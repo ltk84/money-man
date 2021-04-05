@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1q996RTLicpeiXo6p9vo0UHaEvB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/money_man/assets" />
+    <property name="settings.editor.selected.configurable" value="dart.settings" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man\assets" />
+      <recent name="D:\Personal\Flutter_Project\MoneyMan\assets" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man\assets" />
+      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/money_man/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Flutter.main.dart" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="" />
+      <created>1616480763628</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1616480763628</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="422" y="247" key="#Notifications" timestamp="1616480839585">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="422" y="247" key="#Notifications/0.0.1366.768@0.0.1366.768" timestamp="1616480839585" />
+    <state x="0" y="39" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1616481170240">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="0" y="39" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1616481170240" />
+    <state x="176" y="91" width="874" height="568" key="AVDManager" timestamp="1616587589007">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="176" y="91" width="874" height="568" key="AVDManager/0.0.1366.768@0.0.1366.768" timestamp="1616587589007" />
+    <state x="356" y="130" key="AndroidProcessChooserDialog" timestamp="1616489546448">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="356" y="130" key="AndroidProcessChooserDialog/0.0.1366.768@0.0.1366.768" timestamp="1616489546448" />
+    <state x="317" y="139" key="FileChooserDialogImpl" timestamp="1616494633016">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="317" y="139" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1616494633016" />
+    <state width="1014" height="189" key="GridCell.Tab.0.bottom" timestamp="1616594010344">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1014" height="189" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1616594010344" />
+    <state width="1014" height="189" key="GridCell.Tab.0.center" timestamp="1616594010344">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1014" height="189" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1616594010344" />
+    <state width="1014" height="189" key="GridCell.Tab.0.left" timestamp="1616594010344">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1014" height="189" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1616594010344" />
+    <state width="1014" height="189" key="GridCell.Tab.0.right" timestamp="1616594010344">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1014" height="189" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1616594010344" />
+    <state x="38" y="29" key="SettingsEditor" timestamp="1616481253374">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="38" y="29" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1616481253374" />
+    <state x="193" y="174" key="run.anything.popup" timestamp="1616501338867">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="193" y="174" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1616501338867" />
+  </component>
+</project>
