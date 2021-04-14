@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Screen/FirstStep.dart';
+import 'screens/FirstStep.dart';
 
 void main() {
   runApp(MyApp());

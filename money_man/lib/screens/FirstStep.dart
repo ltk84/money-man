@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'Constraints/constaints.dart';
+import 'package:money_man/core/services/SlandingClipper.dart';
+import 'package:money_man/core/services/constaints.dart';
 import 'EndingIntroduction.dart';
-import 'Constraints/SlandingClipper.dart';
+
 
 
 class FirstStep extends StatefulWidget {
@@ -19,7 +20,6 @@ class _FirstStepState extends State<FirstStep> {
         var begin = Offset(1.0, 0.0);
         var end = Offset.zero;
         var curve = Curves.ease;
-
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(

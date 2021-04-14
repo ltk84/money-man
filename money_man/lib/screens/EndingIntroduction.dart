@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'Constraints/SlandingClipper.dart';
-import 'Constraints/constaints.dart';
+import 'package:money_man/core/services/SlandingClipper.dart';
+import 'package:money_man/core/services/constaints.dart';
 
 class OnboardingScreenTwo extends StatelessWidget {
   @override
