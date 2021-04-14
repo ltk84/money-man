@@ -1,13 +1,17 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignUpScreen extends StatefulWidget {
+  final Function changeShow;
+  SignUpScreen({
+    this.changeShow,
+  });
+
   @override
-  _SignInScreenState createState() => _SignInScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
-  final _formKey = GlobalKey<FormState>();
+class _SignUpScreenState extends State<SignUpScreen> {
   String _email;
   String _password;
   bool isObcure = true;
@@ -20,14 +24,12 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
         children: [
-          Form(
-            key: _formKey,
+          Center(
             child: Column(
               children: [
                 Text(
-                  'Login',
+                  'Sign Up',
                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                 ),
                 TextFormField(
@@ -70,11 +72,10 @@ class _SignInScreenState extends State<SignInScreen> {
                   autocorrect: false,
                   obscureText: isObcure,
                 ),
-                OutlinedButton(onPressed: () {}, child: Text('LOGIN')),
                 OutlinedButton(onPressed: () {}, child: Text('SIGN UP')),
+                OutlinedButton(onPressed: () {}, child: Text('LOGIN')),
                 OutlinedButton(onPressed: () {}, child: Text('LOGIN AS GUEST')),
                 Divider(
-                  thickness: 4.0,
                   height: 20,
                 ),
                 OutlinedButton(
