@@ -40,6 +40,7 @@ class OnboardingScreenTwo extends StatelessWidget {
                 width: size.width,
                 padding: EdgeInsets.all(30),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -49,7 +50,7 @@ class OnboardingScreenTwo extends StatelessWidget {
                         letterSpacing: 5,
                         fontWeight: FontWeight.bold,
                         color: black,
-                        fontSize: 40,
+                        fontSize: size.height*0.05*4/3,
                       ),
                     ),
                     SizedBox(
@@ -59,7 +60,7 @@ class OnboardingScreenTwo extends StatelessWidget {
                       'Lorem Ipsum is simply dummy \ntext of the printing and typesetting industry.',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: size.height*0.028,
                         fontFamily: 'NarumGothic',
 
                       ),
@@ -70,70 +71,77 @@ class OnboardingScreenTwo extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Icon(
                                 Icons.monetization_on_outlined,
-                              size: 200,
+
+                              size: size.height*0.334,
+
                             ),
                         ),
                     ),
                     SizedBox(
-                      height: size.height*0.120,
+                      height: size.height*0.1085,
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: ButtonTheme(
-                        minWidth: 300.0,
-                        child: RaisedButton(
-                          onPressed: () {
+                    Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: ButtonTheme(
+                            minWidth: 300.0,
+                            child: RaisedButton(
+                              onPressed: () {
 
-                          },
-                          color: Colors.black54,
-                          elevation: 0.0,
-                          child: Text('Add first transaction',
-                            style: TextStyle(
-                              fontFamily: 'NarumGothic',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
+                              },
+                              color: Colors.black54,
+                              elevation: 0.0,
+                              child: Text('Add first transaction',
+                                style: TextStyle(
+                                  fontFamily: 'NarumGothic',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(30)),
+                              ),
+
                             ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                          ),
-
                         ),
-                      ),
-                    )
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: appPadding / 4),
+                              width: 15,
+                              height: 15,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: black, width: 2),
+                                  shape: BoxShape.circle,
+                                  color: yellow),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: appPadding / 4),
+                              width: 15,
+                              height: 15,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: black, width: 2),
+                                  shape: BoxShape.circle,
+                                  color: Colors.white),
+                            ),
+
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
-            Positioned(
+/*           Positioned(
               bottom: 15,
               left: 0,
               right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: appPadding / 4),
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: black, width: 2),
-                        shape: BoxShape.circle,
-                        color: yellow),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: appPadding / 4),
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: black, width: 2),
-                        shape: BoxShape.circle,
-                        color: Colors.white),
-                  ),
 
-                ],
-              ),
-            ),
+            ),*/
           ],
         ),
       ),
