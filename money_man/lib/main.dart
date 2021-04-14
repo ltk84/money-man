@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_man/ui/screens/authentication_screen/sign_in.dart';
+import 'package:money_man/ui/screens/authentication_screen/sign_in_screen.dart';
 
 void main() {
   runApp(MoneyManApp());
