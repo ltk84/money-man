@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "132678681327",
+    "project_id": "money-man-b2a23",
+    "storage_bucket": "money-man-b2a23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132678681327:android:7c5afb1d37f1b3789d911a",
+        "android_client_info": {
+          "package_name": "com.example.money_man"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "132678681327-q6vebm2afnpajv3see4o6anfp3uvdqd0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.money_man",
+            "certificate_hash": "0d1fa46b10166b0ded318fa4195dad22e1e3631d"
+          }
+        },
+        {
+          "client_id": "132678681327-mn1l7p1vm14r9u2abs8cf8s873pi8vbs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC83m91w-CjfgUrtY245MAFAM35erZ2Wk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132678681327-mn1l7p1vm14r9u2abs8cf8s873pi8vbs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

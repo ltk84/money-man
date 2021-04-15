@@ -64,8 +64,10 @@ class _AppState extends State<App> {
       child: WrapperBuilder(
         builder: (context, userSnapshot) {
           return MaterialApp(
-            home: Wrapper(
-              userSnapshot: userSnapshot,
+            home: SafeArea(
+              child: Wrapper(
+                userSnapshot: userSnapshot,
+              ),
             ),
           );
         },
