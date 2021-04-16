@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/ui/screens/shared_screens/error_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
+import 'package:money_man/ui/screens/transaction_detail.dart';
+import 'package:money_man/ui/screens/transaction_screens/transaction_detail_screen.dart';
 import 'package:money_man/ui/widgets/wrapper.dart';
 import 'package:money_man/ui/widgets/wrapper_builder.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +74,7 @@ class _AppState extends State<App> {
           );
         },
       ),
-      // child: MaterialApp(home: OnboardingScreenTwo()),
+      // child: MaterialApp(home: TransactionDetailScreen()),
     );
   }
 }
