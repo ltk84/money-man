@@ -19,7 +19,6 @@ class _TransactionScreen extends State<TransactionScreen> with TickerProviderSta
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-
         initialIndex: 1,
         length: 3,
         child: Scaffold(
@@ -500,16 +499,16 @@ class _TransactionScreen extends State<TransactionScreen> with TickerProviderSta
               ),
             ],
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            items: [
-              BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet_rounded, size: 20.0),label: 'Wallet',backgroundColor: Colors.black),
-              BottomNavigationBarItem(icon: Icon(Icons.analytics_sharp), label: 'Report',backgroundColor: Colors.black),
-              BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 60.0,), label: 'Add',backgroundColor: Colors.black ),
-              BottomNavigationBarItem(icon: Icon(Icons.article_sharp), label: 'Report',backgroundColor: Colors.black),
-              BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'Report',backgroundColor: Colors.black),
-            ],
-          ),
+          // bottomNavigationBar: BottomNavigationBar(
+          //   backgroundColor: Colors.white,
+          //   items: [
+          //     BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet_rounded, size: 20.0),label: 'Wallet',backgroundColor: Colors.black),
+          //     BottomNavigationBarItem(icon: Icon(Icons.analytics_sharp), label: 'Report',backgroundColor: Colors.black),
+          //     BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 60.0,), label: 'Add',backgroundColor: Colors.black ),
+          //     BottomNavigationBarItem(icon: Icon(Icons.article_sharp), label: 'Report',backgroundColor: Colors.black),
+          //     BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'Report',backgroundColor: Colors.black),
+          //   ],
+          // ),
         )
     );
   }
