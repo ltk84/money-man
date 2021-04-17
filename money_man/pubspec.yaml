@@ -39,6 +39,7 @@ dependencies:
   google_sign_in: "^4.5.1"
   cloud_firestore: "^0.16.0+1"
   firebase_storage: "^7.0.0"
+  sticky_headers: "^0.1.8"
 
 
 
