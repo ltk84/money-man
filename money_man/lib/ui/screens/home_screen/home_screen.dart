@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
           _onItemTap(2);
         },
         backgroundColor: Colors.yellow[700],
-        elevation: 1,
+        elevation: 0,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
