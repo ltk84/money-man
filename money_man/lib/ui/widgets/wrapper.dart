@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/ui/screens/authentication_screens/access_screen.dart';
 import 'package:money_man/ui/screens/authentication_screens/authentication.dart';
 import 'package:money_man/ui/screens/authentication_screens/verify_email_screen.dart';
 import 'package:money_man/ui/screens/home_screen/home_screen.dart';
@@ -16,7 +17,7 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     if (userSnapshot.connectionState == ConnectionState.active) {
       if (userSnapshot.hasData) {
-        if (userSnapshot.data.emailVerified)
+        if (userSnapshot.data.emailVerified || userSnapshot.data.isAnonymous)
           return HomeScreen();
         else
           return VerifyEmailScreen();

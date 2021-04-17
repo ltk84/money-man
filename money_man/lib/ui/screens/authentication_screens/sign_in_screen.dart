@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,9 @@ class _SignInScreenState extends State<SignInScreen> {
     return loading == true
         ? LoadingScreen()
         : Scaffold(
+            // appBar: AppBar(
+            //   title: Text('dang nhap'),
+            // ),
             body: ListView(
               padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
               children: [
@@ -82,6 +86,15 @@ class _SignInScreenState extends State<SignInScreen> {
                             text: 'Connect to Apple',
                             imgName: 'apple',
                           )),
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ForgotPasswordScreen()));
+                        },
+                        child: Text('Forgot password'),
+                      ),
                     ],
                   ),
                 ),

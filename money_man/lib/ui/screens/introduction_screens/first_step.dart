@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:money_man/core/services/SlandingClipper.dart';
 import 'package:money_man/core/services/constaints.dart';
-import 'EndingIntroduction.dart';
-
-
+import 'package:money_man/core/services/slanding_clipper.dart';
+import 'ending_introduction.dart';
 
 class FirstStep extends StatefulWidget {
   @override
@@ -15,12 +13,14 @@ class FirstStep extends StatefulWidget {
 class _FirstStepState extends State<FirstStep> {
   Route _createRoute() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => OnboardingScreenTwo(),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          OnboardingScreenTwo(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(1.0, 0.0);
         var end = Offset.zero;
         var curve = Curves.ease;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
           position: animation.drive(tween),
@@ -29,9 +29,10 @@ class _FirstStepState extends State<FirstStep> {
       },
     );
   }
+
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return  Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         child: Container(
           child: Stack(
@@ -40,12 +41,12 @@ class _FirstStepState extends State<FirstStep> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image(
-                    width: size.width,
-                    height: size.height * 0.6,
-                    fit: BoxFit.cover,
-                    image: AssetImage('assets/images/onboard1.png'),
-                  ),
+                  // Image(
+                  //   width: size.width,
+                  //   height: size.height * 0.6,
+                  //   fit: BoxFit.cover,
+                  //   image: AssetImage('assets/images/apple.jpg'),
+                  // ),
                   ClipPath(
                     clipper: SlandingClipper(),
                     child: Container(
@@ -61,26 +62,27 @@ class _FirstStepState extends State<FirstStep> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: size.height*0.15,),
+                      SizedBox(
+                        height: size.height * 0.15,
+                      ),
                       Container(
                           child: Container(
-                            child: Text(
-                              'Create your \nfirst wallet',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                                //fontFamily: 'Anton',
-                                fontWeight: FontWeight.bold,
-                                fontSize: size.height*0.07,
-                                letterSpacing: 3.0,
-                              ),
-                            ),
-                          )
-                      ),
+                        child: Text(
+                          'Create your \nfirst wallet',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            //fontFamily: 'Anton',
+                            fontWeight: FontWeight.bold,
+                            fontSize: size.height * 0.07,
+                            letterSpacing: 3.0,
+                          ),
+                        ),
+                      )),
                       Row(
                         children: [
                           SizedBox(
-                            width: size.width*0.15,
+                            width: size.width * 0.15,
                           ),
                           Container(
                             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -90,7 +92,7 @@ class _FirstStepState extends State<FirstStep> {
                               style: TextStyle(
                                 color: Colors.blueGrey[700],
                                 fontFamily: 'NarumGothic',
-                                fontSize: size.height*0.022,
+                                fontSize: size.height * 0.022,
                                 fontWeight: FontWeight.w100,
                               ),
                             ),
@@ -98,16 +100,17 @@ class _FirstStepState extends State<FirstStep> {
                         ],
                       ),
                       SizedBox(
-                        height: size.height*0.05,
+                        height: size.height * 0.05,
                       ),
                       Container(
-                        child: Icon(Icons.dashboard_sharp,
-                          size: size.height*0.18,
+                        child: Icon(
+                          Icons.dashboard_sharp,
+                          size: size.height * 0.18,
                           color: Colors.black54,
-
                         ),
                       ),
-                      TextButton(onPressed: () {},
+                      TextButton(
+                          onPressed: () {},
                           child: Text(
                             'CHANGE ICON',
                             style: TextStyle(
@@ -117,7 +120,8 @@ class _FirstStepState extends State<FirstStep> {
                             ),
                           )),
                       Container(
-                        padding: EdgeInsets.fromLTRB(size.width*0.15, 0, 0, 0),
+                        padding:
+                            EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: Text(
@@ -130,7 +134,7 @@ class _FirstStepState extends State<FirstStep> {
                       ),
                       Container(
                         width: 250.0,
-                        height: size.height*0.05,
+                        height: size.height * 0.05,
                         child: TextField(
                           obscureText: false,
                           decoration: InputDecoration(
@@ -139,10 +143,11 @@ class _FirstStepState extends State<FirstStep> {
                         ),
                       ),
                       SizedBox(
-                        height: size.height*0.02,
+                        height: size.height * 0.02,
                       ),
                       Container(
-                        padding: EdgeInsets.fromLTRB(size.width*0.15, 0, 0, 0),
+                        padding:
+                            EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: Text(
@@ -155,7 +160,7 @@ class _FirstStepState extends State<FirstStep> {
                       ),
                       Currency(),
                       SizedBox(
-                        height: size.height*0.01,
+                        height: size.height * 0.01,
                       ),
                       Column(
                         children: [
@@ -167,24 +172,26 @@ class _FirstStepState extends State<FirstStep> {
                               },
                               color: Colors.black54,
                               elevation: 0.0,
-                              child: Text('Continue',
+                              child: Text(
+                                'Continue',
                                 style: TextStyle(
                                   fontFamily: 'NarumGothic',
                                   fontWeight: FontWeight.bold,
-                                  fontSize: size.height*0.05/1.5,
+                                  fontSize: size.height * 0.05 / 1.5,
                                 ),
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
                               ),
-
                             ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                margin: EdgeInsets.symmetric(horizontal: appPadding / 4),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: appPadding / 4),
                                 width: 15,
                                 height: 15,
                                 decoration: BoxDecoration(
@@ -193,7 +200,8 @@ class _FirstStepState extends State<FirstStep> {
                                     color: white),
                               ),
                               Container(
-                                margin: EdgeInsets.symmetric(horizontal: appPadding / 4),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: appPadding / 4),
                                 width: 15,
                                 height: 15,
                                 decoration: BoxDecoration(
@@ -205,7 +213,6 @@ class _FirstStepState extends State<FirstStep> {
                           ),
                         ],
                       ),
-
                     ],
                   ),
                 ),
@@ -224,7 +231,6 @@ class Currency extends StatefulWidget {
 }
 
 class _CurrencyState extends State<Currency> {
-
   String dropdownValue = 'VND';
   List ListItem = ['VND', 'USD', 'WON', 'BITCOIN'];
   @override
@@ -236,16 +242,16 @@ class _CurrencyState extends State<Currency> {
         borderRadius: BorderRadius.all(Radius.circular(4)),
       ),
       width: 250.0,
-      height: size.height*0.05,
+      height: size.height * 0.05,
       child: Row(
         children: [
           //SizedBox(width: 20.0),
           Padding(
             padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
             child: Container(
-
-              child: Icon(Icons.check,
-                size: size.height*0.04,
+              child: Icon(
+                Icons.check,
+                size: size.height * 0.04,
                 color: Colors.black87,
               ),
             ),
@@ -259,15 +265,14 @@ class _CurrencyState extends State<Currency> {
             width: 120.0,
             child: DropdownButtonHideUnderline(
               child: DropdownButton(
-
-                hint: Text('Currency',
+                hint: Text(
+                  'Currency',
                   style: TextStyle(
                     fontFamily: 'NarumGothic',
                   ),
                 ),
                 value: dropdownValue,
-                onChanged: (newValue)
-                {
+                onChanged: (newValue) {
                   setState(() {
                     dropdownValue = newValue;
                   });
@@ -282,15 +287,12 @@ class _CurrencyState extends State<Currency> {
                       ),
                     ),
                   );
-
                 }).toList(),
               ),
             ),
           )
         ],
       ),
-
-
     );
   }
 }

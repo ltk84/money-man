@@ -31,6 +31,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return loading == true
         ? LoadingScreen()
         : Scaffold(
+            // appBar: AppBar(
+            //   title: Text('dang ky'),
+            // ),
             body: ListView(
               children: [
                 Form(

@@ -99,4 +99,14 @@ class FirebaseAuthService {
       return e;
     }
   }
+
+  // lấy lại mật khẩu qua email
+  Future resetPassword(email) async {
+    try {
+      return await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      return e;
+    }
+  }
 }
