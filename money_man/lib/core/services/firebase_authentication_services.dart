@@ -127,24 +127,38 @@ class FirebaseAuthService {
   }
 
   Future signInWithFacebookVer2() async {
-    // Gọi hàm LogIn() với giá trị truyền vào là một mảng permission
-    // Ở đây mình truyền vào cho nó quền xem email
+    // // Gọi hàm LogIn() với giá trị truyền vào là một mảng permission
+    // // Ở đây mình truyền vào cho nó quền xem email
+    // final facebookLogin = FacebookLogin();
+    // final result = await facebookLogin.logIn(['email']);
+    // // Kiểm tra nếu login thành công thì thực hiện login Firebase
+    // // (theo mình thì cách này đơn giản hơn là dùng đường dẫn
+    // // hơn nữa cũng đồng bộ với hệ sinh thái Firebase, tích hợp được
+    // // nhiều loại Auth
+
+    // if (result.status == FacebookLoginStatus.loggedIn) {
+    //   final credential =
+    //       FacebookAuthProvider.credential(result.accessToken.token.toString());
+    //   // (
+    //   //   accessToken: result.accessToken.token,
+    //   // );
+    //   // Lấy thông tin User qua credential có giá trị token đã đăng nhập
+    //   final user = (await _auth.signInWithCredential(credential)).user;
+    //   return user;
+    // }
     final facebookLogin = FacebookLogin();
     final result = await facebookLogin.logIn(['email']);
-    // Kiểm tra nếu login thành công thì thực hiện login Firebase
-    // (theo mình thì cách này đơn giản hơn là dùng đường dẫn
-    // hơn nữa cũng đồng bộ với hệ sinh thái Firebase, tích hợp được
-    // nhiều loại Auth
 
-    if (result.status == FacebookLoginStatus.loggedIn) {
-      final credential =
-          FacebookAuthProvider.credential(result.accessToken.token.toString());
-      // (
-      //   accessToken: result.accessToken.token,
-      // );
-      // Lấy thông tin User qua credential có giá trị token đã đăng nhập
-      final user = (await _auth.signInWithCredential(credential)).user;
-      return user;
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final credential =
+            FacebookAuthProvider.credential(result.accessToken.token);
+        await _auth.signInWithCredential(credential);
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        break;
+      case FacebookLoginStatus.error:
+        break;
     }
   }
 }

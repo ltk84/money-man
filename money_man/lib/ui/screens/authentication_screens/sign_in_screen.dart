@@ -71,8 +71,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       OutlinedButton(
                         onPressed: () {
                           final _auth = FirebaseAuthService();
-                          _auth.signInWithFacebook();
-                          // _auth.signInWithFacebookVer2();
+                          // _auth.signInWithFacebook();
+                          _auth.signInWithFacebookVer2();
                         },
                         child: CustomListTile(
                           text: "Connect to Facebook",
