@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:money_man/core/models/test.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:money_man/ui/screens/wallet_selection.dart';
 
 class TransactionScreen extends StatefulWidget{  
   int indexNow = 0;
@@ -29,7 +30,6 @@ class _TransactionScreen extends State<TransactionScreen> with TickerProviderSta
     super.initState();
     _tabController = TabController(length: 300, vsync: this, initialIndex: 150);
   }
-  var vi = ['vi 1' , 'vi 2', 'vi 3'];
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -43,7 +43,14 @@ class _TransactionScreen extends State<TransactionScreen> with TickerProviderSta
             children: [
               Expanded(
                 child: IconButton(
-                  icon: const Icon(Icons.account_balance_wallet, color: Colors.grey), onPressed: () {  },
+                  icon: const Icon(Icons.account_balance_wallet, color: Colors.grey), onPressed: () {
+                    return showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Wallet_Selection();
+                      }
+                    );
+                  },
                 ),
               ),
               Expanded(
@@ -192,6 +199,7 @@ class _TransactionScreen extends State<TransactionScreen> with TickerProviderSta
                       ),
                       child: StickyHeader(
                         header: Container(
+                          color: Colors.grey[900],
                           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
                           child: Row(
                             children: <Widget>[
