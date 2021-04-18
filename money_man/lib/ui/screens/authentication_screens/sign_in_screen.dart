@@ -163,7 +163,10 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: 300,
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
-                          onPressed: () {},
+                          onPressed: () {
+                            final _auth = FirebaseAuthService();
+                            // _auth.signInWithFacebook();
+                            _auth.signInWithGoogleAccount();},
                           child: CustomListTile(
                             text: "Connect to Google",
                             imgName: "logoGG.png",
