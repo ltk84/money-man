@@ -27,7 +27,7 @@ class ForgotPasswordScreen extends StatelessWidget {
               onChanged: (value) => _email = value,
               decoration: InputDecoration(labelText: 'Email'),
               keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.done,
               autocorrect: false,
             ),
           ),

@@ -57,6 +57,7 @@ flutter {
 }
 
 dependencies {
+     implementation 'com.facebook.android:facebook-login:[8.1)'
     implementation platform('com.google.firebase:firebase-bom:27.0.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.android.support:multidex:1.0.3'

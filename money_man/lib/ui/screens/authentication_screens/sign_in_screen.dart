@@ -4,6 +4,7 @@ import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class SignInScreen extends StatefulWidget {
   final Function changeShow;
@@ -68,7 +69,11 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 20,
                       ),
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          final _auth = FirebaseAuthService();
+                          _auth.signInWithFacebook();
+                          // _auth.signInWithFacebookVer2();
+                        },
                         child: CustomListTile(
                           text: "Connect to Facebook",
                           imgName: "facebook",

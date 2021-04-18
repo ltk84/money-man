@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Money Man</string>
+    <string name="facebook_app_id">470813594122580</string>
+    <string name="fb_login_protocol_scheme">fb470813594122580</string>
+</resources>
+
