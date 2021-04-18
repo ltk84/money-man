@@ -40,6 +40,9 @@ dependencies:
   cloud_firestore: "^0.16.0+1"
   firebase_storage: "^7.0.0"
   sticky_headers: "^0.1.8"
+  flutter_facebook_auth: "^1.0.0"
+  flutter_facebook_login: ^3.0.0
+  
 
 
 

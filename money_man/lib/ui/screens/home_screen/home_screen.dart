@@ -13,7 +13,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  static List<Widget> _screens = [TransactionScreen(), ReportScreen(), LoadingScreen(), ErrorScreen(), ErrorScreen()];
+  static List<Widget> _screens = [
+    TransactionScreen(),
+    ReportScreen(),
+    LoadingScreen(),
+    ErrorScreen(),
+    ErrorScreen()
+  ];
 
   void _onItemTap(int index) {
     setState(() {
@@ -24,40 +30,39 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white24,
       body: _screens.elementAt(_selectedIndex),
       bottomNavigationBar: BottomAppBar(
         notchMargin: 5,
         shape: CircularNotchedRectangle(),
-        color: Colors.black,
+        color: Colors.grey[900],
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           elevation: 0,
           backgroundColor: Colors.transparent,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.account_balance_wallet_rounded, size: 25.0),
-                label: 'Transactions',
+              icon: Icon(Icons.account_balance_wallet_rounded, size: 25.0),
+              label: 'Transactions',
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.analytics_sharp, size: 25.0),
-                label: 'Report',
-                //backgroundColor: Colors.grey[500],
+              icon: Icon(Icons.analytics_sharp, size: 25.0),
+              label: 'Report',
+              //backgroundColor: Colors.grey[500],
             ),
             BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.add_circle,
-                  size: 0.0,
-                ),
-                label: '',
+              icon: Icon(
+                Icons.add_circle,
+                size: 0.0,
+              ),
+              label: '',
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.article_sharp, size: 25.0),
-                label: 'Planning',
+              icon: Icon(Icons.article_sharp, size: 25.0),
+              label: 'Planning',
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle, size: 25.0),
-                label: 'Account',
+              icon: Icon(Icons.account_circle, size: 25.0),
+              label: 'Account',
             ),
           ],
           selectedItemColor: Colors.white,
@@ -70,11 +75,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {_onItemTap(2);},
+        onPressed: () {
+          _onItemTap(2);
+        },
         backgroundColor: Colors.yellow[700],
         elevation: 0,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+    // hello there
   }
 }

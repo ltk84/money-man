@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/ui/screens/home_screen/home_screen.dart';
+import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   @override
@@ -51,7 +52,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     if (user.emailVerified) {
       timer.cancel();
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => HomeScreen()));
+          context, MaterialPageRoute(builder: (_) => FirstStep()));
     }
   }
 }

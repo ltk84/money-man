@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class FirebaseAuthService {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -97,6 +100,65 @@ class FirebaseAuthService {
     } catch (e) {
       print(e);
       return e;
+    }
+  }
+
+  // lấy lại mật khẩu qua email
+  Future resetPassword(email) async {
+    try {
+      return await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      return e;
+    }
+  }
+
+  Future<UserCredential> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final AccessToken result = await FacebookAuth.instance.login();
+
+    // Create a credential from the access token
+    final FacebookAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(result.token);
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance
+        .signInWithCredential(facebookAuthCredential);
+  }
+
+  Future signInWithFacebookVer2() async {
+    // // Gọi hàm LogIn() với giá trị truyền vào là một mảng permission
+    // // Ở đây mình truyền vào cho nó quền xem email
+    // final facebookLogin = FacebookLogin();
+    // final result = await facebookLogin.logIn(['email']);
+    // // Kiểm tra nếu login thành công thì thực hiện login Firebase
+    // // (theo mình thì cách này đơn giản hơn là dùng đường dẫn
+    // // hơn nữa cũng đồng bộ với hệ sinh thái Firebase, tích hợp được
+    // // nhiều loại Auth
+
+    // if (result.status == FacebookLoginStatus.loggedIn) {
+    //   final credential =
+    //       FacebookAuthProvider.credential(result.accessToken.token.toString());
+    //   // (
+    //   //   accessToken: result.accessToken.token,
+    //   // );
+    //   // Lấy thông tin User qua credential có giá trị token đã đăng nhập
+    //   final user = (await _auth.signInWithCredential(credential)).user;
+    //   return user;
+    // }
+    final facebookLogin = FacebookLogin();
+    final result = await facebookLogin.logIn(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final credential =
+            FacebookAuthProvider.credential(result.accessToken.token);
+        await _auth.signInWithCredential(credential);
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        break;
+      case FacebookLoginStatus.error:
+        break;
     }
   }
 }

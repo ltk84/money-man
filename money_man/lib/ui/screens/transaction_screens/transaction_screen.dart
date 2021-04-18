@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,30 +6,30 @@ import 'package:intl/intl.dart';
 import 'package:money_man/core/models/test.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:money_man/ui/screens/wallet_selection.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:provider/provider.dart';
 
-class TransactionScreen extends StatefulWidget{  
-  int indexNow = 0;
+class TransactionScreen extends StatefulWidget {
+  final List<Tab> myTabs = List.generate(200, (index) {
+    var now = DateTime.now();
+    var date = DateTime(now.year, now.month + index - 100, now.day);
+    String dateDisplay = DateFormat('MM/yyyy').format(date);
+    return Tab(text: dateDisplay);
+  });
+
   @override
   State<StatefulWidget> createState() {
-
     return _TransactionScreen();
   }
 }
-class _TransactionScreen extends State<TransactionScreen> with TickerProviderStateMixin {
-  final List<Tab> myTabs = List.generate(
-      300, (index) {
-        var now = DateTime.now();
-      var date = DateTime(now.year, now.month + index - 150, now.day);
-      String dateDisplay = DateFormat('MM/yyyy').format(date);
-      return Tab(text: dateDisplay);
-  }
-  );
 
+class _TransactionScreen extends State<TransactionScreen>
+    with TickerProviderStateMixin {
   TabController _tabController;
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 300, vsync: this, initialIndex: 150);
+    _tabController = TabController(length: 200, vsync: this, initialIndex: 150);
   }
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,7 @@ class _TransactionScreen extends State<TransactionScreen> with TickerProviderSta
             isScrollable: true,
             indicatorWeight: 3.0,
             controller: _tabController,
-            tabs:  myTabs,
+            tabs: widget.myTabs,
           ),
           actions: <Widget>[
             IconButton(
@@ -88,7 +89,7 @@ class _TransactionScreen extends State<TransactionScreen> with TickerProviderSta
         ),
         body: TabBarView(
           controller: _tabController,
-          children: myTabs.map((tab){
+          children: widget.myTabs.map((tab){
             return
               Container(
                 color: Colors.black,
@@ -241,7 +242,8 @@ class _TransactionScreen extends State<TransactionScreen> with TickerProviderSta
       )
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => throw UnimplementedError();
 }
-
-
-

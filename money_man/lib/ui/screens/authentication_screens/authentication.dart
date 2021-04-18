@@ -27,3 +27,26 @@ class _AuthenticationState extends State<Authentication> {
       );
   }
 }
+
+// class Authentication extends StatelessWidget {
+//   final bool showSignIn;
+//   final changeShow;
+
+//   const Authentication({
+//     Key key,
+//     @required this.showSignIn,
+//     @required this.changeShow,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     if (showSignIn)
+//       return SignInScreen(
+//         changeShow: changeShow,
+//       );
+//     else
+//       return SignUpScreen(
+//         changeShow: changeShow,
+//       );
+//   }
+// }

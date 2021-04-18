@@ -2,8 +2,10 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:provider/provider.dart';
+//import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class SignInScreen extends StatefulWidget {
   final Function changeShow;
@@ -32,6 +34,9 @@ class _SignInScreenState extends State<SignInScreen> {
     return loading == true
         ? LoadingScreen()
         : Scaffold(
+            // appBar: AppBar(
+            //   title: Text('dang nhap'),
+            // ),
             body: ListView(
               padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
               children: [
@@ -97,6 +102,10 @@ class _SignInScreenState extends State<SignInScreen> {
                               )),
                           TextButton(
                               onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => ForgotPasswordScreen()));
                                 //Forgot Password
                               },
                               child: Text(
@@ -134,7 +143,11 @@ class _SignInScreenState extends State<SignInScreen> {
                         //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
-                          onPressed: () {},
+                          onPressed: () {
+                          final _auth = FirebaseAuthService();
+                          // _auth.signInWithFacebook();
+                          _auth.signInWithFacebookVer2();
+                          },
                           child: CustomListTile(
                             text: "Connect to Facebook",
                             imgName: "logoFB.png",

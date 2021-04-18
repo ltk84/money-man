@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../ui/style.dart';
+import '../../style.dart';
 
 class TransactionDetail extends StatelessWidget {
   @override
