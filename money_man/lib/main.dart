@@ -66,6 +66,7 @@ class _AppState extends State<App> {
       child: WrapperBuilder(
         builder: (context, userSnapshot) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: SafeArea(
               child: Wrapper(
                 userSnapshot: userSnapshot,

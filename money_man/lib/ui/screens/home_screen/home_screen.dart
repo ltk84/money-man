@@ -24,11 +24,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white24,
       body: _screens.elementAt(_selectedIndex),
       bottomNavigationBar: BottomAppBar(
         notchMargin: 5,
         shape: CircularNotchedRectangle(),
-        color: Colors.grey[900],
+        color: Colors.black,
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           elevation: 0,
@@ -70,8 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {_onItemTap(2);},
-        backgroundColor:
-        Colors.yellow[700],
+        backgroundColor: Colors.yellow[700],
         elevation: 0,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
