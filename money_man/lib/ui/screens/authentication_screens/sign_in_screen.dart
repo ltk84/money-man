@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:provider/provider.dart';
@@ -38,50 +39,142 @@ class _SignInScreenState extends State<SignInScreen> {
                   key: _formKey,
                   child: Column(
                     children: [
+                      SizedBox(height: 30),
                       Text(
                         'Login',
                         style: TextStyle(
-                            fontSize: 35, fontWeight: FontWeight.bold),
+                            fontSize: 65,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontFamily: 'Montserrat'),
                       ),
+                      SizedBox(height: 10),
                       buildInputField(),
-                      OutlinedButton(
-                          onPressed: () async {
-                            await signInWithEmailAndPassword(_auth, context);
-                          },
-                          child: Text('LOGIN')),
-                      OutlinedButton(
-                          onPressed: () {
-                            widget.changeShow();
-                          },
-                          child: Text('SIGN UP')),
-                      OutlinedButton(
+                      SizedBox(height: 15),
+                      ButtonTheme(
+                        minWidth: 300,
+                        child: RaisedButton(
+                            onPressed: () async {
+                              await signInWithEmailAndPassword(_auth, context);
+                            },
+                            child: Text(
+                              'LOGIN',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                              ),
+                            ),
+                            color: yellow,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5))),
+                      ),
+                      ButtonTheme(
+                        minWidth: 300,
+                        child: RaisedButton(
                           onPressed: () async {
                             await signInAnonymously(_auth, context);
                           },
-                          child: Text('LOGIN AS GUEST')),
-                      Divider(
-                        thickness: 4.0,
-                        height: 20,
-                      ),
-                      OutlinedButton(
-                        onPressed: () {},
-                        child: CustomListTile(
-                          text: "Connect to Facebook",
-                          imgName: "facebook",
+                          child: Text('LOGIN AS GUEST'),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
                         ),
                       ),
-                      OutlinedButton(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                              onPressed: () {
+                                widget.changeShow();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Sign up',
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              )),
+                          TextButton(
+                              onPressed: () {
+                                //Forgot Password
+                              },
+                              child: Text(
+                                'Forgot password?',
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.blue,
+                                ),
+                              )),
+                        ],
+                      ),
+                      Row(children: <Widget>[
+                        Expanded(
+                            child: Divider(
+                          thickness: 2,
+                          color: black,
+                        )),
+                        Text(
+                          " OR ",
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Expanded(
+                            child: Divider(
+                          thickness: 2,
+                          color: black,
+                        )),
+                      ]),
+                      SizedBox(height: 20),
+                      Container(
+                        height: 40,
+                        width: 300,
+                        //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                        child: RaisedButton(
+                          color: Color(0xffbcbcbc),
+                          onPressed: () {},
+                          child: CustomListTile(
+                            text: "Connect to Facebook",
+                            imgName: "logoFB.png",
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                        height: 40,
+                        width: 300,
+                        child: RaisedButton(
+                          color: Color(0xffbcbcbc),
                           onPressed: () {},
                           child: CustomListTile(
                             text: "Connect to Google",
-                            imgName: "google",
-                          )),
-                      OutlinedButton(
+                            imgName: "logoGG.png",
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                        height: 40,
+                        width: 300,
+                        child: RaisedButton(
+                          color: Color(0xffbcbcbc),
                           onPressed: () {},
                           child: CustomListTile(
                             text: 'Connect to Apple',
-                            imgName: 'apple',
-                          )),
+                            imgName: 'LogoAP.png',
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -136,22 +229,39 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget buildInputField() {
+    FocusNode myFocusNode = new FocusNode();
     return Column(
       children: [
-        TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty)
-              return 'Email not empty';
-            else if (EmailValidator.validate(value) == false)
-              return 'Email not valid';
-            return null;
-          },
-          onChanged: (value) => _email = value,
-          decoration: InputDecoration(labelText: 'Email'),
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
-          autocorrect: false,
+        Theme(
+          data: Theme.of(context).copyWith(
+            // override textfield's icon color when selected
+            primaryColor: Colors.black,
+          ),
+          child: TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return 'Email not empty';
+              else if (EmailValidator.validate(value) == false)
+                return 'Email not valid';
+              return null;
+            },
+            textAlign: TextAlign.left,
+            onChanged: (value) => _email = value,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.email),
+              labelText: 'Email',
+              labelStyle: TextStyle(
+                fontFamily: 'Montserrat',
+              ),
+              fillColor: Colors.white,
+            ),
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            autocorrect: false,
+            cursorColor: black,
+          ),
         ),
+        SizedBox(height: 10),
         TextFormField(
           validator: (value) {
             if (value == null || value.isEmpty)
@@ -160,8 +270,10 @@ class _SignInScreenState extends State<SignInScreen> {
               return 'Password must longer than 6 digits';
             return null;
           },
+          style: TextStyle(fontFamily: 'Montserrat'),
           onChanged: (value) => _password = value,
           decoration: InputDecoration(
+            prefixIcon: Icon(Icons.security),
             labelText: 'Password',
             suffixIcon: IconButton(
               icon: trailingIconPass,
@@ -194,12 +306,26 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Image(
-        image: AssetImage('assets/images/$imgName.jpg'),
-        fit: BoxFit.contain,
-      ),
-      title: Text('$text'),
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: Row(children: [
+        Container(
+          padding: EdgeInsets.all(5),
+          child: Image(
+            image: AssetImage('assets/images/$imgName'),
+            fit: BoxFit.fitHeight,
+          ),
+        ),
+        Expanded(
+            child: Text(
+          '$text',
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        )),
+      ]),
     );
   }
 }

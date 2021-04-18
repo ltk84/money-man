@@ -132,6 +132,7 @@ class _FirstStepState extends State<FirstStep> {
                         width: 250.0,
                         height: size.height*0.05,
                         child: TextField(
+                          
                           obscureText: false,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
