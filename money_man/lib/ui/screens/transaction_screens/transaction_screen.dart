@@ -48,7 +48,7 @@ class _TransactionScreen extends State<TransactionScreen>
                         return showDialog(
                             context: context,
                             builder: (context) {
-                              return Wallet_Selection();
+                              return WalletSelectionScreen();
                             });
                       },
                     ),

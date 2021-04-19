@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
-import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   final Function changeShow;

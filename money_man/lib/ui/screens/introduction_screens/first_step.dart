@@ -136,7 +136,6 @@ class _FirstStepState extends State<FirstStep> {
                         width: 250.0,
                         height: size.height * 0.05,
                         child: TextField(
-                          
                           obscureText: false,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -233,7 +232,7 @@ class Currency extends StatefulWidget {
 
 class _CurrencyState extends State<Currency> {
   String dropdownValue = 'VND';
-  List ListItem = ['VND', 'USD', 'WON', 'BITCOIN'];
+  List listItem = ['VND', 'USD', 'WON', 'BITCOIN'];
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -278,7 +277,7 @@ class _CurrencyState extends State<Currency> {
                     dropdownValue = newValue;
                   });
                 },
-                items: ListItem.map((dropdownValue) {
+                items: listItem.map((dropdownValue) {
                   return DropdownMenuItem(
                     value: dropdownValue,
                     child: Text(

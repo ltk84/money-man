@@ -4,7 +4,6 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
-import 'package:provider/provider.dart';
 //import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -31,8 +30,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = Provider.of<FirebaseAuthService>(context);
-
     return loading == true
         ? LoadingScreen()
         : Scaffold(
@@ -246,7 +243,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget buildInputField() {
-    FocusNode myFocusNode = new FocusNode();
+    // FocusNode myFocusNode = new FocusNode();
     return Column(
       children: [
         Theme(
