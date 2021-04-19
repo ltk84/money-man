@@ -18,6 +18,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final _auth = FirebaseAuthService();
+
   final _formKey = GlobalKey<FormState>();
   String _email;
   String _password;
@@ -105,7 +107,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => ForgotPasswordScreen()));
+                                        builder: (_) =>
+                                            ForgotPasswordScreen()));
                                 //Forgot Password
                               },
                               child: Text(
@@ -144,9 +147,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
                           onPressed: () {
-                          final _auth = FirebaseAuthService();
-                          // _auth.signInWithFacebook();
-                          _auth.signInWithFacebookVer2();
+                            _auth.signInWithFacebook();
+                            // _auth.signInWithFacebookVer2();
                           },
                           child: CustomListTile(
                             text: "Connect to Facebook",
@@ -163,7 +165,9 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: 300,
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
-                          onPressed: () {},
+                          onPressed: () {
+                            _auth.signInWithGoogleAccount();
+                          },
                           child: CustomListTile(
                             text: "Connect to Google",
                             imgName: "logoGG.png",

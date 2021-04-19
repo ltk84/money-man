@@ -27,8 +27,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = Provider.of<FirebaseAuthService>(context);
-
     return loading == true
         ? LoadingScreen()
         : Scaffold(
