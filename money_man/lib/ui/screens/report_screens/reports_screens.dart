@@ -5,6 +5,7 @@ import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
 import 'package:money_man/ui/screens/time_selection.dart';
 import '../../style.dart';
+import 'package:money_man/ui/screens/wallet_selection.dart';
 import '../wallet_selection.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -51,7 +52,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                     return showDialog(
                         context: context,
                         builder: (context) {
-                          return Wallet_Selection();
+                          return WalletSelectionScreen();
                         }
                     );
                   },
