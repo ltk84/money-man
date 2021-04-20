@@ -6,6 +6,10 @@ import 'package:money_man/ui/screens/transaction_screens/transaction_detail_scre
 import 'package:money_man/ui/screens/transaction_screens/transaction_list_screen.dart';
 import 'package:money_man/ui/screens/report_screens/reports_screens.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:money_man/ui/screens/report_screens/report_screen.dart';
+import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/transaction_screen.dart';
+import 'package:money_man/ui/screens/shared_screens/error_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
