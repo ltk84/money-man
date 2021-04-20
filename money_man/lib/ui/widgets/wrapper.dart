@@ -17,15 +17,16 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (userSnapshot.connectionState == ConnectionState.active) {
-      if (userSnapshot.hasData) {
-        if (userSnapshot.data.emailVerified || userSnapshot.data.isAnonymous)
-          return HomeScreen();
-        else
-          return VerifyEmailScreen();
-      } else
-        return Authentication();
-    }
-    return LoadingScreen();
+    // if (userSnapshot.connectionState == ConnectionState.active) {
+    //   if (userSnapshot.hasData) {
+    //     if (userSnapshot.data.emailVerified || userSnapshot.data.isAnonymous)
+    //       return HomeScreen();
+    //     else
+    //       return VerifyEmailScreen();
+    //   } else
+    //     return Authentication();
+    // }
+    // return LoadingScreen();
+    return HomeScreen();
   }
 }

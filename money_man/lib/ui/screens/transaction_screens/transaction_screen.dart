@@ -56,7 +56,14 @@ class _TransactionScreen extends State<TransactionScreen>
               ),
               Expanded(
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_drop_down, color: Colors.grey), onPressed: () {  },
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.grey), onPressed: () {
+                  return showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Wallet_Selection();
+                      }
+                  );
+                },
                 ),
               )
             ],
