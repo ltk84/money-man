@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Transaction {
+class MyTransaction {
   String id;
   double amount;
   DateTime date;
@@ -10,7 +10,7 @@ class Transaction {
   String budgetID;
   String eventID;
   String billID;
-  Transaction({
+  MyTransaction({
     @required this.id,
     @required this.amount,
     @required this.date,
@@ -22,9 +22,9 @@ class Transaction {
     this.billID,
   });
 
-  factory Transaction.fromMap(Map<String, dynamic> data) {
+  factory MyTransaction.fromMap(Map<String, dynamic> data) {
     if (data == null) return null;
-    return Transaction(
+    return MyTransaction(
         id: data['id'],
         amount: data['amount'],
         date: data['date'],

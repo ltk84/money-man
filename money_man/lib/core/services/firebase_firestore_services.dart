@@ -1,38 +1,61 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/walletModel.dart';
+import '../models/transactionModel.dart';
 
 class FirebaseFireStoreService {
   final String uid;
 
   FirebaseFireStoreService({@required this.uid});
 
-  // final CollectionReference userCollections =
-  //     FirebaseFirestore.instance.collection('users');
+  final CollectionReference users =
+      FirebaseFirestore.instance.collection('users');
 
-  // add player
-  // Future addPlayer(Player player) async {
-  //   return await userCollections
-  //       .doc(uid)
-  //       .collection('players')
-  //       .doc(player.id)
-  //       .set({
-  //         'id': player.id,
-  //         'name': player.name,
-  //         'age': player.age,
-  //         'club': player.club,
-  //         'position': player.position,
-  //         'downloadURL': defaultURL,
-  //       })
-  //       // .add({
-  //       //   'id': player.id,
-  //       //   'name': player.name,
-  //       //   'age': player.age,
-  //       //   'club': player.club,
-  //       //   'position': player.position,
-  //       //   'avatarURL': '',
-  //       // })
-  //       .then((value) => print('player added!'))
-  //       .catchError((error) => print(error));
-  // }
+  //add transaction
+  Future addTransaction(Wallet wallet, MyTransaction transaction) async {
+    final transactionRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions')
+        .doc();
+    transaction.id = transactionRef.id;
+    return await transactionRef
+        .set(transaction.toMap())
+        .then((value) => print('player added!'))
+        .catchError((error) => print(error));
+  }
+
+  // add wallet test chưa có tham số
+  Future addWallet() async {
+    DocumentReference walletRef = users.doc(uid).collection('wallets').doc();
+    // final id = walletRef.parent;
+    Wallet wallet = Wallet(
+        id: walletRef.id,
+        name: 'test',
+        amount: 10,
+        currencyID: 'a',
+        iconID: 'a');
+
+    return await walletRef
+        .set(wallet.toMap())
+        .then((value) => print('wallet added!'))
+        .catchError((error) => print(error));
+  }
+
+  // convert from snapshot
+  List<Wallet> _walletFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((e) => Wallet.fromMap(e.data())).toList();
+  }
+
+  // get stream wallet
+  Stream<List<Wallet>> get streamWallet {
+    return users
+        .doc(uid)
+        .collection('wallets')
+        .snapshots()
+        .map(_walletFromSnapshot);
+  }
 
   // // edit player
   // Future editPlayer(Player player) async {

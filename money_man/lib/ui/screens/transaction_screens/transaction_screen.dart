@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:money_man/core/models/test.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:money_man/ui/screens/wallet_selection.dart';
 
@@ -45,11 +48,7 @@ class _TransactionScreen extends State<TransactionScreen>
                       icon: const Icon(Icons.account_balance_wallet,
                           color: Colors.grey),
                       onPressed: () {
-                        return showDialog(
-                            context: context,
-                            builder: (context) {
-                              return WalletSelectionScreen();
-                            });
+                        buildShowDialog(context);
                       },
                     ),
                   ),
@@ -302,6 +301,20 @@ class _TransactionScreen extends State<TransactionScreen>
                 );
               }).toList(),
             )));
+  }
+
+  void buildShowDialog(BuildContext context) {
+    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Provider(
+            create: (_) {
+              return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+            },
+            child: WalletSelectionScreen(),
+          );
+        });
   }
 
   @override

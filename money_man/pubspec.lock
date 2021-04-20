@@ -92,6 +92,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  currency_picker:
+    dependency: "direct main"
+    description:
+      name: currency_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   email_validator:
     dependency: "direct main"
     description:
@@ -188,6 +195,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
+  flutter_iconpicker:
+    dependency: "direct main"
+    description:
+      name: flutter_iconpicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   flutter_page_indicator:
     dependency: transitive
     description:
@@ -219,6 +233,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  font_awesome_flutter:
+    dependency: transitive
+    description:
+      name: font_awesome_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.0.0"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -407,5 +428,5 @@ packages:
     source: hosted
     version: "2.1.0"
 sdks:
-  dart: ">=2.12.0-0.0 <3.0.0"
+  dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.20.0"

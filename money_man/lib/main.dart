@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/ui/screens/home_screen/home_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/error_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:money_man/ui/widgets/wrapper.dart';

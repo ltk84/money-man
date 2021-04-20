@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:provider/provider.dart';
 
 class WalletSelectionScreen extends StatefulWidget {
   @override
@@ -112,49 +115,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.all(20.0),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[900],
-                      border: Border(
-                          top: BorderSide(
-                            color: Colors.grey[900],
-                            width: 1.0,
-                          ),
-                          bottom: BorderSide(
-                            color: Colors.grey[900],
-                            width: 1.0,
-                          ))),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Icon(Icons.account_balance_wallet_outlined,
-                            color: Colors.white),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Wallet',
-                              style: tsMain,
-                            ),
-                            Text(
-                              '(amount)',
-                              style: tsChild,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                          flex: 1, child: Icon(Icons.check, color: Colors.blue))
-                    ],
-                  ),
-                ),
+                WalletDisplay(),
                 SizedBox(
                   height: 20,
                 ),
@@ -199,6 +160,72 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
               ],
             ),
           )),
+    );
+  }
+}
+
+class WalletDisplay extends StatelessWidget {
+  const WalletDisplay({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _firestore =
+        Provider.of<FirebaseFireStoreService>(context, listen: false);
+    return Expanded(
+      child: StreamBuilder<List<Wallet>>(
+          stream: _firestore.streamWallet,
+          builder: (context, snapshot) {
+            final listWallet = snapshot.data ?? [];
+            print(listWallet.length);
+            return ListView.builder(
+              itemCount: listWallet.length,
+              itemBuilder: (context, index) => Container(
+                padding: EdgeInsets.all(20.0),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: Colors.grey[900],
+                    border: Border(
+                        top: BorderSide(
+                          color: Colors.grey[900],
+                          width: 1.0,
+                        ),
+                        bottom: BorderSide(
+                          color: Colors.grey[900],
+                          width: 1.0,
+                        ))),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Icon(Icons.account_balance_wallet_outlined,
+                          color: Colors.white),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${listWallet[index].name}',
+                            style: tsMain,
+                          ),
+                          Text(
+                            '(${listWallet[index].amount})',
+                            style: tsChild,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                        flex: 1, child: Icon(Icons.check, color: Colors.blue))
+                  ],
+                ),
+              ),
+            );
+          }),
     );
   }
 }
