@@ -10,6 +10,19 @@ class AccountDetail extends StatelessWidget {
   }
 }
 
+// class Test extends StatelessWidget {
+//   Text title = Text('More', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Hero(tag: 'alo', child: title),
+//       )
+//     );
+//   }
+// }
+
+
 class Test extends StatefulWidget {
   @override
   _TestState createState() => _TestState();
@@ -70,7 +83,7 @@ class _TestState extends State<Test> {
               child: Row(
                 children: [
                   Icon(Icons.arrow_back_ios, color: Colors.white),
-                  Text('More', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w500)),
+                  Hero(tag: 'alo', child: Text('More', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w500))),
                 ],
               ),
             ),

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'account_detail_screen.dart';
+import 'package:money_man/ui/screens/account_screen/account_detail_screen.dart';
 
 import 'package:page_transition/page_transition.dart';
 
@@ -40,7 +40,7 @@ class _TestState extends State<Test> {
         reachAppBar = 0;
       });
     }
-    if (_controller.offset >= title.style.fontSize) {
+    if (_controller.offset >= title.style.fontSize - 5) {
       setState(() {
         reachTop = 1;
       });
@@ -96,7 +96,7 @@ class _TestState extends State<Test> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
-            child: reachTop == 0 ? title : emptyTitle,
+            child: reachTop == 0 ? Hero(tag: 'alo', child: title) : emptyTitle,
           ),
           Container(
             padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -140,6 +140,9 @@ class _TestState extends State<Test> {
                     Navigator.push(
                         context,
                         PageTransition(child: AccountDetail(), type: PageTransitionType.rightToLeft));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => AccountDetail()));
                   },
                   dense: true,
                   leading: Icon(Icons.person, color: Colors.white, size: 38.0),
