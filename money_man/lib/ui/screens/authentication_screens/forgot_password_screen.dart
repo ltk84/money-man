@@ -36,7 +36,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                 if (_formKey.currentState.validate()) {
                   final _auth = FirebaseAuthService();
                   final res = await _auth.resetPassword(_email);
+                  print(res.runtimeType);
                   if (res is String) {
+                    print('inside if');
                     String error = "";
                     switch (res) {
                       case 'invalid-email':

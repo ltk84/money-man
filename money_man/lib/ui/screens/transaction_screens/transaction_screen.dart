@@ -26,6 +26,7 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
+  String id;
   @override
   void initState() {
     super.initState();
@@ -45,12 +46,18 @@ class _TransactionScreen extends State<TransactionScreen>
                 children: [
                   Expanded(
                     child: IconButton(
-                      icon: const Icon(Icons.account_balance_wallet,
-                          color: Colors.grey),
-                      onPressed: () {
-                        buildShowDialog(context);
-                      },
-                    ),
+                        icon: const Icon(Icons.account_balance_wallet,
+                            color: Colors.grey),
+                        onPressed: () async {
+                          id = await Provider.of<FirebaseFireStoreService>(
+                                  context,
+                                  listen: false)
+                              .selectedWalletID;
+                          buildShowDialog(context, id);
+                          // return showDialog(
+                          //     context: context,
+                          //     builder: (_) => WalletSelectionScreen());
+                        }),
                   ),
                   Expanded(
                     child: IconButton(
@@ -303,17 +310,17 @@ class _TransactionScreen extends State<TransactionScreen>
             )));
   }
 
-  void buildShowDialog(BuildContext context) {
+  void buildShowDialog(BuildContext context, id) {
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+
     showDialog(
         context: context,
         builder: (context) {
           return Provider(
-            create: (_) {
-              return FirebaseFireStoreService(uid: _auth.currentUser.uid);
-            },
-            child: WalletSelectionScreen(),
-          );
+              create: (_) {
+                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+              },
+              child: WalletSelectionScreen(id: id));
         });
   }
 

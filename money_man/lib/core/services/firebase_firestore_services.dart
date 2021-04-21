@@ -11,6 +11,27 @@ class FirebaseFireStoreService {
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
 
+  // update id của wallet đang được chọn
+  void updateSelectedWalletID(String walletID) async {
+    await users.doc(uid).set({
+      'selectedWalletID': walletID,
+    });
+  }
+
+  dynamic get selectedWalletID async {
+    try {
+      String ref = "";
+      await users.doc(uid).get().then((value) async {
+        ref = await value.data()['selectedWalletID'];
+      });
+      print(ref);
+      return ref;
+    } on StateError catch (e) {
+      print('Field not exist');
+      return null;
+    }
+  }
+
   //add transaction
   Future addTransaction(Wallet wallet, MyTransaction transaction) async {
     final transactionRef = users
@@ -32,8 +53,8 @@ class FirebaseFireStoreService {
     // final id = walletRef.parent;
     Wallet wallet = Wallet(
         id: walletRef.id,
-        name: 'test',
-        amount: 10,
+        name: 'test1',
+        amount: 100,
         currencyID: 'a',
         iconID: 'a');
 
