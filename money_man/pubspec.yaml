@@ -23,6 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  rounded_loading_button: ^1.0.0
+  slide_button: ^0.2.8
+  progress_state_button: ^1.0.2
 
 
   # The following adds the Cupertino Icons font to your application.
