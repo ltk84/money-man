@@ -1,7 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:sticky_headers/sticky_headers.dart';
+
+import 'account_detail_screen.dart';
+
+import 'package:page_transition/page_transition.dart';
 
 class AccountScreen extends StatelessWidget {
   @override
@@ -23,32 +26,6 @@ class _TestState extends State<Test> {
   //
   Text title = Text('More', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
   Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
-
-  // Cái AppBar này không có gì hết. <- Này dùng để tạo hiệu ứng ẩn hiện AppBar.
-  AppBar emptyAppBar = AppBar(
-    backgroundColor: Colors.transparent,
-    elevation: 0,
-  );
-
-  // Đây là cái AppBar thực tế sẽ hiển thị.
-  AppBar realAppBar = AppBar(
-    centerTitle: true,
-    backgroundColor: Colors.transparent,
-    elevation: 0,
-    brightness: Brightness.light,
-    flexibleSpace: ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
-        child: Container(
-          color: Colors.transparent,
-        ),
-      ),
-    ),
-    title: Text(
-      'More',
-      style: TextStyle(color: Colors.white),
-    )
-  );
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
@@ -111,7 +88,7 @@ class _TestState extends State<Test> {
             opacity: reachTop == 1 ? 1 : 0,
             duration: Duration(milliseconds: 100),
             child: Text('More', style: TextStyle(color: Colors.white, fontFamily: 'Montseratt', fontSize: 17.0))
-          )
+          ),
       ),
       body: ListView(
         physics: BouncingScrollPhysics(),
@@ -159,7 +136,11 @@ class _TestState extends State<Test> {
                   color: Colors.white,
                 ),
                 ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(child: AccountDetail(), type: PageTransitionType.rightToLeft));
+                  },
                   dense: true,
                   leading: Icon(Icons.person, color: Colors.white, size: 38.0),
                   title: Text('My Account', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontFamily: 'Montserrat')),

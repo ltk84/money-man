@@ -101,6 +101,7 @@ class _TransactionScreen extends State<TransactionScreen>
               Container(
                 color: Colors.black,
                 child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
                   //primary: false,
                   shrinkWrap: true,
                   itemCount: TRANSACTION_DATA.length + 1,

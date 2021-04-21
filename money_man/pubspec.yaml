@@ -42,7 +42,7 @@ dependencies:
   sticky_headers: "^0.1.8"
   flutter_facebook_auth: "^1.0.0"
   flutter_facebook_login: ^3.0.0
-  
+  page_transition: ^1.1.7+6
 
 
 
