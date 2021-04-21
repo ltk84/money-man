@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 
-void main() => runApp(Piechart());
+//void main() => runApp(Piechart(lg));
 
 class Piechart extends StatelessWidget {
   @override
+  bool legend;
+  Piechart(bool lg){
+    legend = lg;
+  }
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: _Piechart(),
+      home: _Piechart(legend),
     );
   }
 }
 class _Piechart extends StatelessWidget {
+  bool _legend;
+  _Piechart(bool lg){
+    _legend = lg;
+  }
   final Map<String, double> dataMap = {
     "Drink": 500,
     "Mean": 300,
     "Plan": 200,
-    "transport": 200,
+    "Transport": 200,
   };
   List<Color> colorList = [
     Colors.red,
@@ -34,7 +42,7 @@ class _Piechart extends StatelessWidget {
   bool _showLegends = false;
 
   bool _showChartValueBackground = false;
-  bool _showChartValues = true;
+  bool _showChartValues = false;
   bool _showChartValuesInPercentage = false;
   bool _showChartValuesOutside = false;
 
@@ -59,12 +67,13 @@ class _Piechart extends StatelessWidget {
       legendOptions: LegendOptions(
         showLegendsInRow: _showLegendsInRow,
         legendPosition: _legendPosition,
-        showLegends: _showLegends,
+        showLegends: (_legend == true)?true:false,
         legendShape: _options == BoxShape.circle
             ? BoxShape.circle
             : BoxShape.rectangle,
         legendTextStyle: TextStyle(
-          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: Colors.white
         ),
       ),
       chartValuesOptions: ChartValuesOptions(

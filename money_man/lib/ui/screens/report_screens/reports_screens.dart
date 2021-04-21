@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
+import 'package:money_man/ui/screens/report_screens/chart_information_home_screan.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
 import 'package:money_man/ui/screens/time_selection.dart';
 import '../../style.dart';
 import 'package:money_man/ui/screens/wallet_selection.dart';
 import '../wallet_selection.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 
 class ReportScreen extends StatefulWidget{
@@ -27,6 +27,8 @@ class ReportScreen extends StatefulWidget{
 
 class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
   TabController _tabController;
+  String Open;
+  String Close;
   @override
   void initState() {
     super.initState();
@@ -67,8 +69,17 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
             ),
           title: Column(
             children: <Widget>[
-              Text('Wallet', style: TextStyle(fontSize: 14),),
-              Text('100000\$', style: TextStyle(fontSize: 14),),
+              Text('Wallet', style:TextStyle(
+              color: Colors.white,
+              fontSize: 12.0,
+              )
+              ),
+              Text('100000\$', style: TextStyle
+                (
+                  color: Colors.white,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold
+              )),
             ],
           ),
           bottom: TabBar(
@@ -105,7 +116,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                      shrinkWrap: true,
                    children: <Widget>[
                      Container(
-                       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                        decoration: BoxDecoration(
                            color: Colors.grey[900],
                            border: Border(
@@ -132,8 +143,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                            padding: const EdgeInsets.fromLTRB(0,10,100,10),
                            child: Column(
                              children: <Widget>[
-                               Text('Openning',style: tsButton),
-                               Text('100\$',style: tsButton),
+                               Text('Openning',style: TextStyle(color: Colors.white)),
+                               Text('100\$',style: TextStyle(color: Colors.white)),
                              ],
                            ),
                          ),
@@ -141,8 +152,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                            padding: const EdgeInsets.fromLTRB(0,10,0,10),
                            child: Column(
                              children: <Widget>[
-                               Text('Closing',style: tsButton),
-                               Text('300\$',style: tsButton),
+                               Text('Closing',style: TextStyle(color: Colors.white)),
+                               Text('300\$',style: TextStyle(color: Colors.white)),
                              ],
                            ),
                          )
@@ -151,10 +162,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                      ]),
                      ),
                      SizedBox(
-                       height: 10,
+                       height: 5,
                      ),
                      Container(
-                       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                        decoration: BoxDecoration(
                            color: Colors.grey[900],
                            border: Border(
@@ -169,37 +180,34 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                            )
                        ),
                        child: Column(
-                         children: <Widget>[
-                           Row(
+                           children: <Widget>[
+                             Row(
+                                 children: <Widget>[
+                                   Text('Revenue and Expenditure',style: TextStyle(fontSize: 17, color: Colors.white), textAlign: TextAlign.start,),
+                                 ]
+                             ),
+                             Row(
                                children: <Widget>[
-                                 Text('Revenue and expenditure \n',style: TextStyle(fontSize: 17, color: Colors.white), textAlign: TextAlign.start,),
-                               ]
-                           ),
-                           Column(
-                             children: <Widget>[
-                               Row(
-                                   children: <Widget>[
-                                     Text('Net income',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                                   ]
-                               ),
-                               Row(
-                                   children: <Widget>[
-                                     Text('200\$',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                                   ]
-                               ),
-                             ],
-                           )
-                         ],
-                       ) ,
+                                 Container(
+                                   padding: const EdgeInsets.fromLTRB(0,10,100,10),
+                                   child: Column(
+                                     children: <Widget>[
+                                       Text('Net Income',style: TextStyle(color: Colors.white)),
+                                       Text('100\$',style: TextStyle(color: Colors.white)),
+                                     ],
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ]),
                      ),
                      SizedBox(
-                         width: 400,
-                         height: 180,
+                         width: 450,
+                         height: 200,
                          child: Barchart(),
                      ),
-
                      SizedBox(
-                       height: 10,
+                       height: 5,
                      ),
                      Row(
                        children: <Widget>[
@@ -210,9 +218,29 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                Text('Openning',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
                                Text('0\$ \n',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
                                SizedBox(
-                                 width: 90,
-                                 height: 90,
-                                 child: Piechart(),
+                                   width: 90,
+                                   height: 90,
+                                   child: Stack(
+                                     children: <Widget>[
+                                       Container(
+                                         width: 90,
+                                         height: 90,
+                                         child: Piechart(false),
+                                       ),
+                                       IconButton(
+                                           icon: Icon(Icons.circle),
+                                           color: Colors.transparent,
+                                           iconSize: 200,
+                                           onPressed: (){
+                                             return showDialog(
+                                                 context: context,
+                                                 builder: (context) {
+                                                   return InformationHomeScreen(0,'Opening balance');
+                                                 });
+                                           }
+                                       )
+                                     ],
+                                   )
                                ),
                              ],
                            ),
@@ -224,10 +252,29 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                Text('Closing',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
                                Text('0\$ \n',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
                                SizedBox(
-                                 width: 90,
-                                 height: 90,
-                                 child: Piechart(),
-
+                                   width: 90,
+                                   height: 90,
+                                   child: Stack(
+                                     children: <Widget>[
+                                       Container(
+                                         width: 90,
+                                         height: 90,
+                                         child: Piechart(false),
+                                       ),
+                                       IconButton(
+                                         icon: Icon(Icons.circle),
+                                           color: Colors.transparent,
+                                           iconSize: 200,
+                                           onPressed: (){
+                                             return showDialog(
+                                                 context: context,
+                                                 builder: (context) {
+                                                   return InformationHomeScreen(0,'Closing balance');
+                                                 });
+                                           }
+                                       )
+                                     ],
+                                   )
                                ),
                              ],
                            ),
@@ -235,35 +282,85 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                        ],
                      ),
                      SizedBox(
-                       height: 10,
+                       height:5,
                      ),
-                     Row(
-                       children: <Widget>[
-                         Container(
-                           padding: const EdgeInsets.fromLTRB(15,10,100,10),
-                           child: Column(
-                             children: <Widget>[
-                               Text('Owe',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                               Text('0\$ \n',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                             ],
-                           ),
-                         ),
-                         Container(
-                           padding: const EdgeInsets.fromLTRB(0,10,0,10),
-                           child: Column(
-                             children: <Widget>[
-                               Text('Loan',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                               Text('0\$ \n',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                             ],
-                           ),
-                         )
-                       ],
-                     ),
-                     Row(
+                     Container(
+                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                       decoration: BoxDecoration(
+                           color: Colors.grey[900],
+                           border: Border(
+                               bottom: BorderSide(
+                                 color: Colors.black,
+                                 width: 1.0,
+                               ),
+                               top: BorderSide(
+                                 color: Colors.black,
+                                 width:1.0,
+                               )
+                           )
+                       ),
+                       child: Column(
                            children: <Widget>[
-                             Text('Other \n100\$',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                           ],
-                         )
+                             Row(
+                               children: <Widget>[
+                                 Container(
+                                   padding: const EdgeInsets.fromLTRB(0,10,100,10),
+                                   child: Column(
+                                     children: <Widget>[
+                                       Text('Owe',style: TextStyle(color: Colors.white)),
+                                       Text('0\$',style: TextStyle(color: Colors.white)),
+                                     ],
+                                   ),
+                                 ),
+                                 Container(
+                                   padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                                   child: Column(
+                                     children: <Widget>[
+                                       Text('Loan',style: TextStyle(color: Colors.white)),
+                                       Text('0\$',style: TextStyle(color: Colors.white)),
+                                     ],
+                                   ),
+                                 )
+                               ],
+                             ),
+                           ]),
+                     ),
+                     SizedBox(
+                       height: 5,
+                     ),
+                     Container(
+                       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                       decoration: BoxDecoration(
+                           color: Colors.grey[900],
+                           border: Border(
+                               bottom: BorderSide(
+                                 color: Colors.black,
+                                 width: 1.0,
+                               ),
+                               top: BorderSide(
+                                 color: Colors.black,
+                                 width:1.0,
+                               )
+                           )
+                       ),
+                       child: Column(
+                           children: <Widget>[
+                             Row(
+                                 children: <Widget>[
+                                   Container(
+                                     padding: const EdgeInsets.fromLTRB(0,10,100,10),
+                                     child: Column(
+                                       children: <Widget>[
+                                         Text('Other',style: TextStyle(color: Colors.white)),
+                                         Text('100\$',style: TextStyle(color: Colors.white)),
+                                       ],
+                                     ),
+                                   ),
+                                 ]
+                             ),
+                           ]
+                       ),
+                     ),
                    ],
                  ),
                  );
