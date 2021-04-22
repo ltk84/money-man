@@ -55,9 +55,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ButtonTheme(
                         minWidth: 300,
                         child: RaisedButton(
-                            onPressed: () {
-                              widget.changeShow();
-                            },
+                            onPressed: () {},
                             elevation: 0,
                             child: Text(
                               'SIGN UP',
@@ -75,7 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           elevation: 0,
                           color: Colors.white,
                           onPressed: () {
-                            // Thao tác đăng nhập
+                            widget.changeShow();
                           },
                           child: Text(
                             'LOGIN',

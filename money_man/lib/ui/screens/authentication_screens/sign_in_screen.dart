@@ -96,7 +96,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   'Sign up',
                                   style: TextStyle(
                                     fontFamily: 'Montserrat',
-                                    color: Colors.blue,
+                                    color: Colors.red[900],
                                   ),
                                 ),
                               )),
@@ -105,14 +105,15 @@ class _SignInScreenState extends State<SignInScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => ForgotPasswordScreen()));
+                                        builder: (_) =>
+                                            ForgotPasswordScreen()));
                                 //Forgot Password
                               },
                               child: Text(
                                 'Forgot password?',
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
-                                  color: Colors.blue,
+                                  color: Colors.red[900],
                                 ),
                               )),
                         ],
@@ -144,9 +145,9 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
                           onPressed: () {
-                          final _auth = FirebaseAuthService();
-                          // _auth.signInWithFacebook();
-                          _auth.signInWithFacebookVer2();
+                            final _auth = FirebaseAuthService();
+                            // _auth.signInWithFacebook();
+                            _auth.signInWithFacebookVer2();
                           },
                           child: CustomListTile(
                             text: "Connect to Facebook",
@@ -166,7 +167,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           onPressed: () {
                             final _auth = FirebaseAuthService();
                             // _auth.signInWithFacebook();
-                            _auth.signInWithGoogleAccount();},
+                            _auth.signInWithGoogleAccount();
+                          },
                           child: CustomListTile(
                             text: "Connect to Google",
                             imgName: "logoGG.png",
@@ -278,33 +280,39 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
         SizedBox(height: 10),
-        TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty)
-              return 'Password not empty';
-            else if (value.length < 6)
-              return 'Password must longer than 6 digits';
-            return null;
-          },
-          style: TextStyle(fontFamily: 'Montserrat'),
-          onChanged: (value) => _password = value,
-          decoration: InputDecoration(
-            prefixIcon: Icon(Icons.security),
-            labelText: 'Password',
-            suffixIcon: IconButton(
-              icon: trailingIconPass,
-              onPressed: () => this.setState(() {
-                isObcure = !isObcure;
-                show = !show;
-                trailingIconPass = Icon(
-                    show == true ? Icons.remove_red_eye : Icons.receipt_long);
-              }),
-            ),
+        Theme(
+          data: Theme.of(context).copyWith(
+            // override textfield's icon color when selected
+            primaryColor: Colors.black,
           ),
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.done,
-          autocorrect: false,
-          obscureText: isObcure,
+          child: TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return 'Password not empty';
+              else if (value.length < 6)
+                return 'Password must longer than 6 digits';
+              return null;
+            },
+            style: TextStyle(fontFamily: 'Montserrat'),
+            onChanged: (value) => _password = value,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.security),
+              labelText: 'Password',
+              suffixIcon: IconButton(
+                icon: trailingIconPass,
+                onPressed: () => this.setState(() {
+                  isObcure = !isObcure;
+                  show = !show;
+                  trailingIconPass = Icon(
+                      show == true ? Icons.remove_red_eye : Icons.receipt_long);
+                }),
+              ),
+            ),
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            autocorrect: false,
+            obscureText: isObcure,
+          ),
         ),
       ],
     );

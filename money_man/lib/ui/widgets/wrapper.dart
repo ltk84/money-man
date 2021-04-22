@@ -21,8 +21,7 @@ class Wrapper extends StatelessWidget {
     if (userSnapshot.connectionState == ConnectionState.active) {
       if (userSnapshot.hasData) {
         if (userSnapshot.data.emailVerified || userSnapshot.data.isAnonymous)
-          //return HomeScreen();
-          return ForgotPasswordScreen();
+          return HomeScreen();
         else
           return VerifyEmailScreen();
       } else
