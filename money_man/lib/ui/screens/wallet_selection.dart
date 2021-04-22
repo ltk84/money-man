@@ -5,17 +5,13 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
-class WalletSelectionScreen extends StatefulWidget {
-  String id;
+class WalletSelectionScreen extends StatelessWidget {
+  final String id;
   WalletSelectionScreen({
     Key key,
     @required this.id,
   }) : super(key: key);
-  @override
-  _WalletSelectionScreenState createState() => _WalletSelectionScreenState();
-}
 
-class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -123,7 +119,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                   ),
                 ),
                 WalletDisplay(
-                  id: widget.id,
+                  id: id,
                 ),
                 SizedBox(
                   height: 20,
@@ -144,6 +140,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             ))),
                     child: TextButton(
                       onPressed: () {
+                        // add test thôi cần thêm screen để điền thêm thông tin wallet
                         _firestore.addWallet();
                       },
                       child: Text('Add wallet', style: tsButton_wallet),
@@ -175,122 +172,104 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
   }
 }
 
-// class WalletDisplay extends StatefulWidget {
-//   String id;
-//   WalletDisplay({Key key, @required this.id}) : super(key: key);
-//   @override
-//   _WalletDisplayState createState() => _WalletDisplayState();
-// }
-
-class WalletDisplay extends StatelessWidget {
+class WalletDisplay extends StatefulWidget {
   String id;
   WalletDisplay({
     Key key,
     @required this.id,
   }) : super(key: key);
+
+  @override
+  _WalletDisplayState createState() => _WalletDisplayState();
+}
+
+class _WalletDisplayState extends State<WalletDisplay> {
   @override
   Widget build(BuildContext context) {
     final _firestore =
         Provider.of<FirebaseFireStoreService>(context, listen: false);
+
     return Expanded(
       child: StreamBuilder<List<Wallet>>(
           stream: _firestore.streamWallet,
           builder: (context, snapshot) {
             final listWallet = snapshot.data ?? [];
-            // print(listWallet.length);
             return ListView.builder(
-              itemCount: listWallet.length,
-              itemBuilder: (context, index) =>
-                  buildWalletInfo(listWallet, index, id),
-            );
+                itemCount: listWallet.length,
+                itemBuilder: (context, index) {
+                  return widget.id == listWallet[index].id
+                      ? GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[900],
+                                border: Border(
+                                    top: BorderSide(
+                                      color: Colors.grey[900],
+                                      width: 1.0,
+                                    ),
+                                    bottom: BorderSide(
+                                      color: Colors.grey[900],
+                                      width: 1.0,
+                                    ))),
+                            child: ListTile(
+                              leading: Icon(
+                                Icons.account_balance_wallet_outlined,
+                                color: Colors.white,
+                              ),
+                              title: Text(
+                                listWallet[index].name,
+                                style: tsMain,
+                              ),
+                              subtitle: Text(
+                                listWallet[index].amount.toString(),
+                                style: tsChild,
+                              ),
+                              trailing: Icon(Icons.check, color: Colors.blue),
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              widget.id = listWallet[index].id;
+                              _firestore.updateSelectedWalletID(widget.id);
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[900],
+                                border: Border(
+                                    top: BorderSide(
+                                      color: Colors.grey[900],
+                                      width: 1.0,
+                                    ),
+                                    bottom: BorderSide(
+                                      color: Colors.grey[900],
+                                      width: 1.0,
+                                    ))),
+                            child: ListTile(
+                              leading: Icon(
+                                Icons.account_balance_wallet_outlined,
+                                color: Colors.white,
+                              ),
+                              title: Text(
+                                listWallet[index].name,
+                                style: tsMain,
+                              ),
+                              subtitle: Text(
+                                listWallet[index].amount.toString(),
+                                style: tsChild,
+                              ),
+                            ),
+                          ),
+                        );
+                });
           }),
     );
-  }
-
-  buildWalletInfo(List<Wallet> listWallet, int index, id) {
-    return id == listWallet[index].id
-        ? Container(
-            padding: EdgeInsets.all(20.0),
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.grey[900],
-                border: Border(
-                    top: BorderSide(
-                      color: Colors.grey[900],
-                      width: 1.0,
-                    ),
-                    bottom: BorderSide(
-                      color: Colors.grey[900],
-                      width: 1.0,
-                    ))),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Icon(Icons.account_balance_wallet_outlined,
-                      color: Colors.white),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${listWallet[index].name}',
-                        style: tsMain,
-                      ),
-                      Text(
-                        '(${listWallet[index].amount})',
-                        style: tsChild,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(flex: 1, child: Icon(Icons.check, color: Colors.blue))
-              ],
-            ),
-          )
-        : Container(
-            padding: EdgeInsets.all(20.0),
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.grey[900],
-                border: Border(
-                    top: BorderSide(
-                      color: Colors.grey[900],
-                      width: 1.0,
-                    ),
-                    bottom: BorderSide(
-                      color: Colors.grey[900],
-                      width: 1.0,
-                    ))),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Icon(Icons.account_balance_wallet_outlined,
-                      color: Colors.white),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${listWallet[index].name}',
-                        style: tsMain,
-                      ),
-                      Text(
-                        '(${listWallet[index].amount})',
-                        style: tsChild,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
   }
 }
