@@ -87,7 +87,7 @@ class _TestState extends State<Test> {
           title: AnimatedOpacity(
             opacity: reachTop == 1 ? 1 : 0,
             duration: Duration(milliseconds: 100),
-            child: Text('More', style: TextStyle(color: Colors.white, fontFamily: 'Montseratt', fontSize: 17.0))
+            child: Text('More', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 17.0))
           ),
       ),
       body: ListView(
@@ -139,10 +139,7 @@ class _TestState extends State<Test> {
                   onTap: () {
                     Navigator.push(
                         context,
-                        PageTransition(child: AccountDetail(), type: PageTransitionType.rightToLeft));
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => AccountDetail()));
+                        PageTransition(duration: Duration(milliseconds: 300),child: AccountDetail(), type: PageTransitionType.rightToLeft));
                   },
                   dense: true,
                   leading: Icon(Icons.person, color: Colors.white, size: 38.0),

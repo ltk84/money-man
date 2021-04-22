@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 
+
 class AccountDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -83,7 +84,11 @@ class _TestState extends State<Test> {
               child: Row(
                 children: [
                   Icon(Icons.arrow_back_ios, color: Colors.white),
-                  Hero(tag: 'alo', child: Text('More', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w500))),
+                  Hero(
+                    tag: 'alo',
+                    child: Text('More', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w500)
+                    )
+                  ),
                 ],
               ),
             ),
