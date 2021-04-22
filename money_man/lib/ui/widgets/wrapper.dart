@@ -24,7 +24,6 @@ class Wrapper extends StatelessWidget {
         return Authentication();
     }
     return LoadingScreen();
-
     //return HomeScreen();
   }
 }

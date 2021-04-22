@@ -26,7 +26,7 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
-  String idSelectedWallet;
+  String id;
   @override
   void initState() {
     super.initState();
@@ -49,30 +49,24 @@ class _TransactionScreen extends State<TransactionScreen>
                         icon: const Icon(Icons.account_balance_wallet,
                             color: Colors.grey),
                         onPressed: () async {
-<<<<<<< HEAD
                           id = await Provider.of<FirebaseFireStoreService>(
                                   context,
                                   listen: false)
                               .selectedWalletID;
                           buildShowDialog(context, id);
-=======
-                          idSelectedWallet =
-                              await Provider.of<FirebaseFireStoreService>(
-                                      context,
-                                      listen: false)
-                                  .selectedWalletID;
-                          buildShowDialog(context, idSelectedWallet);
-                          // return showDialog(
-                          //     context: context,
-                          //     builder: (_) => WalletSelectionScreen());
->>>>>>> 55920905e15bae42b61ee6cea868cd24e9e39e27
                         }),
                   ),
                   Expanded(
                     child: IconButton(
                       icon:
                           const Icon(Icons.arrow_drop_down, color: Colors.grey),
-                      onPressed: () {},
+                      onPressed: () async {
+                        id = await Provider.of<FirebaseFireStoreService>(
+                                context,
+                                listen: false)
+                            .selectedWalletID;
+                        buildShowDialog(context, id);
+                      },
                     ),
                   )
                 ],
@@ -114,6 +108,7 @@ class _TransactionScreen extends State<TransactionScreen>
                 return Container(
                   color: Colors.black,
                   child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
                       //primary: false,
                       shrinkWrap: true,
                       itemCount: TRANSACTION_DATA.length + 1,

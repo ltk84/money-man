@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_man/ui/screens/account_screen/account_screen.dart';
 import 'package:money_man/ui/screens/report_screens/report_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_screen.dart';
@@ -17,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ReportScreen(),
     LoadingScreen(),
     ErrorScreen(),
-    ErrorScreen()
+    AccountScreen(),
   ];
 
   void _onItemTap(int index) {
@@ -29,11 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white38,
       body: _screens.elementAt(_selectedIndex),
       bottomNavigationBar: BottomAppBar(
         notchMargin: 5,
         shape: CircularNotchedRectangle(),
-        color: Colors.grey[900],
+        color: Colors.black,
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           elevation: 0,
