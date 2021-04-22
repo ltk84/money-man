@@ -54,9 +54,6 @@ class _TransactionScreen extends State<TransactionScreen>
                                   listen: false)
                               .selectedWalletID;
                           buildShowDialog(context, id);
-                          // return showDialog(
-                          //     context: context,
-                          //     builder: (_) => WalletSelectionScreen());
                         }),
                   ),
                   Expanded(
