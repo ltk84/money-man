@@ -7,8 +7,8 @@ import 'package:money_man/ui/screens/transaction_screens/transaction_screen.dart
 import 'package:money_man/ui/screens/shared_screens/error_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  final currentWalletID;
-  const HomeScreen({Key key, this.currentWalletID}) : super(key: key);
+  final currentWallet;
+  const HomeScreen({Key key, this.currentWallet}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -24,8 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('home build + ${widget.currentWallet.id}');
     List<Widget> _screens = [
-      TransactionScreen(walletID: widget.currentWalletID),
+      TransactionScreen(currentWallet: widget.currentWallet),
       ReportScreen(),
       LoadingScreen(),
       ErrorScreen(),

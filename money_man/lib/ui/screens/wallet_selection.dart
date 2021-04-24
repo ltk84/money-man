@@ -186,8 +186,8 @@ class WalletDisplay extends StatefulWidget {
 class _WalletDisplayState extends State<WalletDisplay> {
   @override
   Widget build(BuildContext context) {
-    final _firestore =
-        Provider.of<FirebaseFireStoreService>(context, listen: false);
+    print('wallet select build + ${widget.id}');
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Expanded(
       child: StreamBuilder<List<Wallet>>(
@@ -195,7 +195,6 @@ class _WalletDisplayState extends State<WalletDisplay> {
           builder: (context, snapshot) {
             final listWallet = snapshot.data ?? [];
             print(listWallet.length);
-            print(snapshot.data);
             return ListView.builder(
                 itemCount: listWallet.length,
                 itemBuilder: (context, index) {

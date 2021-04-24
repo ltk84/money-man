@@ -13,42 +13,44 @@ class FirebaseFireStoreService {
 
   // update id của wallet đang được chọn
   void updateSelectedWalletID(String walletID) async {
-    await users.doc(uid).set({
-      'selectedWalletID': walletID,
+    Wallet w;
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletID)
+        .get()
+        .then((value) {
+      w = Wallet.fromMap(value.data());
     });
+
+    await users
+        .doc(uid)
+        .update(w.toMap())
+        .then((value) => print('updated!'))
+        .catchError((onError) => print(onError));
   }
 
   // stream wallet hiện tại
-  Stream<String> get currentWalletID {
-    return users.doc(uid).snapshots().map((event) => event.data()['id']);
+  Stream<Wallet> get currentWallet {
+    return users
+        .doc(uid)
+        .snapshots()
+        .map((event) => Wallet.fromMap(event.data()));
   }
 
   // lấy id của wallet đang được chọn
-  get selectedWalletID async {
-    try {
-      String ref = "";
-      await users.doc(uid).get().then((value) async {
-        ref = await value.data()['selectedWalletID'];
-      });
-      return ref;
-    } on StateError catch (e) {
-      print('Field not exist');
-      return null;
-    }
-  }
-
-  // lấy thông tin wallet đang được chọn
-  get selectedWallet async {
-    Wallet currentwallet;
-    await users.doc(uid).get().then((value) {
-      currentwallet = Wallet.fromMap(value.data());
-    });
-    return currentwallet;
-    // await users
-    // .doc(uid)
-    // .get()
-    // .then((value) => print(value.data()['amount'].runtimeType));
-  }
+  // get selectedWalletID async {
+  //   try {
+  //     String ref = "";
+  //     await users.doc(uid).get().then((value) async {
+  //       ref = await value.data()['selectedWalletID'];
+  //     });
+  //     return ref;
+  //   } on StateError catch (e) {
+  //     print('Field not exist');
+  //     return null;
+  //   }
+  // }
 
   //add transaction
   Future addTransaction(Wallet wallet, MyTransaction transaction) async {
@@ -72,7 +74,7 @@ class FirebaseFireStoreService {
     Wallet wallet = Wallet(
         id: walletRef.id,
         name: 'test1',
-        amount: '100',
+        amount: 100,
         currencyID: 'a',
         iconID: 'a');
 

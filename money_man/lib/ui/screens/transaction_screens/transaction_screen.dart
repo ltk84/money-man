@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:money_man/core/models/test.dart';
+import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,8 @@ import 'package:sticky_headers/sticky_headers.dart';
 import 'package:money_man/ui/screens/wallet_selection.dart';
 
 class TransactionScreen extends StatefulWidget {
-  final walletID;
+  final Wallet currentWallet;
+
   final List<Tab> myTabs = List.generate(200, (index) {
     var now = DateTime.now();
     var date = DateTime(now.year, now.month + index - 100, now.day);
@@ -18,7 +20,7 @@ class TransactionScreen extends StatefulWidget {
     return Tab(text: dateDisplay);
   });
 
-  TransactionScreen({Key key, this.walletID}) : super(key: key);
+  TransactionScreen({Key key, this.currentWallet}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -29,16 +31,37 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
-  String id;
+  Wallet wallet;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 200, vsync: this, initialIndex: 150);
+    wallet = widget.currentWallet ??
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 100,
+            currencyID: 'a',
+            iconID: 'b');
+  }
+
+  @override
+  void didUpdateWidget(covariant TransactionScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    wallet = widget.currentWallet ??
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 100,
+            currencyID: 'a',
+            iconID: 'b');
   }
 
   @override
   Widget build(BuildContext context) {
+    print('trans build + ${widget.currentWallet.id}');
     return DefaultTabController(
         length: 300,
         child: Scaffold(
@@ -53,11 +76,8 @@ class _TransactionScreen extends State<TransactionScreen>
                         icon: const Icon(Icons.account_balance_wallet,
                             color: Colors.grey),
                         onPressed: () async {
-                          id = await Provider.of<FirebaseFireStoreService>(
-                                  context,
-                                  listen: false)
-                              .selectedWalletID;
-                          buildShowDialog(context, id);
+                          // print('pressed' + widget.currentWallet.id);
+                          buildShowDialog(context, wallet.id);
                         }),
                   ),
                   Expanded(
@@ -65,20 +85,16 @@ class _TransactionScreen extends State<TransactionScreen>
                       icon:
                           const Icon(Icons.arrow_drop_down, color: Colors.grey),
                       onPressed: () async {
-                        id = await Provider.of<FirebaseFireStoreService>(
-                                context,
-                                listen: false)
-                            .selectedWalletID;
-                        buildShowDialog(context, widget.walletID);
+                        buildShowDialog(context, wallet.id);
                       },
                     ),
                   )
                 ],
               ),
               title: Column(children: [
-                Text('Wallet',
+                Text(wallet.name,
                     style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
-                Text('+100,000 đ',
+                Text(wallet.amount.toString(),
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 15.0,

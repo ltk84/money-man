@@ -18,27 +18,25 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    return StreamBuilder<String>(
-        stream: _firestore.currentWalletID,
+    return StreamBuilder<Wallet>(
+        stream: _firestore.currentWallet,
         builder: (context, snapshot) {
-          final walletID = snapshot.data;
-          print(walletID);
+          final currentWallet = snapshot.data;
+          print('streambuilder build + ${currentWallet.id}');
           if (userSnapshot.connectionState == ConnectionState.active) {
             if (userSnapshot.hasData) {
               if (userSnapshot.data.emailVerified ||
                   userSnapshot.data.isAnonymous)
-                return HomeScreen();
+                return HomeScreen(
+                  currentWallet: currentWallet,
+                );
               else
                 return VerifyEmailScreen();
             } else
               return Authentication();
           }
           return LoadingScreen();
-          //return HomeScreen();
         });
+    //return HomeScreen();
   }
-}
-
-Future getCurrentWallet(BuildContext context) async {
-  return await Provider.of<FirebaseFireStoreService>(context).selectedWallet;
 }
