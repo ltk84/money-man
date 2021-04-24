@@ -194,6 +194,8 @@ class _WalletDisplayState extends State<WalletDisplay> {
           stream: _firestore.streamWallet,
           builder: (context, snapshot) {
             final listWallet = snapshot.data ?? [];
+            print(listWallet.length);
+            print(snapshot.data);
             return ListView.builder(
                 itemCount: listWallet.length,
                 itemBuilder: (context, index) {

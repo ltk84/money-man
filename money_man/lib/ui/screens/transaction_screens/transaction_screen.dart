@@ -10,12 +10,15 @@ import 'package:sticky_headers/sticky_headers.dart';
 import 'package:money_man/ui/screens/wallet_selection.dart';
 
 class TransactionScreen extends StatefulWidget {
+  final walletID;
   final List<Tab> myTabs = List.generate(200, (index) {
     var now = DateTime.now();
     var date = DateTime(now.year, now.month + index - 100, now.day);
     String dateDisplay = DateFormat('MM/yyyy').format(date);
     return Tab(text: dateDisplay);
   });
+
+  TransactionScreen({Key key, this.walletID}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -27,6 +30,7 @@ class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
   String id;
+
   @override
   void initState() {
     super.initState();
@@ -65,7 +69,7 @@ class _TransactionScreen extends State<TransactionScreen>
                                 context,
                                 listen: false)
                             .selectedWalletID;
-                        buildShowDialog(context, id);
+                        buildShowDialog(context, widget.walletID);
                       },
                     ),
                   )

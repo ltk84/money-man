@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Wallet {
   String id;
   String name;
-  double amount;
+  String amount;
   String currencyID;
   String iconID;
   Wallet({

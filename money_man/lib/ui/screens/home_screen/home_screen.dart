@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:money_man/ui/screens/account_screen/account_screen.dart';
+import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/ui/screens/account_screens/account_screen.dart';
 import 'package:money_man/ui/screens/report_screens/report_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/error_screen.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
+  final currentWalletID;
+  const HomeScreen({Key key, this.currentWalletID}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  static List<Widget> _screens = [
-    TransactionScreen(),
-    ReportScreen(),
-    LoadingScreen(),
-    ErrorScreen(),
-    AccountScreen(),
-  ];
 
   void _onItemTap(int index) {
     setState(() {
@@ -29,6 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _screens = [
+      TransactionScreen(walletID: widget.currentWalletID),
+      ReportScreen(),
+      LoadingScreen(),
+      ErrorScreen(),
+      AccountScreen(),
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white38,
       body: _screens.elementAt(_selectedIndex),

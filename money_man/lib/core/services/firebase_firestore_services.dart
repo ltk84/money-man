@@ -18,18 +18,36 @@ class FirebaseFireStoreService {
     });
   }
 
-  dynamic get selectedWalletID async {
+  // stream wallet hiện tại
+  Stream<String> get currentWalletID {
+    return users.doc(uid).snapshots().map((event) => event.data()['id']);
+  }
+
+  // lấy id của wallet đang được chọn
+  get selectedWalletID async {
     try {
       String ref = "";
       await users.doc(uid).get().then((value) async {
         ref = await value.data()['selectedWalletID'];
       });
-      print(ref);
       return ref;
     } on StateError catch (e) {
       print('Field not exist');
       return null;
     }
+  }
+
+  // lấy thông tin wallet đang được chọn
+  get selectedWallet async {
+    Wallet currentwallet;
+    await users.doc(uid).get().then((value) {
+      currentwallet = Wallet.fromMap(value.data());
+    });
+    return currentwallet;
+    // await users
+    // .doc(uid)
+    // .get()
+    // .then((value) => print(value.data()['amount'].runtimeType));
   }
 
   //add transaction
@@ -54,7 +72,7 @@ class FirebaseFireStoreService {
     Wallet wallet = Wallet(
         id: walletRef.id,
         name: 'test1',
-        amount: 100,
+        amount: '100',
         currencyID: 'a',
         iconID: 'a');
 

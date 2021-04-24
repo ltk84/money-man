@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/authentication.dart';
 import 'package:money_man/ui/screens/authentication_screens/verify_email_screen.dart';
 import 'package:money_man/ui/screens/home_screen/home_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
+import 'package:provider/provider.dart';
 
 class Wrapper extends StatelessWidget {
   final AsyncSnapshot<User> userSnapshot;
@@ -14,16 +17,28 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (userSnapshot.connectionState == ConnectionState.active) {
-      if (userSnapshot.hasData) {
-        if (userSnapshot.data.emailVerified || userSnapshot.data.isAnonymous)
-          return HomeScreen();
-        else
-          return VerifyEmailScreen();
-      } else
-        return Authentication();
-    }
-    return LoadingScreen();
-    //return HomeScreen();
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    return StreamBuilder<String>(
+        stream: _firestore.currentWalletID,
+        builder: (context, snapshot) {
+          final walletID = snapshot.data;
+          print(walletID);
+          if (userSnapshot.connectionState == ConnectionState.active) {
+            if (userSnapshot.hasData) {
+              if (userSnapshot.data.emailVerified ||
+                  userSnapshot.data.isAnonymous)
+                return HomeScreen();
+              else
+                return VerifyEmailScreen();
+            } else
+              return Authentication();
+          }
+          return LoadingScreen();
+          //return HomeScreen();
+        });
   }
+}
+
+Future getCurrentWallet(BuildContext context) async {
+  return await Provider.of<FirebaseFireStoreService>(context).selectedWallet;
 }
