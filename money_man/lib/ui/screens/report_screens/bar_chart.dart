@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Text(
-                "Report all balance",
+                "Report net Income",
                 style: Theme.of(context).textTheme.body2,
               ),
               Expanded(

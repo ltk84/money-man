@@ -41,8 +41,8 @@ class _Piechart extends StatelessWidget {
   bool _showLegendsInRow = false;
   bool _showLegends = false;
 
-  bool _showChartValueBackground = false;
-  bool _showChartValues = false;
+  bool _showChartValueBackground = true;
+  bool _showChartValues =false;
   bool _showChartValuesInPercentage = false;
   bool _showChartValuesOutside = false;
 
@@ -63,7 +63,7 @@ class _Piechart extends StatelessWidget {
       colorList: colorList,
       initialAngleInDegree: 0,
       chartType: _chartType,
-      centerText: _showCenterText ? "HYBRID" : null,
+      centerText: _showCenterText ? "Money" : null,
       legendOptions: LegendOptions(
         showLegendsInRow: _showLegendsInRow,
         legendPosition: _legendPosition,
@@ -78,7 +78,7 @@ class _Piechart extends StatelessWidget {
       ),
       chartValuesOptions: ChartValuesOptions(
         showChartValueBackground: _showChartValueBackground,
-        showChartValues: _showChartValues,
+        showChartValues: (_legend == true)?true:false,
         showChartValuesInPercentage: _showChartValuesInPercentage,
         showChartValuesOutside: _showChartValuesOutside,
       ),

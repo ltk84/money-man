@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_man/ui/screens/report_screens/analytic_revenue_expenditure_screen.dart';
 import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
 import 'package:money_man/ui/screens/report_screens/chart_information_home_screan.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
@@ -162,7 +163,12 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                      ]),
                      ),
                      SizedBox(
-                       height: 5,
+                       height: 10,
+                     ),
+                     Row(
+                         children: <Widget>[
+                           Text('Revenue and Expenditure',style: TextStyle(fontSize: 17, color: Colors.white), textAlign: TextAlign.start,),
+                         ]
                      ),
                      Container(
                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -182,11 +188,6 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                        child: Column(
                            children: <Widget>[
                              Row(
-                                 children: <Widget>[
-                                   Text('Revenue and Expenditure',style: TextStyle(fontSize: 17, color: Colors.white), textAlign: TextAlign.start,),
-                                 ]
-                             ),
-                             Row(
                                children: <Widget>[
                                  Container(
                                    padding: const EdgeInsets.fromLTRB(0,10,100,10),
@@ -199,12 +200,32 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                  ),
                                ],
                              ),
+                             SizedBox(
+                                 width: 450,
+                                 height:200,
+                                 child: Stack(
+                                   children: <Widget>[
+                                     Container(
+                                       width: 450,
+                                       height: 200,
+                                       child: Barchart(),
+                                     ),
+                                     IconButton(
+                                         icon: Icon(Icons.web_outlined),
+                                         color: Colors.transparent,
+                                         iconSize: 300,
+                                         onPressed: (){
+                                           return showDialog(
+                                               context: context,
+                                               builder: (context) {
+                                                 return AnalyticRevenueAndExpenditure();
+                                               });
+                                         }
+                                     )
+                                   ],
+                                 )
+                             ),
                            ]),
-                     ),
-                     SizedBox(
-                         width: 450,
-                         height: 200,
-                         child: Barchart(),
                      ),
                      SizedBox(
                        height: 5,
@@ -370,3 +391,4 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
     );
   }
 }
+
