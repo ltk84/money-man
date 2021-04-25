@@ -17,13 +17,14 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> {
+  final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
 
   //
-  Text title = Text('Planning', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
-  Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
+  // Text title = Text('Planning', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
+  // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
@@ -38,7 +39,7 @@ class _TestState extends State<Test> {
         reachAppBar = 0;
       });
     }
-    if (_controller.offset >= title.style.fontSize - 5) {
+    if (_controller.offset >= fontSizeText - 5) {
       setState(() {
         reachTop = 1;
       });
@@ -85,7 +86,7 @@ class _TestState extends State<Test> {
           title: AnimatedOpacity(
               opacity: reachTop == 1 ? 1 : 0,
               duration: Duration(milliseconds: 100),
-              child: Text('Planning', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 17.0))
+              child: Text('Planning', style: Theme.of(context).textTheme.headline6)
           ),
         ),
         body: ListView(
@@ -95,7 +96,12 @@ class _TestState extends State<Test> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
-                child: reachTop == 0 ? Hero(tag: 'alo', child: title) : emptyTitle,
+                child: reachTop == 0
+                    ? Hero(
+                    tag: 'alo',
+                    child: Text('Planning', style: Theme.of(context).textTheme.headline4)
+                )
+                    : Text('', style: Theme.of(context).textTheme.headline4),
               ),
             ),
             Container(
@@ -115,7 +121,7 @@ class _TestState extends State<Test> {
                       SizedBox(
                         height: 5.0,
                       ),
-                      Text('BUDGET', style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w600, fontFamily: 'Montserrat', color: Colors.white)),
+                      Text('BUDGET', style: Theme.of(context).textTheme.subtitle2),
                     ],
                   ),
                 )
@@ -138,7 +144,7 @@ class _TestState extends State<Test> {
                       SizedBox(
                         height: 5.0,
                       ),
-                      Text('BILLS', style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w600, fontFamily: 'Montserrat', color: Colors.white)),
+                      Text('BILLS', style: Theme.of(context).textTheme.subtitle2),
                     ],
                   ),
                 )
@@ -161,7 +167,7 @@ class _TestState extends State<Test> {
                       SizedBox(
                         height: 5.0,
                       ),
-                      Text('EVENTS', style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w600, fontFamily: 'Montserrat', color: Colors.white)),
+                      Text('EVENTS', style: Theme.of(context).textTheme.subtitle2),
                     ],
                   ),
                 )
@@ -184,7 +190,7 @@ class _TestState extends State<Test> {
                       SizedBox(
                         height: 5.0,
                       ),
-                      Text('RECURRING', style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w600, fontFamily: 'Montserrat', color: Colors.white)),
+                      Text('RECURRING', style: Theme.of(context).textTheme.subtitle2),
                     ],
                   ),
                 )
