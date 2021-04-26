@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('home build + ${widget.currentWallet.id}');
+    print('home build');
     List<Widget> _screens = [
       TransactionScreen(currentWallet: widget.currentWallet),
       ReportScreen(),

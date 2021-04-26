@@ -22,7 +22,7 @@ class Wrapper extends StatelessWidget {
         stream: _firestore.currentWallet,
         builder: (context, snapshot) {
           final currentWallet = snapshot.data;
-          print('streambuilder build + ${currentWallet.id}');
+          print('streambuilder build');
           if (userSnapshot.connectionState == ConnectionState.active) {
             if (userSnapshot.hasData) {
               if (userSnapshot.data.emailVerified ||

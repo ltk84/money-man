@@ -61,7 +61,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
   @override
   Widget build(BuildContext context) {
-    print('trans build + ${widget.currentWallet.id}');
+    print('trans build');
     return DefaultTabController(
         length: 300,
         child: Scaffold(
