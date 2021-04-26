@@ -1,24 +1,26 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
-class EditWallet extends StatefulWidget {
+class AddWalletScreen extends StatefulWidget {
   @override
-  _EditWalletState createState() => _EditWalletState();
+  _AddWalletScreenState createState() => _AddWalletScreenState();
 }
 
-class _EditWalletState extends State<EditWallet> {
+class _AddWalletScreenState extends State<AddWalletScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.grey[900],
       appBar: AppBar(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0))),
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0))),
         elevation: 0,
-        backgroundColor: Color(0xff141414),
+        backgroundColor: Colors.black,
         title: Text(
-          'Edit Wallet',
+          'Add Wallet',
           style: TextStyle(
             fontSize: 27,
             fontFamily: 'Montserrat',
@@ -28,6 +30,9 @@ class _EditWalletState extends State<EditWallet> {
         ),
         leadingWidth: 75,
         leading: TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
           child: Text(
             'Cancel',
             style: TextStyle(
@@ -36,15 +41,18 @@ class _EditWalletState extends State<EditWallet> {
         ),
         actions: [
           TextButton(
+              onPressed: () {},
               child: Text(
-            'Save',
-            style: TextStyle(
-                color: Colors.white70, fontSize: 15, fontFamily: 'Montserrat'),
-          ))
+                'Save',
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 15,
+                    fontFamily: 'Montserrat'),
+              ))
         ],
         centerTitle: true,
       ),
-      body: MainActivity(),
+      body: ListView(children: [MainActivity()]),
     );
   }
 }
@@ -78,7 +86,9 @@ class MainActivity extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: Icon(Icons.account_balance_wallet),
-                    onPressed: () {},
+                    onPressed: () {
+                      // TODO: Chọn icon cho ví
+                    },
                     iconSize: 70,
                     color: Color(0xff8f8f8f),
                   ),
@@ -192,38 +202,23 @@ class MainActivity extends StatelessWidget {
         SizedBox(
           height: 25,
         ),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-          decoration: BoxDecoration(
-              color: Color(0xFFFFD54F),
-              borderRadius: BorderRadius.circular(30)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  // Xử lý sự kiện click ở đây nhen
-                },
-                child: Container(
-                  child: Icon(
-                    Icons.delete_rounded,
-                    size: 30,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Text(
-                'Delete this wallet',
-                style: TextStyle(
-                    color: Color(0xff1a1a1a),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat'),
-              ),
-            ],
+        GestureDetector(
+          onTap: () {
+            // Xử lý sự kiện click ở đây.
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 100),
+            decoration: BoxDecoration(
+                color: Color(0xFFFFD54F),
+                borderRadius: BorderRadius.circular(30)),
+            child: Text(
+              'Link to service',
+              style: TextStyle(
+                  color: Color(0xff1a1a1a),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Montserrat'),
+            ),
           ),
         )
       ],

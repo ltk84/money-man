@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/authentication.dart';
 import 'package:money_man/ui/screens/authentication_screens/verify_email_screen.dart';
@@ -17,26 +18,17 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    return StreamBuilder<Wallet>(
-        stream: _firestore.currentWallet,
-        builder: (context, snapshot) {
-          final currentWallet = snapshot.data;
-          print('streambuilder build');
-          if (userSnapshot.connectionState == ConnectionState.active) {
-            if (userSnapshot.hasData) {
-              if (userSnapshot.data.emailVerified ||
-                  userSnapshot.data.isAnonymous)
-                return HomeScreen(
-                  currentWallet: currentWallet,
-                );
-              else
-                return VerifyEmailScreen();
-            } else
-              return Authentication();
-          }
-          return LoadingScreen();
-        });
+    if (userSnapshot.connectionState == ConnectionState.active) {
+      if (userSnapshot.hasData) {
+        if (userSnapshot.data.emailVerified || userSnapshot.data.isAnonymous)
+          return HomeScreen();
+        else
+          return VerifyEmailScreen();
+      } else
+        return Authentication();
+    }
+    return LoadingScreen();
+
     //return HomeScreen();
   }
 }

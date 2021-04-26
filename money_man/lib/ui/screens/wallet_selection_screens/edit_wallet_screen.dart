@@ -1,26 +1,24 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
-class AddWallet extends StatefulWidget {
+class EditWalletScreen extends StatefulWidget {
   @override
-  _AddWalletState createState() => _AddWalletState();
+  _EditWalletScreenState createState() => _EditWalletScreenState();
 }
 
-class _AddWalletState extends State<AddWallet> {
+class _EditWalletScreenState extends State<EditWalletScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0))),
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0))),
         elevation: 0,
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xff141414),
         title: Text(
-          'Add Wallet',
+          'Edit Wallet',
           style: TextStyle(
             fontSize: 27,
             fontFamily: 'Montserrat',
@@ -80,9 +78,7 @@ class MainActivity extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: Icon(Icons.account_balance_wallet),
-                    onPressed: () {
-                      // TODO: Chọn icon cho ví
-                    },
+                    onPressed: () {},
                     iconSize: 70,
                     color: Color(0xff8f8f8f),
                   ),
@@ -196,23 +192,38 @@ class MainActivity extends StatelessWidget {
         SizedBox(
           height: 25,
         ),
-        GestureDetector(
-          onTap: () {
-            // Xử lý sự kiện click ở đây.
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 100),
-            decoration: BoxDecoration(
-                color: Color(0xFFFFD54F),
-                borderRadius: BorderRadius.circular(30)),
-            child: Text(
-              'Link to service',
-              style: TextStyle(
-                  color: Color(0xff1a1a1a),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Montserrat'),
-            ),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+          decoration: BoxDecoration(
+              color: Color(0xFFFFD54F),
+              borderRadius: BorderRadius.circular(30)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // Xử lý sự kiện click ở đây nhen
+                },
+                child: Container(
+                  child: Icon(
+                    Icons.delete_rounded,
+                    size: 30,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              Text(
+                'Delete this wallet',
+                style: TextStyle(
+                    color: Color(0xff1a1a1a),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Montserrat'),
+              ),
+            ],
           ),
         )
       ],

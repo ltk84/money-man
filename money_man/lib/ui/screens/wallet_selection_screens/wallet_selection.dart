@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';
+import 'package:money_man/ui/screens/wallet_selection_screens/edit_wallet_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +47,10 @@ class WalletSelectionScreen extends StatelessWidget {
             title: Text('Select Wallet', style: tsMain),
             actions: <Widget>[
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => EditWalletScreen()));
+                  },
                   child: const Text(
                     'Edit',
                     style: tsButton,
@@ -140,8 +145,10 @@ class WalletSelectionScreen extends StatelessWidget {
                             ))),
                     child: TextButton(
                       onPressed: () {
-                        // add test thôi cần thêm screen để điền thêm thông tin wallet
-                        _firestore.addWallet();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => AddWalletScreen()));
                       },
                       child: Text('Add wallet', style: tsButton_wallet),
                       //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(success)),

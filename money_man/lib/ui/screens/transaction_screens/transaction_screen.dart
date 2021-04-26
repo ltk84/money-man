@@ -6,9 +6,9 @@ import 'package:money_man/core/models/test.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-import 'package:money_man/ui/screens/wallet_selection.dart';
 
 class TransactionScreen extends StatefulWidget {
   final Wallet currentWallet;
