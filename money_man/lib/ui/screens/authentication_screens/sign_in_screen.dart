@@ -95,7 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   'Sign up',
                                   style: TextStyle(
                                     fontFamily: 'Montserrat',
-                                    color: Colors.blue,
+                                    color: Colors.red[900],
                                   ),
                                 ),
                               )),
@@ -112,7 +112,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 'Forgot password?',
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
-                                  color: Colors.blue,
+                                  color: Colors.red[900],
                                 ),
                               )),
                         ],
@@ -276,33 +276,39 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
         SizedBox(height: 10),
-        TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty)
-              return 'Password not empty';
-            else if (value.length < 6)
-              return 'Password must longer than 6 digits';
-            return null;
-          },
-          style: TextStyle(fontFamily: 'Montserrat'),
-          onChanged: (value) => _password = value,
-          decoration: InputDecoration(
-            prefixIcon: Icon(Icons.security),
-            labelText: 'Password',
-            suffixIcon: IconButton(
-              icon: trailingIconPass,
-              onPressed: () => this.setState(() {
-                isObcure = !isObcure;
-                show = !show;
-                trailingIconPass = Icon(
-                    show == true ? Icons.remove_red_eye : Icons.receipt_long);
-              }),
-            ),
+        Theme(
+          data: Theme.of(context).copyWith(
+            // override textfield's icon color when selected
+            primaryColor: Colors.black,
           ),
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.done,
-          autocorrect: false,
-          obscureText: isObcure,
+          child: TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return 'Password not empty';
+              else if (value.length < 6)
+                return 'Password must longer than 6 digits';
+              return null;
+            },
+            style: TextStyle(fontFamily: 'Montserrat'),
+            onChanged: (value) => _password = value,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.security),
+              labelText: 'Password',
+              suffixIcon: IconButton(
+                icon: trailingIconPass,
+                onPressed: () => this.setState(() {
+                  isObcure = !isObcure;
+                  show = !show;
+                  trailingIconPass = Icon(
+                      show == true ? Icons.remove_red_eye : Icons.receipt_long);
+                }),
+              ),
+            ),
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            autocorrect: false,
+            obscureText: isObcure,
+          ),
         ),
       ],
     );
