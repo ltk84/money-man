@@ -21,11 +21,7 @@ class ErrorScreen extends StatelessWidget {
       body: Column(
         children: [
           Text('error page'),
-          OutlinedButton(
-              onPressed: () {
-                _firestore.addWallet();
-              },
-              child: Text('add wallet')),
+          OutlinedButton(onPressed: () {}, child: Text('add wallet')),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:money_man/ui/screens/account_screens/categories_screen.dart';
 
 import 'package:page_transition/page_transition.dart';
 
@@ -231,7 +232,12 @@ class _TestState extends State<Test> {
                     ),
                   ),
                   ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => CategoriesScreen()));
+                    },
                     dense: true,
                     leading: Icon(Icons.category,
                         color: Colors.grey[400], size: 25.0),

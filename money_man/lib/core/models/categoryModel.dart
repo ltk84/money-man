@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class Catergory {
+class MyCatergory {
   String id;
   String name;
   String type;
   String iconID;
-  Catergory({
+  MyCatergory({
     @required this.id,
     @required this.name,
     @required this.type,
     @required this.iconID,
   });
 
-  factory Catergory.fromMap(Map<String, dynamic> data) {
+  factory MyCatergory.fromMap(Map<String, dynamic> data) {
     if (data == null) return null;
-    return Catergory(
+    return MyCatergory(
         id: data['id'],
         name: data['name'],
         type: data['type'],

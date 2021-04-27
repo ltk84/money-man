@@ -243,7 +243,7 @@ class _WalletDisplayState extends State<WalletDisplay> {
                           onTap: () {
                             setState(() {
                               widget.id = listWallet[index].id;
-                              _firestore.updateSelectedWalletID(widget.id);
+                              _firestore.updateSelectedWallet(widget.id);
                             });
                           },
                           child: Container(
