@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';
@@ -20,7 +21,7 @@ class WalletSelectionScreen extends StatelessWidget {
 
     return Container(
       color: Colors.transparent,
-      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+      //padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
       child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
@@ -38,22 +39,25 @@ class WalletSelectionScreen extends StatelessWidget {
                 },
                 child: const Text(
                   'Close',
-                  style: tsButton,
+                  style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.w600,),
                 ),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.transparent,
                 )),
-            title: Text('Select Wallet', style: tsMain),
+            title: Text('Select Wallet', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.w600, fontSize: 15.0)),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => EditWalletScreen()));
+                    showCupertinoModalBottomSheet(
+                        backgroundColor: Colors.grey[900],
+                        context: context,
+                        builder: (context) => EditWalletScreen()
+                    );
                   },
                   child: const Text(
                     'Edit',
-                    style: tsButton,
+                    style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.w600,),
                   ),
                   style: TextButton.styleFrom(
                     primary: Colors.white,
@@ -62,7 +66,7 @@ class WalletSelectionScreen extends StatelessWidget {
             ],
           ),
           body: Container(
-            color: Colors.black87,
+            color: Colors.black26,
             child: Column(
               children: [
                 SizedBox(
@@ -145,10 +149,10 @@ class WalletSelectionScreen extends StatelessWidget {
                             ))),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => AddWalletScreen()));
+                        showCupertinoModalBottomSheet(
+                          backgroundColor: Colors.grey[900],
+                          context: context,
+                          builder: (context) => AddWalletScreen());
                       },
                       child: Text('Add wallet', style: tsButton_wallet),
                       //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(success)),

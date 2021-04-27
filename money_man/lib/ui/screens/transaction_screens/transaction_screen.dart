@@ -9,6 +9,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TransactionScreen extends StatefulWidget {
   final Wallet currentWallet;
@@ -337,7 +338,8 @@ class _TransactionScreen extends State<TransactionScreen>
   void buildShowDialog(BuildContext context, id) {
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
-    showDialog(
+    showCupertinoModalBottomSheet(
+      backgroundColor: Colors.grey[900],
         context: context,
         builder: (context) {
           return Provider(
