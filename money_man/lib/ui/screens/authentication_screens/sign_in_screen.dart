@@ -4,7 +4,6 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
-import 'package:provider/provider.dart';
 //import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -18,6 +17,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final _auth = FirebaseAuthService();
+
   final _formKey = GlobalKey<FormState>();
   String _email;
   String _password;
@@ -29,8 +30,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = Provider.of<FirebaseAuthService>(context);
-
     return loading == true
         ? LoadingScreen()
         : Scaffold(
@@ -96,7 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   'Sign up',
                                   style: TextStyle(
                                     fontFamily: 'Montserrat',
-                                    color: Colors.blue,
+                                    color: Colors.red[900],
                                   ),
                                 ),
                               )),
@@ -105,14 +104,15 @@ class _SignInScreenState extends State<SignInScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => ForgotPasswordScreen()));
+                                        builder: (_) =>
+                                            ForgotPasswordScreen()));
                                 //Forgot Password
                               },
                               child: Text(
                                 'Forgot password?',
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
-                                  color: Colors.blue,
+                                  color: Colors.red[900],
                                 ),
                               )),
                         ],
@@ -144,9 +144,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
                           onPressed: () {
-                          final _auth = FirebaseAuthService();
-                          // _auth.signInWithFacebook();
-                          _auth.signInWithFacebookVer2();
+                            _auth.signInWithFacebook();
+                            // _auth.signInWithFacebookVer2();
                           },
                           child: CustomListTile(
                             text: "Connect to Facebook",
@@ -164,9 +163,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
                           onPressed: () {
-                            final _auth = FirebaseAuthService();
-                            // _auth.signInWithFacebook();
-                            _auth.signInWithGoogleAccount();},
+                            _auth.signInWithGoogleAccount();
+                          },
                           child: CustomListTile(
                             text: "Connect to Google",
                             imgName: "logoGG.png",
@@ -245,7 +243,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget buildInputField() {
-    FocusNode myFocusNode = new FocusNode();
+    // FocusNode myFocusNode = new FocusNode();
     return Column(
       children: [
         Theme(
@@ -278,33 +276,39 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
         SizedBox(height: 10),
-        TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty)
-              return 'Password not empty';
-            else if (value.length < 6)
-              return 'Password must longer than 6 digits';
-            return null;
-          },
-          style: TextStyle(fontFamily: 'Montserrat'),
-          onChanged: (value) => _password = value,
-          decoration: InputDecoration(
-            prefixIcon: Icon(Icons.security),
-            labelText: 'Password',
-            suffixIcon: IconButton(
-              icon: trailingIconPass,
-              onPressed: () => this.setState(() {
-                isObcure = !isObcure;
-                show = !show;
-                trailingIconPass = Icon(
-                    show == true ? Icons.remove_red_eye : Icons.receipt_long);
-              }),
-            ),
+        Theme(
+          data: Theme.of(context).copyWith(
+            // override textfield's icon color when selected
+            primaryColor: Colors.black,
           ),
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.done,
-          autocorrect: false,
-          obscureText: isObcure,
+          child: TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return 'Password not empty';
+              else if (value.length < 6)
+                return 'Password must longer than 6 digits';
+              return null;
+            },
+            style: TextStyle(fontFamily: 'Montserrat'),
+            onChanged: (value) => _password = value,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.security),
+              labelText: 'Password',
+              suffixIcon: IconButton(
+                icon: trailingIconPass,
+                onPressed: () => this.setState(() {
+                  isObcure = !isObcure;
+                  show = !show;
+                  trailingIconPass = Icon(
+                      show == true ? Icons.remove_red_eye : Icons.receipt_long);
+                }),
+              ),
+            ),
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            autocorrect: false,
+            obscureText: isObcure,
+          ),
         ),
       ],
     );

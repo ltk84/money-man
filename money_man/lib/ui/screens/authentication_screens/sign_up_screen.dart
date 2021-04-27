@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
-import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   final Function changeShow;
@@ -16,6 +15,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final _auth = FirebaseAuthService();
   final _formKey = GlobalKey<FormState>();
   String _email;
   String _password;
@@ -27,8 +27,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = Provider.of<FirebaseAuthService>(context);
-
     return loading == true
         ? LoadingScreen()
         : Scaffold(
@@ -56,7 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         minWidth: 300,
                         child: RaisedButton(
                             onPressed: () {
-                              widget.changeShow();
+                              signUpWithEmailAndPassword(_auth, context);
                             },
                             elevation: 0,
                             child: Text(
@@ -76,6 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           color: Colors.white,
                           onPressed: () {
                             // Thao tác đăng nhập
+                            widget.changeShow();
                           },
                           child: Text(
                             'LOGIN',
@@ -116,7 +115,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
-                          onPressed: () {},
+                          onPressed: () {
+                            _auth.signInWithFacebook();
+                          },
                           elevation: 0,
                           child: CustomListTile(
                             text: "Connect to Facebook",
@@ -133,7 +134,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: 300,
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
-                          onPressed: () {},
+                          onPressed: () {
+                            _auth.signInWithGoogleAccount();
+                          },
                           elevation: 0,
                           child: CustomListTile(
                             text: "Connect to Google",
@@ -185,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       setState(() {
         loading = true;
       });
-      final res = await _auth.signInWithEmailAndPassword(_email, _password);
+      final res = await _auth.signUpWithEmailAndPassword(_email, _password);
       if (res is String) {
         setState(() {
           loading = false;

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/core/services/firebase_storage_services.dart';
@@ -20,15 +21,14 @@ class WrapperBuilder extends StatelessWidget {
 
           if (user != null) {
             return MultiProvider(providers: [
-              Provider<User>.value(value: user),
-              // Provider<FirebaseFireStoreService>(
-              //   create: (BuildContext context) {
-              //     return FirebaseFireStoreService(uid: user.uid);
-              //   },
-              // ),
-              // Provider<FirebaseStorageService>(create: (BuildContext context) {
-              //   return FirebaseStorageService(uid: user.uid);
-              // })
+              Provider<FirebaseFireStoreService>(
+                create: (BuildContext context) {
+                  return FirebaseFireStoreService(uid: user.uid);
+                },
+              ),
+              Provider<FirebaseStorageService>(create: (BuildContext context) {
+                return FirebaseStorageService(uid: user.uid);
+              }),
             ], child: builder(context, snapshot));
           } else {
             return builder(context, snapshot);
