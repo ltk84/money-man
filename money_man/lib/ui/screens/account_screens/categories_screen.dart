@@ -21,7 +21,9 @@ class CategoriesScreen extends StatelessWidget {
                   return ListTile(
                     leading: Icon(Icons.ac_unit_sharp),
                     title: Text(_listCategories[index].name),
-                    onTap: () {},
+                    onTap: () {
+                      // _firestore.addCate();
+                    },
                   );
                 });
           }),

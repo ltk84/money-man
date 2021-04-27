@@ -138,6 +138,14 @@ class FirebaseFireStoreService {
     }).toList();
   }
 
+  // add instance cate
+  void addCate() async {
+    final cateRef = categories.doc();
+    MyCatergory cat = MyCatergory(
+        id: cateRef.id, name: '', type: 'expense', iconID: 'defaultID');
+    await cateRef.set(cat.toMap()).then((value) => print('added!'));
+  }
+
   // CATERGORY //
 
   //add transaction
