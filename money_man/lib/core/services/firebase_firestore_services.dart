@@ -42,6 +42,13 @@ class FirebaseFireStoreService {
   }
 
   // stream wallet hiện tại
+  Stream<String> get currentWalletID {
+    return users
+        .doc(uid)
+        .snapshots()
+        .map((event) => Wallet.fromMap(event.data()).id);
+  }
+
   Stream<Wallet> get currentWallet {
     return users
         .doc(uid)
@@ -78,7 +85,8 @@ class FirebaseFireStoreService {
   }
 
   // edit wallet
-  Future editWallet(Wallet wallet) async {
+  Future updateWallet(Wallet wallet) async {
+    print(wallet.toMap());
     await users
         .doc(uid)
         .collection('wallets')
@@ -117,6 +125,16 @@ class FirebaseFireStoreService {
         .collection('wallets')
         .snapshots()
         .map(_walletFromSnapshot);
+  }
+
+  // get wallet by id
+  Future<Wallet> getWalletByID(String id) async {
+    return await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(id)
+        .get()
+        .then((value) => Wallet.fromMap(value.data()));
   }
 
   // WALLET //
