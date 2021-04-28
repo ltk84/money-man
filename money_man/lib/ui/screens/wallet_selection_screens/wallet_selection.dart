@@ -8,13 +8,18 @@ import 'package:money_man/ui/screens/wallet_selection_screens/edit_wallet_screen
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
-class WalletSelectionScreen extends StatelessWidget {
-  final String id;
+class WalletSelectionScreen extends StatefulWidget {
+  String id = '';
   WalletSelectionScreen({
     Key key,
     @required this.id,
   }) : super(key: key);
 
+  @override
+  _WalletSelectionScreenState createState() => _WalletSelectionScreenState();
+}
+
+class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -39,25 +44,43 @@ class WalletSelectionScreen extends StatelessWidget {
                 },
                 child: const Text(
                   'Close',
-                  style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.w600,),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.transparent,
                 )),
-            title: Text('Select Wallet', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.w600, fontSize: 15.0)),
+            title: Text('Select Wallet',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15.0)),
             actions: <Widget>[
               TextButton(
-                  onPressed: () {
-                    showCupertinoModalBottomSheet(
-                        backgroundColor: Colors.grey[900],
-                        context: context,
-                        builder: (context) => EditWalletScreen()
+                  onPressed: () async {
+                    Wallet wallet = await _firestore.getWalletByID(widget.id);
+                    final res = await showCupertinoModalBottomSheet(
+                      backgroundColor: Colors.grey[900],
+                      context: context,
+                      builder: (context) => EditWalletScreen(wallet: wallet),
                     );
+                    if (res != null && res != widget.id)
+                      setState(() {
+                        widget.id = res;
+                      });
                   },
                   child: const Text(
                     'Edit',
-                    style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.w600,),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   style: TextButton.styleFrom(
                     primary: Colors.white,
@@ -127,9 +150,7 @@ class WalletSelectionScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                WalletDisplay(
-                  id: id,
-                ),
+                buildDisplayWallet(),
                 SizedBox(
                   height: 20,
                 ),
@@ -148,11 +169,15 @@ class WalletSelectionScreen extends StatelessWidget {
                               width: 1.0,
                             ))),
                     child: TextButton(
-                      onPressed: () {
-                        showCupertinoModalBottomSheet(
-                          backgroundColor: Colors.grey[900],
-                          context: context,
-                          builder: (context) => AddWalletScreen());
+                      onPressed: () async {
+                        final res = await showCupertinoModalBottomSheet(
+                            backgroundColor: Colors.grey[900],
+                            context: context,
+                            builder: (context) => AddWalletScreen());
+                        if (res != null && res != widget.id)
+                          setState(() {
+                            widget.id = res;
+                          });
                       },
                       child: Text('Add wallet', style: tsButton_wallet),
                       //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(success)),
@@ -181,22 +206,8 @@ class WalletSelectionScreen extends StatelessWidget {
           )),
     );
   }
-}
 
-class WalletDisplay extends StatefulWidget {
-  String id;
-  WalletDisplay({
-    Key key,
-    @required this.id,
-  }) : super(key: key);
-
-  @override
-  _WalletDisplayState createState() => _WalletDisplayState();
-}
-
-class _WalletDisplayState extends State<WalletDisplay> {
-  @override
-  Widget build(BuildContext context) {
+  Widget buildDisplayWallet() {
     print('wallet select build + ${widget.id}');
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 

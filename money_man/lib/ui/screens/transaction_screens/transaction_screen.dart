@@ -62,7 +62,6 @@ class _TransactionScreen extends State<TransactionScreen>
 
   @override
   Widget build(BuildContext context) {
-    print('trans build');
     return DefaultTabController(
         length: 300,
         child: Scaffold(
@@ -339,7 +338,7 @@ class _TransactionScreen extends State<TransactionScreen>
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
     showCupertinoModalBottomSheet(
-      backgroundColor: Colors.grey[900],
+        backgroundColor: Colors.grey[900],
         context: context,
         builder: (context) {
           return Provider(
