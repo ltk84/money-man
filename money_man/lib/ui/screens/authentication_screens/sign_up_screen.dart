@@ -30,6 +30,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return loading == true
         ? LoadingScreen()
         : Scaffold(
+            appBar: AppBar(
+              toolbarHeight: 30,
+              elevation: 0,
+              iconTheme: IconThemeData(color: Colors.black),
+              backgroundColor: Colors.white54,
+            ),
             backgroundColor: Colors.white,
             body: ListView(
               padding: EdgeInsets.fromLTRB(15, 10, 15, 0),

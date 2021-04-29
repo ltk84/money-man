@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_man/ui/screens/authentication_screens/authentication.dart';
 
 class AccessScreen extends StatelessWidget {
   @override
@@ -9,7 +10,7 @@ class AccessScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
-              backgroundImage: AssetImage('assets/1.jpg'),
+              backgroundImage: AssetImage('assets/images/1.jpg'),
               radius: 100,
             ),
             SizedBox(
@@ -21,7 +22,12 @@ class AccessScreen extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 padding: EdgeInsets.symmetric(horizontal: 50),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => Authentication(showSignIn: true)));
+              },
               child: Text('LOGIN'),
             ),
             ElevatedButton(
@@ -30,18 +36,23 @@ class AccessScreen extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 padding: EdgeInsets.symmetric(horizontal: 43),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => Authentication(showSignIn: false)));
+              },
               child: Text('SIGN UP'),
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                padding: EdgeInsets.symmetric(horizontal: 17),
-              ),
-              onPressed: () {},
-              child: Text('LOGIN AS GUEST'),
-            ),
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(
+            //     shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.all(Radius.circular(20))),
+            //     padding: EdgeInsets.symmetric(horizontal: 17),
+            //   ),
+            //   onPressed: () {},
+            //   child: Text('LOGIN AS GUEST'),
+            // ),
           ],
         ),
       ),
