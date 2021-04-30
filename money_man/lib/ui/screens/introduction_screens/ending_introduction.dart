@@ -1,9 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/constaints.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/core/services/slanding_clipper.dart';
+import 'package:money_man/ui/screens/home_screen/home_screen.dart';
+import 'package:provider/provider.dart';
 
 class OnboardingScreenTwo extends StatelessWidget {
+  final Wallet wallet;
+
+  const OnboardingScreenTwo({Key key, @required this.wallet}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     //it will helps to return the size of the screen
@@ -83,7 +90,18 @@ class OnboardingScreenTwo extends StatelessWidget {
                             child: ButtonTheme(
                               minWidth: 300.0,
                               child: RaisedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  final _firestore =
+                                      Provider.of<FirebaseFireStoreService>(
+                                          context,
+                                          listen: false);
+                                  await _firestore.addFirstWallet(wallet);
+
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => HomeScreen()));
+                                },
                                 color: Colors.black54,
                                 elevation: 0.0,
                                 child: Text(

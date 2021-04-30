@@ -1,6 +1,8 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/slanding_clipper.dart';
 import 'ending_introduction.dart';
@@ -11,10 +13,18 @@ class FirstStep extends StatefulWidget {
 }
 
 class _FirstStepState extends State<FirstStep> {
+  Wallet wallet = Wallet(
+      id: 'id', name: 'wallet', amount: 0, currencyID: 'USD', iconID: 'a');
+  String currencyName = 'USD';
+
+  static final _formKey = GlobalKey<FormState>();
+
   Route _createRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          OnboardingScreenTwo(),
+          OnboardingScreenTwo(
+        wallet: this.wallet,
+      ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(1.0, 0.0);
         var end = Offset.zero;
@@ -135,10 +145,19 @@ class _FirstStepState extends State<FirstStep> {
                       Container(
                         width: 250.0,
                         height: size.height * 0.05,
-                        child: TextField(
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
+                        child: Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.length == 0)
+                                return 'Wallet name is empty';
+                              return null;
+                            },
+                            onChanged: (value) => wallet.name = value,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                            ),
                           ),
                         ),
                       ),
@@ -158,7 +177,31 @@ class _FirstStepState extends State<FirstStep> {
                           ),
                         ),
                       ),
-                      Currency(),
+                      // Currency(),
+                      ListTile(
+                        onTap: () {
+                          showCurrencyPicker(
+                            onSelect: (value) {
+                              wallet.currencyID = value.code;
+                              setState(() {
+                                currencyName = value.name;
+                              });
+                            },
+                            context: context,
+                            showFlag: true,
+                            showCurrencyName: true,
+                            showCurrencyCode: true,
+                          );
+                        },
+                        dense: true,
+                        leading: Icon(Icons.monetization_on,
+                            size: 30.0, color: Colors.white60),
+                        title: Text(currencyName,
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 15.0)),
+                        trailing: Icon(Icons.chevron_right,
+                            size: 20.0, color: Colors.white24),
+                      ),
                       SizedBox(
                         height: size.height * 0.01,
                       ),
@@ -225,74 +268,74 @@ class _FirstStepState extends State<FirstStep> {
   }
 }
 
-class Currency extends StatefulWidget {
-  @override
-  _CurrencyState createState() => _CurrencyState();
-}
+// class Currency extends StatefulWidget {
+//   @override
+//   _CurrencyState createState() => _CurrencyState();
+// }
 
-class _CurrencyState extends State<Currency> {
-  String dropdownValue = 'VND';
-  List listItem = ['VND', 'USD', 'WON', 'BITCOIN'];
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black54),
-        borderRadius: BorderRadius.all(Radius.circular(4)),
-      ),
-      width: 250.0,
-      height: size.height * 0.05,
-      child: Row(
-        children: [
-          //SizedBox(width: 20.0),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-            child: Container(
-              child: Icon(
-                Icons.check,
-                size: size.height * 0.04,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          VerticalDivider(
-            thickness: 2.0,
-            color: Colors.black54,
-          ),
-          SizedBox(width: 40.0),
-          Container(
-            width: 120.0,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                hint: Text(
-                  'Currency',
-                  style: TextStyle(
-                    fontFamily: 'NarumGothic',
-                  ),
-                ),
-                value: dropdownValue,
-                onChanged: (newValue) {
-                  setState(() {
-                    dropdownValue = newValue;
-                  });
-                },
-                items: listItem.map((dropdownValue) {
-                  return DropdownMenuItem(
-                    value: dropdownValue,
-                    child: Text(
-                      dropdownValue,
-                      style: TextStyle(
-                        fontFamily: 'NarumGothic',
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
+// class _CurrencyState extends State<Currency> {
+//   String dropdownValue = 'VND';
+//   List listItem = ['VND', 'USD', 'WON', 'BITCOIN'];
+//   @override
+//   Widget build(BuildContext context) {
+//     Size size = MediaQuery.of(context).size;
+//     return Container(
+//       decoration: BoxDecoration(
+//         border: Border.all(color: Colors.black54),
+//         borderRadius: BorderRadius.all(Radius.circular(4)),
+//       ),
+//       width: 250.0,
+//       height: size.height * 0.05,
+//       child: Row(
+//         children: [
+//           //SizedBox(width: 20.0),
+//           Padding(
+//             padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+//             child: Container(
+//               child: Icon(
+//                 Icons.check,
+//                 size: size.height * 0.04,
+//                 color: Colors.black87,
+//               ),
+//             ),
+//           ),
+//           VerticalDivider(
+//             thickness: 2.0,
+//             color: Colors.black54,
+//           ),
+//           SizedBox(width: 40.0),
+//           Container(
+//             width: 120.0,
+//             child: DropdownButtonHideUnderline(
+//               child: DropdownButton(
+//                 hint: Text(
+//                   'Currency',
+//                   style: TextStyle(
+//                     fontFamily: 'NarumGothic',
+//                   ),
+//                 ),
+//                 value: dropdownValue,
+//                 onChanged: (newValue) {
+//                   setState(() {
+//                     dropdownValue = newValue;
+//                   });
+//                 },
+//                 items: listItem.map((dropdownValue) {
+//                   return DropdownMenuItem(
+//                     value: dropdownValue,
+//                     child: Text(
+//                       dropdownValue,
+//                       style: TextStyle(
+//                         fontFamily: 'NarumGothic',
+//                       ),
+//                     ),
+//                   );
+//                 }).toList(),
+//               ),
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }

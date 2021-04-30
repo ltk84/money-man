@@ -28,6 +28,7 @@ class FirebaseFireStoreService {
         .doc(walletID)
         .get()
         .then((value) {
+      print(walletID);
       w = Wallet.fromMap(value.data());
     });
 
@@ -39,6 +40,22 @@ class FirebaseFireStoreService {
       print(onError);
       return onError.toString();
     });
+  }
+
+  // add first wallet
+  Future addFirstWallet(Wallet wallet) async {
+    DocumentReference docRef = users.doc(uid).collection('wallets').doc();
+    wallet.id = docRef.id;
+
+    await docRef
+        .set(wallet.toMap())
+        .then((value) => print('add wallet to collection wallets'))
+        .catchError((error) => print(error.toString()));
+    return await users
+        .doc(uid)
+        .set(wallet.toMap())
+        .then((value) => print('set selected wallet'))
+        .catchError((error) => print(error));
   }
 
   // stream wallet hiện tại
@@ -82,6 +99,8 @@ class FirebaseFireStoreService {
       print(error);
       return error.toString();
     });
+
+    return wallet;
   }
 
   // edit wallet

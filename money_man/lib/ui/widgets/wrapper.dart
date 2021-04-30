@@ -7,6 +7,7 @@ import 'package:money_man/ui/screens/authentication_screens/authentication.dart'
 import 'package:money_man/ui/screens/authentication_screens/verify_email_screen.dart';
 import 'package:money_man/ui/screens/home_screen/home_screen.dart';
 import 'package:money_man/ui/screens/introduction_screens/access_screen.dart';
+import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
 import 'package:money_man/ui/screens/introduction_screens/introduction_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:provider/provider.dart';
@@ -27,11 +28,10 @@ class Wrapper extends StatelessWidget {
         else
           return VerifyEmailScreen();
       } else
-        // return Authentication();
         return IntroductionScreen();
     }
     return LoadingScreen();
 
-    //return HomeScreen();
+    // return FirstStep();
   }
 }
