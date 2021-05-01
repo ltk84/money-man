@@ -16,7 +16,7 @@ class AddWalletScreen extends StatefulWidget {
 }
 
 class _AddWalletScreenState extends State<AddWalletScreen> {
-  static final _formKey = GlobalKey<FormState>();
+  static var _formKey = GlobalKey<FormState>();
   String currencyName = 'Currency';
 
   Wallet wallet = Wallet(
@@ -64,10 +64,11 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
               )),
           actions: <Widget>[
             TextButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    _firestore.addWallet(this.wallet);
-                    Navigator.of(context).pop();
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    var res = await _firestore.addWallet(this.wallet);
+                    Navigator.of(context).pop(res);
                   }
                 },
                 child: const Text(

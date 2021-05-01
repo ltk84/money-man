@@ -12,7 +12,7 @@ import 'package:sticky_headers/sticky_headers.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TransactionScreen extends StatefulWidget {
-  final Wallet currentWallet;
+  Wallet currentWallet;
 
   final List<Tab> myTabs = List.generate(200, (index) {
     var now = DateTime.now();
@@ -38,19 +38,21 @@ class _TransactionScreen extends State<TransactionScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 200, vsync: this, initialIndex: 150);
-    wallet = widget.currentWallet ??
-        Wallet(
+    widget.currentWallet = widget.currentWallet == null
+        ? Wallet(
             id: 'id',
             name: 'defaultName',
-            amount: 100,
-            currencyID: 'a',
-            iconID: 'b');
+            amount: 0,
+            currencyID: 'USD',
+            iconID: 'a')
+        : widget.currentWallet;
   }
 
   @override
   void didUpdateWidget(covariant TransactionScreen oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
+
     wallet = widget.currentWallet ??
         Wallet(
             id: 'id',
@@ -62,6 +64,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
   @override
   Widget build(BuildContext context) {
+    print('transaction build ' + wallet.id);
     return DefaultTabController(
         length: 300,
         child: Scaffold(
@@ -77,6 +80,7 @@ class _TransactionScreen extends State<TransactionScreen>
                             color: Colors.grey),
                         onPressed: () async {
                           // print('pressed' + widget.currentWallet.id);
+                          // buildShowDialog(context, widget.currentWallet.id);
                           buildShowDialog(context, wallet.id);
                         }),
                   ),
@@ -85,6 +89,7 @@ class _TransactionScreen extends State<TransactionScreen>
                       icon:
                           const Icon(Icons.arrow_drop_down, color: Colors.grey),
                       onPressed: () async {
+                        // buildShowDialog(context, widget.currentWallet.id);
                         buildShowDialog(context, wallet.id);
                       },
                     ),
@@ -334,10 +339,11 @@ class _TransactionScreen extends State<TransactionScreen>
             )));
   }
 
-  void buildShowDialog(BuildContext context, id) {
+  void buildShowDialog(BuildContext context, id) async {
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
-    showCupertinoModalBottomSheet(
+    final result = await showCupertinoModalBottomSheet(
+        isDismissible: true,
         backgroundColor: Colors.grey[900],
         context: context,
         builder: (context) {
@@ -345,7 +351,9 @@ class _TransactionScreen extends State<TransactionScreen>
               create: (_) {
                 return FirebaseFireStoreService(uid: _auth.currentUser.uid);
               },
-              child: WalletSelectionScreen(id: id));
+              child: WalletSelectionScreen(
+                id: id,
+              ));
         });
   }
 

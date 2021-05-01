@@ -20,7 +20,7 @@ class FirebaseFireStoreService {
   // WALLET //
 
   // update id của wallet đang được chọn
-  void updateSelectedWallet(String walletID) async {
+  Future<String> updateSelectedWallet(String walletID) async {
     Wallet w;
     await users
         .doc(uid)
@@ -40,6 +40,8 @@ class FirebaseFireStoreService {
       print(onError);
       return onError.toString();
     });
+
+    return w.id;
   }
 
   // add first wallet
@@ -100,7 +102,7 @@ class FirebaseFireStoreService {
       return error.toString();
     });
 
-    return wallet;
+    return wallet.id;
   }
 
   // edit wallet
@@ -125,9 +127,8 @@ class FirebaseFireStoreService {
     await wallets.get().then((value) {
       length = value.size;
     });
-    if (length == 1) return 'only 1 wallet';
-
     // trường họp chỉ có 1 ví
+    if (length == 1) return 'only 1 wallet';
 
     // trường hợp có nhiều hơn 1 ví
     // xóa ví
@@ -172,6 +173,13 @@ class FirebaseFireStoreService {
         .doc(uid)
         .collection('wallets')
         .doc(id)
+        .get()
+        .then((value) => Wallet.fromMap(value.data()));
+  }
+
+  Future<Wallet> getCurrenWallet() async {
+    return await users
+        .doc(uid)
         .get()
         .then((value) => Wallet.fromMap(value.data()));
   }

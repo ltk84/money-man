@@ -23,7 +23,7 @@ class EditWalletScreen extends StatefulWidget {
 }
 
 class _EditWalletScreenState extends State<EditWalletScreen> {
-  static final _formKey = GlobalKey<FormState>();
+  static var _formKey = GlobalKey<FormState>();
   String currencyName = 'Currency';
 
   @override
@@ -68,6 +68,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
             TextButton(
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
+                    FocusScope.of(context).requestFocus(FocusNode());
                     print('before set' + widget.wallet.id);
                     await _firestore.updateWallet(widget.wallet);
                     await _firestore.updateSelectedWallet(widget.wallet.id);

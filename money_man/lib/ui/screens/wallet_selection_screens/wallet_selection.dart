@@ -22,6 +22,7 @@ class WalletSelectionScreen extends StatefulWidget {
 class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
   @override
   Widget build(BuildContext context) {
+    print('wallet selection build' + widget.id.toString());
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Container(
@@ -40,7 +41,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                     topRight: Radius.circular(20.0))),
             leading: TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(widget.id);
                 },
                 child: const Text(
                   'Close',
@@ -70,9 +71,11 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                       context: context,
                       builder: (context) => EditWalletScreen(wallet: wallet),
                     );
-                    if (res != null && res != widget.id)
+                    print(res.toString());
+                    if (res != null)
                       setState(() {
                         widget.id = res;
+                        // widget.changeWallet(_firestore.getWalletByID(res));
                       });
                   },
                   child: const Text(
@@ -175,9 +178,11 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             backgroundColor: Colors.grey[900],
                             context: context,
                             builder: (context) => AddWalletScreen());
-                        if (res != null && res != widget.id)
+                        print('return from add screen ' + res.toString());
+                        if (res != null)
                           setState(() {
                             widget.id = res;
+                            // widget.changeWallet(_firestore.getWalletByID(res));
                           });
                       },
                       child: Text('Add wallet', style: tsButton_wallet),
@@ -209,7 +214,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
   }
 
   Widget buildDisplayWallet() {
-    print('wallet select build + ${widget.id}');
+    print('wallet select inside build + ${widget.id}');
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Expanded(
@@ -217,7 +222,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
           stream: _firestore.streamWallet,
           builder: (context, snapshot) {
             final listWallet = snapshot.data ?? [];
-            print(listWallet.length);
+            print('stream ' + listWallet.length.toString());
             return ListView.builder(
                 itemCount: listWallet.length,
                 itemBuilder: (context, index) {
@@ -260,6 +265,8 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             setState(() {
                               widget.id = listWallet[index].id;
                               _firestore.updateSelectedWallet(widget.id);
+                              // widget.changeWallet(
+                              //     _firestore.getWalletByID(widget.id));
                             });
                           },
                           child: Container(
