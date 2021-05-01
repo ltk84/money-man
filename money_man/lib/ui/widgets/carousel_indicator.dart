@@ -23,7 +23,7 @@ Widget carouselWithIndicator = new Swiper(
   itemBuilder: (BuildContext context, int index) {
     return index < 5 && index >= 1
         ? Image(
-            image: AssetImage('assets/$index.jpg'),
+            image: AssetImage('assets/images/$index.jpg'),
             fit: BoxFit.fill,
           )
         : null;

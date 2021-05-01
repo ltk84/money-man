@@ -64,7 +64,8 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
               TextButton(
                   onPressed: () async {
                     Wallet wallet = await _firestore.getWalletByID(widget.id);
-                    final res = await showCupertinoModalBottomSheet(
+                    var res = 'alo';
+                    res = await showCupertinoModalBottomSheet(
                       backgroundColor: Colors.grey[900],
                       context: context,
                       builder: (context) => EditWalletScreen(wallet: wallet),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_man/ui/screens/introduction_screens/access_screen.dart';
 import '../../widgets/carousel_indicator.dart';
 
 class IntroductionScreen extends StatelessWidget {
@@ -22,7 +23,10 @@ class IntroductionScreen extends StatelessWidget {
           ),
           Container(
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (_) => AccessScreen()));
+                },
                 child: Text('GET STARTED'),
                 style: TextButton.styleFrom(backgroundColor: Colors.black),
               ),

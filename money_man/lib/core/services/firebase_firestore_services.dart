@@ -28,6 +28,7 @@ class FirebaseFireStoreService {
         .doc(walletID)
         .get()
         .then((value) {
+      print(walletID);
       w = Wallet.fromMap(value.data());
     });
 
@@ -39,6 +40,22 @@ class FirebaseFireStoreService {
       print(onError);
       return onError.toString();
     });
+  }
+
+  // add first wallet
+  Future addFirstWallet(Wallet wallet) async {
+    DocumentReference docRef = users.doc(uid).collection('wallets').doc();
+    wallet.id = docRef.id;
+
+    await docRef
+        .set(wallet.toMap())
+        .then((value) => print('add wallet to collection wallets'))
+        .catchError((error) => print(error.toString()));
+    return await users
+        .doc(uid)
+        .set(wallet.toMap())
+        .then((value) => print('set selected wallet'))
+        .catchError((error) => print(error));
   }
 
   // stream wallet hiện tại
@@ -82,6 +99,8 @@ class FirebaseFireStoreService {
       print(error);
       return error.toString();
     });
+
+    return wallet;
   }
 
   // edit wallet
@@ -101,6 +120,17 @@ class FirebaseFireStoreService {
 
   // detele wallet
   Future deleteWallet(String walletID) async {
+    var length = 0;
+    CollectionReference wallets = users.doc(uid).collection('wallets');
+    await wallets.get().then((value) {
+      length = value.size;
+    });
+    if (length == 1) return 'only 1 wallet';
+
+    // trường họp chỉ có 1 ví
+
+    // trường hợp có nhiều hơn 1 ví
+    // xóa ví
     await users
         .doc(uid)
         .collection('wallets')
@@ -111,6 +141,15 @@ class FirebaseFireStoreService {
       print(error);
       return error.toString();
     });
+
+    // thiết lập lại ví đang được chọn
+    Wallet firstWallet;
+    await users.doc(uid).collection('wallets').get().then((value) async {
+      firstWallet = Wallet.fromMap(value.docs.first.data());
+      await updateSelectedWallet(firstWallet.id);
+    });
+    return firstWallet.id;
+    // updateSelectedWallet(firstWallet.id);
   }
 
   // convert from snapshot

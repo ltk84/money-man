@@ -18,7 +18,6 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _auth = FirebaseAuthService();
-
   final _formKey = GlobalKey<FormState>();
   String _email;
   String _password;
@@ -33,9 +32,12 @@ class _SignInScreenState extends State<SignInScreen> {
     return loading == true
         ? LoadingScreen()
         : Scaffold(
-            // appBar: AppBar(
-            //   title: Text('dang nhap'),
-            // ),
+            appBar: AppBar(
+              toolbarHeight: 30,
+              elevation: 0,
+              iconTheme: IconThemeData(color: Colors.black),
+              backgroundColor: Colors.white54,
+            ),
             body: ListView(
               padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
               children: [

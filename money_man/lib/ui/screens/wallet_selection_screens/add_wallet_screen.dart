@@ -16,8 +16,9 @@ class AddWalletScreen extends StatefulWidget {
 }
 
 class _AddWalletScreenState extends State<AddWalletScreen> {
-  final _formKey = GlobalKey<FormState>();
+  static final _formKey = GlobalKey<FormState>();
   String currencyName = 'Currency';
+
   Wallet wallet = Wallet(
       id: '0',
       name: 'defaultName',
