@@ -266,6 +266,35 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 ),
               ),
             ),
+            GestureDetector(
+              onTap: () async {
+                // Xử lý sự kiện click ở đây.
+                final _firestore = Provider.of<FirebaseFireStoreService>(
+                    context,
+                    listen: false);
+                final res = await _firestore.deleteWallet(widget.wallet.id);
+                if (res is String && res == 'only 1 wallet') {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(res.toString())));
+                  return;
+                }
+                Navigator.pop(context, res);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                alignment: Alignment.center,
+                width: double.infinity,
+                color: Colors.grey[900],
+                child: Text(
+                  'Delete wallet',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Montserrat'),
+                ),
+              ),
+            ),
           ],
         ),
       ],

@@ -120,6 +120,17 @@ class FirebaseFireStoreService {
 
   // detele wallet
   Future deleteWallet(String walletID) async {
+    var length = 0;
+    CollectionReference wallets = users.doc(uid).collection('wallets');
+    await wallets.get().then((value) {
+      length = value.size;
+    });
+    if (length == 1) return 'only 1 wallet';
+
+    // trường họp chỉ có 1 ví
+
+    // trường hợp có nhiều hơn 1 ví
+    // xóa ví
     await users
         .doc(uid)
         .collection('wallets')
@@ -130,6 +141,15 @@ class FirebaseFireStoreService {
       print(error);
       return error.toString();
     });
+
+    // thiết lập lại ví đang được chọn
+    Wallet firstWallet;
+    await users.doc(uid).collection('wallets').get().then((value) async {
+      firstWallet = Wallet.fromMap(value.docs.first.data());
+      await updateSelectedWallet(firstWallet.id);
+    });
+    return firstWallet.id;
+    // updateSelectedWallet(firstWallet.id);
   }
 
   // convert from snapshot
