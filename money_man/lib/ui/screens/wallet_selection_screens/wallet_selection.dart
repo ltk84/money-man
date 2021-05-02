@@ -27,7 +27,6 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
 
     return Container(
       color: Colors.transparent,
-      //padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
       child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
@@ -65,13 +64,12 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
               TextButton(
                   onPressed: () async {
                     Wallet wallet = await _firestore.getWalletByID(widget.id);
-                    var res = 'alo';
+                    var res = '';
                     res = await showCupertinoModalBottomSheet(
                       backgroundColor: Colors.grey[900],
                       context: context,
                       builder: (context) => EditWalletScreen(wallet: wallet),
                     );
-                    print(res.toString());
                     if (res != null)
                       setState(() {
                         widget.id = res;
@@ -100,7 +98,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                   height: 40.0,
                 ),
                 Container(
-                  padding: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                   width: double.infinity,
                   decoration: BoxDecoration(
                       color: Colors.grey[900],
@@ -113,33 +111,25 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             color: Colors.grey[900],
                             width: 1.0,
                           ))),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child: Icon(Icons.all_inclusive_outlined,
-                              color: Colors.white)),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Total',
-                              style: tsMain,
-                            ),
-                            Text(
-                              '(amount)',
-                              style: tsChild,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                          flex: 1, child: Icon(Icons.check, color: Colors.blue))
-                    ],
-                  ),
+                  // child: ListTile(
+                  //   leading: Icon(
+                  //     Icons.all_inclusive_outlined,
+                  //     color: Colors.white,
+                  //   ),
+                  //   title: Text(
+                  //     'Total',
+                  //     style: tsMain,
+                  //   ),
+                  //   subtitle: Text(
+                  //     '(amount)',
+                  //     style: tsChild,
+                  //   ),
+                  //   trailing: Icon(
+                  //     Icons.check,
+                  //     color: Colors.blue,
+                  //   ),
+                  // ),
+                  child: buildDisplayTotalWallet(),
                 ),
                 SizedBox(
                   height: 20.0,
@@ -213,6 +203,50 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
     );
   }
 
+  Widget buildDisplayTotalWallet() {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    return widget.id == 'Total'
+        ? ListTile(
+            onTap: () {},
+            leading: Icon(
+              Icons.all_inclusive_outlined,
+              color: Colors.white,
+            ),
+            title: Text(
+              'Total',
+              style: tsMain,
+            ),
+            subtitle: Text(
+              '(amount)',
+              style: tsChild,
+            ),
+            trailing: Icon(
+              Icons.check,
+              color: Colors.blue,
+            ),
+          )
+        : ListTile(
+            onTap: () {
+              setState(() {
+                widget.id = 'Total';
+                _firestore.updateSelectedWallet('Total');
+              });
+            },
+            leading: Icon(
+              Icons.all_inclusive_outlined,
+              color: Colors.white,
+            ),
+            title: Text(
+              'Total',
+              style: tsMain,
+            ),
+            subtitle: Text(
+              '(amount)',
+              style: tsChild,
+            ),
+          );
+  }
+
   Widget buildDisplayWallet() {
     print('wallet select inside build + ${widget.id}');
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -222,6 +256,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
           stream: _firestore.streamWallet,
           builder: (context, snapshot) {
             final listWallet = snapshot.data ?? [];
+            listWallet.removeWhere((element) => element.id == 'Total');
             print('stream ' + listWallet.length.toString());
             return ListView.builder(
                 itemCount: listWallet.length,

@@ -38,7 +38,7 @@ class _TransactionScreen extends State<TransactionScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 200, vsync: this, initialIndex: 150);
-    widget.currentWallet = widget.currentWallet == null
+    wallet = widget.currentWallet == null
         ? Wallet(
             id: 'id',
             name: 'defaultName',
@@ -64,7 +64,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
   @override
   Widget build(BuildContext context) {
-    print('transaction build ' + wallet.id);
+    // print('transaction build ' + wallet.id);
     return DefaultTabController(
         length: 300,
         child: Scaffold(
