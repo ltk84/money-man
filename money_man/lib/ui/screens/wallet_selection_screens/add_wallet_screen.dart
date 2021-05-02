@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/screens/currency_selection_screen/currency_selection.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class AddWalletScreen extends StatefulWidget {
@@ -325,83 +321,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
           ],
         ),
       ],
-    );
-  }
-}
-
-// class MainActivity extends StatelessWidget {
-//   final formKey;
-//   Wallet wallet;
-//   MainActivity({
-//     Key key,
-//     @required this.formKey,
-//     @required this.wallet,
-//   }) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-
-// }
-
-class Currency extends StatefulWidget {
-  @override
-  _CurrencyState createState() => _CurrencyState();
-}
-
-class _CurrencyState extends State<Currency> {
-  String dropdownValue = 'VND';
-  List ListItem = ['VND', 'USD', 'WON', 'BITCOIN'];
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(width: 1.0, color: Colors.white60),
-        ),
-      ),
-      width: 275,
-      height: size.height * 0.05,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            child: Text(
-              'Currency *',
-              style: TextStyle(color: Colors.white60),
-            ),
-          ),
-          SizedBox(width: 40.0),
-          Container(
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                dropdownColor: Colors.black,
-                hint: Text(
-                  'Currency',
-                  style: TextStyle(
-                    fontFamily: 'NarumGothic',
-                  ),
-                ),
-                value: dropdownValue,
-                onChanged: (newValue) {
-                  setState(() {
-                    dropdownValue = newValue;
-                  });
-                },
-                items: ListItem.map((dropdownValue) {
-                  return DropdownMenuItem(
-                    value: dropdownValue,
-                    child: Text(
-                      dropdownValue,
-                      style: TextStyle(
-                          fontFamily: 'Montserrat', color: Colors.white60),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          )
-        ],
-      ),
     );
   }
 }

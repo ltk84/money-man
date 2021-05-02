@@ -1,8 +1,6 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 
 class PlanningScreen extends StatelessWidget {
   @override
@@ -33,8 +31,7 @@ class _TestState extends State<Test> {
       setState(() {
         reachAppBar = 1;
       });
-    }
-    else {
+    } else {
       setState(() {
         reachAppBar = 0;
       });
@@ -43,8 +40,7 @@ class _TestState extends State<Test> {
       setState(() {
         reachTop = 1;
       });
-    }
-    else {
+    } else {
       setState(() {
         reachTop = 0;
       });
@@ -72,12 +68,19 @@ class _TestState extends State<Test> {
               opacity: reachAppBar == 1 ? 1 : 0,
               duration: Duration(milliseconds: 0),
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: reachTop == 1 ? 25 : 500, sigmaY: 25, tileMode: TileMode.values[0]),
+                filter: ImageFilter.blur(
+                    sigmaX: reachTop == 1 ? 25 : 500,
+                    sigmaY: 25,
+                    tileMode: TileMode.values[0]),
                 child: AnimatedContainer(
-                  duration: Duration(milliseconds: reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  duration: Duration(
+                      milliseconds:
+                          reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                   //child: Container(
                   //color: Colors.transparent,
-                  color: Colors.grey[reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900].withOpacity(0.2),
+                  color: Colors.grey[
+                          reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+                      .withOpacity(0.2),
                   //),
                 ),
               ),
@@ -86,8 +89,8 @@ class _TestState extends State<Test> {
           title: AnimatedOpacity(
               opacity: reachTop == 1 ? 1 : 0,
               duration: Duration(milliseconds: 100),
-              child: Text('Planning', style: Theme.of(context).textTheme.headline6)
-          ),
+              child: Text('Planning',
+                  style: Theme.of(context).textTheme.headline6)),
         ),
         body: ListView(
           physics: BouncingScrollPhysics(),
@@ -98,9 +101,9 @@ class _TestState extends State<Test> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
                 child: reachTop == 0
                     ? Hero(
-                    tag: 'alo',
-                    child: Text('Planning', style: Theme.of(context).textTheme.headline4)
-                )
+                        tag: 'alo',
+                        child: Text('Planning',
+                            style: Theme.of(context).textTheme.headline4))
                     : Text('', style: Theme.of(context).textTheme.headline4),
               ),
             ),
@@ -112,20 +115,20 @@ class _TestState extends State<Test> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.all_inbox, color: Colors.white, size: 40.0),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('BUDGET', style: Theme.of(context).textTheme.subtitle2),
-                    ],
-                  ),
-                )
-              ),
+                  onPressed: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    child: Column(
+                      children: [
+                        Icon(Icons.all_inbox, color: Colors.white, size: 40.0),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text('BUDGET',
+                            style: Theme.of(context).textTheme.subtitle2),
+                      ],
+                    ),
+                  )),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
@@ -135,20 +138,21 @@ class _TestState extends State<Test> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.sticky_note_2_outlined, color: Colors.white, size: 40.0),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('BILLS', style: Theme.of(context).textTheme.subtitle2),
-                    ],
-                  ),
-                )
-              ),
+                  onPressed: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    child: Column(
+                      children: [
+                        Icon(Icons.sticky_note_2_outlined,
+                            color: Colors.white, size: 40.0),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text('BILLS',
+                            style: Theme.of(context).textTheme.subtitle2),
+                      ],
+                    ),
+                  )),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
@@ -158,20 +162,20 @@ class _TestState extends State<Test> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.event, color: Colors.white, size: 40.0),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('EVENTS', style: Theme.of(context).textTheme.subtitle2),
-                    ],
-                  ),
-                )
-              ),
+                  onPressed: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    child: Column(
+                      children: [
+                        Icon(Icons.event, color: Colors.white, size: 40.0),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text('EVENTS',
+                            style: Theme.of(context).textTheme.subtitle2),
+                      ],
+                    ),
+                  )),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
@@ -181,23 +185,22 @@ class _TestState extends State<Test> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.event, color: Colors.white, size: 40.0),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('RECURRING', style: Theme.of(context).textTheme.subtitle2),
-                    ],
-                  ),
-                )
-              ),
+                  onPressed: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    child: Column(
+                      children: [
+                        Icon(Icons.event, color: Colors.white, size: 40.0),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text('RECURRING',
+                            style: Theme.of(context).textTheme.subtitle2),
+                      ],
+                    ),
+                  )),
             ),
           ],
-        )
-    );
+        ));
   }
 }

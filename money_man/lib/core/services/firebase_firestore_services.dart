@@ -1,11 +1,8 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/categoryModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
-import '../models/transactionModel.dart';
 
 class FirebaseFireStoreService {
   final String uid;
@@ -17,11 +14,12 @@ class FirebaseFireStoreService {
   final CollectionReference categories =
       FirebaseFirestore.instance.collection('categories');
 
-  // WALLET //
+  // WALLET START//
 
   // update id của wallet đang được chọn
   Future<String> updateSelectedWallet(String walletID) async {
-    Wallet w;
+    // lấy wallet thông qua id
+    Wallet wallet;
     await users
         .doc(uid)
         .collection('wallets')
@@ -29,26 +27,29 @@ class FirebaseFireStoreService {
         .get()
         .then((value) {
       print(walletID);
-      w = Wallet.fromMap(value.data());
+      wallet = Wallet.fromMap(value.data());
     });
 
+    // update ví đang được chọn lên database
     await users
         .doc(uid)
-        .update(w.toMap())
+        .update(wallet.toMap())
         .then((value) => print('updated!'))
         .catchError((onError) {
       print(onError);
       return onError.toString();
     });
 
-    return w.id;
+    return wallet.id;
   }
 
   // add first wallet
   Future addFirstWallet(Wallet wallet) async {
+    // lấy doc reference để auto generate id của doc
     DocumentReference docRef = users.doc(uid).collection('wallets').doc();
     wallet.id = docRef.id;
 
+    // thêm ví vào collection wallets và set wallet đang được chọn
     await docRef
         .set(wallet.toMap())
         .then((value) => print('add wallet to collection wallets'))
@@ -68,26 +69,13 @@ class FirebaseFireStoreService {
         .map((event) => Wallet.fromMap(event.data()).id);
   }
 
+  // stream của wallet hiện tại đang được chọn
   Stream<Wallet> get currentWallet {
     return users
         .doc(uid)
         .snapshots()
         .map((event) => Wallet.fromMap(event.data()));
   }
-
-  // lấy id của wallet đang được chọn
-  // get selectedWalletID async {
-  //   try {
-  //     String ref = "";
-  //     await users.doc(uid).get().then((value) async {
-  //       ref = await value.data()['selectedWalletID'];
-  //     });
-  //     return ref;
-  //   } on StateError catch (e) {
-  //     print('Field not exist');
-  //     return null;
-  //   }
-  // }
 
   // add wallet
   Future addWallet(Wallet wallet) async {
@@ -107,7 +95,6 @@ class FirebaseFireStoreService {
 
   // edit wallet
   Future updateWallet(Wallet wallet) async {
-    print(wallet.toMap());
     await users
         .doc(uid)
         .collection('wallets')
@@ -150,7 +137,6 @@ class FirebaseFireStoreService {
       await updateSelectedWallet(firstWallet.id);
     });
     return firstWallet.id;
-    // updateSelectedWallet(firstWallet.id);
   }
 
   // convert from snapshot
@@ -177,6 +163,7 @@ class FirebaseFireStoreService {
         .then((value) => Wallet.fromMap(value.data()));
   }
 
+  // lấy wallet đang được chọn
   Future<Wallet> getCurrenWallet() async {
     return await users
         .doc(uid)
@@ -184,12 +171,12 @@ class FirebaseFireStoreService {
         .then((value) => Wallet.fromMap(value.data()));
   }
 
-  // WALLET //
+  // WALLET END//
 
-  // TRANSACTION //
-  // TRANSACTION //
+  // TRANSACTION START//
+  // TRANSACTION END//
 
-  // CATERGORY //
+  // CATERGORY START//
 
   // get stream list category
   Stream<List<MyCatergory>> get categoryStream {
@@ -211,22 +198,22 @@ class FirebaseFireStoreService {
     await cateRef.set(cat.toMap()).then((value) => print('added!'));
   }
 
-  // CATERGORY //
+  // CATERGORY END //
 
   //add transaction
-  Future addTransaction(Wallet wallet, MyTransaction transaction) async {
-    final transactionRef = users
-        .doc(uid)
-        .collection('wallets')
-        .doc(wallet.id)
-        .collection('transactions')
-        .doc();
-    transaction.id = transactionRef.id;
-    return await transactionRef
-        .set(transaction.toMap())
-        .then((value) => print('player added!'))
-        .catchError((error) => print(error));
-  }
+  // Future addTransaction(Wallet wallet, MyTransaction transaction) async {
+  //   final transactionRef = users
+  //       .doc(uid)
+  //       .collection('wallets')
+  //       .doc(wallet.id)
+  //       .collection('transactions')
+  //       .doc();
+  //   transaction.id = transactionRef.id;
+  //   return await transactionRef
+  //       .set(transaction.toMap())
+  //       .then((value) => print('player added!'))
+  //       .catchError((error) => print(error));
+  // }
 
   // // edit player
   // Future editPlayer(Player player) async {

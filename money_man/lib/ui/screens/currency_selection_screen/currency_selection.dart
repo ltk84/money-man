@@ -1,9 +1,5 @@
 import 'dart:ui';
-
-import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
-
-import 'package:page_transition/page_transition.dart';
 
 class CurrencySelection extends StatelessWidget {
   @override
@@ -34,8 +30,7 @@ class _TestState extends State<Test> {
       setState(() {
         reachAppBar = 1;
       });
-    }
-    else {
+    } else {
       setState(() {
         reachAppBar = 0;
       });
@@ -44,8 +39,7 @@ class _TestState extends State<Test> {
       setState(() {
         reachTop = 1;
       });
-    }
-    else {
+    } else {
       setState(() {
         reachTop = 0;
       });
@@ -74,7 +68,12 @@ class _TestState extends State<Test> {
               children: [
                 Icon(Icons.arrow_back_ios, color: Colors.white, size: 15),
                 //Text('Add Wallet', style: Theme.of(context).textTheme.headline6),
-                Text('Add Wallet', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.w600,)),
+                Text('Add Wallet',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600,
+                    )),
               ],
             ),
           ),
@@ -86,12 +85,19 @@ class _TestState extends State<Test> {
               opacity: reachAppBar == 1 ? 1 : 0,
               duration: Duration(milliseconds: 0),
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: reachTop == 1 ? 25 : 500, sigmaY: 25, tileMode: TileMode.values[0]),
+                filter: ImageFilter.blur(
+                    sigmaX: reachTop == 1 ? 25 : 500,
+                    sigmaY: 25,
+                    tileMode: TileMode.values[0]),
                 child: AnimatedContainer(
-                  duration: Duration(milliseconds: reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  duration: Duration(
+                      milliseconds:
+                          reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                   //child: Container(
                   //color: Colors.transparent,
-                  color: Colors.grey[reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900].withOpacity(0.2),
+                  color: Colors.grey[
+                          reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+                      .withOpacity(0.2),
                   //),
                 ),
               ),
@@ -100,8 +106,11 @@ class _TestState extends State<Test> {
           title: AnimatedOpacity(
               opacity: reachTop == 1 ? 1 : 0,
               duration: Duration(milliseconds: 100),
-              child: Text('Currency', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 17.0))
-          ),
+              child: Text('Currency',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontSize: 17.0))),
         ),
         body: ListView(
           physics: BouncingScrollPhysics(),
@@ -110,11 +119,20 @@ class _TestState extends State<Test> {
             Padding(
               padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
               child: reachTop == 0
-                  ? Text('Currency', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold))
-                  : Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
+                  ? Text('Currency',
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold))
+                  : Text('',
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold)),
             ),
           ],
-        )
-    );
+        ));
   }
 }
