@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money_man/ui/screens/home_screen/home_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/error_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
+import 'package:money_man/ui/theme.dart';
 import 'package:money_man/ui/widgets/wrapper.dart';
 import 'package:money_man/ui/widgets/wrapper_builder.dart';
 import 'package:provider/provider.dart';
@@ -65,6 +66,7 @@ class _AppState extends State<App> {
       child: WrapperBuilder(
         builder: (context, userSnapshot) {
           return MaterialApp(
+            theme: firstTheme(),
             debugShowCheckedModeBanner: false,
             home: SafeArea(
               child: Wrapper(

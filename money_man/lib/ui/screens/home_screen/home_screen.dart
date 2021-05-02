@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+//import 'package:money_man/ui/screens/account_screen/account_screen.dart';
+import 'package:money_man/ui/screens/planning_screen/planning_screen.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/account_screens/account_screen.dart';
@@ -15,6 +17,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  static List<Widget> _screens = [
+    TransactionScreen(),
+    ReportScreen(),
+    LoadingScreen(),
+    PlanningScreen(),
+    AccountScreen(),
+  ];
 
   void _onItemTap(int index) {
     setState(() {
@@ -36,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
             TransactionScreen(currentWallet: wallet),
             ReportScreen(),
             LoadingScreen(),
-            ErrorScreen(),
+            PlanningScreen(),
             AccountScreen(),
           ];
 

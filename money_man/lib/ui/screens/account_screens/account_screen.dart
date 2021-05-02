@@ -235,8 +235,9 @@ class _TestState extends State<Test> {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (_) => CategoriesScreen()));
+                          PageTransition(
+                              child: CategoriesScreen(),
+                              type: PageTransitionType.rightToLeft));
                     },
                     dense: true,
                     leading: Icon(Icons.category,

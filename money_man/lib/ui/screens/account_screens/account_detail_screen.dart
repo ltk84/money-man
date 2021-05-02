@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 
+
 class AccountDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -10,29 +11,33 @@ class AccountDetail extends StatelessWidget {
   }
 }
 
+// class Test extends StatelessWidget {
+//   Text title = Text('More', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Hero(tag: 'alo', child: title),
+//       )
+//     );
+//   }
+// }
+
+
 class Test extends StatefulWidget {
   @override
   _TestState createState() => _TestState();
 }
 
 class _TestState extends State<Test> {
+  final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
 
   //
-  Text title = Text('My Account',
-      style: TextStyle(
-          fontSize: 30,
-          color: Colors.white,
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.bold));
-  Text emptyTitle = Text('',
-      style: TextStyle(
-          fontSize: 30,
-          color: Colors.white,
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.bold));
+  // Text title = Text('My Account', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
+  // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
@@ -41,16 +46,18 @@ class _TestState extends State<Test> {
       setState(() {
         reachAppBar = 1;
       });
-    } else {
+    }
+    else {
       setState(() {
         reachAppBar = 0;
       });
     }
-    if (_controller.offset >= title.style.fontSize) {
+    if (_controller.offset >= fontSizeText - 5) {
       setState(() {
         reachTop = 1;
       });
-    } else {
+    }
+    else {
       setState(() {
         reachTop = 0;
       });
@@ -79,13 +86,9 @@ class _TestState extends State<Test> {
                 children: [
                   Icon(Icons.arrow_back_ios, color: Colors.white),
                   Hero(
-                      tag: 'alo',
-                      child: Text('More',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Montserrat',
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w500))),
+                    tag: 'alo',
+                    child: Text('More', style: Theme.of(context).textTheme.headline6)
+                  ),
                 ],
               ),
             ),
@@ -98,20 +101,12 @@ class _TestState extends State<Test> {
                 opacity: reachAppBar == 1 ? 1 : 0,
                 duration: Duration(milliseconds: 0),
                 child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                      sigmaX: reachTop == 1 ? 25 : 500,
-                      sigmaY: 25,
-                      tileMode: TileMode.values[0]),
+                  filter: ImageFilter.blur(sigmaX: reachTop == 1 ? 25 : 500, sigmaY: 25, tileMode: TileMode.values[0]),
                   child: AnimatedContainer(
-                    duration: Duration(
-                        milliseconds:
-                            reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                    duration: Duration(milliseconds: reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                     //child: Container(
                     //color: Colors.transparent,
-                    color: Colors.grey[reachAppBar == 1
-                            ? (reachTop == 1 ? 800 : 850)
-                            : 900]
-                        .withOpacity(0.2),
+                    color: Colors.grey[reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900].withOpacity(0.2),
                     //),
                   ),
                 ),
@@ -120,18 +115,18 @@ class _TestState extends State<Test> {
             title: AnimatedOpacity(
                 opacity: reachTop == 1 ? 1 : 0,
                 duration: Duration(milliseconds: 100),
-                child: Text('My Account',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montseratt',
-                        fontSize: 17.0)))),
+                child: Text('My Account', style: Theme.of(context).textTheme.headline6)
+            )
+        ),
         body: ListView(
           physics: BouncingScrollPhysics(),
           controller: _controller,
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
-              child: reachTop == 0 ? title : emptyTitle,
+              child: reachTop == 0
+                  ? Text('My Account', style: Theme.of(context).textTheme.headline4)
+                  : Text('', style: Theme.of(context).textTheme.headline4),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -145,7 +140,9 @@ class _TestState extends State<Test> {
                       bottom: BorderSide(
                         width: 0.1,
                         color: Colors.white,
-                      ))),
+                      )
+                  )
+              ),
               child: Column(
                 children: [
                   CircleAvatar(
@@ -157,19 +154,9 @@ class _TestState extends State<Test> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(5.0),
-                    child: Text('lamtruoq',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Montserrat',
-                            fontSize: 15.0)),
+                    child: Text('lamtruoq', style: Theme.of(context).textTheme.subtitle2),
                   ),
-                  Text('lamtruoq@gmail.com',
-                      style: TextStyle(
-                          color: Colors.grey[400],
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Montserrat',
-                          fontSize: 13.0)),
+                  Text('lamtruoq@gmail.com', style: Theme.of(context).textTheme.bodyText2),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -179,16 +166,10 @@ class _TestState extends State<Test> {
                     color: Colors.white,
                   ),
                   ListTile(
-                    onTap: () {},
+                    onTap: () {
+                    },
                     dense: true,
-                    title: Text(
-                      'Change password',
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Montserrat'),
-                      textAlign: TextAlign.center,
-                    ),
+                    title: Text('Change password', style: Theme.of(context).textTheme.subtitle2, textAlign: TextAlign.center,),
                   )
                 ],
               ),
@@ -205,7 +186,9 @@ class _TestState extends State<Test> {
                       bottom: BorderSide(
                         width: 0.1,
                         color: Colors.white,
-                      ))),
+                      )
+                  )
+              ),
               child: Column(
                 children: [
                   ListTile(
@@ -214,15 +197,7 @@ class _TestState extends State<Test> {
                       _auth.signOut();
                     },
                     dense: true,
-                    title: Text(
-                      'Sign out',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Montserrat',
-                          fontSize: 14.0),
-                      textAlign: TextAlign.center,
-                    ),
+                    title: Text('Sign out', style: Theme.of(context).textTheme.subtitle2, textAlign: TextAlign.center,),
                   ),
                 ],
               ),
@@ -231,6 +206,7 @@ class _TestState extends State<Test> {
               height: 5.0,
             )
           ],
-        ));
+        )
+    );
   }
 }
