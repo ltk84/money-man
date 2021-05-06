@@ -2,6 +2,8 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +16,7 @@ class AddWalletScreen extends StatefulWidget {
 class _AddWalletScreenState extends State<AddWalletScreen> {
   static var _formKey = GlobalKey<FormState>();
   String currencyName = 'Currency';
+  IconData iconData = Icons.account_balance_wallet;
 
   Wallet wallet = Wallet(
       id: '0',
@@ -106,11 +109,23 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     children: [
                       IconButton(
                         icon: Icon(
-                          Icons.account_balance_wallet,
+                          iconData,
                           size: 35.0,
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           // TODO: Chọn icon cho ví
+                          var data = await FlutterIconPicker.showIconPicker(
+                            context,
+                            iconPickerShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            iconPackMode: IconPack.cupertino,
+                          );
+                          if (data != null) {
+                            wallet.iconID = data.codePoint.toString();
+                            setState(() {
+                              iconData = data;
+                            });
+                          }
                         },
                         iconSize: 70,
                         color: Color(0xff8f8f8f),
@@ -158,17 +173,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     thickness: 0.05,
                     color: Colors.white,
                   ),
-                  // Row(
-                  //   //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     IconButton(
-                  //       icon: Icon(Icons.monetization_on_outlined, size: 40.0),
-                  //       onPressed: () {},
-                  //       color: Color(0xff8f8f8f),
-                  //     ),
-                  //     Currency(),
-                  //   ],
-                  // ),
+
                   ListTile(
                     onTap: () {
                       showCurrencyPicker(

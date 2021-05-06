@@ -18,6 +18,10 @@ class FirebaseFireStoreService {
 
   // update id của wallet đang được chọn
   Future<String> updateSelectedWallet(String walletID) async {
+    // if (walletID == 'Total') {
+    //   Wallet total = Wallet(id: 'Total', name: 'Total', amount: 0, currencyID: currencyID, iconID: iconID)
+    // }
+
     // lấy wallet thông qua id
     Wallet wallet;
     await users
@@ -169,6 +173,12 @@ class FirebaseFireStoreService {
         .doc(uid)
         .get()
         .then((value) => Wallet.fromMap(value.data()));
+  }
+
+  // lấy total wallet
+  getAllWallet() async {
+    var allWallet =
+        await users.doc(uid).collection('wallets').get().then((value) => null);
   }
 
   // WALLET END//

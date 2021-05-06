@@ -2,6 +2,8 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
@@ -21,11 +23,15 @@ class EditWalletScreen extends StatefulWidget {
 class _EditWalletScreenState extends State<EditWalletScreen> {
   static var _formKey = GlobalKey<FormState>();
   String currencyName = 'Currency';
+  IconData iconData = Icons.account_balance_wallet;
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     currencyName = CurrencyService().findByCode(widget.wallet.currencyID).name;
+    iconData = IconData(int.tryParse(widget.wallet.iconID),
+        fontFamily: 'MaterialIcons');
+    // iconData = Wallet.getIconDataByIconID(widget.wallet.iconID);
 
     return Scaffold(
         backgroundColor: Colors.grey[900],
@@ -65,10 +71,8 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    print('before set' + widget.wallet.id);
                     await _firestore.updateWallet(widget.wallet);
                     await _firestore.updateSelectedWallet(widget.wallet.id);
-                    print('after set' + widget.wallet.id);
 
                     Navigator.pop(context, widget.wallet.id);
                   }
@@ -111,11 +115,23 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     children: [
                       IconButton(
                         icon: Icon(
-                          Icons.account_balance_wallet,
+                          iconData,
                           size: 35.0,
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           // TODO: Chọn icon cho ví
+                          var data = await FlutterIconPicker.showIconPicker(
+                            context,
+                            iconPickerShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            iconPackMode: IconPack.material,
+                          );
+                          if (data != null) {
+                            widget.wallet.iconID = data.codePoint.toString();
+                            setState(() {
+                              iconData = data;
+                            });
+                          }
                         },
                         iconSize: 70,
                         color: Color(0xff8f8f8f),

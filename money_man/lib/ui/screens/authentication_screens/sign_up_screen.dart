@@ -223,7 +223,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget buildInputField() {
-    TextEditingController PasswordControler = TextEditingController();
+    // TextEditingController PasswordControler = TextEditingController();
     return Column(
       children: [
         Theme(
@@ -239,6 +239,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 return 'Email not valid';
               return null;
             },
+            style: TextStyle(color: Colors.black),
             textAlign: TextAlign.left,
             onChanged: (value) => _email = value,
             decoration: InputDecoration(
@@ -262,7 +263,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             primaryColor: Colors.black,
           ),
           child: TextFormField(
-            controller: PasswordControler,
+            // controller: PasswordControler,
             validator: (value) {
               if (value == null || value.isEmpty)
                 return 'Password not empty';
@@ -270,7 +271,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 return 'Password must longer than 6 digits';
               return null;
             },
-            style: TextStyle(fontFamily: 'Montserrat'),
+            style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
             onChanged: (value) => _password = value,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.security),
@@ -280,8 +281,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onPressed: () => this.setState(() {
                   isObcure = !isObcure;
                   show = !show;
-                  trailingIconPass = Icon(
-                      show == true ? Icons.remove_red_eye : Icons.receipt_long);
+                  trailingIconPass = Icon(show == true
+                      ? Icons.visibility_rounded
+                      : Icons.visibility_off_rounded);
                 }),
               ),
             ),
@@ -300,12 +302,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             validator: (value) {
               if (value == null || value.isEmpty)
                 return 'Retype password not empty';
-              else if (value != PasswordControler.text)
+              else if (value.length < 6)
                 return 'Password must longer than 6 digits';
               return null;
             },
-            style: TextStyle(fontFamily: 'Montserrat'),
-            onChanged: (value) => _password = value,
+            style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
+            // onChanged: (value) => _password = value,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.security),
               labelText: 'Confirm Password',
@@ -314,8 +316,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onPressed: () => this.setState(() {
                   isObcure = !isObcure;
                   show = !show;
-                  trailingIconPass = Icon(
-                      show == true ? Icons.remove_red_eye : Icons.receipt_long);
+                  trailingIconPass = Icon(show == true
+                      ? Icons.visibility_rounded
+                      : Icons.visibility_off_rounded);
                 }),
               ),
             ),

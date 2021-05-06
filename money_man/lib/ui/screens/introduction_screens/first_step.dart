@@ -2,6 +2,7 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/slanding_clipper.dart';
@@ -16,6 +17,7 @@ class _FirstStepState extends State<FirstStep> {
   Wallet wallet = Wallet(
       id: 'id', name: 'wallet', amount: 0, currencyID: 'USD', iconID: 'a');
   String currencyName = 'USD';
+  IconData iconData = Icons.account_balance_wallet;
 
   static final _formKey = GlobalKey<FormState>();
 
@@ -114,13 +116,26 @@ class _FirstStepState extends State<FirstStep> {
                       ),
                       Container(
                         child: Icon(
-                          Icons.dashboard_sharp,
+                          iconData,
                           size: size.height * 0.18,
                           color: Colors.black54,
                         ),
                       ),
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            var data = await FlutterIconPicker.showIconPicker(
+                              context,
+                              iconPickerShape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              iconPackMode: IconPack.cupertino,
+                            );
+                            if (data != null) {
+                              wallet.iconID = data.codePoint.toString();
+                              setState(() {
+                                iconData = data;
+                              });
+                            }
+                          },
                           child: Text(
                             'CHANGE ICON',
                             style: TextStyle(

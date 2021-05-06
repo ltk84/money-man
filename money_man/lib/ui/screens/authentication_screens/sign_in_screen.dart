@@ -261,6 +261,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 return 'Email not valid';
               return null;
             },
+            style: TextStyle(color: Colors.black),
             textAlign: TextAlign.left,
             onChanged: (value) => _email = value,
             decoration: InputDecoration(
@@ -291,7 +292,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 return 'Password must longer than 6 digits';
               return null;
             },
-            style: TextStyle(fontFamily: 'Montserrat'),
+            style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
             onChanged: (value) => _password = value,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.security),
@@ -301,8 +302,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 onPressed: () => this.setState(() {
                   isObcure = !isObcure;
                   show = !show;
-                  trailingIconPass = Icon(
-                      show == true ? Icons.remove_red_eye : Icons.receipt_long);
+                  trailingIconPass = Icon(show == true
+                      ? Icons.visibility_rounded
+                      : Icons.visibility_off_rounded);
                 }),
               ),
             ),

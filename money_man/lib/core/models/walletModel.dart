@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
 
 class Wallet {
   String id;
@@ -33,5 +34,12 @@ class Wallet {
       'currencyID': currencyID,
       'iconID': iconID,
     };
+  }
+
+  static getIconDataByIconID(String iconID) {
+    return IconPicker.iconMap.values.firstWhere(
+      (element) => element.codePoint.toString() == iconID,
+      orElse: () => Icons.account_balance_wallet,
+    );
   }
 }

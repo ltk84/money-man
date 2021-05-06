@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -20,6 +22,13 @@ class WalletSelectionScreen extends StatefulWidget {
 }
 
 class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // FlutterIconPicker.showIconPicker(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     print('wallet selection build' + widget.id.toString());
@@ -261,6 +270,10 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
             return ListView.builder(
                 itemCount: listWallet.length,
                 itemBuilder: (context, index) {
+                  IconData iconData = IconData(
+                      int.tryParse(listWallet[index].iconID),
+                      fontFamily: 'MaterialIcons');
+
                   return widget.id == listWallet[index].id
                       ? GestureDetector(
                           onTap: () {},
@@ -280,7 +293,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                     ))),
                             child: ListTile(
                               leading: Icon(
-                                Icons.account_balance_wallet_outlined,
+                                iconData,
                                 color: Colors.white,
                               ),
                               title: Text(
@@ -297,12 +310,10 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                         )
                       : GestureDetector(
                           onTap: () {
-                            setState(() {
-                              widget.id = listWallet[index].id;
-                              _firestore.updateSelectedWallet(widget.id);
-                              // widget.changeWallet(
-                              //     _firestore.getWalletByID(widget.id));
-                            });
+                            // setState(() {
+                            //   widget.id = listWallet[index].id;
+                            //   _firestore.updateSelectedWallet(widget.id);
+                            // });
                           },
                           child: Container(
                             padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -319,8 +330,13 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                       width: 1.0,
                                     ))),
                             child: ListTile(
+                              onTap: () {
+                                widget.id = listWallet[index].id;
+                                _firestore.updateSelectedWallet(widget.id);
+                                Navigator.pop(context);
+                              },
                               leading: Icon(
-                                Icons.account_balance_wallet_outlined,
+                                iconData,
                                 color: Colors.white,
                               ),
                               title: Text(
