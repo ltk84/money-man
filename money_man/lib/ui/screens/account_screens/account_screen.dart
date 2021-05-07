@@ -1,10 +1,7 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:money_man/ui/screens/account_screens/categories_screen.dart';
-
+import 'package:money_man/ui/screens/categories_screens/categories_account_screen.dart';
 import 'package:page_transition/page_transition.dart';
-
 import 'account_detail_screen.dart';
 
 class AccountScreen extends StatelessWidget {

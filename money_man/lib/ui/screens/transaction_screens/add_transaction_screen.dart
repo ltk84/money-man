@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_man/core/models/categoryModel.dart';
+import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   @override
@@ -8,6 +11,7 @@ class AddTransactionScreen extends StatefulWidget {
 
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
   String date = 'Today';
+  MyCategory cate;
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +47,37 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
           ),
           ListTile(
-              leading: Icon(Icons.question_answer),
+              onTap: () async {
+                final selectCate = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => CategoriesTransactionScreen()));
+                if (selectCate != null) {
+                  setState(() {
+                    this.cate = selectCate;
+                  });
+                }
+              },
+              leading: cate == null
+                  ? Icon(Icons.question_answer)
+                  : Icon(Icons.ac_unit),
               title: TextField(
+                onTap: () async {
+                  final selectCate = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => CategoriesTransactionScreen()));
+                  if (selectCate != null) {
+                    setState(() {
+                      this.cate = selectCate;
+                    });
+                  }
+                },
                 readOnly: true,
                 style: TextStyle(color: Colors.black),
-                decoration: InputDecoration(hintText: 'Select category'),
-                onTap: () {},
+                decoration: InputDecoration(
+                    hintText:
+                        this.cate == null ? 'Select category' : this.cate.name),
               )),
           ListTile(
             leading: Icon(Icons.note),
@@ -67,13 +96,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     initialDate: now,
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2030));
-                if (pick != null && pick.day != now.day ||
-                    pick.month != now.month ||
-                    pick.year != now.year) {
-                  String text = DateFormat('EEEE, dd-MM-yyyy').format(pick);
-                  setState(() {
-                    this.date = text;
-                  });
+                if (pick != null) {
+                  if (pick.day != now.day ||
+                      pick.month != now.month ||
+                      pick.year != now.year) {
+                    String text = DateFormat('EEEE, dd-MM-yyyy').format(pick);
+                    setState(() {
+                      this.date = text;
+                    });
+                  }
                 }
               },
               readOnly: true,

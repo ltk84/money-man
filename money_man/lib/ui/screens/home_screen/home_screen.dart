@@ -5,10 +5,8 @@ import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/account_screens/account_screen.dart';
 import 'package:money_man/ui/screens/report_screens/report_screen.dart';
-import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/add_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_screen.dart';
-import 'package:money_man/ui/screens/shared_screens/error_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
