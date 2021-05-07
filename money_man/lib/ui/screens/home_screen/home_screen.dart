@@ -6,6 +6,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/account_screens/account_screen.dart';
 import 'package:money_man/ui/screens/report_screens/report_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/add_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/error_screen.dart';
 import 'package:provider/provider.dart';
@@ -16,14 +17,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-  static List<Widget> _screens = [
-    TransactionScreen(),
-    ReportScreen(),
-    LoadingScreen(),
-    PlanningScreen(),
-    AccountScreen(),
-  ];
+  int _selectedIndex = 2;
+  // static List<Widget> _screens = [
+  //   TransactionScreen(),
+  //   ReportScreen(),
+  //   LoadingScreen(),
+  //   PlanningScreen(),
+  //   AccountScreen(),
+  // ];
 
   void _onItemTap(int index) {
     setState(() {
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
           List<Widget> _screens = [
             TransactionScreen(currentWallet: wallet),
             ReportScreen(),
-            LoadingScreen(),
+            AddTransactionScreen(),
             PlanningScreen(),
             AccountScreen(),
           ];

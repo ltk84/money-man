@@ -175,35 +175,30 @@ class FirebaseFireStoreService {
         .then((value) => Wallet.fromMap(value.data()));
   }
 
-  // lấy total wallet
-  getAllWallet() async {
-    var allWallet =
-        await users.doc(uid).collection('wallets').get().then((value) => null);
-  }
-
   // WALLET END//
 
   // TRANSACTION START//
+
   // TRANSACTION END//
 
   // CATERGORY START//
 
   // get stream list category
-  Stream<List<MyCatergory>> get categoryStream {
+  Stream<List<MyCategory>> get categoryStream {
     return categories.snapshots().map(_categoryFromSnapshot);
   }
 
   // convert từ snapshot thành category
-  List<MyCatergory> _categoryFromSnapshot(QuerySnapshot snapshot) {
+  List<MyCategory> _categoryFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((e) {
-      return MyCatergory.fromMap(e.data());
+      return MyCategory.fromMap(e.data());
     }).toList();
   }
 
   // add instance cate
   void addCate() async {
     final cateRef = categories.doc();
-    MyCatergory cat = MyCatergory(
+    MyCategory cat = MyCategory(
         id: cateRef.id, name: '', type: 'expense', iconID: 'defaultID');
     await cateRef.set(cat.toMap()).then((value) => print('added!'));
   }

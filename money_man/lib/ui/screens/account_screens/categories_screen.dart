@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/categoryModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -27,8 +26,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       setState(() {
         reachAppBar = 1;
       });
-    }
-    else {
+    } else {
       setState(() {
         reachAppBar = 0;
       });
@@ -37,8 +35,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       setState(() {
         reachTop = 1;
       });
-    }
-    else {
+    } else {
       setState(() {
         reachTop = 0;
       });
@@ -51,6 +48,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     _controller.addListener(_scrollListener);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -68,8 +66,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 Icon(Icons.arrow_back_ios, color: Colors.white),
                 Hero(
                     tag: 'alo',
-                    child: Text('More', style: Theme.of(context).textTheme.headline6)
-                ),
+                    child: Text('More',
+                        style: Theme.of(context).textTheme.headline6)),
               ],
             ),
           ),
@@ -82,12 +80,19 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               opacity: reachAppBar == 1 ? 1 : 0,
               duration: Duration(milliseconds: 0),
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: reachTop == 1 ? 25 : 500, sigmaY: 25, tileMode: TileMode.values[0]),
+                filter: ImageFilter.blur(
+                    sigmaX: reachTop == 1 ? 25 : 500,
+                    sigmaY: 25,
+                    tileMode: TileMode.values[0]),
                 child: AnimatedContainer(
-                  duration: Duration(milliseconds: reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  duration: Duration(
+                      milliseconds:
+                          reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                   //child: Container(
                   //color: Colors.transparent,
-                  color: Colors.grey[reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900].withOpacity(0.2),
+                  color: Colors.grey[
+                          reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+                      .withOpacity(0.2),
                   //),
                 ),
               ),
@@ -96,14 +101,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           title: AnimatedOpacity(
               opacity: reachTop == 1 ? 1 : 0,
               duration: Duration(milliseconds: 100),
-              child: Text(''
-                  'Categories', style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montseratt',
-                  fontSize: 17.0))
-          )
-      ),
-      body: StreamBuilder<List<MyCatergory>>(
+              child: Text(
+                  ''
+                  'Categories',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Montseratt',
+                      fontSize: 17.0)))),
+      body: StreamBuilder<List<MyCategory>>(
           stream: _firestore.categoryStream,
           builder: (context, snapshot) {
             final _listCategories = snapshot.data ?? [];
@@ -113,8 +118,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 itemCount: _listCategories.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    leading: Icon(Icons.ac_unit_sharp, color: Colors.yellow[700]),
-                    title: Text(_listCategories[index].name, style: Theme.of(context).textTheme.subtitle1),
+                    leading:
+                        Icon(Icons.ac_unit_sharp, color: Colors.yellow[700]),
+                    title: Text(_listCategories[index].name,
+                        style: Theme.of(context).textTheme.subtitle1),
                     onTap: () {
                       // _firestore.addCate();
                     },
