@@ -2,7 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_man/core/models/categoryModel.dart';
+import 'package:money_man/core/models/transactionModel.dart';
+import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:provider/provider.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   @override
@@ -10,11 +15,14 @@ class AddTransactionScreen extends StatefulWidget {
 }
 
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
-  String date = 'Today';
+  DateTime pickDate;
+  double amount;
   MyCategory cate;
+  Wallet wallet;
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     print('add build');
     return Scaffold(
       appBar: AppBar(
@@ -30,7 +38,32 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         ),
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                print(wallet.id);
+                print(cate.name);
+                print(amount);
+                if (wallet != null && cate != null && amount != null) {
+                  MyTransaction trans;
+                  if (pickDate == null) {
+                    trans = MyTransaction(
+                        id: 'id',
+                        amount: amount,
+                        date: DateTime.now(),
+                        currencyID: wallet.currencyID,
+                        catergoryID: cate.id);
+                    print(trans.date.toString() + "chua pick");
+                  } else {
+                    trans = MyTransaction(
+                        id: 'id',
+                        amount: amount,
+                        date: pickDate,
+                        currencyID: wallet.currencyID,
+                        catergoryID: cate.id);
+                    print(trans.date.toString() + 'da pick');
+                  }
+                  _firestore.addTransaction(wallet, trans);
+                }
+              },
               child: Text(
                 'Save',
                 style: TextStyle(color: Colors.black),
@@ -42,6 +75,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           ListTile(
             leading: Icon(Icons.money),
             title: TextFormField(
+              onChanged: (value) => amount = double.tryParse(value),
               style: TextStyle(color: Colors.green),
               initialValue: '0',
             ),
@@ -91,34 +125,50 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             title: TextFormField(
               onTap: () async {
                 DateTime now = DateTime.now();
-                DateTime pick = await showDatePicker(
+                pickDate = await showDatePicker(
                     context: context,
                     initialDate: now,
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2030));
-                if (pick != null) {
-                  if (pick.day != now.day ||
-                      pick.month != now.month ||
-                      pick.year != now.year) {
-                    String text = DateFormat('EEEE, dd-MM-yyyy').format(pick);
-                    setState(() {
-                      this.date = text;
-                    });
+                if (pickDate != null) {
+                  if (pickDate.day != now.day ||
+                      pickDate.month != now.month ||
+                      pickDate.year != now.year) {
+                    setState(() {});
                   }
                 }
               },
               readOnly: true,
               style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(hintText: this.date),
+              decoration: InputDecoration(
+                  hintText: pickDate == null
+                      ? 'Today'
+                      : DateFormat('EEEE, dd-MM-yyyy').format(pickDate)),
             ),
           ),
           ListTile(
-            leading: Icon(Icons.account_balance_wallet_rounded),
+            onTap: () async {
+              wallet = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => SelectWalletAccountScreen()));
+            },
+            leading: Icon(wallet == null
+                ? Icons.account_balance_wallet_rounded
+                : IconData(int.tryParse(wallet.iconID),
+                    fontFamily: 'MaterialIcons')),
             title: TextFormField(
               readOnly: true,
               style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(hintText: 'Select wallet'),
-              onTap: () {},
+              decoration: InputDecoration(
+                  hintText: wallet == null ? 'Select wallet' : wallet.name),
+              onTap: () async {
+                wallet = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => SelectWalletAccountScreen()));
+                setState(() {});
+              },
             ),
           ),
         ],

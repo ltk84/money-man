@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/categoryModel.dart';
+import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 
 class FirebaseFireStoreService {
@@ -179,6 +180,21 @@ class FirebaseFireStoreService {
 
   // TRANSACTION START//
 
+  // add transaction
+  Future addTransaction(Wallet wallet, MyTransaction transaction) async {
+    final transactionRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions')
+        .doc();
+    transaction.id = transactionRef.id;
+    return await transactionRef
+        .set(transaction.toMap())
+        .then((value) => print('transaction added!'))
+        .catchError((error) => print(error));
+  }
+
   // TRANSACTION END//
 
   // CATERGORY START//
@@ -204,21 +220,6 @@ class FirebaseFireStoreService {
   }
 
   // CATERGORY END //
-
-  //add transaction
-  // Future addTransaction(Wallet wallet, MyTransaction transaction) async {
-  //   final transactionRef = users
-  //       .doc(uid)
-  //       .collection('wallets')
-  //       .doc(wallet.id)
-  //       .collection('transactions')
-  //       .doc();
-  //   transaction.id = transactionRef.id;
-  //   return await transactionRef
-  //       .set(transaction.toMap())
-  //       .then((value) => print('player added!'))
-  //       .catchError((error) => print(error));
-  // }
 
   // // edit player
   // Future editPlayer(Player player) async {

@@ -177,7 +177,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             backgroundColor: Colors.grey[900],
                             context: context,
                             builder: (context) => AddWalletScreen());
-                        print('return from add screen ' + res.toString());
+                        // print('return from add screen ' + res.toString());
                         if (res != null)
                           setState(() {
                             widget.id = res;
