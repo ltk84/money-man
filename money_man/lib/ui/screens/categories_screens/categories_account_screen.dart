@@ -5,17 +5,33 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesScreen extends StatefulWidget {
+  // list tab category
+  final List<Tab> categoryTypeTab = [
+    Tab(
+      text: 'DEBT & LOAN',
+    ),
+    Tab(
+      text: 'EXPENSE',
+    ),
+    Tab(
+      text: 'INCOME',
+    ),
+  ];
+
   @override
   _CategoriesScreenState createState() => _CategoriesScreenState();
 }
 
-class _CategoriesScreenState extends State<CategoriesScreen> {
+class _CategoriesScreenState extends State<CategoriesScreen>
+    with TickerProviderStateMixin {
   final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
 
-  //
+  // Tab controller cho tab bar
+  TabController _tabController;
+
   // Text title = Text('My Account', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
   // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
 
@@ -46,16 +62,20 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   void initState() {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 1);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    return Scaffold(
-      backgroundColor: Colors.black,
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
+
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
           leadingWidth: 250.0,
           leading: MaterialButton(
             onPressed: () {
@@ -107,27 +127,50 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Montseratt',
-                      fontSize: 17.0)))),
-      body: StreamBuilder<List<MyCategory>>(
-          stream: _firestore.categoryStream,
-          builder: (context, snapshot) {
-            final _listCategories = snapshot.data ?? [];
-            return ListView.builder(
-                physics: BouncingScrollPhysics(),
-                controller: _controller,
-                itemCount: _listCategories.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading:
-                        Icon(Icons.ac_unit_sharp, color: Colors.yellow[700]),
-                    title: Text(_listCategories[index].name,
-                        style: Theme.of(context).textTheme.subtitle1),
-                    onTap: () {
-                      // _firestore.addCate();
-                    },
-                  );
+                      fontSize: 17.0))),
+          bottom: TabBar(
+            unselectedLabelColor: Colors.grey[500],
+            labelColor: Colors.white,
+            indicatorColor: Colors.yellow[700],
+            physics: NeverScrollableScrollPhysics(),
+            isScrollable: true,
+            indicatorWeight: 3.0,
+            controller: _tabController,
+            tabs: widget.categoryTypeTab,
+          ),
+        ),
+        body: TabBarView(
+          controller: _tabController,
+          children: widget.categoryTypeTab.map((e) {
+            return StreamBuilder<List<MyCategory>>(
+                stream: _firestore.categoryStream,
+                builder: (context, snapshot) {
+                  final _listCategories = snapshot.data ?? [];
+                  final _selectCateTab = _listCategories
+                      .where((element) =>
+                          element.type ==
+                          widget.categoryTypeTab[_tabController.index].text
+                              .toLowerCase())
+                      .toList();
+                  return ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      controller: _controller,
+                      itemCount: _selectCateTab.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: Icon(Icons.ac_unit_sharp,
+                              color: Colors.yellow[700]),
+                          title: Text(_selectCateTab[index].name,
+                              style: Theme.of(context).textTheme.subtitle1),
+                          onTap: () {
+                            // _firestore.addCate();
+                          },
+                        );
+                      });
                 });
-          }),
+          }).toList(),
+        ),
+      ),
     );
   }
 }

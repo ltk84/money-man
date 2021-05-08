@@ -32,13 +32,13 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
-  Wallet wallet;
+  Wallet _wallet;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 200, vsync: this, initialIndex: 150);
-    wallet = widget.currentWallet == null
+    _wallet = widget.currentWallet == null
         ? Wallet(
             id: 'id',
             name: 'defaultName',
@@ -53,7 +53,7 @@ class _TransactionScreen extends State<TransactionScreen>
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
-    wallet = widget.currentWallet ??
+    _wallet = widget.currentWallet ??
         Wallet(
             id: 'id',
             name: 'defaultName',
@@ -81,7 +81,7 @@ class _TransactionScreen extends State<TransactionScreen>
                         onPressed: () async {
                           // print('pressed' + widget.currentWallet.id);
                           // buildShowDialog(context, widget.currentWallet.id);
-                          buildShowDialog(context, wallet.id);
+                          buildShowDialog(context, _wallet.id);
                         }),
                   ),
                   Expanded(
@@ -90,16 +90,16 @@ class _TransactionScreen extends State<TransactionScreen>
                           const Icon(Icons.arrow_drop_down, color: Colors.grey),
                       onPressed: () async {
                         // buildShowDialog(context, widget.currentWallet.id);
-                        buildShowDialog(context, wallet.id);
+                        buildShowDialog(context, _wallet.id);
                       },
                     ),
                   )
                 ],
               ),
               title: Column(children: [
-                Text(wallet.name,
+                Text(_wallet.name,
                     style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
-                Text(wallet.amount.toString(),
+                Text(_wallet.amount.toString(),
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 15.0,
