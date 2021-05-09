@@ -39,7 +39,10 @@ class _TransactionScreen extends State<TransactionScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 200, vsync: this, initialIndex: 150);
+    _tabController = TabController(length: 200, vsync: this, initialIndex: 100);
+    _tabController.addListener(() {
+      setState(() {});
+    });
     _wallet = widget.currentWallet == null
         ? Wallet(
             id: 'id',
@@ -69,7 +72,7 @@ class _TransactionScreen extends State<TransactionScreen>
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     // print('transaction build ' + wallet.id);
     return DefaultTabController(
-        length: 300,
+        length: 200,
         child: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.black,
@@ -134,6 +137,17 @@ class _TransactionScreen extends State<TransactionScreen>
                 stream: _firestore.transactionStream(_wallet),
                 builder: (context, snapshot) {
                   List<MyTransaction> _transactionList = snapshot.data ?? [];
+
+                  var chooseTime =
+                      widget.myTabs[_tabController.index].text.split('/');
+                  print(chooseTime[0]);
+
+                  _transactionList = _transactionList
+                      .where((element) =>
+                          element.date.month == int.parse(chooseTime[0]) &&
+                          element.date.year == int.parse(chooseTime[1]))
+                      .toList();
+
                   List<DateTime> a = [];
 
                   double totalInCome = 0;
