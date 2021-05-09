@@ -150,7 +150,7 @@ class FirebaseFireStoreService {
   }
 
   // get stream wallet
-  Stream<List<Wallet>> get streamWallet {
+  Stream<List<Wallet>> get walletStream {
     return users
         .doc(uid)
         .collection('wallets')
@@ -195,6 +195,38 @@ class FirebaseFireStoreService {
         .catchError((error) => print(error));
   }
 
+  Future addTransactionTest(String wallet, MyTransaction transaction) async {
+    final transactionRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet)
+        .collection('transactions')
+        .doc();
+    transaction.id = transactionRef.id;
+    return await transactionRef
+        .set(transaction.toMap())
+        .then((value) => print('transaction added!'))
+        .catchError((error) => print(error));
+  }
+
+  // stream đến transaction của wallet đang được chọn
+  Stream<List<MyTransaction>> transactionStream(Wallet wallet) {
+    return users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions')
+        .snapshots()
+        .map(_transactionFromSnapshot);
+  }
+
+  // convert từ snapshot thành transaction
+  List<MyTransaction> _transactionFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((e) {
+      return MyTransaction.fromMap(e.data());
+    }).toList();
+  }
+
   // TRANSACTION END//
 
   // CATERGORY START//
@@ -217,6 +249,13 @@ class FirebaseFireStoreService {
     MyCategory cat = MyCategory(
         id: cateRef.id, name: '', type: 'expense', iconID: 'defaultID');
     await cateRef.set(cat.toMap()).then((value) => print('added!'));
+  }
+
+  Future<MyCategory> getCategoryByID(String id) async {
+    return categories
+        .doc(id)
+        .get()
+        .then((value) => MyCategory.fromMap(value.data()));
   }
 
   // CATERGORY END //

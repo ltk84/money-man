@@ -38,19 +38,17 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         ),
         actions: [
           TextButton(
-              onPressed: () {
-                print(wallet.id);
-                print(cate.name);
-                print(amount);
+              onPressed: () async {
                 if (wallet != null && cate != null && amount != null) {
                   MyTransaction trans;
                   if (pickDate == null) {
                     trans = MyTransaction(
                         id: 'id',
                         amount: amount,
-                        date: DateTime.now(),
+                        date: DateTime.parse(
+                            DateFormat("yyyy-MM-dd").format(DateTime.now())),
                         currencyID: wallet.currencyID,
-                        catergoryID: cate.id);
+                        category: cate);
                     print(trans.date.toString() + "chua pick");
                   } else {
                     trans = MyTransaction(
@@ -58,11 +56,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         amount: amount,
                         date: pickDate,
                         currencyID: wallet.currencyID,
-                        catergoryID: cate.id);
+                        category: cate);
                     print(trans.date.toString() + 'da pick');
                   }
-                  _firestore.addTransaction(wallet, trans);
+                  await _firestore.addTransaction(wallet, trans);
                 }
+                // await _firestore.addTransactionTest(
+                //     wallet.id,
+                //     MyTransaction(
+                //         id: 'id',
+                //         amount: 100,
+                //         date: DateTime.now(),
+                //         currencyID: 'USD',
+                //         category: cate));
               },
               child: Text(
                 'Save',
@@ -130,11 +136,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     initialDate: now,
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2030));
+
                 if (pickDate != null) {
                   if (pickDate.day != now.day ||
                       pickDate.month != now.month ||
                       pickDate.year != now.year) {
-                    setState(() {});
+                    setState(() {
+                      pickDate = DateTime.tryParse(
+                          DateFormat('yyyy-MM-dd').format(pickDate));
+                    });
                   }
                 }
               },

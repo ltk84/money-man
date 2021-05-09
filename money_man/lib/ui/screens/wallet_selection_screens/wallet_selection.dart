@@ -262,7 +262,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
 
     return Expanded(
       child: StreamBuilder<List<Wallet>>(
-          stream: _firestore.streamWallet,
+          stream: _firestore.walletStream,
           builder: (context, snapshot) {
             final listWallet = snapshot.data ?? [];
             listWallet.removeWhere((element) => element.id == 'Total');

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/categoryModel.dart';
 
 class MyTransaction {
   String id;
@@ -6,7 +7,7 @@ class MyTransaction {
   DateTime date;
   String note;
   String currencyID;
-  String catergoryID;
+  MyCategory category;
   String budgetID;
   String eventID;
   String billID;
@@ -16,7 +17,7 @@ class MyTransaction {
     @required this.date,
     this.note,
     @required this.currencyID,
-    @required this.catergoryID,
+    @required this.category,
     this.budgetID,
     this.eventID,
     this.billID,
@@ -24,16 +25,18 @@ class MyTransaction {
 
   factory MyTransaction.fromMap(Map<String, dynamic> data) {
     if (data == null) return null;
+
     return MyTransaction(
-        id: data['id'],
-        amount: data['amount'],
-        date: data['date'],
-        currencyID: data['currencyID'],
-        catergoryID: data['catergoryID'],
-        note: data['note'] ?? "",
-        budgetID: data['budgetID'] ?? null,
-        eventID: data['eventID'] ?? null,
-        billID: data['billID'] ?? null);
+            id: data['id'],
+            amount: data['amount'],
+            date: DateTime.tryParse(data['date'].toDate().toString()),
+            currencyID: data['currencyID'],
+            category: MyCategory.fromMap(data['category']),
+            note: data['note'],
+            budgetID: data['budgetID'] ?? "",
+            eventID: data['eventID'] ?? "",
+            billID: data['billID']) ??
+        "";
   }
 
   Map<String, dynamic> toMap() {
@@ -42,7 +45,7 @@ class MyTransaction {
       'amount': amount,
       'date': date,
       'currencyID': currencyID,
-      'catergoryID': catergoryID,
+      'category': category.toMap(),
       'note': note ?? "",
       'budgetID': budgetID ?? null,
       'eventID': eventID ?? null,
