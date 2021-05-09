@@ -136,10 +136,19 @@ class _TransactionScreen extends State<TransactionScreen>
                   List<MyTransaction> _transactionList = snapshot.data ?? [];
                   List<DateTime> a = [];
 
+                  double totalInCome = 0;
+                  double totalOutCome = 0;
+                  double total = 0;
+
                   _transactionList.sort((a, b) => a.date.compareTo(b.date));
                   _transactionList.forEach((element) {
                     if (!a.contains(element.date)) a.add(element.date);
+                    if (element.category.type == 'expense')
+                      totalOutCome += element.amount;
+                    else
+                      totalInCome += element.amount;
                   });
+                  total = totalInCome - totalOutCome;
 
                   // a.map((e) => print(e)).toList();
                   List<List<MyTransaction>> x = [];
@@ -185,7 +194,7 @@ class _TransactionScreen extends State<TransactionScreen>
                                                     style: TextStyle(
                                                         color:
                                                             Colors.grey[500])),
-                                                Text('+1,000,000 đ',
+                                                Text('+$totalInCome đ',
                                                     style: TextStyle(
                                                         color: Colors.white)),
                                               ],
@@ -203,7 +212,7 @@ class _TransactionScreen extends State<TransactionScreen>
                                                       style: TextStyle(
                                                           color: Colors
                                                               .grey[500])),
-                                                  Text('-900,000 đ',
+                                                  Text('-$totalOutCome đ',
                                                       style: TextStyle(
                                                           color: Colors.white)),
                                                 ]),
@@ -240,7 +249,7 @@ class _TransactionScreen extends State<TransactionScreen>
                                                   SizedBox(
                                                     width: 10,
                                                   ),
-                                                  Text('+100,000 đ',
+                                                  Text('$total đ',
                                                       style: TextStyle(
                                                           color: Colors.white)),
                                                 ]),
@@ -267,6 +276,14 @@ class _TransactionScreen extends State<TransactionScreen>
                                   // itemCount: TRANSACTION_DATA.length + 1,
                                   itemCount: x.length,
                                   itemBuilder: (context, xIndex) {
+                                    double totalAmountInDay = 0;
+                                    x[xIndex].forEach((element) {
+                                      if (element.category.type == 'expense')
+                                        totalAmountInDay -= element.amount;
+                                      else
+                                        totalAmountInDay += element.amount;
+                                    });
+
                                     return Container(
                                       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                                       decoration: BoxDecoration(
@@ -319,7 +336,9 @@ class _TransactionScreen extends State<TransactionScreen>
                                                             Colors.grey[500])),
                                               ),
                                               Expanded(
-                                                  child: Text('-1,000,000 đ',
+                                                  child: Text(
+                                                      totalAmountInDay
+                                                          .toString(),
                                                       textAlign: TextAlign.end,
                                                       style: TextStyle(
                                                           fontWeight:
