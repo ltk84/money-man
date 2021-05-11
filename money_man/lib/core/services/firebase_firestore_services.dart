@@ -195,20 +195,6 @@ class FirebaseFireStoreService {
         .catchError((error) => print(error));
   }
 
-  Future addTransactionTest(String wallet, MyTransaction transaction) async {
-    final transactionRef = users
-        .doc(uid)
-        .collection('wallets')
-        .doc(wallet)
-        .collection('transactions')
-        .doc();
-    transaction.id = transactionRef.id;
-    return await transactionRef
-        .set(transaction.toMap())
-        .then((value) => print('transaction added!'))
-        .catchError((error) => print(error));
-  }
-
   // stream đến transaction của wallet đang được chọn
   Stream<List<MyTransaction>> transactionStream(Wallet wallet) {
     return users
@@ -225,6 +211,33 @@ class FirebaseFireStoreService {
     return snapshot.docs.map((e) {
       return MyTransaction.fromMap(e.data());
     }).toList();
+  }
+
+  // delete transaction by id
+  Future deleteTransaction(String idTransaction, String idWallet) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(idWallet)
+        .collection('transactions')
+        .doc(idTransaction)
+        .delete()
+        .then((value) => print('transaction deleted!'))
+        .catchError((error) {
+      print(error);
+      return error.toString();
+    });
+  }
+
+  // update transaction
+  Future updateTransaction(MyTransaction transaction, String walletId) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactions')
+        .doc(transaction.id)
+        .update(transaction.toMap());
   }
 
   // TRANSACTION END//
@@ -259,6 +272,16 @@ class FirebaseFireStoreService {
   }
 
   // CATERGORY END //
+
+  // USER START //
+  Stream<String> get userName {
+    return users.doc(uid).snapshots().map(_userNameFromSnapshot);
+  }
+
+  String _userNameFromSnapshot(DocumentSnapshot snapshot) {
+    return snapshot.data()['userName'].toString();
+  }
+  // USER END //
 
   // // edit player
   // Future editPlayer(Player player) async {

@@ -1,10 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/transactionModel.dart';
+import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/transaction_screens/edit_transaction_screen.dart';
+import 'package:provider/provider.dart';
 import '../../style.dart';
+import 'package:intl/intl.dart';
 
-class TransactionDetail extends StatelessWidget {
+class TransactionDetail extends StatefulWidget {
+  MyTransaction transaction;
+  Wallet wallet;
+
+  TransactionDetail(
+      {Key key, @required this.transaction, @required this.wallet})
+      : super(key: key);
+
+  @override
+  _TransactionDetailState createState() => _TransactionDetailState();
+}
+
+class _TransactionDetailState extends State<TransactionDetail> {
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       backgroundColor: secondaryColor,
       appBar: AppBar(
@@ -12,12 +31,25 @@ class TransactionDetail extends StatelessWidget {
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_outlined, color: textColor),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: const Text('Transactions', style: tsAppBar),
         actions: <Widget>[
           TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                final updatedTrans = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => EditTransactionScreen(
+                            transaction: widget.transaction,
+                            wallet: widget.wallet)));
+
+                setState(() {
+                  widget.transaction = updatedTrans;
+                });
+              },
               child: const Text('Edit', style: tsAppBar),
               style: TextButton.styleFrom(
                 primary: textColor,
@@ -52,7 +84,7 @@ class TransactionDetail extends StatelessWidget {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                '(Category)',
+                                widget.transaction.category.name,
                                 style: TextStyle(
                                     fontFamily: 'Montserrat',
                                     fontSize: 20,
@@ -62,7 +94,10 @@ class TransactionDetail extends StatelessWidget {
                             ),
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: Text('Note',
+                              child: Text(
+                                  widget.transaction.note == ''
+                                      ? 'Note'
+                                      : widget.transaction.note,
                                   style: TextStyle(
                                       fontFamily: 'Montserrat',
                                       fontSize: 15,
@@ -71,7 +106,8 @@ class TransactionDetail extends StatelessWidget {
                             ),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text('(amount)',
+                                child: Text(
+                                    widget.transaction.amount.toString(),
                                     style: TextStyle(
                                         fontFamily: 'Montserrat',
                                         fontSize: 20,
@@ -95,7 +131,9 @@ class TransactionDetail extends StatelessWidget {
                           flex: 1, child: Icon(Icons.calendar_today_rounded)),
                       Expanded(
                           flex: 3,
-                          child: Text(DateTime.now().toString(),
+                          child: Text(
+                              DateFormat('EEEE, dd-MM-yyyy')
+                                  .format(widget.transaction.date),
                               style: tsRegular)),
                     ],
                   ),
@@ -104,9 +142,12 @@ class TransactionDetail extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                          flex: 1, child: Icon(Icons.account_balance_wallet)),
+                          flex: 1,
+                          child: Icon(IconData(int.parse(widget.wallet.iconID),
+                              fontFamily: 'MaterialIcons'))),
                       Expanded(
-                          flex: 3, child: Text('Wallet', style: tsRegular)),
+                          flex: 3,
+                          child: Text(widget.wallet.name, style: tsRegular)),
                     ],
                   )
                 ],
@@ -160,12 +201,12 @@ class TransactionDetail extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '(Category)',
-                                          style: tsMain,
+                                          widget.transaction.category.name,
+                                          style: tsMainUnEdited,
                                         ),
                                         Text(
-                                          '(amount)',
-                                          style: tsChild,
+                                          widget.transaction.amount.toString(),
+                                          style: tsChildUnEdited,
                                         ),
                                       ],
                                     ),
@@ -242,7 +283,35 @@ class TransactionDetail extends StatelessWidget {
                         width: 1.0,
                       ))),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: Text(
+                            'Delete this transaction?',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          actions: [
+                            FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('No')),
+                            FlatButton(
+                                onPressed: () async {
+                                  await _firestore.deleteTransaction(
+                                      widget.transaction.id, widget.wallet.id);
+                                  Navigator.pop(context);
+                                  // chưa có animation để back ra transaction screen
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Yes'))
+                          ],
+                        );
+                      });
+                },
                 child: Text('Delete transaction', style: tsButton),
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(warning)),
