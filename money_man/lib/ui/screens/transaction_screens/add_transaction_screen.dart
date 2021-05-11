@@ -34,7 +34,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         leading: IconButton(
           color: Colors.black,
           icon: Icon(Icons.close),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         actions: [
           TextButton(

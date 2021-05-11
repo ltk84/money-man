@@ -25,10 +25,15 @@ class _HomeScreenState extends State<HomeScreen> {
   // ];
 
   void _onItemTap(int index) {
-    if (index != _selectedIndex)
-      setState(() {
-        _selectedIndex = index;
-      });
+    if (_selectedIndex != index) {
+      if (index == 2) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => AddTransactionScreen()));
+      } else
+        setState(() {
+          _selectedIndex = index;
+        });
+    }
   }
 
   @override
