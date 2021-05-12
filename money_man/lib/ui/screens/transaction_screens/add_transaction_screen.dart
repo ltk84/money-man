@@ -6,6 +6,7 @@ import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -83,7 +84,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           ListTile(
             leading: Icon(Icons.money),
             title: TextFormField(
-              onChanged: (value) => amount = double.tryParse(value),
+              readOnly: true,
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+              },
+              // onChanged: (value) => amount = double.tryParse(value),
               style: TextStyle(color: Colors.green),
               initialValue: '0',
             ),

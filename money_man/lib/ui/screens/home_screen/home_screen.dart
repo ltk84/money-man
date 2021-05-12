@@ -16,13 +16,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  // static List<Widget> _screens = [
-  //   TransactionScreen(),
-  //   ReportScreen(),
-  //   LoadingScreen(),
-  //   PlanningScreen(),
-  //   AccountScreen(),
-  // ];
 
   void _onItemTap(int index) {
     if (_selectedIndex != index) {

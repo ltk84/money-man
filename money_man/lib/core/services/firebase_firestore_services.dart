@@ -279,7 +279,7 @@ class FirebaseFireStoreService {
   }
 
   String _userNameFromSnapshot(DocumentSnapshot snapshot) {
-    return snapshot.data()['userName'].toString();
+    return snapshot.get(FieldPath(['userName'])).toString();
   }
   // USER END //
 
