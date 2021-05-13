@@ -18,25 +18,24 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
 // Array of button
   final List<String> buttons = [
     'C',
-    '+/-',
-    '%',
-    'DEL',
+    '÷',
+    'x',
+    '⌫',
     '7',
     '8',
     '9',
-    '/',
+    '-',
     '4',
     '5',
     '6',
-    'x',
+    '+',
     '1',
     '2',
     '3',
-    '-',
-    '0',
-    '.',
     '=',
-    '+',
+    '0',
+    '000',
+    '.',
   ];
 
   @override
@@ -100,28 +99,6 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                       );
                     }
 
-                    // +/- button
-                    else if (index == 1) {
-                      return MyButton(
-                        buttonText: buttons[index],
-                        color: Colors.blue[50],
-                        textColor: Colors.black,
-                      );
-                    }
-                    // % Button
-                    else if (index == 2) {
-                      return MyButton(
-                        buttontapped: () {
-                          setState(() {
-                            userInput += buttons[index];
-                            userInputFormat = userInput;
-                          });
-                        },
-                        buttonText: buttons[index],
-                        color: Colors.blue[50],
-                        textColor: Colors.black,
-                      );
-                    }
                     // Delete Button
                     else if (index == 3) {
                       return MyButton(
@@ -137,8 +114,9 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                         textColor: Colors.black,
                       );
                     }
+
                     // Equal_to Button
-                    else if (index == 18) {
+                    else if (index == 15) {
                       return MyButton(
                         buttontapped: () {
                           setState(() {
@@ -156,19 +134,56 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                       return MyButton(
                         buttontapped: () {
                           setState(() {
-                            userInput += buttons[index];
-                            final intRegex = RegExp(r'(\d+)');
-                            var list = intRegex
+                            var sign = ['+', '-', '*', '/'];
+                            var input;
+
+                            if (buttons[index] == 'x')
+                              input = '*';
+                            else if (buttons[index] == '÷')
+                              input = '/';
+                            else
+                              input = buttons[index];
+
+                            if (sign.contains(input)) {
+                              for (var s in sign) {
+                                if (userInput.length == 0)
+                                  return;
+                                else if (userInput.endsWith(s)) {
+                                  if (s == input)
+                                    return;
+                                  else {
+                                    userInput = userInput.substring(
+                                        0, userInput.length - 1);
+                                    print(userInput);
+                                  }
+                                }
+                              }
+                            }
+
+                            userInput += input;
+
+                            final intRegex = RegExp(r'[+|\-|*|/]');
+                            var listString = intRegex
                                 .allMatches(userInput)
                                 .map((m) => m.group(0))
                                 .toList();
-                            list.forEach((element) {
-                              element =
-                                  MoneyFormatter(amount: double.parse(element))
-                                      .output
-                                      .withoutFractionDigits;
-                            });
-                            print(list);
+                            var listNumber = userInput.split(intRegex);
+                            String finalString = '';
+                            for (var i = 0; i < listNumber.length; i++) {
+                              if (listNumber[i] != '') {
+                                var formatNumber = MoneyFormatter(
+                                        amount: double.tryParse(listNumber[i]))
+                                    .output
+                                    .withoutFractionDigits;
+                                if (i != listNumber.length - 1) {
+                                  finalString += formatNumber + listString[i];
+                                } else {
+                                  finalString += formatNumber;
+                                }
+                                userInputFormat = finalString;
+                                print(userInput);
+                              }
+                            }
                           });
                         },
                         buttonText: buttons[index],
@@ -189,7 +204,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
   }
 
   bool isOperator(String x) {
-    if (x == '/' || x == 'x' || x == '-' || x == '+' || x == '=') {
+    if (x == '÷' || x == 'x' || x == '-' || x == '+' || x == '=') {
       return true;
     }
     return false;
@@ -198,8 +213,8 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
 // function to calculate the input operation
   void equalPressed() {
     String finaluserinput = userInput;
+    print(finaluserinput.length);
     // String finaluserinput = '123456+123456';
-    finaluserinput = userInput.replaceAll('x', '*');
 
     Parser p = Parser();
     print(finaluserinput);
@@ -209,5 +224,10 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     double eval = exp.evaluate(EvaluationType.REAL, cm);
     print(eval);
     answer = eval.toString();
+    setState(() {
+      answerFormat = MoneyFormatter(amount: double.parse(answer))
+          .output
+          .withoutFractionDigits;
+    });
   }
 }
