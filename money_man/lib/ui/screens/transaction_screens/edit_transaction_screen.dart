@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/categoryModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -59,12 +61,36 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
       body: ListView(
         children: [
           ListTile(
+            onTap: () async {
+              final resultAmount = await Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+              if (resultAmount != null)
+                setState(() {
+                  print(resultAmount);
+                  widget.transaction.amount = double.parse(resultAmount);
+                });
+            },
             leading: Icon(Icons.money),
             title: TextFormField(
-              onChanged: (value) =>
-                  widget.transaction.amount = double.tryParse(value),
+              readOnly: true,
+              onTap: () async {
+                final resultAmount = await Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                if (resultAmount != null)
+                  setState(() {
+                    print(resultAmount);
+                    widget.transaction.amount = double.parse(resultAmount);
+                  });
+              },
+              // onChanged: (value) => amount = double.tryParse(value),
               style: TextStyle(color: Colors.green),
-              initialValue: widget.transaction.amount.toString(),
+              decoration: InputDecoration(
+                  hintStyle: TextStyle(color: Colors.green),
+                  hintText: widget.transaction.amount == null
+                      ? '0'
+                      : MoneyFormatter(amount: widget.transaction.amount)
+                          .output
+                          .withoutFractionDigits),
             ),
           ),
           ListTile(
@@ -89,7 +115,6 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             leading: Icon(Icons.calendar_today),
             title: TextFormField(
               onTap: () async {
-                DateTime now = DateTime.now();
                 pickDate = await showDatePicker(
                     context: context,
                     initialDate: widget.transaction.date,

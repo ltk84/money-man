@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/categoryModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
@@ -20,6 +21,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   double amount;
   MyCategory cate;
   Wallet wallet;
+  String note;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     trans = MyTransaction(
                         id: 'id',
                         amount: amount,
+                        note: note,
                         date: DateTime.parse(
                             DateFormat("yyyy-MM-dd").format(DateTime.now())),
                         currencyID: wallet.currencyID,
@@ -57,21 +60,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     trans = MyTransaction(
                         id: 'id',
                         amount: amount,
+                        note: note,
                         date: pickDate,
                         currencyID: wallet.currencyID,
                         category: cate);
                     print(trans.date.toString() + 'da pick');
                   }
                   await _firestore.addTransaction(wallet, trans);
+                  Navigator.pop(context);
                 }
-                // await _firestore.addTransactionTest(
-                //     wallet.id,
-                //     MyTransaction(
-                //         id: 'id',
-                //         amount: 100,
-                //         date: DateTime.now(),
-                //         currencyID: 'USD',
-                //         category: cate));
               },
               child: Text(
                 'Save',
@@ -82,16 +79,36 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       body: ListView(
         children: [
           ListTile(
+            onTap: () async {
+              final resultAmount = await Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+              if (resultAmount != null)
+                setState(() {
+                  print(resultAmount);
+                  amount = double.parse(resultAmount);
+                });
+            },
             leading: Icon(Icons.money),
             title: TextFormField(
               readOnly: true,
-              onTap: () {
-                Navigator.push(context,
+              onTap: () async {
+                final resultAmount = await Navigator.push(context,
                     MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                if (resultAmount != null)
+                  setState(() {
+                    print(resultAmount);
+                    amount = double.parse(resultAmount);
+                  });
               },
               // onChanged: (value) => amount = double.tryParse(value),
               style: TextStyle(color: Colors.green),
-              initialValue: '0',
+              decoration: InputDecoration(
+                  hintStyle: TextStyle(color: Colors.green),
+                  hintText: amount == null
+                      ? '0'
+                      : MoneyFormatter(amount: amount)
+                          .output
+                          .withoutFractionDigits),
             ),
           ),
           ListTile(
@@ -132,6 +149,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             title: TextFormField(
               decoration: InputDecoration(hintText: 'Write note'),
               style: TextStyle(color: Colors.black),
+              onChanged: (value) => note = value,
             ),
           ),
           ListTile(

@@ -36,6 +36,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     '0',
     '000',
     '.',
+    'Confirm'
   ];
 
   @override
@@ -103,6 +104,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                     else if (index == 3) {
                       return MyButton(
                         buttontapped: () {
+                          if (userInput.isEmpty) return;
                           setState(() {
                             userInput =
                                 userInput.substring(0, userInput.length - 1);
@@ -125,6 +127,18 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                         },
                         buttonText: buttons[index],
                         color: Colors.orange[700],
+                        textColor: Colors.white,
+                      );
+                    }
+
+                    // confirm button
+                    else if (index == 19) {
+                      return MyButton(
+                        buttontapped: () {
+                          Navigator.pop(context, answer);
+                        },
+                        buttonText: buttons[index],
+                        color: Colors.red,
                         textColor: Colors.white,
                       );
                     }
@@ -214,6 +228,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
   void equalPressed() {
     String finaluserinput = userInput;
     print(finaluserinput.length);
+    if (finaluserinput.isEmpty) return;
     // String finaluserinput = '123456+123456';
 
     Parser p = Parser();
@@ -226,6 +241,10 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     answer = eval.toString();
     setState(() {
       answerFormat = MoneyFormatter(amount: double.parse(answer))
+          .output
+          .withoutFractionDigits;
+      userInput = answer;
+      userInputFormat = MoneyFormatter(amount: double.parse(userInput))
           .output
           .withoutFractionDigits;
     });
