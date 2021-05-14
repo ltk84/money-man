@@ -51,6 +51,9 @@ dependencies:
   modal_bottom_sheet: ^2.0.0
   math_expressions: ^2.0.0
   money_formatter: ^0.0.3
+  fl_chart: ^0.36.1
+  charts_flutter: ^0.10.0
+  pie_chart: ^5.0.0
 
 dev_dependencies:
   flutter_test:
