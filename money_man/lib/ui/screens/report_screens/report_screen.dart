@@ -225,7 +225,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             Container(
                               width: 450,
                               height: 200,
-                              child: BarChartScreen(),
+                              child: BarChartScreen(currentList: _transactionList, beginDate: beginDate, endDate: endDate),
                             ),
                           ]
                         ),
@@ -242,7 +242,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     Container(
                                       width: 90,
                                       height: 90,
-                                      child: Piechart(false), //InformationHomeScreen
+                                      child: PieChartScreen(), //InformationHomeScreen
                                     ),
                                   ],
                                 ),
@@ -255,7 +255,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                   Container(
                                     width: 90,
                                     height: 90,
-                                    child: Piechart(false),
+                                    child: PieChartScreen(),
                                   ),
                                 ]
                               ),
