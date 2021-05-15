@@ -1,5 +1,7 @@
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_account_screen.dart';
 import 'package:page_transition/page_transition.dart';
@@ -70,6 +72,7 @@ class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final _auth = Provider.of<FirebaseAuthService>(context);
     return Scaffold(
         backgroundColor: Colors.black,
         extendBodyBehindAppBar: true,
@@ -109,10 +112,10 @@ class _TestState extends State<Test> {
                       fontFamily: 'Montseratt',
                       fontSize: 17.0))),
         ),
-        body: StreamBuilder<Object>(
-            stream: _firestore.userName,
+        body: StreamBuilder<User>(
+            stream: _auth.userStream,
             builder: (context, snapshot) {
-              String userName = snapshot.data ?? '';
+              User user = snapshot.data;
               return ListView(
                 physics: BouncingScrollPhysics(),
                 controller: _controller,
@@ -147,14 +150,18 @@ class _TestState extends State<Test> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Text(userName,
+                          child: Text(
+                              user == null
+                                  ? 'Username'
+                                  : user.email
+                                      .substring(0, user.email.indexOf('@')),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Montserrat',
                                   fontSize: 15.0)),
                         ),
-                        Text('lamtruoq@gmail.com',
+                        Text(user == null ? 'email' : user.email,
                             style: TextStyle(
                                 color: Colors.grey[400],
                                 fontWeight: FontWeight.w400,
@@ -173,7 +180,9 @@ class _TestState extends State<Test> {
                             Navigator.push(
                                 context,
                                 PageTransition(
-                                    child: AccountDetail(),
+                                    child: AccountDetail(
+                                      user: user,
+                                    ),
                                     type: PageTransitionType.rightToLeft));
                             // Navigator.push(
                             //     context,

@@ -1,35 +1,20 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 
-
-class AccountDetail extends StatelessWidget {
+class AccountDetail extends StatefulWidget {
+  User user;
+  AccountDetail({
+    Key key,
+    @required this.user,
+  }) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    return Test();
-  }
+  _AccountDetailState createState() => _AccountDetailState();
 }
 
-// class Test extends StatelessWidget {
-//   Text title = Text('More', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Hero(tag: 'alo', child: title),
-//       )
-//     );
-//   }
-// }
-
-
-class Test extends StatefulWidget {
-  @override
-  _TestState createState() => _TestState();
-}
-
-class _TestState extends State<Test> {
+class _AccountDetailState extends State<AccountDetail> {
   final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
@@ -46,8 +31,7 @@ class _TestState extends State<Test> {
       setState(() {
         reachAppBar = 1;
       });
-    }
-    else {
+    } else {
       setState(() {
         reachAppBar = 0;
       });
@@ -56,8 +40,7 @@ class _TestState extends State<Test> {
       setState(() {
         reachTop = 1;
       });
-    }
-    else {
+    } else {
       setState(() {
         reachTop = 0;
       });
@@ -86,9 +69,9 @@ class _TestState extends State<Test> {
                 children: [
                   Icon(Icons.arrow_back_ios, color: Colors.white),
                   Hero(
-                    tag: 'alo',
-                    child: Text('More', style: Theme.of(context).textTheme.headline6)
-                  ),
+                      tag: 'alo',
+                      child: Text('More',
+                          style: Theme.of(context).textTheme.headline6)),
                 ],
               ),
             ),
@@ -101,12 +84,20 @@ class _TestState extends State<Test> {
                 opacity: reachAppBar == 1 ? 1 : 0,
                 duration: Duration(milliseconds: 0),
                 child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: reachTop == 1 ? 25 : 500, sigmaY: 25, tileMode: TileMode.values[0]),
+                  filter: ImageFilter.blur(
+                      sigmaX: reachTop == 1 ? 25 : 500,
+                      sigmaY: 25,
+                      tileMode: TileMode.values[0]),
                   child: AnimatedContainer(
-                    duration: Duration(milliseconds: reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                    duration: Duration(
+                        milliseconds:
+                            reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                     //child: Container(
                     //color: Colors.transparent,
-                    color: Colors.grey[reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900].withOpacity(0.2),
+                    color: Colors.grey[reachAppBar == 1
+                            ? (reachTop == 1 ? 800 : 850)
+                            : 900]
+                        .withOpacity(0.2),
                     //),
                   ),
                 ),
@@ -115,9 +106,8 @@ class _TestState extends State<Test> {
             title: AnimatedOpacity(
                 opacity: reachTop == 1 ? 1 : 0,
                 duration: Duration(milliseconds: 100),
-                child: Text('My Account', style: Theme.of(context).textTheme.headline6)
-            )
-        ),
+                child: Text('My Account',
+                    style: Theme.of(context).textTheme.headline6))),
         body: ListView(
           physics: BouncingScrollPhysics(),
           controller: _controller,
@@ -125,7 +115,8 @@ class _TestState extends State<Test> {
             Padding(
               padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
               child: reachTop == 0
-                  ? Text('My Account', style: Theme.of(context).textTheme.headline4)
+                  ? Text('My Account',
+                      style: Theme.of(context).textTheme.headline4)
                   : Text('', style: Theme.of(context).textTheme.headline4),
             ),
             Container(
@@ -140,9 +131,7 @@ class _TestState extends State<Test> {
                       bottom: BorderSide(
                         width: 0.1,
                         color: Colors.white,
-                      )
-                  )
-              ),
+                      ))),
               child: Column(
                 children: [
                   CircleAvatar(
@@ -154,9 +143,13 @@ class _TestState extends State<Test> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(5.0),
-                    child: Text('lamtruoq', style: Theme.of(context).textTheme.subtitle2),
+                    child: Text(
+                        widget.user.email
+                            .substring(0, widget.user.email.indexOf('@')),
+                        style: Theme.of(context).textTheme.subtitle2),
                   ),
-                  Text('lamtruoq@gmail.com', style: Theme.of(context).textTheme.bodyText2),
+                  Text(widget.user.email,
+                      style: Theme.of(context).textTheme.bodyText2),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -166,10 +159,13 @@ class _TestState extends State<Test> {
                     color: Colors.white,
                   ),
                   ListTile(
-                    onTap: () {
-                    },
+                    onTap: () {},
                     dense: true,
-                    title: Text('Change password', style: Theme.of(context).textTheme.subtitle2, textAlign: TextAlign.center,),
+                    title: Text(
+                      'Change password',
+                      style: Theme.of(context).textTheme.subtitle2,
+                      textAlign: TextAlign.center,
+                    ),
                   )
                 ],
               ),
@@ -186,9 +182,7 @@ class _TestState extends State<Test> {
                       bottom: BorderSide(
                         width: 0.1,
                         color: Colors.white,
-                      )
-                  )
-              ),
+                      ))),
               child: Column(
                 children: [
                   ListTile(
@@ -197,7 +191,11 @@ class _TestState extends State<Test> {
                       _auth.signOut();
                     },
                     dense: true,
-                    title: Text('Sign out', style: Theme.of(context).textTheme.subtitle2, textAlign: TextAlign.center,),
+                    title: Text(
+                      'Sign out',
+                      style: Theme.of(context).textTheme.subtitle2,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ],
               ),
@@ -206,7 +204,18 @@ class _TestState extends State<Test> {
               height: 5.0,
             )
           ],
-        )
-    );
+        ));
   }
 }
+
+// class Test extends StatelessWidget {
+//   Text title = Text('More', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Hero(tag: 'alo', child: title),
+//       )
+//     );
+//   }
+// }
