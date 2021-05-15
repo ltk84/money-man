@@ -1,3 +1,5 @@
+import 'dart:ui';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +12,7 @@ import '../../style.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/models/categoryModel.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 
@@ -25,6 +28,34 @@ class ReportScreen extends StatefulWidget{
 }
 
 class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
+  final double fontSizeText = 30;
+  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
+  int reachTop = 0;
+  int reachAppBar = 0;
+
+  // Phần này để check xem mình đã Scroll tới đâu trong ListView
+  ScrollController _controller = ScrollController();
+  _scrollListener() {
+    if (_controller.offset > 0) {
+      setState(() {
+        reachAppBar = 1;
+      });
+    } else {
+      setState(() {
+        reachAppBar = 0;
+      });
+    }
+    if (_controller.offset >= fontSizeText - 5) {
+      setState(() {
+        reachTop = 1;
+      });
+    } else {
+      setState(() {
+        reachTop = 0;
+      });
+    }
+  }
+
   Wallet _wallet;
 
   // Khởi tạo mốc thời gian cần thống kê.
@@ -34,6 +65,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
     super.initState();
     _wallet = widget.currentWallet == null
         ? Wallet(
@@ -66,11 +99,34 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
       length: 300,
 
       child: Scaffold(
+        backgroundColor: Colors.black,
         appBar: new AppBar(
           backgroundColor: Colors.black,
           centerTitle: true,
           elevation: 0,
-
+          flexibleSpace: ClipRect(
+            child: AnimatedOpacity(
+              opacity: reachAppBar == 1 ? 1 : 0,
+              duration: Duration(milliseconds: 0),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                    sigmaX: reachTop == 1 ? 25 : 500,
+                    sigmaY: 25,
+                    tileMode: TileMode.values[0]),
+                child: AnimatedContainer(
+                  duration: Duration(
+                      milliseconds:
+                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  //child: Container(
+                  //color: Colors.transparent,
+                  color: Colors.grey[
+                  reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+                      .withOpacity(0.2),
+                  //),
+                ),
+              ),
+            ),
+          ),
           leading: Row(
             children: [
               Expanded(
@@ -93,7 +149,14 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
             ],
           ),
           title: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              final result = showCupertinoModalBottomSheet(
+                isDismissible: true,
+                backgroundColor: Colors.grey[900],
+                context: context,
+                builder: (context) => TimeRangeSelection()
+                );
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -127,6 +190,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
           stream: _firestore.transactionStream(_wallet),
           builder: (context, snapshot) {
             List<MyTransaction> _transactionList = snapshot.data ?? [];
+            List<MyCategory> _incomeCategoryList = [];
+            List<MyCategory> _expenseCategoryList = [];
 
             double openingBalance = 0;
             double closingBalance = 0;
@@ -140,16 +205,22 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                   else
                     openingBalance += element.amount;
                 }
-                if (element.date.compareTo(endDate) <= 0){
+                if (element.date.compareTo(endDate) <= 0) {
                   if (element.category.type == 'expense') {
                     closingBalance -= element.amount;
-                    if (element.date.compareTo(beginDate) >= 0)
+                    if (element.date.compareTo(beginDate) >= 0) {
                       expense += element.amount;
+                      if (!_expenseCategoryList.contains(element.category))
+                        _expenseCategoryList.add(element.category);
+                    }
                   }
                   else {
                     closingBalance += element.amount;
-                    if (element.date.compareTo(beginDate) >= 0)
+                    if (element.date.compareTo(beginDate) >= 0) {
                       income += element.amount;
+                      if (!_incomeCategoryList.contains(element.category))
+                        _incomeCategoryList.add(element.category);
+                    }
                   }
                 }
             });
@@ -158,6 +229,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
             return Container(
                   color: Colors.black,
                   child: ListView(
+                    controller: _controller,
                     physics: BouncingScrollPhysics(),
                     children: <Widget>[
                       Container(
@@ -182,16 +254,46 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                   Expanded(
                                     child: Column(
                                       children: <Widget>[
-                                        Text('Opening',style: TextStyle(color: Colors.white)),
-                                        Text(openingBalance.toString(),style: TextStyle(color: Colors.white)),
+                                        Text('Opening balance',
+                                          style: TextStyle(
+                                            color: Colors.grey[500],
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(openingBalance.toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                            height: 1.5,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                   Expanded(
                                     child: Column(
                                       children: <Widget>[
-                                        Text('Closing',style: TextStyle(color: Colors.white)),
-                                        Text(closingBalance.toString(),style: TextStyle(color: Colors.white)),
+                                        Text('Closing balance',
+                                          style: TextStyle(
+                                            color: Colors.grey[500],
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(closingBalance.toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                            height: 1.5,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   )
@@ -218,8 +320,19 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                Text('Net Income',style: TextStyle(color: Colors.white)),
-                                Text((closingBalance - openingBalance).toString(),style: TextStyle(color: Colors.white)),
+                                Text('Net Income',style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w500,
+                                  )
+                                ),
+                                Text((closingBalance - openingBalance).toString(),style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 22,
+                                  )
+                                ),
                               ],
                             ),
                             Container(
@@ -237,12 +350,28 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             Expanded(
                               child: Column(
                                   children: <Widget>[
-                                    Text('Income',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                                    Text(income.toString(),style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
+                                    Text('Income',
+                                      style: TextStyle(
+                                        color: Colors.grey[500],
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                      ),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    Text(income.toString(),style: TextStyle(
+                                      color: Colors.blueAccent,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 18,
+                                    ),
+                                      textAlign: TextAlign.start,
+                                    ),
                                     Container(
+                                      margin: EdgeInsets.symmetric(vertical: 25),
                                       width: 90,
                                       height: 90,
-                                      child: PieChartScreen(), //InformationHomeScreen
+                                      child: PieChartScreen(currentList: _transactionList, categoryList: _incomeCategoryList, total: income), //InformationHomeScreen
                                     ),
                                   ],
                                 ),
@@ -250,12 +379,28 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             Expanded(
                               child: Column(
                                 children: <Widget>[
-                                  Text('Expense',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                                  Text(expense.toString(),style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
+                                  Text('Expense',
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  Text(expense.toString(),style: TextStyle(
+                                    color: Colors.redAccent,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 18,
+                                  ),
+                                    textAlign: TextAlign.start,
+                                  ),
                                   Container(
+                                    margin: EdgeInsets.symmetric(vertical: 25),
                                     width: 90,
                                     height: 90,
-                                    child: PieChartScreen(),
+                                    child: PieChartScreen(currentList: _transactionList, categoryList: _expenseCategoryList, total: expense),
                                   ),
                                 ]
                               ),

@@ -1,23 +1,73 @@
+import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:money_man/core/models/transactionModel.dart';
+import 'package:money_man/core/models/categoryModel.dart';
+import 'package:random_color/random_color.dart';
 
 /// Icons by svgrepo.com (https://www.svgrepo.com/collection/job-and-professions-3/)
 class PieChartScreen extends StatefulWidget {
+  List<MyTransaction> currentList;
+  List<MyCategory> categoryList;
+  double total;
+
+  PieChartScreen({Key key, @required this.currentList, @required this.categoryList, @required this.total}) : super(key: key);
   @override
   State<StatefulWidget> createState() => PieChartScreenState();
 }
 
-class PieChartScreenState extends State {
+class PieChartScreenState extends State<PieChartScreen>  {
+  double _total;
   int touchedIndex = 0;
+  List<MyTransaction> _transactionList;
+  List<MyCategory> _categoryList;
+  List<double> _info = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+    _transactionList = widget.currentList;
+    _categoryList = widget.categoryList;
+    _total = widget.total;
+    generateData(_categoryList, _transactionList);
+  }
+
+  @override
+  void didUpdateWidget(covariant PieChartScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+
+    _transactionList = widget.currentList ?? [];
+    _categoryList = widget.categoryList ?? [];
+    _total = widget.total;
+    generateData(_categoryList, _transactionList);
+  }
+
+  void generateData (List<MyCategory> categoryList, List<MyTransaction> transactionList) {
+    categoryList.forEach((element) {
+      _info.add(calculateByCategory(element,transactionList));
+    });
+  }
+
+  double calculateByCategory(MyCategory category, List<MyTransaction> transactionList) {
+    double sum = 0;
+    transactionList.forEach((element) {
+      if (element.category == category)
+        sum += element.amount;
+    });
+    return sum;
+  }
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.3,
       child: Card(
-        color: Colors.white,
+        color: Colors.transparent,
         child: AspectRatio(
           aspectRatio: 1,
           child: PieChart(
@@ -46,86 +96,62 @@ class PieChartScreenState extends State {
   }
 
   List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
+    return (_categoryList.length != 0) ? List.generate(
+        _categoryList.length, (i) {
       final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 20.0 : 16.0;
-      final radius = isTouched ? 110.0 : 100.0;
-      final widgetSize = isTouched ? 55.0 : 40.0;
+      final fontSize = isTouched ? 16.0 : 14.0;
+      final radius = isTouched ? 30.0 : 20.0;
+      final widgetSize = isTouched ? 40.0 : 20.0;
 
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: const Color(0xff0293ee),
-            value: 40,
-            title: '40%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              icon: Icon(Icons.add_business_rounded),
-              size: widgetSize,
-              borderColor: const Color(0xff0293ee),
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-        case 1:
-          return PieChartSectionData(
-            color: const Color(0xfff8b250),
-            value: 30,
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              icon: Icon(Icons.account_balance_sharp),
-              size: widgetSize,
-              borderColor: const Color(0xfff8b250),
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-        case 2:
-          return PieChartSectionData(
-            color: const Color(0xff845bef),
-            value: 16,
-            title: '16%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              icon: Icon(Icons.ac_unit_rounded),
-              size: widgetSize,
-              borderColor: const Color(0xff845bef),
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-        case 3:
-          return PieChartSectionData(
-            color: const Color(0xff13d38e),
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              icon: Icon(Icons.access_alarm),
-              size: widgetSize,
-              borderColor: const Color(0xff13d38e),
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-        default:
-          throw 'Oh no';
-      }
+      var value = ((_info[i]/_total)*100).round();
+
+      RandomColor _randomColor = RandomColor();
+
+      Color _color = _randomColor.randomColor(
+        colorHue: _categoryList[0].type == 'expense' ? ColorHue.green : ColorHue.green,
+        colorBrightness: ColorBrightness.dark,
+        colorSaturation: ColorSaturation.highSaturation
+      );
+
+      return PieChartSectionData(
+        color: _color,
+        value: value.toDouble(),
+        showTitle: false,
+        //title: value.toString() + '%',
+        radius: radius,
+        // titleStyle: TextStyle(
+        //     fontSize: fontSize,
+        //     fontWeight: FontWeight.bold,
+        //     color: const Color(0xffffffff)),
+        badgeWidget: _Badge(
+          'assets/icons/hotdog.svg', // category icon.
+          size: widgetSize,
+          borderColor: _color,
+        ),
+        badgePositionPercentageOffset: .98,
+      );
+    }) : List.generate(1, (i) {
+      return PieChartSectionData(
+      color: Colors.grey[900],
+      value: 100,
+      showTitle: false,
+      radius: 15.0,
+      );
     });
   }
 }
 
 class _Badge extends StatelessWidget {
+  final String svgAsset;
   final double size;
   final Color borderColor;
-  final Icon icon;
 
-  const _Badge({Key key, @required this.icon, @required this.size, @required this.borderColor,}) : super(key: key);
+  const _Badge(
+      this.svgAsset, {
+        Key key,
+        @required this.size,
+        @required this.borderColor,
+      }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +175,12 @@ class _Badge extends StatelessWidget {
         ],
       ),
       padding: EdgeInsets.all(size * .15),
-      child: icon,
+      child: Center(
+        child: SvgPicture.asset(
+          svgAsset,
+          fit: BoxFit.contain,
+        ),
+      ),
     );
   }
 }
