@@ -8,17 +8,16 @@ import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
 import 'package:money_man/ui/screens/report_screens/time_selection.dart';
 import '../../style.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
+import 'package:money_man/core/models/transactionModel.dart';
+import 'package:money_man/core/models/walletModel.dart';
+import 'package:provider/provider.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 
 
 class ReportScreen extends StatefulWidget{
+  Wallet currentWallet;
 
-  final List<Tab> myTabs = List.generate(200, (index) {
-    var now = DateTime.now();
-    var date = DateTime(now.year, now.month + index - 100, now.day);
-    String dateDisplay = DateFormat('MM/yyyy').format(date);
-    return Tab(text: dateDisplay);
-  });
-
+  ReportScreen({Key key, this.currentWallet}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _ReportScreen();
@@ -26,21 +25,47 @@ class ReportScreen extends StatefulWidget{
 }
 
 class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
-  TabController _tabController;
-  String Open;
-  String Close;
+  Wallet _wallet;
+
+  // Khởi tạo mốc thời gian cần thống kê.
+  DateTime beginDate = DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime endDate = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  String dateDescript = 'This month';
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 200, vsync: this, initialIndex: 150);
+    _wallet = widget.currentWallet == null
+        ? Wallet(
+        id: 'id',
+        name: 'defaultName',
+        amount: 0,
+        currencyID: 'USD',
+        iconID: 'a')
+        : widget.currentWallet;
   }
+
+  @override
+  void didUpdateWidget(covariant ReportScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+
+    _wallet = widget.currentWallet ??
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 100,
+            currencyID: 'a',
+            iconID: 'b');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return DefaultTabController(
       length: 300,
 
       child: Scaffold(
-
         appBar: new AppBar(
           backgroundColor: Colors.black,
           centerTitle: true,
@@ -67,325 +92,182 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
               )
             ],
           ),
-          title: Column(
-            children: <Widget>[
-              Text('Wallet', style:TextStyle(
-                color: Colors.white,
-                fontSize: 12.0,
-              )
-              ),
-              Text('100000\$', style: TextStyle
-                (
-                  color: Colors.white,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold
-              )),
-            ],
-          ),
-          bottom: TabBar(
-            unselectedLabelColor: Colors.grey[500],
-            labelColor: Colors.white,
-            indicatorColor: Colors.yellow[700],
-            physics: NeverScrollableScrollPhysics(),
-            isScrollable: true,
-            indicatorWeight: 3.0,
-            controller: _tabController,
-            tabs: widget.myTabs,
+          title: GestureDetector(
+            onTap: () {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: <Widget>[
+                    Text(dateDescript, style:TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                    Text(DateFormat('dd/MM/yyyy').format(beginDate) + " - " + DateFormat('dd/MM/yyyy').format(endDate), style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w300
+                      ),
+                    ),
+                  ],
+                ),
+                Icon(Icons.arrow_drop_down, color: Colors.white),
+              ],
+            ),
           ),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.calendar_today, color: Colors.grey),
-              tooltip: 'Time',
-              onPressed: (){
-                return showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Time_Selection();
-                    }
-                );
-              },
+              icon: const Icon(Icons.ios_share, color: Colors.white),
+              onPressed: (){},
             ),
           ],
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: widget.myTabs.map((tab){
+        body: StreamBuilder<Object>(
+          stream: _firestore.transactionStream(_wallet),
+          builder: (context, snapshot) {
+            List<MyTransaction> _transactionList = snapshot.data ?? [];
+
+            double openingBalance = 0;
+            double closingBalance = 0;
+            double income = 0;
+            double expense = 0;
+
+            _transactionList.forEach((element) {
+                if (element.date.isBefore(beginDate)) {
+                  if (element.category.type == 'expense')
+                    openingBalance -= element.amount;
+                  else
+                    openingBalance += element.amount;
+                }
+                if (element.date.compareTo(endDate) <= 0){
+                  if (element.category.type == 'expense') {
+                    closingBalance -= element.amount;
+                    if (element.date.compareTo(beginDate) >= 0)
+                      expense += element.amount;
+                  }
+                  else {
+                    closingBalance += element.amount;
+                    if (element.date.compareTo(beginDate) >= 0)
+                      income += element.amount;
+                  }
+                }
+            });
+            _transactionList = _transactionList
+                .where((element) => element.date.compareTo(beginDate) >= 0  && element.date.compareTo(endDate) <= 0).toList();
             return Container(
-              color: Colors.black,
-              child: ListView(
-                shrinkWrap: true,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        border: Border(
-                            bottom: BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                            top: BorderSide(
-                              color: Colors.black,
-                              width:1.0,
-                            )
-                        )
-                    ),
-                    child: Column(
-                        children: <Widget>[
-                          Row(
-                              children: <Widget>[
-                                Text('Balance',style: TextStyle(fontSize: 17, color: Colors.white), textAlign: TextAlign.start,),
-                              ]
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.fromLTRB(0,10,100,10),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text('Openning',style: TextStyle(color: Colors.white)),
-                                    Text('100\$',style: TextStyle(color: Colors.white)),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.fromLTRB(0,10,0,10),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text('Closing',style: TextStyle(color: Colors.white)),
-                                    Text('300\$',style: TextStyle(color: Colors.white)),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ]),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                      children: <Widget>[
-                        Text('Revenue and Expenditure',style: TextStyle(fontSize: 17, color: Colors.white), textAlign: TextAlign.start,),
-                      ]
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        border: Border(
-                            bottom: BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                            top: BorderSide(
-                              color: Colors.black,
-                              width:1.0,
-                            )
-                        )
-                    ),
-                    child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.fromLTRB(0,10,100,10),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text('Net Income',style: TextStyle(color: Colors.white)),
-                                    Text('100\$',style: TextStyle(color: Colors.white)),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                              width: 450,
-                              height:200,
-                              child: Stack(
-                                children: <Widget>[
-                                  Container(
-                                    width: 450,
-                                    height: 200,
-                                    child: Barchart(),
-                                  ),
-                                  IconButton(
-                                      icon: Icon(Icons.web_outlined),
-                                      color: Colors.transparent,
-                                      iconSize: 300,
-                                      onPressed: (){
-                                        return showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AnalyticRevenueAndExpenditure();
-                                            });
-                                      }
-                                  )
-                                ],
-                              )
-                          ),
-                        ]),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
+                  color: Colors.black,
+                  child: ListView(
+                    physics: BouncingScrollPhysics(),
                     children: <Widget>[
                       Container(
-                        padding: const EdgeInsets.fromLTRB(15,10,100,10),
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey[900],
+                                  width: 1.0,
+                                ),
+                                top: BorderSide(
+                                  color: Colors.grey[900],
+                                  width:1.0,
+                                )
+                            )
+                        ),
+                        child: Column(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text('Opening',style: TextStyle(color: Colors.white)),
+                                        Text(openingBalance.toString(),style: TextStyle(color: Colors.white)),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text('Closing',style: TextStyle(color: Colors.white)),
+                                        Text(closingBalance.toString(),style: TextStyle(color: Colors.white)),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ]),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey[900],
+                                  width: 1.0,
+                                ),
+                                top: BorderSide(
+                                  color: Colors.grey[900],
+                                  width:1.0,
+                                )
+                            )
+                        ),
                         child: Column(
                           children: <Widget>[
-                            Text('Openning',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                            Text('0\$ \n',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                            SizedBox(
-                                width: 90,
-                                height: 90,
-                                child: Stack(
+                            Column(
+                              children: <Widget>[
+                                Text('Net Income',style: TextStyle(color: Colors.white)),
+                                Text((closingBalance - openingBalance).toString(),style: TextStyle(color: Colors.white)),
+                              ],
+                            ),
+                            Container(
+                              width: 450,
+                              height: 200,
+                              child: BarChartScreen(),
+                            ),
+                          ]
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Column(
                                   children: <Widget>[
+                                    Text('Income',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
+                                    Text(income.toString(),style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
                                     Container(
                                       width: 90,
                                       height: 90,
-                                      child: Piechart(false),
+                                      child: Piechart(false), //InformationHomeScreen
                                     ),
-                                    IconButton(
-                                        icon: Icon(Icons.circle),
-                                        color: Colors.transparent,
-                                        iconSize: 200,
-                                        onPressed: (){
-                                          return showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return InformationHomeScreen(0,'Opening balance');
-                                              });
-                                        }
-                                    )
                                   ],
-                                )
+                                ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                children: <Widget>[
+                                  Text('Expense',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
+                                  Text(expense.toString(),style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
+                                  Container(
+                                    width: 90,
+                                    height: 90,
+                                    child: Piechart(false),
+                                  ),
+                                ]
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(0,10,0,10),
-                        child: Column(
-                          children: <Widget>[
-                            Text('Closing',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                            Text('0\$ \n',style: TextStyle(fontSize: 14.5, color: Colors.white), textAlign: TextAlign.start,),
-                            SizedBox(
-                                width: 90,
-                                height: 90,
-                                child: Stack(
-                                  children: <Widget>[
-                                    Container(
-                                      width: 90,
-                                      height: 90,
-                                      child: Piechart(false),
-                                    ),
-                                    IconButton(
-                                        icon: Icon(Icons.circle),
-                                        color: Colors.transparent,
-                                        iconSize: 200,
-                                        onPressed: (){
-                                          return showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return InformationHomeScreen(0,'Closing balance');
-                                              });
-                                        }
-                                    )
-                                  ],
-                                )
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
-                  SizedBox(
-                    height:5,
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        border: Border(
-                            bottom: BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                            top: BorderSide(
-                              color: Colors.black,
-                              width:1.0,
-                            )
-                        )
-                    ),
-                    child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.fromLTRB(0,10,100,10),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text('Owe',style: TextStyle(color: Colors.white)),
-                                    Text('0\$',style: TextStyle(color: Colors.white)),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.fromLTRB(0,10,0,10),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text('Loan',style: TextStyle(color: Colors.white)),
-                                    Text('0\$',style: TextStyle(color: Colors.white)),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ]),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        border: Border(
-                            bottom: BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                            top: BorderSide(
-                              color: Colors.black,
-                              width:1.0,
-                            )
-                        )
-                    ),
-                    child: Column(
-                        children: <Widget>[
-                          Row(
-                              children: <Widget>[
-                                Container(
-                                  padding: const EdgeInsets.fromLTRB(0,10,100,10),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text('Other',style: TextStyle(color: Colors.white)),
-                                      Text('100\$',style: TextStyle(color: Colors.white)),
-                                    ],
-                                  ),
-                                ),
-                              ]
-                          ),
-                        ]
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-        ),
+                );
+          }
+        )
       ),
     );
   }

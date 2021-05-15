@@ -14,7 +14,7 @@ class  _BarChartInformationScreen extends State<BarChartInformationScreen> {
       width: 700,
       padding: EdgeInsets.all(5),
       child: Expanded(
-        child: Barchart(),
+        child: BarChartScreen(),
       ),
     );
   }

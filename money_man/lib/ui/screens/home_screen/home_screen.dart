@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           List<Widget> _screens = [
             TransactionScreen(currentWallet: wallet),
-            ReportScreen(),
+            ReportScreen(currentWallet: wallet),
             AddTransactionScreen(),
             PlanningScreen(),
             AccountScreen(),

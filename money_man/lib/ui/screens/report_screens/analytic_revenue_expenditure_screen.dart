@@ -83,7 +83,7 @@ class _AnalyticRevenueAndExpenditure  extends State<AnalyticRevenueAndExpenditur
                           Container(
                             width: 450,
                             height: 200,
-                            child: Barchart(),
+                            child: BarChartScreen(),
                           ),
                           IconButton(
                               icon: Icon(Icons.web_outlined),
@@ -93,7 +93,7 @@ class _AnalyticRevenueAndExpenditure  extends State<AnalyticRevenueAndExpenditur
                                 return showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return Barchart();
+                                      return BarChartScreen();
                                     });
                               }
                           )
