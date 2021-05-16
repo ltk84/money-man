@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,9 @@ import 'package:money_man/ui/screens/report_screens/analytic_revenue_expenditure
 import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
 import 'package:money_man/ui/screens/report_screens/chart_information_home_screen.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
+import 'package:money_man/ui/screens/report_screens/share_report/utils.dart';
+import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
+import 'package:money_man/ui/screens/report_screens/share_screen.dart';
 import 'package:money_man/ui/screens/report_screens/time_selection.dart';
 import '../../style.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
@@ -28,6 +32,14 @@ class ReportScreen extends StatefulWidget{
 }
 
 class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
+
+  GlobalKey key1;
+  GlobalKey key2;
+  GlobalKey key3;
+  Uint8List bytes1;
+  Uint8List bytes2;
+  Uint8List bytes3;
+
   final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
@@ -182,7 +194,23 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.ios_share, color: Colors.white),
-              onPressed: (){},
+              onPressed: () async {
+                final bytes1 = await Utils.capture(key1);
+                final bytes2 = await Utils.capture(key2);
+                final bytes3 = await Utils.capture(key3);
+
+                await setState(() {
+                  this.bytes1 = bytes1;
+                  this.bytes2 = bytes2;
+                  this.bytes3 = bytes3;
+                });
+                showCupertinoModalBottomSheet(
+                    isDismissible: true,
+                    backgroundColor: Colors.grey[900],
+                    context: context,
+                    builder: (context) => ShareScreen(bytes1: this.bytes1, bytes2: this.bytes2, bytes3: this.bytes3)
+                );
+              },
             ),
           ],
         ),
@@ -316,31 +344,36 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                 )
                             )
                         ),
-                        child: Column(
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Text('Net Income',style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.w500,
-                                  )
-                                ),
-                                Text((closingBalance - openingBalance).toString(),style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 22,
-                                  )
-                                ),
-                              ],
-                            ),
-                            Container(
-                              width: 450,
-                              height: 200,
-                              child: BarChartScreen(currentList: _transactionList, beginDate: beginDate, endDate: endDate),
-                            ),
-                          ]
+                        child: WidgetToImage( builder: (key) {
+                          this.key1 = key;
+
+                          return Column(
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Text('Net Income',style: TextStyle(
+                                      color: Colors.grey[500],
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w500,
+                                    )
+                                  ),
+                                  Text((closingBalance - openingBalance).toString(),style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 22,
+                                    )
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                width: 450,
+                                height: 200,
+                                child: BarChartScreen(currentList: _transactionList, beginDate: beginDate, endDate: endDate),
+                              ),
+                            ]
+                          );
+                        },
                         ),
                       ),
                       Container(
@@ -348,9 +381,48 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                         child: Row(
                           children: <Widget>[
                             Expanded(
-                              child: Column(
+                              child: WidgetToImage(
+                                builder: (key) {
+                                  this.key2 = key;
+
+                                  return Column(
+                                    children: <Widget>[
+                                      Text('Income',
+                                        style: TextStyle(
+                                          color: Colors.grey[500],
+                                          fontFamily: 'Montserrat',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                        ),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Text(income.toString(),style: TextStyle(
+                                        color: Colors.blueAccent,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 18,
+                                      ),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.symmetric(vertical: 25),
+                                        width: 90,
+                                        height: 90,
+                                        child: PieChartScreen(currentList: _transactionList, categoryList: _incomeCategoryList, total: income), //InformationHomeScreen
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              child: WidgetToImage(
+                                builder: (key) {
+                                  this.key3 = key;
+
+                                  return Column(
                                   children: <Widget>[
-                                    Text('Income',
+                                    Text('Expense',
                                       style: TextStyle(
                                         color: Colors.grey[500],
                                         fontFamily: 'Montserrat',
@@ -359,8 +431,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       ),
                                       textAlign: TextAlign.start,
                                     ),
-                                    Text(income.toString(),style: TextStyle(
-                                      color: Colors.blueAccent,
+                                    Text(expense.toString(),style: TextStyle(
+                                      color: Colors.redAccent,
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w400,
                                       fontSize: 18,
@@ -371,38 +443,11 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       margin: EdgeInsets.symmetric(vertical: 25),
                                       width: 90,
                                       height: 90,
-                                      child: PieChartScreen(currentList: _transactionList, categoryList: _incomeCategoryList, total: income), //InformationHomeScreen
+                                      child: PieChartScreen(currentList: _transactionList, categoryList: _expenseCategoryList, total: expense),
                                     ),
-                                  ],
-                                ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                children: <Widget>[
-                                  Text('Expense',
-                                    style: TextStyle(
-                                      color: Colors.grey[500],
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                    ),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  Text(expense.toString(),style: TextStyle(
-                                    color: Colors.redAccent,
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 18,
-                                  ),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(vertical: 25),
-                                    width: 90,
-                                    height: 90,
-                                    child: PieChartScreen(currentList: _transactionList, categoryList: _expenseCategoryList, total: expense),
-                                  ),
-                                ]
+                                  ]
+                                );
+                              },
                               ),
                             ),
                           ],
