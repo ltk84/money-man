@@ -137,6 +137,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             onTap: () {},
             leading: Icon(IconData(int.tryParse(widget.wallet.iconID),
                 fontFamily: 'MaterialIcons')),
+            // leading: Icon(Icons.wallet_giftcard),
             title: TextFormField(
               readOnly: true,
               style: TextStyle(color: Colors.black),

@@ -30,15 +30,10 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     if (userSnapshot.connectionState == ConnectionState.active) {
       if (userSnapshot.hasData) {
-        if (userSnapshot.data.emailVerified &&
-                checkIfExistInFirestore(userSnapshot) ==
-                    Future<bool>.value(true) ||
-            userSnapshot.data.isAnonymous)
+        if (userSnapshot.data.emailVerified || userSnapshot.data.isAnonymous)
           return HomeScreen();
-        else if (!userSnapshot.data.emailVerified)
-          return VerifyEmailScreen();
         else
-          return FirstStep();
+          return VerifyEmailScreen();
       } else
         return IntroductionScreen();
     }
