@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
+import 'package:money_man/ui/screens/home_screen/home_screen.dart';
+import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
+import 'package:provider/provider.dart';
 //import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -164,8 +170,21 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: 300,
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
-                          onPressed: () {
-                            _auth.signInWithGoogleAccount();
+                          onPressed: () async {
+                            final UserCredential result = await _auth
+                                .signInWithGoogleAccount()
+                                .whenComplete(() {});
+                            // User user = result.user;
+                            // DocumentSnapshot docs = await FirebaseFirestore
+                            //     .instance
+                            //     .collection('users')
+                            //     .doc(user.uid)
+                            //     .get();
+                            // if (!docs.exists)
+                            //   Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (_) => FirstStep()));
                           },
                           child: CustomListTile(
                             text: "Connect to Google",

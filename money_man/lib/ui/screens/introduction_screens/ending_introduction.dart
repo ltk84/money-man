@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
