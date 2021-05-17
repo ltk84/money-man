@@ -38,12 +38,12 @@ class FirebaseFireStoreService {
     // update ví đang được chọn lên database
     await users
         .doc(uid)
-        .update(wallet.toMap())
+        .update({'currentWallet': wallet.toMap()})
         .then((value) => print('updated!'))
         .catchError((onError) {
-      print(onError);
-      return onError.toString();
-    });
+          print(onError);
+          return onError.toString();
+        });
 
     return wallet.id;
   }
@@ -59,27 +59,19 @@ class FirebaseFireStoreService {
         .set(wallet.toMap())
         .then((value) => print('add wallet to collection wallets'))
         .catchError((error) => print(error.toString()));
+
     return await users
         .doc(uid)
-        .set(wallet.toMap())
+        .set({'currentWallet': wallet.toMap()})
         .then((value) => print('set selected wallet'))
         .catchError((error) => print(error));
   }
 
-  // stream wallet hiện tại
-  Stream<String> get currentWalletID {
-    return users
-        .doc(uid)
-        .snapshots()
-        .map((event) => Wallet.fromMap(event.data()).id);
-  }
-
   // stream của wallet hiện tại đang được chọn
   Stream<Wallet> get currentWallet {
-    return users
-        .doc(uid)
-        .snapshots()
-        .map((event) => Wallet.fromMap(event.data()));
+    return users.doc(uid).snapshots().map((event) {
+      return Wallet.fromMap(event.get('currentWallet'));
+    });
   }
 
   // add wallet
@@ -164,14 +156,6 @@ class FirebaseFireStoreService {
         .doc(uid)
         .collection('wallets')
         .doc(id)
-        .get()
-        .then((value) => Wallet.fromMap(value.data()));
-  }
-
-  // lấy wallet đang được chọn
-  Future<Wallet> getCurrenWallet() async {
-    return await users
-        .doc(uid)
         .get()
         .then((value) => Wallet.fromMap(value.data()));
   }

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:money_man/core/models/userModel.dart';
 
 class FirebaseAuthService {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -17,6 +18,7 @@ class FirebaseAuthService {
         print('User is signed in!');
       }
     });
+
     // trả về stream
     return _auth.authStateChanges();
   }
@@ -160,4 +162,7 @@ class FirebaseAuthService {
         break;
     }
   }
+
+  // link acount with multiple provider
+  Future linkUserWithOtherProvider() async {}
 }

@@ -171,9 +171,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: RaisedButton(
                           color: Color(0xffbcbcbc),
                           onPressed: () async {
-                            final UserCredential result = await _auth
-                                .signInWithGoogleAccount()
-                                .whenComplete(() {});
+                            await _auth.signInWithGoogleAccount();
                             // User user = result.user;
                             // DocumentSnapshot docs = await FirebaseFirestore
                             //     .instance

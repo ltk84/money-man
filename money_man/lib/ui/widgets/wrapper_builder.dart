@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/userModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/core/services/firebase_storage_services.dart';
@@ -16,7 +17,7 @@ class WrapperBuilder extends StatelessWidget {
     return StreamBuilder<User>(
         stream: _auth.userStream,
         builder: (context, snapshot) {
-          final user = _auth.currentUser;
+          final user = snapshot.data;
 
           if (user != null) {
             return MultiProvider(providers: [
