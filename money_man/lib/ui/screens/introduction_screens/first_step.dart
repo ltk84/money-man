@@ -15,7 +15,11 @@ class FirstStep extends StatefulWidget {
 
 class _FirstStepState extends State<FirstStep> {
   Wallet wallet = Wallet(
-      id: 'id', name: 'wallet', amount: 0, currencyID: 'USD', iconID: 'a');
+      id: 'id',
+      name: 'newWallet',
+      amount: 0,
+      currencyID: 'USD',
+      iconID: '58666');
   String currencyName = 'USD';
   IconData iconData = Icons.account_balance_wallet;
 

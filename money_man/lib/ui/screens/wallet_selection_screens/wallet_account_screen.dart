@@ -40,6 +40,7 @@ class SelectWalletAccountScreen extends StatelessWidget {
                         IconData iconData = IconData(
                             int.tryParse(listWallet[index].iconID),
                             fontFamily: 'MaterialIcons');
+                        // IconData iconData = Icons.wallet_giftcard;
 
                         return Container(
                           padding: EdgeInsets.fromLTRB(20, 10, 20, 0),

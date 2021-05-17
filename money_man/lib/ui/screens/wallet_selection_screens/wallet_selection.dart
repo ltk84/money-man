@@ -273,6 +273,8 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                   IconData iconData = IconData(
                       int.tryParse(listWallet[index].iconID),
                       fontFamily: 'MaterialIcons');
+                  // print(iconData1.codePoint);
+                  // IconData iconData = Icons.wallet_giftcard;
 
                   return widget.id == listWallet[index].id
                       ? GestureDetector(
