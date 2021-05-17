@@ -40,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
         stream: _firestore.currentWallet,
         builder: (context, snapshot) {
           final wallet = snapshot.data;
-          print(snapshot.data);
 
           List<Widget> _screens = [
             TransactionScreen(currentWallet: wallet),

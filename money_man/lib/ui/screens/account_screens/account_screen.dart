@@ -71,7 +71,6 @@ class _TestState extends State<Test> {
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     final _auth = Provider.of<FirebaseAuthService>(context);
     return Scaffold(
         backgroundColor: Colors.black,
@@ -116,6 +115,7 @@ class _TestState extends State<Test> {
             stream: _auth.userStream,
             builder: (context, snapshot) {
               User user = snapshot.data;
+
               return ListView(
                 physics: BouncingScrollPhysics(),
                 controller: _controller,

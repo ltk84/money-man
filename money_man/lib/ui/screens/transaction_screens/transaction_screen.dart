@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/categoryModel.dart';
 import 'package:money_man/core/models/test.dart';
 import 'package:money_man/core/models/transactionModel.dart';
@@ -51,13 +52,12 @@ class _TransactionScreen extends State<TransactionScreen>
             name: 'defaultName',
             amount: 0,
             currencyID: 'USD',
-            iconID: 'a')
+            iconID: '58666')
         : widget.currentWallet;
   }
 
   @override
   void didUpdateWidget(covariant TransactionScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
     _wallet = widget.currentWallet ??
@@ -65,14 +65,14 @@ class _TransactionScreen extends State<TransactionScreen>
             id: 'id',
             name: 'defaultName',
             amount: 100,
-            currencyID: 'a',
-            iconID: 'b');
+            currencyID: 'USD',
+            iconID: '58666');
   }
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    // print('transaction build ' + wallet.id);
+    print('transaction build ' + _wallet.amount.toString());
     return DefaultTabController(
         length: 200,
         child: Scaffold(
@@ -87,8 +87,6 @@ class _TransactionScreen extends State<TransactionScreen>
                         icon: const Icon(Icons.account_balance_wallet,
                             color: Colors.grey),
                         onPressed: () async {
-                          // print('pressed' + widget.currentWallet.id);
-                          // buildShowDialog(context, widget.currentWallet.id);
                           buildShowDialog(context, _wallet.id);
                         }),
                   ),
@@ -97,7 +95,6 @@ class _TransactionScreen extends State<TransactionScreen>
                       icon:
                           const Icon(Icons.arrow_drop_down, color: Colors.grey),
                       onPressed: () async {
-                        // buildShowDialog(context, widget.currentWallet.id);
                         buildShowDialog(context, _wallet.id);
                       },
                     ),
@@ -107,7 +104,10 @@ class _TransactionScreen extends State<TransactionScreen>
               title: Column(children: [
                 Text(_wallet.name,
                     style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
-                Text(_wallet.amount.toString(),
+                Text(
+                    MoneyFormatter(amount: _wallet.amount)
+                        .output
+                        .withoutFractionDigits,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 15.0,

@@ -282,7 +282,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           // ),
                         ),
                         onChanged: (value) {
-                          var val = int.tryParse(value);
+                          var val = double.tryParse(value);
                           if (val == null) wallet.amount = 0;
                           wallet.amount = val;
                         },

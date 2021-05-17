@@ -19,10 +19,6 @@ class FirebaseFireStoreService {
 
   // update id của wallet đang được chọn
   Future<String> updateSelectedWallet(String walletID) async {
-    // if (walletID == 'Total') {
-    //   Wallet total = Wallet(id: 'Total', name: 'Total', amount: 0, currencyID: currencyID, iconID: iconID)
-    // }
-
     // lấy wallet thông qua id
     Wallet wallet;
     await users
@@ -166,17 +162,32 @@ class FirebaseFireStoreService {
 
   // add transaction
   Future addTransaction(Wallet wallet, MyTransaction transaction) async {
+    // lấy reference của list transaction để lấy auto-generate id
     final transactionRef = users
         .doc(uid)
         .collection('wallets')
         .doc(wallet.id)
         .collection('transactions')
         .doc();
+
+    // gán id cho transaction
     transaction.id = transactionRef.id;
-    return await transactionRef
+
+    // thực hiện add transaction
+    await transactionRef
         .set(transaction.toMap())
         .then((value) => print('transaction added!'))
         .catchError((error) => print(error));
+
+    // Update amount của wallet
+    if (transaction.category.type == 'expense')
+      wallet.amount -= transaction.amount;
+    else
+      wallet.amount += transaction.amount;
+
+    // udpate wallet trong list và wallet đang được chọn
+    await updateWallet(wallet);
+    await updateSelectedWallet(wallet.id);
   }
 
   // stream đến transaction của wallet đang được chọn
@@ -198,19 +209,26 @@ class FirebaseFireStoreService {
   }
 
   // delete transaction by id
-  Future deleteTransaction(String idTransaction, String idWallet) async {
+  Future deleteTransaction(MyTransaction transaction, Wallet wallet) async {
     await users
         .doc(uid)
         .collection('wallets')
-        .doc(idWallet)
+        .doc(wallet.id)
         .collection('transactions')
-        .doc(idTransaction)
+        .doc(transaction.id)
         .delete()
         .then((value) => print('transaction deleted!'))
         .catchError((error) {
       print(error);
-      return error.toString();
     });
+
+    if (transaction.category.type == 'expense')
+      wallet.amount += transaction.amount;
+    else
+      wallet.amount -= transaction.amount;
+
+    await updateWallet(wallet);
+    await updateSelectedWallet(wallet.id);
   }
 
   // update transaction
@@ -248,6 +266,7 @@ class FirebaseFireStoreService {
     await cateRef.set(cat.toMap()).then((value) => print('added!'));
   }
 
+  // Lấy category bằng id
   Future<MyCategory> getCategoryByID(String id) async {
     return categories
         .doc(id)
