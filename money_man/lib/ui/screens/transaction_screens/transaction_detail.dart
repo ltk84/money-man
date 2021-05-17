@@ -302,7 +302,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                             FlatButton(
                                 onPressed: () async {
                                   await _firestore.deleteTransaction(
-                                      widget.transaction.id, widget.wallet.id);
+                                      widget.transaction, widget.wallet);
                                   Navigator.pop(context);
                                   // chưa có animation để back ra transaction screen
                                   Navigator.pop(context);

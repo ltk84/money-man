@@ -23,13 +23,6 @@ class WalletSelectionScreen extends StatefulWidget {
 
 class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // FlutterIconPicker.showIconPicker(context);
-  }
-
-  @override
   Widget build(BuildContext context) {
     print('wallet selection build' + widget.id.toString());
     final _firestore = Provider.of<FirebaseFireStoreService>(context);

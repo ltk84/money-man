@@ -4,7 +4,7 @@ import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
 class Wallet {
   String id;
   String name;
-  int amount;
+  double amount;
   String currencyID;
   String iconID;
   Wallet({
@@ -20,7 +20,7 @@ class Wallet {
     return Wallet(
       id: data['id'],
       name: data['name'],
-      amount: data['amount'],
+      amount: data['amount'].toDouble(),
       currencyID: data['currencyID'],
       iconID: data['iconID'],
     );

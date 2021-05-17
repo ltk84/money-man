@@ -245,12 +245,13 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                           // ),
                         ),
                         onChanged: (value) {
-                          var val = int.tryParse(value);
+                          var val = double.tryParse(value);
                           if (val == null) widget.wallet.amount = 0;
                           widget.wallet.amount = val;
                         },
                         validator: (value) {
-                          return (value == null || int.tryParse(value) == null)
+                          return (value == null ||
+                                  double.tryParse(value) == null)
                               ? 'Do not use the @ char.'
                               : null;
                         },

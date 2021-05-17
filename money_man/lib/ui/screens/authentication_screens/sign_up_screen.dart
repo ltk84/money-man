@@ -1,5 +1,7 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
@@ -59,8 +61,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ButtonTheme(
                         minWidth: 300,
                         child: RaisedButton(
-                            onPressed: () {
-                              signUpWithEmailAndPassword(_auth, context);
+                            onPressed: () async {
+                              await signUpWithEmailAndPassword(_auth, context);
                             },
                             elevation: 0,
                             child: Text(
@@ -218,8 +220,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(error)));
+      } else {
+        handleLinkWithGoogle(_email);
       }
     }
+  }
+
+  void handleLinkWithGoogle(String _email) async {
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    if (_email.contains('gmail'))
+      _auth.currentUser.linkWithCredential(credential).catchError((error) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error.toString())));
+      });
   }
 
   Widget buildInputField() {
