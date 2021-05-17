@@ -161,13 +161,18 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
             ],
           ),
           title: GestureDetector(
-            onTap: () {
-              final result = showCupertinoModalBottomSheet(
+            onTap: () async {
+              final result = await showCupertinoModalBottomSheet(
                 isDismissible: true,
                 backgroundColor: Colors.grey[900],
                 context: context,
                 builder: (context) => TimeRangeSelection()
                 );
+              setState(() {
+                dateDescript = result.description;
+                beginDate = result.begin;
+                beginDate = result.end;
+              });
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

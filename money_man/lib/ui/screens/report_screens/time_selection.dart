@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/timeRangeInfoModel.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'custom_time_range.dart';
@@ -12,16 +13,16 @@ class TimeRangeSelection extends StatefulWidget{
   TimeRangeSelectionState createState() =>  TimeRangeSelectionState();
 }
 class  TimeRangeSelectionState extends State<TimeRangeSelection>{
-  List<TimeRangeInfo> listInfo = [
+  List<dynamic> listInfo = [
     TimeRangeInfo(
-        'This month',
-        DateTime(DateTime.now().year, DateTime.now().month, 1),
-        DateTime(DateTime.now().year, DateTime.now().month + 1, 0)
+        description: 'This month',
+        begin: DateTime(DateTime.now().year, DateTime.now().month, 1),
+        end: DateTime(DateTime.now().year, DateTime.now().month + 1, 0)
     ),
     TimeRangeInfo(
-        'Custom',
-        null,
-        null
+        description: 'Custom',
+        begin: null,
+        end: null
     )
   ];
 
@@ -70,17 +71,28 @@ class  TimeRangeSelectionState extends State<TimeRangeSelection>{
           String endDate = (listInfo[index].end == null) ? '--' : DateFormat('dd/MM/yyyy').format(listInfo[index].end);
 
           return ListTile(
-            onTap: () {
+            onTap: () async {
               if (listInfo[index].description == 'Custom') {
-                showCupertinoModalBottomSheet(
+                final result = await showCupertinoModalBottomSheet(
                     isDismissible: true,
                     backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) => CustomTimeRange()
                 );
+                setState(() {
+                  if (result.runtimeType == listInfo[0].runtimeType && result != null) {
+                    listInfo.removeLast();
+                    listInfo.add(result);
+                    Navigator.of(context).pop(result);
+                  }
+                });
               }
               else {
-                final result = [listInfo[index].begin, listInfo[index].end, listInfo[index].description];
+                var result = TimeRangeInfo(
+                    description: listInfo[index].description,
+                    begin: listInfo[index].begin,
+                    end: listInfo[index].end
+                );
                 Navigator.of(context).pop(result);
               }
             },
@@ -106,12 +118,4 @@ class  TimeRangeSelectionState extends State<TimeRangeSelection>{
       )
     );
   }
-}
-
-class TimeRangeInfo {
-  String description;
-  DateTime begin;
-  DateTime end;
-
-  TimeRangeInfo(this.description, this.begin, this.end);
 }

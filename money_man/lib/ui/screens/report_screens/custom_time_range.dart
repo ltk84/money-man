@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
+import 'package:money_man/core/models/timeRangeInfoModel.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -18,6 +19,9 @@ class  CustomTimeRangeState extends State<CustomTimeRange>{
 
   @override
   Widget build(BuildContext context) {
+    _beginDate = realBeginDate != null ? DateFormat('dd/MM/yyyy').format(realBeginDate) : 'Begin date';
+    _endDate = realEndDate != null ? DateFormat('dd/MM/yyyy').format(realEndDate) : 'End date';
+
     return Scaffold(
         backgroundColor: Colors.black45,
         appBar: AppBar(
@@ -53,7 +57,7 @@ class  CustomTimeRangeState extends State<CustomTimeRange>{
                   if (realBeginDate != null
                       && realEndDate != null
                       && realBeginDate.compareTo(realEndDate) <= 0)
-                    Navigator.of(context).pop([realBeginDate, realEndDate, 'Custom']);
+                    Navigator.of(context).pop(TimeRangeInfo(description: 'Custom', begin: realBeginDate, end: realEndDate));
                   else
                     Alert(context: context, title: "FilledStacks", desc: "Flutter is awesome.").show();
                 },
@@ -72,7 +76,7 @@ class  CustomTimeRangeState extends State<CustomTimeRange>{
                     onConfirm: (date) {
                       setState(() {
                         realBeginDate = date;
-                        _beginDate = DateFormat('dd/MM/yyyy').format(date);
+                        //_beginDate = DateFormat('dd/MM/yyyy').format(date);
                       });
                     },
                     currentTime: DateTime.now(),
@@ -106,7 +110,7 @@ class  CustomTimeRangeState extends State<CustomTimeRange>{
                     onConfirm: (date) {
                       setState(() {
                         realEndDate = date;
-                        _endDate = DateFormat('dd/MM/yyyy').format(date);
+                        //_endDate = DateFormat('dd/MM/yyyy').format(date);
                       });
                     },
                     currentTime: DateTime.now(),
