@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -166,13 +167,15 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                 isDismissible: true,
                 backgroundColor: Colors.grey[900],
                 context: context,
-                builder: (context) => TimeRangeSelection()
+                builder: (context) => TimeRangeSelection(dateDescription: dateDescript, beginDate: beginDate, endDate: endDate)
                 );
-              setState(() {
-                dateDescript = result.description;
-                beginDate = result.begin;
-                beginDate = result.end;
-              });
+              if (result != null) {
+                setState(() {
+                  dateDescript = result.description;
+                  beginDate = result.begin;
+                  endDate = result.end;
+                });
+              }
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

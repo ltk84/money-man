@@ -8,19 +8,39 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class CustomTimeRange extends StatefulWidget{
+  final beginDate;
+  final endDate;
+
+  CustomTimeRange({Key key, @required this.beginDate, @required this.endDate}) : super(key: key);
   @override
   CustomTimeRangeState createState() =>  CustomTimeRangeState();
 }
 class  CustomTimeRangeState extends State<CustomTimeRange>{
-  String _beginDate = 'Begin date';
-  String _endDate = 'End date';
+  // String _beginDate = 'Begin date';
+  // String _endDate = 'End date';
   DateTime realBeginDate;
   DateTime realEndDate;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    realBeginDate = widget.beginDate;
+    realEndDate = widget.endDate;
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomTimeRange oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    realBeginDate = widget.beginDate;
+    realEndDate = widget.endDate;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _beginDate = realBeginDate != null ? DateFormat('dd/MM/yyyy').format(realBeginDate) : 'Begin date';
-    _endDate = realEndDate != null ? DateFormat('dd/MM/yyyy').format(realEndDate) : 'End date';
+    String _beginDate = realBeginDate != null ? DateFormat('dd/MM/yyyy').format(realBeginDate) : 'Begin date';
+    String _endDate = realEndDate != null ? DateFormat('dd/MM/yyyy').format(realEndDate) : 'End date';
 
     return Scaffold(
         backgroundColor: Colors.black45,
@@ -72,14 +92,21 @@ class  CustomTimeRangeState extends State<CustomTimeRange>{
               child: ListTile (
                 onTap: () {
                   DatePicker.showDatePicker(context,
+                    currentTime: realBeginDate == null
+                      ? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+                      : realBeginDate,
                     showTitleActions: true,
                     onConfirm: (date) {
                       setState(() {
-                        realBeginDate = date;
+                        // Bước xét DateFormat này là do realBeginDate có thể bị lệch giờ,
+                        // dẫn đến hiện tượng không so sánh được DateTime của transaction (không có giờ phút giây).
+                        // DateFormat này để cho realBeginDate có trùng giờ với DateTime của transaction (không có giờ phút giây).
+                        DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+                        String formattedDate = dateFormat.format(date);
+                        realBeginDate = dateFormat.parse(formattedDate);
                         //_beginDate = DateFormat('dd/MM/yyyy').format(date);
                       });
                     },
-                    currentTime: DateTime.now(),
                     locale: LocaleType.en,
                     theme: DatePickerTheme(
                       cancelStyle: TextStyle(color: Colors.white),
@@ -106,14 +133,21 @@ class  CustomTimeRangeState extends State<CustomTimeRange>{
               child: ListTile (
                 onTap: () {
                   DatePicker.showDatePicker(context,
+                    currentTime: realEndDate == null
+                        ? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+                        : realEndDate,
                     showTitleActions: true,
                     onConfirm: (date) {
                       setState(() {
-                        realEndDate = date;
+                        // Bước xét DateFormat này là do realEndDate có thể bị lệch giờ,
+                        // dẫn đến hiện tượng không so sánh được DateTime của transaction (không có giờ phút giây).
+                        // DateFormat này để cho realEndDate có trùng giờ với DateTime của transaction (không có giờ phút giây).
+                        DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+                        String formattedDate = dateFormat.format(date);
+                        realEndDate = dateFormat.parse(formattedDate);
                         //_endDate = DateFormat('dd/MM/yyyy').format(date);
                       });
                     },
-                    currentTime: DateTime.now(),
                     locale: LocaleType.en,
                     theme: DatePickerTheme(
                       cancelStyle: TextStyle(color: Colors.white),
