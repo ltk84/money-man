@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 import 'custom_time_range.dart';
 
@@ -154,6 +155,45 @@ class ShareScreenState extends State<ShareScreen>{
                       ),
                     ],
                   ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 50.0),
+              padding: EdgeInsets.symmetric(horizontal: 100.0),
+              child: TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) return Colors.white;
+                      return Colors.green; // Use the component's default.
+                    },
+                  ),
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) return Colors.green;
+                      return Colors.white; // Use the component's default.
+                    },
+                  ),
+                ),
+                onPressed: () async {
+                  ImageGallerySaver.saveImage(
+                      (_currentIndex == 0) ? reportData1 : ((_currentIndex == 1) ? reportData2 : reportData3),
+                      quality: 100,
+                      name: "Report_" + (_currentIndex + 1).toString());
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Text('SAVE', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                      flex: 3,
+                    ),
+                    Expanded(
+                      child: Icon(Icons.share),
+                      flex: 1,
+                    ),
+                  ],
+                ),
               ),
             )
           ],
