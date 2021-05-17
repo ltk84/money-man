@@ -36,6 +36,7 @@ class BarChartScreenState extends State<BarChartScreen> {
     DateTimeRange value = DateTimeRange(start: beginDate, end: endDate);
     if (value.duration >= Duration(days: 6))
     {
+      List<dynamic> calculationList = [];
       var x = (value.duration.inDays/6).round();
       var firstDate = beginDate.subtract(Duration(days: 1));
       for (int i = 0; i < 6; i++) {
@@ -43,11 +44,19 @@ class BarChartScreenState extends State<BarChartScreen> {
         var secondDate = (i != 5) ? firstDate.add(Duration(days: x)) : endDate;
 
         var calculation = calculateByTimeRange(firstDate, secondDate, transactionList);
-        var barGroup = makeGroupData(i, (calculation.first*19)/_maximumAmount.round(), (calculation.last*19)/_maximumAmount.round());
-        rawBarGroups.add(barGroup);
-
+        calculationList.add(calculation);
+        double temp = calculation.first > calculation.last ? calculation.first : calculation.last;
+        if (temp > _maximumAmount)
+          _maximumAmount = temp;
         timeRangeList.add(firstDate.day.toString() + "-" + secondDate.day.toString());
         firstDate = firstDate.add(Duration(days: x));
+      }
+      if (!calculationList.isEmpty)
+      {
+        for (int i = 0; i < calculationList.length; i++){
+          var barGroup = makeGroupData(i, (calculationList[i].first*19)/_maximumAmount.round(), (calculationList[i].last*19)/_maximumAmount.round());
+          rawBarGroups.add(barGroup);
+        }
       }
     }
   }
@@ -70,13 +79,13 @@ class BarChartScreenState extends State<BarChartScreen> {
   @override
   void initState() {
     super.initState();
-    _transactionList = widget.currentList;
+    _transactionList = widget.currentList ?? [];
     _beginDate = widget.beginDate;
     _endDate = widget.endDate;
-
-    _maximumAmount = (_transactionList != null && _transactionList.isNotEmpty)
-        ? _transactionList.map<double>((e) => e.amount).reduce(max)
-        : 10000;
+    _maximumAmount = 1;
+    // _maximumAmount = (_transactionList != null && _transactionList.isNotEmpty)
+    //     ? _transactionList.map<double>((e) => e.amount).reduce(max)
+    //     : 10000;
     generateData(_beginDate, _endDate, timeRangeList, _transactionList, rawBarGroups);
     showingBarGroups = rawBarGroups;
   }
@@ -86,10 +95,13 @@ class BarChartScreenState extends State<BarChartScreen> {
     super.didUpdateWidget(oldWidget);
 
     _transactionList = widget.currentList ?? [];
+    _beginDate = widget.beginDate;
+    _endDate = widget.endDate;
+    _maximumAmount = 1;
 
-    _maximumAmount = (_transactionList != null && _transactionList.isNotEmpty)
-        ? _transactionList.map<double>((e) => e.amount).reduce(max)
-        : 10000;
+    // _maximumAmount = (_transactionList != null && _transactionList.isNotEmpty)
+    //     ? _transactionList.map<double>((e) => e.amount).reduce(max)
+    //     : 10000;
     generateData(_beginDate, _endDate, timeRangeList, _transactionList, rawBarGroups);
     showingBarGroups = rawBarGroups;
   }

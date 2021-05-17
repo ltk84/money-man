@@ -86,6 +86,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
                 borderData: FlBorderData(
                   show: false,
                 ),
+                startDegreeOffset: 270,
                 sectionsSpace: 0,
                 centerSpaceRadius: 20,
                 sections: showingSections()),
