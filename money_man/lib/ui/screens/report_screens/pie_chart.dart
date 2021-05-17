@@ -21,7 +21,7 @@ class PieChartScreen extends StatefulWidget {
 
 class PieChartScreenState extends State<PieChartScreen>  {
   double _total;
-  int touchedIndex = 0;
+  int touchedIndex = -1;
   List<MyTransaction> _transactionList;
   List<MyCategory> _categoryList;
   List<double> _info = [];
@@ -66,7 +66,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.3,
-      child: Card(
+      child: Container(
         color: Colors.transparent,
         child: AspectRatio(
           aspectRatio: 1,
@@ -105,16 +105,24 @@ class PieChartScreenState extends State<PieChartScreen>  {
 
       var value = ((_info[i]/_total)*100).round();
 
-      RandomColor _randomColor = RandomColor();
+      // RandomColor _randomColor = RandomColor();
+      // Color _color = _randomColor.randomColor(
+      //   colorHue: _categoryList[0].type == 'expense' ? ColorHue.green : ColorHue.green,
+      //   colorBrightness: ColorBrightness.dark,
+      //   colorSaturation: ColorSaturation.highSaturation
+      // );
 
-      Color _color = _randomColor.randomColor(
-        colorHue: _categoryList[0].type == 'expense' ? ColorHue.green : ColorHue.green,
-        colorBrightness: ColorBrightness.dark,
-        colorSaturation: ColorSaturation.highSaturation
-      );
+      List<Color> colors = [
+        Color(0xFFFFF200), Color(0xFFFC6600), Color(0xFFD30000), Color(0xFFFC0FC0), Color(0xFFB200ED),
+        Color(0xFF0018F9), Color(0xFF3BB143), Color(0xFF7C4700), Color(0xFF828282), Color(0xFFF8DE7E),
+        Color(0xFFF9A602), Color(0xFFFA8072), Color(0xFFE0115F), Color(0xFFB43757), Color(0xFF131E3A),
+        Color(0xFF0B6623), Color(0xFF4B3A26), Color(0xFF787276), Color(0xFFFCD12A), Color(0xFFFFBF00),
+        Color(0xFFC21807), Color(0xFFFBAED2), Color(0xFF8660CD), Color(0xFF89CFEF), Color(0xFF00A86B),
+        Color(0xFF997950), Color(0xFFBEBDB8), Color(0xFFEFFD5F), Color(0xFF000080), Color(0xFF2B1700),
+      ];
 
       return PieChartSectionData(
-        color: _color,
+        color: colors[i],
         value: value.toDouble(),
         showTitle: false,
         //title: value.toString() + '%',
@@ -126,7 +134,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
         badgeWidget: _Badge(
           'assets/icons/hotdog.svg', // category icon.
           size: widgetSize,
-          borderColor: _color,
+          borderColor: colors[i],
         ),
         badgePositionPercentageOffset: .98,
       );

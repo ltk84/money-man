@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:share/share.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -176,10 +177,12 @@ class ShareScreenState extends State<ShareScreen>{
                   ),
                 ),
                 onPressed: () async {
-                  ImageGallerySaver.saveImage(
+                  dynamic result = await ImageGallerySaver.saveImage(
                       (_currentIndex == 0) ? reportData1 : ((_currentIndex == 1) ? reportData2 : reportData3),
                       quality: 100,
-                      name: "Report_" + (_currentIndex + 1).toString());
+                      name: 'Report_' + (_currentIndex + 1).toString());
+                  if (result['isSuccess'])
+                    Alert(context: context, title: "Image has been saved").show();
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
