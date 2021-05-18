@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class _Badge extends StatelessWidget {
+class SuperIcon extends StatelessWidget {
   final String svgAsset;
   final double size;
 
-  const _Badge(
+  const SuperIcon(
       this.svgAsset, {
         Key key,
         @required this.size,
@@ -14,10 +14,11 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.yellow,
       width: size,
       height: size,
       child: Center(
-        child: SvgPicture.asset(
+        child: SvgPicture.network(
           svgAsset,
           fit: BoxFit.contain,
         ),
