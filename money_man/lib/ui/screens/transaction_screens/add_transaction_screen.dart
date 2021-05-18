@@ -8,6 +8,7 @@ import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/edit_transaction_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +29,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     print('add build');
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Colors.black26,
       appBar: AppBar(
         leadingWidth: 70.0,
         centerTitle: true,
@@ -106,21 +107,27 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          ListTile(
-            onTap: () async {
-              final resultAmount = await Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => EnterAmountScreen()));
-              if (resultAmount != null)
-                setState(() {
-                  print(resultAmount);
-                  amount = double.parse(resultAmount);
-                });
-            },
-            leading: Icon(Icons.money),
-            title: TextFormField(
-              readOnly: true,
+      body: Container(
+        margin: EdgeInsets.symmetric(vertical: 35.0),
+        decoration: BoxDecoration(
+            color: Colors.grey[900],
+          border: Border(
+            top: BorderSide(
+              color: Colors.white12,
+              width: 0.5,
+            ),
+            bottom: BorderSide(
+              color: Colors.white12,
+              width: 0.5,
+            )
+          )
+        ),
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.fromLTRB(10, 0, 20, 0),
+              minVerticalPadding: 10.0,
               onTap: () async {
                 final resultAmount = await Navigator.push(context,
                     MaterialPageRoute(builder: (_) => EnterAmountScreen()));
@@ -130,33 +137,55 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     amount = double.parse(resultAmount);
                   });
               },
-              // onChanged: (value) => amount = double.tryParse(value),
-              style: TextStyle(color: Colors.green),
-              decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Colors.green),
-                  hintText: amount == null
-                      ? '0'
-                      : MoneyFormatter(amount: amount)
-                          .output
-                          .withoutFractionDigits),
+              leading: Icon(Icons.money, color: Colors.white54, size: 45.0),
+              title: TextFormField(
+                readOnly: true,
+                onTap: () async {
+                  final resultAmount = await Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                  if (resultAmount != null)
+                    setState(() {
+                      print(resultAmount);
+                      amount = double.parse(resultAmount);
+                    });
+                },
+                // onChanged: (value) => amount = double.tryParse(value),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30.0,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600
+                ),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    hintStyle: TextStyle(
+                        color: amount == null ? Colors.grey[600] : Colors.white,
+                        fontSize: amount == null ? 22 : 30.0,
+                        fontFamily: 'Montserrat',
+                        fontWeight: amount == null ? FontWeight.w500 : FontWeight.w600,
+                    ),
+                    hintText: amount == null
+                        ? 'Enter amount'
+                        : MoneyFormatter(amount: amount)
+                            .output
+                            .withoutFractionDigits),
+              ),
             ),
-          ),
-          ListTile(
-              onTap: () async {
-                final selectCate = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => CategoriesTransactionScreen()));
-                if (selectCate != null) {
-                  setState(() {
-                    this.cate = selectCate;
-                  });
-                }
-              },
-              leading: cate == null
-                  ? Icon(Icons.question_answer)
-                  : Icon(Icons.ac_unit),
-              title: TextField(
+            Container(
+              margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+              child: Divider(
+                color: Colors.white24,
+                height: 1,
+                thickness: 0.2,
+              ),
+            ),
+            ListTile(
+              dense: true,
+              //minVerticalPadding: 8,
                 onTap: () async {
                   final selectCate = await Navigator.push(
                       context,
@@ -168,76 +197,191 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     });
                   }
                 },
-                readOnly: true,
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                    hintText:
-                        this.cate == null ? 'Select category' : this.cate.name),
-              )),
-          ListTile(
-            leading: Icon(Icons.note),
-            title: TextFormField(
-              decoration: InputDecoration(hintText: 'Write note'),
-              style: TextStyle(color: Colors.black),
-              onChanged: (value) => note = value,
+                leading: cate == null
+                    ? Icon(Icons.question_answer, color: Colors.white54, size: 28.0)
+                    : Icon(Icons.ac_unit, color: Colors.white54, size: 28.0),
+                title: TextField(
+                  onTap: () async {
+                    final selectCate = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => CategoriesTransactionScreen()));
+                    if (selectCate != null) {
+                      setState(() {
+                        this.cate = selectCate;
+                      });
+                    }
+                  },
+                  readOnly: true,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600
+                  ),
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      hintStyle: TextStyle(
+                          color: this.cate == null ? Colors.grey[600] : Colors.white,
+                          fontSize: 16.0,
+                          fontFamily: 'Montserrat',
+                          fontWeight: this.cate == null ? FontWeight.w500 : FontWeight.w600
+                      ),
+                      hintText:
+                          this.cate == null ? 'Select category' : this.cate.name
+                  ),
+                ),
+                trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.calendar_today),
-            title: TextFormField(
-              onTap: () async {
-                DateTime now = DateTime.now();
-                pickDate = await showDatePicker(
-                    context: context,
-                    initialDate: now,
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2030));
+            Container(
+              margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+              child: Divider(
+                color: Colors.white24,
+                height: 1,
+                thickness: 0.2,
+              ),
+            ),
+            ListTile(
+              dense: true,
+              leading: Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
+              title: TextFormField(
+                onTap: () async {
+                  DateTime now = DateTime.now();
+                  pickDate = await showDatePicker(
+                      context: context,
+                      initialDate: now,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2030));
 
-                if (pickDate != null) {
-                  if (pickDate.day != now.day ||
-                      pickDate.month != now.month ||
-                      pickDate.year != now.year) {
-                    setState(() {
-                      pickDate = DateTime.tryParse(
-                          DateFormat('yyyy-MM-dd').format(pickDate));
-                    });
+                  if (pickDate != null) {
+                    if (pickDate.day != now.day ||
+                        pickDate.month != now.month ||
+                        pickDate.year != now.year) {
+                      setState(() {
+                        pickDate = DateTime.tryParse(
+                            DateFormat('yyyy-MM-dd').format(pickDate));
+                      });
+                    }
                   }
-                }
-              },
-              readOnly: true,
-              style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(
-                  hintText: pickDate == null
-                      ? 'Today'
-                      : DateFormat('EEEE, dd-MM-yyyy').format(pickDate)),
+                },
+                readOnly: true,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600
+                ),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    hintStyle: TextStyle(
+                        color: pickDate == null ? Colors.grey[600] : Colors.white,
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: pickDate == null ? FontWeight.w500 : FontWeight.w600,
+                    ),
+                    hintText: pickDate == null
+                        ? 'Select date'
+                        : DateFormat('EEEE, dd-MM-yyyy').format(pickDate)),
+              ),
+              trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
-          ),
-          ListTile(
-            onTap: () async {
-              wallet = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => SelectWalletAccountScreen()));
-            },
-            leading: Icon(wallet == null
-                ? Icons.account_balance_wallet_rounded
-                : IconData(int.tryParse(wallet.iconID),
-                    fontFamily: 'MaterialIcons')),
-            title: TextFormField(
-              readOnly: true,
-              style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(
-                  hintText: wallet == null ? 'Select wallet' : wallet.name),
+            Container(
+              margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+              child: Divider(
+                color: Colors.white24,
+                height: 1,
+                thickness: 0.2,
+              ),
+            ),
+            ListTile(
+              dense: true,
               onTap: () async {
                 wallet = await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (_) => SelectWalletAccountScreen()));
-                setState(() {});
               },
+              leading: Icon(wallet == null
+                  ? Icons.account_balance_wallet_rounded
+                  : IconData(int.tryParse(wallet.iconID),
+                      fontFamily: 'MaterialIcons'),
+              color: Colors.white54, size: 28.0),
+              title: TextFormField(
+                readOnly: true,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600
+                ),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    hintStyle: TextStyle(
+                        color: wallet == null ? Colors.grey[600] : Colors.white,
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: wallet == null ? FontWeight.w500 : FontWeight.w600,
+                    ),
+                    hintText: wallet == null ? 'Select wallet' : wallet.name),
+                onTap: () async {
+                  wallet = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => SelectWalletAccountScreen()));
+                  setState(() {});
+                },
+              ),
+              trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
-          ),
-        ],
+            Container(
+              margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+              child: Divider(
+                color: Colors.white24,
+                height: 1,
+                thickness: 0.2,
+              ),
+            ),
+            ListTile(
+              dense: true,
+              leading: Icon(Icons.note, color: Colors.white54, size: 28.0),
+              title: TextFormField(
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    hintStyle: TextStyle(
+                        color: Colors.grey[600],
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500
+                    ),
+                    hintText: 'Write note'
+                ),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600
+                ),
+                onChanged: (value) => note = value,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

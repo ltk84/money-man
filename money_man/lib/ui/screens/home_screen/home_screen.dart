@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
 //import 'package:money_man/ui/screens/account_screen/account_screen.dart';
 import 'package:money_man/ui/screens/planning_screen/planning_screen.dart';
@@ -22,8 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onItemTap(int index) {
     if (_selectedIndex != index) {
       if (index == 2) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => AddTransactionScreen()));
+        showCupertinoModalBottomSheet(
+            isDismissible: true,
+            backgroundColor: Colors.grey[900],
+            context: context,
+            builder: (context) => AddTransactionScreen()
+        );
       } else
         setState(() {
           _selectedIndex = index;
