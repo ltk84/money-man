@@ -81,7 +81,8 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.transparent,
-                )),
+                )
+            ),
           ],
         ),
         body: Container(

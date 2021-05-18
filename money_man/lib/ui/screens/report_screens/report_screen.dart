@@ -5,6 +5,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/report_screens/analytic_revenue_expenditure_screen.dart';
 import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
 import 'package:money_man/ui/screens/report_screens/chart_information_home_screen.dart';
@@ -144,19 +145,18 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
             children: [
               Expanded(
                 child: IconButton(
-                  icon: const Icon(Icons.account_balance_wallet, color: Colors.grey), onPressed: () {
-                  return showDialog(
-                      context: context,
-                      builder: (context) {
-                        return WalletSelectionScreen();
-                      }
-                  );
-                },
+                  icon: const Icon(Icons.account_balance_wallet, color: Colors.grey),
+                  onPressed: () async {
+                    buildShowDialog(context, _wallet.id);
+                  },
                 ),
               ),
               Expanded(
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_drop_down, color: Colors.grey), onPressed: () {  },
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                  onPressed: () async {
+                    buildShowDialog(context, _wallet.id);
+                  },
                 ),
               )
             ],
@@ -468,5 +468,23 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
         )
       ),
     );
+  }
+
+  void buildShowDialog(BuildContext context, id) async {
+    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+
+    final result = await showCupertinoModalBottomSheet(
+        isDismissible: true,
+        backgroundColor: Colors.grey[900],
+        context: context,
+        builder: (context) {
+          return Provider(
+              create: (_) {
+                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+              },
+              child: WalletSelectionScreen(
+                id: id,
+              ));
+        });
   }
 }

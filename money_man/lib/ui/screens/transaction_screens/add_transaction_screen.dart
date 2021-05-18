@@ -28,18 +28,39 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     print('add build');
     return Scaffold(
+      backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'Add transaction',
-          style: TextStyle(color: Colors.black),
+        leadingWidth: 70.0,
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.grey[900],
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0))),
+        title: Text('Add Transaction',
+            style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+                fontSize: 15.0)
         ),
-        leading: IconButton(
-          color: Colors.black,
-          icon: Icon(Icons.close),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        leading: TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+              backgroundColor: Colors.transparent,
+            )
         ),
         actions: [
           TextButton(
@@ -70,10 +91,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   Navigator.pop(context);
                 }
               },
-              child: Text(
+              child: const Text(
                 'Save',
-                style: TextStyle(color: Colors.black),
-              ))
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.transparent,
+              )
+          ),
         ],
       ),
       body: ListView(
