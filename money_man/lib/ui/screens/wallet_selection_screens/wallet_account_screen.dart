@@ -4,17 +4,68 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
-class SelectWalletAccountScreen extends StatelessWidget {
+class SelectWalletAccountScreen extends StatefulWidget {
+  Wallet wallet;
+
+  SelectWalletAccountScreen({Key key, this.wallet}) : super (key: key);
+  @override
+  _SelectWalletAccountScreenState createState() => _SelectWalletAccountScreenState();
+}
+
+class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
+  Wallet _wallet;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _wallet = widget.wallet;
+  }
+
+  @override
+  void didUpdateWidget(covariant SelectWalletAccountScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    _wallet = widget.wallet;
+  }
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Select wallet',
-          style: TextStyle(color: Colors.black),
+        leadingWidth: 70.0,
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.grey[900],
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0))),
+        leading: TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Back',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+              backgroundColor: Colors.transparent,
+            )
+        ),
+        title: Text('Select Wallet',
+            style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+                fontSize: 15.0)
         ),
       ),
       body: Column(
@@ -23,9 +74,9 @@ class SelectWalletAccountScreen extends StatelessWidget {
           Padding(
             child: Text(
               'Included in Total',
-              style: TextStyle(color: Colors.black, fontSize: 15),
+              style: TextStyle(color: Colors.white70, fontSize: 15, fontFamily: 'Montserrat', fontWeight: FontWeight.w400),
             ),
-            padding: EdgeInsets.only(left: 10),
+            padding: EdgeInsets.fromLTRB(20, 25, 0, 8)
           ),
           Expanded(
             child: StreamBuilder<List<Wallet>>(
@@ -43,36 +94,51 @@ class SelectWalletAccountScreen extends StatelessWidget {
                         // IconData iconData = Icons.wallet_giftcard;
 
                         return Container(
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                           width: double.infinity,
                           decoration: BoxDecoration(
                               color: Colors.grey[900],
                               border: Border(
                                   top: BorderSide(
-                                    color: Colors.grey[900],
-                                    width: 1.0,
+                                    color: Colors.white12,
+                                    width: 0.5,
                                   ),
                                   bottom: BorderSide(
-                                    color: Colors.grey[900],
-                                    width: 1.0,
+                                    color: Colors.white12,
+                                    width: 0.5,
                                   ))),
                           child: ListTile(
+                            contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 0),
                             onTap: () {
+                              setState(() {
+                                _wallet = listWallet[index];
+                              });
+
                               Navigator.pop(context, listWallet[index]);
                             },
                             leading: Icon(
                               iconData,
                               color: Colors.white,
+                              size: 35.0
                             ),
                             title: Text(
                               listWallet[index].name,
-                              style: tsMain,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                             subtitle: Text(
                               listWallet[index].amount.toString(),
-                              style: tsChild,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
-                            // trailing: Icon(Icons.check, color: Colors.blue),
+                            trailing: listWallet[index] == _wallet ? Icon(Icons.check, color: Colors.blue) : null,
                           ),
                         );
                       });

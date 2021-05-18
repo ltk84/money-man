@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/categoryModel.dart';
@@ -250,23 +251,41 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               leading: Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
               title: TextFormField(
                 onTap: () async {
-                  DateTime now = DateTime.now();
-                  pickDate = await showDatePicker(
-                      context: context,
-                      initialDate: now,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2030));
+                  DatePicker.showDatePicker(context,
+                      currentTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+                      showTitleActions: true,
+                      onConfirm: (date) {
+                        if (date != null) {
+                          setState(() {
+                            pickDate = date;
+                          });
+                        }
+                      },
+                      locale: LocaleType.en,
+                      theme: DatePickerTheme(
+                        cancelStyle: TextStyle(color: Colors.white),
+                        doneStyle: TextStyle(color: Colors.white),
+                        itemStyle: TextStyle(color: Colors.white),
+                        backgroundColor: Colors.grey[900],
+                      )
+                  );
+                  // DateTime now = DateTime.now();
+                  // pickDate = await showDatePicker(
+                  //     context: context,
+                  //     initialDate: now,
+                  //     firstDate: DateTime(2000),
+                  //     lastDate: DateTime(2030));
 
-                  if (pickDate != null) {
-                    if (pickDate.day != now.day ||
-                        pickDate.month != now.month ||
-                        pickDate.year != now.year) {
-                      setState(() {
-                        pickDate = DateTime.tryParse(
-                            DateFormat('yyyy-MM-dd').format(pickDate));
-                      });
-                    }
-                  }
+                  // if (pickDate != null) {
+                  //   if (pickDate.day != now.day ||
+                  //       pickDate.month != now.month ||
+                  //       pickDate.year != now.year) {
+                  //     setState(() {
+                  //       pickDate = DateTime.tryParse(
+                  //           DateFormat('yyyy-MM-dd').format(pickDate));
+                  //     });
+                  //   }
+                  // }
                 },
                 readOnly: true,
                 style: TextStyle(
@@ -307,7 +326,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 wallet = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => SelectWalletAccountScreen()));
+                        builder: (_) => SelectWalletAccountScreen(wallet: wallet)));
               },
               leading: Icon(wallet == null
                   ? Icons.account_balance_wallet_rounded
