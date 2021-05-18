@@ -20,10 +20,10 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
 
   Wallet wallet = Wallet(
       id: '0',
-      name: 'defaultName',
+      name: 'newWallet',
       amount: 0,
-      currencyID: 'defaultID',
-      iconID: 'defaultID');
+      currencyID: 'USD',
+      iconID: '58666');
 
   @override
   Widget build(BuildContext context) {
@@ -287,7 +287,8 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           wallet.amount = val;
                         },
                         validator: (value) {
-                          return (value == null || int.tryParse(value) == null)
+                          return (value == null ||
+                                  double.tryParse(value) == null)
                               ? 'Do not use the @ char.'
                               : null;
                         },

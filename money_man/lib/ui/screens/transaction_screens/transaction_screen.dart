@@ -9,9 +9,11 @@ import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -129,10 +131,60 @@ class _TransactionScreen extends State<TransactionScreen>
                   tooltip: 'Notify',
                   onPressed: () {},
                 ),
-                IconButton(
-                  icon: const Icon(Icons.more_vert, color: Colors.grey),
-                  onPressed: () {},
-                ),
+                // IconButton(
+                //   icon: const Icon(Icons.more_vert, color: Colors.grey),
+                //   onPressed: () {},
+                // ),
+                PopupMenuButton(onSelected: (value) {
+                  print(value);
+                  if (value == 'Search for transaction') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => SearchTransactionScreen(
+                                  wallet: _wallet,
+                                )));
+                  }
+                }, itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                        value: 'Select time range',
+                        child: Text(
+                          'Select time range',
+                          style: TextStyle(color: Colors.black),
+                        )),
+                    PopupMenuItem(
+                        value: 'View by category',
+                        child: Text(
+                          'View by category',
+                          style: TextStyle(color: Colors.black),
+                        )),
+                    PopupMenuItem(
+                        value: 'Adjust Balance',
+                        child: Text(
+                          'Adjust Balance',
+                          style: TextStyle(color: Colors.black),
+                        )),
+                    PopupMenuItem(
+                        value: 'Transfer money',
+                        child: Text(
+                          'Transfer money',
+                          style: TextStyle(color: Colors.black),
+                        )),
+                    PopupMenuItem(
+                        value: 'Search for transaction',
+                        child: Text(
+                          'Search for transaction',
+                          style: TextStyle(color: Colors.black),
+                        )),
+                    PopupMenuItem(
+                        value: 'Synchronize',
+                        child: Text(
+                          'Synchronize',
+                          style: TextStyle(color: Colors.black),
+                        )),
+                  ];
+                })
               ],
             ),
             body: StreamBuilder<List<MyTransaction>>(
