@@ -81,7 +81,6 @@ class FirebaseFireStoreService {
         .snapshots()
         .map((event) => Wallet.fromMap(event.data()));
   }
-
   // add wallet
   Future addWallet(Wallet wallet) async {
     DocumentReference walletRef = users.doc(uid).collection('wallets').doc();
@@ -157,7 +156,6 @@ class FirebaseFireStoreService {
         .snapshots()
         .map(_walletFromSnapshot);
   }
-
   // get wallet by id
   Future<Wallet> getWalletByID(String id) async {
     return await users

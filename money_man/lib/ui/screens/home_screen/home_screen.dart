@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_man/ui/screens/account_screens/account_edit_information_screen.dart';
 //import 'package:money_man/ui/screens/account_screen/account_screen.dart';
 import 'package:money_man/ui/screens/planning_screen/planning_screen.dart';
 import 'package:money_man/core/models/walletModel.dart';
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
             AddTransactionScreen(),
             PlanningScreen(),
             AccountScreen(),
+
           ];
 
           return Scaffold(

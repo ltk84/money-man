@@ -78,7 +78,39 @@ class FirebaseAuthService {
       return e;
     }
   }
+  //đăng nhập tài khoản với số điện thoại
+  Future signInWithPhoneNumbers(String  _phoneNumber)  async
+  {
+    try {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: _phoneNumber,
+        timeout: const Duration(seconds: 60),
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await _auth.signInWithCredential(credential);
 
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          if (e.code == 'invalid-phone-number') {
+            print('The provided phone number is not valid.');
+          }
+        },
+        codeSent: (String verificationId, int resendToken) async {
+          String smsCode = '123456';
+          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+          await _auth.signInWithCredential(credential);
+        },
+        codeAutoRetrievalTimeout: (String verificationId) async {
+          print('Time out ');
+        },
+      );
+    } on FirebaseException catch (e) {
+      print(e.code);
+      return e.code;
+    } catch (e) {
+      print(e);
+      return e;
+    }
+  }
   // đăng nhập với tài khoản Google
   Future signInWithGoogleAccount() async {
     try {

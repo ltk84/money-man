@@ -3,8 +3,8 @@
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
-        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../../MoneyMan/gen" />
-        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../../MoneyMan/gen" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../gen" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../gen" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../../MoneyMan/AndroidManifest.xml" />
         <option name="RES_FOLDER_RELATIVE_PATH" value="/../../MoneyMan/res" />
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/../../MoneyMan/assets" />
