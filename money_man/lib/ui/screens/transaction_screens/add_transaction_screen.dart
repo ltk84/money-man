@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/categoryModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
@@ -188,10 +189,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               dense: true,
               //minVerticalPadding: 8,
                 onTap: () async {
-                  final selectCate = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => CategoriesTransactionScreen()));
+                  final selectCate = await showCupertinoModalBottomSheet(
+                      isDismissible: true,
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      builder: (context) => CategoriesTransactionScreen()
+                  );
                   if (selectCate != null) {
                     setState(() {
                       this.cate = selectCate;
@@ -203,10 +206,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     : Icon(Icons.ac_unit, color: Colors.white54, size: 28.0),
                 title: TextField(
                   onTap: () async {
-                    final selectCate = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => CategoriesTransactionScreen()));
+                    final selectCate = await showCupertinoModalBottomSheet(
+                        isDismissible: true,
+                        backgroundColor: Colors.grey[900],
+                        context: context,
+                        builder: (context) => CategoriesTransactionScreen()
+                    );
                     if (selectCate != null) {
                       setState(() {
                         this.cate = selectCate;
@@ -323,10 +328,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ListTile(
               dense: true,
               onTap: () async {
-                wallet = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => SelectWalletAccountScreen(wallet: wallet)));
+                // wallet = await Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (_) => SelectWalletAccountScreen(wallet: wallet)));
+                wallet = await showCupertinoModalBottomSheet(
+                    isDismissible: true,
+                    backgroundColor: Colors.grey[900],
+                    context: context,
+                    builder: (context) => SelectWalletAccountScreen(wallet: wallet));
               },
               leading: Icon(wallet == null
                   ? Icons.account_balance_wallet_rounded
@@ -355,10 +365,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     ),
                     hintText: wallet == null ? 'Select wallet' : wallet.name),
                 onTap: () async {
-                  wallet = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => SelectWalletAccountScreen()));
+                  wallet = await showCupertinoModalBottomSheet(
+                      isDismissible: true,
+                      backgroundColor: Colors.grey[900],
+                      context: context,
+                      builder: (context) => SelectWalletAccountScreen(wallet: wallet));
                   setState(() {});
                 },
               ),

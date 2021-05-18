@@ -13,7 +13,7 @@ class SelectWalletAccountScreen extends StatefulWidget {
 }
 
 class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
-  Wallet _wallet;
+  dynamic _wallet;
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
                 topRight: Radius.circular(20.0))),
         leading: TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(_wallet);
             },
             child: const Text(
               'Back',
@@ -68,83 +68,86 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
                 fontSize: 15.0)
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            child: Text(
-              'Included in Total',
-              style: TextStyle(color: Colors.white70, fontSize: 15, fontFamily: 'Montserrat', fontWeight: FontWeight.w400),
+      body: Container(
+        color: Colors.black26,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              child: Text(
+                'Included in Total',
+                style: TextStyle(color: Colors.white70, fontSize: 15, fontFamily: 'Montserrat', fontWeight: FontWeight.w400),
+              ),
+              padding: EdgeInsets.fromLTRB(20, 25, 0, 8)
             ),
-            padding: EdgeInsets.fromLTRB(20, 25, 0, 8)
-          ),
-          Expanded(
-            child: StreamBuilder<List<Wallet>>(
-                stream: _firestore.walletStream,
-                builder: (context, snapshot) {
-                  final listWallet = snapshot.data ?? [];
-                  listWallet.removeWhere((element) => element.id == 'Total');
-                  print('stream ' + listWallet.length.toString());
-                  return ListView.builder(
-                      itemCount: listWallet.length,
-                      itemBuilder: (context, index) {
-                        IconData iconData = IconData(
-                            int.tryParse(listWallet[index].iconID),
-                            fontFamily: 'MaterialIcons');
-                        // IconData iconData = Icons.wallet_giftcard;
+            Expanded(
+              child: StreamBuilder<List<Wallet>>(
+                  stream: _firestore.walletStream,
+                  builder: (context, snapshot) {
+                    final listWallet = snapshot.data ?? [];
+                    listWallet.removeWhere((element) => element.id == 'Total');
+                    print('stream ' + listWallet.length.toString());
+                    return ListView.builder(
+                        itemCount: listWallet.length,
+                        itemBuilder: (context, index) {
+                          IconData iconData = IconData(
+                              int.tryParse(listWallet[index].iconID),
+                              fontFamily: 'MaterialIcons');
+                          // IconData iconData = Icons.wallet_giftcard;
 
-                        return Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[900],
-                              border: Border(
-                                  top: BorderSide(
-                                    color: Colors.white12,
-                                    width: 0.5,
-                                  ),
-                                  bottom: BorderSide(
-                                    color: Colors.white12,
-                                    width: 0.5,
-                                  ))),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 0),
-                            onTap: () {
-                              setState(() {
-                                _wallet = listWallet[index];
-                              });
+                          return Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[900],
+                                border: Border(
+                                    top: BorderSide(
+                                      color: Colors.white12,
+                                      width: 0.5,
+                                    ),
+                                    bottom: BorderSide(
+                                      color: Colors.white12,
+                                      width: 0.5,
+                                    ))),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+                              onTap: () {
+                                setState(() {
+                                  _wallet = listWallet[index];
+                                });
 
-                              Navigator.pop(context, listWallet[index]);
-                            },
-                            leading: Icon(
-                              iconData,
-                              color: Colors.white,
-                              size: 35.0
-                            ),
-                            title: Text(
-                              listWallet[index].name,
-                              style: TextStyle(
+                                Navigator.pop(context, listWallet[index]);
+                              },
+                              leading: Icon(
+                                iconData,
                                 color: Colors.white,
-                                fontFamily: 'Montserrat',
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w700,
+                                size: 35.0
                               ),
-                            ),
-                            subtitle: Text(
-                              listWallet[index].amount.toString(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w400,
+                              title: Text(
+                                listWallet[index].name,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
+                              subtitle: Text(
+                                listWallet[index].amount.toString(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              trailing: (_wallet != null && _wallet.name == listWallet[index].name) ? Icon(Icons.check, color: Colors.blue) : null,
                             ),
-                            trailing: listWallet[index] == _wallet ? Icon(Icons.check, color: Colors.blue) : null,
-                          ),
-                        );
-                      });
-                }),
-          ),
-        ],
+                          );
+                        });
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }
