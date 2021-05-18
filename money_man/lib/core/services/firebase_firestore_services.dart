@@ -242,6 +242,82 @@ class FirebaseFireStoreService {
         .update(transaction.toMap());
   }
 
+  // Query transaction by category
+  Future queryTransationByCategory(String searhPattern, Wallet wallet) async {
+    List<List<String>> cateName = [[]];
+    int index = 0;
+    await categories
+        .where('searchIndex', arrayContainsAny: [searhPattern])
+        .get()
+        .then((value) => value.docs.map((e) {
+              MyCategory a = MyCategory.fromMap(e.data());
+              // print(a.name);
+              if (cateName[index].length == 10) {
+                cateName.add([]);
+                index++;
+              }
+              cateName[index].add(a.name);
+            }).toList());
+
+    print(cateName[1]);
+
+    List<MyTransaction> transList = [];
+    for (int i = 0; i < cateName.length; i++) {
+      await users
+          .doc(uid)
+          .collection('wallets')
+          .doc(wallet.id)
+          .collection('transactions')
+          .where('category.name', arrayContainsAny: ['Award', 'Repayment'])
+          .get()
+          .then((value) {
+            print(value.docs.length);
+          });
+    }
+  }
+
+  // void setup() async {
+  //   List<String> cateName = [];
+  //   List<String> idList = [];
+  //   await categories.get().then((value) {
+  //     value.docs.forEach((element) {
+  //       idList.add(element.id);
+  //       cateName.add(element.get('name'));
+  //     });
+  //   });
+
+  //   List<List<String>> result = [[]];
+  //   List<List<String>> single = [[]];
+  //   int index = 0;
+
+  //   for (var name in cateName) {
+  //     String total = '';
+  //     for (int i = 0; i < name.length; i++) {
+  //       String k = name[i].toLowerCase();
+  //       total += k;
+  //       total = total.toLowerCase();
+  //       result[index].add(total);
+  //       if (!single[index].contains(k)) single[index].add(k);
+  //     }
+  //     result.add([]);
+  //     single.add([]);
+  //     result[index].addAll(single[index]);
+  //     index++;
+  //   }
+
+  //   // print(result[0]);
+
+  //   // print(idList);
+  //   for (int i = 0; i < idList.length; i++) {
+  //     setUp2(idList[i], result[i]);
+  //   }
+  //   // setUp2('2Gx7qrHpF1LrIQP89sIU', result[1]);
+  // }
+
+  // void setUp2(String id, List<String> list) async {
+  //   await categories.doc(id).update({'searchIndex': list});
+  // }
+
   // TRANSACTION END//
 
   // CATERGORY START//

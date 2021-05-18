@@ -22,8 +22,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _email;
   String _password;
   bool isObcure = true;
+  bool isObcureSub = true;
   bool show = true;
+  bool showSub = true;
   Icon trailingIconPass = Icon(Icons.remove_red_eye);
+  Icon trailingIconPassSub = Icon(Icons.remove_red_eye);
   bool loading = false;
   String error = '';
 
@@ -333,11 +336,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               prefixIcon: Icon(Icons.security),
               labelText: 'Confirm Password',
               suffixIcon: IconButton(
-                icon: trailingIconPass,
+                icon: trailingIconPassSub,
                 onPressed: () => this.setState(() {
-                  isObcure = !isObcure;
-                  show = !show;
-                  trailingIconPass = Icon(show == true
+                  isObcureSub = !isObcureSub;
+                  showSub = !showSub;
+                  trailingIconPassSub = Icon(showSub == true
                       ? Icons.visibility_rounded
                       : Icons.visibility_off_rounded);
                 }),
@@ -346,7 +349,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             autocorrect: false,
-            obscureText: isObcure,
+            obscureText: isObcureSub,
           ),
         ),
       ],
