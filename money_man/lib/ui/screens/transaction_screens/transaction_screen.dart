@@ -2,21 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
-import 'package:money_man/core/models/categoryModel.dart';
-import 'package:money_man/core/models/test.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
-import 'package:money_man/ui/screens/transaction_screens/transaction_detail_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TransactionScreen extends StatefulWidget {
   Wallet currentWallet;
@@ -201,7 +197,7 @@ class _TransactionScreen extends State<TransactionScreen>
                           element.date.year == int.parse(chooseTime[1]))
                       .toList();
 
-                  List<DateTime> a = [];
+                  List<DateTime> dateInChoosenTime = [];
 
                   double totalInCome = 0;
                   double totalOutCome = 0;
@@ -209,7 +205,8 @@ class _TransactionScreen extends State<TransactionScreen>
 
                   _transactionList.sort((a, b) => b.date.compareTo(a.date));
                   _transactionList.forEach((element) {
-                    if (!a.contains(element.date)) a.add(element.date);
+                    if (!dateInChoosenTime.contains(element.date))
+                      dateInChoosenTime.add(element.date);
                     if (element.category.type == 'expense')
                       totalOutCome += element.amount;
                     else
@@ -218,11 +215,12 @@ class _TransactionScreen extends State<TransactionScreen>
                   total = totalInCome - totalOutCome;
 
                   // a.map((e) => print(e)).toList();
-                  List<List<MyTransaction>> x = [];
-                  a.forEach((date) {
+                  List<List<MyTransaction>> transactionListSortByDate = [];
+                  dateInChoosenTime.forEach((date) {
+                    print(date);
                     final b = _transactionList
                         .where((element) => element.date.compareTo(date) == 0);
-                    x.add(b.toList());
+                    transactionListSortByDate.add(b.toList());
                   });
 
                   // x.map((e) => e.map((k) => print(k.id)).toList()).toList();
@@ -237,10 +235,11 @@ class _TransactionScreen extends State<TransactionScreen>
                             //primary: false,
                             shrinkWrap: true,
                             // itemCount: TRANSACTION_DATA.length + 1,
-                            itemCount: x.length,
+                            itemCount: transactionListSortByDate.length,
                             itemBuilder: (context, xIndex) {
                               double totalAmountInDay = 0;
-                              x[xIndex].forEach((element) {
+                              transactionListSortByDate[xIndex]
+                                  .forEach((element) {
                                 if (element.category.type == 'expense')
                                   totalAmountInDay -= element.amount;
                                 else
@@ -252,10 +251,12 @@ class _TransactionScreen extends State<TransactionScreen>
                                       children: [
                                         buildHeader(
                                             totalInCome, totalOutCome, total),
-                                        buildBottom(x, xIndex, totalAmountInDay)
+                                        buildBottom(transactionListSortByDate,
+                                            xIndex, totalAmountInDay)
                                       ],
                                     )
-                                  : buildBottom(x, xIndex, totalAmountInDay);
+                                  : buildBottom(transactionListSortByDate,
+                                      xIndex, totalAmountInDay);
                             }),
                       );
                     }).toList(),

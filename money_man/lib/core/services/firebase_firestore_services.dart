@@ -179,6 +179,11 @@ class FirebaseFireStoreService {
         .then((value) => print('transaction added!'))
         .catchError((error) => print(error));
 
+    // update searchList để sau này dùng cho việc search transaction
+    List<String> searchList = splitNumber(transaction.amount.toInt());
+    await transactionRef
+        .update({'amountSearch': FieldValue.arrayUnion(searchList)});
+
     // Update amount của wallet
     if (transaction.category.type == 'expense')
       wallet.amount -= transaction.amount;
@@ -188,6 +193,18 @@ class FirebaseFireStoreService {
     // udpate wallet trong list và wallet đang được chọn
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
+  }
+
+  List<String> splitNumber(int number) {
+    String strNum = number.toString();
+    List<String> list = [];
+    String total = '';
+    for (int i = 0; i < strNum.length; i++) {
+      String char = strNum[i];
+      total += char;
+      list.add(total);
+    }
+    return list;
   }
 
   // stream đến transaction của wallet đang được chọn
@@ -232,48 +249,113 @@ class FirebaseFireStoreService {
   }
 
   // update transaction
-  Future updateTransaction(MyTransaction transaction, String walletId) async {
-    await users
+  Future updateTransaction(MyTransaction transaction, Wallet wallet) async {
+    // Lấy reference đến collection transactions
+    CollectionReference transactionRef = users
         .doc(uid)
         .collection('wallets')
-        .doc(walletId)
-        .collection('transactions')
+        .doc(wallet.id)
+        .collection('transactions');
+
+    // Lấy transaction cũ
+    MyTransaction oldTransaction;
+    await transactionRef.doc(transaction.id).get().then((value) {
+      oldTransaction = MyTransaction.fromMap(value.data());
+    });
+
+    // Tính toán để lấy lại amount cũ của ví
+    if (oldTransaction.category.type == 'expense')
+      wallet.amount += oldTransaction.amount;
+    else
+      wallet.amount -= oldTransaction.amount;
+
+    // Tính toán lấy amount mới của ví
+    if (transaction.category.type == 'expense')
+      wallet.amount -= transaction.amount;
+    else
+      wallet.amount += transaction.amount;
+
+    // update transaction
+    await transactionRef.doc(transaction.id).update(transaction.toMap());
+
+    // update searchList để sau này dùng cho việc search transaction
+    List<String> searchList = splitNumber(transaction.amount.toInt());
+    await transactionRef
         .doc(transaction.id)
-        .update(transaction.toMap());
+        .update({'amountSearch': FieldValue.arrayUnion(searchList)});
+
+    // update ví trong list và ví đang được chọn
+    await updateWallet(wallet);
+    await updateSelectedWallet(wallet.id);
   }
 
   // Query transaction by category
-  Future queryTransationByCategory(String searhPattern, Wallet wallet) async {
-    List<List<String>> cateName = [[]];
-    int index = 0;
-    await categories
-        .where('searchIndex', arrayContainsAny: [searhPattern])
-        .get()
-        .then((value) => value.docs.map((e) {
-              MyCategory a = MyCategory.fromMap(e.data());
-              // print(a.name);
-              if (cateName[index].length == 10) {
-                cateName.add([]);
-                index++;
-              }
-              cateName[index].add(a.name);
-            }).toList());
+  Future<List<MyTransaction>> queryTransationByCategory(
+      String searchPattern, Wallet wallet) async {
+    double number = double.tryParse(searchPattern);
+    List<MyTransaction> listTrans = [];
 
-    print(cateName[1]);
-
-    List<MyTransaction> transList = [];
-    for (int i = 0; i < cateName.length; i++) {
+    // trường hợp search bằng số
+    if (number != null) {
+      int intNum = number.toInt();
       await users
           .doc(uid)
           .collection('wallets')
           .doc(wallet.id)
           .collection('transactions')
-          .where('category.name', arrayContainsAny: ['Award', 'Repayment'])
+          .where('amountSearch', arrayContainsAny: [intNum.toString()])
           .get()
           .then((value) {
-            print(value.docs.length);
+            if (value.docs.isNotEmpty) {
+              value.docs.forEach((element) {
+                MyTransaction trans = MyTransaction.fromMap(element.data());
+                if (!listTrans.contains(trans)) listTrans.add(trans);
+              });
+            }
           });
+    } else {
+      // trường hợp tìm theo category
+      searchPattern = searchPattern.toLowerCase();
+      List<List<String>> cateName = [[]];
+      int index = 0;
+
+      // dựa trên searchPattern để tìm kiếm category thích hợp trong collection categories
+      await categories
+          .where('searchIndex', arrayContainsAny: [searchPattern])
+          .get()
+          .then((value) => value.docs.map((e) {
+                MyCategory a = MyCategory.fromMap(e.data());
+                // print(a.name);
+                if (cateName[index].length == 10) {
+                  cateName.add([]);
+                  index++;
+                }
+                cateName[index].add(a.name);
+              }).toList());
+
+      // Dựa trên list categories ở trên để tìm kiếm các transaction thỏa điều kiện
+
+      for (int i = 0; i < cateName.length; i++) {
+        for (int j = 0; j < cateName[i].length; j++)
+          await users
+              .doc(uid)
+              .collection('wallets')
+              .doc(wallet.id)
+              .collection('transactions')
+              .where('category.name', isEqualTo: cateName[i][j])
+              .get()
+              .then((value) {
+            if (value.docs.isNotEmpty) {
+              value.docs.forEach((element) {
+                MyTransaction trans = MyTransaction.fromMap(element.data());
+                if (!listTrans.contains(trans)) listTrans.add(trans);
+              });
+            }
+          });
+      }
     }
+    print(listTrans.length);
+    return listTrans;
   }
 
   // void setup() async {
