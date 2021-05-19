@@ -57,6 +57,7 @@ class _IconPickerState extends State<IconPicker> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 color: Colors.black26,
                 child: GridView.builder(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -64,11 +65,16 @@ class _IconPickerState extends State<IconPicker> {
                     ),
                     itemCount: listIconURLs.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: SuperIcon(
-                          listIconURLs[index],
-                          size: 20.0,
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop(listIconURLs[index]);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10.0),
+                          child: SuperIcon(
+                            listIconURLs[index],
+                            size: 20.0,
+                          ),
                         ),
                       );
                     }
