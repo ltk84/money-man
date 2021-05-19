@@ -14,7 +14,6 @@ class SuperIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.yellow,
       width: size,
       height: size,
       child: Center(

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -15,69 +16,70 @@ class _IconPickerState extends State<IconPicker> {
   @override
   Widget build(BuildContext context) {
     print("build 1");
-    return FutureBuilder(
-      future: getListIcon(),
-      builder: (context, snapshot) {
-        print(snapshot.connectionState.toString());
-        print(listIconURLs.length.toString());
-        if (snapshot.connectionState == ConnectionState.done) {
-          return Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                leadingWidth: 70.0,
-                centerTitle: true,
-                elevation: 0,
-                backgroundColor: Colors.grey[900],
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0))),
-                leading: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Back',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    style: TextButton.styleFrom(
-                      primary: Colors.white,
-                      backgroundColor: Colors.transparent,
-                    )
-                ),
-                title: Text('Icon Picker',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.0)
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          leadingWidth: 70.0,
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.grey[900],
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0))),
+          leading: TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Back',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              body: Container(
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.transparent,
+              )
+          ),
+          title: Text('Icon Picker',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.0)
+          ),
+        ),
+        body: FutureBuilder(
+          future: getListIcon(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Container(
                 color: Colors.black26,
                 child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 6,
-                  ),
-                  itemCount: listIconURLs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return SuperIcon(
-                      listIconURLs[index],
-                      size: 20.0,
-                    );
-                  }
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 6,
+                    ),
+                    itemCount: listIconURLs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        padding: EdgeInsets.all(10.0),
+                        child: SuperIcon(
+                          listIconURLs[index],
+                          size: 20.0,
+                        ),
+                      );
+                    }
                 ),
-              )
-          );
-        }
-        else {
-          return Center(child: Text('Loading'));
-        }
-      }
+              );
+            }
+            else {
+              return Center(child: Text('Loading'));
+            }
+          }
+        )
     );
   }
 
