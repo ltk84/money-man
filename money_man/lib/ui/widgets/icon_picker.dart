@@ -65,16 +65,18 @@ class _IconPickerState extends State<IconPicker> {
                     ),
                     itemCount: listIconURLs.length,
                     itemBuilder: (BuildContext context, int index) {
+                      Widget icon = SuperIcon(
+                        listIconURLs[index],
+                        size: 20.0,
+                      );
+
                       return GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pop(listIconURLs[index]);
+                          Navigator.of(context).pop(icon);
                         },
                         child: Container(
                           padding: EdgeInsets.all(10.0),
-                          child: SuperIcon(
-                            listIconURLs[index],
-                            size: 20.0,
-                          ),
+                          child: icon
                         ),
                       );
                     }
@@ -109,45 +111,3 @@ class _IconPickerState extends State<IconPicker> {
     return iconURL;
   }
 }
-
-// class MyIcon extends StatefulWidget {
-//   final refIcon;
-//   const MyIcon({Key key, @required this.refIcon}) : super(key: key);
-//
-//   @override
-//   _MyIconState createState() => _MyIconState();
-// }
-//
-// class _MyIconState extends State<MyIcon> {
-//   String urlIconPath;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     print("build 2");
-//     return FutureBuilder(
-//       future: getIcon(),
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.done){
-//           return SuperIcon(
-//             urlIconPath,
-//             size: 30.0,
-//           );
-//         }
-//         else {
-//           return Container(
-//               width: 30.0,
-//               height: 30.0,
-//               child: Center(
-//                   child: Icon(Icons.error, color: Colors.red)
-//               )
-//           );
-//         }
-//       }
-//     );
-//   }
-//
-//   Future<void> getIcon() async {
-//     var url = await widget.refIcon.getDownloadURL();
-//     urlIconPath = url;
-//   }
-// }
