@@ -25,17 +25,30 @@ class _TransactionDetailState extends State<TransactionDetail> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: secondaryColor,
+      backgroundColor: Colors.black,
       appBar: AppBar(
+        leadingWidth: 250,
         elevation: 0,
-        backgroundColor: primaryColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_outlined, color: textColor),
+        backgroundColor: Colors.black,
+        leading: TextButton(
+          child: Row(
+            children: [
+              const Icon(Icons.arrow_back_ios_outlined, color: Colors.white, size: 16.0),
+              SizedBox(width: 8.0),
+              const Text('Transactions',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  color: Colors.white,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w500,
+                )
+              ),
+            ],
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Transactions', style: tsAppBar),
         actions: <Widget>[
           TextButton(
               onPressed: () async {
@@ -50,22 +63,32 @@ class _TransactionDetailState extends State<TransactionDetail> {
                   widget.transaction = updatedTrans;
                 });
               },
-              child: const Text('Edit', style: tsAppBar),
-              style: TextButton.styleFrom(
-                primary: textColor,
-                backgroundColor: Colors.transparent,
-              )),
+              child: const Text('Edit', style: TextStyle(
+                fontFamily: 'Montserrat',
+                color: Colors.white,
+                fontSize: 15.0,
+                fontWeight: FontWeight.w500,
+              )
+              ),
+          ),
         ],
       ),
       body: Column(
         children: [
           Container(
             decoration: BoxDecoration(
+                color: Colors.grey[900],
                 border: Border(
                     bottom: BorderSide(
-              color: Colors.black,
-              width: 1.0,
-            ))),
+                    color: Colors.white12,
+                    width: 0.5,
+                  ),
+                    top: BorderSide(
+                      color: Colors.white12,
+                      width: 0.5,
+                    )
+                )
+            ),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -75,7 +98,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: Icon(Icons.local_pizza, size: 70),
+                        child: Icon(Icons.local_pizza, size: 70, color: Colors.white,),
                       ),
                       Expanded(
                         flex: 3,
@@ -89,7 +112,9 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                     fontFamily: 'Montserrat',
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700,
-                                    height: 1.5),
+                                    height: 1.5,
+                                    color: Colors.white,
+                                ),
                               ),
                             ),
                             Align(
@@ -100,9 +125,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                       : widget.transaction.note,
                                   style: TextStyle(
                                       fontFamily: 'Montserrat',
-                                      fontSize: 15,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w400,
-                                      height: 1.5)),
+                                      height: 1.5,
+                                      color: widget.transaction.note == '' ?  Colors.grey[600] : Colors.white,
+                                  )
+                              ),
                             ),
                             Align(
                                 alignment: Alignment.centerLeft,
@@ -112,14 +140,18 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                         fontFamily: 'Montserrat',
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
-                                        height: 1.5))),
+                                        height: 1.5,
+                                        color: Colors.white,
+                                    )
+                                )
+                            ),
                           ],
                         ),
                       )
                     ],
                   ),
                   Divider(
-                      color: Colors.black,
+                      color: Colors.white12,
                       thickness: 0.5,
                       indent: 15.0,
                       endIndent: 15.0,
@@ -128,13 +160,20 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                          flex: 1, child: Icon(Icons.calendar_today_rounded)),
+                          flex: 1, child: Icon(Icons.calendar_today_rounded, color: Colors.grey[500],)
+                      ),
                       Expanded(
                           flex: 3,
                           child: Text(
                               DateFormat('EEEE, dd-MM-yyyy')
                                   .format(widget.transaction.date),
-                              style: tsRegular)),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: ' Montserrat',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15.0)
+                          )
+                      ),
                     ],
                   ),
                   SizedBox(height: 10),
@@ -144,10 +183,16 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       Expanded(
                           flex: 1,
                           child: Icon(IconData(int.parse(widget.wallet.iconID),
-                              fontFamily: 'MaterialIcons'))),
+                              fontFamily: 'MaterialIcons'), color: Colors.grey[500],)),
                       Expanded(
                           flex: 3,
-                          child: Text(widget.wallet.name, style: tsRegular)),
+                          child: Text(widget.wallet.name, style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: ' Montserrat',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15.0)
+                          )
+                      ),
                     ],
                   )
                 ],
@@ -160,15 +205,18 @@ class _TransactionDetailState extends State<TransactionDetail> {
           Container(
               width: double.infinity,
               decoration: BoxDecoration(
+                  color: Colors.grey[900],
                   border: Border(
-                      top: BorderSide(
-                        color: Colors.black,
-                        width: 1.0,
-                      ),
                       bottom: BorderSide(
-                        color: Colors.black,
-                        width: 1.0,
-                      ))),
+                        color: Colors.white12,
+                        width: 0.5,
+                      ),
+                      top: BorderSide(
+                        color: Colors.white12,
+                        width: 0.5,
+                      )
+                  )
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -187,7 +235,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                            flex: 1, child: Icon(Icons.local_pizza, size: 35)),
+                            flex: 1, child: Icon(Icons.local_pizza, size: 35, color: Colors.white)),
                         Expanded(
                           flex: 6,
                           child: Column(
@@ -202,11 +250,19 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                       children: [
                                         Text(
                                           widget.transaction.category.name,
-                                          style: tsMainUnEdited,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15.0),
                                         ),
                                         Text(
                                           widget.transaction.amount.toString(),
-                                          style: tsChildUnEdited,
+                                          style: TextStyle(
+                                              color: Colors.lightGreenAccent,
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 13.0),
                                         ),
                                       ],
                                     ),
@@ -248,40 +304,59 @@ class _TransactionDetailState extends State<TransactionDetail> {
             height: 20,
           ),
           Container(
-              height: 33,
+              margin: EdgeInsets.symmetric(horizontal: 20.0),
+              height: 40,
               width: double.infinity,
-              decoration: BoxDecoration(
-                  border: Border(
-                      top: BorderSide(
-                        color: Colors.black,
-                        width: 1.0,
-                      ),
-                      bottom: BorderSide(
-                        color: Colors.black,
-                        width: 1.0,
-                      ))),
+              // decoration: BoxDecoration(
+              //     border: Border(
+              //         top: BorderSide(
+              //           color: Colors.black,
+              //           width: 1.0,
+              //         ),
+              //         bottom: BorderSide(
+              //           color: Colors.black,
+              //           width: 1.0,
+              //         ))),
               child: TextButton(
                 onPressed: () {},
-                child: Text('Share', style: tsButton),
+                child: Text('Share', style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(highlight)),
-              )),
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) return Colors.white;
+                      return Colors.blueAccent; // Use the component's default.
+                    },
+                  ),
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) return Colors.blueAccent;
+                      return Colors.white; // Use the component's default.
+                    },
+                  ),
+                ),
+              )
+          ),
           SizedBox(
             height: 20,
           ),
           Container(
-              height: 33,
+              margin: EdgeInsets.symmetric(horizontal: 20.0),
+              height: 40,
               width: double.infinity,
-              decoration: BoxDecoration(
-                  border: Border(
-                      top: BorderSide(
-                        color: Colors.black,
-                        width: 1.0,
-                      ),
-                      bottom: BorderSide(
-                        color: Colors.black,
-                        width: 1.0,
-                      ))),
+              // decoration: BoxDecoration(
+              //     border: Border(
+              //         top: BorderSide(
+              //           color: Colors.black,
+              //           width: 1.0,
+              //         ),
+              //         bottom: BorderSide(
+              //           color: Colors.black,
+              //           width: 1.0,
+              //         ))),
               child: TextButton(
                 onPressed: () async {
                   await showDialog(
@@ -291,7 +366,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         return AlertDialog(
                           title: Text(
                             'Delete this transaction?',
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           actions: [
                             FlatButton(
@@ -312,9 +391,25 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         );
                       });
                 },
-                child: Text('Delete transaction', style: tsButton),
+                child: Text('Delete transaction', style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w600,
+                  )
+                ),
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(warning)),
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) return Colors.white;
+                      return Colors.red; // Use the component's default.
+                    },
+                  ),
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) return Colors.red;
+                      return Colors.white; // Use the component's default.
+                    },
+                  ),
+                ),
               )),
         ],
       ),
