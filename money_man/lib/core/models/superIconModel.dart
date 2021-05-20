@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SuperIcon extends StatelessWidget {
-  final String svgAsset;
+  final String iconPath;
   final double size;
 
-  const SuperIcon(
-      this.svgAsset, {
+  const SuperIcon({
         Key key,
+        @required this.iconPath,
         @required this.size,
       }) : super(key: key);
 
@@ -17,8 +17,8 @@ class SuperIcon extends StatelessWidget {
       width: size,
       height: size,
       child: Center(
-        child: SvgPicture.network(
-          svgAsset,
+        child: SvgPicture.asset(
+          iconPath,
           fit: BoxFit.contain,
         ),
       ),

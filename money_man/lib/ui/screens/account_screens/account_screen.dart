@@ -10,7 +10,6 @@ import 'package:money_man/ui/screens/categories_screens/categories_account_scree
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'account_detail_screen.dart';
-import 'package:money_man/ui/screens/test_screens/test.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart' as myIconPicker;
 
 class AccountScreen extends StatelessWidget {

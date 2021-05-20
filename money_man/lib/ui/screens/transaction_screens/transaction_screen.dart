@@ -12,6 +12,8 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
+import 'package:money_man/ui/style.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
@@ -499,12 +501,15 @@ class _TransactionScreen extends State<TransactionScreen>
                 onTap: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (_) => TransactionDetail(
+                      PageTransition(
+                          child: TransactionDetail(
                                 transaction: transListSortByDate[xIndex]
                                     [yIndex],
                                 wallet: widget.currentWallet,
-                              )));
+                              ),
+                          type: PageTransitionType.rightToLeft
+                      )
+                  );
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
