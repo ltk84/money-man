@@ -7,30 +7,31 @@ class IntroductionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Lorem ipsum'),
-          Container(
-            child: IntroductionSlide(),
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
-          //   child: Text(
-          //       'Lorem Ipsum is s hdard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop .'),
-          // ),
-          Container(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (_) => AccessScreen()));
-                },
-                child: Text('GET STARTED'),
-                style: TextButton.styleFrom(backgroundColor: Colors.black),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 5,
+                child: Container(
+                  color: Colors.white,
+                  child: IntroductionSlide(),
+                ),
               ),
-              alignment: Alignment.bottomCenter)
-        ],
-      ),
-    ));
+              Expanded(
+                flex: 1,
+                child: Container(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (_) => AccessScreen()));
+                      },
+                      child: Text('GET STARTED'),
+                      style: TextButton.styleFrom(backgroundColor: Colors.black),
+                    ),
+                ),
+              )
+            ],
+          ),
+        )
+    );
   }
 }

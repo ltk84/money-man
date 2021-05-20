@@ -14,58 +14,76 @@ class IntroductionSlide extends StatefulWidget {
 
 class _IntroductionSlideState extends State<IntroductionSlide> {
   dynamic imgList;
+  int _currentIndex = 0;
 
   Future _initImages() async {
-    // >> To get paths you need these 2 lines
     final manifestContent = await DefaultAssetBundle.of(context).loadString('AssetManifest.json');
 
     final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-    // >> To get paths you need these 2 lines
 
     final imagePaths =
     manifestMap.keys
         .where((String key) => key.contains('images/carousel/'))
         .where((String key) => key.contains('.svg'))
         .toList();
-    imgList = imagePaths;
+    setState(() {
+      imgList = imagePaths;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (imgList == null)
+      _initImages();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _initImages(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            print(imgList.toString());
-            return CarouselSlider(
-              items: imgList.map<Widget>((element) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                        color: Colors.transparent,
-                        child: SuperIcon(
-                          iconPath: element,
-                          size: 100.0,
-                        )
-                    );
-                  },
-                );
-              }).toList(),
-              options: CarouselOptions(
-                scrollPhysics: BouncingScrollPhysics(),
-                autoPlay: false,
-                aspectRatio: 2.0,
-                enlargeCenterPage: true,
-                enableInfiniteScroll: false,
+    return imgList != null ? Column(
+      children: [
+        CarouselSlider(
+          items: imgList.map<Widget>((element) {
+            return Container(
+                color: Colors.yellow,
+                child: SuperIcon(
+                  iconPath: element,
+                  size: 200.0,
+                )
+            );
+          }).toList(),
+          options: CarouselOptions(
+              scrollPhysics: BouncingScrollPhysics(),
+              autoPlay: false,
+              aspectRatio: 1.0,
+              enlargeCenterPage: true,
+              enableInfiniteScroll: false,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              }
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: imgList.map<Widget>((element) {
+            int index = imgList.indexOf(element);
+            return Container(
+              width: 8.0,
+              height: 8.0,
+              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _currentIndex == index
+                    ? Color.fromRGBO(0, 0, 0, 0.9)
+                    : Color.fromRGBO(0, 0, 0, 0.4),
               ),
             );
-          }
-          else {
-            return Center(
-              child: Text('Loading'),
-            );
-          }
-        }
-    );
+          }).toList(),
+        ),
+      ],
+    ) : Center(child: Text('Error'));
   }
 }
