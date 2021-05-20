@@ -14,16 +14,22 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 import 'custom_time_range.dart';
 
-class ShareScreen extends StatefulWidget{
+class ShareScreen extends StatefulWidget {
   Uint8List bytes1;
   Uint8List bytes2;
   Uint8List bytes3;
 
-  ShareScreen({Key key, @required this.bytes1, @required this.bytes2, @required this.bytes3}) : super(key: key);
+  ShareScreen(
+      {Key key,
+      @required this.bytes1,
+      @required this.bytes2,
+      @required this.bytes3})
+      : super(key: key);
   @override
-  ShareScreenState createState() =>  ShareScreenState();
+  ShareScreenState createState() => ShareScreenState();
 }
-class ShareScreenState extends State<ShareScreen>{
+
+class ShareScreenState extends State<ShareScreen> {
   Uint8List reportData1;
   Uint8List reportData2;
   Uint8List reportData3;
@@ -51,40 +57,39 @@ class ShareScreenState extends State<ShareScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black45,
-        appBar: AppBar(
-          leadingWidth: 70.0,
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.grey[900],
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0))),
-          title: Text('Share',
+      backgroundColor: Colors.black45,
+      appBar: AppBar(
+        leadingWidth: 70.0,
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.grey[900],
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0))),
+        title: Text('Share',
+            style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+                fontSize: 15.0)),
+        leading: TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Close',
               style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15.0)),
-          leading: TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Close',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                ),
+                color: Colors.white,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
               ),
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                backgroundColor: Colors.transparent,
-              )
-          ),
-        ),
+            ),
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+              backgroundColor: Colors.transparent,
+            )),
+      ),
       // body: ListView(
       //   scrollDirection: Axis.horizontal,
       //   children: [
@@ -94,52 +99,58 @@ class ShareScreenState extends State<ShareScreen>{
       //   ],
       // )
       body: Container(
-        margin: EdgeInsets.symmetric(vertical: 20.0),
-        child: Column(
-          children: [
-            Container(
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  scrollPhysics: BouncingScrollPhysics(),
-                  autoPlay: false,
-                  aspectRatio: 2.0,
-                  enlargeCenterPage: true,
-                  enableInfiniteScroll: false,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
+          margin: EdgeInsets.symmetric(vertical: 20.0),
+          child: Column(
+            children: [
+              Container(
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    scrollPhysics: BouncingScrollPhysics(),
+                    autoPlay: false,
+                    aspectRatio: 2.0,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: false,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
+                  ),
+                  items: [
+                    ImageFromUnit8List(reportData1),
+                    ImageFromUnit8List(reportData2),
+                    ImageFromUnit8List(reportData3),
+                  ],
                 ),
-                items: [
-                  ImageFromUnit8List(reportData1),
-                  ImageFromUnit8List(reportData2),
-                  ImageFromUnit8List(reportData3),
-                ],
               ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 50.0),
-              padding: EdgeInsets.symmetric(horizontal: 100.0),
-              child: TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) return Colors.white;
-                      return Colors.blueAccent; // Use the component's default.
-                    },
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 50.0),
+                padding: EdgeInsets.symmetric(horizontal: 100.0),
+                child: TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.white;
+                        return Colors
+                            .blueAccent; // Use the component's default.
+                      },
+                    ),
+                    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.blueAccent;
+                        return Colors.white; // Use the component's default.
+                      },
+                    ),
                   ),
-                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) return Colors.blueAccent;
-                      return Colors.white; // Use the component's default.
-                    },
-                  ),
-                ),
                   onPressed: () async {
                     final tempDir = await getTemporaryDirectory();
-                    final file = await new File('${tempDir.path}/image.jpg').create();
-                    var data = (_currentIndex == 0) ? reportData1 : ((_currentIndex == 1) ? reportData2 : reportData3);
+                    final file =
+                        await new File('${tempDir.path}/image.jpg').create();
+                    var data = (_currentIndex == 0)
+                        ? reportData1
+                        : ((_currentIndex == 1) ? reportData2 : reportData3);
                     file.writeAsBytesSync(data);
                     Share.shareFiles([file.path]);
                   },
@@ -147,7 +158,9 @@ class ShareScreenState extends State<ShareScreen>{
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Text('SHARE', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                        child: Text('SHARE',
+                            style: TextStyle(fontSize: 15),
+                            textAlign: TextAlign.center),
                         flex: 3,
                       ),
                       Expanded(
@@ -156,52 +169,62 @@ class ShareScreenState extends State<ShareScreen>{
                       ),
                     ],
                   ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 50.0),
-              padding: EdgeInsets.symmetric(horizontal: 100.0),
-              child: TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) return Colors.white;
-                      return Colors.green; // Use the component's default.
-                    },
-                  ),
-                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) return Colors.green;
-                      return Colors.white; // Use the component's default.
-                    },
-                  ),
-                ),
-                onPressed: () async {
-                  dynamic result = await ImageGallerySaver.saveImage(
-                      (_currentIndex == 0) ? reportData1 : ((_currentIndex == 1) ? reportData2 : reportData3),
-                      quality: 100,
-                      name: 'Report_' + (_currentIndex + 1).toString());
-                  if (result['isSuccess'])
-                    Alert(context: context, title: "Image has been saved").show();
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Text('SAVE', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
-                      flex: 3,
-                    ),
-                    Expanded(
-                      child: Icon(Icons.share),
-                      flex: 1,
-                    ),
-                  ],
                 ),
               ),
-            )
-          ],
-        )
-      ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 50.0),
+                padding: EdgeInsets.symmetric(horizontal: 100.0),
+                child: TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.white;
+                        return Colors.green; // Use the component's default.
+                      },
+                    ),
+                    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.green;
+                        return Colors.white; // Use the component's default.
+                      },
+                    ),
+                  ),
+                  onPressed: () async {
+                    dynamic result = await ImageGallerySaver.saveImage(
+                        (_currentIndex == 0)
+                            ? reportData1
+                            : ((_currentIndex == 1)
+                                ? reportData2
+                                : reportData3),
+                        quality: 100,
+                        name: 'Report_' + (_currentIndex + 1).toString());
+                    if (result['isSuccess'])
+                      Alert(context: context, title: "Image has been saved")
+                          .show();
+                    else
+                      Alert(context: context, title: "Error!").show();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text('SAVE',
+                            style: TextStyle(fontSize: 15),
+                            textAlign: TextAlign.center),
+                        flex: 3,
+                      ),
+                      Expanded(
+                        child: Icon(Icons.share),
+                        flex: 1,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          )),
     );
   }
 
