@@ -93,7 +93,7 @@ class _IconPickerState extends State<IconPicker> {
 
   Future<void> getListIcon() async {
     ListResult result =
-    await FirebaseStorage.instance.ref().listAll();
+    await FirebaseStorage.instance.ref().child('/icons/').listAll();
     List<String> URLResult = [];
     // result.items.forEach((element) {
     //   var iconURL = getIcon(element);
