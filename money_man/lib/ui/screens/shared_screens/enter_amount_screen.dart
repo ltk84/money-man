@@ -189,6 +189,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                                         amount: double.tryParse(listNumber[i]))
                                     .output
                                     .withoutFractionDigits;
+                                print(formatNumber);
                                 if (i != listNumber.length - 1) {
                                   finalString += formatNumber + listString[i];
                                 } else {

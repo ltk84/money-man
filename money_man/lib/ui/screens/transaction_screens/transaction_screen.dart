@@ -2,22 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/categoryModel.dart';
-import 'package:money_man/core/models/test.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
-import 'package:money_man/ui/screens/transaction_screens/transaction_detail_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TransactionScreen extends StatefulWidget {
   Wallet currentWallet;
@@ -41,6 +39,7 @@ class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
   Wallet _wallet;
+  bool viewByCategory = false;
 
   @override
   void initState() {
@@ -132,10 +131,6 @@ class _TransactionScreen extends State<TransactionScreen>
                   tooltip: 'Notify',
                   onPressed: () {},
                 ),
-                // IconButton(
-                //   icon: const Icon(Icons.more_vert, color: Colors.grey),
-                //   onPressed: () {},
-                // ),
                 PopupMenuButton(onSelected: (value) {
                   print(value);
                   if (value == 'Search for transaction') {
@@ -145,6 +140,10 @@ class _TransactionScreen extends State<TransactionScreen>
                             builder: (_) => SearchTransactionScreen(
                                   wallet: _wallet,
                                 )));
+                  } else if (value == 'change display') {
+                    setState(() {
+                      viewByCategory = !viewByCategory;
+                    });
                   }
                 }, itemBuilder: (context) {
                   return [
@@ -155,9 +154,11 @@ class _TransactionScreen extends State<TransactionScreen>
                           style: TextStyle(color: Colors.black),
                         )),
                     PopupMenuItem(
-                        value: 'View by category',
+                        value: 'change display',
                         child: Text(
-                          'View by category',
+                          viewByCategory
+                              ? 'View by transaction'
+                              : 'View by category',
                           style: TextStyle(color: Colors.black),
                         )),
                     PopupMenuItem(
@@ -202,70 +203,247 @@ class _TransactionScreen extends State<TransactionScreen>
                           element.date.year == int.parse(chooseTime[1]))
                       .toList();
 
-                  List<DateTime> a = [];
+                  List<DateTime> dateInChoosenTime = [];
+                  List<String> categoryInChoosenTime = [];
 
                   double totalInCome = 0;
                   double totalOutCome = 0;
                   double total = 0;
 
+                  List<List<MyTransaction>> transactionListSorted = [];
+
                   _transactionList.sort((a, b) => b.date.compareTo(a.date));
-                  _transactionList.forEach((element) {
-                    if (!a.contains(element.date)) a.add(element.date);
-                    if (element.category.type == 'expense')
-                      totalOutCome += element.amount;
-                    else
-                      totalInCome += element.amount;
-                  });
-                  total = totalInCome - totalOutCome;
 
-                  // a.map((e) => print(e)).toList();
-                  List<List<MyTransaction>> x = [];
-                  a.forEach((date) {
-                    final b = _transactionList
-                        .where((element) => element.date.compareTo(date) == 0);
-                    x.add(b.toList());
-                  });
+                  if (viewByCategory) {
+                    _transactionList.forEach((element) {
+                      if (!categoryInChoosenTime
+                          .contains(element.category.name))
+                        categoryInChoosenTime.add(element.category.name);
+                      if (element.category.type == 'expense')
+                        totalOutCome += element.amount;
+                      else
+                        totalInCome += element.amount;
+                    });
+                    total = totalInCome - totalOutCome;
 
-                  // x.map((e) => e.map((k) => print(k.id)).toList()).toList();
+                    categoryInChoosenTime.forEach((cate) {
+                      final b = _transactionList.where((element) =>
+                          element.category.name.compareTo(cate) == 0);
+                      transactionListSorted.add(b.toList());
+                    });
+                  } else {
+                    _transactionList.forEach((element) {
+                      if (!dateInChoosenTime.contains(element.date))
+                        dateInChoosenTime.add(element.date);
+                      if (element.category.type == 'expense')
+                        totalOutCome += element.amount;
+                      else
+                        totalInCome += element.amount;
+                    });
+                    total = totalInCome - totalOutCome;
+
+                    dateInChoosenTime.forEach((date) {
+                      final b = _transactionList.where(
+                          (element) => element.date.compareTo(date) == 0);
+                      transactionListSorted.add(b.toList());
+                    });
+                  }
 
                   return TabBarView(
                     controller: _tabController,
                     children: widget.myTabs.map((tab) {
-                      return Container(
-                        color: Colors.black,
-                        child: ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            //primary: false,
-                            shrinkWrap: true,
-                            // itemCount: TRANSACTION_DATA.length + 1,
-                            itemCount: x.length,
-                            itemBuilder: (context, xIndex) {
-                              double totalAmountInDay = 0;
-                              x[xIndex].forEach((element) {
-                                if (element.category.type == 'expense')
-                                  totalAmountInDay -= element.amount;
-                                else
-                                  totalAmountInDay += element.amount;
-                              });
-
-                              return xIndex == 0
-                                  ? Column(
-                                      children: [
-                                        buildHeader(
-                                            totalInCome, totalOutCome, total),
-                                        buildBottom(x, xIndex, totalAmountInDay)
-                                      ],
-                                    )
-                                  : buildBottom(x, xIndex, totalAmountInDay);
-                            }),
-                      );
+                      return viewByCategory == true
+                          ? buildDisplayTransactionByCategory(
+                              transactionListSorted,
+                              totalInCome,
+                              totalOutCome,
+                              total)
+                          : buildDisplayTransactionByDate(transactionListSorted,
+                              totalInCome, totalOutCome, total);
                     }).toList(),
                   );
                 })));
   }
 
-  Container buildBottom(
-      List<List<MyTransaction>> x, int xIndex, double totalAmountInDay) {
+  Container buildDisplayTransactionByCategory(
+      List<List<MyTransaction>> transactionListSortByCategory,
+      double totalInCome,
+      double totalOutCome,
+      double total) {
+    return Container(
+      color: Colors.black,
+      child: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: transactionListSortByCategory.length,
+          itemBuilder: (context, xIndex) {
+            double totalAmountInDay = 0;
+            transactionListSortByCategory[xIndex].forEach((element) {
+              if (element.category.type == 'expense')
+                totalAmountInDay -= element.amount;
+              else
+                totalAmountInDay += element.amount;
+            });
+
+            return xIndex == 0
+                ? Column(
+                    children: [
+                      buildHeader(totalInCome, totalOutCome, total),
+                      buildBottomViewByCategory(transactionListSortByCategory,
+                          xIndex, totalAmountInDay)
+                    ],
+                  )
+                : buildBottomViewByCategory(
+                    transactionListSortByCategory, xIndex, totalAmountInDay);
+          }),
+    );
+  }
+
+  Container buildDisplayTransactionByDate(
+      List<List<MyTransaction>> transactionListSortByDate,
+      double totalInCome,
+      double totalOutCome,
+      double total) {
+    return Container(
+      color: Colors.black,
+      child: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          //primary: false,
+          shrinkWrap: true,
+          // itemCount: TRANSACTION_DATA.length + 1,
+          itemCount: transactionListSortByDate.length,
+          itemBuilder: (context, xIndex) {
+            double totalAmountInDay = 0;
+            transactionListSortByDate[xIndex].forEach((element) {
+              if (element.category.type == 'expense')
+                totalAmountInDay -= element.amount;
+              else
+                totalAmountInDay += element.amount;
+            });
+
+            return xIndex == 0
+                ? Column(
+                    children: [
+                      buildHeader(totalInCome, totalOutCome, total),
+                      buildBottomViewByDate(
+                          transactionListSortByDate, xIndex, totalAmountInDay)
+                    ],
+                  )
+                : buildBottomViewByDate(
+                    transactionListSortByDate, xIndex, totalAmountInDay);
+          }),
+    );
+  }
+
+  Container buildBottomViewByCategory(
+      List<List<MyTransaction>> transListSortByCategory,
+      int xIndex,
+      double totalAmountInDay) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+      decoration: BoxDecoration(
+          color: Colors.grey[900],
+          border: Border(
+              bottom: BorderSide(
+                color: Colors.black,
+                width: 1.0,
+              ),
+              top: BorderSide(
+                color: Colors.black,
+                width: 1.0,
+              ))),
+      child: StickyHeader(
+        header: Container(
+          color: Colors.grey[900],
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
+          child: Row(
+            children: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                  child: Icon(Icons.ac_unit_rounded)),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
+                child: Text(
+                    transListSortByCategory[xIndex][0].category.name +
+                        '\n' +
+                        transListSortByCategory[xIndex].length.toString() +
+                        ' transactions',
+                    // 'hello',
+                    style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
+              ),
+              Expanded(
+                child: Text(totalAmountInDay.toString(),
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white)),
+              ),
+            ],
+          ),
+        ),
+        content: ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: transListSortByCategory[xIndex].length,
+            itemBuilder: (context, yIndex) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => TransactionDetail(
+                                transaction: transListSortByCategory[xIndex]
+                                    [yIndex],
+                                wallet: widget.currentWallet,
+                              )));
+                },
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                        child: Text(
+                            DateFormat("dd").format(
+                                transListSortByCategory[xIndex][yIndex].date),
+                            style:
+                                TextStyle(fontSize: 30.0, color: Colors.white)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
+                        child: Text(
+                            DateFormat("MMMM yyyy, EEEE").format(
+                                transListSortByCategory[xIndex][yIndex].date),
+                            style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ),
+                      Expanded(
+                        child: Text(
+                            transListSortByCategory[xIndex][yIndex]
+                                .amount
+                                .toString(),
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: transListSortByCategory[xIndex][yIndex]
+                                            .category
+                                            .type ==
+                                        'income'
+                                    ? Colors.green
+                                    : Colors.red[600])),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+      ),
+    );
+  }
+
+  Container buildBottomViewByDate(List<List<MyTransaction>> transListSortByDate,
+      int xIndex, double totalAmountInDay) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
@@ -287,16 +465,20 @@ class _TransactionScreen extends State<TransactionScreen>
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                child: Text(DateFormat("dd").format(x[xIndex][0].date),
+                child: Text(
+                    DateFormat("dd")
+                        .format(transListSortByDate[xIndex][0].date),
                     style: TextStyle(fontSize: 30.0, color: Colors.white)),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
                 child: Text(
-                    DateFormat("EEEE").format(x[xIndex][0].date).toString() +
+                    DateFormat("EEEE")
+                            .format(transListSortByDate[xIndex][0].date)
+                            .toString() +
                         '\n' +
                         DateFormat("MMMM yyyy")
-                            .format(x[xIndex][0].date)
+                            .format(transListSortByDate[xIndex][0].date)
                             .toString(),
                     // 'hello',
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
@@ -313,7 +495,7 @@ class _TransactionScreen extends State<TransactionScreen>
         content: ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: x[xIndex].length,
+            itemCount: transListSortByDate[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
                 onTap: () {
@@ -321,7 +503,8 @@ class _TransactionScreen extends State<TransactionScreen>
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                                transaction: x[xIndex][yIndex],
+                                transaction: transListSortByDate[xIndex]
+                                    [yIndex],
                                 wallet: widget.currentWallet,
                               ),
                           type: PageTransitionType.rightToLeft
@@ -339,21 +522,27 @@ class _TransactionScreen extends State<TransactionScreen>
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
-                        child: Text(x[xIndex][yIndex].category.name,
+                        child: Text(
+                            transListSortByDate[xIndex][yIndex].category.name,
                             style: TextStyle(
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white)),
                       ),
                       Expanded(
-                        child: Text(x[xIndex][yIndex].amount.toString(),
+                        child: Text(
+                            transListSortByDate[xIndex][yIndex]
+                                .amount
+                                .toString(),
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color:
-                                    x[xIndex][yIndex].category.type == 'income'
-                                        ? Colors.green
-                                        : Colors.red[600])),
+                                color: transListSortByDate[xIndex][yIndex]
+                                            .category
+                                            .type ==
+                                        'income'
+                                    ? Colors.green
+                                    : Colors.red[600])),
                       ),
                     ],
                   ),

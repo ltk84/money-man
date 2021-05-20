@@ -73,7 +73,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               onPressed: () async {
                 FocusScope.of(context).requestFocus(FocusNode());
                 await _firestore.updateTransaction(
-                    widget.transaction, widget.wallet.id);
+                    widget.transaction, widget.wallet);
                 Navigator.pop(context, widget.transaction);
               },
               child: const Text(
