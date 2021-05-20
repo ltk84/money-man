@@ -61,7 +61,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         minWidth: 300,
                         child: RaisedButton(
                             onPressed: () async {
-                              await checkSignInWithEmailOrPhone(_auth, context);
+                              await signInWithEmailAndPassword(_auth, context);
                             },
                             child: Text(
                               'LOGIN',
@@ -214,46 +214,6 @@ class _SignInScreenState extends State<SignInScreen> {
       return false;
     }
     return double.parse(s, (e) => null) != null;
-  }
-  //Kiểm tra người dùng đăng ký tài khoản bằng số điện thoại hay email
-  Future checkSignInWithEmailOrPhone( FirebaseAuthService _auth, BuildContext context)
-  {
-    if(isNumeric(_email))
-    {
-      signInWithPhoneNumbers(_auth, context);
-    }
-    else signInWithEmailAndPassword(_auth, context);
-  }
-  //đăng ký bằng số điện thoại
-  Future signInWithPhoneNumbers(
-      FirebaseAuthService _auth, BuildContext context) async {
-    if (_formKey.currentState.validate()) {
-      setState(() {
-        loading = true;
-      });
-      final res = await _auth.signInWithPhoneNumbers(_email);
-      if (res is String) {
-        setState(() {
-          loading = false;
-        });
-        String error = "";
-        switch (res) {
-          case 'wrong-password':
-            error = "Password is wrong";
-            break;
-          case 'user-disable':
-            error = "user is disable";
-            break;
-          case 'user-not-found':
-            error = "user not found";
-            break;
-          default:
-            error = res;
-        }
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error)));
-      }
-    }
   }
   Future signInWithEmailAndPassword(
       FirebaseAuthService _auth, BuildContext context) async {

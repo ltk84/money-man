@@ -1,14 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:money_man/ui/screens/introduction_screens/access_screen.dart';
 import '../../widgets/carousel_indicator.dart';
+class IntroductionScreen extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Introduction();
+  }
+}
+class Introduction extends StatefulWidget{
+  @override
+  _Introduction createState() => _Introduction();
+}
+class _Introduction extends State<Introduction> {
+  final double fontSizeText = 30;
+  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
+  int reachTop = 0;
+  int reachAppBar = 0;
+  // Phần này để check xem mình đã Scroll tới đâu trong ListView
+  ScrollController _controller = ScrollController();
+  _scrollListener() {
+    if (_controller.offset > 0) {
+      setState(() {
+        reachAppBar = 1;
+      });
+    }
+    else {
+      setState(() {
+        reachAppBar = 0;
+      });
+    }
+    if (_controller.offset >=  fontSizeText  - 5) {
+      setState(() {
+        reachTop = 1;
+      });
+    }
+    else {
+      setState(() {
+        reachTop = 0;
+      });
+    }
+  }
 
-class IntroductionScreen extends StatelessWidget {
+  @override
+  void initState() {
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: ListView(
+        //mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('Lorem ipsum'),
           Container(

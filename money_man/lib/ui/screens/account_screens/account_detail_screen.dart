@@ -154,7 +154,9 @@ class _TestState extends State<Test> {
                     children: [
                       CircleAvatar(
                         radius: 30.0,
-                        child: Text((_user.displayName != '' ||_user.displayName != null)?'Y':_user.displayName.substring(0,1)),
+                        child: Text((_user == null)?'':(_user.displayName != '' && _user.displayName != null)?
+                        _user.displayName.substring(0,1):'Y',
+                            style: TextStyle(fontSize: 25.0)),
                       ),
                       SizedBox(
                         height: 10,

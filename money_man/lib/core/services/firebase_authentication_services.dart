@@ -17,6 +17,7 @@ class FirebaseAuthService {
         print('User is signed in!');
       }
     });
+
     // trả về stream
     return _auth.authStateChanges();
   }
@@ -78,46 +79,14 @@ class FirebaseAuthService {
       return e;
     }
   }
-  //đăng nhập tài khoản với số điện thoại
-  Future signInWithPhoneNumbers(String  _phoneNumber)  async
-  {
-    try {
-      await _auth.verifyPhoneNumber(
-        phoneNumber: _phoneNumber,
-        timeout: const Duration(seconds: 60),
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await _auth.signInWithCredential(credential);
 
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          if (e.code == 'invalid-phone-number') {
-            print('The provided phone number is not valid.');
-          }
-        },
-        codeSent: (String verificationId, int resendToken) async {
-          String smsCode = '123456';
-          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
-          await _auth.signInWithCredential(credential);
-        },
-        codeAutoRetrievalTimeout: (String verificationId) async {
-          print('Time out ');
-        },
-      );
-    } on FirebaseException catch (e) {
-      print(e.code);
-      return e.code;
-    } catch (e) {
-      print(e);
-      return e;
-    }
-  }
   // đăng nhập với tài khoản Google
   Future signInWithGoogleAccount() async {
     try {
       final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      await googleUser.authentication;
 
       final GoogleAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -150,7 +119,7 @@ class FirebaseAuthService {
 
     // Create a credential from the access token
     final FacebookAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(result.token);
+    FacebookAuthProvider.credential(result.token);
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance
@@ -183,7 +152,7 @@ class FirebaseAuthService {
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         final credential =
-            FacebookAuthProvider.credential(result.accessToken.token);
+        FacebookAuthProvider.credential(result.accessToken.token);
         await _auth.signInWithCredential(credential);
         break;
       case FacebookLoginStatus.cancelledByUser:
@@ -192,4 +161,7 @@ class FirebaseAuthService {
         break;
     }
   }
+
+  // link acount with multiple provider
+  Future linkUserWithOtherProvider() async {}
 }

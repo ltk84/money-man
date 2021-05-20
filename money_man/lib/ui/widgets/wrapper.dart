@@ -18,8 +18,8 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     if (userSnapshot.connectionState == ConnectionState.active) {
       if (userSnapshot.hasData) {
-        if (userSnapshot.data.isAnonymous || userSnapshot.data.displayName != null ||
-            userSnapshot.data.displayName != '')
+        if (userSnapshot.data.isAnonymous || (userSnapshot.data.displayName != null &&
+            userSnapshot.data.displayName != ''))
           return HomeScreen();
         else if(!userSnapshot.data.emailVerified )
           return VerifyEmailScreen();

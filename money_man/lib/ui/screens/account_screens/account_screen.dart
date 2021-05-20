@@ -141,7 +141,8 @@ class _TestState extends State<Test> {
                       children: [
                         CircleAvatar(
                           radius: 30.0,
-                          child: Text((_user.displayName != '' ||_user.displayName != null)?'Y':_user.displayName.substring(0,1),
+                          child: Text((_user == null)?'':(_user.displayName != '' && _user.displayName != null)?
+                          _user.displayName.substring(0,1):'Y',
                               style: TextStyle(fontSize: 25.0)),
                         ),
                         SizedBox(
@@ -149,14 +150,14 @@ class _TestState extends State<Test> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Text((_user.displayName != '' && _user.displayName != null)? _user.displayName:(_user.phoneNumber != null ? _user.phoneNumber:'Your name'),
+                          child: Text((_user == null)?'':(_user.displayName != '' && _user.displayName != null)? _user.displayName:(_user.phoneNumber != null ? _user.phoneNumber:'Your name'),
                               style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'Montserrat',
                               fontSize: 15.0)),
                         ),
-                        Text(_user.email == null?'Your email':(_user.email!= ''?_user.email:'Your email'),
+                        Text((_user == null)?'':_user.email == null?'Your email':(_user.email!= ''?_user.email:'Your email'),
                             style: TextStyle(
                             color: Colors.grey[400],
                             fontWeight: FontWeight.w400,
