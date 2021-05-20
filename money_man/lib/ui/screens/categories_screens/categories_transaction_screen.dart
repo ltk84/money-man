@@ -74,7 +74,7 @@ class _CategoriesTransactionScreenState
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xFF1f1e1e),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
@@ -94,7 +94,7 @@ class _CategoriesTransactionScreenState
           ),
           //),
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.grey[900],
           elevation: 0,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(

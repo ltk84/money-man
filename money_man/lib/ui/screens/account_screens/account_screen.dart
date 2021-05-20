@@ -1,12 +1,17 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_account_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'account_detail_screen.dart';
+import 'package:money_man/ui/screens/test_screens/test.dart';
+import 'package:money_man/ui/widgets/icon_picker.dart' as myIconPicker;
 
 class AccountScreen extends StatelessWidget {
   @override
@@ -284,7 +289,12 @@ class _TestState extends State<Test> {
                     child: Column(
                       children: [
                         ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            showCupertinoModalBottomSheet(
+                                backgroundColor: Colors.grey[900],
+                                context: context,
+                                builder: (context) => myIconPicker.IconPicker());
+                          },
                           dense: true,
                           leading: Icon(Icons.explore,
                               color: Colors.grey[400], size: 25.0),

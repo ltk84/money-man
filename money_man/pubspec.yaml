@@ -51,7 +51,16 @@ dependencies:
   modal_bottom_sheet: ^2.0.0
   math_expressions: ^2.0.0
   money_formatter: ^0.0.3
-
+  fl_chart: ^0.36.1
+  charts_flutter: ^0.10.0
+  pie_chart: ^5.0.0
+  flutter_svg: ^0.22.0
+  random_color: ^1.0.5
+  flutter_datetime_picker: ^1.5.1
+  rflutter_alert: ^1.0.2
+  share: ^2.0.1
+  path_provider: ^2.0.1
+  image_gallery_saver: ^1.6.9
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -70,6 +79,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - assets/images/
+     - assets/icons/
 
 
 
