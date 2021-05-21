@@ -7,6 +7,7 @@ class AccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.grey[900],
@@ -48,10 +49,6 @@ class AccessScreen extends StatelessWidget {
                         context: context,
                         builder: (context) => Authentication(showSignIn: false)
                     );
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (_) => Authentication(showSignIn: false)));
                   },
                   child: Text("NEW TO MONEY MAN",
                       style: TextStyle(
@@ -88,10 +85,6 @@ class AccessScreen extends StatelessWidget {
                         context: context,
                         builder: (context) => Authentication(showSignIn: true)
                     );
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (_) => Authentication(showSignIn: true)));
                   },
                   child: Text("ALREADY USING MONEY MAN",
                       style: TextStyle(

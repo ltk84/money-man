@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_man/core/models/superIconModel.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 
@@ -131,7 +130,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(vertical: 20.0),
+                        margin: EdgeInsets.symmetric(vertical: 16.0),
                         child: Row(children: <Widget>[
                           Expanded(
                               child: Divider(
@@ -158,7 +157,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ]),
                       ),
-                      SizedBox(height: 20),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 60.0),
                         width: double.infinity,

@@ -117,6 +117,6 @@ class _IntroductionSlideState extends State<IntroductionSlide> {
           }).toList(),
         ),
       ],
-    ) : Center(child: Text('Error'));
+    ) : Center(child: Text('Loading'));
   }
 }
