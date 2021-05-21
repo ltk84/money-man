@@ -70,6 +70,68 @@ class _TransactionScreen extends State<TransactionScreen>
             iconID: '58666');
   }
 
+  void _handleSelectTimeRange(int selected) {
+    showMenu(
+      initialValue: 3,
+      context: context,
+      position: RelativeRect.fromLTRB(100, -350, 0, 0),
+      items: [
+        CheckedPopupMenuItem(
+          checked: selected == 1 ? true : false,
+          value: 1,
+          child: Text("Day", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 2 ? true : false,
+          value: 2,
+          child: Text("Week", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 3 ? true : false,
+          value: 3,
+          child: Text("Month", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 4 ? true : false,
+          value: 4,
+          child: Text("Quarter", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 5 ? true : false,
+          value: 5,
+          child: Text("Year", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 6 ? true : false,
+          value: 6,
+          child: Text("All", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 7 ? true : false,
+          value: 7,
+          child: Text("Custom", style: TextStyle(color: Colors.black)),
+        ),
+      ],
+    ).then((value) {
+      switch (value) {
+        case 1:
+          break;
+        case 2:
+          break;
+        case 3:
+          break;
+        case 4:
+          break;
+        case 5:
+          break;
+        case 6:
+          break;
+        case 7:
+          break;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -150,6 +212,8 @@ class _TransactionScreen extends State<TransactionScreen>
                             builder: (_) => AdjustBalanceScreen(
                                   wallet: _wallet,
                                 )));
+                  } else if (value == 'Select time range') {
+                    _handleSelectTimeRange(3);
                   }
                 }, itemBuilder: (context) {
                   return [
