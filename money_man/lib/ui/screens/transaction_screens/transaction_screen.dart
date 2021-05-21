@@ -290,7 +290,10 @@ class _TransactionScreen extends State<TransactionScreen>
                                 color: Colors.white)),
                       ),
                       Expanded(
-                        child: Text(x[xIndex][yIndex].amount.toString(),
+                        child: Text(
+                            x[xIndex][yIndex].category.type == 'income'
+                                ? "${x[xIndex][yIndex].amount.toString()}"
+                                : "${"-" + (x[xIndex][yIndex].amount).toString()}",
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,

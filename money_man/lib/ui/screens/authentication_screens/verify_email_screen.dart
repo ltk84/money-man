@@ -12,6 +12,7 @@ class VerifyEmailScreen extends StatefulWidget {
 
 class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   final auth = FirebaseAuth.instance;
+
   Timer timer;
   @override
   void initState() {
