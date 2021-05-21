@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/ui/screens/authentication_screens/authentication.dart';
 
@@ -31,7 +32,7 @@ class AccessScreen extends StatelessWidget {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                           (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
+                          if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
                         return Colors.white; // Use the component's default.
                       },
                     ),
@@ -43,10 +44,14 @@ class AccessScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => Authentication(showSignIn: true)));
+                    showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (context) => Authentication(showSignIn: false)
+                    );
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (_) => Authentication(showSignIn: false)));
                   },
                   child: Text("NEW TO MONEY MAN",
                       style: TextStyle(
@@ -79,10 +84,14 @@ class AccessScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => Authentication(showSignIn: false)));
+                    showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (context) => Authentication(showSignIn: true)
+                    );
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (_) => Authentication(showSignIn: true)));
                   },
                   child: Text("ALREADY USING MONEY MAN",
                       style: TextStyle(

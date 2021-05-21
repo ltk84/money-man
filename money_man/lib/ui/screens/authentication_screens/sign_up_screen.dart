@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
@@ -25,8 +26,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isObcureSub = true;
   bool show = true;
   bool showSub = true;
-  Icon trailingIconPass = Icon(Icons.remove_red_eye);
-  Icon trailingIconPassSub = Icon(Icons.remove_red_eye);
+  Icon trailingIconPass = Icon(Icons.remove_red_eye, color: Color(0x70999999));
+  Icon trailingIconPassSub = Icon(Icons.remove_red_eye, color: Color(0x70999999));
   bool loading = false;
   String error = '';
 
@@ -36,142 +37,285 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ? LoadingScreen()
         : Scaffold(
             appBar: AppBar(
-              toolbarHeight: 30,
               elevation: 0,
-              iconTheme: IconThemeData(color: Colors.black),
-              backgroundColor: Colors.white54,
+              leading: CloseButton(),
+              backgroundColor: Colors.grey[900],
             ),
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.grey[900],
             body: ListView(
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
               children: [
                 Form(
                   key: _formKey,
                   child: Column(
                     children: [
-                      SizedBox(height: 30),
                       Text(
                         'Sign Up',
                         style: TextStyle(
-                            fontSize: 65,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
                             fontFamily: 'Montserrat'),
                       ),
                       SizedBox(height: 10),
-                      buildInputField(),
-                      SizedBox(height: 15),
-                      ButtonTheme(
-                        minWidth: 300,
-                        child: RaisedButton(
-                            onPressed: () async {
-                              await signUpWithEmailAndPassword(_auth, context);
-                            },
-                            elevation: 0,
-                            child: Text(
-                              'SIGN UP',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                              ),
-                            ),
-                            color: yellow,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5))),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 60.0),
+                        width: double.infinity,
+                        child: buildInputField(),
                       ),
-                      ButtonTheme(
-                        minWidth: 300,
-                        child: RaisedButton(
-                          elevation: 0,
-                          color: Colors.white,
+                      SizedBox(height: 20),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 80.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFF2FB49C); // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                          ),
+                          onPressed: () async {
+                            await signUpWithEmailAndPassword(_auth, context);
+                          },
+                          child: Text("SIGN UP",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.5,
+                                  wordSpacing: 2.0
+                              ),
+                              textAlign: TextAlign.center
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 80.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFF2FB49C); // Use the component's default.
+                              },
+                            ),
+                          ),
                           onPressed: () {
                             // Thao tác đăng nhập
                             widget.changeShow();
                           },
-                          child: Text(
-                            'LOGIN',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          textColor: yellow,
-                          shape: RoundedRectangleBorder(
-                              //side: BorderSide(color: Colors.red, width: 0),
-                              borderRadius: BorderRadius.circular(5)),
-                        ),
-                      ),
-                      Divider(
-                        height: 5,
-                      ),
-                      Row(children: <Widget>[
-                        Expanded(
-                            child: Divider(
-                          thickness: 2,
-                          color: black,
-                        )),
-                        Text(
-                          " OR ",
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
+                          child: Text("LOGIN",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.5,
+                                  wordSpacing: 2.0
+                              ),
+                              textAlign: TextAlign.center
                           ),
                         ),
-                        Expanded(
-                            child: Divider(
-                          thickness: 2,
-                          color: black,
-                        )),
-                      ]),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 20.0),
+                        child: Row(children: <Widget>[
+                          Expanded(
+                              child: Divider(
+                                thickness: 1,
+                                color: Colors.white24,
+                              )
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              " OR ",
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                              child: Divider(
+                                thickness: 1,
+                                color: Colors.white24,
+                              )
+                          ),
+                        ]),
+                      ),
                       SizedBox(height: 20),
                       Container(
-                        height: 40,
-                        width: 300,
-                        //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                        child: RaisedButton(
-                          color: Color(0xffbcbcbc),
+                        margin: EdgeInsets.symmetric(horizontal: 60.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFF2c84d4);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFF2c84d4); // Use the component's default.
+                              },
+                            ),
+                          ),
                           onPressed: () {
                             _auth.signInWithFacebook();
                           },
-                          elevation: 0,
-                          child: CustomListTile(
-                            text: "Connect to Facebook",
-                            imgName: "logoFB.png",
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: SuperIcon(
+                                  iconPath: 'assets/images/facebook.svg',
+                                  size: 18,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: SizedBox(
+                                  width: 10,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: Text("Connect with Facebook",
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.5,
+                                      wordSpacing: 2.0
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ],
                           ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
                         ),
                       ),
-                      SizedBox(height: 15),
                       Container(
-                        //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                        height: 40,
-                        width: 300,
-                        child: RaisedButton(
-                          color: Color(0xffbcbcbc),
+                        margin: EdgeInsets.symmetric(horizontal: 60.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFFfc4232);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFFfc4232); // Use the component's default.
+                              },
+                            ),
+                          ),
                           onPressed: () {
                             _auth.signInWithGoogleAccount();
                           },
-                          elevation: 0,
-                          child: CustomListTile(
-                            text: "Connect to Google",
-                            imgName: "logoGG.png",
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: SuperIcon(
+                                  iconPath: 'assets/images/google.svg',
+                                  size: 18,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: SizedBox(
+                                  width: 10,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: Text("Connect with Google",
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.5,
+                                      wordSpacing: 2.0
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ],
                           ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
                         ),
                       ),
-                      SizedBox(height: 15),
                       Container(
-                        //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                        height: 40,
-                        width: 300,
-                        child: RaisedButton(
-                          color: Color(0xffbcbcbc),
-                          onPressed: () {},
-                          elevation: 0,
-                          child: CustomListTile(
-                            text: 'Connect to Apple',
-                            imgName: 'LogoAP.png',
+                        margin: EdgeInsets.symmetric(horizontal: 60.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFF0c0c0c);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFF0c0c0c); // Use the component's default.
+                              },
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
+                          onPressed: () {
+                            _auth.signInWithGoogleAccount();
+                          },
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: SuperIcon(
+                                  iconPath: 'assets/images/apple.svg',
+                                  size: 18,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: SizedBox(
+                                  width: 10,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: Text("Connect with Apple",
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.5,
+                                      wordSpacing: 2.0
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -253,53 +397,91 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Theme(
           data: Theme.of(context).copyWith(
             // override textfield's icon color when selected
-            primaryColor: Colors.black,
+            primaryColor: Colors.white,
           ),
           child: TextFormField(
             validator: (value) {
               if (value == null || value.isEmpty)
-                return 'Email not empty';
+                return 'Email is empty';
               else if (EmailValidator.validate(value) == false)
-                return 'Email not valid';
+                return 'Email is not valid';
               return null;
             },
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Montserrat',
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
             textAlign: TextAlign.left,
             onChanged: (value) => _email = value,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.email),
-              labelText: 'Email',
-              labelStyle: TextStyle(
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.white12,
+                ),
+              ),
+              prefixIcon: Container(
+                margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Icon(Icons.email, color: Colors.white, size: 25.0)
+              ),
+              hintText: 'Email',
+              hintStyle: TextStyle(
+                color: Color(0x70999999),
                 fontFamily: 'Montserrat',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
               fillColor: Colors.white,
             ),
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             autocorrect: false,
-            cursorColor: black,
+            cursorColor: Color(0xFF2FB49C),
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 5),
         Theme(
           data: Theme.of(context).copyWith(
             // override textfield's icon color when selected
-            primaryColor: Colors.black,
+            primaryColor: Colors.white,
           ),
           child: TextFormField(
             // controller: PasswordControler,
             validator: (value) {
               if (value == null || value.isEmpty)
-                return 'Password not empty';
+                return 'Password is empty';
               else if (value.length < 6)
                 return 'Password must longer than 6 digits';
               return null;
             },
-            style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Montserrat',
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.left,
             onChanged: (value) => _password = value,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.security),
-              labelText: 'Password',
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.white12,
+                ),
+              ),
+              prefixIcon: Container(
+                  margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Icon(Icons.security, color: Colors.white, size: 25.0)
+              ),
+              hintText: 'Password',
+              hintStyle: TextStyle(
+                color: Color(0x70999999),
+                fontFamily: 'Montserrat',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
               suffixIcon: IconButton(
                 icon: trailingIconPass,
                 onPressed: () => this.setState(() {
@@ -307,34 +489,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   show = !show;
                   trailingIconPass = Icon(show == true
                       ? Icons.visibility_rounded
-                      : Icons.visibility_off_rounded);
+                      : Icons.visibility_off_rounded,
+                    color: Color(0x70999999),
+                  );
                 }),
               ),
+              fillColor: Colors.white,
             ),
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             autocorrect: false,
             obscureText: isObcure,
+            cursorColor: Color(0xFF2FB49C),
           ),
         ),
+        SizedBox(height: 5),
         Theme(
           data: Theme.of(context).copyWith(
             // override textfield's icon color when selected
-            primaryColor: Colors.black,
+            primaryColor: Colors.white,
           ),
           child: TextFormField(
             validator: (value) {
               if (value == null || value.isEmpty)
-                return 'Retype password not empty';
+                return 'Re-password is empty';
               else if (value.length < 6)
-                return 'Password must longer than 6 digits';
+                return 'Re-password must longer than 6 digits';
               return null;
             },
-            style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Montserrat',
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.left,
             // onChanged: (value) => _password = value,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.security),
-              labelText: 'Confirm Password',
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.white12,
+                ),
+              ),
+              prefixIcon: Container(
+                  margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Icon(Icons.security, color: Colors.white, size: 25.0)
+              ),
+              hintText: 'Confirm Password',
+              hintStyle: TextStyle(
+                color: Color(0x70999999),
+                fontFamily: 'Montserrat',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
               suffixIcon: IconButton(
                 icon: trailingIconPassSub,
                 onPressed: () => this.setState(() {
@@ -342,52 +550,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   showSub = !showSub;
                   trailingIconPassSub = Icon(showSub == true
                       ? Icons.visibility_rounded
-                      : Icons.visibility_off_rounded);
+                      : Icons.visibility_off_rounded,
+                    color: Color(0x70999999),
+                  );
                 }),
               ),
+              fillColor: Colors.white,
             ),
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             autocorrect: false,
             obscureText: isObcureSub,
+            cursorColor: Color(0xFF2FB49C),
           ),
         ),
       ],
-    );
-  }
-}
-
-class CustomListTile extends StatelessWidget {
-  final String text;
-  final String imgName;
-  CustomListTile({
-    Key key,
-    @required this.text,
-    @required this.imgName,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      child: Row(children: [
-        Container(
-          padding: EdgeInsets.all(5),
-          child: Image(
-            image: AssetImage('assets/images/$imgName'),
-            fit: BoxFit.fitHeight,
-          ),
-        ),
-        Expanded(
-            child: Text(
-          '$text',
-          style: TextStyle(
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        )),
-      ]),
     );
   }
 }
