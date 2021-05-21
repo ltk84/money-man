@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/ui/screens/introduction_screens/access_screen.dart';
 import '../../widgets/carousel_indicator.dart';
 
@@ -43,8 +44,12 @@ class IntroductionScreen extends StatelessWidget {
                       ),
                     ),
                     onPressed: () async {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) => AccessScreen()));
+                      // Navigator.pushReplacement(context,
+                      //     MaterialPageRoute(builder: (_) => AccessScreen()));
+                      showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => AccessScreen()
+                      );
                     },
                     child: Text('GET STARTED',
                         style: TextStyle(
