@@ -39,6 +39,7 @@ class _TransactionScreen extends State<TransactionScreen>
   TabController _tabController;
   Wallet _wallet;
   bool viewByCategory = false;
+  int choosedTimeRange = 3;
 
   @override
   void initState() {
@@ -115,18 +116,39 @@ class _TransactionScreen extends State<TransactionScreen>
     ).then((value) {
       switch (value) {
         case 1:
+          setState(() {
+            choosedTimeRange = 1;
+          });
           break;
         case 2:
+          setState(() {
+            choosedTimeRange = 2;
+          });
           break;
         case 3:
+          setState(() {
+            choosedTimeRange = 3;
+          });
           break;
         case 4:
+          setState(() {
+            choosedTimeRange = 4;
+          });
           break;
         case 5:
+          setState(() {
+            choosedTimeRange = 5;
+          });
           break;
         case 6:
+          setState(() {
+            choosedTimeRange = 6;
+          });
           break;
         case 7:
+          setState(() {
+            choosedTimeRange = 7;
+          });
           break;
       }
     });
@@ -213,7 +235,7 @@ class _TransactionScreen extends State<TransactionScreen>
                                   wallet: _wallet,
                                 )));
                   } else if (value == 'Select time range') {
-                    _handleSelectTimeRange(3);
+                    _handleSelectTimeRange(choosedTimeRange);
                   }
                 }, itemBuilder: (context) {
                   return [
