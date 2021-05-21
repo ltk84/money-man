@@ -14,6 +14,12 @@ class IntroductionSlide extends StatefulWidget {
 
 class _IntroductionSlideState extends State<IntroductionSlide> {
   dynamic imgList;
+  List<String> description = [
+    "I'm a man who will help you to mange your money.",
+    "Track your spending/income.",
+    "Achieve your financial goals."
+  ];
+
   int _currentIndex = 0;
 
   Future _initImages() async {
@@ -45,18 +51,45 @@ class _IntroductionSlideState extends State<IntroductionSlide> {
       children: [
         CarouselSlider(
           items: imgList.map<Widget>((element) {
-            return Container(
-                color: Colors.yellow,
-                child: SuperIcon(
-                  iconPath: element,
-                  size: 200.0,
-                )
+            var index = imgList.indexOf(element);
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SuperIcon(
+                      iconPath: element,
+                      size: 200.0,
+                    ),
+                index == 0 ? Text('MONEY MAN',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w900,
+                    fontSize: 24.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ) :
+                SizedBox(
+                  height: 30.0,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 40.0),
+                  child: Text(description[index],
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             );
           }).toList(),
           options: CarouselOptions(
               scrollPhysics: BouncingScrollPhysics(),
               autoPlay: false,
-              aspectRatio: 1.0,
+              aspectRatio: 0.8,
               enlargeCenterPage: true,
               enableInfiniteScroll: false,
               onPageChanged: (index, reason) {
@@ -77,8 +110,8 @@ class _IntroductionSlideState extends State<IntroductionSlide> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _currentIndex == index
-                    ? Color.fromRGBO(0, 0, 0, 0.9)
-                    : Color.fromRGBO(0, 0, 0, 0.4),
+                    ? Color.fromRGBO(255, 255, 255, 0.9)
+                    : Color.fromRGBO(255, 255, 255, 0.4),
               ),
             );
           }).toList(),
