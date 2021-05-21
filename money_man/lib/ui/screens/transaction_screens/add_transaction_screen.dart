@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/categoryModel.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -46,8 +47,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 color: Colors.white,
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w600,
-                fontSize: 15.0)
-        ),
+                fontSize: 15.0)),
         leading: TextButton(
             onPressed: () {
               Navigator.pop(context);
@@ -63,8 +63,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             style: TextButton.styleFrom(
               primary: Colors.white,
               backgroundColor: Colors.transparent,
-            )
-        ),
+            )),
         actions: [
           TextButton(
               onPressed: () async {
@@ -105,25 +104,22 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               style: TextButton.styleFrom(
                 primary: Colors.white,
                 backgroundColor: Colors.transparent,
-              )
-          ),
+              )),
         ],
       ),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: 35.0),
         decoration: BoxDecoration(
             color: Colors.grey[900],
-          border: Border(
-            top: BorderSide(
-              color: Colors.white12,
-              width: 0.5,
-            ),
-            bottom: BorderSide(
-              color: Colors.white12,
-              width: 0.5,
-            )
-          )
-        ),
+            border: Border(
+                top: BorderSide(
+                  color: Colors.white12,
+                  width: 0.5,
+                ),
+                bottom: BorderSide(
+                  color: Colors.white12,
+                  width: 0.5,
+                ))),
         child: ListView(
           shrinkWrap: true,
           children: [
@@ -156,8 +152,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     color: Colors.white,
                     fontSize: 30.0,
                     fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.w600
-                ),
+                    fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -165,10 +160,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color: amount == null ? Colors.grey[600] : Colors.white,
-                        fontSize: amount == null ? 22 : 30.0,
-                        fontFamily: 'Montserrat',
-                        fontWeight: amount == null ? FontWeight.w500 : FontWeight.w600,
+                      color: amount == null ? Colors.grey[600] : Colors.white,
+                      fontSize: amount == null ? 22 : 30.0,
+                      fontFamily: 'Montserrat',
+                      fontWeight:
+                          amount == null ? FontWeight.w500 : FontWeight.w600,
                     ),
                     hintText: amount == null
                         ? 'Enter amount'
@@ -188,60 +184,59 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ListTile(
               dense: true,
               //minVerticalPadding: 8,
+              onTap: () async {
+                final selectCate = await showCupertinoModalBottomSheet(
+                    isDismissible: true,
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    builder: (context) => CategoriesTransactionScreen());
+                if (selectCate != null) {
+                  setState(() {
+                    this.cate = selectCate;
+                  });
+                }
+              },
+              leading: cate == null
+                  ? Icon(Icons.question_answer,
+                      color: Colors.white54, size: 28.0)
+                  : SuperIcon(iconPath: cate.iconID, size: 28.0),
+              title: TextField(
                 onTap: () async {
                   final selectCate = await showCupertinoModalBottomSheet(
                       isDismissible: true,
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: Colors.grey[900],
                       context: context,
-                      builder: (context) => CategoriesTransactionScreen()
-                  );
+                      builder: (context) => CategoriesTransactionScreen());
                   if (selectCate != null) {
                     setState(() {
                       this.cate = selectCate;
                     });
                   }
                 },
-                leading: cate == null
-                    ? Icon(Icons.question_answer, color: Colors.white54, size: 28.0)
-                    : Icon(Icons.ac_unit, color: Colors.white54, size: 28.0),
-                title: TextField(
-                  onTap: () async {
-                    final selectCate = await showCupertinoModalBottomSheet(
-                        isDismissible: true,
-                        backgroundColor: Colors.grey[900],
-                        context: context,
-                        builder: (context) => CategoriesTransactionScreen()
-                    );
-                    if (selectCate != null) {
-                      setState(() {
-                        this.cate = selectCate;
-                      });
-                    }
-                  },
-                  readOnly: true,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w600
-                  ),
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      hintStyle: TextStyle(
-                          color: this.cate == null ? Colors.grey[600] : Colors.white,
-                          fontSize: 16.0,
-                          fontFamily: 'Montserrat',
-                          fontWeight: this.cate == null ? FontWeight.w500 : FontWeight.w600
-                      ),
-                      hintText:
-                          this.cate == null ? 'Select category' : this.cate.name
-                  ),
-                ),
-                trailing: Icon(Icons.chevron_right, color: Colors.white54),
+                readOnly: true,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    hintStyle: TextStyle(
+                        color:
+                            this.cate == null ? Colors.grey[600] : Colors.white,
+                        fontSize: 16.0,
+                        fontFamily: 'Montserrat',
+                        fontWeight: this.cate == null
+                            ? FontWeight.w500
+                            : FontWeight.w600),
+                    hintText:
+                        this.cate == null ? 'Select category' : this.cate.name),
+              ),
+              trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
@@ -253,27 +248,27 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
+              leading:
+                  Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
               title: TextFormField(
                 onTap: () async {
                   DatePicker.showDatePicker(context,
-                      currentTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-                      showTitleActions: true,
-                      onConfirm: (date) {
-                        if (date != null) {
-                          setState(() {
-                            pickDate = date;
-                          });
-                        }
-                      },
+                      currentTime: DateTime(DateTime.now().year,
+                          DateTime.now().month, DateTime.now().day),
+                      showTitleActions: true, onConfirm: (date) {
+                    if (date != null) {
+                      setState(() {
+                        pickDate = date;
+                      });
+                    }
+                  },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(color: Colors.white),
                         doneStyle: TextStyle(color: Colors.white),
                         itemStyle: TextStyle(color: Colors.white),
                         backgroundColor: Colors.grey[900],
-                      )
-                  );
+                      ));
                   // DateTime now = DateTime.now();
                   // pickDate = await showDatePicker(
                   //     context: context,
@@ -297,8 +292,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     color: Colors.white,
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
-                    fontWeight: FontWeight.w600
-                ),
+                    fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -306,10 +300,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color: pickDate == null ? Colors.grey[600] : Colors.white,
-                        fontFamily: 'Montserrat',
-                        fontSize: 16.0,
-                        fontWeight: pickDate == null ? FontWeight.w500 : FontWeight.w600,
+                      color: pickDate == null ? Colors.grey[600] : Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight:
+                          pickDate == null ? FontWeight.w500 : FontWeight.w600,
                     ),
                     hintText: pickDate == null
                         ? 'Select date'
@@ -336,21 +331,23 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     isDismissible: true,
                     backgroundColor: Colors.grey[900],
                     context: context,
-                    builder: (context) => SelectWalletAccountScreen(wallet: wallet));
+                    builder: (context) =>
+                        SelectWalletAccountScreen(wallet: wallet));
               },
-              leading: Icon(wallet == null
-                  ? Icons.account_balance_wallet_rounded
-                  : IconData(int.tryParse(wallet.iconID),
-                      fontFamily: 'MaterialIcons'),
-              color: Colors.white54, size: 28.0),
+              leading: Icon(
+                  wallet == null
+                      ? Icons.account_balance_wallet_rounded
+                      : IconData(int.tryParse(wallet.iconID),
+                          fontFamily: 'MaterialIcons'),
+                  color: Colors.white54,
+                  size: 28.0),
               title: TextFormField(
                 readOnly: true,
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
-                    fontWeight: FontWeight.w600
-                ),
+                    fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -358,10 +355,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color: wallet == null ? Colors.grey[600] : Colors.white,
-                        fontFamily: 'Montserrat',
-                        fontSize: 16.0,
-                        fontWeight: wallet == null ? FontWeight.w500 : FontWeight.w600,
+                      color: wallet == null ? Colors.grey[600] : Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight:
+                          wallet == null ? FontWeight.w500 : FontWeight.w600,
                     ),
                     hintText: wallet == null ? 'Select wallet' : wallet.name),
                 onTap: () async {
@@ -369,7 +367,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       isDismissible: true,
                       backgroundColor: Colors.grey[900],
                       context: context,
-                      builder: (context) => SelectWalletAccountScreen(wallet: wallet));
+                      builder: (context) =>
+                          SelectWalletAccountScreen(wallet: wallet));
                   setState(() {});
                 },
               ),
@@ -397,16 +396,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         color: Colors.grey[600],
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
-                        fontWeight: FontWeight.w500
-                    ),
-                    hintText: 'Write note'
-                ),
+                        fontWeight: FontWeight.w500),
+                    hintText: 'Write note'),
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
-                    fontWeight: FontWeight.w600
-                ),
+                    fontWeight: FontWeight.w600),
                 onChanged: (value) => note = value,
               ),
             ),

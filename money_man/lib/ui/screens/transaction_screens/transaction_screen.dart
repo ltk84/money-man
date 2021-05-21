@@ -232,7 +232,7 @@ class _TransactionScreen extends State<TransactionScreen>
                       else
                         totalInCome += element.amount;
                     });
-                    totalInCome += _wallet.amount;
+                    // totalInCome += _wallet.amount > 0 ? _wallet.amount : 0;
                     total = totalInCome - totalOutCome;
 
                     // lấy các transaction ra theo từng category
@@ -252,7 +252,7 @@ class _TransactionScreen extends State<TransactionScreen>
                       else
                         totalInCome += element.amount;
                     });
-                    totalInCome += _wallet.amount;
+                    // totalInCome += _wallet.amount > 0 ? _wallet.amount : 0;
                     total = totalInCome - totalOutCome;
 
                     dateInChoosenTime.forEach((date) {
