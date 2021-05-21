@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:money_man/core/models/walletModel.dart';
-import 'package:money_man/core/services/constaints.dart';
-import 'package:money_man/core/services/slanding_clipper.dart';
 import 'ending_introduction.dart';
 
 class FirstStep extends StatefulWidget {
@@ -45,121 +43,108 @@ class _FirstStepState extends State<FirstStep> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          child: Stack(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Image(
-                  //   width: size.width,
-                  //   height: size.height * 0.6,
-                  //   fit: BoxFit.cover,
-                  //   image: AssetImage('assets/images/apple.jpg'),
-                  // ),
-                  ClipPath(
-                    clipper: SlandingClipper(),
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.bottomRight,
+          stops: [0.15, 0.05, 0.05, 0.25],
+          colors: [
+            Colors.orange,
+            Colors.yellow,
+            Colors.grey[200],
+            Colors.grey[200]
+          ],
+        )),
+        alignment: Alignment.bottomCenter,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
                     child: Container(
-                      height: size.height * 0.4,
-                      color: yellow,
+                  child: Text(
+                    'Create your \nfirst wallet',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                      fontSize: size.height * 0.07,
                     ),
-                  )
-                ],
-              ),
-              Positioned(
-                child: Container(
-                  child: Column(
+                  ),
+                )),
+                Container(
+                  child: Text(
+                    'This app can help you to save your money \nas much as possible!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Montserrat',
+                      fontSize: size.height * 0.022,
+                      fontWeight: FontWeight.w100,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: Icon(
+                    iconData,
+                    size: size.height * 0.18,
+                    color: Colors.red,
+                  ),
+                ),
+                TextButton(
+                    onPressed: () async {
+                      var data = await FlutterIconPicker.showIconPicker(
+                        context,
+                        iconPickerShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        iconPackMode: IconPack.cupertino,
+                      );
+                      if (data != null) {
+                        wallet.iconID = data.codePoint.toString();
+                        setState(() {
+                          iconData = data;
+                        });
+                      }
+                    },
+                    child: Text(
+                      'CHANGE ICON',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                Container(
+                  padding: EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Wallet's name:",
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: size.height * 0.15,
-                      ),
+                    children: [
                       Container(
-                          child: Container(
-                        child: Text(
-                          'Create your \nfirst wallet',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                            //fontFamily: 'Anton',
-                            fontWeight: FontWeight.bold,
-                            fontSize: size.height * 0.07,
-                            letterSpacing: 3.0,
-                          ),
-                        ),
-                      )),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: size.width * 0.15,
-                          ),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Text(
-                              'This app can help you to save your money \nas much as possible!',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.blueGrey[700],
-                                fontFamily: 'NarumGothic',
-                                fontSize: size.height * 0.022,
-                                fontWeight: FontWeight.w100,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: size.height * 0.05,
-                      ),
-                      Container(
-                        child: Icon(
-                          iconData,
-                          size: size.height * 0.18,
-                          color: Colors.black54,
-                        ),
-                      ),
-                      TextButton(
-                          onPressed: () async {
-                            var data = await FlutterIconPicker.showIconPicker(
-                              context,
-                              iconPickerShape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              iconPackMode: IconPack.cupertino,
-                            );
-                            if (data != null) {
-                              wallet.iconID = data.codePoint.toString();
-                              setState(() {
-                                iconData = data;
-                              });
-                            }
-                          },
-                          child: Text(
-                            'CHANGE ICON',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'NarumGothic',
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )),
-                      Container(
-                        padding:
-                            EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            'Wallet name:',
-                            style: TextStyle(
-                              fontFamily: 'NarumGothic',
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
                         width: 250.0,
-                        height: size.height * 0.05,
+                        height: size.height * 0.033,
                         child: Form(
                           key: _formKey,
                           child: TextFormField(
@@ -170,112 +155,162 @@ class _FirstStepState extends State<FirstStep> {
                             },
                             onChanged: (value) => wallet.name = value,
                             obscureText: false,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.02,
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            'Currency: ',
-                            style: TextStyle(
-                              fontFamily: 'NarumGothic',
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Currency(),
-                      ListTile(
-                        onTap: () {
-                          showCurrencyPicker(
-                            onSelect: (value) {
-                              wallet.currencyID = value.code;
-                              setState(() {
-                                currencyName = value.name;
-                              });
-                            },
-                            context: context,
-                            showFlag: true,
-                            showCurrencyName: true,
-                            showCurrencyCode: true,
-                          );
-                        },
-                        dense: true,
-                        leading: Icon(Icons.monetization_on,
-                            size: 30.0, color: Colors.white60),
-                        title: Text(currencyName,
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 15.0)),
-                        trailing: Icon(Icons.chevron_right,
-                            size: 20.0, color: Colors.white24),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.01,
-                      ),
-                      Column(
-                        children: [
-                          ButtonTheme(
-                            minWidth: 250.0,
-                            child: RaisedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(_createRoute());
-                              },
-                              color: Colors.black54,
-                              elevation: 0.0,
-                              child: Text(
-                                'Continue',
-                                style: TextStyle(
-                                  fontFamily: 'NarumGothic',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: size.height * 0.05 / 1.5,
-                                ),
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
-                              ),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: appPadding / 4),
-                                width: 15,
-                                height: 15,
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: black, width: 2),
-                                    shape: BoxShape.circle,
-                                    color: white),
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: appPadding / 4),
-                                width: 15,
-                                height: 15,
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: black, width: 2),
-                                    shape: BoxShape.circle,
-                                    color: yellow),
-                              ),
-                            ],
-                          ),
-                        ],
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5)),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Wallet's amount:",
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 200.0,
+                        height: size.height * 0.033,
+                        child: Form(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value == null || value.length == 0)
+                                return 'Wallet amount is empty';
+                              return null;
+                            },
+                            onChanged: (value) =>
+                                wallet.amount = int.tryParse(value),
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5)),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 45,
+                        height: size.height * 0.033,
+                        alignment: Alignment.center,
+                        child: Text(
+                          currencyName,
+                          style: TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.bold),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(5),
+                          //border: Border.all(color: Colors.grey)
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+
+                // Currency(),
+                ListTile(
+                  onTap: () {
+                    showCurrencyPicker(
+                      onSelect: (value) {
+                        wallet.currencyID = value.code;
+                        setState(() {
+                          currencyName = value.name;
+                        });
+                      },
+                      context: context,
+                      showFlag: true,
+                      showCurrencyName: true,
+                      showCurrencyCode: true,
+                    );
+                  },
+                  dense: true,
+                  leading: Icon(Icons.monetization_on,
+                      size: 30.0, color: Colors.white60),
+                  title: Text(currencyName,
+                      style: TextStyle(color: Colors.black, fontSize: 15.0)),
+                  trailing: Icon(Icons.chevron_right,
+                      size: 20.0, color: Colors.white24),
+                ),
+
+                Column(
+                  children: [
+                    ButtonTheme(
+                      minWidth: 250.0,
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(_createRoute());
+                        },
+                        color: Colors.orange,
+                        elevation: 0.0,
+                        child: Text(
+                          'Continue',
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          width: 15,
+                          height: 15,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black, width: 2),
+                              shape: BoxShape.circle,
+                              color: Colors.black),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          width: 15,
+                          height: 15,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black, width: 2),
+                              shape: BoxShape.circle,
+                              color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

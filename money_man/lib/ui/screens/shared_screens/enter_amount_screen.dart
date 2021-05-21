@@ -3,14 +3,13 @@ import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/ui/widgets/buttonCalculator.dart';
 import 'package:math_expressions/math_expressions.dart';
 
-
 class EnterAmountScreen extends StatefulWidget {
   @override
   _EnterAmountScreenState createState() => _EnterAmountScreenState();
 }
 
 class _EnterAmountScreenState extends State<EnterAmountScreen> {
-  var isEnd  = false;
+  var isEnd = false;
   var userInput = '';
   var answer = '';
   var userInputFormat = '';
@@ -49,15 +48,11 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
         title: Container(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: Color(0xff444b59)
-          ),
+              borderRadius: BorderRadius.circular(30),
+              color: Color(0xff444b59)),
           child: Text(
             'Calculate your amount!',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold
-            ),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
         centerTitle: true,
@@ -96,65 +91,87 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
             ),
             Center(
               child: Container(
-          height: MediaQuery.of(context).size.height*0.6,
-      padding: EdgeInsets.fromLTRB(28,20,20,40),
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: Color(0xff292d36),
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      KeyOfCalc(0, Color(0xffdbdddd), Color(0xffb34048),),
-                      KeyOfCalc(4, Color(0xffdbdddd), Color(0xff282c35)),
-                      KeyOfCalc(8, Color(0xffdbdddd), Color(0xff282c35)),
-                      KeyOfCalc(12, Color(0xffdbdddd), Color(0xff282c35)),
-                      KeyOfCalc(16, Color(0xffdbdddd), Color(0xff282c35)),
-
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      KeyOfCalc(1, Color(0xffdbdddd), Color(0xff444b59)),
-                      KeyOfCalc(5, Color(0xffdbdddd), Color(0xff282c35)),
-                      KeyOfCalc(9, Color(0xffdbdddd), Color(0xff282c35)),
-                      KeyOfCalc(13, Color(0xffdbdddd), Color(0xff282c35)),
-                      KeyOfCalc(17, Color(0xffdbdddd), Color(0xff444b59)),
-                    ],
-                  ),
-
-                  Column(
-                    children: [
-                      KeyOfCalc(2, Color(0xffdbdddd), Color(0xff444b59)),
-                      KeyOfCalc(6, Color(0xffdbdddd), Color(0xff282c35)),
-                      KeyOfCalc(10, Color(0xffdbdddd), Color(0xff282c35)),
-                      KeyOfCalc(14, Color(0xffdbdddd), Color(0xff282c35)),
-                      KeyOfCalc(18, Color(0xffdbdddd), Color(0xff444b59)),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      KeyOfCalc(3, Color(0xffdbdddd), Color(0xff444b59)),
-                      KeyOfCalc(7, Color(0xffdbdddd), Color(0xff444b59)),
-                      KeyOfCalc(11, Color(0xffdbdddd), Color(0xff444b59)),
-                      KeyOfCalc(isEnd? 19:15, Color(0xffdbdddd),isEnd?Color(0xffb0b008) : Color(0xff25b197), 2),
-                      //KeyOfCalc(19, Color(0xffdbdddd)),
-                    ],
-                  ),
-                ],
+                height: MediaQuery.of(context).size.height * 0.6,
+                padding: EdgeInsets.fromLTRB(28, 20, 20, 40),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Color(0xff292d36),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              KeyOfCalc(
+                                0,
+                                Color(0xffdbdddd),
+                                Color(0xffb34048),
+                              ),
+                              KeyOfCalc(
+                                  4, Color(0xffdbdddd), Color(0xff282c35)),
+                              KeyOfCalc(
+                                  8, Color(0xffdbdddd), Color(0xff282c35)),
+                              KeyOfCalc(
+                                  12, Color(0xffdbdddd), Color(0xff282c35)),
+                              KeyOfCalc(
+                                  16, Color(0xffdbdddd), Color(0xff282c35)),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              KeyOfCalc(
+                                  1, Color(0xffdbdddd), Color(0xff444b59)),
+                              KeyOfCalc(
+                                  5, Color(0xffdbdddd), Color(0xff282c35)),
+                              KeyOfCalc(
+                                  9, Color(0xffdbdddd), Color(0xff282c35)),
+                              KeyOfCalc(
+                                  13, Color(0xffdbdddd), Color(0xff282c35)),
+                              KeyOfCalc(
+                                  17, Color(0xffdbdddd), Color(0xff444b59)),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              KeyOfCalc(
+                                  2, Color(0xffdbdddd), Color(0xff444b59)),
+                              KeyOfCalc(
+                                  6, Color(0xffdbdddd), Color(0xff282c35)),
+                              KeyOfCalc(
+                                  10, Color(0xffdbdddd), Color(0xff282c35)),
+                              KeyOfCalc(
+                                  14, Color(0xffdbdddd), Color(0xff282c35)),
+                              KeyOfCalc(
+                                  18, Color(0xffdbdddd), Color(0xff444b59)),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              KeyOfCalc(
+                                  3, Color(0xffdbdddd), Color(0xff444b59)),
+                              KeyOfCalc(
+                                  7, Color(0xffdbdddd), Color(0xff444b59)),
+                              KeyOfCalc(
+                                  11, Color(0xffdbdddd), Color(0xff444b59)),
+                              KeyOfCalc(
+                                  isEnd ? 19 : 15,
+                                  Color(0xffdbdddd),
+                                  isEnd ? Color(0xffb0b008) : Color(0xff25b197),
+                                  2),
+                              //KeyOfCalc(19, Color(0xffdbdddd)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-          ),
-
-
-        ],
-      ),
-    ),
             )
           ],
         ),
@@ -168,7 +185,6 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     }
     return false;
   }
-
 
 // function to calculate the input operation
   void equalPressed() {
@@ -196,132 +212,122 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     });
   }
 
-
-
-  KeyOnclick(int index)
-  {
+  KeyOnclick(int index) {
     setState(() {
       isEnd = false;
     });
     print(buttons[index]);
     if (index == 0) {
-          setState(() {
-            userInput = '';
-            answer = '0';
-            userInputFormat = '';
-            answerFormat = '0';
-          });
-        }
+      setState(() {
+        userInput = '';
+        answer = '0';
+        userInputFormat = '';
+        answerFormat = '0';
+      });
+    }
     // Delete Button
 
     else if (index == 3) {
       {
-          if (userInput.isEmpty) return;
-          setState(() {
-            userInput =
-                userInput.substring(0, userInput.length - 1);
-            userInputFormat = userInput;
-          });
+        if (userInput.isEmpty) return;
+        setState(() {
+          userInput = userInput.substring(0, userInput.length - 1);
+          userInputFormat = userInput;
+        });
       }
     }
 
     // Equal_to Button
     else if (index == 15) {
-
-          setState(() {
-            isEnd = true;
-            equalPressed();
-          });
+      setState(() {
+        isEnd = true;
+        equalPressed();
+      });
     }
 
     // confirm button
     else if (index == 19) {
-
-          Navigator.pop(context, answer);
-
+      Navigator.pop(context, answer);
     }
 
     // other buttons
     else {
-          setState(() {
-            var sign = ['+', '-', '*', '/'];
-            var input;
+      setState(() {
+        var sign = ['+', '-', '*', '/'];
+        var input;
 
-            if (buttons[index] == '×')
-              input = '*';
-            else if (buttons[index] == '÷')
-              input = '/';
-            else
-              input = buttons[index];
-            if (input == '.' && userInput.contains('.')) return;
-            if (sign.contains(input)) {
-              for (var s in sign) {
-                if (userInput.length == 0)
-                  return;
-                else if (userInput.endsWith(s)) {
-                  if (s == input)
-                    return;
-                  else {
-                    userInput = userInput.substring(
-                        0, userInput.length - 1);
-                    print(userInput);
-                  }
-                }
-              }
-            }
-
-            userInput += input;
-
-            final intRegex = RegExp(r'[+|\-|*|/]');
-            var listString = intRegex
-                .allMatches(userInput)
-                .map((m) => m.group(0))
-                .toList();
-            var listNumber = userInput.split(intRegex);
-            String finalString = '';
-            for (var i = 0; i < listNumber.length; i++) {
-              if (listNumber[i] != '') {
-                var formatNumber = MoneyFormatter(
-                    amount: double.tryParse(listNumber[i]))
-                    .output
-                    .withoutFractionDigits;
-                if (i != listNumber.length - 1) {
-                  finalString += formatNumber + listString[i];
-                } else {
-                  finalString += formatNumber;
-                }
-                userInputFormat = finalString;
+        if (buttons[index] == '×')
+          input = '*';
+        else if (buttons[index] == '÷')
+          input = '/';
+        else
+          input = buttons[index];
+        if (input == '.' && userInput.contains('.')) return;
+        if (sign.contains(input)) {
+          for (var s in sign) {
+            if (userInput.length == 0)
+              return;
+            else if (userInput.endsWith(s)) {
+              if (s == input)
+                return;
+              else {
+                userInput = userInput.substring(0, userInput.length - 1);
                 print(userInput);
               }
             }
-          });
+          }
+        }
+
+        userInput += input;
+
+        final intRegex = RegExp(r'[+|\-|*|/]');
+        var listString =
+            intRegex.allMatches(userInput).map((m) => m.group(0)).toList();
+        var listNumber = userInput.split(intRegex);
+        String finalString = '';
+        for (var i = 0; i < listNumber.length; i++) {
+          if (listNumber[i] != '') {
+            var formatNumber =
+                MoneyFormatter(amount: double.tryParse(listNumber[i]))
+                    .output
+                    .withoutFractionDigits;
+            if (i != listNumber.length - 1) {
+              finalString += formatNumber + listString[i];
+            } else {
+              finalString += formatNumber;
+            }
+            userInputFormat = finalString;
+            print(userInput);
+          }
+        }
+      });
     }
   }
 
-  KeyOfCalc(int index, Color txtcolor, Color BgColor, [int flex = 1])
-  { return
-    Expanded(
+  KeyOfCalc(int index, Color txtcolor, Color BgColor, [int flex = 1]) {
+    return Expanded(
       flex: flex,
-        child: GestureDetector(
-        onTap: (){KeyOnclick(index);},
-    child: Container(
-    decoration: BoxDecoration(
-    color: BgColor, //Color(0xff282c35),
-  borderRadius: BorderRadius.circular(15),
-  ),
-  alignment: Alignment.center,
-  width: 70,
-  margin: EdgeInsets.all(7),
-  child: Text(buttons[index],
-  style: TextStyle(
-  color: txtcolor,//Color(0xffdbdddd),
-  fontSize: 25,
-  ),
-    ),
-    ),
-    ),
+      child: GestureDetector(
+        onTap: () {
+          KeyOnclick(index);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: BgColor, //Color(0xff282c35),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          alignment: Alignment.center,
+          width: 70,
+          margin: EdgeInsets.all(7),
+          child: Text(
+            buttons[index],
+            style: TextStyle(
+              color: txtcolor, //Color(0xffdbdddd),
+              fontSize: 25,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
-
-
