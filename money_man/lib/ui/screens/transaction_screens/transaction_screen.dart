@@ -9,6 +9,7 @@ import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/adjust_balance_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:page_transition/page_transition.dart';
@@ -142,6 +143,13 @@ class _TransactionScreen extends State<TransactionScreen>
                     setState(() {
                       viewByCategory = !viewByCategory;
                     });
+                  } else if (value == 'Adjust Balance') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => AdjustBalanceScreen(
+                                  wallet: _wallet,
+                                )));
                   }
                 }, itemBuilder: (context) {
                   return [

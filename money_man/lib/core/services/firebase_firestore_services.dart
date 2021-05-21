@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 import 'package:money_man/core/models/categoryModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
@@ -154,6 +155,31 @@ class FirebaseFireStoreService {
         .doc(id)
         .get()
         .then((value) => Wallet.fromMap(value.data()));
+  }
+
+  // adjust wallet's balance
+  Future adjustBalance(Wallet wallet, double amount) async {
+    double transactionAmount;
+    MyCategory category;
+
+    transactionAmount = amount - wallet.amount;
+    if (transactionAmount > 0)
+      await categories.where('name', isEqualTo: 'Other Income').get().then(
+          (value) => category = MyCategory.fromMap(value.docs.first.data()));
+    else {
+      await categories.where('name', isEqualTo: 'Other Expense').get().then(
+          (value) => category = MyCategory.fromMap(value.docs.first.data()));
+      transactionAmount = -transactionAmount;
+    }
+
+    MyTransaction trans = MyTransaction(
+        id: 'id',
+        amount: transactionAmount,
+        date: DateTime.now(),
+        currencyID: wallet.currencyID,
+        category: category,
+        note: 'Adjust Balance');
+    await addTransaction(wallet, trans);
   }
 
   // WALLET END//
