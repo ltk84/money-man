@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/categoryModel.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
 
@@ -159,8 +160,7 @@ class _CategoriesTransactionScreenState
                       itemCount: _selectCateTab.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          leading: Icon(Icons.ac_unit_sharp,
-                              color: Colors.yellow[700]),
+                          leading: SuperIcon(iconPath: _selectCateTab[index].iconID, size: 35.0),
                           title: Text(_selectCateTab[index].name,
                               style: Theme.of(context).textTheme.subtitle1),
                           onTap: () {

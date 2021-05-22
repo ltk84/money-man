@@ -101,7 +101,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         flex: 1,
                         child: SuperIcon(
                           iconPath: widget.transaction.category.iconID,
-                          size: 70.0,
+                          size: 50.0,
                         ),
                       ),
                       Expanded(
@@ -164,7 +164,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                          flex: 1, child: Icon(Icons.calendar_today_rounded, color: Colors.grey[500],)
+                          flex: 1, child: Icon(Icons.calendar_today_rounded, color: Colors.grey[500], size: 25.0)
                       ),
                       Expanded(
                           flex: 3,
@@ -175,7 +175,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                   color: Colors.white,
                                   fontFamily: ' Montserrat',
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 15.0)
+                                  fontSize: 16.0)
                           )
                       ),
                     ],
@@ -188,7 +188,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           flex: 1,
                           child: SuperIcon(
                             iconPath: widget.wallet.iconID,
-                            size: 20.0,
+                            size: 25.0,
                           )
                       ),
                       Expanded(
@@ -197,7 +197,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               color: Colors.white,
                               fontFamily: ' Montserrat',
                               fontWeight: FontWeight.w400,
-                              fontSize: 15.0)
+                              fontSize: 16.0)
                           )
                       ),
                     ],
@@ -245,11 +245,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
                             flex: 1,
                             child: SuperIcon(
                               iconPath: widget.transaction.category.iconID,
-                              size: 20.0,
+                              size: 35.0,
                             )
                         ),
                         Expanded(
-                          flex: 6,
+                          flex: 5,
                           child: Column(
                             children: [
                               Row(

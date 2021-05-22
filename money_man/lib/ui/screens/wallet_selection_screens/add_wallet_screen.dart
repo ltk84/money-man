@@ -112,7 +112,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                       IconButton(
                         icon: SuperIcon(
                           iconPath: wallet.iconID,
-                          size: 20.0,
+                          size: 35.0,
                         ),
                         onPressed: () async {
                           // TODO: Chọn icon cho ví

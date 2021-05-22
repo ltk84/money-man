@@ -17,7 +17,7 @@ class _IconPickerState extends State<IconPicker> {
   Widget build(BuildContext context) {
     print("build 1");
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.black26,
       appBar: AppBar(
         leadingWidth: 70.0,
         centerTitle: true,

@@ -101,7 +101,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                   height: 40.0,
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   width: double.infinity,
                   decoration: BoxDecoration(
                       color: Colors.grey[900],
@@ -213,7 +213,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
             onTap: () {},
             leading: SuperIcon(
               iconPath: 'assets/icons/wallet_4.svg',
-              size: 20.0,
+              size: 40.0,
             ),
             title: Text(
               'Total',
@@ -237,7 +237,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
             },
             leading: SuperIcon(
               iconPath: 'assets/icons/wallet_4.svg',
-              size: 20.0,
+              size: 40.0,
             ),
             title: Text(
               'Total',
@@ -275,7 +275,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                       ? GestureDetector(
                           onTap: () {},
                           child: Container(
-                            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                             width: double.infinity,
                             decoration: BoxDecoration(
                                 color: Colors.grey[900],
@@ -291,7 +291,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             child: ListTile(
                               leading: SuperIcon(
                                 iconPath: iconData,
-                                size: 20.0,
+                                size: 40.0,
                               ),
                               title: Text(
                                 listWallet[index].name,
@@ -313,7 +313,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             // });
                           },
                           child: Container(
-                            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                             width: double.infinity,
                             decoration: BoxDecoration(
                                 color: Colors.grey[900],
@@ -334,7 +334,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                               },
                               leading: SuperIcon(
                                 iconPath: iconData,
-                                size: 20.0,
+                                size: 40.0,
                               ),
                               title: Text(
                                 listWallet[index].name,

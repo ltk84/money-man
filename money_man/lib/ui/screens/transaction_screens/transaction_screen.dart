@@ -83,28 +83,23 @@ class _TransactionScreen extends State<TransactionScreen>
               backgroundColor: Colors.black,
               centerTitle: true,
               elevation: 0,
-              leading: Row(
-                children: [
-                  Expanded(
-                    child: IconButton(
-                        icon: SuperIcon(
-                          iconPath: _wallet.iconID,
-                          size: 20.0,
-                        ),
-                        onPressed: () async {
-                          buildShowDialog(context, _wallet.id);
-                        }),
+              leadingWidth: double.infinity,
+              leading: GestureDetector(
+                onTap: () async {
+                  buildShowDialog(context, _wallet.id);
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    children: [
+                      SuperIcon(
+                        iconPath: _wallet.iconID,
+                        size: 25.0,
+                      ),
+                      Icon(Icons.arrow_drop_down, color: Colors.grey)
+                    ],
                   ),
-                  Expanded(
-                    child: IconButton(
-                      icon:
-                          const Icon(Icons.arrow_drop_down, color: Colors.grey),
-                      onPressed: () async {
-                        buildShowDialog(context, _wallet.id);
-                      },
-                    ),
-                  )
-                ],
+                ),
               ),
               title: Column(children: [
                 Text(_wallet.name,
@@ -365,7 +360,7 @@ class _TransactionScreen extends State<TransactionScreen>
                   padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                   child: SuperIcon(
                     iconPath: transListSortByCategory[xIndex][0].category.iconID,
-                    size: 20.0,
+                    size: 35.0,
                   )
               ),
               Padding(
@@ -526,7 +521,7 @@ class _TransactionScreen extends State<TransactionScreen>
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         child: SuperIcon(
                             iconPath: transListSortByDate[xIndex][yIndex].category.iconID,
-                            size: 20.0,
+                            size: 35.0,
                         ),
                       ),
                       Padding(
