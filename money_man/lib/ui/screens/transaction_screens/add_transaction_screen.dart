@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/categoryModel.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -203,7 +204,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 },
                 leading: cate == null
                     ? Icon(Icons.question_answer, color: Colors.white54, size: 28.0)
-                    : Icon(Icons.ac_unit, color: Colors.white54, size: 28.0),
+                    : SuperIcon(
+                    iconPath: cate.iconID,
+                    size: 28.0,
+                ),
                 title: TextField(
                   onTap: () async {
                     final selectCate = await showCupertinoModalBottomSheet(
@@ -338,11 +342,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     context: context,
                     builder: (context) => SelectWalletAccountScreen(wallet: wallet));
               },
-              leading: Icon(wallet == null
-                  ? Icons.account_balance_wallet_rounded
-                  : IconData(int.tryParse(wallet.iconID),
-                      fontFamily: 'MaterialIcons'),
-              color: Colors.white54, size: 28.0),
+              leading: wallet == null
+                  ? SuperIcon(
+                  iconPath: 'assets/icons/wallet_2.svg',
+                  size: 28.0
+              )
+                  : SuperIcon(
+                  iconPath: wallet.iconID,
+                  size: 28.0
+              ),
               title: TextFormField(
                 readOnly: true,
                 style: TextStyle(

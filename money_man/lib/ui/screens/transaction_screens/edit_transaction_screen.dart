@@ -4,6 +4,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/categoryModel.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -170,7 +171,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             ListTile(
                 dense: true,
                 onTap: () {},
-                leading: Icon(Icons.ac_unit, color: Colors.white54, size: 28.0),
+                leading: SuperIcon(
+                    iconPath: widget.transaction.category.iconID,
+                    size: 28.0
+                ),
                 title: TextField(
                   onTap: () {},
                   readOnly: true,
@@ -284,9 +288,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             ListTile(
               dense: true,
               onTap: () {},
-              leading: Icon(IconData(int.tryParse(widget.wallet.iconID),
-                  fontFamily: 'MaterialIcons'),
-                  color: Colors.white54, size: 28.0),
+              leading: SuperIcon(
+                iconPath: widget.wallet.iconID,
+                size: 28.0,
+              ),
               // leading: Icon(Icons.wallet_giftcard),
               title: TextFormField(
                 readOnly: true,

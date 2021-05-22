@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/categoryModel.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
@@ -54,7 +55,7 @@ class _TransactionScreen extends State<TransactionScreen>
             name: 'defaultName',
             amount: 0,
             currencyID: 'USD',
-            iconID: '58666')
+            iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
   }
 
@@ -68,7 +69,7 @@ class _TransactionScreen extends State<TransactionScreen>
             name: 'defaultName',
             amount: 100,
             currencyID: 'USD',
-            iconID: '58666');
+            iconID: 'assets/icons/wallet_2.svg');
   }
 
   @override
@@ -86,8 +87,10 @@ class _TransactionScreen extends State<TransactionScreen>
                 children: [
                   Expanded(
                     child: IconButton(
-                        icon: const Icon(Icons.account_balance_wallet,
-                            color: Colors.grey),
+                        icon: SuperIcon(
+                          iconPath: _wallet.iconID,
+                          size: 20.0,
+                        ),
                         onPressed: () async {
                           buildShowDialog(context, _wallet.id);
                         }),
@@ -360,7 +363,11 @@ class _TransactionScreen extends State<TransactionScreen>
             children: <Widget>[
               Padding(
                   padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                  child: Icon(Icons.ac_unit_rounded)),
+                  child: SuperIcon(
+                    iconPath: transListSortByCategory[xIndex][0].category.iconID,
+                    size: 20.0,
+                  )
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
                 child: Text(
@@ -517,8 +524,10 @@ class _TransactionScreen extends State<TransactionScreen>
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                        child: Icon(Icons.school,
-                            size: 30.0, color: Colors.grey[600]),
+                        child: SuperIcon(
+                            iconPath: transListSortByDate[xIndex][yIndex].category.iconID,
+                            size: 20.0,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';
@@ -210,9 +211,9 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
     return widget.id == 'Total'
         ? ListTile(
             onTap: () {},
-            leading: Icon(
-              Icons.all_inclusive_outlined,
-              color: Colors.white,
+            leading: SuperIcon(
+              iconPath: 'assets/icons/wallet_4.svg',
+              size: 20.0,
             ),
             title: Text(
               'Total',
@@ -234,9 +235,9 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                 _firestore.updateSelectedWallet('Total');
               });
             },
-            leading: Icon(
-              Icons.all_inclusive_outlined,
-              color: Colors.white,
+            leading: SuperIcon(
+              iconPath: 'assets/icons/wallet_4.svg',
+              size: 20.0,
             ),
             title: Text(
               'Total',
@@ -263,11 +264,12 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
             return ListView.builder(
                 itemCount: listWallet.length,
                 itemBuilder: (context, index) {
-                  IconData iconData = IconData(
-                      int.tryParse(listWallet[index].iconID),
-                      fontFamily: 'MaterialIcons');
+                  // IconData iconData = IconData(
+                  //     int.tryParse(listWallet[index].iconID),
+                  //     fontFamily: 'MaterialIcons');
                   // print(iconData1.codePoint);
                   // IconData iconData = Icons.wallet_giftcard;
+                  String iconData = listWallet[index].iconID;
 
                   return widget.id == listWallet[index].id
                       ? GestureDetector(
@@ -287,9 +289,9 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                       width: 1.0,
                                     ))),
                             child: ListTile(
-                              leading: Icon(
-                                iconData,
-                                color: Colors.white,
+                              leading: SuperIcon(
+                                iconPath: iconData,
+                                size: 20.0,
                               ),
                               title: Text(
                                 listWallet[index].name,
@@ -330,9 +332,9 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 _firestore.updateSelectedWallet(widget.id);
                                 Navigator.pop(context);
                               },
-                              leading: Icon(
-                                iconData,
-                                color: Colors.white,
+                              leading: SuperIcon(
+                                iconPath: iconData,
+                                size: 20.0,
                               ),
                               title: Text(
                                 listWallet[index].name,

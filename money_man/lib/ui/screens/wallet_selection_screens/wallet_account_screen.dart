@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
@@ -90,9 +91,7 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
                     return ListView.builder(
                         itemCount: listWallet.length,
                         itemBuilder: (context, index) {
-                          IconData iconData = IconData(
-                              int.tryParse(listWallet[index].iconID),
-                              fontFamily: 'MaterialIcons');
+                          String iconData = listWallet[index].iconID;
                           // IconData iconData = Icons.wallet_giftcard;
 
                           return Container(
@@ -117,9 +116,8 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
 
                                 Navigator.pop(context, listWallet[index]);
                               },
-                              leading: Icon(
-                                iconData,
-                                color: Colors.white,
+                              leading: SuperIcon(
+                                iconPath: iconData,
                                 size: 35.0
                               ),
                               title: Text(

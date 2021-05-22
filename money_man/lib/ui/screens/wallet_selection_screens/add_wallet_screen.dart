@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
@@ -16,14 +18,13 @@ class AddWalletScreen extends StatefulWidget {
 class _AddWalletScreenState extends State<AddWalletScreen> {
   static var _formKey = GlobalKey<FormState>();
   String currencyName = 'Currency';
-  IconData iconData = Icons.account_balance_wallet;
 
   Wallet wallet = Wallet(
       id: '0',
       name: 'newWallet',
       amount: 0,
       currencyID: 'USD',
-      iconID: '58666');
+      iconID: 'assets/icons/wallet_2.svg');
 
   @override
   Widget build(BuildContext context) {
@@ -109,22 +110,19 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        icon: Icon(
-                          iconData,
-                          size: 35.0,
+                        icon: SuperIcon(
+                          iconPath: wallet.iconID,
+                          size: 20.0,
                         ),
                         onPressed: () async {
                           // TODO: Chọn icon cho ví
-                          var data = await FlutterIconPicker.showIconPicker(
-                            context,
-                            iconPickerShape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            iconPackMode: IconPack.cupertino,
+                          var data = await showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (context) => IconPicker(),
                           );
                           if (data != null) {
-                            wallet.iconID = data.codePoint.toString();
                             setState(() {
-                              iconData = data;
+                              wallet.iconID = data;
                             });
                           }
                         },

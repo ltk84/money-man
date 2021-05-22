@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
@@ -23,14 +25,13 @@ class EditWalletScreen extends StatefulWidget {
 class _EditWalletScreenState extends State<EditWalletScreen> {
   static var _formKey = GlobalKey<FormState>();
   String currencyName = 'Currency';
-  IconData iconData = Icons.account_balance_wallet;
+  String iconData = 'assets/icons/wallet_2.svg';
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     currencyName = CurrencyService().findByCode(widget.wallet.currencyID).name;
-    iconData = IconData(int.tryParse(widget.wallet.iconID),
-        fontFamily: 'MaterialIcons');
+    iconData = widget.wallet.iconID;
     // iconData = Wallet.getIconDataByIconID(widget.wallet.iconID);
 
     return Scaffold(
@@ -114,20 +115,18 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                   Row(
                     children: [
                       IconButton(
-                        icon: Icon(
-                          iconData,
+                        icon: SuperIcon(
+                          iconPath: iconData,
                           size: 35.0,
                         ),
                         onPressed: () async {
                           // TODO: Chọn icon cho ví
-                          var data = await FlutterIconPicker.showIconPicker(
-                            context,
-                            iconPickerShape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            iconPackMode: IconPack.material,
+                          var data = await showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (context) => IconPicker(),
                           );
                           if (data != null) {
-                            widget.wallet.iconID = data.codePoint.toString();
+                            widget.wallet.iconID = data;
                             setState(() {
                               iconData = data;
                             });

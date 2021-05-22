@@ -3,9 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/slanding_clipper.dart';
+import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'ending_introduction.dart';
 
 class FirstStep extends StatefulWidget {
@@ -19,9 +22,9 @@ class _FirstStepState extends State<FirstStep> {
       name: 'newWallet',
       amount: 0,
       currencyID: 'USD',
-      iconID: '58666');
+      iconID: 'assets/icons/wallet_2.svg');
   String currencyName = 'USD';
-  IconData iconData = Icons.account_balance_wallet;
+  //IconData iconData = Icons.account_balance_wallet;
 
   static final _formKey = GlobalKey<FormState>();
 
@@ -119,24 +122,32 @@ class _FirstStepState extends State<FirstStep> {
                         height: size.height * 0.05,
                       ),
                       Container(
-                        child: Icon(
-                          iconData,
+                        child: SuperIcon(
+                          iconPath: wallet.iconID,
                           size: size.height * 0.18,
-                          color: Colors.black54,
                         ),
                       ),
                       TextButton(
                           onPressed: () async {
-                            var data = await FlutterIconPicker.showIconPicker(
-                              context,
-                              iconPickerShape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              iconPackMode: IconPack.cupertino,
+                            // var data = await FlutterIconPicker.showIconPicker(
+                            //   context,
+                            //   iconPickerShape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(20)),
+                            //   iconPackMode: IconPack.cupertino,
+                            // );
+                            // if (data != null) {
+                            //   wallet.iconID = data.codePoint.toString();
+                            //   setState(() {
+                            //     iconData = data;
+                            //   });
+                            // }
+                            var data = await showCupertinoModalBottomSheet(
+                                context: context,
+                                builder: (context) => IconPicker(),
                             );
                             if (data != null) {
-                              wallet.iconID = data.codePoint.toString();
                               setState(() {
-                                iconData = data;
+                                wallet.iconID = data;
                               });
                             }
                           },

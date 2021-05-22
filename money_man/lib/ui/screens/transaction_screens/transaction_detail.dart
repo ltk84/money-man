@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -98,7 +99,10 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: Icon(Icons.local_pizza, size: 70, color: Colors.white,),
+                        child: SuperIcon(
+                          iconPath: widget.transaction.category.iconID,
+                          size: 70.0,
+                        ),
                       ),
                       Expanded(
                         flex: 3,
@@ -182,8 +186,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     children: [
                       Expanded(
                           flex: 1,
-                          child: Icon(IconData(int.parse(widget.wallet.iconID),
-                              fontFamily: 'MaterialIcons'), color: Colors.grey[500],)),
+                          child: SuperIcon(
+                            iconPath: widget.wallet.iconID,
+                            size: 20.0,
+                          )
+                      ),
                       Expanded(
                           flex: 3,
                           child: Text(widget.wallet.name, style: TextStyle(
@@ -235,7 +242,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                            flex: 1, child: Icon(Icons.local_pizza, size: 35, color: Colors.white)),
+                            flex: 1,
+                            child: SuperIcon(
+                              iconPath: widget.transaction.category.iconID,
+                              size: 20.0,
+                            )
+                        ),
                         Expanded(
                           flex: 6,
                           child: Column(
