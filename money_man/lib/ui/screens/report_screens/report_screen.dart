@@ -5,6 +5,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/report_screens/analytic_revenue_expenditure_screen.dart';
 import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
@@ -88,7 +89,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
         name: 'defaultName',
         amount: 0,
         currencyID: 'USD',
-        iconID: 'a')
+        iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
   }
 
@@ -101,9 +102,9 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
         Wallet(
             id: 'id',
             name: 'defaultName',
-            amount: 100,
-            currencyID: 'a',
-            iconID: 'b');
+            amount: 0,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg');
   }
 
   @override
@@ -141,25 +142,23 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
-          leading: Row(
-            children: [
-              Expanded(
-                child: IconButton(
-                  icon: const Icon(Icons.account_balance_wallet, color: Colors.grey),
-                  onPressed: () async {
-                    buildShowDialog(context, _wallet.id);
-                  },
-                ),
+          leadingWidth: 70,
+          leading: GestureDetector(
+            onTap: () async {
+              buildShowDialog(context, _wallet.id);
+            },
+            child: Container(
+              padding: EdgeInsets.only(left: 20.0),
+              child: Row(
+                children: [
+                  SuperIcon(
+                    iconPath: _wallet.iconID,
+                    size: 25.0,
+                  ),
+                  Icon(Icons.arrow_drop_down, color: Colors.grey),
+                ],
               ),
-              Expanded(
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
-                  onPressed: () async {
-                    buildShowDialog(context, _wallet.id);
-                  },
-                ),
-              )
-            ],
+            ),
           ),
           title: GestureDetector(
             onTap: () async {

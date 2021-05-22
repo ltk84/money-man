@@ -83,13 +83,13 @@ class _TransactionScreen extends State<TransactionScreen>
               backgroundColor: Colors.black,
               centerTitle: true,
               elevation: 0,
-              leadingWidth: double.infinity,
+              leadingWidth: 70,
               leading: GestureDetector(
                 onTap: () async {
                   buildShowDialog(context, _wallet.id);
                 },
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.only(left: 20.0),
                   child: Row(
                     children: [
                       SuperIcon(

@@ -133,7 +133,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
         //     fontWeight: FontWeight.bold,
         //     color: const Color(0xffffffff)),
         badgeWidget: _Badge(
-          'assets/icons/hotdog.svg', // category icon.
+          _categoryList[i].iconID, // category icon.
           size: widgetSize,
           borderColor: colors[i],
         ),
@@ -183,7 +183,7 @@ class _Badge extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.all(size * .15),
+      //padding: EdgeInsets.all(size * .15),
       child: Center(
         child: SvgPicture.asset(
           svgAsset,
