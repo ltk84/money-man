@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/ui/screens/authentication_screens/authentication.dart';
+import 'package:page_transition/page_transition.dart';
 
 class AccessScreen extends StatelessWidget {
   @override
@@ -45,10 +46,20 @@ class AccessScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    showCupertinoModalBottomSheet(
-                        context: context,
-                        builder: (context) => Authentication(showSignIn: false)
+                    Navigator.push(context,
+                        PageTransition(
+                          child: Authentication(showSignIn: false),
+                          childCurrent: context.widget,
+                          alignment: Alignment(0, 0.5),
+                          type: PageTransitionType.scale,
+                          duration: Duration(milliseconds: 300),
+                          reverseDuration: Duration(milliseconds: 300),
+                        )
                     );
+                    // showCupertinoModalBottomSheet(
+                    //     context: context,
+                    //     builder: (context) => Authentication(showSignIn: false)
+                    //);
                   },
                   child: Text("NEW TO MONEY MAN",
                       style: TextStyle(
@@ -81,10 +92,20 @@ class AccessScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    showCupertinoModalBottomSheet(
-                        context: context,
-                        builder: (context) => Authentication(showSignIn: true)
+                    Navigator.push(context,
+                        PageTransition(
+                          child: Authentication(showSignIn: true),
+                          childCurrent: context.widget,
+                          alignment: Alignment(0, 0.5),
+                          type: PageTransitionType.scale,
+                          duration: Duration(milliseconds: 300),
+                          reverseDuration: Duration(milliseconds: 300),
+                        )
                     );
+                    // showCupertinoModalBottomSheet(
+                    //     context: context,
+                    //     builder: (context) => Authentication(showSignIn: true)
+                    // );
                   },
                   child: Text("ALREADY USING MONEY MAN",
                       style: TextStyle(

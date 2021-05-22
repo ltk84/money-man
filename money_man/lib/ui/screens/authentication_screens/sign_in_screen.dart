@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -29,7 +30,7 @@ class _SignInScreenState extends State<SignInScreen> {
   String _password;
   bool isObcure = true;
   bool show = true;
-  Icon trailingIconPass = Icon(Icons.remove_red_eye);
+  Icon trailingIconPass = Icon(Icons.remove_red_eye, color: Color(0x70999999));
   bool loading = false;
   String error = '';
 
@@ -38,174 +39,353 @@ class _SignInScreenState extends State<SignInScreen> {
     return loading == true
         ? LoadingScreen()
         : Scaffold(
+            backgroundColor: Colors.grey[900],
             appBar: AppBar(
-              toolbarHeight: 30,
               elevation: 0,
-              iconTheme: IconThemeData(color: Colors.black),
-              backgroundColor: Colors.white54,
+              leading: CloseButton(),
+              backgroundColor: Colors.grey[900],
             ),
             body: ListView(
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
               children: [
                 Form(
                   key: _formKey,
                   child: Column(
                     children: [
-                      SizedBox(height: 30),
                       Text(
                         'Login',
                         style: TextStyle(
-                            fontSize: 65,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
                             fontFamily: 'Montserrat'),
                       ),
                       SizedBox(height: 10),
-                      buildInputField(),
-                      SizedBox(height: 15),
-                      ButtonTheme(
-                        minWidth: 300,
-                        child: RaisedButton(
-                            onPressed: () async {
-                              await signInWithEmailAndPassword(_auth, context);
-                            },
-                            child: Text(
-                              'LOGIN',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                              ),
-                            ),
-                            color: yellow,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5))),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 60.0),
+                        width: double.infinity,
+                        child: buildInputField(),
                       ),
-                      ButtonTheme(
-                        minWidth: 300,
-                        child: RaisedButton(
+                      SizedBox(height: 20),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 80.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFF2FB49C); // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                          ),
+                          onPressed: () async {
+                            await signInWithEmailAndPassword(_auth, context);
+                          },
+                          child: Text("LOGIN",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.5,
+                                  wordSpacing: 2.0
+                              ),
+                              textAlign: TextAlign.center
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 80.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFF2FB49C); // Use the component's default.
+                              },
+                            ),
+                          ),
                           onPressed: () async {
                             await signInAnonymously(_auth, context);
                           },
-                          child: Text('LOGIN AS GUEST'),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                widget.changeShow();
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Sign up',
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.red[900],
-                                  ),
-                                ),
-                              )),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                            ForgotPasswordScreen()));
-                                //Forgot Password
-                              },
-                              child: Text(
-                                'Forgot password?',
-                                style: TextStyle(
+                          child: Text("LOGIN AS GUEST",
+                              style: TextStyle(
+                                  fontSize: 14,
                                   fontFamily: 'Montserrat',
-                                  color: Colors.red[900],
-                                ),
-                              )),
-                        ],
-                      ),
-                      Row(children: <Widget>[
-                        Expanded(
-                            child: Divider(
-                          thickness: 2,
-                          color: black,
-                        )),
-                        Text(
-                          " OR ",
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.5,
+                                  wordSpacing: 2.0
+                              ),
+                              textAlign: TextAlign.center
                           ),
                         ),
-                        Expanded(
-                            child: Divider(
-                          thickness: 2,
-                          color: black,
-                        )),
-                      ]),
-                      SizedBox(height: 20),
+                      ),
                       Container(
-                        height: 40,
-                        width: 300,
-                        //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                        child: RaisedButton(
-                          color: Color(0xffbcbcbc),
+                        margin: EdgeInsets.symmetric(horizontal: 80.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFF2FB49C); // Use the component's default.
+                              },
+                            ),
+                          ),
+                          onPressed: () {
+                            // Thao tác đăng nhập
+                            widget.changeShow();
+                          },
+                          child: Text("SIGN UP",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.5,
+                                  wordSpacing: 2.0
+                              ),
+                              textAlign: TextAlign.center
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: TextButton(
+                          style: ButtonStyle(
+                            // backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                            //       (Set<MaterialState> states) {
+                            //     if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
+                            //     return Colors.white; // Use the component's default.
+                            //   },
+                            // ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFF2FB49C); // Use the component's default.
+                              },
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        ForgotPasswordScreen()));
+                          },
+                          child: Text("Forgot password?",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.5,
+                                  wordSpacing: 2.0
+                              ),
+                              textAlign: TextAlign.center
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 16.0),
+                        child: Row(children: <Widget>[
+                          Expanded(
+                              child: Divider(
+                                thickness: 1,
+                                color: Colors.white24,
+                              )
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              " OR ",
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                              child: Divider(
+                                thickness: 1,
+                                color: Colors.white24,
+                              )
+                          ),
+                        ]),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 60.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFF2c84d4);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFF2c84d4); // Use the component's default.
+                              },
+                            ),
+                          ),
                           onPressed: () {
                             _auth.signInWithFacebook();
-                            // _auth.signInWithFacebookVer2();
                           },
-                          child: CustomListTile(
-                            text: "Connect to Facebook",
-                            imgName: "logoFB.png",
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: SuperIcon(
+                                  iconPath: 'assets/images/facebook.svg',
+                                  size: 18,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: SizedBox(
+                                  width: 10,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: Text("Connect with Facebook",
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.5,
+                                      wordSpacing: 2.0
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ],
                           ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
                         ),
                       ),
-                      SizedBox(height: 15),
                       Container(
-                        //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                        height: 40,
-                        width: 300,
-                        child: RaisedButton(
-                          color: Color(0xffbcbcbc),
-                          onPressed: () async {
-                            await _auth.signInWithGoogleAccount();
-                            // User user = result.user;
-                            // DocumentSnapshot docs = await FirebaseFirestore
-                            //     .instance
-                            //     .collection('users')
-                            //     .doc(user.uid)
-                            //     .get();
-                            // if (!docs.exists)
-                            //   Navigator.push(
-                            //       context,
-                            //       MaterialPageRoute(
-                            //           builder: (_) => FirstStep()));
-                          },
-                          child: CustomListTile(
-                            text: "Connect to Google",
-                            imgName: "logoGG.png",
+                        margin: EdgeInsets.symmetric(horizontal: 60.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFFfc4232);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFFfc4232); // Use the component's default.
+                              },
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
+                          onPressed: () {
+                            _auth.signInWithGoogleAccount();
+                          },
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: SuperIcon(
+                                  iconPath: 'assets/images/google.svg',
+                                  size: 18,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: SizedBox(
+                                  width: 10,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: Text("Connect with Google",
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.5,
+                                      wordSpacing: 2.0
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      SizedBox(height: 15),
                       Container(
-                        //padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                        height: 40,
-                        width: 300,
-                        child: RaisedButton(
-                          color: Color(0xffbcbcbc),
-                          onPressed: () {},
-                          child: CustomListTile(
-                            text: 'Connect to Apple',
-                            imgName: 'LogoAP.png',
+                        margin: EdgeInsets.symmetric(horizontal: 60.0),
+                        width: double.infinity,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Color(0xFF0c0c0c);
+                                return Colors.white; // Use the component's default.
+                              },
+                            ),
+                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) return Colors.white;
+                                return Color(0xFF0c0c0c); // Use the component's default.
+                              },
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
+                          onPressed: () {
+                            //_auth.signInWithGoogleAccount();
+                          },
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: SuperIcon(
+                                  iconPath: 'assets/images/apple.svg',
+                                  size: 18,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: SizedBox(
+                                  width: 10,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: Text("Connect with Apple",
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.5,
+                                      wordSpacing: 2.0
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -268,52 +448,91 @@ class _SignInScreenState extends State<SignInScreen> {
         Theme(
           data: Theme.of(context).copyWith(
             // override textfield's icon color when selected
-            primaryColor: Colors.black,
+            primaryColor: Colors.white,
           ),
           child: TextFormField(
             validator: (value) {
               if (value == null || value.isEmpty)
-                return 'Email not empty';
+                return 'Email is empty';
               else if (EmailValidator.validate(value) == false)
-                return 'Email not valid';
+                return 'Email is not valid';
               return null;
             },
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Montserrat',
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
             textAlign: TextAlign.left,
             onChanged: (value) => _email = value,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.email),
-              labelText: 'Email',
-              labelStyle: TextStyle(
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.white12,
+                ),
+              ),
+              prefixIcon: Container(
+                  margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Icon(Icons.email, color: Colors.white, size: 25.0)
+              ),
+              hintText: 'Email',
+              hintStyle: TextStyle(
+                color: Color(0x70999999),
                 fontFamily: 'Montserrat',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
               fillColor: Colors.white,
             ),
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             autocorrect: false,
-            cursorColor: black,
+            cursorColor: Color(0xFF2FB49C),
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 5),
         Theme(
           data: Theme.of(context).copyWith(
             // override textfield's icon color when selected
-            primaryColor: Colors.black,
+            primaryColor: Colors.white,
           ),
           child: TextFormField(
+            // controller: PasswordControler,
             validator: (value) {
               if (value == null || value.isEmpty)
-                return 'Password not empty';
+                return 'Password is empty';
               else if (value.length < 6)
                 return 'Password must longer than 6 digits';
               return null;
             },
-            style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Montserrat',
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.left,
             onChanged: (value) => _password = value,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.security),
-              labelText: 'Password',
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.white12,
+                ),
+              ),
+              prefixIcon: Container(
+                  margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Icon(Icons.security, color: Colors.white, size: 25.0)
+              ),
+              hintText: 'Password',
+              hintStyle: TextStyle(
+                color: Color(0x70999999),
+                fontFamily: 'Montserrat',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
               suffixIcon: IconButton(
                 icon: trailingIconPass,
                 onPressed: () => this.setState(() {
@@ -321,14 +540,18 @@ class _SignInScreenState extends State<SignInScreen> {
                   show = !show;
                   trailingIconPass = Icon(show == true
                       ? Icons.visibility_rounded
-                      : Icons.visibility_off_rounded);
+                      : Icons.visibility_off_rounded,
+                    color: Color(0x70999999),
+                  );
                 }),
               ),
+              fillColor: Colors.white,
             ),
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             autocorrect: false,
             obscureText: isObcure,
+            cursorColor: Color(0xFF2FB49C),
           ),
         ),
       ],

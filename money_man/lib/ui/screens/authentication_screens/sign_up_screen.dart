@@ -282,7 +282,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           onPressed: () {
-                            _auth.signInWithGoogleAccount();
+                            //_auth.signInWithGoogleAccount();
                           },
                           child: Row(
                             children: [
@@ -495,7 +495,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               fillColor: Colors.white,
             ),
             keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.done,
+            textInputAction: TextInputAction.next,
             autocorrect: false,
             obscureText: isObcure,
             cursorColor: Color(0xFF2FB49C),
