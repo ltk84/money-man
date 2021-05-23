@@ -85,7 +85,7 @@ class OnboardingScreenTwo extends StatelessWidget {
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (_) => HomeScreen()));
                       },
-                      color: Colors.white,
+                      color: Color(0xff007b10),
                       elevation: 0.0,
                       child: Text(
                         'Add first transaction',

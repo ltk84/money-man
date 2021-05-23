@@ -34,10 +34,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     final RoundedLoadingButtonController _btnController =
         new RoundedLoadingButtonController();
     return Scaffold(
-      backgroundColor: Colors.black12,
+      backgroundColor: Color(0xff1a1a1a),
       body: Container(
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
@@ -102,16 +101,11 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
             SizedBox(
               height: 20,
             ),
-            /*OutlinedButton(
-                onPressed: () async {
-                  await user.sendEmailVerification();
-                },
-                child: Text('Verify email!'))*/
             Container(
               child: RoundedLoadingButton(
                 height: 40,
                 width: 200,
-                color: Colors.grey[350],
+                color: Color(0xff007b10),
                 child: Text('Verify email!',
                     style: TextStyle(
                         fontFamily: 'Montserrat',
@@ -123,7 +117,20 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   _btnController.success();
                 },
               ),
-            )
+            ),
+            Center(
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(vertical: 50, horizontal: 40),
+                child: Text(
+                  ' Click the button then check your mailbox to get your verify email link! \n ',
+                  style: TextStyle(
+                    color: white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ],
         ),
       ),

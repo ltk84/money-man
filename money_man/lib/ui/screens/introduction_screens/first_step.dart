@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/services/constaints.dart';
 import 'ending_introduction.dart';
 
 class FirstStep extends StatefulWidget {
@@ -129,6 +130,7 @@ class _FirstStepState extends State<FirstStep> {
                     child: Text(
                       "Wallet's name:",
                       style: TextStyle(
+                          color: black,
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.bold),
                     ),
@@ -148,16 +150,16 @@ class _FirstStepState extends State<FirstStep> {
                         child: Form(
                           key: _formKey,
                           child: TextFormField(
-                            validator: (value) {
-                              if (value == null || value.length == 0)
-                                return 'Wallet name is empty';
-                              return null;
-                            },
-                            onChanged: (value) => wallet.name = value,
-                            obscureText: false,
-                            decoration:
-                                InputDecoration(border: InputBorder.none),
-                          ),
+                              validator: (value) {
+                                if (value == null || value.length == 0)
+                                  return 'Wallet name is empty';
+                                return null;
+                              },
+                              onChanged: (value) => wallet.name = value,
+                              obscureText: false,
+                              decoration:
+                                  InputDecoration(border: InputBorder.none),
+                              style: TextStyle(color: black)),
                         ),
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -176,6 +178,7 @@ class _FirstStepState extends State<FirstStep> {
                     child: Text(
                       "Wallet's amount:",
                       style: TextStyle(
+                          color: black,
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.bold),
                     ),
@@ -189,6 +192,7 @@ class _FirstStepState extends State<FirstStep> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
                         width: 200.0,
                         height: size.height * 0.033,
                         child: Form(
@@ -205,6 +209,7 @@ class _FirstStepState extends State<FirstStep> {
                             decoration: InputDecoration(
                               border: InputBorder.none,
                             ),
+                            style: TextStyle(color: black),
                           ),
                         ),
                         decoration: BoxDecoration(
@@ -214,19 +219,37 @@ class _FirstStepState extends State<FirstStep> {
                       SizedBox(
                         width: 5,
                       ),
-                      Container(
-                        width: 45,
-                        height: size.height * 0.033,
-                        alignment: Alignment.center,
-                        child: Text(
-                          currencyName,
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.bold),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(5),
-                          //border: Border.all(color: Colors.grey)
+                      GestureDetector(
+                        onTap: () {
+                          showCurrencyPicker(
+                            onSelect: (value) {
+                              wallet.currencyID = value.code;
+                              setState(() {
+                                currencyName = value.code;
+                              });
+                            },
+                            context: context,
+                            showFlag: true,
+                            showCurrencyName: true,
+                            showCurrencyCode: true,
+                          );
+                        },
+                        child: Container(
+                          width: 45,
+                          height: size.height * 0.033,
+                          alignment: Alignment.center,
+                          child: Text(
+                            currencyName,
+                            style: TextStyle(
+                                color: white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(5),
+                            //border: Border.all(color: Colors.grey)
+                          ),
                         ),
                       )
                     ],
@@ -237,7 +260,7 @@ class _FirstStepState extends State<FirstStep> {
                 ),
 
                 // Currency(),
-                ListTile(
+                /* ListTile(
                   onTap: () {
                     showCurrencyPicker(
                       onSelect: (value) {
@@ -259,7 +282,7 @@ class _FirstStepState extends State<FirstStep> {
                       style: TextStyle(color: Colors.black, fontSize: 15.0)),
                   trailing: Icon(Icons.chevron_right,
                       size: 20.0, color: Colors.white24),
-                ),
+                ),*/
 
                 Column(
                   children: [

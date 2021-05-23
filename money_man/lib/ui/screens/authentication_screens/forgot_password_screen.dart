@@ -227,6 +227,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       onPressed: onPressedIconWithText,
                       state: stateTextWithIcon),
                 ),
+                Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(vertical: 40, horizontal: 40),
+                    child: Text(
+                      ' Click the button then check your mailbox to get your verify email link! \n ',
+                      style: TextStyle(
+                        color: black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
