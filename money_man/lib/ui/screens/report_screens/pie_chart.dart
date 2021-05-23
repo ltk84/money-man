@@ -13,8 +13,7 @@ class PieChartScreen extends StatefulWidget {
   List<MyTransaction> currentList;
   List<MyCategory> categoryList;
   double total;
-
-  PieChartScreen({Key key, @required this.currentList, @required this.categoryList, @required this.total}) : super(key: key);
+  PieChartScreen({Key key, @required this.currentList, @required this.categoryList, @required this.total }) : super(key: key);
   @override
   State<StatefulWidget> createState() => PieChartScreenState();
 }
