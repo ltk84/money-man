@@ -36,67 +36,109 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
+      backgroundColor: Color(0xFF111111),
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: TextField(
-          onChanged: (value) => searchPattern = value,
-          onEditingComplete: () async {
-            // làm bàn phím down
-            FocusScope.of(context).unfocus();
-            // control cho loading screen xuất hiện
-            setState(() {
-              isLoading = true;
-            });
-
-            // Lấy danh sách transaction dựa trên searchPattern
-            List<MyTransaction> _transactionList = await _firestore
-                .queryTransationByCategory(searchPattern, widget.wallet);
-
-            // danh sách các date mà _transactionList có
-            List<DateTime> listDateOfTrans = [];
-
-            // thực hiện sort theo thứ tự thời gian giảm dần
-            _transactionList.sort((a, b) => b.date.compareTo(a.date));
-            // Lấy các ngày có trong _transactionList ra cho vào listDateOfTrans
-            // tính toán tổng đầu vào, đàu ra, hiệu
-            _transactionList.forEach((element) {
-              if (!listDateOfTrans.contains(element.date))
-                listDateOfTrans.add(element.date);
-              if (element.category.type == 'expense')
-                totalOutCome += element.amount;
-              else
-                totalInCome += element.amount;
-            });
-            total = totalInCome - totalOutCome;
-
-            // Tạo thành list trans filter theo thời gian
-            transactionListSortByDate.clear();
-            listDateOfTrans.forEach((date) {
-              final b = _transactionList
-                  .where((element) => element.date.compareTo(date) == 0);
-              transactionListSortByDate.add(b.toList());
-            });
-
-            // control loading screen mất => hiện kết quả truy ván ra
-            setState(() {
-              isLoading = false;
-            });
-          },
-          decoration:
-              InputDecoration(hintText: 'Search by #tag, category, etc'),
-        ),
-        actions: [Icon(Icons.settings_applications)],
+        elevation: 0,
+        backgroundColor: Colors.grey[900],
+        leading: CloseButton(),
+        // leading: IconButton(
+        //   icon: Icon(Icons.close),
+        //   onPressed: () => Navigator.pop(context),
+        // ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Icon(Icons.settings),
+          )
+        ],
       ),
-      body: Stack(
+      body: Column(
         children: [
           Container(
-            color: Colors.black,
+            margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+            decoration: BoxDecoration(
+              color: Colors.grey[900].withOpacity(0.8),
+              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+            ),
+            child: TextField(
+              onChanged: (value) => searchPattern = value,
+              onEditingComplete: () async {
+                // làm bàn phím down
+                FocusScope.of(context).unfocus();
+                // control cho loading screen xuất hiện
+                setState(() {
+                  isLoading = true;
+                });
+
+                // Lấy danh sách transaction dựa trên searchPattern
+                List<MyTransaction> _transactionList = await _firestore
+                    .queryTransationByCategory(searchPattern, widget.wallet);
+
+                // danh sách các date mà _transactionList có
+                List<DateTime> listDateOfTrans = [];
+
+                // thực hiện sort theo thứ tự thời gian giảm dần
+                _transactionList.sort((a, b) => b.date.compareTo(a.date));
+                // Lấy các ngày có trong _transactionList ra cho vào listDateOfTrans
+                // tính toán tổng đầu vào, đàu ra, hiệu
+                _transactionList.forEach((element) {
+                  if (!listDateOfTrans.contains(element.date))
+                    listDateOfTrans.add(element.date);
+                  if (element.category.type == 'expense')
+                    totalOutCome += element.amount;
+                  else
+                    totalInCome += element.amount;
+                });
+                total = totalInCome - totalOutCome;
+
+                // Tạo thành list trans filter theo thời gian
+                transactionListSortByDate.clear();
+                listDateOfTrans.forEach((date) {
+                  final b = _transactionList
+                      .where((element) => element.date.compareTo(date) == 0);
+                  transactionListSortByDate.add(b.toList());
+                });
+
+                // control loading screen mất => hiện kết quả truy ván ra
+                setState(() {
+                  isLoading = false;
+                });
+              },
+              style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white
+              ),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                prefixIconConstraints: BoxConstraints(
+                  minHeight: 15,
+                  minWidth: 40,
+                  maxHeight: 15,
+                  maxWidth: 40,
+                ),
+                isDense: true,
+                contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                prefixIcon: Icon(Icons.search, color: Colors.white38),
+                hintText: 'Search by #tag, category, etc',
+                hintStyle: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white24
+                )
+              ),
+            ),
+          ),
+           Container(
             child: transactionListSortByDate.length == 0
                 ? Text(
-                    'deo co gi ca',
+                    'Nothing',
                     style: TextStyle(color: Colors.white),
                   )
                 : ListView.builder(
@@ -124,9 +166,45 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                               totalAmountInDay);
                     }),
           ),
-          isLoading == true ? LoadingScreen() : Container()
         ],
       ),
+      // body: Stack(
+      //   children: [
+      //     Container(
+      //       color: Colors.black,
+      //       child: transactionListSortByDate.length == 0
+      //           ? Text(
+      //               'deo co gi ca',
+      //               style: TextStyle(color: Colors.white),
+      //             )
+      //           : ListView.builder(
+      //               physics: BouncingScrollPhysics(),
+      //               shrinkWrap: true,
+      //               itemCount: transactionListSortByDate.length,
+      //               itemBuilder: (context, xIndex) {
+      //                 double totalAmountInDay = 0;
+      //                 transactionListSortByDate[xIndex].forEach((element) {
+      //                   if (element.category.type == 'expense')
+      //                     totalAmountInDay -= element.amount;
+      //                   else
+      //                     totalAmountInDay += element.amount;
+      //                 });
+      //
+      //                 return xIndex == 0
+      //                     ? Column(
+      //                         children: [
+      //                           buildHeader(totalInCome, totalOutCome, total),
+      //                           buildBottom(transactionListSortByDate, xIndex,
+      //                               totalAmountInDay)
+      //                         ],
+      //                       )
+      //                     : buildBottom(transactionListSortByDate, xIndex,
+      //                         totalAmountInDay);
+      //               }),
+      //     ),
+      //     isLoading == true ? LoadingScreen() : Container()
+      //   ],
+      // ),
     );
   }
 
