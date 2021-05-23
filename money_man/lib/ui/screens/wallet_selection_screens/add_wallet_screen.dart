@@ -81,8 +81,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.transparent,
-                )
-            ),
+                )),
           ],
         ),
         body: Container(
@@ -257,6 +256,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
+                          onPressed: () {},
                           icon: Icon(
                             Icons.account_balance_outlined,
                             color: Color(0xff8f8f8f),
