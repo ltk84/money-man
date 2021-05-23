@@ -132,12 +132,16 @@ class _TransactionScreen extends State<TransactionScreen>
                 PopupMenuButton(onSelected: (value) {
                   print(value);
                   if (value == 'Search for transaction') {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => SearchTransactionScreen(
-                                  wallet: _wallet,
-                                )));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (_) => SearchTransactionScreen(
+                    //               wallet: _wallet,
+                    //             )));
+                    showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (context) => SearchTransactionScreen(wallet: _wallet),
+                    );
                   } else if (value == 'change display') {
                     setState(() {
                       viewByCategory = !viewByCategory;
