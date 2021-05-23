@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/ui/screens/introduction_screens/access_screen.dart';
 import '../../widgets/carousel_indicator.dart';
 
@@ -6,33 +7,67 @@ class IntroductionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.grey[900],
         body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Lorem ipsum'),
-          Container(
-            child: carouselWithIndicator,
-            height: 350,
-            width: 300,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
-            child: Text(
-                'Lorem Ipsum is s hdard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop .'),
-          ),
-          Container(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (_) => AccessScreen()));
-                },
-                child: Text('GET STARTED'),
-                style: TextButton.styleFrom(backgroundColor: Colors.black),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 5,
+                child: IntroductionSlide(),
               ),
-              alignment: Alignment.bottomCenter)
-        ],
-      ),
-    ));
+              Expanded(
+                flex: 1,
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),
+                  width: double.infinity,
+                    // child: TextButton(
+                    //   onPressed: () {
+                    //     Navigator.pushReplacement(context,
+                    //         MaterialPageRoute(builder: (_) => AccessScreen()));
+                    //   },
+                    //   child: Text('GET STARTED'),
+                    //   style: TextButton.styleFrom(backgroundColor: Colors.black),
+                    // ),
+                  child: TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed)) return Colors.white;
+                          return Color(0xFF2FB49C); // Use the component's default.
+                        },
+                      ),
+                      foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
+                          return Colors.white; // Use the component's default.
+                        },
+                      ),
+                    ),
+                    onPressed: () async {
+                      // Navigator.pushReplacement(context,
+                      //     MaterialPageRoute(builder: (_) => AccessScreen()));
+                      showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => AccessScreen()
+                      );
+                    },
+                    child: Text('GET STARTED',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.5,
+                            wordSpacing: 2.0
+                        ),
+                        textAlign: TextAlign.center
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+    );
   }
 }
