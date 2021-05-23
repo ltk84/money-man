@@ -539,9 +539,9 @@ class _TransactionScreen extends State<TransactionScreen>
                       ),
                       Expanded(
                         child: Text(
-                            transListSortByDate[xIndex][yIndex]
-                                .amount
-                                .toString(),
+                            transListSortByDate[xIndex][yIndex].category.type == 'income'
+                                ? "${transListSortByDate[xIndex][yIndex].amount.toString()}"
+                                : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()}",
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,

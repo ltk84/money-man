@@ -128,41 +128,44 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                         iconSize: 70,
                         color: Color(0xff8f8f8f),
                       ),
-                      Container(
-                        width: 250,
-                        child: TextFormField(
-                          keyboardType: TextInputType.name,
-                          style: TextStyle(
-                            color: Colors.white,
-                            decoration: TextDecoration.none,
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(right: 50),
+                          width: 250,
+                          child: TextFormField(
+                            keyboardType: TextInputType.name,
+                            style: TextStyle(
+                              color: Colors.white,
+                              decoration: TextDecoration.none,
+                            ),
+                            decoration: InputDecoration(
+                                errorBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.red, width: 1),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white60, width: 1),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white60, width: 3),
+                                ),
+                                // border: UnderlineInputBorder(
+                                //   borderSide:
+                                //       BorderSide(color: Colors.white60, width: 3),
+                                // ),
+                                labelText: 'Name',
+                                labelStyle: TextStyle(color: Colors.white60)),
+                            onChanged: (value) => wallet.name = value,
+                            validator: (value) {
+                              if (value == null || value.length == 0)
+                                return 'Name is empty';
+                              return (value != null && value.contains('@'))
+                                  ? 'Do not use the @ char.'
+                                  : null;
+                            },
                           ),
-                          decoration: InputDecoration(
-                              errorBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.red, width: 1),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.white60, width: 1),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.white60, width: 3),
-                              ),
-                              // border: UnderlineInputBorder(
-                              //   borderSide:
-                              //       BorderSide(color: Colors.white60, width: 3),
-                              // ),
-                              labelText: 'Name',
-                              labelStyle: TextStyle(color: Colors.white60)),
-                          onChanged: (value) => wallet.name = value,
-                          validator: (value) {
-                            if (value == null || value.length == 0)
-                              return 'Name is empty';
-                            return (value != null && value.contains('@'))
-                                ? 'Do not use the @ char.'
-                                : null;
-                          },
                         ),
                       )
                     ],
@@ -171,7 +174,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     thickness: 0.05,
                     color: Colors.white,
                   ),
-
                   ListTile(
                     onTap: () {
                       showCurrencyPicker(
@@ -200,51 +202,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     thickness: 0.05,
                     color: Colors.white,
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     IconButton(
-                  //       icon: Icon(Icons.confirmation_number_outlined),
-                  //       onPressed: () {},
-                  //       iconSize: 40,
-                  //       color: Color(0xff8f8f8f),
-                  //     ),
-                  //     Container(
-                  //         width: 275,
-                  //         child: Theme(
-                  //           data: ThemeData(
-                  //             primaryColor: Colors.white70,
-                  //             fontFamily: 'Monserrat',
-                  //             secondaryHeaderColor: Colors.white,
-                  //           ),
-                  //           child: TextFormField(
-                  //             style: TextStyle(fontSize: 13),
-                  //             decoration: const InputDecoration(
-                  //                 enabledBorder: UnderlineInputBorder(
-                  //                   borderSide: BorderSide(color: Colors.white60),
-                  //                 ),
-                  //                 focusedBorder: UnderlineInputBorder(
-                  //                   borderSide: BorderSide(color: Colors.white60),
-                  //                 ),
-                  //                 border: UnderlineInputBorder(
-                  //                   borderSide: BorderSide(color: Colors.white60),
-                  //                 ),
-                  //                 labelText: 'Amount *',
-                  //                 labelStyle: TextStyle(color: Colors.white60)),
-                  //             onSaved: (value) {
-                  //               // This optional block of code can be used to run
-                  //               // code when the user saves the form.
-                  //             },
-                  //             validator: (value) {
-                  //               return (value != null && value.contains('@'))
-                  //                   ? 'Do not use the @ char.'
-                  //                   : null;
-                  //             },
-                  //           ),
-                  //         ))
-                  //   ],
-                  // ),
-                  ListTile(
+                  /*ListTile(
                     onTap: () {},
                     dense: true,
                     leading: Icon(Icons.account_balance,
@@ -291,6 +249,62 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                               : null;
                         },
                       ),
+                    ),
+                  ),*/
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, bottom: 8),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.account_balance_outlined,
+                            color: Color(0xff8f8f8f),
+                            size: 30,
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(left: 15, right: 50),
+                            width: 250,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              style: TextStyle(
+                                color: Colors.white,
+                                decoration: TextDecoration.none,
+                              ),
+                              decoration: InputDecoration(
+                                  errorBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.red, width: 1),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white60, width: 1),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white60, width: 3),
+                                  ),
+                                  labelText: 'Initial balance',
+                                  labelStyle: TextStyle(color: Colors.white60)),
+                              onChanged: (value) {
+                                var val = int.tryParse(value);
+                                if (val == null) wallet.amount = 0;
+                                wallet.amount = val;
+                              },
+                              validator: (value) {
+                                if (value == null || value.length == 0)
+                                  return 'This field not empty';
+                                var temp = int.tryParse(value);
+                                return temp == null
+                                    ? 'Initial amount must be number'
+                                    : null;
+                              },
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ],
