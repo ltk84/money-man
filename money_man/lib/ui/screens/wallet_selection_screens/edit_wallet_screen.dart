@@ -247,13 +247,13 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                   labelText: 'Initial balance',
                                   labelStyle: TextStyle(color: Colors.white60)),
                               onChanged: (value) {
-                                var val = int.tryParse(value);
+                                var val = double.tryParse(value);
                                 if (val == null) widget.wallet.amount = 0;
                                 widget.wallet.amount = val;
                               },
                               validator: (value) {
                                 return (value == null ||
-                                        int.tryParse(value) == null)
+                                    double.tryParse(value) == null)
                                     ? 'This field must be a number'
                                     : null;
                               },

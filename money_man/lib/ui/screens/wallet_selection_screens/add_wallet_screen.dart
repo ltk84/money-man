@@ -289,14 +289,14 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                                   labelText: 'Initial balance',
                                   labelStyle: TextStyle(color: Colors.white60)),
                               onChanged: (value) {
-                                var val = int.tryParse(value);
+                                var val = double.tryParse(value);
                                 if (val == null) wallet.amount = 0;
                                 wallet.amount = val;
                               },
                               validator: (value) {
                                 if (value == null || value.length == 0)
                                   return 'This field not empty';
-                                var temp = int.tryParse(value);
+                                var temp = double.tryParse(value);
                                 return temp == null
                                     ? 'Initial amount must be number'
                                     : null;

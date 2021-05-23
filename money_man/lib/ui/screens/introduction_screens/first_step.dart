@@ -207,7 +207,7 @@ class _FirstStepState extends State<FirstStep> {
                               return null;
                             },
                             onChanged: (value) =>
-                                wallet.amount = int.tryParse(value),
+                                wallet.amount = double.tryParse(value),
                             obscureText: false,
                             decoration: InputDecoration(
                               border: InputBorder.none,
