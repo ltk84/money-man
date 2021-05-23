@@ -17,7 +17,7 @@ class _IconPickerState extends State<IconPicker> {
   Widget build(BuildContext context) {
     print("build 1");
     return Scaffold(
-      backgroundColor: Colors.black26,
+      backgroundColor: Color(0xFF111111),
       appBar: AppBar(
         leadingWidth: 70.0,
         centerTitle: true,
@@ -61,7 +61,7 @@ class _IconPickerState extends State<IconPicker> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              color: Colors.black26,
+              color: Color(0xFF111111),
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 6,

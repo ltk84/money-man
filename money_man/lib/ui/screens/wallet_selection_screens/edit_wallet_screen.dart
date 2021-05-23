@@ -2,12 +2,11 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
-import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
 
 class EditWalletScreen extends StatefulWidget {
