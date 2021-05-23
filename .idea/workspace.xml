@@ -3,19 +3,128 @@
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:lam" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:phuc" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:tung" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:money-man" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:money-man" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:hacThe" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:money-man" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:lam" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:money-man" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:phuc" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:money-man" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:the" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:money-man" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:tung" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:hacThe" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:lam" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:phuc" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:the" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:tung" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/analytic_pie_chart_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/report_list_transaction_in_time.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/widgets/wrapper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/widgets/wrapper.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/widgets/wrapper_builder.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/widgets/wrapper_builder.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/analytic_revenue_expenditure_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/analytic_revenue_expenditure_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/bar_chart_information_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/bar_chart_information_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/chart_information_home_screen.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/pie_chart.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/pie_chart.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/pie_chart_information_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/pie_chart_information_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/report_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/report_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/pubspec.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Pixel_2_API_28]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VirtualDevicePath@C:\Users\Asus\.android\avd\Nexus_5_API_28.avd]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -37,7 +146,7 @@
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="dart.settings" />
+    <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -61,6 +170,7 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -74,6 +184,18 @@
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="422" y="247" key="#Notifications" timestamp="1616480839585">
       <screen x="0" y="0" width="1366" height="768" />
@@ -83,13 +205,19 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="73" y="0" key="#Project_Structure/0.0.1536.834@0.0.1536.834" timestamp="1618988245081" />
-    <state x="0" y="39" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1616481170240">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="0" y="30" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1621630869491">
+      <screen x="0" y="0" width="1280" height="720" />
     </state>
+    <state x="0" y="30" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.720@0.0.1280.720" timestamp="1621630869491" />
     <state x="0" y="39" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1616481170240" />
-    <state x="176" y="91" width="874" height="568" key="AVDManager" timestamp="1616587589007">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="371" y="107" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621633207415">
+      <screen x="0" y="0" width="1280" height="720" />
     </state>
+    <state x="371" y="107" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1280.720@0.0.1280.720" timestamp="1621633207415" />
+    <state x="165" y="85" width="819" height="533" key="AVDManager" timestamp="1621704768084">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="165" y="85" width="819" height="533" key="AVDManager/0.0.1280.720@0.0.1280.720" timestamp="1621704768084" />
     <state x="176" y="91" width="874" height="568" key="AVDManager/0.0.1366.768@0.0.1366.768" timestamp="1616587589007" />
     <state x="356" y="130" key="AndroidProcessChooserDialog" timestamp="1616489546448">
       <screen x="0" y="0" width="1366" height="768" />
@@ -100,29 +228,35 @@
     </state>
     <state x="317" y="139" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1616494633016" />
     <state x="356" y="151" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1618643935553" />
-    <state width="1014" height="189" key="GridCell.Tab.0.bottom" timestamp="1618980309778">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1236" height="123" key="GridCell.Tab.0.bottom" timestamp="1621777419806">
+      <screen x="0" y="0" width="1280" height="720" />
     </state>
+    <state width="1236" height="123" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1621777419806" />
     <state width="1014" height="189" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
-    <state width="1014" height="189" key="GridCell.Tab.0.center" timestamp="1618980309778">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1236" height="123" key="GridCell.Tab.0.center" timestamp="1621777419806">
+      <screen x="0" y="0" width="1280" height="720" />
     </state>
+    <state width="1236" height="123" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1621777419806" />
     <state width="1014" height="189" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
-    <state width="1014" height="189" key="GridCell.Tab.0.left" timestamp="1618980309777">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1236" height="123" key="GridCell.Tab.0.left" timestamp="1621777419806">
+      <screen x="0" y="0" width="1280" height="720" />
     </state>
+    <state width="1236" height="123" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1621777419806" />
     <state width="1014" height="189" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1618980309777" />
-    <state width="1014" height="189" key="GridCell.Tab.0.right" timestamp="1618980309778">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1236" height="123" key="GridCell.Tab.0.right" timestamp="1621777419806">
+      <screen x="0" y="0" width="1280" height="720" />
     </state>
+    <state width="1236" height="123" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1621777419806" />
     <state width="1014" height="189" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
-    <state x="38" y="29" key="SettingsEditor" timestamp="1616481253374">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="36" y="10" key="SettingsEditor" timestamp="1621775479634">
+      <screen x="0" y="0" width="1280" height="720" />
     </state>
+    <state x="36" y="10" key="SettingsEditor/0.0.1280.720@0.0.1280.720" timestamp="1621775479634" />
     <state x="38" y="29" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1616481253374" />
-    <state x="193" y="174" key="run.anything.popup" timestamp="1616501338867">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="181" y="163" key="run.anything.popup" timestamp="1621635183868">
+      <screen x="0" y="0" width="1280" height="720" />
     </state>
+    <state x="181" y="163" key="run.anything.popup/0.0.1280.720@0.0.1280.720" timestamp="1621635183868" />
     <state x="193" y="174" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1616501338867" />
   </component>
 </project>

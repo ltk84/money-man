@@ -8,8 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/report_screens/analytic_revenue_expenditure_screen.dart';
 import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
-import 'package:money_man/ui/screens/report_screens/chart_information_home_screen.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
+import 'package:money_man/ui/screens/report_screens/analytic_pie_chart_screen.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/utils.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
 import 'package:money_man/ui/screens/report_screens/share_screen.dart';
@@ -105,7 +105,6 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
             currencyID: 'a',
             iconID: 'b');
   }
-
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -377,7 +376,29 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                               Container(
                                 width: 450,
                                 height: 200,
-                                child: BarChartScreen(currentList: _transactionList, beginDate: beginDate, endDate: endDate),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      width: 450,
+                                      height: 200,
+                                      child: BarChartScreen(currentList: _transactionList, beginDate: beginDate, endDate: endDate),
+                                    ),
+                                    IconButton(
+                                        icon: Icon(Icons.web_outlined),
+                                        color: Colors.transparent,
+                                        iconSize: 400,
+                                        onPressed: (){
+                                          return showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AnalyticRevenueAndExpenditureScreen(
+                                                  currentWallet: _wallet,
+                                                );
+                                              });
+                                        }
+                                        )
+                                  ],
+                                )
                               ),
                             ]
                           );
@@ -416,7 +437,28 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         margin: EdgeInsets.symmetric(vertical: 25),
                                         width: 90,
                                         height: 90,
-                                        child: PieChartScreen(currentList: _transactionList, categoryList: _incomeCategoryList, total: income), //InformationHomeScreen
+                                        child: Stack(
+                                          children: <Widget>[
+                                            Container(
+                                              width: 90,
+                                              height: 90,
+                                              child: PieChartScreen(currentList: _transactionList, categoryList: _incomeCategoryList, total: income),
+                                            ),
+                                            IconButton(
+                                                icon: Icon(Icons.web_outlined),
+                                                color: Colors.transparent,
+                                                iconSize: 90,
+                                                onPressed: (){
+                                                  return showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AnalyticPieChartSreen(currentList: _transactionList,
+                                                          categoryList: _incomeCategoryList, total: income, content: 'Income',color: Colors.green[600],);
+                                                      });
+                                                }
+                                            )
+                                          ],
+                                        ) //InformationHomeScreen
                                       ),
                                     ],
                                   );
@@ -448,10 +490,31 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       textAlign: TextAlign.start,
                                     ),
                                     Container(
-                                      margin: EdgeInsets.symmetric(vertical: 25),
-                                      width: 90,
-                                      height: 90,
-                                      child: PieChartScreen(currentList: _transactionList, categoryList: _expenseCategoryList, total: expense),
+                                        margin: EdgeInsets.symmetric(vertical: 25),
+                                        width: 90,
+                                        height: 90,
+                                        child: Stack(
+                                          children: <Widget>[
+                                            Container(
+                                              width: 90,
+                                              height: 90,
+                                              child: PieChartScreen(currentList: _transactionList, categoryList: _expenseCategoryList, total: expense),
+                                            ),
+                                            IconButton(
+                                                icon: Icon(Icons.web_outlined),
+                                                color: Colors.transparent,
+                                                iconSize: 90,
+                                                onPressed: (){
+                                                  return showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AnalyticPieChartSreen(currentList: _transactionList, categoryList: _expenseCategoryList, total: expense,
+                                                          content: 'Expense',color: Colors.red,);
+                                                      });
+                                                }
+                                            )
+                                          ],
+                                        ) //InformationHomeScreen
                                     ),
                                   ]
                                 );
