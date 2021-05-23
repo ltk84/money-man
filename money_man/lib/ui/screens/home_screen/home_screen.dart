@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
+import 'package:money_man/ui/screens/account_screens/account_edit_information_screen.dart';
 //import 'package:money_man/ui/screens/account_screen/account_screen.dart';
 import 'package:money_man/ui/screens/planning_screen/planning_screen.dart';
 import 'package:money_man/core/models/walletModel.dart';
@@ -52,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
             AddTransactionScreen(),
             PlanningScreen(),
             AccountScreen(),
+
           ];
 
           if (snapshot.connectionState == ConnectionState.active) {

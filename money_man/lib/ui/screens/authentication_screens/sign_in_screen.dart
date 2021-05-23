@@ -406,7 +406,12 @@ class _SignInScreenState extends State<SignInScreen> {
           .showSnackBar(SnackBar(content: Text(error)));
     }
   }
-
+  bool isNumeric(String s) {
+    if(s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
+  }
   Future signInWithEmailAndPassword(
       FirebaseAuthService _auth, BuildContext context) async {
     if (_formKey.currentState.validate()) {
@@ -453,9 +458,9 @@ class _SignInScreenState extends State<SignInScreen> {
           child: TextFormField(
             validator: (value) {
               if (value == null || value.isEmpty)
-                return 'Email is empty';
-              else if (EmailValidator.validate(value) == false)
-                return 'Email is not valid';
+                return 'Email not empty';
+              else if (!isNumeric(value) && EmailValidator.validate(value) == false)
+                return 'Email not valid';
               return null;
             },
             style: TextStyle(
@@ -593,3 +598,4 @@ class CustomListTile extends StatelessWidget {
     );
   }
 }
+

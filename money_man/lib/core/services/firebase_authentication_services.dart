@@ -86,7 +86,7 @@ class FirebaseAuthService {
       final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      await googleUser.authentication;
 
       final GoogleAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -119,7 +119,7 @@ class FirebaseAuthService {
 
     // Create a credential from the access token
     final FacebookAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(result.token);
+    FacebookAuthProvider.credential(result.token);
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance
@@ -152,7 +152,7 @@ class FirebaseAuthService {
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         final credential =
-            FacebookAuthProvider.credential(result.accessToken.token);
+        FacebookAuthProvider.credential(result.accessToken.token);
         await _auth.signInWithCredential(credential);
         break;
       case FacebookLoginStatus.cancelledByUser:

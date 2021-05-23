@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/ui/screens/authentication_screens/verify_email_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -334,7 +335,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           .showSnackBar(SnackBar(content: Text(error)));
     }
   }
-
   Future signUpWithEmailAndPassword(
       FirebaseAuthService _auth, BuildContext context) async {
     if (_formKey.currentState.validate()) {

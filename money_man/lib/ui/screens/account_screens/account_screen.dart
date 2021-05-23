@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:flutter/material.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/ui/screens/account_screens/account_edit_information_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_account_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -115,62 +117,58 @@ class _TestState extends State<Test> {
                       fontFamily: 'Montseratt',
                       fontSize: 17.0))),
         ),
-        body: StreamBuilder<User>(
-            stream: _auth.userStream,
-            builder: (context, snapshot) {
-              User user = snapshot.data;
-
-              return ListView(
-                physics: BouncingScrollPhysics(),
-                controller: _controller,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
-                    child: reachTop == 0
-                        ? Hero(tag: 'alo', child: title)
-                        : emptyTitle,
-                  ),
-                  Container(
+        body:  StreamBuilder<User>(
+        stream: _auth.userStream,
+          builder: (context, snapshot) {
+          User _user = snapshot.data;
+           return ListView(
+              physics: BouncingScrollPhysics(),
+              controller: _controller,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
+                  child:
+                  reachTop == 0 ? Hero(tag: 'alo', child: title) : emptyTitle,
+                ),
+                Container(
                     padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                     decoration: BoxDecoration(
                         color: Colors.grey[900],
                         border: Border(
-                            top: BorderSide(
-                              width: 0.1,
-                              color: Colors.white,
-                            ),
+                        top: BorderSide(
+                        width: 0.1,
+                        color: Colors.white,
+                      ),
                             bottom: BorderSide(
                               width: 0.1,
                               color: Colors.white,
-                            ))),
-                    child: Column(
+                      ))),
+                    child : Column(
                       children: [
                         CircleAvatar(
                           radius: 30.0,
-                          child: Text('L', style: TextStyle(fontSize: 25.0)),
+                          child: Text((_user == null)?'':(_user.displayName != '' && _user.displayName != null)?
+                          _user.displayName.substring(0,1):'Y',
+                              style: TextStyle(fontSize: 25.0)),
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                              user == null
-                                  ? 'Username'
-                                  : user.email
-                                      .substring(0, user.email.indexOf('@')),
+                          child: Text((_user == null)?'':(_user.displayName != '' && _user.displayName != null)? _user.displayName:(_user.phoneNumber != null ? _user.phoneNumber:'Your name'),
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 15.0)),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Montserrat',
+                              fontSize: 15.0)),
                         ),
-                        Text(user == null ? 'email' : user.email,
+                        Text((_user == null)?'':_user.email == null?'Your email':(_user.email!= ''?_user.email:'Your email'),
                             style: TextStyle(
-                                color: Colors.grey[400],
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Montserrat',
-                                fontSize: 13.0)),
+                            color: Colors.grey[400],
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Montserrat',
+                            fontSize: 13.0)),
                         SizedBox(
                           height: 20.0,
                         ),
@@ -185,201 +183,196 @@ class _TestState extends State<Test> {
                                 context,
                                 PageTransition(
                                     child: AccountDetail(
-                                      user: user,
                                     ),
                                     type: PageTransitionType.rightToLeft));
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(builder: (context) => AccountDetail()));
-                          },
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(builder: (context) => AccountDetail()));
+                         },
                           dense: true,
-                          leading: Icon(Icons.person,
-                              color: Colors.white, size: 38.0),
+                          leading:
+                          Icon(Icons.person, color: Colors.white, size: 38.0),
                           title: Text('My Account',
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Montserrat')),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Montserrat')),
                           subtitle: Text('Your infomation',
                               style: TextStyle(
-                                  color: Colors.grey[400],
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 13.0)),
-                          trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        border: Border(
-                            top: BorderSide(
-                              width: 0.1,
-                              color: Colors.white,
-                            ),
-                            bottom: BorderSide(
-                              width: 0.1,
-                              color: Colors.white,
-                            ))),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          onTap: () {},
-                          dense: true,
-                          leading: Icon(Icons.account_balance_wallet_rounded,
-                              color: Colors.grey[400], size: 25.0),
-                          title: Text('My Wallets',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 14.0)),
-                          trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-                          child: Divider(
-                            height: 0,
-                            thickness: 0.1,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListTile(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: CategoriesScreen(),
-                                    type: PageTransitionType.rightToLeft));
-                          },
-                          dense: true,
-                          leading: Icon(Icons.category,
-                              color: Colors.grey[400], size: 25.0),
-                          title: Text('Categories',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 14.0)),
-                          trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        border: Border(
-                            top: BorderSide(
-                              width: 0.1,
-                              color: Colors.white,
-                            ),
-                            bottom: BorderSide(
-                              width: 0.1,
-                              color: Colors.white,
-                            ))),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          onTap: () {
-                            showCupertinoModalBottomSheet(
-                                backgroundColor: Colors.grey[900],
-                                context: context,
-                                builder: (context) => myIconPicker.IconPicker());
-                          },
-                          dense: true,
-                          leading: Icon(Icons.explore,
-                              color: Colors.grey[400], size: 25.0),
-                          title: Text('Explore',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 14.0)),
-                          trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-                          child: Divider(
-                            height: 0,
-                            thickness: 0.1,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListTile(
-                          onTap: () {},
-                          dense: true,
-                          leading: Icon(Icons.help_outline,
-                              color: Colors.grey[400], size: 25.0),
-                          title: Text('Help & Support',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 14.0)),
-                          trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-                          child: Divider(
-                            height: 0,
-                            thickness: 0.1,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListTile(
-                          onTap: () {},
-                          dense: true,
-                          leading: Icon(Icons.settings,
-                              color: Colors.grey[400], size: 25.0),
-                          title: Text('Settings',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 14.0)),
-                          trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-                          child: Divider(
-                            height: 0,
-                            thickness: 0.1,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListTile(
-                          onTap: () {},
-                          dense: true,
-                          leading: Icon(Icons.info,
-                              color: Colors.grey[400], size: 25.0),
-                          title: Text('About',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 14.0)),
-                          trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5.0,
+                              color: Colors.grey[400],
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Montserrat',
+                              fontSize: 13.0)),
+                          trailing:
+                          Icon(Icons.chevron_right, color: Colors.grey[400]),
                   )
                 ],
-              );
-            }));
+              )
+          ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[900],
+                      border: Border(
+                      top: BorderSide(
+                      width: 0.1,
+                      color: Colors.white,
+                    ),
+                          bottom: BorderSide(
+                            width: 0.1,
+                            color: Colors.white,
+                    ))),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        onTap: () {},
+                        dense: true,
+                        leading: Icon(Icons.account_balance_wallet_rounded,
+                            color: Colors.grey[400], size: 25.0),
+                        title: Text('My Wallets',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Montserrat',
+                                fontSize: 14.0)),
+                        trailing:
+                        Icon(Icons.chevron_right, color: Colors.grey[400]),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                        child: Divider(
+                          height: 0,
+                          thickness: 0.1,
+                          color: Colors.white,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: CategoriesScreen(),
+                                  type: PageTransitionType.rightToLeft));
+                          },
+                        dense: true,
+                        leading: Icon(Icons.category,
+                            color: Colors.grey[400], size: 25.0),
+                        title: Text('Categories',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Montserrat',
+                                fontSize: 14.0)),
+                        trailing:
+                        Icon(Icons.chevron_right, color: Colors.grey[400]),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[900],
+                      border: Border(
+                          top: BorderSide(
+                            width: 0.1,
+                            color: Colors.white,
+                    ),
+                          bottom: BorderSide(
+                            width: 0.1,
+                            color: Colors.white,
+                    ))),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        onTap: () {},
+                        dense: true,
+                        leading: Icon(Icons.explore,
+                            color: Colors.grey[400], size: 25.0),
+                        title: Text('Explore',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Montserrat',
+                                fontSize: 14.0)),
+                        trailing:
+                        Icon(Icons.chevron_right, color: Colors.grey[400]),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                        child: Divider(
+                          height: 0,
+                          thickness: 0.1,
+                          color: Colors.white,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: () {},
+                        dense: true,
+                        leading: Icon(Icons.help_outline,
+                            color: Colors.grey[400], size: 25.0),
+                        title: Text('Help & Support',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600, fontFamily: 'Montserrat',
+
+                                fontSize: 14.0)),
+                        trailing:
+                        Icon(Icons.chevron_right, color: Colors.grey[400]),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                        child: Divider(
+                          height: 0,
+                          thickness: 0.1,
+                          color: Colors.white,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: () {},
+                        dense: true,
+                        leading: Icon(Icons.settings,
+                            color: Colors.grey[400], size: 25.0),
+                        title: Text('Settings',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Montserrat',
+                                fontSize: 14.0)),
+                        trailing:
+                        Icon(Icons.chevron_right, color: Colors.grey[400]),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                        child: Divider(
+                          height: 0,
+                          thickness: 0.1,
+                          color: Colors.white,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: () {},
+                        dense: true,
+                        leading:
+                        Icon(Icons.info, color: Colors.grey[400], size: 25.0),
+                        title: Text('About',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Montserrat',
+                                fontSize: 14.0)),
+                        trailing:
+                        Icon(Icons.chevron_right, color: Colors.grey[400]),
+                ),
+              ],
+            ),
+          ),
+                SizedBox(
+                  height: 5.0,
+          )
+        ],
+      );
+    })
+    );
   }
 }
