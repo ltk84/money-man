@@ -115,8 +115,8 @@ class  TimeRangeSelectionState extends State<TimeRangeSelection>{
         itemCount: listInfo.length,
         separatorBuilder: (BuildContext context, int index) => Divider(),
         itemBuilder: (BuildContext context, int index) {
-          String beginDate = (listInfo[index].begin == null) ? '--' : DateFormat('dd/MM/yyyy').format(listInfo[index].begin);
-          String endDate = (listInfo[index].end == null) ? '--' : DateFormat('dd/MM/yyyy').format(listInfo[index].end);
+          String beginDate = (listInfo[index].begin == null) ? 'Day/Month/Year' : DateFormat('dd/MM/yyyy').format(listInfo[index].begin);
+          String endDate = (listInfo[index].end == null) ? 'Day/Month/Year' : DateFormat('dd/MM/yyyy').format(listInfo[index].end);
 
           return ListTile(
             onTap: () async {
@@ -163,7 +163,7 @@ class  TimeRangeSelectionState extends State<TimeRangeSelection>{
             subtitle: Text(beginDate + " - " + endDate,
                 style: TextStyle(
                 fontFamily: 'Montserrat',
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.w400,
                 color: Colors.grey[500],
               )
