@@ -79,7 +79,7 @@ class _CategoriesTransactionScreenState
       length: 3,
       child: Scaffold(
         backgroundColor: Colors.black,
-        extendBodyBehindAppBar: true,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
           leading: MaterialButton(

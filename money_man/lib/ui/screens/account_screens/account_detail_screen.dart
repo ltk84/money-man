@@ -64,7 +64,7 @@ class _AccountDetailState extends State<AccountDetail> {
         User _user = snapshot.data;
         return Scaffold(
             backgroundColor: Colors.black,
-            extendBodyBehindAppBar: true,
+            //extendBodyBehindAppBar: true,
             appBar: AppBar(
                 leadingWidth: 250.0,
                 leading: MaterialButton(
