@@ -6,7 +6,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/constaints.dart';
-import 'package:money_man/core/services/slanding_clipper.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'ending_introduction.dart';
 
