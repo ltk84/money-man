@@ -112,17 +112,29 @@ class PieChartScreenState extends State<PieChartScreen>  {
       //   colorSaturation: ColorSaturation.highSaturation
       // );
 
+      // List<Color> colors = [
+      //   Color(0xFF0B6623), Color(0xFF3BB143), Color(0xFFFA8072), Color(0xFF7C4700),
+      //   Color(0xFFE0115F), Color(0xFFFFF200), Color(0xFFFC6600), Color(0xFFD30000),
+      //   Color(0xFFFC0FC0), Color(0xFFB200ED), Color(0xFF0018F9), Color(0xFFF8DE7E),
+      //   Color(0xFF89CFEF), Color(0xFFF9A602), Color(0xFFB43757), Color(0xFF131E3A),
+      //   Color(0xFF828282), Color(0xFF4B3A26), Color(0xFF787276), Color(0xFFFCD12A),
+      //   Color(0xFFFFBF00), Color(0xFFC21807), Color(0xFFFBAED2), Color(0xFF8660CD),
+      //   Color(0xFF00A86B), Color(0xFF997950), Color(0xFFBEBDB8), Color(0xFFEFFD5F),
+      //   Color(0xFF000080), Color(0xFF2B1700),
+      // ];
       List<Color> colors = [
-        Color(0xFFFFF200), Color(0xFFFC6600), Color(0xFFD30000), Color(0xFFFC0FC0), Color(0xFFB200ED),
-        Color(0xFF0018F9), Color(0xFF3BB143), Color(0xFF7C4700), Color(0xFF828282), Color(0xFFF8DE7E),
-        Color(0xFFF9A602), Color(0xFFFA8072), Color(0xFFE0115F), Color(0xFFB43757), Color(0xFF131E3A),
-        Color(0xFF0B6623), Color(0xFF4B3A26), Color(0xFF787276), Color(0xFFFCD12A), Color(0xFFFFBF00),
-        Color(0xFFC21807), Color(0xFFFBAED2), Color(0xFF8660CD), Color(0xFF89CFEF), Color(0xFF00A86B),
-        Color(0xFF997950), Color(0xFFBEBDB8), Color(0xFFEFFD5F), Color(0xFF000080), Color(0xFF2B1700),
+        Color(0xFF678f8f).withOpacity(0.5),
+        Color(0xFF23cc9c),
+        Color(0xFF2981d9),
+        Color(0xFFe3b82b),
+        Color(0xFFe68429),
+        Color(0xFFcf3f1f),
+        Color(0xFFbf137a),
+        Color(0xFF621bbf),
       ];
 
       return PieChartSectionData(
-        color: colors[i],
+        color: i < colors.length ? colors[i] : Colors.grey,
         value: value.toDouble(),
         showTitle: false,
         //title: value.toString() + '%',
@@ -134,7 +146,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
         badgeWidget: _Badge(
           _categoryList[i].iconID, // category icon.
           size: widgetSize,
-          borderColor: colors[i],
+          borderColor: i < colors.length ? colors[i] : Colors.grey,
         ),
         badgePositionPercentageOffset: .98,
       );
