@@ -215,6 +215,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
+                          onPressed: () {},
                           icon: Icon(
                             Icons.account_balance_outlined,
                             color: Color(0xff8f8f8f),
@@ -253,7 +254,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                               },
                               validator: (value) {
                                 return (value == null ||
-                                    double.tryParse(value) == null)
+                                        double.tryParse(value) == null)
                                     ? 'This field must be a number'
                                     : null;
                               },

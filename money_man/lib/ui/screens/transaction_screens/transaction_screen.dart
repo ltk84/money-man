@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
-import 'package:money_man/core/models/categoryModel.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
@@ -13,10 +12,11 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+
+import 'adjust_balance_screen.dart';
 
 class TransactionScreen extends StatefulWidget {
   Wallet currentWallet;
@@ -41,6 +41,7 @@ class _TransactionScreen extends State<TransactionScreen>
   TabController _tabController;
   Wallet _wallet;
   bool viewByCategory = false;
+  int choosedTimeRange = 3;
 
   @override
   void initState() {
@@ -70,6 +71,89 @@ class _TransactionScreen extends State<TransactionScreen>
             amount: 100,
             currencyID: 'USD',
             iconID: 'assets/icons/wallet_2.svg');
+  }
+
+  void _handleSelectTimeRange(int selected) {
+    showMenu(
+      initialValue: 3,
+      context: context,
+      position: RelativeRect.fromLTRB(100, -350, 0, 0),
+      items: [
+        CheckedPopupMenuItem(
+          checked: selected == 1 ? true : false,
+          value: 1,
+          child: Text("Day", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 2 ? true : false,
+          value: 2,
+          child: Text("Week", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 3 ? true : false,
+          value: 3,
+          child: Text("Month", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 4 ? true : false,
+          value: 4,
+          child: Text("Quarter", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 5 ? true : false,
+          value: 5,
+          child: Text("Year", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 6 ? true : false,
+          value: 6,
+          child: Text("All", style: TextStyle(color: Colors.black)),
+        ),
+        CheckedPopupMenuItem(
+          checked: selected == 7 ? true : false,
+          value: 7,
+          child: Text("Custom", style: TextStyle(color: Colors.black)),
+        ),
+      ],
+    ).then((value) {
+      switch (value) {
+        case 1:
+          setState(() {
+            choosedTimeRange = 1;
+          });
+          break;
+        case 2:
+          setState(() {
+            choosedTimeRange = 2;
+          });
+          break;
+        case 3:
+          setState(() {
+            choosedTimeRange = 3;
+          });
+          break;
+        case 4:
+          setState(() {
+            choosedTimeRange = 4;
+          });
+          break;
+        case 5:
+          setState(() {
+            choosedTimeRange = 5;
+          });
+          break;
+        case 6:
+          setState(() {
+            choosedTimeRange = 6;
+          });
+          break;
+        case 7:
+          setState(() {
+            choosedTimeRange = 7;
+          });
+          break;
+      }
+    });
   }
 
   @override
@@ -130,7 +214,6 @@ class _TransactionScreen extends State<TransactionScreen>
                   onPressed: () {},
                 ),
                 PopupMenuButton(onSelected: (value) {
-                  print(value);
                   if (value == 'Search for transaction') {
                     // Navigator.push(
                     //     context,
@@ -147,6 +230,15 @@ class _TransactionScreen extends State<TransactionScreen>
                     setState(() {
                       viewByCategory = !viewByCategory;
                     });
+                  } else if (value == 'Adjust Balance') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => AdjustBalanceScreen(
+                                  wallet: _wallet,
+                                )));
+                  } else if (value == 'Select time range') {
+                    _handleSelectTimeRange(choosedTimeRange);
                   }
                 }, itemBuilder: (context) {
                   return [
@@ -197,44 +289,58 @@ class _TransactionScreen extends State<TransactionScreen>
                 builder: (context, snapshot) {
                   List<MyTransaction> _transactionList = snapshot.data ?? [];
 
+                  // thời gian được chọn từ tab bar
                   var chooseTime =
                       widget.myTabs[_tabController.index].text.split('/');
 
+                  // lọc các transaction có date phù hợp với date được chọn
                   _transactionList = _transactionList
                       .where((element) =>
                           element.date.month == int.parse(chooseTime[0]) &&
                           element.date.year == int.parse(chooseTime[1]))
                       .toList();
 
+                  // list những ngày trong các transaction đã lọc
                   List<DateTime> dateInChoosenTime = [];
+                  // list những category trong các transaction đã lọc
                   List<String> categoryInChoosenTime = [];
 
+                  // tổng đầu vào, tổng đầu ra, hiệu
                   double totalInCome = 0;
                   double totalOutCome = 0;
                   double total = 0;
 
+                  // list các list transaction đã lọc
                   List<List<MyTransaction>> transactionListSorted = [];
 
+                  // sort theo date giảm dần
                   _transactionList.sort((a, b) => b.date.compareTo(a.date));
 
+                  // trường hợp hiển thị category
                   if (viewByCategory) {
                     _transactionList.forEach((element) {
+                      // lấy các category trong transaction đã lọc
                       if (!categoryInChoosenTime
                           .contains(element.category.name))
                         categoryInChoosenTime.add(element.category.name);
+                      // tính toán đầu vào, đầu ra
                       if (element.category.type == 'expense')
                         totalOutCome += element.amount;
                       else
                         totalInCome += element.amount;
                     });
+                    // totalInCome += _wallet.amount > 0 ? _wallet.amount : 0;
                     total = totalInCome - totalOutCome;
 
+                    // lấy các transaction ra theo từng category
                     categoryInChoosenTime.forEach((cate) {
                       final b = _transactionList.where((element) =>
                           element.category.name.compareTo(cate) == 0);
                       transactionListSorted.add(b.toList());
                     });
-                  } else {
+                  }
+                  // trường hợp hiển thị theo date (tương tự)
+                  else {
                     _transactionList.forEach((element) {
                       if (!dateInChoosenTime.contains(element.date))
                         dateInChoosenTime.add(element.date);
@@ -243,6 +349,7 @@ class _TransactionScreen extends State<TransactionScreen>
                       else
                         totalInCome += element.amount;
                     });
+                    // totalInCome += _wallet.amount > 0 ? _wallet.amount : 0;
                     total = totalInCome - totalOutCome;
 
                     dateInChoosenTime.forEach((date) {

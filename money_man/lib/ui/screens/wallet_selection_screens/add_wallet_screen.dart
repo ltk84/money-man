@@ -67,6 +67,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                   if (_formKey.currentState.validate()) {
                     FocusScope.of(context).requestFocus(FocusNode());
                     var res = await _firestore.addWallet(this.wallet);
+                    await _firestore.updateSelectedWallet(res);
                     Navigator.of(context).pop(res);
                   }
                 },
@@ -81,8 +82,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.transparent,
-                )
-            ),
+                )),
           ],
         ),
         body: Container(
@@ -151,10 +151,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                                   borderSide: BorderSide(
                                       color: Colors.white60, width: 3),
                                 ),
-                                // border: UnderlineInputBorder(
-                                //   borderSide:
-                                //       BorderSide(color: Colors.white60, width: 3),
-                                // ),
                                 labelText: 'Name',
                                 labelStyle: TextStyle(color: Colors.white60)),
                             onChanged: (value) => wallet.name = value,
@@ -202,61 +198,13 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     thickness: 0.05,
                     color: Colors.white,
                   ),
-                  /*ListTile(
-                    onTap: () {},
-                    dense: true,
-                    leading: Icon(Icons.account_balance,
-                        size: 30.0, color: Colors.white60),
-                    title: Text('Initial Balance',
-                        style:
-                            TextStyle(color: Colors.white60, fontSize: 12.0)),
-                    subtitle: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 12.0),
-                      padding: EdgeInsets.fromLTRB(0, 0, 30.0, 0.0),
-                      height: 30,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(
-                          color: Colors.white,
-                          decoration: TextDecoration.none,
-                        ),
-                        decoration: InputDecoration(
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red, width: 1),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white60, width: 1),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white60, width: 3),
-                          ),
-                          // border: UnderlineInputBorder(
-                          //   borderSide:
-                          //       BorderSide(color: Colors.white60, width: 3),
-                          // ),
-                        ),
-                        onChanged: (value) {
-                          var val = double.tryParse(value);
-                          if (val == null) wallet.amount = 0;
-                          wallet.amount = val;
-                        },
-                        validator: (value) {
-                          return (value == null ||
-                                  double.tryParse(value) == null)
-                              ? 'Do not use the @ char.'
-                              : null;
-                        },
-                      ),
-                    ),
-                  ),*/
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, bottom: 8),
                     child: Row(
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
+                          onPressed: () {},
                           icon: Icon(
                             Icons.account_balance_outlined,
                             color: Color(0xff8f8f8f),
