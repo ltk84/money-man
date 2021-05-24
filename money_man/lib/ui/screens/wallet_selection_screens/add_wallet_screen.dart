@@ -6,6 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,7 @@ class AddWalletScreen extends StatefulWidget {
 class _AddWalletScreenState extends State<AddWalletScreen> {
   static var _formKey = GlobalKey<FormState>();
   String currencyName = 'Currency';
+  double _initial_balance;
 
   Wallet wallet = Wallet(
       id: '0',
@@ -93,6 +95,26 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
             )));
   }
 
+  String convertMoneyType(double k) {
+    String result = k.toString();
+    var ff = result.split('.');
+    String temp1 = ff[0];
+    String temp2 = temp1.split('').reversed.join();
+    result = '';
+    int i = 0;
+    for (int j = 0; j < temp2.length; j++) {
+      result += temp2[j];
+      i++;
+      if (i % 3 == 0 && j + 1 != temp2.length) result += ',';
+    }
+    result = ff.length == 1
+        ? result.split('').reversed.join()
+        : result.split('').reversed.join() + '.';
+    for (i = 1; i < ff.length; i++) result += ff[i];
+    print(result);
+    return result;
+  }
+
   Widget buildInput() {
     return ListView(
       children: [
@@ -111,7 +133,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                       IconButton(
                         icon: SuperIcon(
                           iconPath: wallet.iconID,
-                          size: 35.0,
+                          size: 49.0,
                         ),
                         onPressed: () async {
                           // TODO: Chọn icon cho ví
@@ -135,24 +157,27 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           child: TextFormField(
                             keyboardType: TextInputType.name,
                             style: TextStyle(
+                              fontSize: 20,
                               color: Colors.white,
                               decoration: TextDecoration.none,
                             ),
                             decoration: InputDecoration(
-                                errorBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.red, width: 1),
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.white60, width: 1),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.white60, width: 3),
-                                ),
-                                labelText: 'Name',
-                                labelStyle: TextStyle(color: Colors.white60)),
+                              errorBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.red, width: 1),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.white60, width: 1),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.white60, width: 3),
+                              ),
+                              labelText: 'Name',
+                              labelStyle: TextStyle(
+                                  color: Colors.white60, fontSize: 15),
+                            ),
                             onChanged: (value) => wallet.name = value,
                             validator: (value) {
                               if (value == null || value.length == 0)
@@ -187,74 +212,115 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.monetization_on,
-                        size: 30.0, color: Colors.white60),
-                    title: Text(currencyName,
-                        style:
-                            TextStyle(color: Colors.white24, fontSize: 15.0)),
+                        size: 30.0, color: Colors.orange),
+                    title: Text('Currency: ' + currencyName,
+                        style: TextStyle(color: Colors.white, fontSize: 15.0)),
                     trailing: Icon(Icons.chevron_right,
-                        size: 20.0, color: Colors.white24),
+                        size: 20.0, color: Colors.white),
                   ),
                   Divider(
                     thickness: 0.05,
                     color: Colors.white,
                   ),
-                  Padding(
+                  ListTile(
+                    onTap: () async {
+                      final resultAmount = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => EnterAmountScreen()));
+                      if (resultAmount != null)
+                        setState(() {
+                          print(resultAmount);
+                          wallet.amount = double.parse(resultAmount);
+                        });
+                    },
+                    dense: true,
+                    leading: Icon(Icons.account_balance_rounded,
+                        size: 30.0, color: Colors.green),
+                    title: Text(
+                        wallet.amount == null
+                            ? 'Enter initial balance'
+                            : "Initial balance: " +
+                                convertMoneyType(wallet.amount),
+                        style: TextStyle(color: Colors.white, fontSize: 15.0)),
+                    trailing: Icon(Icons.chevron_right,
+                        size: 20.0, color: Colors.white),
+                  )
+                  /*Padding(
                     padding: const EdgeInsets.only(left: 8.0, bottom: 8),
                     child: Row(
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Icon(
                             Icons.account_balance_outlined,
                             color: Color(0xff8f8f8f),
                             size: 30,
                           ),
                         ),
                         Expanded(
-                          child: Container(
-                            padding: EdgeInsets.only(left: 15, right: 50),
-                            width: 250,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                color: Colors.white,
-                                decoration: TextDecoration.none,
+                          child: GestureDetector(
+                            onTap: () async {
+                              final resultAmount = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => EnterAmountScreen()));
+                              if (resultAmount != null)
+                                setState(() {
+                                  print(resultAmount);
+                                  wallet.amount = double.parse(resultAmount);
+                                });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.only(left: 15, right: 50),
+                              width: 250,
+                              child: TextFormField(
+                                readOnly: true,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  decoration: TextDecoration.none,
+                                ),
+                                decoration: InputDecoration(
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.red, width: 1),
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white60, width: 1),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white60, width: 3),
+                                    ),
+                                    hintText: wallet.amount == null
+                                        ? 'Enter initial balance'
+                                        : "Initial balance: " +
+                                            convertMoneyType(wallet.amount),
+                                    hintStyle:
+                                        TextStyle(color: Colors.white60)),
+                                onChanged: (value) {
+                                  var val = double.tryParse(value);
+                                  if (val == null) wallet.amount = 0;
+                                  wallet.amount = val;
+                                },
+                                validator: (value) {
+                                  if (value == null || value.length == 0)
+                                    return 'This field not empty';
+                                  var temp = double.tryParse(value);
+                                  return temp == null
+                                      ? 'Initial amount must be number'
+                                      : null;
+                                },
                               ),
-                              decoration: InputDecoration(
-                                  errorBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.red, width: 1),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.white60, width: 1),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.white60, width: 3),
-                                  ),
-                                  labelText: 'Initial balance',
-                                  labelStyle: TextStyle(color: Colors.white60)),
-                              onChanged: (value) {
-                                var val = double.tryParse(value);
-                                if (val == null) wallet.amount = 0;
-                                wallet.amount = val;
-                              },
-                              validator: (value) {
-                                if (value == null || value.length == 0)
-                                  return 'This field not empty';
-                                var temp = double.tryParse(value);
-                                return temp == null
-                                    ? 'Initial amount must be number'
-                                    : null;
-                              },
                             ),
                           ),
                         )
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),

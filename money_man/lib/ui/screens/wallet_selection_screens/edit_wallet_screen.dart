@@ -6,6 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -116,7 +117,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       IconButton(
                         icon: SuperIcon(
                           iconPath: iconData,
-                          size: 35.0,
+                          size: 45.0,
                         ),
                         onPressed: () async {
                           // TODO: Chọn icon cho ví
@@ -143,6 +144,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             keyboardType: TextInputType.name,
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: 20,
                               decoration: TextDecoration.none,
                             ),
                             decoration: InputDecoration(
@@ -163,7 +165,8 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                 //       BorderSide(color: Colors.white60, width: 3),
                                 // ),
                                 labelText: 'Name',
-                                labelStyle: TextStyle(color: Colors.white60)),
+                                labelStyle: TextStyle(
+                                    color: Colors.white60, fontSize: 15)),
                             onChanged: (value) => widget.wallet.name = value,
                             validator: (value) {
                               if (value == null || value.length == 0)
@@ -209,61 +212,85 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     thickness: 0.05,
                     color: Colors.white,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, bottom: 8),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.account_balance_outlined,
-                            color: Color(0xff8f8f8f),
-                            size: 30,
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.only(left: 15, right: 50),
-                            width: 250,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                color: Colors.white,
-                                decoration: TextDecoration.none,
-                              ),
-                              decoration: InputDecoration(
-                                  errorBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.red, width: 1),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.white60, width: 1),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.white60, width: 3),
-                                  ),
-                                  labelText: 'Initial balance',
-                                  labelStyle: TextStyle(color: Colors.white60)),
-                              onChanged: (value) {
-                                var val = double.tryParse(value);
-                                if (val == null) widget.wallet.amount = 0;
-                                widget.wallet.amount = val;
-                              },
-                              validator: (value) {
-                                return (value == null ||
-                                        double.tryParse(value) == null)
-                                    ? 'This field must be a number'
-                                    : null;
-                              },
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                  ListTile(
+                    onTap: () async {
+                      final resultAmount = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => EnterAmountScreen()));
+                      if (resultAmount != null)
+                        setState(() {
+                          print(resultAmount);
+                          widget.wallet.amount = double.parse(resultAmount);
+                        });
+                    },
+                    dense: true,
+                    leading: Icon(Icons.account_balance_rounded,
+                        size: 30.0, color: Colors.green),
+                    title: Text(
+                        widget.wallet.amount == null
+                            ? 'Enter initial balance'
+                            : "Initial balance: " +
+                                convertMoneyType(widget.wallet.amount),
+                        style: TextStyle(color: Colors.white, fontSize: 15.0)),
+                    trailing: Icon(Icons.chevron_right,
+                        size: 20.0, color: Colors.white),
+                  )
+                  /*Padding(
+                                                    padding: const EdgeInsets.only(left: 8.0, bottom: 8),
+                                                    child: Row(
+                                                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        IconButton(
+                                                          onPressed: () {},
+                                                          icon: Icon(
+                                                            Icons.account_balance_outlined,
+                                                            color: Color(0xff8f8f8f),
+                                                            size: 30,
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Container(
+                                                            padding: EdgeInsets.only(left: 15, right: 50),
+                                                            width: 250,
+                                                            child: TextFormField(
+                                                              keyboardType: TextInputType.number,
+                                                              style: TextStyle(
+                                                                color: Colors.white,
+                                                                decoration: TextDecoration.none,
+                                                              ),
+                                                              decoration: InputDecoration(
+                                                                  errorBorder: UnderlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide(color: Colors.red, width: 1),
+                                                                  ),
+                                                                  enabledBorder: UnderlineInputBorder(
+                                                                    borderSide: BorderSide(
+                                                                        color: Colors.white60, width: 1),
+                                                                  ),
+                                                                  focusedBorder: UnderlineInputBorder(
+                                                                    borderSide: BorderSide(
+                                                                        color: Colors.white60, width: 3),
+                                                                  ),
+                                                                  labelText: 'Initial balance',
+                                                                  labelStyle: TextStyle(color: Colors.white60)),
+                                                              onChanged: (value) {
+                                                                var val = double.tryParse(value);
+                                                                if (val == null) widget.wallet.amount = 0;
+                                                                widget.wallet.amount = val;
+                                                              },
+                                                              validator: (value) {
+                                                                return (value == null ||
+                                                                        double.tryParse(value) == null)
+                                                                    ? 'This field must be a number'
+                                                                    : null;
+                                                              },
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),*/
                 ],
               ),
             ),
@@ -319,5 +346,25 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
         ),
       ],
     );
+  }
+
+  String convertMoneyType(amount) {
+    String result = amount.toString();
+    var ff = result.split('.');
+    String temp1 = ff[0];
+    String temp2 = temp1.split('').reversed.join();
+    result = '';
+    int i = 0;
+    for (int j = 0; j < temp2.length; j++) {
+      result += temp2[j];
+      i++;
+      if (i % 3 == 0 && j + 1 != temp2.length) result += ',';
+    }
+    result = ff.length == 1
+        ? result.split('').reversed.join()
+        : result.split('').reversed.join() + '.';
+    for (i = 1; i < ff.length; i++) result += ff[i];
+    print(result);
+    return result;
   }
 }
