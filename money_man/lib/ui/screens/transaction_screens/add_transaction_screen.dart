@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +11,6 @@ import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/screens/transaction_screens/edit_transaction_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -26,10 +25,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   MyCategory cate;
   Wallet wallet;
   String note;
+  String currencySymbol = '';
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+
     print('add build');
     return Scaffold(
       backgroundColor: Colors.black26,
@@ -168,9 +169,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     ),
                     hintText: amount == null
                         ? 'Enter amount'
-                        : MoneyFormatter(amount: amount)
-                            .output
-                            .withoutFractionDigits),
+                        : currencySymbol +
+                            ' ' +
+                            MoneyFormatter(amount: amount)
+                                .output
+                                .withoutFractionDigits),
               ),
             ),
             Container(
@@ -368,7 +371,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       context: context,
                       builder: (context) =>
                           SelectWalletAccountScreen(wallet: wallet));
-                  setState(() {});
+                  setState(() {
+                    currencySymbol =
+                        CurrencyService().findByCode(wallet.currencyID).symbol;
+                  });
                 },
               ),
               trailing: Icon(Icons.chevron_right, color: Colors.white54),

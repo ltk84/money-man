@@ -25,6 +25,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
   static var _formKey = GlobalKey<FormState>();
   String currencyName = 'Currency';
   String iconData = 'assets/icons/wallet_2.svg';
+  double adjustAmount;
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +72,12 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    await _firestore.updateWallet(widget.wallet);
-                    await _firestore.updateSelectedWallet(widget.wallet.id);
-
+                    if (adjustAmount == null) {
+                      await _firestore.updateWallet(widget.wallet);
+                      await _firestore.updateSelectedWallet(widget.wallet.id);
+                    } else
+                      await _firestore.adjustBalance(
+                          widget.wallet, adjustAmount);
                     Navigator.pop(context, widget.wallet.id);
                   }
                 },
@@ -249,8 +253,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                   labelStyle: TextStyle(color: Colors.white60)),
                               onChanged: (value) {
                                 var val = double.tryParse(value);
-                                if (val == null) widget.wallet.amount = 0;
-                                widget.wallet.amount = val;
+                                if (val != null) adjustAmount = val;
                               },
                               validator: (value) {
                                 return (value == null ||

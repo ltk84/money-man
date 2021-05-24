@@ -1,3 +1,4 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -42,6 +43,7 @@ class _TransactionScreen extends State<TransactionScreen>
   Wallet _wallet;
   bool viewByCategory = false;
   int choosedTimeRange = 3;
+  String currencySymbol;
 
   @override
   void initState() {
@@ -58,6 +60,8 @@ class _TransactionScreen extends State<TransactionScreen>
             currencyID: 'USD',
             iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
+    currencySymbol =
+        CurrencyService().findByCode(_wallet.currencyID).symbol ?? '';
   }
 
   @override
@@ -71,6 +75,8 @@ class _TransactionScreen extends State<TransactionScreen>
             amount: 100,
             currencyID: 'USD',
             iconID: 'assets/icons/wallet_2.svg');
+    currencySymbol =
+        CurrencyService().findByCode(_wallet.currencyID).symbol ?? '';
   }
 
   void _handleSelectTimeRange(int selected) {
@@ -190,8 +196,10 @@ class _TransactionScreen extends State<TransactionScreen>
                     style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
                 Text(
                     MoneyFormatter(amount: _wallet.amount)
-                        .output
-                        .withoutFractionDigits,
+                            .output
+                            .withoutFractionDigits +
+                        ' ' +
+                        currencySymbol,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 15.0,

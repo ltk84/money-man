@@ -1,3 +1,4 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -26,11 +27,16 @@ class EditTransactionScreen extends StatefulWidget {
 class _EditTransactionScreenState extends State<EditTransactionScreen> {
   DateTime pickDate;
   DateTime formatTransDate;
+  String currencySymbol;
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     formatTransDate = DateTime(widget.transaction.date.year,
         widget.transaction.date.month, widget.transaction.date.day);
+    currencySymbol =
+        CurrencyService().findByCode(widget.wallet.currencyID).symbol;
+
     return Scaffold(
       backgroundColor: Colors.black26,
       appBar: AppBar(
@@ -149,9 +155,11 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     ),
                     hintText: widget.transaction.amount == null
                         ? 'Enter amount'
-                        : MoneyFormatter(amount: widget.transaction.amount)
-                            .output
-                            .withoutFractionDigits),
+                        : currencySymbol +
+                            ' ' +
+                            MoneyFormatter(amount: widget.transaction.amount)
+                                .output
+                                .withoutFractionDigits),
               ),
             ),
             Container(

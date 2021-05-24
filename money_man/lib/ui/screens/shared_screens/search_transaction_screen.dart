@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -108,34 +107,31 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                   fontFamily: 'Montserrat',
                   fontSize: 15.0,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white
-              ),
+                  color: Colors.white),
               decoration: InputDecoration(
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                prefixIconConstraints: BoxConstraints(
-                  minHeight: 15,
-                  minWidth: 40,
-                  maxHeight: 15,
-                  maxWidth: 40,
-                ),
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-                prefixIcon: Icon(Icons.search, color: Colors.white38),
-                hintText: 'Search by #tag, category, etc',
-                hintStyle: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white24
-                )
-              ),
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  prefixIconConstraints: BoxConstraints(
+                    minHeight: 15,
+                    minWidth: 40,
+                    maxHeight: 15,
+                    maxWidth: 40,
+                  ),
+                  isDense: true,
+                  contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                  prefixIcon: Icon(Icons.search, color: Colors.white38),
+                  hintText: 'Search by #tag, category, etc',
+                  hintStyle: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white24)),
             ),
           ),
-           Container(
+          Container(
             child: transactionListSortByDate.length == 0
                 ? Text(
                     'Nothing',

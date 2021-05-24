@@ -216,6 +216,9 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             padding: EdgeInsets.only(left: 15, right: 50),
                             width: 250,
                             child: TextFormField(
+                              onTap: () {
+                                print('print');
+                              },
                               keyboardType: TextInputType.number,
                               style: TextStyle(
                                 color: Colors.white,

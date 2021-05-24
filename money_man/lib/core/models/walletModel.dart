@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
 
 class Wallet {
   String id;
