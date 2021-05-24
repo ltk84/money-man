@@ -139,8 +139,9 @@ class _TransactionScreen extends State<TransactionScreen>
                     //               wallet: _wallet,
                     //             )));
                     showCupertinoModalBottomSheet(
-                        context: context,
-                        builder: (context) => SearchTransactionScreen(wallet: _wallet),
+                      context: context,
+                      builder: (context) =>
+                          SearchTransactionScreen(wallet: _wallet),
                     );
                   } else if (value == 'change display') {
                     setState(() {
@@ -363,10 +364,10 @@ class _TransactionScreen extends State<TransactionScreen>
               Padding(
                   padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                   child: SuperIcon(
-                    iconPath: transListSortByCategory[xIndex][0].category.iconID,
+                    iconPath:
+                        transListSortByCategory[xIndex][0].category.iconID,
                     size: 35.0,
-                  )
-              ),
+                  )),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
                 child: Text(
@@ -427,8 +428,17 @@ class _TransactionScreen extends State<TransactionScreen>
                       Expanded(
                         child: Text(
                             transListSortByCategory[xIndex][yIndex]
-                                .amount
-                                .toString(),
+                                        .category
+                                        .type ==
+                                    'income'
+                                ? '+' +
+                                    transListSortByCategory[xIndex][yIndex]
+                                        .amount
+                                        .toString()
+                                : '-' +
+                                    transListSortByCategory[xIndex][yIndex]
+                                        .amount
+                                        .toString(),
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -509,13 +519,10 @@ class _TransactionScreen extends State<TransactionScreen>
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                                transaction: transListSortByDate[xIndex]
-                                    [yIndex],
-                                wallet: widget.currentWallet,
-                              ),
-                          type: PageTransitionType.rightToLeft
-                      )
-                  );
+                            transaction: transListSortByDate[xIndex][yIndex],
+                            wallet: widget.currentWallet,
+                          ),
+                          type: PageTransitionType.rightToLeft));
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
@@ -524,8 +531,10 @@ class _TransactionScreen extends State<TransactionScreen>
                       Padding(
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         child: SuperIcon(
-                            iconPath: transListSortByDate[xIndex][yIndex].category.iconID,
-                            size: 35.0,
+                          iconPath: transListSortByDate[xIndex][yIndex]
+                              .category
+                              .iconID,
+                          size: 35.0,
                         ),
                       ),
                       Padding(
@@ -539,8 +548,9 @@ class _TransactionScreen extends State<TransactionScreen>
                       ),
                       Expanded(
                         child: Text(
-                            transListSortByDate[xIndex][yIndex].category.type == 'income'
-                                ? "${transListSortByDate[xIndex][yIndex].amount.toString()}"
+                            transListSortByDate[xIndex][yIndex].category.type ==
+                                    'income'
+                                ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()}"
                                 : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()}",
                             textAlign: TextAlign.end,
                             style: TextStyle(
