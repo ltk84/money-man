@@ -51,107 +51,107 @@ class _FirstStepState extends State<FirstStep> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.bottomRight,
-          stops: [0.15, 0.05, 0.05, 0.25],
-          colors: [
-            Colors.orange,
-            Colors.yellow,
-            Colors.grey[200],
-            Colors.grey[200]
-          ],
-        )),
-        alignment: Alignment.bottomCenter,
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                    child: Container(
-                  child: Text(
-                    'Create your \nfirst wallet',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
-                      fontSize: size.height * 0.07,
-                    ),
-                  ),
-                )),
-                Container(
-                  child: Text(
-                    'This app can help you to save your money \nas much as possible!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Montserrat',
-                      fontSize: size.height * 0.022,
-                      fontWeight: FontWeight.w100,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  child: SuperIcon(
-                    iconPath: wallet.iconID,
-                    size: size.height * 0.18,
-                  ),
-                ),
-                TextButton(
-                    onPressed: () async {
-                      var data = await showCupertinoModalBottomSheet(
-                          context: context,
-                          builder: (context) => IconPicker(),
-                      );
-                      if (data != null) {
-                        setState(() {
-                          wallet.iconID = data;
-                        });
-                      }
-                    },
+      body: Form(
+        key: _formKey,
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.bottomRight,
+            stops: [0.15, 0.05, 0.05, 0.25],
+            colors: [
+              Colors.orange,
+              Colors.yellow,
+              Colors.grey[200],
+              Colors.grey[200]
+            ],
+          )),
+          alignment: Alignment.bottomCenter,
+          child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                      child: Container(
                     child: Text(
-                      'CHANGE ICON',
+                      'Create your \nfirst wallet',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
+                        fontSize: size.height * 0.07,
                       ),
-                    )),
-                Container(
-                  padding: EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
+                    ),
+                  )),
+                  Container(
                     child: Text(
-                      "Wallet's name:",
+                      'This app can help you to save your money \nas much as possible!',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: black,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold),
+                        color: Colors.black,
+                        fontFamily: 'Montserrat',
+                        fontSize: size.height * 0.022,
+                        fontWeight: FontWeight.w100,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        width: 250.0,
-                        height: size.height * 0.033,
-                        child: Form(
-                          key: _formKey,
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: SuperIcon(
+                      iconPath: wallet.iconID,
+                      size: size.height * 0.18,
+                    ),
+                  ),
+                  TextButton(
+                      onPressed: () async {
+                        var data = await showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => IconPicker(),
+                        );
+                        if (data != null) {
+                          setState(() {
+                            wallet.iconID = data;
+                          });
+                        }
+                      },
+                      child: Text(
+                        'CHANGE ICON',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Wallet's name:",
+                        style: TextStyle(
+                            color: black,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          width: 250.0,
+                          height: size.height * 0.033,
                           child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.length == 0)
@@ -163,45 +163,44 @@ class _FirstStepState extends State<FirstStep> {
                               decoration:
                                   InputDecoration(border: InputBorder.none),
                               style: TextStyle(color: black)),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5)),
                         ),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5)),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Wallet's amount:",
-                      style: TextStyle(
-                          color: black,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold),
+                      ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        width: 200.0,
-                        height: size.height * 0.033,
-                        child: Form(
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Wallet's amount:",
+                        style: TextStyle(
+                            color: black,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          width: 200.0,
+                          height: size.height * 0.033,
                           child: TextFormField(
                             keyboardType: TextInputType.number,
                             validator: (value) {
+                              print(value);
                               if (value == null || value.length == 0)
                                 return 'Wallet amount is empty';
                               return null;
@@ -214,128 +213,131 @@ class _FirstStepState extends State<FirstStep> {
                             ),
                             style: TextStyle(color: black),
                           ),
-                        ),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5)),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showCurrencyPicker(
-                            onSelect: (value) {
-                              wallet.currencyID = value.code;
-                              setState(() {
-                                currencyName = value.code;
-                              });
-                            },
-                            context: context,
-                            showFlag: true,
-                            showCurrencyName: true,
-                            showCurrencyCode: true,
-                          );
-                        },
-                        child: Container(
-                          width: 45,
-                          height: size.height * 0.033,
-                          alignment: Alignment.center,
-                          child: Text(
-                            currencyName,
-                            style: TextStyle(
-                                color: white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold),
-                          ),
                           decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(5),
-                            //border: Border.all(color: Colors.grey)
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5)),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showCurrencyPicker(
+                              onSelect: (value) {
+                                wallet.currencyID = value.code;
+                                setState(() {
+                                  currencyName = value.code;
+                                });
+                              },
+                              context: context,
+                              showFlag: true,
+                              showCurrencyName: true,
+                              showCurrencyCode: true,
+                            );
+                          },
+                          child: Container(
+                            width: 45,
+                            height: size.height * 0.033,
+                            alignment: Alignment.center,
+                            child: Text(
+                              currencyName,
+                              style: TextStyle(
+                                  color: white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(5),
+                              //border: Border.all(color: Colors.grey)
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-
-                // Currency(),
-                /* ListTile(
-                  onTap: () {
-                    showCurrencyPicker(
-                      onSelect: (value) {
-                        wallet.currencyID = value.code;
-                        setState(() {
-                          currencyName = value.name;
-                        });
-                      },
-                      context: context,
-                      showFlag: true,
-                      showCurrencyName: true,
-                      showCurrencyCode: true,
-                    );
-                  },
-                  dense: true,
-                  leading: Icon(Icons.monetization_on,
-                      size: 30.0, color: Colors.white60),
-                  title: Text(currencyName,
-                      style: TextStyle(color: Colors.black, fontSize: 15.0)),
-                  trailing: Icon(Icons.chevron_right,
-                      size: 20.0, color: Colors.white24),
-                ),*/
-
-                Column(
-                  children: [
-                    ButtonTheme(
-                      minWidth: 250.0,
-                      child: RaisedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(_createRoute());
-                        },
-                        color: Colors.orange,
-                        elevation: 0.0,
-                        child: Text(
-                          'Continue',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5),
-                          width: 15,
-                          height: 15,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 2),
-                              shape: BoxShape.circle,
-                              color: Colors.black),
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5),
-                          width: 15,
-                          height: 15,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 2),
-                              shape: BoxShape.circle,
-                              color: Colors.white),
-                        ),
+                        )
                       ],
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+
+                  // Currency(),
+                  /* ListTile(
+                    onTap: () {
+                      showCurrencyPicker(
+                        onSelect: (value) {
+                          wallet.currencyID = value.code;
+                          setState(() {
+                            currencyName = value.name;
+                          });
+                        },
+                        context: context,
+                        showFlag: true,
+                        showCurrencyName: true,
+                        showCurrencyCode: true,
+                      );
+                    },
+                    dense: true,
+                    leading: Icon(Icons.monetization_on,
+                        size: 30.0, color: Colors.white60),
+                    title: Text(currencyName,
+                        style: TextStyle(color: Colors.black, fontSize: 15.0)),
+                    trailing: Icon(Icons.chevron_right,
+                        size: 20.0, color: Colors.white24),
+                  ),*/
+
+                  Column(
+                    children: [
+                      ButtonTheme(
+                        minWidth: 250.0,
+                        child: RaisedButton(
+                          onPressed: () {
+                            if (_formKey.currentState.validate())
+                              Navigator.of(context).push(_createRoute());
+                          },
+                          color: Colors.orange,
+                          elevation: 0.0,
+                          child: Text(
+                            'Continue',
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.black, width: 2),
+                                shape: BoxShape.circle,
+                                color: Colors.black),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.black, width: 2),
+                                shape: BoxShape.circle,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
