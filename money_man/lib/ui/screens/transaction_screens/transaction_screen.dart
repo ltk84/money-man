@@ -22,11 +22,27 @@ import 'adjust_balance_screen.dart';
 class TransactionScreen extends StatefulWidget {
   Wallet currentWallet;
 
-  final List<Tab> myTabs = List.generate(200, (index) {
+  final List<Tab> myTabs = List.generate(20, (index) {
     var now = DateTime.now();
-    var date = DateTime(now.year, now.month + index - 100, now.day);
-    String dateDisplay = DateFormat('MM/yyyy').format(date);
-    return Tab(text: dateDisplay);
+    if (index == 17) {
+      return Tab(
+        text: 'LAST MONTH',
+      );
+    } else if (index == 18) {
+      return Tab(
+        text: 'THIS MONTH',
+      );
+    } else if (index == 19) {
+      return Tab(
+        text: 'FUTURE',
+      );
+    } else {
+      var date = DateTime(now.year, now.month - (18 - index), now.day);
+      String dateDisplay = DateFormat('MM/yyyy').format(date);
+      return Tab(
+        text: dateDisplay,
+      );
+    }
   });
 
   TransactionScreen({Key key, this.currentWallet}) : super(key: key);
@@ -48,7 +64,7 @@ class _TransactionScreen extends State<TransactionScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 200, vsync: this, initialIndex: 100);
+    _tabController = TabController(length: 20, vsync: this, initialIndex: 18);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -295,13 +311,39 @@ class _TransactionScreen extends State<TransactionScreen>
                   // thời gian được chọn từ tab bar
                   var chooseTime =
                       widget.myTabs[_tabController.index].text.split('/');
+                  bool isFuture = false;
 
-                  // lọc các transaction có date phù hợp với date được chọn
-                  _transactionList = _transactionList
-                      .where((element) =>
-                          element.date.month == int.parse(chooseTime[0]) &&
-                          element.date.year == int.parse(chooseTime[1]))
-                      .toList();
+                  if (chooseTime.length == 1) {
+                    chooseTime.clear();
+                    int nowMonth = DateTime.now().month;
+                    int nowYear = DateTime.now().year;
+                    if (_tabController.index == 17) {
+                      chooseTime.add((nowMonth - 1).toString());
+                      chooseTime.add(nowYear.toString());
+                    } else if (_tabController.index == 18) {
+                      chooseTime.add((nowMonth).toString());
+                      chooseTime.add(nowYear.toString());
+                    } else {
+                      chooseTime.add((nowMonth + 1).toString());
+                      chooseTime.add(nowYear.toString());
+                      isFuture = true;
+                    }
+                  }
+
+                  if (isFuture) {
+                    _transactionList = _transactionList
+                        .where((element) =>
+                            element.date.month >= int.parse(chooseTime[0]) &&
+                            element.date.year == int.parse(chooseTime[1]))
+                        .toList();
+                    isFuture = false;
+                  } else {
+                    _transactionList = _transactionList
+                        .where((element) =>
+                            element.date.month == int.parse(chooseTime[0]) &&
+                            element.date.year == int.parse(chooseTime[1]))
+                        .toList();
+                  }
 
                   // list những ngày trong các transaction đã lọc
                   List<DateTime> dateInChoosenTime = [];

@@ -329,16 +329,18 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ListTile(
               dense: true,
               onTap: () async {
-                // wallet = await Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (_) => SelectWalletAccountScreen(wallet: wallet)));
-                wallet = await showCupertinoModalBottomSheet(
+                var res = await showCupertinoModalBottomSheet(
                     isDismissible: true,
                     backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) =>
                         SelectWalletAccountScreen(wallet: wallet));
+                if (res != null)
+                  setState(() {
+                    wallet = res;
+                    currencySymbol =
+                        CurrencyService().findByCode(wallet.currencyID).symbol;
+                  });
               },
               leading: wallet == null
                   ? SuperIcon(iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
@@ -365,16 +367,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     ),
                     hintText: wallet == null ? 'Select wallet' : wallet.name),
                 onTap: () async {
-                  wallet = await showCupertinoModalBottomSheet(
+                  var res = await showCupertinoModalBottomSheet(
                       isDismissible: true,
                       backgroundColor: Colors.grey[900],
                       context: context,
                       builder: (context) =>
                           SelectWalletAccountScreen(wallet: wallet));
-                  setState(() {
-                    currencySymbol =
-                        CurrencyService().findByCode(wallet.currencyID).symbol;
-                  });
+                  if (res != null)
+                    setState(() {
+                      wallet = res;
+                      currencySymbol = CurrencyService()
+                          .findByCode(wallet.currencyID)
+                          .symbol;
+                    });
                 },
               ),
               trailing: Icon(Icons.chevron_right, color: Colors.white54),
