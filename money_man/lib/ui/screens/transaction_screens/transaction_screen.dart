@@ -35,7 +35,7 @@ class _TransactionScreen extends State<TransactionScreen>
   TabController _tabController;
   Wallet _wallet;
   bool viewByCategory = false;
-  int choosedTimeRange = 1;
+  int choosedTimeRange = 4;
   String currencySymbol;
   List<Tab> myTabs;
 
@@ -46,10 +46,9 @@ class _TransactionScreen extends State<TransactionScreen>
     myTabs = initTabBar(choosedTimeRange);
 
     _tabController = TabController(length: 20, vsync: this, initialIndex: 18);
-    // _tabController.addListener(() {
-    //   print(_tabController.animation.value.round());
-    //   setState(() {});
-    // });
+    _tabController.addListener(() {
+      setState(() {});
+    });
     _wallet = widget.currentWallet == null
         ? Wallet(
             id: 'id',
@@ -126,59 +125,66 @@ class _TransactionScreen extends State<TransactionScreen>
             choosedTimeRange = 1;
 
             myTabs = initTabBar(choosedTimeRange);
-
             _tabController =
                 TabController(length: 20, vsync: this, initialIndex: 18);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 2:
           setState(() {
             choosedTimeRange = 2;
+            myTabs = initTabBar(choosedTimeRange);
             _tabController =
                 TabController(length: 20, vsync: this, initialIndex: 18);
-            myTabs = initTabBar(choosedTimeRange);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 3:
           setState(() {
             choosedTimeRange = 3;
-
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
                 TabController(length: 20, vsync: this, initialIndex: 18);
-            // _tabController =
-            //     TabController(length: 20, vsync: this, initialIndex: 18);
-
-            print(_tabController.index);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 4:
           setState(() {
             choosedTimeRange = 4;
-
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
                 TabController(length: 20, vsync: this, initialIndex: 18);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 5:
           setState(() {
             choosedTimeRange = 5;
-
             myTabs = initTabBar(choosedTimeRange);
-            // _tabController =
-            //     TabController(length: 20, vsync: this, initialIndex: 18);
+            _tabController =
+                TabController(length: 20, vsync: this, initialIndex: 18);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 6:
           setState(() {
             choosedTimeRange = 6;
+            myTabs = initTabBar(choosedTimeRange);
             _tabController =
                 TabController(length: 1, vsync: this, initialIndex: 0);
-
-            myTabs = initTabBar(choosedTimeRange);
-
-            print(_tabController.index);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 7:
@@ -243,7 +249,64 @@ class _TransactionScreen extends State<TransactionScreen>
         }
       });
     } else if (choosedTimeRange == 2) {
+      return List.generate(20, (index) {
+        var now = DateTime.now();
+        if (index == 17) {
+          return Tab(
+            text: 'LAST WEEK',
+          );
+        } else if (index == 18) {
+          return Tab(
+            text: 'THIS WEEK',
+          );
+        } else if (index == 19) {
+          return Tab(
+            text: 'FUTURE',
+          );
+        } else {
+          var firstDateInAWeek = DateTime.now()
+              .subtract(Duration(days: DateTime.now().weekday - 1))
+              .subtract(Duration(days: 7 * (18 - index)));
+          String firstDateDisplay =
+              DateFormat('dd/MM').format(firstDateInAWeek);
+
+          var lastDateInAWeek = firstDateInAWeek.add(Duration(days: 6));
+          String lastDateDisplay = DateFormat('dd/MM').format(lastDateInAWeek);
+
+          return Tab(text: firstDateDisplay + ' - ' + lastDateDisplay);
+        }
+      });
     } else if (choosedTimeRange == 4) {
+      var now = DateTime.now();
+      int year = now.year;
+      int initQuarter = ((now.month + 2) / 3).toInt();
+      int k = 0;
+
+      List<String> list = [];
+
+      for (var i = 0; i < 20; i++) {
+        var q = initQuarter - i + 4 * k + 1;
+        list.add('Q$q $year');
+        if (q == 1) {
+          k = k + 1;
+          year = year - 1;
+        }
+      }
+      list = list.reversed.toList();
+
+      return List.generate(20, (index) {
+        if (index == 19) {
+          return Tab(
+            text: 'FUTURE',
+          );
+        } else {
+          // String dateDisplay = DateFormat('yyyy').format(date);
+          String display = list[index];
+          return Tab(
+            text: display,
+          );
+        }
+      });
     } else if (choosedTimeRange == 5) {
       return List.generate(20, (index) {
         var now = DateTime.now();
@@ -310,10 +373,11 @@ class _TransactionScreen extends State<TransactionScreen>
       // trường hợp tab FUTURE thì lấy những transaction có tháng
       // tháng hiện tại
       if (isFutureTab) {
+        DateTime time =
+            DateTime(int.parse(chooseTime[1]), int.parse(chooseTime[0]));
+
         _transactionList = _transactionList
-            .where((element) =>
-                element.date.month >= int.parse(chooseTime[0]) &&
-                element.date.year == int.parse(chooseTime[1]))
+            .where((element) => element.date.compareTo(time) > 0)
             .toList();
         isFutureTab = false;
       }
@@ -403,26 +467,144 @@ class _TransactionScreen extends State<TransactionScreen>
       // trường hợp tab FUTURE thì lấy những transaction có tháng
       // tháng hiện tại
       if (isFutureTab) {
+        DateTime futureTime = DateTime(int.parse(chooseTime[2]),
+            int.parse(chooseTime[1]), int.parse(chooseTime[0]));
         _transactionList = _transactionList
-            .where((element) =>
-                element.date.day >= int.parse(chooseTime[0]) &&
-                element.date.month == int.parse(chooseTime[1]) &&
-                element.date.year == int.parse(chooseTime[2]))
+            .where((element) => element.date.compareTo(futureTime) > 0)
             .toList();
         isFutureTab = false;
       }
       // còn lại thì lấy bằng tháng đã lấy trong chooseTime
       else {
+        DateTime time = DateTime(int.parse(chooseTime[2]),
+            int.parse(chooseTime[1]), int.parse(chooseTime[0]));
         _transactionList = _transactionList
-            .where((element) =>
-                element.date.day == int.parse(chooseTime[0]) &&
-                element.date.month == int.parse(chooseTime[1]) &&
-                element.date.year == int.parse(chooseTime[2]))
+            .where((element) => element.date.compareTo(time) == 0)
             .toList();
       }
       return _transactionList;
     } else if (choosedTimeRange == 2) {
+      List<String> chooseTime = [];
+      chooseTime = myTabs[_tabController.index].text.split(' - ');
+
+      bool isFutureTab = false;
+
+      var headDateList;
+      DateTime headTime;
+      DateTime tailTime;
+
+      if (chooseTime.length == 1) {
+        chooseTime.clear();
+
+        var firstDatePresent = DateTime(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .subtract(Duration(days: DateTime.now().weekday - 1));
+        var lastDatePresent = firstDatePresent.add(Duration(days: 6));
+
+        var firstDateInPast = firstDatePresent.subtract(Duration(days: 7));
+        var lastDateInPast = firstDateInPast.add(Duration(days: 6));
+
+        var firstDateInFutre = firstDatePresent.add(Duration(days: 7));
+
+        // LAST MONTH (lấy tháng trước hiện tại)
+        if (_tabController.index == 17) {
+          headTime = firstDateInPast;
+          tailTime = lastDateInPast;
+        }
+        // THIS MONTH (lấy tháng hiện tại)
+        else if (_tabController.index == 18) {
+          headTime = firstDatePresent;
+          tailTime = lastDatePresent;
+        }
+        // FUTURE (lấy những tháng sau hiện tại)
+        else {
+          headTime = firstDateInFutre;
+          isFutureTab = true;
+        }
+      } else {
+        headDateList = chooseTime[0].split('/');
+        headTime = DateTime(DateTime.now().year, int.parse(headDateList[1]),
+            int.parse(headDateList[0]));
+        tailTime = headTime.add(Duration(days: 6));
+      }
+
+      if (isFutureTab) {
+        _transactionList = _transactionList
+            .where((element) => element.date.compareTo(headTime) >= 0)
+            .toList();
+        isFutureTab = false;
+      } else {
+        _transactionList = _transactionList
+            .where((element) =>
+                element.date.compareTo(headTime) >= 0 &&
+                element.date.compareTo(tailTime) <= 0)
+            .toList();
+      }
+
+      return _transactionList;
     } else if (choosedTimeRange == 4) {
+      var chooseTime = myTabs[_tabController.index].text.split(' ');
+
+      DateTime headTime;
+      DateTime tailTime;
+      DateTime now = DateTime.now();
+      bool isFutureTab = false;
+
+      if (chooseTime.length == 1) {
+        isFutureTab = true;
+        var x = myTabs[_tabController.index - 1].text.split(' ');
+
+        switch (x[0]) {
+          case 'Q1':
+            headTime = DateTime(now.year, DateTime.april);
+            break;
+          case 'Q2':
+            headTime = DateTime(now.year, DateTime.july);
+            break;
+          case 'Q3':
+            headTime = DateTime(now.year, DateTime.october);
+            break;
+          case 'Q4':
+            headTime = DateTime(now.year + 1, DateTime.january);
+            break;
+          default:
+        }
+      } else {
+        switch (chooseTime[0]) {
+          case 'Q1':
+            headTime = DateTime(now.year, DateTime.january);
+            tailTime = DateTime(now.year, DateTime.march);
+            break;
+          case 'Q2':
+            headTime = DateTime(now.year, DateTime.april);
+            tailTime = DateTime(now.year, DateTime.june);
+            break;
+          case 'Q3':
+            headTime = DateTime(now.year, DateTime.july);
+            tailTime = DateTime(now.year, DateTime.september);
+            break;
+          case 'Q4':
+            headTime = DateTime(now.year, DateTime.october);
+            tailTime = DateTime(now.year, DateTime.december);
+            break;
+          default:
+        }
+      }
+
+      if (isFutureTab) {
+        isFutureTab = false;
+        _transactionList = _transactionList
+            .where((element) => element.date.compareTo(headTime) >= 0)
+            .toList();
+      } else {
+        _transactionList = _transactionList
+            .where((element) =>
+                element.date.compareTo(headTime) >= 0 &&
+                element.date.compareTo(tailTime) <= 0)
+            .toList();
+      }
+
+      return _transactionList;
     } else if (choosedTimeRange == 5) {
       // thời gian được chọn từ tab bar
       var chooseTime = myTabs[_tabController.index].text;
