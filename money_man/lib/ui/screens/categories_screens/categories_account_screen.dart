@@ -85,14 +85,18 @@ class _CategoriesScreenState extends State<CategoriesScreen>
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Row(
-              children: [
-                Icon(Icons.arrow_back_ios, color: Colors.white),
-                Hero(
-                    tag: 'alo',
-                    child: Text('More',
-                        style: Theme.of(context).textTheme.headline6)),
-              ],
+            child: Hero(
+              tag: 'alo',
+              child: Row(
+                children: [
+                  Icon(Icons.arrow_back_ios, color: Colors.white),
+                Text('More', style: Theme.of(context).textTheme.headline6),
+                  // Hero(
+                  //     tag: 'alo',
+                  //     child: Text('More',
+                  //         style: Theme.of(context).textTheme.headline6)),
+                ],
+              ),
             ),
           ),
           //),
