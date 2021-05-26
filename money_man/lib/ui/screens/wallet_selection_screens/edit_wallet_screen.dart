@@ -226,15 +226,17 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       if (resultAmount != null)
                         setState(() {
                           print(resultAmount);
-                          widget.wallet.amount = double.parse(resultAmount);
+                          adjustAmount = double.parse(resultAmount);
+                          // widget.wallet.amount = double.parse(resultAmount);
                         });
                     },
                     dense: true,
                     leading: Icon(Icons.account_balance_rounded,
                         size: 30.0, color: Colors.green),
                     title: Text(
-                        widget.wallet.amount == null
-                            ? 'Enter initial balance'
+                        adjustAmount != null
+                            ? "Initial balance: " +
+                                convertMoneyType(adjustAmount)
                             : "Initial balance: " +
                                 convertMoneyType(widget.wallet.amount),
                         style: TextStyle(color: Colors.white, fontSize: 15.0)),
