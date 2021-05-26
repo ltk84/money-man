@@ -22,7 +22,7 @@ class OnboardingScreenTwo extends StatelessWidget {
           begin: Alignment.bottomLeft,
           end: Alignment.topRight,
           stops: [0.6, 0.1],
-          colors: [Colors.orange, Colors.white],
+          colors: [Color(0xFF111111), Color(0xff2FB49C)],
         )),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -62,7 +62,7 @@ class OnboardingScreenTwo extends StatelessWidget {
                 child: Icon(
                   Icons.money_outlined,
                   size: size.height * 0.334,
-                  color: Colors.yellow,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -85,7 +85,7 @@ class OnboardingScreenTwo extends StatelessWidget {
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (_) => HomeScreen()));
                       },
-                      color: Color(0xff007b10),
+                      color: Color(0xff2FB49C),
                       elevation: 0.0,
                       child: Text(
                         'Add first transaction',

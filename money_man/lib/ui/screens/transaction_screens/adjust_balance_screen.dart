@@ -25,6 +25,8 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xff111111),
+        centerTitle: true,
         title: Text(
           'Adjust Balance',
           style: TextStyle(color: Colors.white),

@@ -106,7 +106,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               child: RoundedLoadingButton(
                 height: 40,
                 width: 200,
-                color: Color(0xff007b10),
+                color: Color(0xff2FB49C),
                 child: Text('Verify email!',
                     style: TextStyle(
                         fontFamily: 'Montserrat',
@@ -143,8 +143,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => AccountInformationScreen()));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (_) => AccountInformationScreen()));
     }
   }
 }
