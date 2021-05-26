@@ -58,7 +58,7 @@ class _TestState extends State<Test> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.black,
-        extendBodyBehindAppBar: true,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.transparent,

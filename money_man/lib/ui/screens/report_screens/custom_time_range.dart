@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:money_man/core/models/timeRangeInfoModel.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -76,23 +80,29 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
           ),
           actions: [
             TextButton(
-                onPressed: () {
-                  if (realBeginDate != null &&
-                      realEndDate != null &&
-                      realBeginDate.compareTo(realEndDate) <= 0)
-                    Navigator.of(context).pop(TimeRangeInfo(
-                        description: 'Custom',
-                        begin: realBeginDate,
-                        end: realEndDate));
-                  else
-                    Alert(
-                            context: context,
-                            title: "FilledStacks",
-                            desc: "Flutter is awesome.")
-                        .show();
-                },
-                child:
-                    Text('Done', style: Theme.of(context).textTheme.headline6))
+                onPressed: (realBeginDate == null || realEndDate == null)
+                    ? null
+                    : () {
+                        if (realBeginDate != null &&
+                            realEndDate != null &&
+                            realBeginDate.compareTo(realEndDate) <= 0)
+                          Navigator.of(context).pop(TimeRangeInfo(
+                              description: 'Custom',
+                              begin: realBeginDate,
+                              end: realEndDate));
+                        else {
+                          _showAlertDialog();
+                        }
+                      },
+                child: Text(
+                  'Done',
+                  style: TextStyle(
+                      color: (realBeginDate == null || realEndDate == null)
+                          ? Colors.white30
+                          : Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontSize: 17.0),
+                ))
           ],
         ),
         body: ListView(
@@ -177,5 +187,16 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
             )
           ],
         ));
+  }
+
+  Future<void> _showAlertDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: "End date can't be before begin date.");
+      },
+    );
   }
 }

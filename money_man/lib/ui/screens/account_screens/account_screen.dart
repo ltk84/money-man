@@ -74,7 +74,7 @@ class _TestState extends State<Test> {
     final _auth = Provider.of<FirebaseAuthService>(context);
     return Scaffold(
         backgroundColor: Colors.black,
-        extendBodyBehindAppBar: true,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.transparent,
