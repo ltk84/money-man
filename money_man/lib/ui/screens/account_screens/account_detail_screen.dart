@@ -1,9 +1,10 @@
 import 'dart:ui';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
 
 class AccountDetail extends StatefulWidget {
   User user;
@@ -174,7 +175,13 @@ class _AccountDetailState extends State<AccountDetail> {
                     color: Colors.white,
                   ),
                   ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  ChangePasswordScreen()));
+                    },
                     dense: true,
                     title: Text(
                       'Change password',
