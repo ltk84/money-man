@@ -46,6 +46,8 @@ class FirebaseFireStoreService {
 
   // add first wallet
   Future addFirstWallet(Wallet wallet) async {
+    double amount = wallet.amount;
+    wallet.amount = 0;
     // lấy doc reference để auto generate id của doc
     DocumentReference docRef = users.doc(uid).collection('wallets').doc();
     wallet.id = docRef.id;
@@ -56,11 +58,24 @@ class FirebaseFireStoreService {
         .then((value) => print('add wallet to collection wallets'))
         .catchError((error) => print(error.toString()));
 
-    return await users
+    await users
         .doc(uid)
         .set({'currentWallet': wallet.toMap()})
         .then((value) => print('set selected wallet'))
         .catchError((error) => print(error));
+
+    MyCategory category;
+    await categories.where('name', isEqualTo: 'Other Income').get().then(
+        (value) => category = MyCategory.fromMap(value.docs.first.data()));
+
+    MyTransaction trans = MyTransaction(
+        id: 'id',
+        amount: amount,
+        date: DateTime.now(),
+        currencyID: wallet.currencyID,
+        category: category,
+        note: 'Initial Balance');
+    await addTransaction(wallet, trans);
   }
 
   // stream của wallet hiện tại đang được chọn
