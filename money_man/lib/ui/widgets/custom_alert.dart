@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAlert extends StatefulWidget {
-  const CustomAlert({Key key}) : super(key: key);
+  final iconPath;
+  final title;
+  final content;
+  const CustomAlert(
+      {
+        Key key,
+        this.iconPath = 'assets/images/alert.svg',
+        this.title = 'Oops...',
+        this.content = "Something was wrong!",
+      }) : super(key: key);
 
   @override
   _CustomAlertState createState() => _CustomAlertState();
@@ -48,13 +57,13 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
                   Column(
                     children: [
                       SvgPicture.asset(
-                        'assets/images/alert.svg',
+                        widget.iconPath,
                         height: 50.0,
                         width: 50.0,
                         alignment: Alignment.center,
                       ),
                       SizedBox(height: 15.0),
-                      Text('Oops...',
+                      Text(widget.title,
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 16.0,
@@ -64,7 +73,7 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 5.0),
-                      Text("End date can't be before begin date.",
+                      Text(widget.content,
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 14.0,
