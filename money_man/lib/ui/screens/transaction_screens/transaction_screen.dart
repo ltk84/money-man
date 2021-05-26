@@ -16,7 +16,7 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.d
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-
+import '../../widgets/custom_select_time_dialog.dart';
 import 'adjust_balance_screen.dart';
 
 class TransactionScreen extends StatefulWidget {
@@ -35,7 +35,7 @@ class _TransactionScreen extends State<TransactionScreen>
   TabController _tabController;
   Wallet _wallet;
   bool viewByCategory = false;
-  int choosedTimeRange = 4;
+  int choosedTimeRange = 3;
   String currencySymbol;
   List<Tab> myTabs;
 
@@ -118,7 +118,7 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text("Custom", style: TextStyle(color: Colors.black)),
         ),
       ],
-    ).then((value) {
+    ).then((value) async {
       switch (value) {
         case 1:
           setState(() {
@@ -188,20 +188,35 @@ class _TransactionScreen extends State<TransactionScreen>
           });
           break;
         case 7:
+          List<DateTime> timeRange = [];
+          await showDialog(
+              context: context,
+              builder: (builder) {
+                return CustomSelectTimeDialog();
+              }).then((value) => timeRange = value);
+
+          if (timeRange.length == 0) return null;
+
+          String displayTab = DateFormat('dd/MM/yyyy').format(timeRange[0]) +
+              " - " +
+              DateFormat('dd/MM/yyyy').format(timeRange[1]);
+
           setState(() {
             choosedTimeRange = 7;
-
-            myTabs = initTabBar(choosedTimeRange);
+            myTabs = initTabBar(choosedTimeRange, extraInfo: displayTab);
             _tabController =
-                TabController(length: 20, vsync: this, initialIndex: 18);
-            // TODO: fix lại
+                TabController(length: 1, vsync: this, initialIndex: 0);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
+
           break;
       }
     });
   }
 
-  List<Tab> initTabBar(int choosedTimeRange) {
+  List<Tab> initTabBar(int choosedTimeRange, {var extraInfo}) {
     if (choosedTimeRange == 3) {
       return List.generate(20, (index) {
         var now = DateTime.now();
@@ -336,7 +351,13 @@ class _TransactionScreen extends State<TransactionScreen>
           text: 'All transactions',
         );
       });
-    } else {}
+    } else {
+      return List.generate(1, (index) {
+        return Tab(
+          text: extraInfo,
+        );
+      });
+    }
   }
 
   List<MyTransaction> sortTransactionBasedOnTime(
@@ -640,7 +661,26 @@ class _TransactionScreen extends State<TransactionScreen>
       return _transactionList;
     } else if (choosedTimeRange == 6) {
       return _transactionList;
-    } else if (choosedTimeRange == 7) {}
+    } else {
+      var chooseTime = myTabs[_tabController.index].text.split(' - ');
+      DateTime head;
+      DateTime tail;
+
+      var headList = chooseTime[0].split('/');
+      head = DateTime(int.parse(headList[2]), int.parse(headList[1]),
+          int.parse(headList[0]));
+
+      var tailList = chooseTime[1].split('/');
+      tail = DateTime(int.parse(tailList[2]), int.parse(tailList[1]),
+          int.parse(tailList[0]));
+
+      _transactionList = _transactionList
+          .where((element) =>
+              element.date.compareTo(head) >= 0 &&
+              element.date.compareTo(tail) <= 0)
+          .toList();
+      return _transactionList;
+    }
   }
 
   @override
