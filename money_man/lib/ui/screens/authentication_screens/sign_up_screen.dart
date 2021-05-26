@@ -27,7 +27,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool show = true;
   bool showSub = true;
   Icon trailingIconPass = Icon(Icons.remove_red_eye, color: Color(0x70999999));
-  Icon trailingIconPassSub = Icon(Icons.remove_red_eye, color: Color(0x70999999));
+  Icon trailingIconPassSub =
+      Icon(Icons.remove_red_eye, color: Color(0x70999999));
   bool loading = false;
   String error = '';
 
@@ -68,16 +69,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFF2FB49C); // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFF2FB49C); // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
-                                return Colors.white; // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFF2FB49C);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
                           ),
@@ -90,10 +97,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.5,
-                                  wordSpacing: 2.0
-                              ),
-                              textAlign: TextAlign.center
-                          ),
+                                  wordSpacing: 2.0),
+                              textAlign: TextAlign.center),
                         ),
                       ),
                       Container(
@@ -101,16 +106,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
-                                return Colors.white; // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFF2FB49C);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFF2FB49C); // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFF2FB49C); // Use the component's default.
                               },
                             ),
                           ),
@@ -124,10 +135,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.5,
-                                  wordSpacing: 2.0
-                              ),
-                              textAlign: TextAlign.center
-                          ),
+                                  wordSpacing: 2.0),
+                              textAlign: TextAlign.center),
                         ),
                       ),
                       Container(
@@ -135,10 +144,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: Row(children: <Widget>[
                           Expanded(
                               child: Divider(
-                                thickness: 1,
-                                color: Colors.white24,
-                              )
-                          ),
+                            thickness: 1,
+                            color: Colors.white24,
+                          )),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
@@ -152,10 +160,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           Expanded(
                               child: Divider(
-                                thickness: 1,
-                                color: Colors.white24,
-                              )
-                          ),
+                            thickness: 1,
+                            color: Colors.white24,
+                          )),
                         ]),
                       ),
                       Container(
@@ -163,16 +170,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFF2c84d4);
-                                return Colors.white; // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFF2c84d4);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFF2c84d4); // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFF2c84d4); // Use the component's default.
                               },
                             ),
                           ),
@@ -196,14 +209,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                               Expanded(
                                 flex: 8,
-                                child: Text("Connect with Facebook",
+                                child: Text(
+                                  "Connect with Facebook",
                                   style: TextStyle(
                                       fontSize: 13,
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.5,
-                                      wordSpacing: 2.0
-                                  ),
+                                      wordSpacing: 2.0),
                                   textAlign: TextAlign.left,
                                 ),
                               ),
@@ -216,16 +229,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFFfc4232);
-                                return Colors.white; // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFFfc4232);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFFfc4232); // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFFfc4232); // Use the component's default.
                               },
                             ),
                           ),
@@ -249,14 +268,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                               Expanded(
                                 flex: 8,
-                                child: Text("Connect with Google",
+                                child: Text(
+                                  "Connect with Google",
                                   style: TextStyle(
                                       fontSize: 13,
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.5,
-                                      wordSpacing: 2.0
-                                  ),
+                                      wordSpacing: 2.0),
                                   textAlign: TextAlign.left,
                                 ),
                               ),
@@ -269,16 +288,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFF0c0c0c);
-                                return Colors.white; // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFF0c0c0c);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFF0c0c0c); // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFF0c0c0c); // Use the component's default.
                               },
                             ),
                           ),
@@ -302,14 +327,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                               Expanded(
                                 flex: 8,
-                                child: Text("Connect with Apple",
+                                child: Text(
+                                  "Connect with Apple",
                                   style: TextStyle(
                                       fontSize: 13,
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.5,
-                                      wordSpacing: 2.0
-                                  ),
+                                      wordSpacing: 2.0),
                                   textAlign: TextAlign.left,
                                 ),
                               ),
@@ -335,6 +360,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           .showSnackBar(SnackBar(content: Text(error)));
     }
   }
+
   Future signUpWithEmailAndPassword(
       FirebaseAuthService _auth, BuildContext context) async {
     if (_formKey.currentState.validate()) {
@@ -420,10 +446,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               prefixIcon: Container(
-                margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
+                  margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Icon(Icons.email, color: Colors.white, size: 25.0)
-              ),
+                  child: Icon(Icons.email, color: Colors.white, size: 25.0)),
               hintText: 'Email',
               hintStyle: TextStyle(
                 color: Color(0x70999999),
@@ -471,8 +496,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               prefixIcon: Container(
                   margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Icon(Icons.security, color: Colors.white, size: 25.0)
-              ),
+                  child: Icon(Icons.security, color: Colors.white, size: 25.0)),
               hintText: 'Password',
               hintStyle: TextStyle(
                 color: Color(0x70999999),
@@ -485,9 +509,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onPressed: () => this.setState(() {
                   isObcure = !isObcure;
                   show = !show;
-                  trailingIconPass = Icon(show == true
-                      ? Icons.visibility_rounded
-                      : Icons.visibility_off_rounded,
+                  trailingIconPass = Icon(
+                    show == true
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded,
                     color: Color(0x70999999),
                   );
                 }),
@@ -532,8 +557,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               prefixIcon: Container(
                   margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Icon(Icons.security, color: Colors.white, size: 25.0)
-              ),
+                  child: Icon(Icons.security, color: Colors.white, size: 25.0)),
               hintText: 'Confirm Password',
               hintStyle: TextStyle(
                 color: Color(0x70999999),
@@ -546,9 +570,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onPressed: () => this.setState(() {
                   isObcureSub = !isObcureSub;
                   showSub = !showSub;
-                  trailingIconPassSub = Icon(showSub == true
-                      ? Icons.visibility_rounded
-                      : Icons.visibility_off_rounded,
+                  trailingIconPassSub = Icon(
+                    showSub == true
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded,
                     color: Color(0x70999999),
                   );
                 }),

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
 import 'package:provider/provider.dart';
@@ -20,124 +21,141 @@ class AccountInformation extends StatefulWidget {
 
 class _AccountInformation extends State<AccountInformation> {
   String username;
-  String image;
-  final double fontSizeText = 30;
-  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
-  int reachTop = 0;
-  int reachAppBar = 0;
-  // Phần này để check xem mình đã Scroll tới đâu trong ListView
-  ScrollController _controller = ScrollController();
-  _scrollListener() {
-    if (_controller.offset > 0) {
-      setState(() {
-        reachAppBar = 1;
-      });
-    } else {
-      setState(() {
-        reachAppBar = 0;
-      });
-    }
-    if (_controller.offset >= fontSizeText - 5) {
-      setState(() {
-        reachTop = 1;
-      });
-    } else {
-      setState(() {
-        reachTop = 0;
-      });
-    }
-  }
+  bool invalid = false;
+  Widget InputTile(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      decoration: BoxDecoration(
+          color: Color(0xff333333), borderRadius: BorderRadius.circular(17)),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Text(
+              'User name:',
+              style: TextStyle(
+                  color: Colors.white70,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w700),
+            ),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.person_rounded,
+              color: white,
+              size: 30,
+            ),
+            title: Theme(
+              data: Theme.of(context).copyWith(
+                primaryColor: Colors.white,
+              ),
+              child: TextFormField(
+                onChanged: (val) {
+                  setState(() {
+                    username = val;
+                  });
 
-  @override
-  void initState() {
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
-    super.initState();
+                  print(username);
+                },
+                style: TextStyle(
+                    color: white, fontSize: 20, fontFamily: 'Montserrat'),
+                autocorrect: false,
+                decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.symmetric(vertical: 5)),
+              ),
+            ),
+          ),
+          Container(
+              alignment: Alignment.centerRight,
+              child: !invalid
+                  ? Container()
+                  : Text(
+                      'This field can not empty',
+                      style: TextStyle(color: Colors.red),
+                    ))
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final _auth = Provider.of<FirebaseAuthService>(context);
-    return StreamBuilder<User>(
-        stream: _auth.userStream,
-        builder: (context, snapshot) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              leadingWidth: 250.0,
-              centerTitle: true,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              flexibleSpace: ClipRect(
-                child: AnimatedOpacity(
-                  opacity: reachAppBar == 1 ? 1 : 0,
-                  duration: Duration(milliseconds: 0),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                        sigmaX: reachTop == 1 ? 25 : 500,
-                        sigmaY: 25,
-                        tileMode: TileMode.values[0]),
-                    child: AnimatedContainer(
-                      duration: Duration(
-                          milliseconds:
-                              reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                      color: Colors.grey[reachAppBar == 1
-                              ? (reachTop == 1 ? 800 : 850)
-                              : 900]
-                          .withOpacity(0.2),
-                    ),
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
-                child: reachTop == 0
-                    ? Text(
-                        'Edit your information',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Colors.black,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    : Text(
-                        '',
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.black,
-                            fontSize: 30),
-                      ),
-              ),
-            ),
-            body: ListView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("What is your name?"),
+        backgroundColor: Color(0xff2FB49C),
+      ),
+      body: Container(
+        padding: EdgeInsets.only(top: 30),
+        color: Color(0xFF111111),
+        child: ListView(
+          children: [
+            Column(
               children: <Widget>[
-                buildInputField(),
+                //buildInputField(),
+                Center(
+                  child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 30),
+                      height: 200,
+                      width: 200,
+                      decoration:
+                          BoxDecoration(shape: BoxShape.circle, color: yellow),
+                      child: Text(
+                        username == null || username.length == 0
+                            ? 'A'
+                            : username[0].toUpperCase(),
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 125,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w900),
+                      ),
+                      alignment: Alignment.center),
+                ),
+                InputTile(context),
                 SizedBox(height: 30),
                 Container(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) {
-                        _auth.currentUser.updateProfile(
-                          displayName: username,
-                        );
-                        return FirstStep();
-                      }));
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Color(0xff555555)),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("tap");
+                      if (username == null || username.length == 0) {
+                        print("false");
+                        setState(() {
+                          invalid = true;
+                        });
+                      } else {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (_) {
+                          _auth.currentUser.updateProfile(
+                            displayName: username,
+                          );
+                          return FirstStep();
+                        }));
+                      }
                     },
                     child: Text(
                       'CONFIRM',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w700),
                     ),
-                    style: TextButton.styleFrom(backgroundColor: Colors.black),
                   ),
-                  alignment: Alignment.bottomCenter,
                 ),
               ],
             ),
-          );
-        });
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildInputField() {

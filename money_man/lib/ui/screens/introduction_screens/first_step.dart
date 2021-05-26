@@ -59,8 +59,8 @@ class _FirstStepState extends State<FirstStep> {
             end: Alignment.bottomRight,
             stops: [0.15, 0.05, 0.05, 0.25],
             colors: [
-              Colors.orange,
-              Colors.yellow,
+              Color(0xFF2FB49C),
+              Color(0xff2fb49a),
               Colors.grey[200],
               Colors.grey[200]
             ],
@@ -293,7 +293,7 @@ class _FirstStepState extends State<FirstStep> {
                             if (_formKey.currentState.validate())
                               Navigator.of(context).push(_createRoute());
                           },
-                          color: Colors.orange,
+                          color: Color(0xff2FB49C),
                           elevation: 0.0,
                           child: Text(
                             'Continue',

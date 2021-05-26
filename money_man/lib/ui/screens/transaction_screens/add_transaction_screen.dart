@@ -207,6 +207,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       size: 28.0,
                     ),
               title: TextField(
+                autocorrect: false,
                 onTap: () async {
                   final selectCate = await showCupertinoModalBottomSheet(
                       isDismissible: true,
@@ -396,6 +397,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               dense: true,
               leading: Icon(Icons.note, color: Colors.white54, size: 28.0),
               title: TextFormField(
+                autocorrect: false,
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,

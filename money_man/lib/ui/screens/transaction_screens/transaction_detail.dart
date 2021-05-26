@@ -26,24 +26,24 @@ class _TransactionDetailState extends State<TransactionDetail> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xff1b1b1b),
       appBar: AppBar(
-        leadingWidth: 250,
+        leadingWidth: 380,
         elevation: 0,
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xff1a1a1a),
         leading: TextButton(
           child: Row(
             children: [
-              const Icon(Icons.arrow_back_ios_outlined, color: Colors.white, size: 16.0),
-              SizedBox(width: 8.0),
+              const Icon(Icons.arrow_back_ios_outlined,
+                  color: Colors.white, size: 16.0),
+              SizedBox(width: 6.0),
               const Text('Transactions',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  color: Colors.white,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w500,
-                )
-              ),
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    color: Colors.white,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w500,
+                  )),
             ],
           ),
           onPressed: () {
@@ -52,25 +52,25 @@ class _TransactionDetailState extends State<TransactionDetail> {
         ),
         actions: <Widget>[
           TextButton(
-              onPressed: () async {
-                final updatedTrans = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => EditTransactionScreen(
-                            transaction: widget.transaction,
-                            wallet: widget.wallet)));
-                if (updatedTrans != null)
-                  setState(() {
-                    widget.transaction = updatedTrans;
-                  });
-              },
-              child: const Text('Edit', style: TextStyle(
-                fontFamily: 'Montserrat',
-                color: Colors.white,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-              )
-              ),
+            onPressed: () async {
+              final updatedTrans = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => EditTransactionScreen(
+                          transaction: widget.transaction,
+                          wallet: widget.wallet)));
+              if (updatedTrans != null)
+                setState(() {
+                  widget.transaction = updatedTrans;
+                });
+            },
+            child: const Text('Edit',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  color: Colors.white,
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w500,
+                )),
           ),
         ],
       ),
@@ -81,15 +81,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 color: Colors.grey[900],
                 border: Border(
                     bottom: BorderSide(
-                    color: Colors.white12,
-                    width: 0.5,
-                  ),
+                      color: Colors.white12,
+                      width: 0.5,
+                    ),
                     top: BorderSide(
                       color: Colors.white12,
                       width: 0.5,
-                    )
-                )
-            ),
+                    ))),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -101,55 +99,57 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         flex: 1,
                         child: SuperIcon(
                           iconPath: widget.transaction.category.iconID,
-                          size: 50.0,
+                          size: 70.0,
                         ),
                       ),
                       Expanded(
                         flex: 3,
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                widget.transaction.category.name,
-                                style: TextStyle(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  widget.transaction.category.name,
+                                  style: TextStyle(
                                     fontFamily: 'Montserrat',
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700,
                                     height: 1.5,
                                     color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                  widget.transaction.note == ''
-                                      ? 'Note'
-                                      : widget.transaction.note,
-                                  style: TextStyle(
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                    widget.transaction.note == ''
+                                        ? 'Note'
+                                        : widget.transaction.note,
+                                    style: TextStyle(
                                       fontFamily: 'Montserrat',
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
                                       height: 1.5,
-                                      color: widget.transaction.note == '' ?  Colors.grey[600] : Colors.white,
-                                  )
+                                      color: widget.transaction.note == ''
+                                          ? Colors.grey[600]
+                                          : Colors.white,
+                                    )),
                               ),
-                            ),
-                            Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                    widget.transaction.amount.toString(),
-                                    style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                        height: 1.5,
-                                        color: Colors.white,
-                                    )
-                                )
-                            ),
-                          ],
+                              Align(
+                                  alignment: Alignment.centerLeft,
+                                  child:
+                                      Text(widget.transaction.amount.toString(),
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500,
+                                            height: 1.5,
+                                            color: Colors.white,
+                                          ))),
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -164,8 +164,9 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                          flex: 1, child: Icon(Icons.calendar_today_rounded, color: Colors.grey[500], size: 25.0)
-                      ),
+                          flex: 1,
+                          child: Icon(Icons.calendar_today_rounded,
+                              color: Colors.grey[500], size: 25.0)),
                       Expanded(
                           flex: 3,
                           child: Text(
@@ -174,10 +175,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: ' Montserrat',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16.0)
-                          )
-                      ),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0))),
                     ],
                   ),
                   SizedBox(height: 10),
@@ -189,17 +188,15 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           child: SuperIcon(
                             iconPath: widget.wallet.iconID,
                             size: 25.0,
-                          )
-                      ),
+                          )),
                       Expanded(
                           flex: 3,
-                          child: Text(widget.wallet.name, style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: ' Montserrat',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16.0)
-                          )
-                      ),
+                          child: Text(widget.wallet.name,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: ' Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0))),
                     ],
                   )
                 ],
@@ -221,9 +218,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       top: BorderSide(
                         color: Colors.white12,
                         width: 0.5,
-                      )
-                  )
-              ),
+                      ))),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -246,8 +241,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                             child: SuperIcon(
                               iconPath: widget.transaction.category.iconID,
                               size: 35.0,
-                            )
-                        ),
+                            )),
                         Expanded(
                           flex: 5,
                           child: Column(
@@ -297,12 +291,19 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                       ))
                                 ],
                               ),
-                              LinearProgressIndicator(
-                                value: 0.5,
-                                valueColor: new AlwaysStoppedAnimation<Color>(
-                                    Colors.greenAccent),
-                                backgroundColor: Colors.black26,
-                                minHeight: 4,
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: 5),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: LinearProgressIndicator(
+                                    value: 0.5,
+                                    valueColor:
+                                        new AlwaysStoppedAnimation<Color>(
+                                            Colors.greenAccent),
+                                    backgroundColor: Colors.black26,
+                                    minHeight: 4,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -331,27 +332,30 @@ class _TransactionDetailState extends State<TransactionDetail> {
               //         ))),
               child: TextButton(
                 onPressed: () {},
-                child: Text('Share', style: TextStyle(
+                child: Text(
+                  'Share',
+                  style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) return Colors.white;
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return Colors.white;
                       return Colors.blueAccent; // Use the component's default.
                     },
                   ),
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) return Colors.blueAccent;
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return Colors.blueAccent;
                       return Colors.white; // Use the component's default.
                     },
                   ),
                 ),
-              )
-          ),
+              )),
           SizedBox(
             height: 20,
           ),
@@ -403,21 +407,23 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         );
                       });
                 },
-                child: Text('Delete transaction', style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  )
-                ),
+                child: Text('Delete transaction',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600,
+                    )),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) return Colors.white;
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return Colors.white;
                       return Colors.red; // Use the component's default.
                     },
                   ),
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) return Colors.red;
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return Colors.red;
                       return Colors.white; // Use the component's default.
                     },
                   ),
