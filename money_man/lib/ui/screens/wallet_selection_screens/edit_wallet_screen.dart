@@ -140,6 +140,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                           padding: EdgeInsets.only(right: 50),
                           width: 250,
                           child: TextFormField(
+                            autocorrect: false,
                             initialValue: widget.wallet.name,
                             keyboardType: TextInputType.name,
                             style: TextStyle(

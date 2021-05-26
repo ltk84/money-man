@@ -161,7 +161,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                               KeyOfCalc(
                                   isEnd ? 19 : 15,
                                   Color(0xffdbdddd),
-                                  isEnd ? Color(0xffb0b008) : Color(0xff25b197),
+                                  isEnd ? Color(0xff22a115) : Color(0xff25b197),
                                   2),
                               //KeyOfCalc(19, Color(0xffdbdddd)),
                             ],

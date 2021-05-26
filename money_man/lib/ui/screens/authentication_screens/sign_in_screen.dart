@@ -71,16 +71,22 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFF2FB49C); // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFF2FB49C); // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
-                                return Colors.white; // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFF2FB49C);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
                           ),
@@ -93,10 +99,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.5,
-                                  wordSpacing: 2.0
-                              ),
-                              textAlign: TextAlign.center
-                          ),
+                                  wordSpacing: 2.0),
+                              textAlign: TextAlign.center),
                         ),
                       ),
                       Container(
@@ -104,16 +108,22 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
-                                return Colors.white; // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFF2FB49C);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFF2FB49C); // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFF2FB49C); // Use the component's default.
                               },
                             ),
                           ),
@@ -126,10 +136,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.5,
-                                  wordSpacing: 2.0
-                              ),
-                              textAlign: TextAlign.center
-                          ),
+                                  wordSpacing: 2.0),
+                              textAlign: TextAlign.center),
                         ),
                       ),
                       Container(
@@ -137,16 +145,22 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
-                                return Colors.white; // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFF2FB49C);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFF2FB49C); // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFF2FB49C); // Use the component's default.
                               },
                             ),
                           ),
@@ -160,10 +174,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.5,
-                                  wordSpacing: 2.0
-                              ),
-                              textAlign: TextAlign.center
-                          ),
+                                  wordSpacing: 2.0),
+                              textAlign: TextAlign.center),
                         ),
                       ),
                       Container(
@@ -175,10 +187,13 @@ class _SignInScreenState extends State<SignInScreen> {
                             //     return Colors.white; // Use the component's default.
                             //   },
                             // ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFF2FB49C); // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFF2FB49C); // Use the component's default.
                               },
                             ),
                           ),
@@ -186,8 +201,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) =>
-                                        ForgotPasswordScreen()));
+                                    builder: (_) => ForgotPasswordScreen()));
                           },
                           child: Text("Forgot password?",
                               style: TextStyle(
@@ -195,10 +209,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.5,
-                                  wordSpacing: 2.0
-                              ),
-                              textAlign: TextAlign.center
-                          ),
+                                  wordSpacing: 2.0),
+                              textAlign: TextAlign.center),
                         ),
                       ),
                       Container(
@@ -206,10 +218,9 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: Row(children: <Widget>[
                           Expanded(
                               child: Divider(
-                                thickness: 1,
-                                color: Colors.white24,
-                              )
-                          ),
+                            thickness: 1,
+                            color: Colors.white24,
+                          )),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
@@ -223,10 +234,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           Expanded(
                               child: Divider(
-                                thickness: 1,
-                                color: Colors.white24,
-                              )
-                          ),
+                            thickness: 1,
+                            color: Colors.white24,
+                          )),
                         ]),
                       ),
                       Container(
@@ -234,16 +244,22 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFF2c84d4);
-                                return Colors.white; // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFF2c84d4);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFF2c84d4); // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFF2c84d4); // Use the component's default.
                               },
                             ),
                           ),
@@ -267,14 +283,14 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                               Expanded(
                                 flex: 8,
-                                child: Text("Connect with Facebook",
+                                child: Text(
+                                  "Connect with Facebook",
                                   style: TextStyle(
                                       fontSize: 13,
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.5,
-                                      wordSpacing: 2.0
-                                  ),
+                                      wordSpacing: 2.0),
                                   textAlign: TextAlign.left,
                                 ),
                               ),
@@ -287,16 +303,22 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFFfc4232);
-                                return Colors.white; // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFFfc4232);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFFfc4232); // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFFfc4232); // Use the component's default.
                               },
                             ),
                           ),
@@ -320,14 +342,14 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                               Expanded(
                                 flex: 8,
-                                child: Text("Connect with Google",
+                                child: Text(
+                                  "Connect with Google",
                                   style: TextStyle(
                                       fontSize: 13,
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.5,
-                                      wordSpacing: 2.0
-                                  ),
+                                      wordSpacing: 2.0),
                                   textAlign: TextAlign.left,
                                 ),
                               ),
@@ -340,16 +362,22 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: double.infinity,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Color(0xFF0c0c0c);
-                                return Colors.white; // Use the component's default.
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Color(0xFF0c0c0c);
+                                return Colors
+                                    .white; // Use the component's default.
                               },
                             ),
-                            foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) return Colors.white;
-                                return Color(0xFF0c0c0c); // Use the component's default.
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.white;
+                                return Color(
+                                    0xFF0c0c0c); // Use the component's default.
                               },
                             ),
                           ),
@@ -373,14 +401,14 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                               Expanded(
                                 flex: 8,
-                                child: Text("Connect with Apple",
+                                child: Text(
+                                  "Connect with Apple",
                                   style: TextStyle(
                                       fontSize: 13,
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.5,
-                                      wordSpacing: 2.0
-                                  ),
+                                      wordSpacing: 2.0),
                                   textAlign: TextAlign.left,
                                 ),
                               ),
@@ -406,12 +434,14 @@ class _SignInScreenState extends State<SignInScreen> {
           .showSnackBar(SnackBar(content: Text(error)));
     }
   }
+
   bool isNumeric(String s) {
-    if(s == null) {
+    if (s == null) {
       return false;
     }
     return double.parse(s, (e) => null) != null;
   }
+
   Future signInWithEmailAndPassword(
       FirebaseAuthService _auth, BuildContext context) async {
     if (_formKey.currentState.validate()) {
@@ -459,7 +489,8 @@ class _SignInScreenState extends State<SignInScreen> {
             validator: (value) {
               if (value == null || value.isEmpty)
                 return 'Email not empty';
-              else if (!isNumeric(value) && EmailValidator.validate(value) == false)
+              else if (!isNumeric(value) &&
+                  EmailValidator.validate(value) == false)
                 return 'Email not valid';
               return null;
             },
@@ -480,8 +511,7 @@ class _SignInScreenState extends State<SignInScreen> {
               prefixIcon: Container(
                   margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Icon(Icons.email, color: Colors.white, size: 25.0)
-              ),
+                  child: Icon(Icons.email, color: Colors.white, size: 25.0)),
               hintText: 'Email',
               hintStyle: TextStyle(
                 color: Color(0x70999999),
@@ -529,8 +559,7 @@ class _SignInScreenState extends State<SignInScreen> {
               prefixIcon: Container(
                   margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Icon(Icons.security, color: Colors.white, size: 25.0)
-              ),
+                  child: Icon(Icons.security, color: Colors.white, size: 25.0)),
               hintText: 'Password',
               hintStyle: TextStyle(
                 color: Color(0x70999999),
@@ -543,9 +572,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 onPressed: () => this.setState(() {
                   isObcure = !isObcure;
                   show = !show;
-                  trailingIconPass = Icon(show == true
-                      ? Icons.visibility_rounded
-                      : Icons.visibility_off_rounded,
+                  trailingIconPass = Icon(
+                    show == true
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded,
                     color: Color(0x70999999),
                   );
                 }),
@@ -598,4 +628,3 @@ class CustomListTile extends StatelessWidget {
     );
   }
 }
-
