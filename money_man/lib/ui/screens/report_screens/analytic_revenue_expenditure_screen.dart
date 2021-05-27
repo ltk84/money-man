@@ -200,7 +200,12 @@ class _AnalyticRevenueAndExpenditureScreen extends State<AnalyticRevenueAndExpen
                                 child: BarChartScreen(currentList: _transactionList, beginDate: beginDate, endDate: endDate),
                               ),
                               Container(
-                                child: BarChartInformation(currentList: _transactionList, beginDate: beginDate, endDate: endDate),
+                                child: BarChartInformation(
+                                    currentList: _transactionList,
+                                    beginDate: beginDate,
+                                    endDate: endDate,
+                                  currentWallet: widget.currentWallet,
+                                ),
                               )
                             ]
                         );

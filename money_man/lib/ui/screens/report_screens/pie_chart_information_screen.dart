@@ -5,12 +5,13 @@ import 'package:money_man/core/models/iconModel.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/categoryModel.dart';
+import 'package:money_man/core/models/walletModel.dart';
 
 class PieChartInformationScreen extends StatefulWidget {
   List<MyTransaction> currentList;
   List<MyCategory> categoryList;
   Color color;
-  PieChartInformationScreen({Key key, @required this.currentList, @required this.categoryList , @required this.color}) : super(key: key);
+  PieChartInformationScreen({Key key,@required this.currentList, @required this.categoryList , @required this.color}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _PieChartInformationScreen();
 }

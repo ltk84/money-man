@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/transactionModel.dart';
+import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
 import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_time.dart';
 
@@ -8,7 +9,8 @@ class BarChartInformation extends StatefulWidget{
   final List<MyTransaction> currentList;
   final DateTime beginDate;
   final DateTime endDate;
-  BarChartInformation({Key key, this.currentList, this.beginDate, this.endDate}) : super(key: key);
+  final Wallet currentWallet;
+  BarChartInformation({Key key, this.currentWallet,this.currentList, this.beginDate, this.endDate}) : super(key: key);
   @override
   _BarChartInformation createState() => _BarChartInformation();
 }
@@ -47,6 +49,8 @@ class  _BarChartInformation extends State<BarChartInformation> {
   List<dynamic> calculationList = [];
 
   List<String> timeRangeList = [];
+  List<DateTime> fisrtDayList = [];
+  List<DateTime> secondDayList = [];
   @override
   void initState() {
     super.initState();
@@ -88,7 +92,14 @@ class  _BarChartInformation extends State<BarChartInformation> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => ReportListTransaction())
+                      builder: (_) => ReportListTransaction(
+                        currentList: _transactionList,
+                        beginDate: fisrtDayList[index],
+                        endDate: secondDayList[index],
+                        totalMoney: calculationList[index].first-calculationList[index].last,
+                        currentWallet: widget.currentWallet,
+                      )
+                  )
               );
             },
             child: Column(
@@ -141,6 +152,8 @@ class  _BarChartInformation extends State<BarChartInformation> {
           calculationList.add(calculation);
           timeRangeList.add(firstDate.day.toString() +"/" + firstDate.month.toString()+"-" +
               secondDate.day.toString() +"/" + secondDate.month.toString());
+          fisrtDayList.add(firstDate);
+          secondDayList.add(secondDate);
         }
         firstDate = firstDate.add(Duration(days: x));
       }

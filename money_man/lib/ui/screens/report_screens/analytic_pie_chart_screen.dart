@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/categoryModel.dart';
+import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart_information_screen.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';

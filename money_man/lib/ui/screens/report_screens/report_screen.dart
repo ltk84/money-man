@@ -380,7 +380,12 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     Container(
                                       width: 450,
                                       height: 200,
-                                      child: BarChartScreen(currentList: _transactionList, beginDate: beginDate, endDate: endDate),
+                                      child: BarChartScreen(
+                                          currentList: _transactionList,
+                                          beginDate: beginDate,
+                                          endDate: endDate
+
+                                      ),
                                     ),
                                     IconButton(
                                         icon: Icon(Icons.web_outlined),
