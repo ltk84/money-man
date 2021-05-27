@@ -441,7 +441,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             Container(
                                               width: 90,
                                               height: 90,
-                                              child: PieChartScreen(currentList: _transactionList, categoryList: _incomeCategoryList, total: income),
+                                              child: PieChartScreen(isShowPercent: false ,currentList: _transactionList, categoryList: _incomeCategoryList, total: income),
                                             ),
                                             IconButton(
                                                 icon: Icon(Icons.web_outlined),
@@ -497,7 +497,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             Container(
                                               width: 90,
                                               height: 90,
-                                              child: PieChartScreen(currentList: _transactionList, categoryList: _expenseCategoryList, total: expense),
+                                              child: PieChartScreen(isShowPercent: false , currentList: _transactionList, categoryList: _expenseCategoryList, total: expense),
                                             ),
                                             IconButton(
                                                 icon: Icon(Icons.web_outlined),

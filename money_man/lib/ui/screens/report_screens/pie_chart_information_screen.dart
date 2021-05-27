@@ -1,6 +1,8 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/iconModel.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/categoryModel.dart';
 
@@ -125,8 +127,18 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen>  {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(_listCategoryReport[index].name,
-                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 6, 0),
+                      child: SuperIcon(
+                        iconPath:_listCategoryReport[index].iconID,
+                          size: 35,
+                      )
+                  ),
+                  Expanded(child: Text(_listCategoryReport[index].name,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),),
                   Column(
                     children: <Widget>[
                       Text(_info[index].toString(),

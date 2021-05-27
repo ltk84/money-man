@@ -12,8 +12,9 @@ import 'package:random_color/random_color.dart';
 class PieChartScreen extends StatefulWidget {
   List<MyTransaction> currentList;
   List<MyCategory> categoryList;
+  bool isShowPercent;
   double total;
-  PieChartScreen({Key key, @required this.currentList, @required this.categoryList, @required this.total }) : super(key: key);
+  PieChartScreen({Key key, @required this.currentList, @required this.isShowPercent,@required this.categoryList, @required this.total }) : super(key: key);
   @override
   State<StatefulWidget> createState() => PieChartScreenState();
 }
@@ -21,6 +22,7 @@ class PieChartScreen extends StatefulWidget {
 class PieChartScreenState extends State<PieChartScreen>  {
   double _total;
   int touchedIndex = -1;
+  bool _isShowPercent;
   List<MyTransaction> _transactionList;
   List<MyCategory> _categoryList;
   List<double> _info = [];
@@ -32,6 +34,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
     _transactionList = widget.currentList;
     _categoryList = widget.categoryList;
     _total = widget.total;
+    _isShowPercent = widget.isShowPercent;
     generateData(_categoryList, _transactionList);
   }
 
@@ -43,6 +46,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
     _transactionList = widget.currentList ?? [];
     _categoryList = widget.categoryList ?? [];
     _total = widget.total;
+    _isShowPercent = widget.isShowPercent;
     generateData(_categoryList, _transactionList);
   }
 
@@ -143,16 +147,21 @@ class PieChartScreenState extends State<PieChartScreen>  {
       return PieChartSectionData(
         color: colors[i],
         value: value.toDouble(),
-        showTitle: false,
+        titleStyle: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w700 ,
+            fontFamily: 'Montserrat' ),
+        showTitle: _isShowPercent,//false,
+        titlePositionPercentageOffset: 0.5,
         //title: value.toString() + '%',
-        radius: radius,
+        radius: _isShowPercent ? 65:radius,
         // titleStyle: TextStyle(
         //     fontSize: fontSize,
         //     fontWeight: FontWeight.bold,
         //     color: const Color(0xffffffff)),
         badgeWidget: _Badge(
           _listCategoryReport[i].iconID, // category icon.
-          size: widgetSize,
+          size: _isShowPercent?30:widgetSize,
           borderColor: colors[i],
         ),
         badgePositionPercentageOffset: .98,

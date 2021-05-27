@@ -121,7 +121,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen>  {
                         Column(
                           children: <Widget>[
                             Text(_content,style: TextStyle(
-                              color: Colors.grey[500],
+                              color: Colors.grey[300],
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
                               fontSize: 30,
@@ -137,9 +137,12 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen>  {
                           ],
                         ),
                         Container(
+                          height: 30,
+                        ),
+                        Container(
                           width: 200,
                           height: 200,
-                          child: PieChartScreen(currentList: _transactionList, categoryList: _categoryList, total: _total),
+                          child: PieChartScreen(isShowPercent: true ,currentList: _transactionList, categoryList: _categoryList, total: _total),
                         ),
                         Container(
                           child: PieChartInformationScreen(currentList: _transactionList, categoryList: _categoryList, color: _color,),
