@@ -118,15 +118,9 @@ class FirebaseAuthService {
       // Trigger the sign-in flow
       final AccessToken result = await FacebookAuth.instance.login();
 
-<<<<<<< HEAD
-    // Create a credential from the access token
-    final FacebookAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(result.token);
-=======
       // Create a credential from the access token
       final FacebookAuthCredential facebookAuthCredential =
           FacebookAuthProvider.credential(result.token);
->>>>>>> tung/feature-transaction
 
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance
@@ -159,40 +153,6 @@ class FirebaseAuthService {
   }
 
   Future signInWithFacebookVer2() async {
-<<<<<<< HEAD
-    // // Gọi hàm LogIn() với giá trị truyền vào là một mảng permission
-    // // Ở đây mình truyền vào cho nó quền xem email
-    // final facebookLogin = FacebookLogin();
-    // final result = await facebookLogin.logIn(['email']);
-    // // Kiểm tra nếu login thành công thì thực hiện login Firebase
-    // // (theo mình thì cách này đơn giản hơn là dùng đường dẫn
-    // // hơn nữa cũng đồng bộ với hệ sinh thái Firebase, tích hợp được
-    // // nhiều loại Auth
-
-    // if (result.status == FacebookLoginStatus.loggedIn) {
-    //   final credential =
-    //       FacebookAuthProvider.credential(result.accessToken.token.toString());
-    //   // (
-    //   //   accessToken: result.accessToken.token,
-    //   // );
-    //   // Lấy thông tin User qua credential có giá trị token đã đăng nhập
-    //   final user = (await _auth.signInWithCredential(credential)).user;
-    //   return user;
-    // }
-    final facebookLogin = FacebookLogin();
-    final result = await facebookLogin.logIn(['email']);
-
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final credential =
-            FacebookAuthProvider.credential(result.accessToken.token);
-        await _auth.signInWithCredential(credential);
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        break;
-      case FacebookLoginStatus.error:
-        break;
-=======
     try {
       final facebookLogin = FacebookLogin();
       final result = await facebookLogin.logIn(['email']);
@@ -210,7 +170,6 @@ class FirebaseAuthService {
       }
     } on FirebaseAuthException catch (e) {
       return e.code;
->>>>>>> tung/feature-transaction
     }
   }
 }
