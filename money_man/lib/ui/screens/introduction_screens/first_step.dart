@@ -311,6 +311,7 @@ class _FirstStepState extends State<FirstStep> {
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
+                              color: Colors.white,
                             ),
                           ),
                           shape: RoundedRectangleBorder(
