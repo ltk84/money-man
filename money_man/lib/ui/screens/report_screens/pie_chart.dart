@@ -24,7 +24,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
   List<MyTransaction> _transactionList;
   List<MyCategory> _categoryList;
   List<double> _info = [];
-
+  List<MyCategory> _listCategoryReport = [];
 
   @override
   void initState() {
@@ -46,16 +46,35 @@ class PieChartScreenState extends State<PieChartScreen>  {
     generateData(_categoryList, _transactionList);
   }
 
-  void generateData (List<MyCategory> categoryList, List<MyTransaction> transactionList) {
+  bool isContained(MyCategory currentCategory, List<MyCategory> categoryList)
+  {
+    if(categoryList.isEmpty) return false;
+    int n = 0;
     categoryList.forEach((element) {
-      _info.add(calculateByCategory(element,transactionList));
+      if(element.name == currentCategory.name)
+        n+=1;
+    });
+    if(n == 1)
+      return true;
+    return false;
+  }
+  void generateData (List<MyCategory> categoryList, List<MyTransaction> transactionList) {
+
+    categoryList.forEach((element) {
+      if(!isContained(element,_listCategoryReport))
+      {
+        _listCategoryReport.add(element);
+      }
+    });
+    _listCategoryReport.forEach((element) {
+      _info.add(calculateByCategory(element, transactionList));
     });
   }
 
   double calculateByCategory(MyCategory category, List<MyTransaction> transactionList) {
     double sum = 0;
     transactionList.forEach((element) {
-      if (element.category == category)
+      if (element.category.name == category.name)
         sum += element.amount;
     });
     return sum;
@@ -96,8 +115,8 @@ class PieChartScreenState extends State<PieChartScreen>  {
   }
 
   List<PieChartSectionData> showingSections() {
-    return (_categoryList.length != 0) ? List.generate(
-        _categoryList.length, (i) {
+    return (_listCategoryReport.length != 0) ? List.generate(
+        _listCategoryReport.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 16.0 : 14.0;
       final radius = isTouched ? 30.0 : 20.0;
@@ -132,7 +151,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
         //     fontWeight: FontWeight.bold,
         //     color: const Color(0xffffffff)),
         badgeWidget: _Badge(
-          _categoryList[i].iconID, // category icon.
+          _listCategoryReport[i].iconID, // category icon.
           size: widgetSize,
           borderColor: colors[i],
         ),
