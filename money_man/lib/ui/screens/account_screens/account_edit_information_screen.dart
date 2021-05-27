@@ -158,6 +158,7 @@ class _AccountInformation extends State<AccountInformation> {
     );
   }
 
+// Đây là cái cũ, không xài, nhưng để cho có kỷ niệm.
   Widget buildInputField() {
     final _auth = Provider.of<FirebaseAuthService>(context);
     return StreamBuilder<User>(
