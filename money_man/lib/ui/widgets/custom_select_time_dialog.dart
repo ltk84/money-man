@@ -24,7 +24,7 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
     super.initState();
 
     controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 700));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
     scaleAnimation =
         CurvedAnimation(parent: controller, curve: Curves.fastLinearToSlowEaseIn);
 
