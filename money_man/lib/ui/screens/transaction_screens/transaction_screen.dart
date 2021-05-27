@@ -195,7 +195,7 @@ class _TransactionScreen extends State<TransactionScreen>
                 return CustomSelectTimeDialog();
               }).then((value) => timeRange = value);
 
-          if (timeRange.length == 0) return null;
+          if (timeRange == null) return null;
 
           String displayTab = DateFormat('dd/MM/yyyy').format(timeRange[0]) +
               " - " +

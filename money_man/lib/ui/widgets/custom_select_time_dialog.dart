@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
+import 'custom_alert.dart';
+
 class CustomSelectTimeDialog extends StatefulWidget {
   @override
   _CustomSelectTimeDialogState createState() => _CustomSelectTimeDialogState();
@@ -152,9 +154,14 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> {
                     child: Text('CANCEL')),
                 TextButton(
                     onPressed: () {
-                      if (beginDate != null &&
-                          endDate != null &&
-                          beginDate != endDate) {
+                      if (beginDate == null) {
+                        _showAlertDialog('Please pick starting date');
+                      } else if (endDate == null) {
+                        _showAlertDialog('Please pick end date');
+                      } else if (beginDate.compareTo(endDate) >= 0) {
+                        _showAlertDialog(
+                            'Ending date must be after starting date');
+                      } else {
                         Navigator.pop(context, [beginDate, endDate]);
                       }
                     },
@@ -164,6 +171,17 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
     );
   }
 }
