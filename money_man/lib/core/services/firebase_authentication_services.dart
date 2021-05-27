@@ -142,6 +142,11 @@ class FirebaseAuthService {
     }
   }
 
+  Future<void> updatePassword(String password) async {
+    var firebaseUser = await _auth.currentUser;
+    firebaseUser.updatePassword(password);
+  }
+
   Future signInWithFacebookVer2() async {
     // // Gọi hàm LogIn() với giá trị truyền vào là một mảng permission
     // // Ở đây mình truyền vào cho nó quền xem email
