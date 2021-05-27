@@ -7,6 +7,7 @@ import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -17,14 +18,13 @@ class AddWalletScreen extends StatefulWidget {
 
 class _AddWalletScreenState extends State<AddWalletScreen> {
   static var _formKey = GlobalKey<FormState>();
-  String currencyName = 'Currency';
-  double _initial_balance;
+  String currencyName = 'Viet Nam Dong';
 
   Wallet wallet = Wallet(
       id: '0',
       name: 'newWallet',
       amount: 0,
-      currencyID: 'USD',
+      currencyID: 'VND',
       iconID: 'assets/icons/wallet_2.svg');
 
   @override
@@ -93,6 +93,17 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
               key: _formKey,
               child: buildInput(),
             )));
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
+    );
   }
 
   String convertMoneyType(double k) {
@@ -282,13 +293,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                 ],
               ),
             ),
-            // SizedBox(
-            //   height: 25,
-            //   child: Container(height: 50, color: Color(0xff6f6f6f)),
-            // ),
-            // SizedBox(
-            //   height: 25,
-            // ),
             GestureDetector(
               onTap: () {
                 // Xử lý sự kiện click ở đây.

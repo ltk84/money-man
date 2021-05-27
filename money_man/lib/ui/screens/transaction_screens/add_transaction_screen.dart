@@ -11,10 +11,18 @@ import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
 class AddTransactionScreen extends StatefulWidget {
+  Wallet currentWallet;
+  AddTransactionScreen({
+    Key key,
+    @required this.currentWallet,
+  }) : super(key: key);
+
   @override
   _AddTransactionScreenState createState() => _AddTransactionScreenState();
 }
@@ -23,9 +31,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   DateTime pickDate;
   double amount;
   MyCategory cate;
-  Wallet wallet;
+  Wallet selectedWallet;
   String note;
-  String currencySymbol = '';
+  String currencySymbol;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    pickDate = DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
+    selectedWallet = widget.currentWallet;
+    currencySymbol = '';
+    note = null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,29 +86,34 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                if (wallet != null && cate != null && amount != null) {
+                if (selectedWallet == null) {
+                  _showAlertDialog('Please pick your wallet!');
+                } else if (amount == null) {
+                  _showAlertDialog('Please enter amount!');
+                } else if (cate == null) {
+                  _showAlertDialog('Please pick category');
+                } else {
                   MyTransaction trans;
-                  if (pickDate == null) {
-                    trans = MyTransaction(
-                        id: 'id',
-                        amount: amount,
-                        note: note,
-                        date: DateTime.parse(
-                            DateFormat("yyyy-MM-dd").format(DateTime.now())),
-                        currencyID: wallet.currencyID,
-                        category: cate);
-                    print(trans.date.toString() + "chua pick");
-                  } else {
-                    trans = MyTransaction(
-                        id: 'id',
-                        amount: amount,
-                        note: note,
-                        date: pickDate,
-                        currencyID: wallet.currencyID,
-                        category: cate);
-                    print(trans.date.toString() + 'da pick');
-                  }
-                  await _firestore.addTransaction(wallet, trans);
+                  // if (pickDate == null) {
+                  //   trans = MyTransaction(
+                  //       id: 'id',
+                  //       amount: amount,
+                  //       note: note,
+                  //       date: DateTime.parse(
+                  //           DateFormat("yyyy-MM-dd").format(DateTime.now())),
+                  //       currencyID: wallet.currencyID,
+                  //       category: cate);
+                  //   print(trans.date.toString() + "chua pick");
+                  // } else {
+                  trans = MyTransaction(
+                      id: 'id',
+                      amount: amount,
+                      note: note,
+                      date: pickDate,
+                      currencyID: selectedWallet.currencyID,
+                      category: cate);
+                  // }
+                  await _firestore.addTransaction(selectedWallet, trans);
                   Navigator.pop(context);
                 }
               },
@@ -298,24 +321,21 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       fontWeight:
                           pickDate == null ? FontWeight.w500 : FontWeight.w600,
                     ),
-                    hintText: pickDate == null
-                        ? 'Select date'
+                    hintText: pickDate ==
+                            DateTime.parse(
+                                DateFormat("yyyy-MM-dd").format(DateTime.now()))
+                        ? 'Today'
                         : pickDate ==
-                                DateTime.parse(DateFormat("yyyy-MM-dd")
-                                    .format(DateTime.now()))
-                            ? 'Today'
+                                DateTime.parse(DateFormat("yyyy-MM-dd").format(
+                                    DateTime.now().add(Duration(days: 1))))
+                            ? 'Tomorrow'
                             : pickDate ==
                                     DateTime.parse(DateFormat("yyyy-MM-dd")
                                         .format(DateTime.now()
-                                            .add(Duration(days: 1))))
-                                ? 'Tomorrow'
-                                : pickDate ==
-                                        DateTime.parse(DateFormat("yyyy-MM-dd")
-                                            .format(DateTime.now()
-                                                .subtract(Duration(days: 1))))
-                                    ? 'Yesterday'
-                                    : DateFormat('EEEE, dd-MM-yyyy')
-                                        .format(pickDate)),
+                                            .subtract(Duration(days: 1))))
+                                ? 'Yesterday'
+                                : DateFormat('EEEE, dd-MM-yyyy')
+                                    .format(pickDate)),
               ),
               trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
@@ -335,17 +355,18 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) =>
-                        SelectWalletAccountScreen(wallet: wallet));
+                        SelectWalletAccountScreen(wallet: selectedWallet));
                 if (res != null)
                   setState(() {
-                    wallet = res;
-                    currencySymbol =
-                        CurrencyService().findByCode(wallet.currencyID).symbol;
+                    selectedWallet = res;
+                    currencySymbol = CurrencyService()
+                        .findByCode(selectedWallet.currencyID)
+                        .symbol;
                   });
               },
-              leading: wallet == null
+              leading: selectedWallet == null
                   ? SuperIcon(iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
-                  : SuperIcon(iconPath: wallet.iconID, size: 28.0),
+                  : SuperIcon(iconPath: selectedWallet.iconID, size: 28.0),
               title: TextFormField(
                 readOnly: true,
                 style: TextStyle(
@@ -360,25 +381,30 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                      color: wallet == null ? Colors.grey[600] : Colors.white,
+                      color: selectedWallet == null
+                          ? Colors.grey[600]
+                          : Colors.white,
                       fontFamily: 'Montserrat',
                       fontSize: 16.0,
-                      fontWeight:
-                          wallet == null ? FontWeight.w500 : FontWeight.w600,
+                      fontWeight: selectedWallet == null
+                          ? FontWeight.w500
+                          : FontWeight.w600,
                     ),
-                    hintText: wallet == null ? 'Select wallet' : wallet.name),
+                    hintText: selectedWallet == null
+                        ? 'Select wallet'
+                        : selectedWallet.name),
                 onTap: () async {
                   var res = await showCupertinoModalBottomSheet(
                       isDismissible: true,
                       backgroundColor: Colors.grey[900],
                       context: context,
                       builder: (context) =>
-                          SelectWalletAccountScreen(wallet: wallet));
+                          SelectWalletAccountScreen(wallet: selectedWallet));
                   if (res != null)
                     setState(() {
-                      wallet = res;
+                      selectedWallet = res;
                       currencySymbol = CurrencyService()
-                          .findByCode(wallet.currencyID)
+                          .findByCode(selectedWallet.currencyID)
                           .symbol;
                     });
                 },
@@ -397,6 +423,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               dense: true,
               leading: Icon(Icons.note, color: Colors.white54, size: 28.0),
               title: TextFormField(
+                onTap: () async {
+                  final noteContent = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => NoteTransactionScreen()));
+                  print(noteContent);
+                  if (noteContent != null) {
+                    setState(() {
+                      note = noteContent;
+                    });
+                  }
+                },
+                readOnly: true,
                 autocorrect: false,
                 decoration: InputDecoration(
                     border: InputBorder.none,
@@ -409,18 +448,29 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500),
-                    hintText: 'Write note'),
+                    hintText: note == null ? 'Write note' : note),
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
-                onChanged: (value) => note = value,
               ),
+              trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
     );
   }
 }
