@@ -192,6 +192,7 @@ class _FirstStepState extends State<FirstStep> {
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 10),
