@@ -11,25 +11,25 @@ class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Note'),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  _formKey.currentState.save();
-                  Navigator.pop(context, noteContent);
-                },
-                child: Text(
-                  'Save',
-                  style: TextStyle(color: Colors.white),
-                ))
-          ],
-        ),
-        body: Container(
-          padding: EdgeInsets.all(8.0),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Note'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                _formKey.currentState.save();
+                Navigator.pop(context, noteContent);
+              },
+              child: Text(
+                'Save',
+                style: TextStyle(color: Colors.white),
+              ))
+        ],
+      ),
+      body: Container(
+        padding: EdgeInsets.all(8.0),
+        child: Form(
+          key: _formKey,
           child: TextFormField(
             onSaved: (String val) {
               noteContent = val;
