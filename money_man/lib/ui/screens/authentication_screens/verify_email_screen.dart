@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/screens/account_screens/account_edit_information_screen.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
@@ -34,6 +36,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     final user = auth.currentUser;
     final RoundedLoadingButtonController _btnController =
         new RoundedLoadingButtonController();
+    final RoundedLoadingButtonController _btnController2 =
+        new RoundedLoadingButtonController();
     return Scaffold(
       backgroundColor: Color(0xff1a1a1a),
       body: Container(
@@ -41,7 +45,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(20, 90, 0, 0),
+              padding: EdgeInsets.fromLTRB(20, 50, 0, 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,8 +118,34 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         color: black)),
                 controller: _btnController,
                 onPressed: () async {
-                  await user.sendEmailVerification();
+                  if (user.email.contains('gmail') == false) {
+                    await user.sendEmailVerification();
+                  } else {
+                    await _handleLinkWithGoogle(user.email);
+                  }
+                  final timer2 =
+                      Timer.periodic(Duration(seconds: 3), (timer) {});
+
                   _btnController.success();
+                },
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              child: RoundedLoadingButton(
+                height: 40,
+                width: 200,
+                color: Color(0xff2FB49C),
+                child: Text('Back',
+                    style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: black)),
+                controller: _btnController2,
+                onPressed: () async {
+                  await auth.signOut();
                 },
               ),
             ),
@@ -146,5 +176,54 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (_) => AccountInformationScreen()));
     }
+  }
+
+  Future _handleLinkWithGoogle(String _email) async {
+    try {
+      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      if (_email.contains('gmail')) {
+        print('link');
+        auth.currentUser.linkWithCredential(credential);
+      }
+    } on FirebaseAuthException catch (e) {
+      String error = '';
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          error =
+              "This account is linked with another provider! Try another provider!";
+          break;
+        case 'email-already-in-use':
+          error = "Your email address has been registered.";
+          break;
+        case 'invalid-credential':
+          error = "Your credential is malformed or has expired.";
+          break;
+        case 'user-disabled':
+          error = "This user has been disable.";
+          break;
+        default:
+          error = e.code;
+      }
+      _showAlertDialog(error);
+    }
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
+    );
   }
 }

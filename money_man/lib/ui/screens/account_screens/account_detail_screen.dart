@@ -2,9 +2,12 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+<<<<<<< HEAD
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
+=======
+>>>>>>> tung/feature-transaction
 
 class AccountDetail extends StatefulWidget {
   User user;

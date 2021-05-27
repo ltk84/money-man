@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:math_expressions/math_expressions.dart';
 import 'package:money_man/core/models/categoryModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
@@ -30,7 +29,7 @@ class FirebaseFireStoreService {
         .then((value) {
       print(walletID);
       wallet = Wallet.fromMap(value.data());
-    });
+    }).catchError((error) => print(error));
 
     // update ví đang được chọn lên database
     await users
@@ -47,6 +46,8 @@ class FirebaseFireStoreService {
 
   // add first wallet
   Future addFirstWallet(Wallet wallet) async {
+    double amount = wallet.amount;
+    wallet.amount = 0;
     // lấy doc reference để auto generate id của doc
     DocumentReference docRef = users.doc(uid).collection('wallets').doc();
     wallet.id = docRef.id;
@@ -57,11 +58,24 @@ class FirebaseFireStoreService {
         .then((value) => print('add wallet to collection wallets'))
         .catchError((error) => print(error.toString()));
 
-    return await users
+    await users
         .doc(uid)
         .set({'currentWallet': wallet.toMap()})
         .then((value) => print('set selected wallet'))
         .catchError((error) => print(error));
+
+    MyCategory category;
+    await categories.where('name', isEqualTo: 'Other Income').get().then(
+        (value) => category = MyCategory.fromMap(value.docs.first.data()));
+
+    MyTransaction trans = MyTransaction(
+        id: 'id',
+        amount: amount,
+        date: DateTime.now(),
+        currencyID: wallet.currencyID,
+        category: category,
+        note: 'Initial Balance');
+    await addTransaction(wallet, trans);
   }
 
   // stream của wallet hiện tại đang được chọn
@@ -107,7 +121,7 @@ class FirebaseFireStoreService {
     CollectionReference wallets = users.doc(uid).collection('wallets');
     await wallets.get().then((value) {
       length = value.size;
-    });
+    }).catchError((error) => print(error));
     // trường họp chỉ có 1 ví
     if (length == 1) return 'only 1 wallet';
 
@@ -208,7 +222,8 @@ class FirebaseFireStoreService {
     // update searchList để sau này dùng cho việc search transaction
     List<String> searchList = splitNumber(transaction.amount.toInt());
     await transactionRef
-        .update({'amountSearch': FieldValue.arrayUnion(searchList)});
+        .update({'amountSearch': FieldValue.arrayUnion(searchList)}).catchError(
+            (error) => print(error));
 
     // Update amount của wallet
     if (transaction.category.type == 'expense')
@@ -447,7 +462,10 @@ class FirebaseFireStoreService {
     final cateRef = categories.doc();
     MyCategory cat = MyCategory(
         id: cateRef.id, name: '', type: 'expense', iconID: 'defaultID');
-    await cateRef.set(cat.toMap()).then((value) => print('added!'));
+    await cateRef
+        .set(cat.toMap())
+        .then((value) => print('added!'))
+        .catchError((error) => print(error));
   }
 
   // Lấy category bằng id

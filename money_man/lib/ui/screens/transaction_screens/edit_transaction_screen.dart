@@ -1,3 +1,4 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -9,6 +10,8 @@ import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'note_transaction_srcreen.dart';
 
 class EditTransactionScreen extends StatefulWidget {
   MyTransaction transaction;
@@ -26,11 +29,16 @@ class EditTransactionScreen extends StatefulWidget {
 class _EditTransactionScreenState extends State<EditTransactionScreen> {
   DateTime pickDate;
   DateTime formatTransDate;
+  String currencySymbol;
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     formatTransDate = DateTime(widget.transaction.date.year,
         widget.transaction.date.month, widget.transaction.date.day);
+    currencySymbol =
+        CurrencyService().findByCode(widget.wallet.currencyID).symbol;
+
     return Scaffold(
       backgroundColor: Colors.black26,
       appBar: AppBar(
@@ -149,9 +157,11 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     ),
                     hintText: widget.transaction.amount == null
                         ? 'Enter amount'
-                        : MoneyFormatter(amount: widget.transaction.amount)
-                            .output
-                            .withoutFractionDigits),
+                        : currencySymbol +
+                            ' ' +
+                            MoneyFormatter(amount: widget.transaction.amount)
+                                .output
+                                .withoutFractionDigits),
               ),
             ),
             Container(
@@ -330,6 +340,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               dense: true,
               leading: Icon(Icons.note, color: Colors.white54, size: 28.0),
               title: TextFormField(
+                readOnly: true,
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -341,13 +352,26 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500),
-                    hintText: 'Write note'),
+                    hintText: widget.transaction.note.length == 0
+                        ? 'Write note'
+                        : widget.transaction.note),
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
-                onChanged: (value) => widget.transaction.note = value,
+                onTap: () async {
+                  final noteContent = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => NoteTransactionScreen()));
+                  print(noteContent);
+                  if (noteContent != null) {
+                    setState(() {
+                      widget.transaction.note = noteContent;
+                    });
+                  }
+                },
               ),
             ),
           ],

@@ -26,6 +26,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
   static var _formKey = GlobalKey<FormState>();
   String currencyName = 'Currency';
   String iconData = 'assets/icons/wallet_2.svg';
+  double adjustAmount;
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +73,12 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    await _firestore.updateWallet(widget.wallet);
-                    await _firestore.updateSelectedWallet(widget.wallet.id);
-
+                    if (adjustAmount == null) {
+                      await _firestore.updateWallet(widget.wallet);
+                      await _firestore.updateSelectedWallet(widget.wallet.id);
+                    } else
+                      await _firestore.adjustBalance(
+                          widget.wallet, adjustAmount);
                     Navigator.pop(context, widget.wallet.id);
                   }
                 },
@@ -221,15 +225,17 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       if (resultAmount != null)
                         setState(() {
                           print(resultAmount);
-                          widget.wallet.amount = double.parse(resultAmount);
+                          adjustAmount = double.parse(resultAmount);
+                          // widget.wallet.amount = double.parse(resultAmount);
                         });
                     },
                     dense: true,
                     leading: Icon(Icons.account_balance_rounded,
                         size: 30.0, color: Colors.green),
                     title: Text(
-                        widget.wallet.amount == null
-                            ? 'Enter initial balance'
+                        adjustAmount != null
+                            ? "Initial balance: " +
+                                convertMoneyType(adjustAmount)
                             : "Initial balance: " +
                                 convertMoneyType(widget.wallet.amount),
                         style: TextStyle(color: Colors.white, fontSize: 15.0)),

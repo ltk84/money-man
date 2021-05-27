@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
 class SelectWalletAccountScreen extends StatefulWidget {
   Wallet wallet;
 
-  SelectWalletAccountScreen({Key key, this.wallet}) : super (key: key);
+  SelectWalletAccountScreen({Key key, this.wallet}) : super(key: key);
   @override
-  _SelectWalletAccountScreenState createState() => _SelectWalletAccountScreenState();
+  _SelectWalletAccountScreenState createState() =>
+      _SelectWalletAccountScreenState();
 }
 
 class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
@@ -18,7 +18,6 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _wallet = widget.wallet;
   }
@@ -59,15 +58,13 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
             style: TextButton.styleFrom(
               primary: Colors.white,
               backgroundColor: Colors.transparent,
-            )
-        ),
+            )),
         title: Text('Select Wallet',
             style: TextStyle(
                 color: Colors.white,
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w600,
-                fontSize: 15.0)
-        ),
+                fontSize: 15.0)),
       ),
       body: Container(
         color: Colors.black26,
@@ -75,12 +72,15 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              child: Text(
-                'Included in Total',
-                style: TextStyle(color: Colors.white70, fontSize: 15, fontFamily: 'Montserrat', fontWeight: FontWeight.w400),
-              ),
-              padding: EdgeInsets.fromLTRB(20, 25, 0, 8)
-            ),
+                child: Text(
+                  'Included in Total',
+                  style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 15,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w400),
+                ),
+                padding: EdgeInsets.fromLTRB(20, 25, 0, 8)),
             Expanded(
               child: StreamBuilder<List<Wallet>>(
                   stream: _firestore.walletStream,
@@ -116,10 +116,8 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
 
                                 Navigator.pop(context, listWallet[index]);
                               },
-                              leading: SuperIcon(
-                                iconPath: iconData,
-                                size: 35.0
-                              ),
+                              leading:
+                                  SuperIcon(iconPath: iconData, size: 35.0),
                               title: Text(
                                 listWallet[index].name,
                                 style: TextStyle(
@@ -138,7 +136,10 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              trailing: (_wallet != null && _wallet.name == listWallet[index].name) ? Icon(Icons.check, color: Colors.blue) : null,
+                              trailing: (_wallet != null &&
+                                      _wallet.name == listWallet[index].name)
+                                  ? Icon(Icons.check, color: Colors.blue)
+                                  : null,
                             ),
                           );
                         });

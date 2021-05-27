@@ -113,17 +113,28 @@ class FirebaseAuthService {
     }
   }
 
-  Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    final AccessToken result = await FacebookAuth.instance.login();
+  Future signInWithFacebook() async {
+    try {
+      // Trigger the sign-in flow
+      final AccessToken result = await FacebookAuth.instance.login();
 
+<<<<<<< HEAD
     // Create a credential from the access token
     final FacebookAuthCredential facebookAuthCredential =
         FacebookAuthProvider.credential(result.token);
+=======
+      // Create a credential from the access token
+      final FacebookAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(result.token);
+>>>>>>> tung/feature-transaction
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance
-        .signInWithCredential(facebookAuthCredential);
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      return e.code;
+    }
   }
 
 //Hàm kiểm tra password
@@ -148,6 +159,7 @@ class FirebaseAuthService {
   }
 
   Future signInWithFacebookVer2() async {
+<<<<<<< HEAD
     // // Gọi hàm LogIn() với giá trị truyền vào là một mảng permission
     // // Ở đây mình truyền vào cho nó quền xem email
     // final facebookLogin = FacebookLogin();
@@ -180,9 +192,25 @@ class FirebaseAuthService {
         break;
       case FacebookLoginStatus.error:
         break;
+=======
+    try {
+      final facebookLogin = FacebookLogin();
+      final result = await facebookLogin.logIn(['email']);
+
+      switch (result.status) {
+        case FacebookLoginStatus.loggedIn:
+          final credential =
+              FacebookAuthProvider.credential(result.accessToken.token);
+          await _auth.signInWithCredential(credential);
+          break;
+        case FacebookLoginStatus.cancelledByUser:
+          break;
+        case FacebookLoginStatus.error:
+          break;
+      }
+    } on FirebaseAuthException catch (e) {
+      return e.code;
+>>>>>>> tung/feature-transaction
     }
   }
-
-  // link acount with multiple provider
-  Future linkUserWithOtherProvider() async {}
 }

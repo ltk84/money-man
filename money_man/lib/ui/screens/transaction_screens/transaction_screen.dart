@@ -1,3 +1,4 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -15,18 +16,11 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.d
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-
+import '../../widgets/custom_select_time_dialog.dart';
 import 'adjust_balance_screen.dart';
 
 class TransactionScreen extends StatefulWidget {
   Wallet currentWallet;
-
-  final List<Tab> myTabs = List.generate(200, (index) {
-    var now = DateTime.now();
-    var date = DateTime(now.year, now.month + index - 100, now.day);
-    String dateDisplay = DateFormat('MM/yyyy').format(date);
-    return Tab(text: dateDisplay);
-  });
 
   TransactionScreen({Key key, this.currentWallet}) : super(key: key);
 
@@ -42,11 +36,16 @@ class _TransactionScreen extends State<TransactionScreen>
   Wallet _wallet;
   bool viewByCategory = false;
   int choosedTimeRange = 3;
+  String currencySymbol;
+  List<Tab> myTabs;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 200, vsync: this, initialIndex: 100);
+
+    myTabs = initTabBar(choosedTimeRange);
+
+    _tabController = TabController(length: 20, vsync: this, initialIndex: 18);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -58,6 +57,8 @@ class _TransactionScreen extends State<TransactionScreen>
             currencyID: 'USD',
             iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
+    currencySymbol =
+        CurrencyService().findByCode(_wallet.currencyID).symbol ?? '';
   }
 
   @override
@@ -71,6 +72,8 @@ class _TransactionScreen extends State<TransactionScreen>
             amount: 100,
             currencyID: 'USD',
             iconID: 'assets/icons/wallet_2.svg');
+    currencySymbol =
+        CurrencyService().findByCode(_wallet.currencyID).symbol ?? '';
   }
 
   void _handleSelectTimeRange(int selected) {
@@ -115,264 +118,772 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text("Custom", style: TextStyle(color: Colors.black)),
         ),
       ],
-    ).then((value) {
+    ).then((value) async {
       switch (value) {
         case 1:
           setState(() {
             choosedTimeRange = 1;
+
+            myTabs = initTabBar(choosedTimeRange);
+            _tabController =
+                TabController(length: 20, vsync: this, initialIndex: 18);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 2:
           setState(() {
             choosedTimeRange = 2;
+            myTabs = initTabBar(choosedTimeRange);
+            _tabController =
+                TabController(length: 20, vsync: this, initialIndex: 18);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 3:
           setState(() {
             choosedTimeRange = 3;
+            myTabs = initTabBar(choosedTimeRange);
+            _tabController =
+                TabController(length: 20, vsync: this, initialIndex: 18);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 4:
           setState(() {
             choosedTimeRange = 4;
+            myTabs = initTabBar(choosedTimeRange);
+            _tabController =
+                TabController(length: 20, vsync: this, initialIndex: 18);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 5:
           setState(() {
             choosedTimeRange = 5;
+            myTabs = initTabBar(choosedTimeRange);
+            _tabController =
+                TabController(length: 20, vsync: this, initialIndex: 18);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 6:
           setState(() {
             choosedTimeRange = 6;
+            myTabs = initTabBar(choosedTimeRange);
+            _tabController =
+                TabController(length: 1, vsync: this, initialIndex: 0);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
           break;
         case 7:
+          List<DateTime> timeRange = [];
+          await showDialog(
+              context: context,
+              builder: (builder) {
+                return CustomSelectTimeDialog();
+              }).then((value) => timeRange = value);
+
+          if (timeRange == null) return null;
+
+          String displayTab = DateFormat('dd/MM/yyyy').format(timeRange[0]) +
+              " - " +
+              DateFormat('dd/MM/yyyy').format(timeRange[1]);
+
           setState(() {
             choosedTimeRange = 7;
+            myTabs = initTabBar(choosedTimeRange, extraInfo: displayTab);
+            _tabController =
+                TabController(length: 1, vsync: this, initialIndex: 0);
+            _tabController.addListener(() {
+              setState(() {});
+            });
           });
+
           break;
       }
     });
+  }
+
+  List<Tab> initTabBar(int choosedTimeRange, {var extraInfo}) {
+    if (choosedTimeRange == 3) {
+      return List.generate(20, (index) {
+        var now = DateTime.now();
+        if (index == 17) {
+          return Tab(
+            text: 'LAST MONTH',
+          );
+        } else if (index == 18) {
+          return Tab(
+            text: 'THIS MONTH',
+          );
+        } else if (index == 19) {
+          return Tab(
+            text: 'FUTURE',
+          );
+        } else {
+          var date = DateTime(now.year, now.month - (18 - index), now.day);
+          String dateDisplay = DateFormat('MM/yyyy').format(date);
+          return Tab(
+            text: dateDisplay,
+          );
+        }
+      });
+    } else if (choosedTimeRange == 1) {
+      return List.generate(20, (index) {
+        var now = DateTime.now();
+        if (index == 17) {
+          return Tab(
+            text: 'YESTERDAY',
+          );
+        } else if (index == 18) {
+          return Tab(
+            text: 'TODAY',
+          );
+        } else if (index == 19) {
+          return Tab(
+            text: 'FUTURE',
+          );
+        } else {
+          var date = DateTime(now.year, now.month, now.day - (18 - index));
+          String dateDisplay = DateFormat('dd MMMM yyyy').format(date);
+          return Tab(
+            text: dateDisplay,
+          );
+        }
+      });
+    } else if (choosedTimeRange == 2) {
+      return List.generate(20, (index) {
+        var now = DateTime.now();
+        if (index == 17) {
+          return Tab(
+            text: 'LAST WEEK',
+          );
+        } else if (index == 18) {
+          return Tab(
+            text: 'THIS WEEK',
+          );
+        } else if (index == 19) {
+          return Tab(
+            text: 'FUTURE',
+          );
+        } else {
+          var firstDateInAWeek = DateTime.now()
+              .subtract(Duration(days: DateTime.now().weekday - 1))
+              .subtract(Duration(days: 7 * (18 - index)));
+          String firstDateDisplay =
+              DateFormat('dd/MM').format(firstDateInAWeek);
+
+          var lastDateInAWeek = firstDateInAWeek.add(Duration(days: 6));
+          String lastDateDisplay = DateFormat('dd/MM').format(lastDateInAWeek);
+
+          return Tab(text: firstDateDisplay + ' - ' + lastDateDisplay);
+        }
+      });
+    } else if (choosedTimeRange == 4) {
+      var now = DateTime.now();
+      int year = now.year;
+      int initQuarter = ((now.month + 2) / 3).toInt();
+      int k = 0;
+
+      List<String> list = [];
+
+      for (var i = 0; i < 20; i++) {
+        var q = initQuarter - i + 4 * k + 1;
+        list.add('Q$q $year');
+        if (q == 1) {
+          k = k + 1;
+          year = year - 1;
+        }
+      }
+      list = list.reversed.toList();
+
+      return List.generate(20, (index) {
+        if (index == 19) {
+          return Tab(
+            text: 'FUTURE',
+          );
+        } else {
+          // String dateDisplay = DateFormat('yyyy').format(date);
+          String display = list[index];
+          return Tab(
+            text: display,
+          );
+        }
+      });
+    } else if (choosedTimeRange == 5) {
+      return List.generate(20, (index) {
+        var now = DateTime.now();
+        if (index == 17) {
+          return Tab(
+            text: 'LAST YEAR',
+          );
+        } else if (index == 18) {
+          return Tab(
+            text: 'THIS YEAR',
+          );
+        } else if (index == 19) {
+          return Tab(
+            text: 'FUTURE',
+          );
+        } else {
+          var date = DateTime(now.year, now.month, now.day - (18 - index));
+          String dateDisplay = DateFormat('yyyy').format(date);
+          return Tab(
+            text: dateDisplay,
+          );
+        }
+      });
+    } else if (choosedTimeRange == 6) {
+      return List.generate(1, (index) {
+        return Tab(
+          text: 'All transactions',
+        );
+      });
+    } else {
+      return List.generate(1, (index) {
+        return Tab(
+          text: extraInfo,
+        );
+      });
+    }
+  }
+
+  List<MyTransaction> sortTransactionBasedOnTime(
+      int choosedTimeRange, List<MyTransaction> _transactionList) {
+    if (choosedTimeRange == 3) {
+      // thời gian được chọn từ tab bar
+      var chooseTime = myTabs[_tabController.index].text.split('/');
+      // biến để xác định tab hiện tại có là tab future hay không ?
+      bool isFutureTab = false;
+
+      // trường hợp rơi vào tab THIS MONTH, LAST MONTH, FUTURE
+      if (chooseTime.length == 1) {
+        chooseTime.clear();
+        int nowMonth = DateTime.now().month;
+        int nowYear = DateTime.now().year;
+        // LAST MONTH (lấy tháng trước hiện tại)
+        if (_tabController.index == 17) {
+          chooseTime.add((nowMonth - 1).toString());
+          chooseTime.add(nowYear.toString());
+        }
+        // THIS MONTH (lấy tháng hiện tại)
+        else if (_tabController.index == 18) {
+          chooseTime.add((nowMonth).toString());
+          chooseTime.add(nowYear.toString());
+        }
+        // FUTURE (lấy những tháng sau hiện tại)
+        else {
+          chooseTime.add((nowMonth + 1).toString());
+          chooseTime.add(nowYear.toString());
+          isFutureTab = true;
+        }
+      }
+
+      // trường hợp tab FUTURE thì lấy những transaction có tháng
+      // tháng hiện tại
+      if (isFutureTab) {
+        DateTime time =
+            DateTime(int.parse(chooseTime[1]), int.parse(chooseTime[0]));
+
+        _transactionList = _transactionList
+            .where((element) => element.date.compareTo(time) > 0)
+            .toList();
+        isFutureTab = false;
+      }
+      // còn lại thì lấy bằng tháng đã lấy trong chooseTime
+      else {
+        _transactionList = _transactionList
+            .where((element) =>
+                element.date.month == int.parse(chooseTime[0]) &&
+                element.date.year == int.parse(chooseTime[1]))
+            .toList();
+      }
+      return _transactionList;
+    } else if (choosedTimeRange == 1) {
+      // thời gian được chọn từ tab bar
+      var chooseTime = myTabs[_tabController.index].text.split(' ');
+
+      // biến để xác định tab hiện tại có là tab future hay không ?
+      bool isFutureTab = false;
+
+      // trường hợp rơi vào tab THIS MONTH, LAST MONTH, FUTURE
+      if (chooseTime.length == 1) {
+        chooseTime.clear();
+        int nowDay = DateTime.now().day;
+        int nowMonth = DateTime.now().month;
+        int nowYear = DateTime.now().year;
+        // LAST MONTH (lấy tháng trước hiện tại)
+        if (_tabController.index == 17) {
+          chooseTime.add((nowDay - 1).toString());
+          chooseTime.add((nowMonth).toString());
+          chooseTime.add(nowYear.toString());
+        }
+        // THIS MONTH (lấy tháng hiện tại)
+        else if (_tabController.index == 18) {
+          chooseTime.add((nowDay).toString());
+          chooseTime.add((nowMonth).toString());
+          chooseTime.add(nowYear.toString());
+        }
+        // FUTURE (lấy những tháng sau hiện tại)
+        else {
+          chooseTime.add((nowDay + 1).toString());
+          chooseTime.add((nowMonth).toString());
+          chooseTime.add(nowYear.toString());
+          isFutureTab = true;
+        }
+      } else {
+        switch (chooseTime[1]) {
+          case 'January':
+            chooseTime[1] = '1';
+            break;
+          case 'February':
+            chooseTime[1] = '2';
+            break;
+          case 'March':
+            chooseTime[1] = '3';
+            break;
+          case 'April':
+            chooseTime[1] = '4';
+            break;
+          case 'May':
+            chooseTime[1] = '5';
+            break;
+          case 'June':
+            chooseTime[1] = '6';
+            break;
+          case 'July':
+            chooseTime[1] = '7';
+            break;
+          case 'August':
+            chooseTime[1] = '8';
+            break;
+          case 'September':
+            chooseTime[1] = '9';
+            break;
+          case 'October':
+            chooseTime[1] = '10';
+            break;
+          case 'November':
+            chooseTime[1] = '11';
+            break;
+          case 'December':
+            chooseTime[1] = '12';
+            break;
+          default:
+        }
+      }
+
+      // trường hợp tab FUTURE thì lấy những transaction có tháng
+      // tháng hiện tại
+      if (isFutureTab) {
+        DateTime futureTime = DateTime(int.parse(chooseTime[2]),
+            int.parse(chooseTime[1]), int.parse(chooseTime[0]));
+        _transactionList = _transactionList
+            .where((element) => element.date.compareTo(futureTime) > 0)
+            .toList();
+        isFutureTab = false;
+      }
+      // còn lại thì lấy bằng tháng đã lấy trong chooseTime
+      else {
+        DateTime time = DateTime(int.parse(chooseTime[2]),
+            int.parse(chooseTime[1]), int.parse(chooseTime[0]));
+        _transactionList = _transactionList
+            .where((element) => element.date.compareTo(time) == 0)
+            .toList();
+      }
+      return _transactionList;
+    } else if (choosedTimeRange == 2) {
+      List<String> chooseTime = [];
+      chooseTime = myTabs[_tabController.index].text.split(' - ');
+
+      bool isFutureTab = false;
+
+      var headDateList;
+      DateTime headTime;
+      DateTime tailTime;
+
+      if (chooseTime.length == 1) {
+        chooseTime.clear();
+
+        var firstDatePresent = DateTime(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .subtract(Duration(days: DateTime.now().weekday - 1));
+        var lastDatePresent = firstDatePresent.add(Duration(days: 6));
+
+        var firstDateInPast = firstDatePresent.subtract(Duration(days: 7));
+        var lastDateInPast = firstDateInPast.add(Duration(days: 6));
+
+        var firstDateInFutre = firstDatePresent.add(Duration(days: 7));
+
+        // LAST MONTH (lấy tháng trước hiện tại)
+        if (_tabController.index == 17) {
+          headTime = firstDateInPast;
+          tailTime = lastDateInPast;
+        }
+        // THIS MONTH (lấy tháng hiện tại)
+        else if (_tabController.index == 18) {
+          headTime = firstDatePresent;
+          tailTime = lastDatePresent;
+        }
+        // FUTURE (lấy những tháng sau hiện tại)
+        else {
+          headTime = firstDateInFutre;
+          isFutureTab = true;
+        }
+      } else {
+        headDateList = chooseTime[0].split('/');
+        headTime = DateTime(DateTime.now().year, int.parse(headDateList[1]),
+            int.parse(headDateList[0]));
+        tailTime = headTime.add(Duration(days: 6));
+      }
+
+      if (isFutureTab) {
+        _transactionList = _transactionList
+            .where((element) => element.date.compareTo(headTime) >= 0)
+            .toList();
+        isFutureTab = false;
+      } else {
+        _transactionList = _transactionList
+            .where((element) =>
+                element.date.compareTo(headTime) >= 0 &&
+                element.date.compareTo(tailTime) <= 0)
+            .toList();
+      }
+
+      return _transactionList;
+    } else if (choosedTimeRange == 4) {
+      var chooseTime = myTabs[_tabController.index].text.split(' ');
+
+      DateTime headTime;
+      DateTime tailTime;
+      DateTime now = DateTime.now();
+      bool isFutureTab = false;
+
+      if (chooseTime.length == 1) {
+        isFutureTab = true;
+        var x = myTabs[_tabController.index - 1].text.split(' ');
+
+        switch (x[0]) {
+          case 'Q1':
+            headTime = DateTime(now.year, DateTime.april);
+            break;
+          case 'Q2':
+            headTime = DateTime(now.year, DateTime.july);
+            break;
+          case 'Q3':
+            headTime = DateTime(now.year, DateTime.october);
+            break;
+          case 'Q4':
+            headTime = DateTime(now.year + 1, DateTime.january);
+            break;
+          default:
+        }
+      } else {
+        switch (chooseTime[0]) {
+          case 'Q1':
+            headTime = DateTime(now.year, DateTime.january);
+            tailTime = DateTime(now.year, DateTime.march);
+            break;
+          case 'Q2':
+            headTime = DateTime(now.year, DateTime.april);
+            tailTime = DateTime(now.year, DateTime.june);
+            break;
+          case 'Q3':
+            headTime = DateTime(now.year, DateTime.july);
+            tailTime = DateTime(now.year, DateTime.september);
+            break;
+          case 'Q4':
+            headTime = DateTime(now.year, DateTime.october);
+            tailTime = DateTime(now.year, DateTime.december);
+            break;
+          default:
+        }
+      }
+
+      if (isFutureTab) {
+        isFutureTab = false;
+        _transactionList = _transactionList
+            .where((element) => element.date.compareTo(headTime) >= 0)
+            .toList();
+      } else {
+        _transactionList = _transactionList
+            .where((element) =>
+                element.date.compareTo(headTime) >= 0 &&
+                element.date.compareTo(tailTime) <= 0)
+            .toList();
+      }
+
+      return _transactionList;
+    } else if (choosedTimeRange == 5) {
+      // thời gian được chọn từ tab bar
+      var chooseTime = myTabs[_tabController.index].text;
+      // biến để xác định tab hiện tại có là tab future hay không ?
+      bool isFutureTab = false;
+
+      var tempt = int.tryParse(chooseTime);
+      if (tempt == null) {
+        if (chooseTime == 'LAST YEAR') {
+          chooseTime = (DateTime.now().year - 1).toString();
+        } else if (chooseTime == 'THIS YEAR') {
+          chooseTime = (DateTime.now().year).toString();
+        } else {
+          chooseTime = (DateTime.now().year + 1).toString();
+          isFutureTab = true;
+        }
+      }
+
+      // trường hợp tab FUTURE thì lấy những transaction có tháng
+      // tháng hiện tại
+      if (isFutureTab) {
+        _transactionList = _transactionList
+            .where((element) => element.date.year >= int.parse(chooseTime))
+            .toList();
+        isFutureTab = false;
+      }
+      // còn lại thì lấy bằng tháng đã lấy trong chooseTime
+      else {
+        _transactionList = _transactionList
+            .where((element) => element.date.year == int.parse(chooseTime))
+            .toList();
+      }
+      return _transactionList;
+    } else if (choosedTimeRange == 6) {
+      return _transactionList;
+    } else {
+      var chooseTime = myTabs[_tabController.index].text.split(' - ');
+      DateTime head;
+      DateTime tail;
+
+      var headList = chooseTime[0].split('/');
+      head = DateTime(int.parse(headList[2]), int.parse(headList[1]),
+          int.parse(headList[0]));
+
+      var tailList = chooseTime[1].split('/');
+      tail = DateTime(int.parse(tailList[2]), int.parse(tailList[1]),
+          int.parse(tailList[0]));
+
+      _transactionList = _transactionList
+          .where((element) =>
+              element.date.compareTo(head) >= 0 &&
+              element.date.compareTo(tail) <= 0)
+          .toList();
+      return _transactionList;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     print('transaction build ' + _wallet.amount.toString());
-    return DefaultTabController(
-        length: 200,
-        child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.black,
-              centerTitle: true,
-              elevation: 0,
-              leadingWidth: 70,
-              leading: GestureDetector(
-                onTap: () async {
-                  buildShowDialog(context, _wallet.id);
-                },
-                child: Container(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: Row(
-                    children: [
-                      SuperIcon(
-                        iconPath: _wallet.iconID,
-                        size: 25.0,
-                      ),
-                      Icon(Icons.arrow_drop_down, color: Colors.grey)
-                    ],
+
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          centerTitle: true,
+          elevation: 0,
+          leadingWidth: 70,
+          leading: GestureDetector(
+            onTap: () async {
+              buildShowDialog(context, _wallet.id);
+            },
+            child: Container(
+              padding: EdgeInsets.only(left: 20.0),
+              child: Row(
+                children: [
+                  SuperIcon(
+                    iconPath: _wallet.iconID,
+                    size: 25.0,
                   ),
-                ),
+                  Icon(Icons.arrow_drop_down, color: Colors.grey)
+                ],
               ),
-              title: Column(children: [
-                Text(_wallet.name,
-                    style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
-                Text(
-                    MoneyFormatter(amount: _wallet.amount)
-                        .output
-                        .withoutFractionDigits,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold)),
-              ]),
-              bottom: TabBar(
-                unselectedLabelColor: Colors.grey[500],
-                labelColor: Colors.white,
-                indicatorColor: Colors.yellow[700],
-                physics: NeverScrollableScrollPhysics(),
-                isScrollable: true,
-                indicatorWeight: 3.0,
-                controller: _tabController,
-                tabs: widget.myTabs,
-              ),
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.notifications, color: Colors.grey),
-                  tooltip: 'Notify',
-                  onPressed: () {},
-                ),
-                PopupMenuButton(onSelected: (value) {
-                  if (value == 'Search for transaction') {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (_) => SearchTransactionScreen(
-                    //               wallet: _wallet,
-                    //             )));
-                    showCupertinoModalBottomSheet(
-                      context: context,
-                      builder: (context) =>
-                          SearchTransactionScreen(wallet: _wallet),
-                    );
-                  } else if (value == 'change display') {
-                    setState(() {
-                      viewByCategory = !viewByCategory;
-                    });
-                  } else if (value == 'Adjust Balance') {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => AdjustBalanceScreen(
-                                  wallet: _wallet,
-                                )));
-                  } else if (value == 'Select time range') {
-                    _handleSelectTimeRange(choosedTimeRange);
-                  }
-                }, itemBuilder: (context) {
-                  return [
-                    PopupMenuItem(
-                        value: 'Select time range',
-                        child: Text(
-                          'Select time range',
-                          style: TextStyle(color: Colors.black),
-                        )),
-                    PopupMenuItem(
-                        value: 'change display',
-                        child: Text(
-                          viewByCategory
-                              ? 'View by transaction'
-                              : 'View by category',
-                          style: TextStyle(color: Colors.black),
-                        )),
-                    PopupMenuItem(
-                        value: 'Adjust Balance',
-                        child: Text(
-                          'Adjust Balance',
-                          style: TextStyle(color: Colors.black),
-                        )),
-                    PopupMenuItem(
-                        value: 'Transfer money',
-                        child: Text(
-                          'Transfer money',
-                          style: TextStyle(color: Colors.black),
-                        )),
-                    PopupMenuItem(
-                        value: 'Search for transaction',
-                        child: Text(
-                          'Search for transaction',
-                          style: TextStyle(color: Colors.black),
-                        )),
-                    PopupMenuItem(
-                        value: 'Synchronize',
-                        child: Text(
-                          'Synchronize',
-                          style: TextStyle(color: Colors.black),
-                        )),
-                  ];
-                })
-              ],
             ),
-            body: StreamBuilder<List<MyTransaction>>(
-                stream: _firestore.transactionStream(_wallet),
-                builder: (context, snapshot) {
-                  List<MyTransaction> _transactionList = snapshot.data ?? [];
+          ),
+          title: Column(children: [
+            Text(_wallet.name,
+                style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
+            Text(
+                MoneyFormatter(amount: _wallet.amount)
+                        .output
+                        .withoutFractionDigits +
+                    ' ' +
+                    currencySymbol,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold)),
+          ]),
+          bottom: TabBar(
+            unselectedLabelColor: Colors.grey[500],
+            labelColor: Colors.white,
+            indicatorColor: Colors.yellow[700],
+            physics: AlwaysScrollableScrollPhysics(),
+            isScrollable: true,
+            indicatorWeight: 3.0,
+            controller: _tabController,
+            tabs: myTabs,
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.notifications, color: Colors.grey),
+              tooltip: 'Notify',
+              onPressed: () {},
+            ),
+            PopupMenuButton(onSelected: (value) {
+              if (value == 'Search for transaction') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => SearchTransactionScreen(
+                              wallet: _wallet,
+                            )));
+              } else if (value == 'change display') {
+                setState(() {
+                  viewByCategory = !viewByCategory;
+                });
+              } else if (value == 'Adjust Balance') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => AdjustBalanceScreen(
+                              wallet: _wallet,
+                            )));
+              } else if (value == 'Select time range') {
+                _handleSelectTimeRange(choosedTimeRange);
+              }
+            }, itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                    value: 'Select time range',
+                    child: Text(
+                      'Select time range',
+                      style: TextStyle(color: Colors.black),
+                    )),
+                PopupMenuItem(
+                    value: 'change display',
+                    child: Text(
+                      viewByCategory
+                          ? 'View by transaction'
+                          : 'View by category',
+                      style: TextStyle(color: Colors.black),
+                    )),
+                PopupMenuItem(
+                    value: 'Adjust Balance',
+                    child: Text(
+                      'Adjust Balance',
+                      style: TextStyle(color: Colors.black),
+                    )),
+                PopupMenuItem(
+                    value: 'Transfer money',
+                    child: Text(
+                      'Transfer money',
+                      style: TextStyle(color: Colors.black),
+                    )),
+                PopupMenuItem(
+                    value: 'Search for transaction',
+                    child: Text(
+                      'Search for transaction',
+                      style: TextStyle(color: Colors.black),
+                    )),
+                PopupMenuItem(
+                    value: 'Synchronize',
+                    child: Text(
+                      'Synchronize',
+                      style: TextStyle(color: Colors.black),
+                    )),
+              ];
+            })
+          ],
+        ),
+        body: StreamBuilder<List<MyTransaction>>(
+            stream: _firestore.transactionStream(_wallet),
+            builder: (context, snapshot) {
+              List<MyTransaction> _transactionList = snapshot.data ?? [];
 
-                  // thời gian được chọn từ tab bar
-                  var chooseTime =
-                      widget.myTabs[_tabController.index].text.split('/');
+              _transactionList = sortTransactionBasedOnTime(
+                  choosedTimeRange, _transactionList);
 
-                  // lọc các transaction có date phù hợp với date được chọn
-                  _transactionList = _transactionList
-                      .where((element) =>
-                          element.date.month == int.parse(chooseTime[0]) &&
-                          element.date.year == int.parse(chooseTime[1]))
-                      .toList();
+              // list những ngày trong các transaction đã lọc
+              List<DateTime> dateInChoosenTime = [];
+              // list những category trong các transaction đã lọc
+              List<String> categoryInChoosenTime = [];
 
-                  // list những ngày trong các transaction đã lọc
-                  List<DateTime> dateInChoosenTime = [];
-                  // list những category trong các transaction đã lọc
-                  List<String> categoryInChoosenTime = [];
+              // tổng đầu vào, tổng đầu ra, hiệu
+              double totalInCome = 0;
+              double totalOutCome = 0;
+              double total = 0;
 
-                  // tổng đầu vào, tổng đầu ra, hiệu
-                  double totalInCome = 0;
-                  double totalOutCome = 0;
-                  double total = 0;
+              // list các list transaction đã lọc
+              List<List<MyTransaction>> transactionListSorted = [];
 
-                  // list các list transaction đã lọc
-                  List<List<MyTransaction>> transactionListSorted = [];
+              // sort theo date giảm dần
+              _transactionList.sort((a, b) => b.date.compareTo(a.date));
 
-                  // sort theo date giảm dần
-                  _transactionList.sort((a, b) => b.date.compareTo(a.date));
+              // trường hợp hiển thị category
+              if (viewByCategory) {
+                _transactionList.forEach((element) {
+                  // lấy các category trong transaction đã lọc
+                  if (!categoryInChoosenTime.contains(element.category.name))
+                    categoryInChoosenTime.add(element.category.name);
+                  // tính toán đầu vào, đầu ra
+                  if (element.category.type == 'expense')
+                    totalOutCome += element.amount;
+                  else
+                    totalInCome += element.amount;
+                });
+                // totalInCome += _wallet.amount > 0 ? _wallet.amount : 0;
+                total = totalInCome - totalOutCome;
 
-                  // trường hợp hiển thị category
-                  if (viewByCategory) {
-                    _transactionList.forEach((element) {
-                      // lấy các category trong transaction đã lọc
-                      if (!categoryInChoosenTime
-                          .contains(element.category.name))
-                        categoryInChoosenTime.add(element.category.name);
-                      // tính toán đầu vào, đầu ra
-                      if (element.category.type == 'expense')
-                        totalOutCome += element.amount;
-                      else
-                        totalInCome += element.amount;
-                    });
-                    // totalInCome += _wallet.amount > 0 ? _wallet.amount : 0;
-                    total = totalInCome - totalOutCome;
+                // lấy các transaction ra theo từng category
+                categoryInChoosenTime.forEach((cate) {
+                  final b = _transactionList.where(
+                      (element) => element.category.name.compareTo(cate) == 0);
+                  transactionListSorted.add(b.toList());
+                });
+              }
+              // trường hợp hiển thị theo date (tương tự)
+              else {
+                _transactionList.forEach((element) {
+                  if (!dateInChoosenTime.contains(element.date))
+                    dateInChoosenTime.add(element.date);
+                  if (element.category.type == 'expense')
+                    totalOutCome += element.amount;
+                  else
+                    totalInCome += element.amount;
+                });
+                // totalInCome += _wallet.amount > 0 ? _wallet.amount : 0;
+                total = totalInCome - totalOutCome;
 
-                    // lấy các transaction ra theo từng category
-                    categoryInChoosenTime.forEach((cate) {
-                      final b = _transactionList.where((element) =>
-                          element.category.name.compareTo(cate) == 0);
-                      transactionListSorted.add(b.toList());
-                    });
-                  }
-                  // trường hợp hiển thị theo date (tương tự)
-                  else {
-                    _transactionList.forEach((element) {
-                      if (!dateInChoosenTime.contains(element.date))
-                        dateInChoosenTime.add(element.date);
-                      if (element.category.type == 'expense')
-                        totalOutCome += element.amount;
-                      else
-                        totalInCome += element.amount;
-                    });
-                    // totalInCome += _wallet.amount > 0 ? _wallet.amount : 0;
-                    total = totalInCome - totalOutCome;
+                dateInChoosenTime.forEach((date) {
+                  final b = _transactionList
+                      .where((element) => element.date.compareTo(date) == 0);
+                  transactionListSorted.add(b.toList());
+                });
+              }
 
-                    dateInChoosenTime.forEach((date) {
-                      final b = _transactionList.where(
-                          (element) => element.date.compareTo(date) == 0);
-                      transactionListSorted.add(b.toList());
-                    });
-                  }
-
-                  return TabBarView(
-                    controller: _tabController,
-                    children: widget.myTabs.map((tab) {
-                      return viewByCategory == true
-                          ? buildDisplayTransactionByCategory(
-                              transactionListSorted,
-                              totalInCome,
-                              totalOutCome,
-                              total)
-                          : buildDisplayTransactionByDate(transactionListSorted,
-                              totalInCome, totalOutCome, total);
-                    }).toList(),
-                  );
-                })));
+              return TabBarView(
+                controller: _tabController,
+                children: myTabs.map((tab) {
+                  return viewByCategory == true
+                      ? buildDisplayTransactionByCategory(transactionListSorted,
+                          totalInCome, totalOutCome, total)
+                      : buildDisplayTransactionByDate(transactionListSorted,
+                          totalInCome, totalOutCome, total);
+                }).toList(),
+              );
+            }));
   }
 
   Container buildDisplayTransactionByCategory(
