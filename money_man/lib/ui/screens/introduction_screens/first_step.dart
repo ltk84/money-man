@@ -144,29 +144,30 @@ class _FirstStepState extends State<FirstStep> {
                     height: 5,
                   ),
                   Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          width: 250.0,
-                          height: size.height * 0.033,
-                          child: TextFormField(
-                              validator: (value) {
-                                if (value == null || value.length == 0)
-                                  return 'Wallet name is empty';
-                                return null;
-                              },
-                              onChanged: (value) => wallet.name = value,
-                              obscureText: false,
-                              decoration:
-                                  InputDecoration(border: InputBorder.none),
-                              style: TextStyle(color: black)),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5)),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    width: 250.0,
+                    child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.length == 0)
+                            return 'Wallet name is empty';
+                          return null;
+                        },
+                        onChanged: (value) => wallet.name = value,
+                        obscureText: false,
+                        decoration:
+                        InputDecoration(
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                          filled: true,
+                          fillColor: Colors.white,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                style: BorderStyle.none
+                            ),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
                         ),
-                      ],
+                        style: TextStyle(color: black)
                     ),
                   ),
                   SizedBox(
@@ -195,7 +196,6 @@ class _FirstStepState extends State<FirstStep> {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           width: 200.0,
-                          height: size.height * 0.033,
                           child: TextFormField(
                             keyboardType: TextInputType.number,
                             validator: (value) {
@@ -208,16 +208,22 @@ class _FirstStepState extends State<FirstStep> {
                                 wallet.amount = double.tryParse(value),
                             obscureText: false,
                             decoration: InputDecoration(
-                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                              filled: true,
+                              fillColor: Colors.white,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    style: BorderStyle.none
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
                             ),
                             style: TextStyle(color: black),
                           ),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5)),
-                        ),
-                        SizedBox(
-                          width: 5,
+                          // decoration: BoxDecoration(
+                          //     color: Colors.white,
+                          //     borderRadius: BorderRadius.circular(5)),
                         ),
                         GestureDetector(
                           onTap: () {
@@ -235,15 +241,18 @@ class _FirstStepState extends State<FirstStep> {
                             );
                           },
                           child: Container(
-                            width: 45,
-                            height: size.height * 0.033,
+                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8.0),
+                            width: 50,
+                            //height: size.height * 0.033,
                             alignment: Alignment.center,
                             child: Text(
                               currencyName,
                               style: TextStyle(
                                   color: white,
                                   fontSize: 13,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                             decoration: BoxDecoration(
                               color: Colors.green,
