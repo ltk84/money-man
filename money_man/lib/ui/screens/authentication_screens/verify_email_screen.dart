@@ -41,7 +41,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(20, 90, 0, 0),
+              padding: EdgeInsets.fromLTRB(20, 50, 0, 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,6 +116,25 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 onPressed: () async {
                   await user.sendEmailVerification();
                   _btnController.success();
+                },
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              child: RoundedLoadingButton(
+                height: 40,
+                width: 200,
+                color: Color(0xff2FB49C),
+                child: Text('Back',
+                    style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: black)),
+                controller: _btnController,
+                onPressed: () async {
+                  await auth.signOut();
                 },
               ),
             ),

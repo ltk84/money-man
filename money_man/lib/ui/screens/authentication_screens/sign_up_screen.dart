@@ -441,7 +441,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
         _showAlertDialog(error);
       } else {
-        _handleLinkWithGoogle(_email);
+        if (_email.contains('gmail')) {
+          _handleLinkWithGoogle(_email);
+        }
       }
     }
   }
