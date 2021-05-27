@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
+import 'custom_alert.dart';
+
 class CustomSelectTimeDialog extends StatefulWidget {
   @override
   _CustomSelectTimeDialogState createState() => _CustomSelectTimeDialogState();
@@ -22,27 +24,66 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       child: Container(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0,10.0),
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5.0),
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(10.0),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text('Select time range'),
+            Text(
+                'Select time range',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              )
+            ),
+            SizedBox(height: 20.0),
             Center(
               child: Column(
                 children: [
-                  Text('From'),
+                  Text(
+                      'From',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white70,
+                      )
+                  ),
                   SizedBox(
                     height: 15,
                   ),
                   GestureDetector(
-                    child: Text(beginDisplay ?? 'Choose date'),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1,
+                            color: Colors.white38,
+                          )
+                        )
+                      ),
+                      child: Text(
+                          beginDisplay ?? 'Choose date',
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 16,
+                            fontWeight: beginDisplay == null ? FontWeight.w400 : FontWeight.w600,
+                            color: beginDisplay == null ? Colors.white12: Colors.white,
+                          ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     onTap: () {
                       DatePicker.showDatePicker(context,
                           currentTime: beginDate == null
@@ -88,12 +129,42 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> {
                   SizedBox(
                     height: 15,
                   ),
-                  Text('To'),
+                  Text(
+                      'To',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white70,
+                      )
+                  ),
                   SizedBox(
                     height: 15,
                   ),
                   GestureDetector(
-                    child: Text(endDisplay ?? 'Choose date'),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                width: 1,
+                                color: Colors.white38,
+                              )
+                          )
+                      ),
+                      child: Text(
+                          endDisplay ?? 'Choose date',
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 16,
+                            fontWeight: endDisplay == null ? FontWeight.w400 : FontWeight.w600,
+                            color: endDisplay == null ? Colors.white12: Colors.white,
+                          ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     onTap: () {
                       DatePicker.showDatePicker(context,
                           currentTime: endDate == null
@@ -149,16 +220,48 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('CANCEL')),
+                    child: Text(
+                        'CANCEL',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF2FB49C),
+                      )
+                    )
+                ),
                 TextButton(
-                    onPressed: () {
+                    onPressed: (beginDate == null || endDate == null)
+                        ? null
+                        :  () {
                       if (beginDate != null &&
                           endDate != null &&
-                          beginDate != endDate) {
+                          beginDate.compareTo(endDate) < 0) {
                         Navigator.pop(context, [beginDate, endDate]);
                       }
+                      else {
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          barrierColor: Colors.black54,
+                          builder: (BuildContext context) {
+                            return CustomAlert(content: "End date can't be before or the same with begin date.");
+                          },
+                        );
+                      }
                     },
-                    child: Text('SELECT TIME')),
+                    child: Text(
+                        'DONE',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: (beginDate == null || endDate == null)
+                              ? Color(0xFF2FB49C).withOpacity(0.4)
+                              : Color(0xFF2FB49C),
+                        )
+                    )
+                ),
               ],
             )
           ],
