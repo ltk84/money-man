@@ -100,11 +100,15 @@ class  _BarChartInformation extends State<BarChartInformation> {
                         style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
                     Column(
                       children: <Widget>[
-                        Text(calculationList[index].first.toString(),
+                        Text( (calculationList[index].first == 0)?"0.0":
+                            "+" + calculationList[index].first.toString(),
                             style: TextStyle(color: Colors.green , fontSize: 16, fontWeight: FontWeight.bold)),
-                        Text(calculationList[index].last.toString(),
+                        Text( (calculationList[index].last == 0)?"0.0":
+                            "-" + calculationList[index].last.toString(),
                             style: TextStyle(color: Colors.red[600], fontSize: 16, fontWeight: FontWeight.bold)),
-                        Text((calculationList[index].first-calculationList[index].last).toString(),
+                        Text((calculationList[index].first-calculationList[index].last)>= 0?
+                        "+" + (calculationList[index].first-calculationList[index].last).toString()
+                            :(calculationList[index].first-calculationList[index].last).toString(),
                             style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
                       ],
                     )

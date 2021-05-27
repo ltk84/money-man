@@ -6,7 +6,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/constaints.dart';
-import 'package:money_man/core/services/slanding_clipper.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'ending_introduction.dart';
 
@@ -47,7 +46,6 @@ class _FirstStepState extends State<FirstStep> {
       },
     );
   }
-
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -225,6 +223,17 @@ class _FirstStepState extends State<FirstStep> {
                       GestureDetector(
                         onTap: () {
                           showCurrencyPicker(
+                            theme: CurrencyPickerThemeData(
+                              flagSize: 26,
+                              titleTextStyle: TextStyle(
+                                  fontSize: 17,
+                                  color: Color(0xFF111111),
+                                  fontWeight: FontWeight.w700),
+                              subtitleTextStyle: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white),
+                              backgroundColor: Colors.grey[400],
+                            ),
                             onSelect: (value) {
                               wallet.currencyID = value.code;
                               setState(() {
@@ -244,7 +253,7 @@ class _FirstStepState extends State<FirstStep> {
                           child: Text(
                             currencyName,
                             style: TextStyle(
-                                color: white,
+                                color: Colors.white,
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold),
                           ),
