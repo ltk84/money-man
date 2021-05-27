@@ -440,49 +440,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             error = res;
         }
         _showAlertDialog(error);
-      } else {
-        if (_email.contains('gmail')) {
-          _handleLinkWithGoogle(_email);
-        }
+        // } else {
+        //   if (_email.contains('gmail')) {
+        //     _handleLinkWithGoogle(_email);
+        //   }
       }
-    }
-  }
-
-  void _handleLinkWithGoogle(String _email) async {
-    try {
-      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      final GoogleAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      if (_email.contains('gmail')) {
-        print('link');
-        _auth.currentUser.linkWithCredential(credential);
-      }
-    } on FirebaseAuthException catch (e) {
-      String error = '';
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          error =
-              "This account is linked with another provider! Try another provider!";
-          break;
-        case 'email-already-in-use':
-          error = "Your email address has been registered.";
-          break;
-        case 'invalid-credential':
-          error = "Your credential is malformed or has expired.";
-          break;
-        case 'user-disabled':
-          error = "This user has been disable.";
-          break;
-        default:
-          error = e.code;
-      }
-      _showAlertDialog(error);
     }
   }
 
