@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/constaints.dart';
-import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override
@@ -9,7 +9,13 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
-  bool inValid = false;
+  final _auth = FirebaseAuthService();
+  bool inValid1 = false;
+  bool invalid2 = false;
+  bool invalid3 = false;
+  bool isEqual = true;
+  bool truePassword = true;
+  String field1, field2, field3;
   bool obscure1 = true;
   bool obscure2 = true;
   bool obscure3 = true;
@@ -60,7 +66,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         obscureText: obscure1,
                         cursorColor: white,
                         onChanged: (val) {
-                          setState(() {});
+                          setState(() {
+                            field1 = val;
+                          });
                         },
                         style: TextStyle(
                             color: white,
@@ -86,10 +94,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   Container(
                       alignment: Alignment.centerRight,
-                      child: !inValid
+                      child: !inValid1
                           ? Container()
                           : Text(
-                              'This field can not empty',
+                              truePassword
+                                  ? 'This field can not empty'
+                                  : 'Wrong password',
                               style: TextStyle(color: Colors.red),
                             ))
                 ],
@@ -147,7 +157,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         obscureText: obscure2,
                         cursorColor: white,
                         onChanged: (val) {
-                          setState(() {});
+                          setState(() {
+                            field2 = val;
+                          });
                         },
                         style: TextStyle(
                             color: white,
@@ -162,7 +174,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   Container(
                       alignment: Alignment.centerRight,
-                      child: !inValid
+                      child: !invalid2
                           ? Container()
                           : Text(
                               'This field can not empty',
@@ -193,7 +205,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         obscureText: obscure3,
                         cursorColor: white,
                         onChanged: (val) {
-                          setState(() {});
+                          setState(() {
+                            field3 = val;
+                          });
                         },
                         style: TextStyle(
                             color: white,
@@ -208,17 +222,50 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   Container(
                       alignment: Alignment.centerRight,
-                      child: !inValid
+                      child: !invalid3
                           ? Container()
                           : Text(
-                              'This field can not empty',
+                              isEqual
+                                  ? 'This field can not empty'
+                                  : 'New password mismatch',
                               style: TextStyle(color: Colors.red),
                             ))
                 ],
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                //TODO: Validate va change password
+                setState(() async {
+                  if (field1 == null || field1 == '')
+                    inValid1 = true;
+                  else
+                    inValid1 = false;
+                  if (!(await _auth.validatePassword(field1))) {
+                    inValid1 = true;
+                    print('no no no');
+                    truePassword = false;
+                  } else {
+                    invalid2 = false;
+                    truePassword = true;
+                  }
+
+                  if (field2 == null || field2 == '')
+                    invalid2 = true;
+                  else
+                    invalid2 = false;
+                  if (field3 == null || field3 == '')
+                    invalid3 = true;
+                  else
+                    invalid3 = false;
+                  if (field2 != field3) {
+                    isEqual = false;
+                    invalid3 = true;
+                  }
+
+                  if (!(inValid1 || invalid2 || invalid3)) {}
+                });
+              },
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 30, 10, 10),
                 padding: EdgeInsets.symmetric(vertical: 10),
