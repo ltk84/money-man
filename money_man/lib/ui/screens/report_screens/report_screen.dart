@@ -395,8 +395,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       context: context,
                                       builder: (context) {
                                         return AnalyticRevenueAndExpenditureScreen(
-                                          currentWallet: _wallet,
-                                        );
+                                                  currentWallet: _wallet,
+                                                  beginDate: beginDate,
+                                                  endDate: endDate,
+                                                );
                                       });
                                 },
                                 child: Container(

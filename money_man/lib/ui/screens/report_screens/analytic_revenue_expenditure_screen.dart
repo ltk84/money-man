@@ -19,8 +19,9 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 class AnalyticRevenueAndExpenditureScreen extends StatefulWidget{
 
   Wallet currentWallet;
-
-  AnalyticRevenueAndExpenditureScreen({Key key, this.currentWallet}) : super(key: key);
+  final DateTime endDate;
+  final DateTime beginDate;
+  AnalyticRevenueAndExpenditureScreen({Key key, this.currentWallet, this.endDate, this.beginDate,}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _AnalyticRevenueAndExpenditureScreen();
@@ -40,6 +41,8 @@ class _AnalyticRevenueAndExpenditureScreen extends State<AnalyticRevenueAndExpen
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
+  DateTime beginDate ;
+  DateTime endDate ;
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
@@ -67,12 +70,12 @@ class _AnalyticRevenueAndExpenditureScreen extends State<AnalyticRevenueAndExpen
   Wallet _wallet;
 
   // Khởi tạo mốc thời gian cần thống kê.
-  DateTime beginDate = DateTime(DateTime.now().year, DateTime.now().month, 1);
-  DateTime endDate = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
   String dateDescript = 'This month';
 
   @override
   void initState() {
+    beginDate = widget.beginDate;
+    endDate = widget.endDate;
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
