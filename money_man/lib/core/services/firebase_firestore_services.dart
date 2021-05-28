@@ -249,14 +249,26 @@ class FirebaseFireStoreService {
   }
 
   // stream đến transaction của wallet đang được chọn
-  Stream<List<MyTransaction>> transactionStream(Wallet wallet) {
-    return users
-        .doc(uid)
-        .collection('wallets')
-        .doc(wallet.id)
-        .collection('transactions')
-        .snapshots()
-        .map(_transactionFromSnapshot);
+  Stream<List<MyTransaction>> transactionStream(Wallet wallet, dynamic limit) {
+    if (limit == 'full') {
+      return users
+          .doc(uid)
+          .collection('wallets')
+          .doc(wallet.id)
+          .collection('transactions')
+          .snapshots()
+          .map(_transactionFromSnapshot);
+    } else {
+      return users
+          .doc(uid)
+          .collection('wallets')
+          .doc(wallet.id)
+          .collection('transactions')
+          .limit(limit)
+          .orderBy('date', descending: true)
+          .snapshots()
+          .map(_transactionFromSnapshot);
+    }
   }
 
   // convert từ snapshot thành transaction

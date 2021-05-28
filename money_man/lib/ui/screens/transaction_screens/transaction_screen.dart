@@ -33,15 +33,23 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
+  ScrollController listScrollController;
+  int _limit = 50;
+  int _limitIncrement = 20;
   Wallet _wallet;
-  bool viewByCategory = false;
-  int choosedTimeRange = 3;
+  bool viewByCategory;
+  int choosedTimeRange;
   String currencySymbol;
   List<Tab> myTabs;
 
   @override
   void initState() {
     super.initState();
+
+    viewByCategory = false;
+    choosedTimeRange = 3;
+    listScrollController = ScrollController();
+    listScrollController.addListener(scrollListener);
 
     myTabs = initTabBar(choosedTimeRange);
 
@@ -74,6 +82,16 @@ class _TransactionScreen extends State<TransactionScreen>
             iconID: 'assets/icons/wallet_2.svg');
     currencySymbol =
         CurrencyService().findByCode(_wallet.currencyID).symbol ?? '';
+  }
+
+  void scrollListener() {
+    if (listScrollController.offset >=
+            listScrollController.position.maxScrollExtent &&
+        !listScrollController.position.outOfRange) {
+      setState(() {
+        _limit += _limitIncrement;
+      });
+    }
   }
 
   void _handleSelectTimeRange(int selected) {
@@ -808,7 +826,7 @@ class _TransactionScreen extends State<TransactionScreen>
           ],
         ),
         body: StreamBuilder<List<MyTransaction>>(
-            stream: _firestore.transactionStream(_wallet),
+            stream: _firestore.transactionStream(_wallet, _limit),
             builder: (context, snapshot) {
               List<MyTransaction> _transactionList = snapshot.data ?? [];
 
@@ -894,6 +912,7 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       color: Colors.black,
       child: ListView.builder(
+          controller: listScrollController,
           physics: BouncingScrollPhysics(),
           shrinkWrap: true,
           itemCount: transactionListSortByCategory.length,
@@ -928,6 +947,7 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       color: Colors.black,
       child: ListView.builder(
+          controller: listScrollController,
           physics: BouncingScrollPhysics(),
           //primary: false,
           shrinkWrap: true,
