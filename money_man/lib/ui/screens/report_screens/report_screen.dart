@@ -446,7 +446,12 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             Container(
                                               width: 90,
                                               height: 90,
-                                              child: PieChartScreen(isShowPercent: false ,currentList: _transactionList, categoryList: _incomeCategoryList, total: income),
+                                              child: PieChartScreen(
+                                                  isShowPercent: false ,
+                                                  currentList: _transactionList,
+                                                  categoryList: _incomeCategoryList,
+                                                  total: income
+                                              ),
                                             ),
                                             IconButton(
                                                 icon: Icon(Icons.web_outlined),
@@ -456,8 +461,12 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                   return showDialog(
                                                       context: context,
                                                       builder: (context) {
-                                                        return AnalyticPieChartSreen(currentList: _transactionList,
-                                                          categoryList: _incomeCategoryList, total: income, content: 'Income',color: Colors.green[600],);
+                                                        return AnalyticPieChartSreen(
+                                                          currentList: _transactionList,
+                                                          categoryList: _incomeCategoryList,
+                                                          currentWallet: widget.currentWallet,
+                                                          total: income, content: 'Income',
+                                                          color: Colors.green[600],);
                                                       });
                                                 }
                                             )
@@ -512,7 +521,11 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                   return showDialog(
                                                       context: context,
                                                       builder: (context) {
-                                                        return AnalyticPieChartSreen(currentList: _transactionList, categoryList: _expenseCategoryList, total: expense,
+                                                        return AnalyticPieChartSreen(
+                                                          currentList: _transactionList,
+                                                          categoryList: _expenseCategoryList,
+                                                          total: expense,
+                                                          currentWallet: widget.currentWallet,
                                                           content: 'Expense',color: Colors.red,);
                                                       });
                                                 }
