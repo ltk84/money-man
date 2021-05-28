@@ -15,12 +15,13 @@ import 'package:random_color/random_color.dart';
 class AnalyticPieChartSreen extends StatefulWidget {
   List<MyTransaction> currentList;
   List<MyCategory> categoryList;
+  final Wallet currentWallet;
   String content;
   Color color;
   double total;
 
   AnalyticPieChartSreen({Key key, @required this.currentList, @required this.categoryList,
-    @required this.total, @required  this.content,@required this.color}) : super(key: key);
+    @required this.total, @required  this.content,@required this.color, this.currentWallet}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _AnalyticPieChartSreen();
 }
@@ -121,14 +122,14 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen>  {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            Text(_content,style: TextStyle(
+                            Text(_content ,style: TextStyle(
                               color: Colors.grey[300],
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
                               fontSize: 30,
                             )
                             ),
-                            Text(_total.toString(),style: TextStyle(
+                            Text(_total.toString() , style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w400,
@@ -146,7 +147,11 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen>  {
                           child: PieChartScreen(isShowPercent: true ,currentList: _transactionList, categoryList: _categoryList, total: _total),
                         ),
                         Container(
-                          child: PieChartInformationScreen(currentList: _transactionList, categoryList: _categoryList, color: _color,),
+                          child: PieChartInformationScreen(
+                            currentList: _transactionList,
+                            categoryList: _categoryList,
+                            currentWallet: widget.currentWallet,
+                            color: _color,),
                         )
                       ]
                   );

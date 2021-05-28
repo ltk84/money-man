@@ -447,8 +447,13 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                           return showDialog(
                                             context: context,
                                             builder: (context) {
-                                              return AnalyticPieChartSreen(currentList: _transactionList,
-                                                categoryList: _incomeCategoryList, total: income, content: 'Income',color: Colors.green[600],);
+                                              return AnalyticPieChartSreen(
+                                                currentList: _transactionList,
+                                                categoryList: _incomeCategoryList, 
+                                                currentWallet: widget.currentWallet,
+                                                total: income, 
+                                                content: 'Income',
+                                                color: Colors.green[600],);
                                             });
                                         },
                                         child: Container(
@@ -492,8 +497,14 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         return showDialog(
                                             context: context,
                                             builder: (context) {
-                                              return AnalyticPieChartSreen(currentList: _transactionList, categoryList: _expenseCategoryList, total: expense,
-                                                content: 'Expense',color: Colors.red,);
+                                              return AnalyticPieChartSreen(
+                                                currentList: _transactionList,
+                                                categoryList: _expenseCategoryList,
+                                                total: expense,
+                                                content: 'Expense',
+                                                color: Colors.red,
+                                                currentWallet: widget.currentWallet,
+                                                );
                                             });
                                       },
                                       child: Container(
