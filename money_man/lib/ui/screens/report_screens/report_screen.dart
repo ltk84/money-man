@@ -384,7 +384,6 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                           currentList: _transactionList,
                                           beginDate: beginDate,
                                           endDate: endDate
-
                                       ),
                                     ),
                                     IconButton(
@@ -397,6 +396,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                               builder: (context) {
                                                 return AnalyticRevenueAndExpenditureScreen(
                                                   currentWallet: _wallet,
+                                                  beginDate: beginDate,
+                                                  endDate: endDate,
                                                 );
                                               });
                                         }
@@ -450,7 +451,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                   isShowPercent: false ,
                                                   currentList: _transactionList,
                                                   categoryList: _incomeCategoryList,
-                                                  total: income
+                                                  total: income,
                                               ),
                                             ),
                                             IconButton(
@@ -511,7 +512,11 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             Container(
                                               width: 90,
                                               height: 90,
-                                              child: PieChartScreen(isShowPercent: false , currentList: _transactionList, categoryList: _expenseCategoryList, total: expense),
+                                              child: PieChartScreen(
+                                                  isShowPercent: false ,
+                                                  currentList: _transactionList,
+                                                  categoryList: _expenseCategoryList,
+                                                  total: expense),
                                             ),
                                             IconButton(
                                                 icon: Icon(Icons.web_outlined),

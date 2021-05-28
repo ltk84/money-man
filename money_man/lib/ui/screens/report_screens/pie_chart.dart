@@ -14,7 +14,7 @@ class PieChartScreen extends StatefulWidget {
   List<MyCategory> categoryList;
   bool isShowPercent;
   double total;
-  PieChartScreen({Key key, @required this.currentList, @required this.isShowPercent,@required this.categoryList, @required this.total }) : super(key: key);
+  PieChartScreen({Key key, @required this.currentList, @required this.isShowPercent,@required this.categoryList, @required this.total, }) : super(key: key);
   @override
   State<StatefulWidget> createState() => PieChartScreenState();
 }
@@ -27,6 +27,8 @@ class PieChartScreenState extends State<PieChartScreen>  {
   List<MyCategory> _categoryList;
   List<double> _info = [];
   List<MyCategory> _listCategoryReport = [];
+  DateTime _beginDate;
+  DateTime _endDate;
 
   @override
   void initState() {
@@ -42,7 +44,6 @@ class PieChartScreenState extends State<PieChartScreen>  {
   void didUpdateWidget(covariant PieChartScreen oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-
     _transactionList = widget.currentList ?? [];
     _categoryList = widget.categoryList ?? [];
     _total = widget.total;
