@@ -2,15 +2,20 @@ import 'dart:core';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/transactionModel.dart';
+import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class ReportListTransaction extends StatefulWidget{
   final DateTime beginDate;
   final DateTime endDate;
+  final Wallet currentWallet;
   final List<MyTransaction> currentList;
   final double totalMoney;
-  const ReportListTransaction({Key key, this.beginDate, this.endDate, this.currentList, this.totalMoney}) : super(key: key);
+  const ReportListTransaction({Key key, this.beginDate, this.endDate, this.currentList, this.totalMoney, this.currentWallet}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _ReportListTransaction();
 }
@@ -45,48 +50,51 @@ class  _ReportListTransaction extends State<ReportListTransaction>{
   // list các list transaction đã lọc
   List<List<MyTransaction>> transactionListSorted = [];
   List<MyTransaction> _transactionList;
+  List<DateTime> dateInChoosenTime = [];
+  List<String> categoryInChoosenTime = [];
   // sort theo date giảm dần
   DateTime _beginDate;
   DateTime _endDate;
-  List<MyTransaction> _transactionInTime_Income = [];
-  List<MyTransaction> _transactionInTime_Outcome = [];
   int total;
   double _totalMoney;
   @override
   void initState() {
     super.initState();
     _transactionList = widget.currentList?? [];
-    _transactionList.sort((a, b) => b.date.compareTo(a.date));
     _beginDate = widget.beginDate;
     _endDate = widget.endDate;
     total = 0;
     _totalMoney = widget.totalMoney;
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
-    _transactionList = _transactionList
-        .where((element) =>
-    element.date.day <= _endDate.day && element.date.month <= _endDate.month && element.date.year <= _endDate.year &&
-        element.date.day >= _beginDate.day && element.date.month >= _beginDate.month && element.date.year >= _beginDate.year)
-        .toList();
+    filterData(_transactionList, _beginDate, _endDate);
   }
   @override
   void didUpdateWidget(covariant ReportListTransaction oldWidget) {
     _transactionList = widget.currentList?? [];
-    _transactionList.sort((a, b) => b.date.compareTo(a.date));
     _beginDate = widget.beginDate;
     _endDate = widget.endDate;
     _controller = ScrollController();
     _totalMoney = widget.totalMoney;
     total = 0;
     _controller.addListener(_scrollListener);
-    _transactionList = _transactionList
-        .where((element) =>
-    element.date.day <= _endDate.day && element.date.month <= _endDate.month && element.date.year <= _endDate.year &&
-        element.date.day >= _beginDate.day && element.date.month >= _beginDate.month && element.date.year >= _beginDate.year)
-        .toList();
   }
-  void filterData(List<MyTransaction>  _transactionList , DateTime _beginDate ,DateTime _endDate){
-
+  void filterData(List<MyTransaction>  transactionList , DateTime beginDate ,DateTime endDate){
+    transactionList = transactionList
+        .where((element) =>
+    element.date.day <= endDate.day && element.date.month <= endDate.month && element.date.year <= endDate.year &&
+        element.date.day >= beginDate.day && element.date.month >= beginDate.month && element.date.year >= beginDate.year)
+        .toList();
+    transactionList.sort((a, b) => b.date.compareTo(a.date));
+    transactionList.forEach((element) {
+      if (!dateInChoosenTime.contains(element.date))
+        dateInChoosenTime.add(element.date);
+    });
+    dateInChoosenTime.forEach((date) {
+      final b = _transactionList.where(
+              (element) => element.date.compareTo(date) == 0);
+      transactionListSorted.add(b.toList());
+    });
   }
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,13 +105,10 @@ class  _ReportListTransaction extends State<ReportListTransaction>{
         elevation: 0,
         title: Text('Transaction List'),
       ),
+      body: buildDisplayTransactionByDate(transactionListSorted, _totalMoney),
     );
   }
-  Container buildDisplayTransactionByDate(
-      List<List<MyTransaction>> transactionListSortByDate,
-      double totalInCome,
-      double totalOutCome,
-      double total) {
+  Container buildDisplayTransactionByDate(List<List<MyTransaction>> transactionListSortByDate, double total) {
     return Container(
       color: Colors.black,
       child: ListView.builder(
@@ -121,10 +126,10 @@ class  _ReportListTransaction extends State<ReportListTransaction>{
                 totalAmountInDay += element.amount;
             });
 
-            return xIndex == 0
-                ? Column(
+            return xIndex == 0 ?
+            Column(
               children: [
-                buildHeader(totalInCome, totalOutCome, total),
+                buildHeader(total),
                 buildBottomViewByDate(
                     transactionListSortByDate, xIndex, totalAmountInDay)
               ],
@@ -134,8 +139,7 @@ class  _ReportListTransaction extends State<ReportListTransaction>{
           }),
     );
   }
-  StickyHeader buildHeader(
-      double totalInCome, double totalOutCome, double total) {
+  StickyHeader buildHeader(double total) {
     return StickyHeader(
       header: SizedBox(height: 0),
       content: Container(
@@ -151,31 +155,14 @@ class  _ReportListTransaction extends State<ReportListTransaction>{
             Container(
               margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Opening balance',
-                      style: TextStyle(color: Colors.grey[500])),
-                  Text('+$totalInCome đ',
-                      style: TextStyle(color: Colors.white)),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-              child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Ending balance',
-                        style: TextStyle(color: Colors.grey[500])),
-                    Text('-$totalOutCome đ',
-                        style: TextStyle(color: Colors.white)),
-                  ]),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+                    Text('Overview', style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    )),
                     SizedBox(
                       width: 10,
                       height: 10,
@@ -189,26 +176,28 @@ class  _ReportListTransaction extends State<ReportListTransaction>{
                   ]),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
+              margin: EdgeInsets.fromLTRB(2, 2, 2, 15),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    SizedBox(
-                      width: 10,
+                    Text(_totalMoney >= 0?'Income':'Outcome', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontFamily: 'Montserrat',
+                    )
                     ),
-                    Text('$total đ', style: TextStyle(color: Colors.white)),
+                    Text('$total đ', style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Montserrat',
+                    )
+                    ),
                   ]),
             ),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                'View report for this period',
-                style: TextStyle(color: Colors.yellow[700]),
-              ),
-              style: TextButton.styleFrom(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-            )
-          ])),
+          ]
+          )
+      ),
     );
   }
   Container buildBottomViewByDate(List<List<MyTransaction>> transListSortByDate,
@@ -267,14 +256,29 @@ class  _ReportListTransaction extends State<ReportListTransaction>{
             itemCount: transListSortByDate[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: TransactionDetail(
+                            transaction: transListSortByDate[xIndex]
+                            [yIndex],
+                            wallet: widget.currentWallet,
+                          ),
+                          type: PageTransitionType.rightToLeft
+                      )
+                  );
+                },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                   child: Row(
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                        child: Icon(Icons.school,
-                            size: 30.0, color: Colors.grey[600]),
+                        child: SuperIcon(
+                          iconPath: transListSortByDate[xIndex][yIndex].category.iconID,
+                          size: 30,
+                        )
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
@@ -308,4 +312,5 @@ class  _ReportListTransaction extends State<ReportListTransaction>{
       ),
     );
   }
+
 }
