@@ -206,12 +206,11 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.monetization_on,
-                        size: 30.0, color: Colors.white60),
+                        size: 30.0, color: Colors.orange),
                     title: Text(currencyName,
-                        style:
-                            TextStyle(color: Colors.white24, fontSize: 15.0)),
+                        style: TextStyle(color: Colors.white, fontSize: 15.0)),
                     trailing: Icon(Icons.chevron_right,
-                        size: 20.0, color: Colors.white24),
+                        size: 20.0, color: Colors.white),
                   ),
                   Divider(
                     thickness: 0.05,

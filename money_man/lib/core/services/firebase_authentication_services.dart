@@ -86,7 +86,7 @@ class FirebaseAuthService {
       final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
       final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
+          await googleUser.authentication;
 
       final GoogleAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -113,55 +113,63 @@ class FirebaseAuthService {
     }
   }
 
-  Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    final AccessToken result = await FacebookAuth.instance.login();
+  Future signInWithFacebook() async {
+    try {
+      // Trigger the sign-in flow
+      final AccessToken result = await FacebookAuth.instance.login();
 
-    // Create a credential from the access token
-    final FacebookAuthCredential facebookAuthCredential =
-    FacebookAuthProvider.credential(result.token);
+      // Create a credential from the access token
+      final FacebookAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(result.token);
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance
-        .signInWithCredential(facebookAuthCredential);
-  }
-
-  Future signInWithFacebookVer2() async {
-    // // Gọi hàm LogIn() với giá trị truyền vào là một mảng permission
-    // // Ở đây mình truyền vào cho nó quền xem email
-    // final facebookLogin = FacebookLogin();
-    // final result = await facebookLogin.logIn(['email']);
-    // // Kiểm tra nếu login thành công thì thực hiện login Firebase
-    // // (theo mình thì cách này đơn giản hơn là dùng đường dẫn
-    // // hơn nữa cũng đồng bộ với hệ sinh thái Firebase, tích hợp được
-    // // nhiều loại Auth
-
-    // if (result.status == FacebookLoginStatus.loggedIn) {
-    //   final credential =
-    //       FacebookAuthProvider.credential(result.accessToken.token.toString());
-    //   // (
-    //   //   accessToken: result.accessToken.token,
-    //   // );
-    //   // Lấy thông tin User qua credential có giá trị token đã đăng nhập
-    //   final user = (await _auth.signInWithCredential(credential)).user;
-    //   return user;
-    // }
-    final facebookLogin = FacebookLogin();
-    final result = await facebookLogin.logIn(['email']);
-
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final credential =
-        FacebookAuthProvider.credential(result.accessToken.token);
-        await _auth.signInWithCredential(credential);
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        break;
-      case FacebookLoginStatus.error:
-        break;
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      return e.code;
     }
   }
 
-  // link acount with multiple provider
-  Future linkUserWithOtherProvider() async {}
+//Hàm kiểm tra password
+  Future<bool> validatePassword(String password) async {
+    var firebaseUser = await _auth.currentUser;
+
+    var authCredentials = EmailAuthProvider.credential(
+        email: firebaseUser.email, password: password);
+    try {
+      var authResult =
+          await firebaseUser.reauthenticateWithCredential(authCredentials);
+      return authResult.user != null;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<void> updatePassword(String password) async {
+    var firebaseUser = await _auth.currentUser;
+    firebaseUser.updatePassword(password);
+  }
+
+  Future signInWithFacebookVer2() async {
+    try {
+      final facebookLogin = FacebookLogin();
+      final result = await facebookLogin.logIn(['email']);
+
+      switch (result.status) {
+        case FacebookLoginStatus.loggedIn:
+          final credential =
+              FacebookAuthProvider.credential(result.accessToken.token);
+          await _auth.signInWithCredential(credential);
+          break;
+        case FacebookLoginStatus.cancelledByUser:
+          break;
+        case FacebookLoginStatus.error:
+          break;
+      }
+    } on FirebaseAuthException catch (e) {
+      return e.code;
+    }
+  }
 }

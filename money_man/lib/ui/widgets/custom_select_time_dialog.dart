@@ -262,14 +262,7 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                           Navigator.pop(context, [beginDate, endDate]);
                         }
                         else {
-                          showDialog<void>(
-                            context: context,
-                            barrierDismissible: false, // user must tap button!
-                            barrierColor: Colors.black54,
-                            builder: (BuildContext context) {
-                              return CustomAlert(content: "End date can't be before or the same with begin date.");
-                            },
-                          );
+                          _showAlertDialog(content: "Ending date must be after starting date");
                         }
                       },
                       child: Text(
@@ -290,6 +283,17 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
     );
   }
 }

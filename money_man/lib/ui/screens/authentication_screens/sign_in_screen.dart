@@ -1,9 +1,11 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 
 class SignInScreen extends StatefulWidget {
   final Function changeShow;
@@ -83,7 +85,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                           onPressed: () async {
-                            await signInWithEmailAndPassword(_auth, context);
+                            await _signInWithEmailAndPassword(_auth, context);
                           },
                           child: Text("LOGIN",
                               style: TextStyle(
@@ -120,7 +122,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                           onPressed: () async {
-                            await signInAnonymously(_auth, context);
+                            await _signInAnonymously(_auth, context);
                           },
                           child: Text("LOGIN AS GUEST",
                               style: TextStyle(
@@ -256,7 +258,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                           onPressed: () {
-                            _auth.signInWithFacebook();
+                            _signInWithFacebookAccount();
                           },
                           child: Row(
                             children: [
@@ -315,7 +317,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                           onPressed: () {
-                            _auth.signInWithGoogleAccount();
+                            _signInWithGoogleAccount();
                           },
                           child: Row(
                             children: [
@@ -416,7 +418,7 @@ class _SignInScreenState extends State<SignInScreen> {
           );
   }
 
-  Future signInAnonymously(
+  Future _signInAnonymously(
       FirebaseAuthService _auth, BuildContext context) async {
     final res = await _auth.signInAnonymously();
 
@@ -434,7 +436,59 @@ class _SignInScreenState extends State<SignInScreen> {
     return double.parse(s, (e) => null) != null;
   }
 
-  Future signInWithEmailAndPassword(
+  Future _signInWithFacebookAccount() async {
+    try {
+      _auth.signInWithFacebook();
+    } on FirebaseAuthException catch (e) {
+      String error = '';
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          error =
+              "This account is linked with another provider! Try another provider!";
+          break;
+        case 'email-already-in-use':
+          error = "Your email address has been registered.";
+          break;
+        case 'invalid-credential':
+          error = "Your credential is malformed or has expired.";
+          break;
+        case 'user-disabled':
+          error = "This user has been disable.";
+          break;
+        default:
+          error = e.code;
+      }
+      _showAlertDialog(error);
+    }
+  }
+
+  Future _signInWithGoogleAccount() async {
+    try {
+      _auth.signInWithGoogleAccount();
+    } on FirebaseAuthException catch (e) {
+      String error = '';
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          error =
+              "This account is linked with another provider! Try another provider!";
+          break;
+        case 'email-already-in-use':
+          error = "Your email address has been registered.";
+          break;
+        case 'invalid-credential':
+          error = "Your credential is malformed or has expired.";
+          break;
+        case 'user-disabled':
+          error = "This user has been disable.";
+          break;
+        default:
+          error = e.code;
+      }
+      _showAlertDialog(error);
+    }
+  }
+
+  Future _signInWithEmailAndPassword(
       FirebaseAuthService _auth, BuildContext context) async {
     if (_formKey.currentState.validate()) {
       setState(() {
@@ -448,24 +502,34 @@ class _SignInScreenState extends State<SignInScreen> {
         String error = "";
         switch (res) {
           case 'invalid-email':
-            error = "Email is invalid";
+            error = "This email is invalid.";
             break;
           case 'wrong-password':
-            error = "Password is wrong";
+            error = "Your password is wrong! Try again!";
             break;
           case 'user-disable':
-            error = "user is disable";
+            error = "This user is disable.";
             break;
           case 'user-not-found':
-            error = "user not found";
+            error = "User has not been registered.";
             break;
           default:
             error = res;
         }
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error)));
+        _showAlertDialog(error);
       }
     }
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
+    );
   }
 
   Widget buildInputField() {

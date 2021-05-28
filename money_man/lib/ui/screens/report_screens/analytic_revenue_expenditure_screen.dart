@@ -111,7 +111,7 @@ class _AnalyticRevenueAndExpenditureScreen extends State<AnalyticRevenueAndExpen
           elevation: 0,
         ),
         body: StreamBuilder<Object>(
-            stream: _firestore.transactionStream(_wallet),
+            stream: _firestore.transactionStream(_wallet, 'full'),
             builder: (context, snapshot) {
               List<MyTransaction> _transactionList = snapshot.data ?? [];
               List<MyCategory> _incomeCategoryList = [];

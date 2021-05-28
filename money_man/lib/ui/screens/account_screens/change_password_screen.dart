@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/constaints.dart';
-import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override
@@ -9,7 +9,13 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
-  bool inValid = false;
+  final _auth = FirebaseAuthService();
+  bool inValid1 = false;
+  bool invalid2 = false;
+  bool invalid3 = false;
+  bool isEqual = true;
+  bool truePassword = true;
+  String field1, field2, field3;
   bool obscure1 = true;
   bool obscure2 = true;
   bool obscure3 = true;
@@ -60,7 +66,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         obscureText: obscure1,
                         cursorColor: white,
                         onChanged: (val) {
-                          setState(() {});
+                          setState(() {
+                            field1 = val;
+                          });
                         },
                         style: TextStyle(
                             color: white,
@@ -86,10 +94,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   Container(
                       alignment: Alignment.centerRight,
-                      child: !inValid
+                      child: !inValid1
                           ? Container()
                           : Text(
-                              'This field can not empty',
+                              truePassword
+                                  ? 'Password at least 8 characters'
+                                  : 'Wrong password',
                               style: TextStyle(color: Colors.red),
                             ))
                 ],
@@ -147,7 +157,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         obscureText: obscure2,
                         cursorColor: white,
                         onChanged: (val) {
-                          setState(() {});
+                          setState(() {
+                            field2 = val;
+                          });
                         },
                         style: TextStyle(
                             color: white,
@@ -162,10 +174,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   Container(
                       alignment: Alignment.centerRight,
-                      child: !inValid
+                      child: !invalid2
                           ? Container()
                           : Text(
-                              'This field can not empty',
+                              'Password at least 6 characers',
                               style: TextStyle(color: Colors.red),
                             )),
                   ListTile(
@@ -193,7 +205,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         obscureText: obscure3,
                         cursorColor: white,
                         onChanged: (val) {
-                          setState(() {});
+                          setState(() {
+                            field3 = val;
+                          });
                         },
                         style: TextStyle(
                             color: white,
@@ -208,17 +222,83 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   Container(
                       alignment: Alignment.centerRight,
-                      child: !inValid
+                      child: !invalid3
                           ? Container()
                           : Text(
-                              'This field can not empty',
+                              isEqual
+                                  ? 'Password at least 6 characers'
+                                  : 'New password mismatch',
                               style: TextStyle(color: Colors.red),
                             ))
                 ],
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                //TODO: Validate va change password
+                setState(() async {
+                  // Kiểm tra mật khẩu đúng hay k
+                  // Validate field 1
+                  if (field1 == null || field1.length < 6) {
+                    inValid1 = true;
+                    print('validate1');
+                  } else {
+                    truePassword = await _auth.validatePassword(field1);
+                    if (!truePassword) {
+                      inValid1 = true;
+                      print('false');
+                    } else
+                      inValid1 = false;
+                  }
+
+                  // validate field 2
+                  if (field2 == null || field2.length < 6)
+                    invalid2 = true;
+                  else
+                    invalid2 = false;
+
+                  // So sánh field 2 và field 3
+
+                  // validate field 3
+                  if (field3 == null || field3.length < 6)
+                    invalid3 = true;
+                  else {
+                    if (field2 != field3) {
+                      isEqual = false;
+                      invalid3 = true;
+                    } else {
+                      isEqual = true;
+                      invalid3 = false;
+                    }
+                  }
+
+                  // Nếu tất cả đều hợp lệ
+                  if (!(inValid1 || invalid2 || invalid3)) {
+                    try {
+                      print("dm");
+                      await _auth.updatePassword(field2);
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert(context, 'Congratulation',
+                              'Your password updated successfully');
+                        },
+                      );
+                      Navigator.of(context).pop();
+                    } catch (e) {
+                      print('vl');
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert(context, 'So sorry...',
+                              'There is some mistake hear');
+                        },
+                      );
+                    }
+                  } else
+                    setState(() {});
+                });
+              },
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 30, 10, 10),
                 padding: EdgeInsets.symmetric(vertical: 10),
@@ -257,4 +337,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       ),
     );
   }
+}
+
+AlertDialog alert(context, title, mess) {
+  return AlertDialog(
+    title: Text(
+      title,
+      style: TextStyle(color: black, fontWeight: FontWeight.w700),
+    ),
+    content: Text(
+      mess,
+      style: TextStyle(color: black, fontWeight: FontWeight.w500),
+    ),
+    actions: [
+      FlatButton(
+        child: Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    ],
+  );
 }
