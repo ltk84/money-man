@@ -816,25 +816,27 @@ class _TransactionScreen extends State<TransactionScreen>
               elevation: 0.0,
               onSelected: (value) {
                 if (value == 'Search for transaction') {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => SearchTransactionScreen(
-                                wallet: _wallet,
-                              )
-                      )
+                  showCupertinoModalBottomSheet(
+                      context: context,
+                      builder: (context) => SearchTransactionScreen(wallet: _wallet)
                   );
                 } else if (value == 'change display') {
                   setState(() {
                     viewByCategory = !viewByCategory;
                   });
                 } else if (value == 'Adjust Balance') {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => AdjustBalanceScreen(
-                                wallet: _wallet,
-                              )));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (_) => AdjustBalanceScreen(
+                  //               wallet: _wallet,
+                  //             )
+                  //     )
+                  // );
+                  showCupertinoModalBottomSheet(
+                      context: context,
+                      builder: (context) => AdjustBalanceScreen(wallet: _wallet)
+                  );
                 } else if (value == 'Select time range') {
                   _handleSelectTimeRange(choosedTimeRange);
                 }
