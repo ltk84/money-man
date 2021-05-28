@@ -244,16 +244,33 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                     closingBalance -= element.amount;
                     if (element.date.compareTo(beginDate) >= 0) {
                       expense += element.amount;
-                      if (!_expenseCategoryList.contains(element.category))
+
+                      if (!_expenseCategoryList.any( (categoryElement) {
+                        if (categoryElement.name == element.category.name)
+                          return true;
+                        else
+                          return false;
+                      })) {
                         _expenseCategoryList.add(element.category);
+                      }
+                      // if (!_expenseCategoryList.contains(element.category))
+                      //   _expenseCategoryList.add(element.category);
                     }
                   }
                   else {
                     closingBalance += element.amount;
                     if (element.date.compareTo(beginDate) >= 0) {
                       income += element.amount;
-                      if (!_incomeCategoryList.contains(element.category))
+                      if (!_incomeCategoryList.any( (categoryElement) {
+                        if (categoryElement.name == element.category.name)
+                          return true;
+                        else
+                          return false;
+                      })) {
                         _incomeCategoryList.add(element.category);
+                      }
+                      // if (!_incomeCategoryList.contains(element.category))
+                      //   _incomeCategoryList.add(element.category);
                     }
                   }
                 }

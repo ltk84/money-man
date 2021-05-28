@@ -228,6 +228,23 @@ class _FirstStepState extends State<FirstStep> {
                         GestureDetector(
                           onTap: () {
                             showCurrencyPicker(
+                              theme: CurrencyPickerThemeData(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                flagSize: 26,
+                                titleTextStyle: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 17,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700),
+                                subtitleTextStyle: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 15,
+                                    color: Colors.black
+                                ),
+                                //backgroundColor: Colors.grey[900],
+                              ),
                               onSelect: (value) {
                                 wallet.currencyID = value.code;
                                 setState(() {
