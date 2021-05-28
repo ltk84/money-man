@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:provider/provider.dart';
 
 import 'add_budget.dart';
 import 'applied_budget.dart';
@@ -22,8 +25,16 @@ class _BudgetScreenState extends State<BudgetScreen>
     _tabController = new TabController(length: 3, vsync: this, initialIndex: 1);
   }
 
+  Wallet _wallet = Wallet(
+      id: 'id',
+      name: 'defaultName',
+      amount: 0,
+      currencyID: 'USD',
+      iconID: 'assets/icons/wallet_2.svg');
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    //_wallet = _firestore.currentWallet
     return MaterialApp(
       home: 1 == 65
           ? Scaffold(
