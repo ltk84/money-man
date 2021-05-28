@@ -262,7 +262,7 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                           Navigator.pop(context, [beginDate, endDate]);
                         }
                         else {
-                          _showAlertDialog(content: "Ending date must be after starting date");
+                          _showAlertDialog("Ending date must be after starting date");
                         }
                       },
                       child: Text(
