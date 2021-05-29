@@ -71,7 +71,8 @@ class FirebaseFireStoreService {
     MyTransaction trans = MyTransaction(
         id: 'id',
         amount: amount,
-        date: DateTime.now(),
+        date: DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
         currencyID: wallet.currencyID,
         category: category,
         note: 'Initial Balance');
@@ -89,6 +90,10 @@ class FirebaseFireStoreService {
   Future addWallet(Wallet wallet) async {
     DocumentReference walletRef = users.doc(uid).collection('wallets').doc();
     wallet.id = walletRef.id;
+    MyCategory category;
+
+    double amount = wallet.amount;
+    wallet.amount = 0;
 
     await walletRef
         .set(wallet.toMap())
@@ -97,6 +102,19 @@ class FirebaseFireStoreService {
       print(error);
       return error.toString();
     });
+
+    await categories.where('name', isEqualTo: 'Other Income').get().then(
+        (value) => category = MyCategory.fromMap(value.docs.first.data()));
+
+    MyTransaction trans = MyTransaction(
+        id: 'id',
+        amount: amount,
+        date: DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
+        currencyID: wallet.currencyID,
+        category: category,
+        note: 'Adjust Balance');
+    await addTransaction(wallet, trans);
 
     return wallet.id;
   }
@@ -189,7 +207,8 @@ class FirebaseFireStoreService {
     MyTransaction trans = MyTransaction(
         id: 'id',
         amount: transactionAmount,
-        date: DateTime.now(),
+        date: DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
         currencyID: wallet.currencyID,
         category: category,
         note: 'Adjust Balance');

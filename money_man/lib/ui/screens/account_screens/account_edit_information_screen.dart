@@ -134,13 +134,18 @@ class _AccountInformation extends State<AccountInformation> {
                           invalid = true;
                         });
                       } else {
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (_) {
+                        //   _auth.currentUser.updateProfile(
+                        //     displayName: username,
+                        //   );
+                        //   return FirstStep();
+                        // }));
+                        _auth.currentUser.updateProfile(
+                          displayName: username,
+                        );
                         Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (_) {
-                          _auth.currentUser.updateProfile(
-                            displayName: username,
-                          );
-                          return FirstStep();
-                        }));
+                            MaterialPageRoute(builder: (_) => FirstStep()));
                       }
                     },
                     child: Text(

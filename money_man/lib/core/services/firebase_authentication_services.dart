@@ -83,7 +83,10 @@ class FirebaseAuthService {
   // đăng nhập với tài khoản Google
   Future signInWithGoogleAccount() async {
     try {
-      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount googleUser =
+          await GoogleSignIn().signIn().catchError((error) => print(error));
+
+      if (googleUser == null) return null;
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;

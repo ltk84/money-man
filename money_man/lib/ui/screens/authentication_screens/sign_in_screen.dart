@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
@@ -464,7 +465,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future _signInWithGoogleAccount() async {
     try {
-      _auth.signInWithGoogleAccount();
+      UserCredential res = await _auth.signInWithGoogleAccount();
+      // print(res.additionalUserInfo.providerId);
     } on FirebaseAuthException catch (e) {
       String error = '';
       switch (e.code) {
@@ -485,7 +487,7 @@ class _SignInScreenState extends State<SignInScreen> {
           error = e.code;
       }
       _showAlertDialog(error);
-    }
+    } on PlatformException catch (e) {}
   }
 
   Future _signInWithEmailAndPassword(

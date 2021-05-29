@@ -1162,7 +1162,7 @@ class _TransactionScreen extends State<TransactionScreen>
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString(),
+                child: Text(totalAmountInDay.toString() + ' $currencySymbol',
                     textAlign: TextAlign.end,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.white)),
@@ -1217,11 +1217,13 @@ class _TransactionScreen extends State<TransactionScreen>
                                 ? '+' +
                                     transListSortByCategory[xIndex][yIndex]
                                         .amount
-                                        .toString()
+                                        .toString() +
+                                    ' $currencySymbol'
                                 : '-' +
                                     transListSortByCategory[xIndex][yIndex]
                                         .amount
-                                        .toString(),
+                                        .toString() +
+                                    ' $currencySymbol',
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -1283,7 +1285,7 @@ class _TransactionScreen extends State<TransactionScreen>
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString(),
+                child: Text(totalAmountInDay.toString() + ' $currencySymbol',
                     textAlign: TextAlign.end,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.white)),
@@ -1333,8 +1335,8 @@ class _TransactionScreen extends State<TransactionScreen>
                         child: Text(
                             transListSortByDate[xIndex][yIndex].category.type ==
                                     'income'
-                                ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()}"
-                                : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()}",
+                                ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()} $currencySymbol"
+                                : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()} $currencySymbol",
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -1375,7 +1377,7 @@ class _TransactionScreen extends State<TransactionScreen>
                 children: <Widget>[
                   Text('Opening balance',
                       style: TextStyle(color: Colors.grey[500])),
-                  Text('+$totalInCome đ',
+                  Text('+$totalInCome $currencySymbol',
                       style: TextStyle(color: Colors.white)),
                 ],
               ),
@@ -1387,7 +1389,7 @@ class _TransactionScreen extends State<TransactionScreen>
                   children: <Widget>[
                     Text('Ending balance',
                         style: TextStyle(color: Colors.grey[500])),
-                    Text('-$totalOutCome đ',
+                    Text('-$totalOutCome $currencySymbol',
                         style: TextStyle(color: Colors.white)),
                   ]),
             ),
@@ -1416,7 +1418,8 @@ class _TransactionScreen extends State<TransactionScreen>
                     SizedBox(
                       width: 10,
                     ),
-                    Text('$total đ', style: TextStyle(color: Colors.white)),
+                    Text('$total $currencySymbol',
+                        style: TextStyle(color: Colors.white)),
                   ]),
             ),
             TextButton(
