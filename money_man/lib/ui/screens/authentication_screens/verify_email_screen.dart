@@ -7,6 +7,7 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/screens/account_screens/account_edit_information_screen.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
@@ -184,7 +185,12 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     if (user.emailVerified) {
       timer.cancel();
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (_) => AccountInformationScreen()));
+          PageTransition(
+            child: AccountInformationScreen(),
+            type: PageTransitionType.scale,
+            curve: Curves.elasticInOut,
+          )
+      );
     }
   }
 
