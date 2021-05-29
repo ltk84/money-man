@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -180,11 +181,15 @@ class _AccountDetailState extends State<AccountDetail> {
                   ),
                   ListTile(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  ChangePasswordScreen()));
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (BuildContext context) =>
+                      //             ChangePasswordScreen()));
+                      showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => ChangePasswordScreen()
+                      );
                     },
                     dense: true,
                     title: Text(

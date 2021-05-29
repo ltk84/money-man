@@ -208,6 +208,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     color: Colors.white,
                   ),
                   ListTile(
+                    contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 0),
                     onTap: () {
                       showCurrencyPicker(
                         theme: CurrencyPickerThemeData(
@@ -241,9 +242,15 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.monetization_on,
-                        size: 30.0, color: Colors.orange),
-                    title: Text('Currency: ' + currencyName,
-                        style: TextStyle(color: Colors.white, fontSize: 15.0)),
+                        size: 30.0, color: Colors.white24),
+                    title: Text(currencyName,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.0
+                        )
+                    ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Colors.white),
                   ),
@@ -252,6 +259,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     color: Colors.white,
                   ),
                   ListTile(
+                    contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 10),
                     onTap: () async {
                       final resultAmount = await Navigator.push(
                           context,
@@ -264,14 +272,19 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                         });
                     },
                     dense: true,
-                    leading: Icon(Icons.account_balance_rounded,
-                        size: 30.0, color: Colors.green),
+                    leading: Icon(Icons.account_balance,
+                        size: 30.0, color: Colors.white24),
                     title: Text(
                         wallet.amount == null
                             ? 'Enter initial balance'
-                            : "Initial balance: " +
-                                convertMoneyType(wallet.amount),
-                        style: TextStyle(color: Colors.white, fontSize: 15.0)),
+                            : convertMoneyType(wallet.amount),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.0
+                        )
+                    ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Colors.white),
                   )
