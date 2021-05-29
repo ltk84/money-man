@@ -120,12 +120,6 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen>  {
     return Container(
       width: 450,
       height: 450,
-      decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                color: Colors.yellow,
-                width: 1.0,
-              ))),
       padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
       child: ListView.builder(
         physics: BouncingScrollPhysics(),
