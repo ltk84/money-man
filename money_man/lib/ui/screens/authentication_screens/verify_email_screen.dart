@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/screens/account_screens/account_edit_information_screen.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
@@ -42,123 +43,128 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       backgroundColor: Color(0xff1a1a1a),
       body: Container(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 50, 0, 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                    child: Text(
-                      'Verify your email',
-                      style: TextStyle(
-                          color: yellow,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 35),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                    child: Text(
-                      'to keep using',
-                      style: TextStyle(
-                          color: yellow,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                    child: Text(
-                      'Money Man',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 45),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Center(
+            Expanded(
               child: Container(
-                height: 160,
-                width: 160,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/logoEmail.png'),
-                    fit: BoxFit.fill,
-                  ),
-                  shape: BoxShape.circle,
+                padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'To get access to ',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w300,
+                              fontSize: 16
+                          ),
+                        ),
+                        Text(
+                          'Money Man',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w800,
+                              fontSize: 20),
+                        ),
+                        Text(
+                          ', please',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w300,
+                              fontSize: 16
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10.0),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text(
+                        'VERIFY YOUR EMAIL',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w900,
+                            fontSize: 30),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              child: RoundedLoadingButton(
-                height: 40,
-                width: 200,
-                color: Color(0xff2FB49C),
-                child: Text('Verify email!',
-                    style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: black)),
-                controller: _btnController,
-                onPressed: () async {
-                  if (user.email.contains('gmail') == false) {
-                    await user.sendEmailVerification();
-                  } else {
-                    await _handleLinkWithGoogle(user.email);
-                  }
-                  final timer2 =
-                      Timer.periodic(Duration(seconds: 3), (timer) {});
-
-                  _btnController.success();
-                },
+            Expanded(
+              child: SuperIcon(
+                  iconPath: "assets/images/email.svg",
+                  size: 120.0,
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              child: RoundedLoadingButton(
-                height: 40,
-                width: 200,
-                color: Color(0xff2FB49C),
-                child: Text('Back',
-                    style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: black)),
-                controller: _btnController2,
-                onPressed: () async {
-                  await auth.signOut();
-                },
-              ),
-            ),
-            Center(
+            Expanded(
               child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(vertical: 50, horizontal: 40),
-                child: Text(
-                  ' Click the button then check your mailbox to get your verify email link! \n ',
-                  style: TextStyle(
-                    color: white,
-                  ),
-                  textAlign: TextAlign.center,
+                padding: EdgeInsets.only(bottom: 50.0, top: 20.0),
+                child: Column(
+                  children: [
+                    Container(
+                      child: RoundedLoadingButton(
+                        successColor: Color(0xff2FB49C),
+                        borderRadius: 10.0,
+                        height: 45,
+                        width: 220,
+                        color: Color(0xff2FB49C),
+                        child: Text('Tap to verify email',
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16.0,
+                                color: white,
+                            )
+                        ),
+                        controller: _btnController,
+                        onPressed: () async {
+                          if (user.email.contains('gmail') == false) {
+                            await user.sendEmailVerification();
+                          } else {
+                            await _handleLinkWithGoogle(user.email);
+                          }
+                          final timer2 =
+                              Timer.periodic(Duration(seconds: 3), (timer) {});
+
+                          _btnController.success();
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      child: RoundedLoadingButton(
+                        borderRadius: 10.0,
+                        height: 45,
+                        width: 220,
+                        color: Colors.white,
+                        child: Text('Back',
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16.0,
+                              color: Color(0xff2FB49C),
+                            )
+                        ),
+                        controller: _btnController2,
+                        onPressed: () async {
+                          await auth.signOut();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

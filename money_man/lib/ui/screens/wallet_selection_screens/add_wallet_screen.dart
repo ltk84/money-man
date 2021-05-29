@@ -2,6 +2,7 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
@@ -261,10 +262,16 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 10),
                     onTap: () async {
-                      final resultAmount = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => EnterAmountScreen()));
+                      // final resultAmount = await Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (_) => EnterAmountScreen()
+                      //     )
+                      // );
+                      final resultAmount = await showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => EnterAmountScreen()
+                      );
                       if (resultAmount != null)
                         setState(() {
                           print(resultAmount);
