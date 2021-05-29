@@ -121,7 +121,11 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   if (user.email.contains('gmail') == false) {
                     await user.sendEmailVerification();
                   } else {
-                    await _handleLinkWithGoogle(user.email);
+                    final res = await _handleLinkWithGoogle(user.email);
+                    if (res == null) {
+                      await _showAlertDialog('There is something wrong!');
+                      await user.delete();
+                    }
                   }
                   final timer2 =
                       Timer.periodic(Duration(seconds: 3), (timer) {});
@@ -182,6 +186,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     try {
       final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
+      if (googleUser == null) return null;
+
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
@@ -190,8 +196,24 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         idToken: googleAuth.idToken,
       );
       if (_email.contains('gmail')) {
-        print('link');
-        auth.currentUser.linkWithCredential(credential);
+        // print('link');
+        if (_email != googleUser.email) {
+          await GoogleSignIn().signOut();
+          await _showAlertDialog(
+              'The google account and the email is different! Please sign up again!');
+          await auth.currentUser.delete();
+
+          // Navigator.pop(context);
+        } else {
+          try {
+            UserCredential res =
+                await auth.currentUser.linkWithCredential(credential);
+          } on FirebaseAuthException catch (e) {
+            // TODO
+            print(e.code);
+            return null;
+          }
+        }
       }
     } on FirebaseAuthException catch (e) {
       String error = '';

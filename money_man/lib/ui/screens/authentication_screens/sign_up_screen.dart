@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
@@ -411,7 +412,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           error = e.code;
       }
       _showAlertDialog(error);
-    }
+    } on PlatformException catch (e) {}
   }
 
   Future _signUpWithEmailAndPassword(
@@ -440,10 +441,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             error = res;
         }
         _showAlertDialog(error);
-        // } else {
-        //   if (_email.contains('gmail')) {
-        //     _handleLinkWithGoogle(_email);
-        //   }
       }
     }
   }

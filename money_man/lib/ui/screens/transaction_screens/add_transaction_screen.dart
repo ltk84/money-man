@@ -41,7 +41,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     super.initState();
     pickDate = DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
     selectedWallet = widget.currentWallet;
-    currencySymbol = '';
+    currencySymbol =
+        CurrencyService().findByCode(selectedWallet.currencyID).symbol;
     note = null;
   }
 

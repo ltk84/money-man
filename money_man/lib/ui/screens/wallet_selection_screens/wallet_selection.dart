@@ -1,3 +1,4 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
@@ -298,7 +299,12 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 style: tsMain,
                               ),
                               subtitle: Text(
-                                listWallet[index].amount.toString(),
+                                listWallet[index].amount.toString() +
+                                    ' ' +
+                                    CurrencyService()
+                                        .findByCode(
+                                            listWallet[index].currencyID)
+                                        .symbol,
                                 style: tsChild,
                               ),
                               trailing: Icon(Icons.check, color: Colors.blue),
@@ -341,7 +347,12 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 style: tsMain,
                               ),
                               subtitle: Text(
-                                listWallet[index].amount.toString(),
+                                listWallet[index].amount.toString() +
+                                    ' ' +
+                                    CurrencyService()
+                                        .findByCode(
+                                            listWallet[index].currencyID)
+                                        .symbol,
                                 style: tsChild,
                               ),
                             ),
