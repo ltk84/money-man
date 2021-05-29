@@ -143,6 +143,7 @@ class _AccountDetailState extends State<AccountDetail> {
               child: Column(
                 children: [
                   CircleAvatar(
+                    backgroundColor: Colors.white,
                     radius: 30.0,
                     child: Text(
                         (_user == null)
@@ -151,7 +152,13 @@ class _AccountDetailState extends State<AccountDetail> {
                                     _user.displayName != null)
                                 ? _user.displayName.substring(0, 1)
                                 : 'Y',
-                        style: TextStyle(fontSize: 25.0)),
+                      style: TextStyle(
+                          color: Color(0xff2FB49C),
+                          fontSize: 30.0,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w400
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: 10,
