@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     _onItemTap(2, wallet);
                   },
-                  backgroundColor: Colors.yellow[700],
+                  backgroundColor: Color(0xff2FB49C),
                   elevation: 0,
                 ),
                 floatingActionButtonLocation:

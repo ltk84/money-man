@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class AccountInformationScreen extends StatelessWidget {
@@ -199,8 +200,13 @@ class _AccountInformation extends State<AccountInformation> {
                         _auth.currentUser.updateProfile(
                           displayName: username,
                         );
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (_) => FirstStep()));
+                        Navigator.push(context,
+                            PageTransition(
+                              child: FirstStep(),
+                              type: PageTransitionType.scale,
+                              curve: Curves.elasticInOut,
+                            )
+                        );
                       }
                     },
                     child: Text('CONFIRM',

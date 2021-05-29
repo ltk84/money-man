@@ -806,7 +806,7 @@ class _TransactionScreen extends State<TransactionScreen>
           bottom: TabBar(
             unselectedLabelColor: Colors.grey[500],
             labelColor: Colors.white,
-            indicatorColor: Colors.yellow[700],
+            indicatorColor: Color(0xff2FB49C),
             physics: AlwaysScrollableScrollPhysics(),
             isScrollable: true,
             indicatorWeight: 3.0,
@@ -1426,7 +1426,7 @@ class _TransactionScreen extends State<TransactionScreen>
               onPressed: () {},
               child: Text(
                 'View report for this period',
-                style: TextStyle(color: Colors.yellow[700]),
+                style: TextStyle(color: Color(0xff36D1B5)),
               ),
               style: TextButton.styleFrom(
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap),

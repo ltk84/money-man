@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:share/share.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -124,7 +125,7 @@ class ShareScreenState extends State<ShareScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 50.0),
+                margin: EdgeInsets.only(top: 50.0, bottom: 10.0),
                 padding: EdgeInsets.symmetric(horizontal: 100.0),
                 child: TextButton(
                   style: ButtonStyle(
@@ -172,7 +173,6 @@ class ShareScreenState extends State<ShareScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 50.0),
                 padding: EdgeInsets.symmetric(horizontal: 100.0),
                 child: TextButton(
                   style: ButtonStyle(
@@ -200,11 +200,31 @@ class ShareScreenState extends State<ShareScreen> {
                                 : reportData3),
                         quality: 100,
                         name: 'Report_' + (_currentIndex + 1).toString());
-                    if (result['isSuccess'])
-                      Alert(context: context, title: "Image has been saved")
-                          .show();
-                    else
-                      Alert(context: context, title: "Error!").show();
+                    if (result['isSuccess']) {
+                      showDialog<void>(
+                        context: context,
+                        barrierDismissible: false, // user must tap button!
+                        barrierColor: Colors.black54,
+                        builder: (BuildContext context) {
+                          return CustomAlert(
+                            iconPath: "assets/images/success.svg",
+                            title: "Successfully",
+                            content: "Image has been saved,\ncheck your gallery.");
+                        },
+                      );
+                    }
+                    else {
+                      showDialog<void>(
+                        context: context,
+                        barrierDismissible: false, // user must tap button!
+                        barrierColor: Colors.black54,
+                        builder: (BuildContext context) {
+                          return CustomAlert(
+                              iconPath: "assets/images/error.svg",
+                              content: "Something was wrong,\nplease try again.");
+                        },
+                      );
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -216,7 +236,7 @@ class ShareScreenState extends State<ShareScreen> {
                         flex: 3,
                       ),
                       Expanded(
-                        child: Icon(Icons.share),
+                        child: Icon(Icons.save_alt),
                         flex: 1,
                       ),
                     ],
