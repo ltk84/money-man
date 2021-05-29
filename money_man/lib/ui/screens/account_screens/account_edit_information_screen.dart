@@ -103,7 +103,8 @@ class _AccountInformation extends State<AccountInformation> {
                         fontWeight: FontWeight.w400
                     ),
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(vertical: 5)),
+                    contentPadding: EdgeInsets.symmetric(vertical: 5)
+                ),
               ),
             ),
           ),

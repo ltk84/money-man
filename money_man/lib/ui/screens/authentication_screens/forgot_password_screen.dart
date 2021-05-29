@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:progress_state_button/iconed_button.dart';
@@ -22,18 +23,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xff111111),
       appBar: AppBar(
+        leading: CloseButton(),
         elevation: 0,
-        backgroundColor: yellow,
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        title: Text(
-          'Forgot password',
-          style: TextStyle(fontFamily: 'Montserrat', color: black),
-        ),
-        centerTitle: true,
+        backgroundColor: Color(0xff111111),
       ),
       body: ListView(
         children: [
@@ -45,84 +39,49 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 SizedBox(
                   height: 30,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 40,
-                    ),
-                    Text(
-                      'Forgot \nPassword?',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 40,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w800,
-                      ),
-                    )
-                  ],
+                Text(
+                  'Forgot Password?',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w800,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 40,
-                    ),
-                    Text(
-                      'Enter the email address associated \n with your account',
-                      style: TextStyle(
-                          fontFamily: 'Montserrat', color: Colors.grey[700]),
-                    )
-                  ],
-                ),
-                Center(
-                  child: Container(
-                    height: 230,
-                    width: 230,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/forgotPass.jpg'),
-                        fit: BoxFit.fitHeight,
-                      ),
-                      //shape: BoxShape.rectangle,
-                    ),
+                Text(
+                  'Enter the email address associated \n with your account',
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16.0,
+                      color: Colors.white70,
                   ),
+                  textAlign: TextAlign.center,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 40,
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 5),
-                      child: Text(
-                        'Your email',
-                        style: TextStyle(
-                            color: Colors.black87,
-                            fontFamily: 'Montserrat',
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
                 Container(
+                  padding: EdgeInsets.symmetric(vertical: 60.0),
+                  child: SuperIcon(
+                    iconPath: 'assets/images/email.svg',
+                    size: 150,
+                  )
+                ),
+                SizedBox(height: 20),
+                Container(
+                  height: 80.0,
                   width: 300,
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      // override textfield's icon color when selected
-                      primaryColor: Colors.yellow,
-                    ),
-                    child: Form(
+                  child: Form(
                       key: _formKey,
                       child: TextFormField(
                         style: TextStyle(
-                            color: Colors.black, fontFamily: 'Montserrat'),
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.0,
+                          color: Colors.white,
+                        ),
                         validator: (value) {
                           if (value == null || value.isEmpty)
                             return 'Email not empty';
@@ -133,6 +92,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         textAlign: TextAlign.start,
                         onChanged: (value) => _email = value,
                         decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                          labelText: 'Email',
+                          labelStyle: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16.0,
+                            color: Colors.white70,
+                          ),
                           errorStyle: TextStyle(
                               color: Colors.red,
                               fontFamily: 'Montserrat',
@@ -140,7 +107,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                             borderSide: BorderSide(
-                              color: black,
+                              color: white,
                               width: 2.0,
                             ),
                           ),
@@ -152,18 +119,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                             borderSide: BorderSide(
-                              color: black,
+                              color: white,
                               width: 2.0,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            borderSide: BorderSide(color: black, width: 2.0),
+                            borderSide: BorderSide(color: white, width: 2.0),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                             borderSide: BorderSide(
-                              color: black,
+                              color: white,
                               width: 2.0,
                             ),
                           ),
@@ -173,72 +140,42 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         autocorrect: false,
                       ),
                     ),
-                  ),
                 ),
-                SizedBox(height: 40),
-                /*OutlinedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState.validate()) {
-                        final _auth = FirebaseAuthService();
-                        final res = await _auth.resetPassword(_email);
-                        if (res is String) {
-                          String error = "";
-                          switch (res) {
-                            case 'invalid-email':
-                              error = 'Email is invalid';
-                              break;
-                            case 'user-not-found':
-                              error = 'email not registered yet';
-                              break;
-                            default:
-                          }
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text(error)));
-                        }
-                      }
-                    },
-                    child: Text('Send code to email'))*/
                 Container(
-                  //padding: EdgeInsets.only(left: 60),
                   child: ProgressButton.icon(
+                    radius: 10.0,
+                    height: 40.0,
                       textStyle: TextStyle(
                           fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16.0,
                           color: white),
                       iconedButtons: {
                         ButtonState.idle: IconedButton(
-                            text: 'Send',
-                            icon: Icon(Icons.send, color: Colors.white),
-                            color: Colors.black),
-                        ButtonState.loading:
-                            IconedButton(text: 'Loading', color: yellow),
+                            text: 'Verify',
+                            icon: Icon(Icons.verified_user, color: Colors.white, size: 20.0),
+                            color: Color(0xFF2FB49C)
+                        ),
+                        ButtonState.loading: IconedButton(
+                                text: 'Loading',
+                                color: Color(0xFF2FB49C).withOpacity(0.1)
+                            ),
                         ButtonState.fail: IconedButton(
-                            text: 'Failed! Try again.',
-                            icon: Icon(Icons.cancel, color: Colors.white),
-                            color: Colors.red.shade300),
+                            text: 'Failed',
+                            icon: Icon(Icons.cancel, color: Colors.white, size: 20.0),
+                            color: Colors.red[700]
+                        ),
                         ButtonState.success: IconedButton(
                             text: 'Success',
                             icon: Icon(
                               Icons.check_circle,
                               color: Colors.white,
+                              size: 20.0
                             ),
                             color: Colors.green.shade400)
                       },
                       onPressed: onPressedIconWithText,
                       state: stateTextWithIcon),
-                ),
-                Center(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(vertical: 40, horizontal: 40),
-                    child: Text(
-                      ' Click the button then check your mailbox to get your verify email link! \n ',
-                      style: TextStyle(
-                        color: black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
                 ),
               ],
             ),
@@ -274,7 +211,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   );
                   break;
                 case 'user-not-found':
-                  error = 'email not registered yet';
+                  error = 'Email not registered yet';
                   print('2');
                   setState(
                     () {
