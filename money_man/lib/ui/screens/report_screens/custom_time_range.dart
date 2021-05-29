@@ -195,7 +195,7 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
       barrierDismissible: false, // user must tap button!
       barrierColor: Colors.black54,
       builder: (BuildContext context) {
-        return CustomAlert(content: "End date can't be before begin date.");
+        return CustomAlert(content: "End date can't be before begin date,\nplease try again.");
       },
     );
   }
