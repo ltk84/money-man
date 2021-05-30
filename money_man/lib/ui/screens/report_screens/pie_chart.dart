@@ -80,7 +80,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
                       ),
                       startDegreeOffset: 270,
                       sectionsSpace: 0,
-                      centerSpaceRadius: 17,
+                      centerSpaceRadius: _isShowPercent ? 25 : 17,
                       sections: showingSubSections()),
                 ),
               ),
@@ -110,7 +110,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
                       ),
                       startDegreeOffset: 270,
                       sectionsSpace: 0,
-                      centerSpaceRadius: 25,
+                      centerSpaceRadius: _isShowPercent ? 40 : 25,
                       sections: showingSections()),
                 ),
               ),
@@ -145,14 +145,15 @@ class PieChartScreenState extends State<PieChartScreen>  {
         value: value.toDouble(),
         showTitle: _isShowPercent,
         //title: value.toString() + '%',
-        radius: radius,
+        radius: _isShowPercent ? (isTouched ? 80: 65) : radius,
         titleStyle: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w700 ,
+            color: Colors.white,
+            fontSize: 12.0,
+            fontWeight: FontWeight.w700,
             fontFamily: 'Montserrat' ),
         badgeWidget: _Badge(
           _categoryList[i].iconID, // category icon.
-          size: _isShowPercent ? 30 : widgetSize,
+          size: _isShowPercent ? (isTouched ? 60: 30) : widgetSize,
           borderColor: i < colors.length ? colors[i] : Colors.grey,
         ),
         badgePositionPercentageOffset: .98,
@@ -197,7 +198,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
         color: Colors.grey[900],
         value: 100,
         showTitle: false,
-        radius: 15.0,
+        radius: _isShowPercent ? 55 : 15.0,
       );
     });
   }

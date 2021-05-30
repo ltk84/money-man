@@ -201,7 +201,7 @@ class _AccountInformation extends State<AccountInformation> {
                         _auth.currentUser.updateProfile(
                           displayName: username,
                         );
-                        Navigator.push(context,
+                        Navigator.pushReplacement(context,
                             PageTransition(
                               child: FirstStep(),
                               type: PageTransitionType.scale,
