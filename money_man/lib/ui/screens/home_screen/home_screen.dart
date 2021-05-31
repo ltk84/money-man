@@ -21,15 +21,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  void _onItemTap(int index) {
+  void _onItemTap(int index, Wallet wallet) {
     if (_selectedIndex != index) {
       if (index == 2) {
         showCupertinoModalBottomSheet(
             isDismissible: true,
             backgroundColor: Colors.grey[900],
             context: context,
-            builder: (context) => AddTransactionScreen()
-        );
+            builder: (context) => AddTransactionScreen(currentWallet: wallet));
       } else
         setState(() {
           _selectedIndex = index;
@@ -50,10 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
           List<Widget> _screens = [
             TransactionScreen(currentWallet: wallet),
             ReportScreen(currentWallet: wallet),
-            AddTransactionScreen(),
+            AddTransactionScreen(currentWallet: wallet),
             PlanningScreen(),
             AccountScreen(),
-
           ];
 
           if (snapshot.connectionState == ConnectionState.active) {
@@ -68,50 +66,49 @@ class _HomeScreenState extends State<HomeScreen> {
                   shape: CircularNotchedRectangle(),
                   color: Colors.black,
                   child: BottomNavigationBar(
-                    type: BottomNavigationBarType.fixed,
-                    elevation: 0,
-                    backgroundColor: Colors.transparent,
-                    items: <BottomNavigationBarItem>[
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.account_balance_wallet_rounded,
-                            size: 25.0),
-                        label: 'Transactions',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.analytics_sharp, size: 25.0),
-                        label: 'Report',
-                        //backgroundColor: Colors.grey[500],
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(
-                          Icons.add_circle,
-                          size: 0.0,
+                      type: BottomNavigationBarType.fixed,
+                      elevation: 0,
+                      backgroundColor: Colors.transparent,
+                      items: <BottomNavigationBarItem>[
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.account_balance_wallet_rounded,
+                              size: 25.0),
+                          label: 'Transactions',
                         ),
-                        label: '',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.article_sharp, size: 25.0),
-                        label: 'Planning',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.account_circle, size: 25.0),
-                        label: 'Account',
-                      ),
-                    ],
-                    selectedItemColor: Colors.white,
-                    unselectedItemColor: Colors.grey[400],
-                    unselectedFontSize: 12.0,
-                    selectedFontSize: 12.0,
-                    currentIndex: _selectedIndex,
-                    onTap: _onItemTap,
-                  ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.analytics_sharp, size: 25.0),
+                          label: 'Report',
+                          //backgroundColor: Colors.grey[500],
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(
+                            Icons.add_circle,
+                            size: 0.0,
+                          ),
+                          label: '',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.article_sharp, size: 25.0),
+                          label: 'Planning',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.account_circle, size: 25.0),
+                          label: 'Account',
+                        ),
+                      ],
+                      selectedItemColor: Colors.white,
+                      unselectedItemColor: Colors.grey[400],
+                      unselectedFontSize: 12.0,
+                      selectedFontSize: 12.0,
+                      currentIndex: _selectedIndex,
+                      onTap: (index) => _onItemTap(index, wallet)),
                 ),
                 floatingActionButton: FloatingActionButton(
                   child: Icon(Icons.add),
                   onPressed: () {
-                    _onItemTap(2);
+                    _onItemTap(2, wallet);
                   },
-                  backgroundColor: Colors.yellow[700],
+                  backgroundColor: Color(0xff2FB49C),
                   elevation: 0,
                 ),
                 floatingActionButtonLocation:

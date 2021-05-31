@@ -1,11 +1,13 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/verify_email_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 
 class SignUpScreen extends StatefulWidget {
   final Function changeShow;
@@ -89,7 +91,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           onPressed: () async {
-                            await signUpWithEmailAndPassword(_auth, context);
+                            await _signUpWithEmailAndPassword(_auth, context);
                           },
                           child: Text("SIGN UP",
                               style: TextStyle(
@@ -190,7 +192,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           onPressed: () {
-                            _auth.signInWithFacebook();
+                            _signInWithFacebookAccount();
                           },
                           child: Row(
                             children: [
@@ -249,7 +251,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           onPressed: () {
-                            _auth.signInWithGoogleAccount();
+                            _signInWithGoogleAccount();
                           },
                           child: Row(
                             children: [
@@ -350,18 +352,70 @@ class _SignUpScreenState extends State<SignUpScreen> {
           );
   }
 
-  Future signInAnonymously(
-      FirebaseAuthService _auth, BuildContext context) async {
-    final res = await _auth.signInAnonymously();
+  // Future _signInAnonymously(
+  //     FirebaseAuthService _auth, BuildContext context) async {
+  //   final res = await _auth.signInAnonymously();
 
-    if (res is String) {
-      final error = res;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error)));
+  //   if (res is String) {
+  //     final error = res;
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text(error)));
+  //   }
+  // }
+
+  Future _signInWithFacebookAccount() async {
+    try {
+      _auth.signInWithFacebook();
+    } on FirebaseAuthException catch (e) {
+      String error = '';
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          error =
+              "This account is linked with another provider! Try another provider!";
+          break;
+        case 'email-already-in-use':
+          error = "Your email address has been registered.";
+          break;
+        case 'invalid-credential':
+          error = "Your credential is malformed or has expired.";
+          break;
+        case 'user-disabled':
+          error = "This user has been disable.";
+          break;
+        default:
+          error = e.code;
+      }
+      _showAlertDialog(error);
     }
   }
 
-  Future signUpWithEmailAndPassword(
+  Future _signInWithGoogleAccount() async {
+    try {
+      _auth.signInWithGoogleAccount();
+    } on FirebaseAuthException catch (e) {
+      String error = '';
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          error =
+              "This account is linked with another provider! Try another provider!";
+          break;
+        case 'email-already-in-use':
+          error = "Your email address has been registered.";
+          break;
+        case 'invalid-credential':
+          error = "Your credential is malformed or has expired.";
+          break;
+        case 'user-disabled':
+          error = "This user has been disable.";
+          break;
+        default:
+          error = e.code;
+      }
+      _showAlertDialog(error);
+    } on PlatformException catch (e) {}
+  }
+
+  Future _signUpWithEmailAndPassword(
       FirebaseAuthService _auth, BuildContext context) async {
     if (_formKey.currentState.validate()) {
       setState(() {
@@ -375,43 +429,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
         String error = "";
         switch (res) {
           case 'invalid-email':
-            error = "Email is invalid";
+            error = "This email is invalid.";
             break;
-          case 'wrong-password':
-            error = "Password is wrong";
+          case 'email-already-in-use':
+            error = "Your email address has been registered.";
             break;
-          case 'user-disable':
-            error = "user is disable";
-            break;
-          case 'user-not-found':
-            error = "user not found";
+          case 'weak-password':
+            error = "Your password is so weak! Be stronger bro!";
             break;
           default:
             error = res;
         }
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error)));
-      } else {
-        handleLinkWithGoogle(_email);
+        _showAlertDialog(error);
       }
     }
   }
 
-  void handleLinkWithGoogle(String _email) async {
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-
-    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
     );
-    if (_email.contains('gmail'))
-      _auth.currentUser.linkWithCredential(credential).catchError((error) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error.toString())));
-      });
   }
 
   Widget buildInputField() {

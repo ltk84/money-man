@@ -12,8 +12,9 @@ import 'package:random_color/random_color.dart';
 class PieChartScreen extends StatefulWidget {
   List<MyTransaction> currentList;
   List<MyCategory> categoryList;
+  bool isShowPercent;
   double total;
-  PieChartScreen({Key key, @required this.currentList, @required this.categoryList, @required this.total }) : super(key: key);
+  PieChartScreen({Key key, @required this.currentList, @required this.isShowPercent,@required this.categoryList, @required this.total, }) : super(key: key);
   @override
   State<StatefulWidget> createState() => PieChartScreenState();
 }
@@ -21,10 +22,10 @@ class PieChartScreen extends StatefulWidget {
 class PieChartScreenState extends State<PieChartScreen>  {
   double _total;
   int touchedIndex = -1;
+  bool _isShowPercent;
   List<MyTransaction> _transactionList;
   List<MyCategory> _categoryList;
   List<double> _info = [];
-
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class PieChartScreenState extends State<PieChartScreen>  {
     _transactionList = widget.currentList;
     _categoryList = widget.categoryList;
     _total = widget.total;
+    _isShowPercent = widget.isShowPercent;
     generateData(_categoryList, _transactionList);
   }
 
@@ -39,10 +41,10 @@ class PieChartScreenState extends State<PieChartScreen>  {
   void didUpdateWidget(covariant PieChartScreen oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-
     _transactionList = widget.currentList ?? [];
     _categoryList = widget.categoryList ?? [];
     _total = widget.total;
+    _isShowPercent = widget.isShowPercent;
     generateData(_categoryList, _transactionList);
   }
 
@@ -64,57 +66,57 @@ class PieChartScreenState extends State<PieChartScreen>  {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
-        AspectRatio(
-          aspectRatio: 1.3,
-          child: Container(
-            color: Colors.transparent,
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: PieChart(
-                PieChartData(
-                    borderData: FlBorderData(
-                      show: false,
-                    ),
-                    startDegreeOffset: 270,
-                    sectionsSpace: 0,
-                    centerSpaceRadius: 17,
-                    sections: showingSubSections()),
+        children: [
+          AspectRatio(
+            aspectRatio: 1.3,
+            child: Container(
+              color: Colors.transparent,
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: PieChart(
+                  PieChartData(
+                      borderData: FlBorderData(
+                        show: false,
+                      ),
+                      startDegreeOffset: 270,
+                      sectionsSpace: 0,
+                      centerSpaceRadius: _isShowPercent ? 25 : 17,
+                      sections: showingSubSections()),
+                ),
               ),
             ),
           ),
-        ),
-        AspectRatio(
-          aspectRatio: 1.3,
-          child: Container(
-            color: Colors.transparent,
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: PieChart(
-                PieChartData(
-                    pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
-                      setState(() {
-                        final desiredTouch = pieTouchResponse.touchInput is! PointerExitEvent &&
-                            pieTouchResponse.touchInput is! PointerUpEvent;
-                        if (desiredTouch && pieTouchResponse.touchedSection != null) {
-                          touchedIndex = pieTouchResponse.touchedSection.touchedSectionIndex;
-                        } else {
-                          touchedIndex = -1;
-                        }
-                      });
-                    }),
-                    borderData: FlBorderData(
-                      show: false,
-                    ),
-                    startDegreeOffset: 270,
-                    sectionsSpace: 0,
-                    centerSpaceRadius: 25,
-                    sections: showingSections()),
+          AspectRatio(
+            aspectRatio: 1.3,
+            child: Container(
+              color: Colors.transparent,
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: PieChart(
+                  PieChartData(
+                      pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+                        setState(() {
+                          final desiredTouch = pieTouchResponse.touchInput is! PointerExitEvent &&
+                              pieTouchResponse.touchInput is! PointerUpEvent;
+                          if (desiredTouch && pieTouchResponse.touchedSection != null) {
+                            touchedIndex = pieTouchResponse.touchedSection.touchedSectionIndex;
+                          } else {
+                            touchedIndex = -1;
+                          }
+                        });
+                      }),
+                      borderData: FlBorderData(
+                        show: false,
+                      ),
+                      startDegreeOffset: 270,
+                      sectionsSpace: 0,
+                      centerSpaceRadius: _isShowPercent ? 40 : 25,
+                      sections: showingSections()),
+                ),
               ),
             ),
           ),
-        ),
-      ]
+        ]
     );
   }
 
@@ -138,30 +140,30 @@ class PieChartScreenState extends State<PieChartScreen>  {
         Color(0xFFbf137a),
         Color(0xFF621bbf),
       ];
-
       return PieChartSectionData(
         color: i < colors.length ? colors[i] : Colors.grey,
         value: value.toDouble(),
-        showTitle: false,
+        showTitle: _isShowPercent,
         //title: value.toString() + '%',
-        radius: radius,
-        // titleStyle: TextStyle(
-        //     fontSize: fontSize,
-        //     fontWeight: FontWeight.bold,
-        //     color: const Color(0xffffffff)),
+        radius: _isShowPercent ? (isTouched ? 80: 65) : radius,
+        titleStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 12.0,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Montserrat' ),
         badgeWidget: _Badge(
           _categoryList[i].iconID, // category icon.
-          size: widgetSize,
+          size: _isShowPercent ? (isTouched ? 60: 30) : widgetSize,
           borderColor: i < colors.length ? colors[i] : Colors.grey,
         ),
         badgePositionPercentageOffset: .98,
       );
     }) : List.generate(1, (i) {
       return PieChartSectionData(
-      color: Colors.grey[900],
-      value: 100,
-      showTitle: false,
-      radius: 15.0,
+        color: Colors.grey[900],
+        value: 100,
+        showTitle: false,
+        radius: 15.0,
       );
     });
   }
@@ -189,19 +191,14 @@ class PieChartScreenState extends State<PieChartScreen>  {
         color: i < colors.length ? colors[i].withOpacity(0.4) : Colors.grey.withOpacity(0.4),
         value: value.toDouble(),
         showTitle: false,
-        //title: value.toString() + '%',
         radius: radius,
-        // titleStyle: TextStyle(
-        //     fontSize: fontSize,
-        //     fontWeight: FontWeight.bold,
-        //     color: const Color(0xffffffff)),
       );
     }) : List.generate(1, (i) {
       return PieChartSectionData(
         color: Colors.grey[900],
         value: 100,
         showTitle: false,
-        radius: 15.0,
+        radius: _isShowPercent ? 55 : 15.0,
       );
     });
   }

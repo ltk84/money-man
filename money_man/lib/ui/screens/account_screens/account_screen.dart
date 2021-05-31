@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/ui/screens/account_screens/my_wallets_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_account_screen.dart';
+import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'account_detail_screen.dart';
@@ -141,6 +143,7 @@ class _TestState extends State<Test> {
                       child: Column(
                         children: [
                           CircleAvatar(
+                            backgroundColor: Colors.white,
                             radius: 30.0,
                             child: Text(
                                 (_user == null)
@@ -149,7 +152,13 @@ class _TestState extends State<Test> {
                                             _user.displayName != null)
                                         ? _user.displayName.substring(0, 1)
                                         : 'Y',
-                                style: TextStyle(fontSize: 25.0)),
+                              style: TextStyle(
+                                  color: Color(0xff2FB49C),
+                                  fontSize: 30.0,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
                           ),
                           SizedBox(
                             height: 10,
@@ -240,7 +249,13 @@ class _TestState extends State<Test> {
                     child: Column(
                       children: [
                         ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: MyWalletScreen(),
+                                    type: PageTransitionType.rightToLeft));
+                          },
                           dense: true,
                           leading: Icon(Icons.account_balance_wallet_rounded,
                               color: Colors.grey[400], size: 25.0),

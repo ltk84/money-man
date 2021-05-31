@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class AccountInformationScreen extends StatelessWidget {
@@ -20,30 +21,23 @@ class AccountInformation extends StatefulWidget {
 }
 
 class _AccountInformation extends State<AccountInformation> {
+  final _formKey = GlobalKey<FormState>();
   String username;
-  bool invalid = false;
   Widget InputTile(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      margin: EdgeInsets.fromLTRB(30, 15, 30, 30),
+      //padding: EdgeInsets.fromLTRB(20,10,20,20),
       decoration: BoxDecoration(
-          color: Color(0xff333333), borderRadius: BorderRadius.circular(17)),
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(10)
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Text(
-              'User name:',
-              style: TextStyle(
-                  color: Colors.white70,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
           ListTile(
+            contentPadding: EdgeInsets.fromLTRB(30, 10, 40, 20),
             leading: Icon(
               Icons.person_rounded,
               color: white,
@@ -54,30 +48,66 @@ class _AccountInformation extends State<AccountInformation> {
                 primaryColor: Colors.white,
               ),
               child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty)
+                    return 'Please enter your name';
+                  return null;
+                },
                 onChanged: (val) {
                   setState(() {
                     username = val;
                   });
-
                   print(username);
                 },
                 style: TextStyle(
-                    color: white, fontSize: 20, fontFamily: 'Montserrat'),
+                    color: white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Montserrat'
+                ),
                 autocorrect: false,
                 decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white12,
+                        width: 1.5,
+                      )
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                        width: 2.0,
+                      )
+                    ),
+                    errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red[700],
+                          width: 1.5,
+                        )
+                    ),
+                    focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red[700],
+                          width: 2.0,
+                        )
+                    ),
+                    errorStyle: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    labelText: 'Enter your name',
+                    labelStyle: TextStyle(
+                        color: Colors.white24,
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w400
+                    ),
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(vertical: 5)),
+                    contentPadding: EdgeInsets.symmetric(vertical: 5)
+                ),
               ),
             ),
           ),
-          Container(
-              alignment: Alignment.centerRight,
-              child: !invalid
-                  ? Container()
-                  : Text(
-                      'This field can not empty',
-                      style: TextStyle(color: Colors.red),
-                    ))
         ],
       ),
     );
@@ -88,71 +118,113 @@ class _AccountInformation extends State<AccountInformation> {
     final _auth = Provider.of<FirebaseAuthService>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("What is your name?"),
-        backgroundColor: Color(0xff2FB49C),
+        elevation: 0.0,
+        backgroundColor: Color(0xFF111111),
+        leadingWidth: 60.0,
+        leading: RotatedBox(
+            quarterTurns: 2,
+            child: IconButton(
+              onPressed: () {
+                final _auth = FirebaseAuthService();
+                _auth.signOut();
+              },
+              icon: Icon(
+                  Icons.exit_to_app,
+                  color: Colors.white24,
+                  size: 28.0,
+              ),
+            )
+        ),
       ),
       body: Container(
+        height: double.infinity,
         padding: EdgeInsets.only(top: 30),
         color: Color(0xFF111111),
-        child: ListView(
-          children: [
-            Column(
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
               children: <Widget>[
                 //buildInputField(),
                 Center(
                   child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 30),
-                      height: 200,
-                      width: 200,
+                      margin: EdgeInsets.symmetric(vertical: 40),
+                      height: 150,
+                      width: 150,
                       decoration:
-                          BoxDecoration(shape: BoxShape.circle, color: yellow),
+                      BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                       child: Text(
                         username == null || username.length == 0
-                            ? 'A'
+                            ? 'M'
                             : username[0].toUpperCase(),
                         style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 125,
+                            color: Color(0xff2FB49C),
+                            fontSize: 65,
                             fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w900),
+                            fontWeight: FontWeight.w400),
                       ),
                       alignment: Alignment.center),
                 ),
+                Text(
+                  'Tell me what your name is.',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white,
+                  )
+                ),
                 InputTile(context),
-                SizedBox(height: 30),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Color(0xff555555)),
-                  child: GestureDetector(
-                    onTap: () {
-                      print("tap");
-                      if (username == null || username.length == 0) {
-                        print("false");
-                        setState(() {
-                          invalid = true;
-                        });
-                      } else {
+                  margin: EdgeInsets.symmetric(horizontal: 100.0),
+                  height: 45.0,
+                  width: double.infinity,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Colors.white;
+                          return Color(0xFF2FB49C); // Use the component's default.
+                        },
+                      ),
+                      foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Color(0xFF2FB49C);
+                          return Colors.white; // Use the component's default.
+                        },
+                      ),
+                    ),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        _auth.currentUser.updateProfile(
+                          displayName: username,
+                        );
                         Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (_) {
-                          _auth.currentUser.updateProfile(
-                            displayName: username,
-                          );
-                          return FirstStep();
-                        }));
+                            PageTransition(
+                              child: FirstStep(),
+                              type: PageTransitionType.scale,
+                              curve: Curves.elasticInOut,
+                            )
+                        );
                       }
                     },
-                    child: Text(
-                      'CONFIRM',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w700),
+                    child: Text('CONFIRM',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.5,
+                            wordSpacing: 2.0
+                        ),
+                        textAlign: TextAlign.center
                     ),
                   ),
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -46,8 +46,8 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Container(
-            margin: EdgeInsets.only(top: 20),
-            height: 180,
+            margin: EdgeInsets.only(top: 20, left: 20, right: 20.0),
+            height: 190,
             width: 315,
             decoration: BoxDecoration(
             ),
@@ -87,6 +87,7 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
                   //SizedBox(height: 10.0),
                   Container(
                     //height: 150.0,
+                    margin: EdgeInsets.only(top: 10.0),
                     decoration: BoxDecoration(
                         border: Border(
                             top: BorderSide(

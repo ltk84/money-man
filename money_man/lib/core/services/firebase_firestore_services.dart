@@ -29,7 +29,7 @@ class FirebaseFireStoreService {
         .then((value) {
       print(walletID);
       wallet = Wallet.fromMap(value.data());
-    });
+    }).catchError((error) => print(error));
 
     // update ví đang được chọn lên database
     await users
@@ -71,7 +71,8 @@ class FirebaseFireStoreService {
     MyTransaction trans = MyTransaction(
         id: 'id',
         amount: amount,
-        date: DateTime.now(),
+        date: DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
         currencyID: wallet.currencyID,
         category: category,
         note: 'Initial Balance');
@@ -89,6 +90,10 @@ class FirebaseFireStoreService {
   Future addWallet(Wallet wallet) async {
     DocumentReference walletRef = users.doc(uid).collection('wallets').doc();
     wallet.id = walletRef.id;
+    MyCategory category;
+
+    double amount = wallet.amount;
+    wallet.amount = 0;
 
     await walletRef
         .set(wallet.toMap())
@@ -97,6 +102,19 @@ class FirebaseFireStoreService {
       print(error);
       return error.toString();
     });
+
+    await categories.where('name', isEqualTo: 'Other Income').get().then(
+        (value) => category = MyCategory.fromMap(value.docs.first.data()));
+
+    MyTransaction trans = MyTransaction(
+        id: 'id',
+        amount: amount,
+        date: DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
+        currencyID: wallet.currencyID,
+        category: category,
+        note: 'Adjust Balance');
+    await addTransaction(wallet, trans);
 
     return wallet.id;
   }
@@ -121,7 +139,7 @@ class FirebaseFireStoreService {
     CollectionReference wallets = users.doc(uid).collection('wallets');
     await wallets.get().then((value) {
       length = value.size;
-    });
+    }).catchError((error) => print(error));
     // trường họp chỉ có 1 ví
     if (length == 1) return 'only 1 wallet';
 
@@ -189,7 +207,8 @@ class FirebaseFireStoreService {
     MyTransaction trans = MyTransaction(
         id: 'id',
         amount: transactionAmount,
-        date: DateTime.now(),
+        date: DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
         currencyID: wallet.currencyID,
         category: category,
         note: 'Adjust Balance');
@@ -222,7 +241,8 @@ class FirebaseFireStoreService {
     // update searchList để sau này dùng cho việc search transaction
     List<String> searchList = splitNumber(transaction.amount.toInt());
     await transactionRef
-        .update({'amountSearch': FieldValue.arrayUnion(searchList)});
+        .update({'amountSearch': FieldValue.arrayUnion(searchList)}).catchError(
+            (error) => print(error));
 
     // Update amount của wallet
     if (transaction.category.type == 'expense')
@@ -248,14 +268,26 @@ class FirebaseFireStoreService {
   }
 
   // stream đến transaction của wallet đang được chọn
-  Stream<List<MyTransaction>> transactionStream(Wallet wallet) {
-    return users
-        .doc(uid)
-        .collection('wallets')
-        .doc(wallet.id)
-        .collection('transactions')
-        .snapshots()
-        .map(_transactionFromSnapshot);
+  Stream<List<MyTransaction>> transactionStream(Wallet wallet, dynamic limit) {
+    if (limit == 'full') {
+      return users
+          .doc(uid)
+          .collection('wallets')
+          .doc(wallet.id)
+          .collection('transactions')
+          .snapshots()
+          .map(_transactionFromSnapshot);
+    } else {
+      return users
+          .doc(uid)
+          .collection('wallets')
+          .doc(wallet.id)
+          .collection('transactions')
+          .limit(limit)
+          .orderBy('date', descending: true)
+          .snapshots()
+          .map(_transactionFromSnapshot);
+    }
   }
 
   // convert từ snapshot thành transaction
@@ -461,7 +493,10 @@ class FirebaseFireStoreService {
     final cateRef = categories.doc();
     MyCategory cat = MyCategory(
         id: cateRef.id, name: '', type: 'expense', iconID: 'defaultID');
-    await cateRef.set(cat.toMap()).then((value) => print('added!'));
+    await cateRef
+        .set(cat.toMap())
+        .then((value) => print('added!'))
+        .catchError((error) => print(error));
   }
 
   // Lấy category bằng id

@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -68,14 +69,18 @@ class _AccountDetailState extends State<AccountDetail> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Row(
-                children: [
-                  Icon(Icons.arrow_back_ios, color: Colors.white),
-                  Hero(
-                      tag: 'alo',
-                      child: Text('More',
-                          style: Theme.of(context).textTheme.headline6)),
-                ],
+              child: Hero(
+                tag: 'alo',
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, color: Colors.white),
+                    Text('More', style: Theme.of(context).textTheme.headline6)
+                    // Hero(
+                    //     tag: 'alo',
+                    //     child: Text('More', style: Theme.of(context).textTheme.headline6)
+                    // ),
+                  ],
+                ),
               ),
             ),
             //),
@@ -110,7 +115,9 @@ class _AccountDetailState extends State<AccountDetail> {
                 opacity: reachTop == 1 ? 1 : 0,
                 duration: Duration(milliseconds: 100),
                 child: Text('My Account',
-                    style: Theme.of(context).textTheme.headline6))),
+                    style: Theme.of(context).textTheme.headline6)
+            )
+        ),
         body: ListView(
           physics: BouncingScrollPhysics(),
           controller: _controller,
@@ -138,6 +145,7 @@ class _AccountDetailState extends State<AccountDetail> {
               child: Column(
                 children: [
                   CircleAvatar(
+                    backgroundColor: Colors.white,
                     radius: 30.0,
                     child: Text(
                         (_user == null)
@@ -146,7 +154,13 @@ class _AccountDetailState extends State<AccountDetail> {
                                     _user.displayName != null)
                                 ? _user.displayName.substring(0, 1)
                                 : 'Y',
-                        style: TextStyle(fontSize: 25.0)),
+                      style: TextStyle(
+                          color: Color(0xff2FB49C),
+                          fontSize: 30.0,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w400
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: 10,
@@ -176,11 +190,15 @@ class _AccountDetailState extends State<AccountDetail> {
                   ),
                   ListTile(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  ChangePasswordScreen()));
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (BuildContext context) =>
+                      //             ChangePasswordScreen()));
+                      showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => ChangePasswordScreen()
+                      );
                     },
                     dense: true,
                     title: Text(

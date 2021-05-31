@@ -33,15 +33,23 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
+  ScrollController listScrollController;
+  int _limit = 50;
+  int _limitIncrement = 20;
   Wallet _wallet;
-  bool viewByCategory = false;
-  int choosedTimeRange = 3;
+  bool viewByCategory;
+  int choosedTimeRange;
   String currencySymbol;
   List<Tab> myTabs;
 
   @override
   void initState() {
     super.initState();
+
+    viewByCategory = false;
+    choosedTimeRange = 3;
+    listScrollController = ScrollController();
+    listScrollController.addListener(scrollListener);
 
     myTabs = initTabBar(choosedTimeRange);
 
@@ -76,46 +84,116 @@ class _TransactionScreen extends State<TransactionScreen>
         CurrencyService().findByCode(_wallet.currencyID).symbol ?? '';
   }
 
+  void scrollListener() {
+    if (listScrollController.offset >=
+            listScrollController.position.maxScrollExtent &&
+        !listScrollController.position.outOfRange) {
+      setState(() {
+        _limit += _limitIncrement;
+      });
+    }
+  }
+
   void _handleSelectTimeRange(int selected) {
     showMenu(
-      initialValue: 3,
+      // padding: EdgeInsets.all(10.0),
+      // //icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+      // offset: Offset.fromDirection(40, 40),
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          bottomLeft: Radius.circular(10.0),
+          bottomRight: Radius.circular(10.0),
+        ),
+      ),
+      elevation: 0.0,
       context: context,
-      position: RelativeRect.fromLTRB(100, -350, 0, 0),
+      position: RelativeRect.fromLTRB(100, 55, 28, 0),
       items: [
         CheckedPopupMenuItem(
           checked: selected == 1 ? true : false,
           value: 1,
-          child: Text("Day", style: TextStyle(color: Colors.black)),
+          child: Text("Day",
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Montserrat',
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
         CheckedPopupMenuItem(
           checked: selected == 2 ? true : false,
           value: 2,
-          child: Text("Week", style: TextStyle(color: Colors.black)),
+          child: Text("Week",
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Montserrat',
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
         CheckedPopupMenuItem(
           checked: selected == 3 ? true : false,
           value: 3,
-          child: Text("Month", style: TextStyle(color: Colors.black)),
+          child: Text("Month",
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Montserrat',
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
         CheckedPopupMenuItem(
           checked: selected == 4 ? true : false,
           value: 4,
-          child: Text("Quarter", style: TextStyle(color: Colors.black)),
+          child: Text("Quarter",
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Montserrat',
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
         CheckedPopupMenuItem(
           checked: selected == 5 ? true : false,
           value: 5,
-          child: Text("Year", style: TextStyle(color: Colors.black)),
+          child: Text("Year",
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Montserrat',
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
         CheckedPopupMenuItem(
           checked: selected == 6 ? true : false,
           value: 6,
-          child: Text("All", style: TextStyle(color: Colors.black)),
+          child: Text("All",
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Montserrat',
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
         CheckedPopupMenuItem(
           checked: selected == 7 ? true : false,
           value: 7,
-          child: Text("Custom", style: TextStyle(color: Colors.black)),
+          child: Text("Custom",
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Montserrat',
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
       ],
     ).then((value) async {
@@ -195,7 +273,7 @@ class _TransactionScreen extends State<TransactionScreen>
                 return CustomSelectTimeDialog();
               }).then((value) => timeRange = value);
 
-          if (timeRange.length == 0) return null;
+          if (timeRange == null) return null;
 
           String displayTab = DateFormat('dd/MM/yyyy').format(timeRange[0]) +
               " - " +
@@ -728,7 +806,7 @@ class _TransactionScreen extends State<TransactionScreen>
           bottom: TabBar(
             unselectedLabelColor: Colors.grey[500],
             labelColor: Colors.white,
-            indicatorColor: Colors.yellow[700],
+            indicatorColor: Color(0xff2FB49C),
             physics: AlwaysScrollableScrollPhysics(),
             isScrollable: true,
             indicatorWeight: 3.0,
@@ -741,74 +819,159 @@ class _TransactionScreen extends State<TransactionScreen>
               tooltip: 'Notify',
               onPressed: () {},
             ),
-            PopupMenuButton(onSelected: (value) {
-              if (value == 'Search for transaction') {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => SearchTransactionScreen(
-                              wallet: _wallet,
-                            )));
-              } else if (value == 'change display') {
-                setState(() {
-                  viewByCategory = !viewByCategory;
-                });
-              } else if (value == 'Adjust Balance') {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => AdjustBalanceScreen(
-                              wallet: _wallet,
-                            )));
-              } else if (value == 'Select time range') {
-                _handleSelectTimeRange(choosedTimeRange);
+            PopupMenuButton(
+              padding: EdgeInsets.all(10.0),
+              //icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+              offset: Offset.fromDirection(40, 40),
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  bottomLeft: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10.0),
+                ),
+              ),
+              elevation: 0.0,
+              onSelected: (value) {
+                if (value == 'Search for transaction') {
+                  showCupertinoModalBottomSheet(
+                      context: context,
+                      builder: (context) => SearchTransactionScreen(wallet: _wallet)
+                  );
+                } else if (value == 'change display') {
+                  setState(() {
+                    viewByCategory = !viewByCategory;
+                  });
+                } else if (value == 'Adjust Balance') {
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (_) => AdjustBalanceScreen(
+                  //               wallet: _wallet,
+                  //             )
+                  //     )
+                  // );
+                  showCupertinoModalBottomSheet(
+                      context: context,
+                      builder: (context) => AdjustBalanceScreen(wallet: _wallet)
+                  );
+                } else if (value == 'Select time range') {
+                  _handleSelectTimeRange(choosedTimeRange);
+                }
+              },
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                      value: 'Select time range',
+                      child: Row(
+                        children: [
+                          Icon(Icons.calendar_today, color: Colors.black),
+                          SizedBox(width: 10.0),
+                          Text(
+                            'Select time range',
+                            style: TextStyle(
+                                color: Colors.black,
+                              fontFamily: 'Montserrat',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )),
+                  PopupMenuItem(
+                      value: 'change display',
+                      child: Row(
+                        children: [
+                          Icon(Icons.remove_red_eye, color: Colors.black),
+                          SizedBox(width: 10.0),
+                          Text(
+                            viewByCategory
+                                ? 'View by transaction'
+                                : 'View by category',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Montserrat',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )),
+                  PopupMenuItem(
+                      value: 'Adjust Balance',
+                      child: Row(
+                        children: [
+                          Icon(Icons.account_balance_wallet, color: Colors.black),
+                          SizedBox(width: 10.0),
+                          Text(
+                            'Adjust Balance',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Montserrat',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )),
+                  PopupMenuItem(
+                      value: 'Transfer money',
+                      child: Row(
+                        children: [
+                          Icon(Icons.attach_money, color: Colors.black),
+                          SizedBox(width: 10.0),
+                          Text(
+                            'Transfer money',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Montserrat',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )),
+                  PopupMenuItem(
+                      value: 'Search for transaction',
+                      child: Row(
+                        children: [
+                          Icon(Icons.search, color: Colors.black),
+                          SizedBox(width: 10.0),
+                          Text(
+                            'Search for transaction',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Montserrat',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )),
+                  PopupMenuItem(
+                      value: 'Synchronize',
+                      child: Row(
+                        children: [
+                          Icon(Icons.sync, color: Colors.black),
+                          SizedBox(width: 10.0),
+                          Text(
+                            'Synchronize',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Montserrat',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )),
+                ];
               }
-            }, itemBuilder: (context) {
-              return [
-                PopupMenuItem(
-                    value: 'Select time range',
-                    child: Text(
-                      'Select time range',
-                      style: TextStyle(color: Colors.black),
-                    )),
-                PopupMenuItem(
-                    value: 'change display',
-                    child: Text(
-                      viewByCategory
-                          ? 'View by transaction'
-                          : 'View by category',
-                      style: TextStyle(color: Colors.black),
-                    )),
-                PopupMenuItem(
-                    value: 'Adjust Balance',
-                    child: Text(
-                      'Adjust Balance',
-                      style: TextStyle(color: Colors.black),
-                    )),
-                PopupMenuItem(
-                    value: 'Transfer money',
-                    child: Text(
-                      'Transfer money',
-                      style: TextStyle(color: Colors.black),
-                    )),
-                PopupMenuItem(
-                    value: 'Search for transaction',
-                    child: Text(
-                      'Search for transaction',
-                      style: TextStyle(color: Colors.black),
-                    )),
-                PopupMenuItem(
-                    value: 'Synchronize',
-                    child: Text(
-                      'Synchronize',
-                      style: TextStyle(color: Colors.black),
-                    )),
-              ];
-            })
+            )
           ],
         ),
         body: StreamBuilder<List<MyTransaction>>(
-            stream: _firestore.transactionStream(_wallet),
+            stream: _firestore.transactionStream(_wallet, _limit),
             builder: (context, snapshot) {
               List<MyTransaction> _transactionList = snapshot.data ?? [];
 
@@ -894,6 +1057,7 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       color: Colors.black,
       child: ListView.builder(
+          controller: listScrollController,
           physics: BouncingScrollPhysics(),
           shrinkWrap: true,
           itemCount: transactionListSortByCategory.length,
@@ -928,6 +1092,7 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       color: Colors.black,
       child: ListView.builder(
+          controller: listScrollController,
           physics: BouncingScrollPhysics(),
           //primary: false,
           shrinkWrap: true,
@@ -997,7 +1162,7 @@ class _TransactionScreen extends State<TransactionScreen>
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString(),
+                child: Text(totalAmountInDay.toString() + ' $currencySymbol',
                     textAlign: TextAlign.end,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.white)),
@@ -1052,11 +1217,13 @@ class _TransactionScreen extends State<TransactionScreen>
                                 ? '+' +
                                     transListSortByCategory[xIndex][yIndex]
                                         .amount
-                                        .toString()
+                                        .toString() +
+                                    ' $currencySymbol'
                                 : '-' +
                                     transListSortByCategory[xIndex][yIndex]
                                         .amount
-                                        .toString(),
+                                        .toString() +
+                                    ' $currencySymbol',
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -1118,7 +1285,7 @@ class _TransactionScreen extends State<TransactionScreen>
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString(),
+                child: Text(totalAmountInDay.toString() + ' $currencySymbol',
                     textAlign: TextAlign.end,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.white)),
@@ -1168,8 +1335,8 @@ class _TransactionScreen extends State<TransactionScreen>
                         child: Text(
                             transListSortByDate[xIndex][yIndex].category.type ==
                                     'income'
-                                ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()}"
-                                : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()}",
+                                ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()} $currencySymbol"
+                                : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()} $currencySymbol",
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -1210,7 +1377,7 @@ class _TransactionScreen extends State<TransactionScreen>
                 children: <Widget>[
                   Text('Opening balance',
                       style: TextStyle(color: Colors.grey[500])),
-                  Text('+$totalInCome đ',
+                  Text('+$totalInCome $currencySymbol',
                       style: TextStyle(color: Colors.white)),
                 ],
               ),
@@ -1222,7 +1389,7 @@ class _TransactionScreen extends State<TransactionScreen>
                   children: <Widget>[
                     Text('Ending balance',
                         style: TextStyle(color: Colors.grey[500])),
-                    Text('-$totalOutCome đ',
+                    Text('-$totalOutCome $currencySymbol',
                         style: TextStyle(color: Colors.white)),
                   ]),
             ),
@@ -1251,14 +1418,15 @@ class _TransactionScreen extends State<TransactionScreen>
                     SizedBox(
                       width: 10,
                     ),
-                    Text('$total đ', style: TextStyle(color: Colors.white)),
+                    Text('$total $currencySymbol',
+                        style: TextStyle(color: Colors.white)),
                   ]),
             ),
             TextButton(
               onPressed: () {},
               child: Text(
                 'View report for this period',
-                style: TextStyle(color: Colors.yellow[700]),
+                style: TextStyle(color: Color(0xff36D1B5)),
               ),
               style: TextButton.styleFrom(
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap),

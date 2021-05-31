@@ -2,11 +2,13 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -17,14 +19,13 @@ class AddWalletScreen extends StatefulWidget {
 
 class _AddWalletScreenState extends State<AddWalletScreen> {
   static var _formKey = GlobalKey<FormState>();
-  String currencyName = 'Currency';
-  double _initial_balance;
+  String currencyName = 'Viet Nam Dong';
 
   Wallet wallet = Wallet(
       id: '0',
       name: 'newWallet',
       amount: 0,
-      currencyID: 'USD',
+      currencyID: 'VND',
       iconID: 'assets/icons/wallet_2.svg');
 
   @override
@@ -93,6 +94,17 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
               key: _formKey,
               child: buildInput(),
             )));
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
+    );
   }
 
   String convertMoneyType(double k) {
@@ -197,8 +209,26 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     color: Colors.white,
                   ),
                   ListTile(
+                    contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 0),
                     onTap: () {
                       showCurrencyPicker(
+                        theme: CurrencyPickerThemeData(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          ),
+                          flagSize: 26,
+                          titleTextStyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 17,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700),
+                          subtitleTextStyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 15,
+                              color: Colors.black
+                          ),
+                          //backgroundColor: Colors.grey[900],
+                        ),
                         onSelect: (value) {
                           wallet.currencyID = value.code;
                           setState(() {
@@ -213,9 +243,15 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.monetization_on,
-                        size: 30.0, color: Colors.orange),
-                    title: Text('Currency: ' + currencyName,
-                        style: TextStyle(color: Colors.white, fontSize: 15.0)),
+                        size: 30.0, color: Colors.white24),
+                    title: Text(currencyName,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.0
+                        )
+                    ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Colors.white),
                   ),
@@ -224,11 +260,18 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     color: Colors.white,
                   ),
                   ListTile(
+                    contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 10),
                     onTap: () async {
-                      final resultAmount = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => EnterAmountScreen()));
+                      // final resultAmount = await Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (_) => EnterAmountScreen()
+                      //     )
+                      // );
+                      final resultAmount = await showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => EnterAmountScreen()
+                      );
                       if (resultAmount != null)
                         setState(() {
                           print(resultAmount);
@@ -236,14 +279,19 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                         });
                     },
                     dense: true,
-                    leading: Icon(Icons.account_balance_rounded,
-                        size: 30.0, color: Colors.green),
+                    leading: Icon(Icons.account_balance,
+                        size: 30.0, color: Colors.white24),
                     title: Text(
                         wallet.amount == null
                             ? 'Enter initial balance'
-                            : "Initial balance: " +
-                                convertMoneyType(wallet.amount),
-                        style: TextStyle(color: Colors.white, fontSize: 15.0)),
+                            : convertMoneyType(wallet.amount),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.0
+                        )
+                    ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Colors.white),
                   )
@@ -282,13 +330,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                 ],
               ),
             ),
-            // SizedBox(
-            //   height: 25,
-            //   child: Container(height: 50, color: Color(0xff6f6f6f)),
-            // ),
-            // SizedBox(
-            //   height: 25,
-            // ),
             GestureDetector(
               onTap: () {
                 // Xử lý sự kiện click ở đây.
