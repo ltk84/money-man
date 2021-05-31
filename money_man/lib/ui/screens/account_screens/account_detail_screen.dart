@@ -115,7 +115,9 @@ class _AccountDetailState extends State<AccountDetail> {
                 opacity: reachTop == 1 ? 1 : 0,
                 duration: Duration(milliseconds: 100),
                 child: Text('My Account',
-                    style: Theme.of(context).textTheme.headline6))),
+                    style: Theme.of(context).textTheme.headline6)
+            )
+        ),
         body: ListView(
           physics: BouncingScrollPhysics(),
           controller: _controller,

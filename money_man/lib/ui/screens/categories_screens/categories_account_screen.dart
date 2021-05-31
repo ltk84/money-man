@@ -134,7 +134,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                   'Categories',
                   style: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Montseratt',
+                      fontFamily: 'Montserrat',
                       fontSize: 17.0))),
           bottom: TabBar(
             unselectedLabelColor: Colors.grey[500],
