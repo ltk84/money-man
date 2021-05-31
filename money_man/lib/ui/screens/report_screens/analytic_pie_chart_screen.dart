@@ -1,16 +1,11 @@
-import 'dart:math';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:money_man/core/models/transactionModel.dart';
 import 'package:money_man/core/models/categoryModel.dart';
 import 'package:money_man/core/models/walletModel.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart_information_screen.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
-import 'package:random_color/random_color.dart';
 
 class AnalyticPieChartSreen extends StatefulWidget {
   List<MyTransaction> currentList;
@@ -35,34 +30,6 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen>  {
   List<double> _info = [];
   String _content;
   GlobalKey key1;
-
-  final double fontSizeText = 30;
-  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
-  int reachTop = 0;
-  int reachAppBar = 0;
-
-  // Phần này để check xem mình đã Scroll tới đâu trong ListView
-  ScrollController _controller = ScrollController();
-  _scrollListener() {
-    if (_controller.offset > 0) {
-      setState(() {
-        reachAppBar = 1;
-      });
-    } else {
-      setState(() {
-        reachAppBar = 0;
-      });
-    }
-    if (_controller.offset >= fontSizeText - 5) {
-      setState(() {
-        reachTop = 1;
-      });
-    } else {
-      setState(() {
-        reachTop = 0;
-      });
-    }
-  }
   @override
   void initState() {
     super.initState();
@@ -71,10 +38,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen>  {
     _total = widget.total;
     _content = widget.content;
     _color = widget.color;
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
   }
-
   @override
   void didUpdateWidget(covariant AnalyticPieChartSreen oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -84,8 +48,11 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen>  {
     _total = widget.total;
     _content = widget.content;
     _color = widget.color;
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
+  }
+  @override
+  void setState(fn) {
+
+    super.setState(fn);
   }
   @override
   Widget build(BuildContext context) {
@@ -96,12 +63,11 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen>  {
         centerTitle: true,
         elevation: 0,
       ),
-      body: ListView(
-            controller: _controller,
-            physics: BouncingScrollPhysics(),
+      body: Container(
+        child: Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                padding: EdgeInsets.fromLTRB(0,0, 0, 15),
                 decoration: BoxDecoration(
                     color: Colors.black,
                     border: Border(
@@ -146,13 +112,15 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen>  {
                           height: 200,
                           child: PieChartScreen(isShowPercent: true ,currentList: _transactionList, categoryList: _categoryList, total: _total),
                         ),
+
                         Container(
                           child: PieChartInformationScreen(
                             currentList: _transactionList,
                             categoryList: _categoryList,
                             currentWallet: widget.currentWallet,
-                            color: _color,),
-                        )
+                            color: _color,
+                          ),
+                        ),
                       ]
                   );
                 },
@@ -160,6 +128,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen>  {
               ),
             ],
           ),
+      )
     );
   }
 }

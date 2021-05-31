@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/iconModel.dart';
@@ -118,8 +119,8 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen>  {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 450,
-      height: 450,
+      width: 500,
+      height:  MediaQuery. of(context). size. height-400,
       padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
       child: ListView.builder(
         physics: BouncingScrollPhysics(),
@@ -165,7 +166,7 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen>  {
                             '+' + _info[index].toString(),
                                 style: TextStyle(color: _color, fontSize: 16, fontWeight: FontWeight.bold)),
                           ],
-                        )
+                        ),
                       ],
                     ),
                     Container(
