@@ -618,7 +618,7 @@ class _SignInScreenState extends State<SignInScreen> {
               prefixIcon: Container(
                   margin: EdgeInsets.only(bottom: 5.0, right: 8.0),
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Icon(Icons.security, color: Colors.white, size: 25.0)),
+                  child: Icon(Icons.vpn_key, color: Colors.white, size: 25.0)),
               hintText: 'Password',
               hintStyle: TextStyle(
                 color: Color(0x70999999),

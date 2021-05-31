@@ -72,9 +72,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 5, 30, 5),
                     leading: Icon(
-                      Icons.security,
+                      Icons.vpn_key,
                       color: Colors.white24,
-                      size: 25,
+                      size: 26,
                     ),
                     title: Theme(
                       data: Theme.of(context).copyWith(
@@ -194,9 +194,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 5,30, 5),
                     leading: Icon(
-                      Icons.security,
+                      Icons.vpn_key,
                       color: Colors.white24,
-                      size: 25,
+                      size: 26,
                     ),
                     title: Theme(
                       data: Theme.of(context).copyWith(
@@ -288,9 +288,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 5,30, 5),
                     leading: Icon(
-                      Icons.security,
+                      Icons.vpn_key,
                       color: Colors.white24,
-                      size: 25,
+                      size: 26,
                     ),
                     title: Theme(
                       data: Theme.of(context).copyWith(
