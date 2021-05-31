@@ -4,7 +4,7 @@ import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
 import 'package:money_man/ui/screens/account_screens/account_edit_information_screen.dart';
 //import 'package:money_man/ui/screens/account_screen/account_screen.dart';
 import 'package:money_man/ui/screens/planning_screen/planning_screen.dart';
-import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/account_screens/account_screen.dart';
 import 'package:money_man/ui/screens/report_screens/report_screen.dart';

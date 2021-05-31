@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/superIconModel.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/ui/screens/authentication_screens/authentication.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -21,8 +21,8 @@ class AccessScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SuperIcon(
-                  iconPath: 'assets/images/money_man.svg',
-                  size: 200.0,
+                iconPath: 'assets/images/money_man.svg',
+                size: 200.0,
               ),
               SizedBox(
                 height: 40,
@@ -33,20 +33,24 @@ class AccessScreen extends StatelessWidget {
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Color(0xFF2FB49C);
                         return Colors.white; // Use the component's default.
                       },
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed)) return Colors.white;
-                        return Color(0xFF2FB49C); // Use the component's default.
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.white;
+                        return Color(
+                            0xFF2FB49C); // Use the component's default.
                       },
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(context,
+                    Navigator.push(
+                        context,
                         PageTransition(
                           child: Authentication(showSignIn: false),
                           childCurrent: context.widget,
@@ -54,8 +58,7 @@ class AccessScreen extends StatelessWidget {
                           type: PageTransitionType.scale,
                           duration: Duration(milliseconds: 300),
                           reverseDuration: Duration(milliseconds: 300),
-                        )
-                    );
+                        ));
                     // showCupertinoModalBottomSheet(
                     //     context: context,
                     //     builder: (context) => Authentication(showSignIn: false)
@@ -67,10 +70,8 @@ class AccessScreen extends StatelessWidget {
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
-                          wordSpacing: 2.0
-                      ),
-                      textAlign: TextAlign.center
-                  ),
+                          wordSpacing: 2.0),
+                      textAlign: TextAlign.center),
                 ),
               ),
               Container(
@@ -79,20 +80,24 @@ class AccessScreen extends StatelessWidget {
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed)) return Colors.white;
-                        return Color(0xFF2FB49C); // Use the component's default.
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.white;
+                        return Color(
+                            0xFF2FB49C); // Use the component's default.
                       },
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed)) return Color(0xFF2FB49C);
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Color(0xFF2FB49C);
                         return Colors.white; // Use the component's default.
                       },
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(context,
+                    Navigator.push(
+                        context,
                         PageTransition(
                           child: Authentication(showSignIn: true),
                           childCurrent: context.widget,
@@ -100,8 +105,7 @@ class AccessScreen extends StatelessWidget {
                           type: PageTransitionType.scale,
                           duration: Duration(milliseconds: 300),
                           reverseDuration: Duration(milliseconds: 300),
-                        )
-                    );
+                        ));
                     // showCupertinoModalBottomSheet(
                     //     context: context,
                     //     builder: (context) => Authentication(showSignIn: true)
@@ -113,10 +117,8 @@ class AccessScreen extends StatelessWidget {
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
-                          wordSpacing: 2.0
-                      ),
-                      textAlign: TextAlign.center
-                  ),
+                          wordSpacing: 2.0),
+                      textAlign: TextAlign.center),
                 ),
               ),
             ],

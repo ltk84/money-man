@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/superIconModel.dart';
-import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'ending_introduction.dart';
@@ -46,6 +46,7 @@ class _FirstStepState extends State<FirstStep> {
       },
     );
   }
+
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -83,15 +84,15 @@ class _FirstStepState extends State<FirstStep> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                            'Create your',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 40,
+                              'Create your',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 40,
+                              ),
                             ),
-                          ),
                             Text(
                               'FIRST\nWALLET',
                               textAlign: TextAlign.left,
@@ -164,7 +165,8 @@ class _FirstStepState extends State<FirstStep> {
                               ),
                             )),
                         Container(
-                          padding: EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
+                          padding:
+                              EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: Text(
@@ -173,8 +175,7 @@ class _FirstStepState extends State<FirstStep> {
                                   color: Colors.white,
                                   fontFamily: 'Montserrat',
                                   fontSize: 14.0,
-                                  fontWeight: FontWeight.w600
-                              ),
+                                  fontWeight: FontWeight.w600),
                             ),
                           ),
                         ),
@@ -192,27 +193,26 @@ class _FirstStepState extends State<FirstStep> {
                               },
                               onChanged: (value) => wallet.name = value,
                               obscureText: false,
-                              decoration:
-                              InputDecoration(
+                              decoration: InputDecoration(
                                 isDense: true,
-                                contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 10.0),
                                 filled: true,
                                 fillColor: Colors.white,
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.none
-                                  ),
+                                  borderSide:
+                                      BorderSide(style: BorderStyle.none),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                               ),
-                              style: TextStyle(color: black)
-                          ),
+                              style: TextStyle(color: black)),
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         Container(
-                          padding: EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
+                          padding:
+                              EdgeInsets.fromLTRB(size.width * 0.15, 0, 0, 0),
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: Text(
@@ -221,8 +221,7 @@ class _FirstStepState extends State<FirstStep> {
                                   color: Colors.white,
                                   fontFamily: 'Montserrat',
                                   fontSize: 14.0,
-                                  fontWeight: FontWeight.w600
-                              ),
+                                  fontWeight: FontWeight.w600),
                             ),
                           ),
                         ),
@@ -246,17 +245,17 @@ class _FirstStepState extends State<FirstStep> {
                                     return null;
                                   },
                                   onChanged: (value) =>
-                                  wallet.amount = double.tryParse(value),
+                                      wallet.amount = double.tryParse(value),
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 10.0),
                                     filled: true,
                                     fillColor: Colors.white,
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          style: BorderStyle.none
-                                      ),
+                                      borderSide:
+                                          BorderSide(style: BorderStyle.none),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                   ),
@@ -271,7 +270,8 @@ class _FirstStepState extends State<FirstStep> {
                                   showCurrencyPicker(
                                     theme: CurrencyPickerThemeData(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
                                       ),
                                       flagSize: 26,
                                       titleTextStyle: TextStyle(
@@ -282,8 +282,7 @@ class _FirstStepState extends State<FirstStep> {
                                       subtitleTextStyle: TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 15,
-                                          color: Colors.black
-                                      ),
+                                          color: Colors.black),
                                       //backgroundColor: Colors.grey[900],
                                     ),
                                     onSelect: (value) {
@@ -299,7 +298,8 @@ class _FirstStepState extends State<FirstStep> {
                                   );
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8.0),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 8.0),
                                   width: 50,
                                   //height: size.height * 0.033,
                                   alignment: Alignment.center,
@@ -308,8 +308,7 @@ class _FirstStepState extends State<FirstStep> {
                                     style: TextStyle(
                                         color: white,
                                         fontSize: 13,
-                                        fontWeight: FontWeight.bold
-                                    ),
+                                        fontWeight: FontWeight.bold),
                                     textAlign: TextAlign.center,
                                   ),
                                   decoration: BoxDecoration(
@@ -332,7 +331,8 @@ class _FirstStepState extends State<FirstStep> {
                                 child: RaisedButton(
                                   onPressed: () {
                                     if (_formKey.currentState.validate())
-                                      Navigator.of(context).push(_createRoute());
+                                      Navigator.of(context)
+                                          .push(_createRoute());
                                   },
                                   color: Color(0xff2FB49C),
                                   elevation: 0.0,
@@ -346,7 +346,8 @@ class _FirstStepState extends State<FirstStep> {
                                     ),
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(25)),
                                   ),
                                 ),
                               ),
@@ -354,7 +355,8 @@ class _FirstStepState extends State<FirstStep> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 2.0),
                                     width: 8,
                                     height: 8,
                                     decoration: BoxDecoration(
@@ -362,7 +364,8 @@ class _FirstStepState extends State<FirstStep> {
                                         color: Colors.white.withOpacity(0.9)),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 2.0),
                                     width: 8,
                                     height: 8,
                                     decoration: BoxDecoration(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:money_man/core/models/timeRangeInfoModel.dart';
+import 'package:money_man/core/models/time_range_info_model.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -195,7 +195,8 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
       barrierDismissible: false, // user must tap button!
       barrierColor: Colors.black54,
       builder: (BuildContext context) {
-        return CustomAlert(content: "End date can't be before begin date,\nplease try again.");
+        return CustomAlert(
+            content: "End date can't be before begin date,\nplease try again.");
       },
     );
   }

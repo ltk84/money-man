@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/transactionModel.dart';
-import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/models/transaction_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:provider/provider.dart';

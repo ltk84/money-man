@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/categoryModel.dart';
-import 'package:money_man/core/models/transactionModel.dart';
-import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/transaction_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 
 class FirebaseFireStoreService {
   final String uid;
