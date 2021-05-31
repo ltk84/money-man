@@ -364,7 +364,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   final noteContent = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => NoteTransactionScreen()));
+                          builder: (_) => NoteTransactionScreen(
+                                content: widget.transaction.note,
+                              )));
                   print(noteContent);
                   if (noteContent != null) {
                     setState(() {
