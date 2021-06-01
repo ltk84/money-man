@@ -1,0 +1,291 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:money_man/core/models/superIconModel.dart';
+
+class BillsMainScreen extends StatelessWidget {
+  const BillsMainScreen({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.black,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.grey[900].withOpacity(0.2),
+          elevation: 0.0,
+          leading: BackButton(),
+          title: Text(
+              'Bills',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 17.0,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              )
+          ),
+          centerTitle: true,
+          flexibleSpace: ClipRect(
+            child: AnimatedOpacity(
+              opacity: 1,
+              duration: Duration(milliseconds: 0),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                    sigmaX: 500,
+                    sigmaY: 500,
+                    tileMode: TileMode.values[0]),
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 1),
+                  //child: Container(
+                  //color: Colors.transparent,
+                  color: Colors.transparent
+                  //),
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {},
+              child: Text(
+                  'Add',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  )
+              ),
+            ),
+          ],
+        ),
+        body:
+        ListView(
+          physics: BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          children: [
+            buildOverallInfo(overdue: '\$ 1,000',
+                forToday: '\$ 1,000',
+                thisPeriod: '\$ 1,000'),
+            SizedBox(height: 20.0),
+            buildListBills(),
+          ],
+        )
+    );
+  }
+
+  Widget buildListBills() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+          child: Text(
+              'THIS PERIOD',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+                color: Colors.white70,
+              )
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+              color: Color(0xFF1c1c1c),
+              border: Border(
+                  top: BorderSide(
+                    color: Colors.white12,
+                    width: 0.5,
+                  ),
+                  bottom: BorderSide(
+                    color: Colors.white12,
+                    width: 0.5,
+                  )
+              )
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SuperIcon(
+                iconPath: 'assets/icons/investment_3.svg',
+                size: 38.0,
+              ),
+              SizedBox(width: 20.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      'Investment',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      )
+                  ),
+                  Text(
+                      'Next bill is 02/06/2021',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white70,
+                      )
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                      'Due in 1 day',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      )
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Colors.white;
+                          else
+                            return Color(0xFF4FCC5C); // Use the component's default.
+                        },
+                      ),
+                      foregroundColor:
+                      MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Color(0xFF4FCC5C);
+                          else
+                            return Colors.white; // Use the component's default.
+                        },
+                      ),
+                    ),
+                    child: Text("PAY \$ 1,000",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.center
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildOverallInfo({String overdue, String forToday, String thisPeriod}) {
+    return Container(
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+            color: Color(0xFF1c1c1c),
+            border: Border(
+                top: BorderSide(
+                  color: Colors.white12,
+                  width: 0.5,
+                ),
+                bottom: BorderSide(
+                  color: Colors.white12,
+                  width: 0.5,
+                )
+            )
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+                'Remaining Bills',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                )
+            ),
+            SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                    'Overdue',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white38,
+                    )
+                ),
+                Text(
+                    overdue,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    )
+                )
+              ],
+            ),
+            SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                    'For today',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white38,
+                    )
+                ),
+                Text(
+                    forToday,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    )
+                )
+              ],
+            ),
+            SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                    'This period',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white38,
+                    )
+                ),
+                Text(
+                    thisPeriod,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    )
+                )
+              ],
+            )
+          ],
+        )
+    );
+  }
+}
