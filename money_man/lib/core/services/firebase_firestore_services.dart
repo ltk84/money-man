@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 
@@ -493,6 +494,17 @@ class FirebaseFireStoreService {
     // lấy auto id gán cho budget
     budget.id = budgetsRef.id;
 
+    // tính toán spent và gán spent cho budget
+    budget.spent = await calculateBudgetSpent(wallet, budget);
+
+    // thực hiện add budget
+    await budgetsRef
+        .set(budget.toMap())
+        .then((value) => print('budget added!'))
+        .catchError((error) => print(error));
+  }
+
+  Future<double> calculateBudgetSpent(Wallet wallet, Budget budget) async {
     // khai báo biến spent (số tiền của các transaction thỏa yêu cầu của budget)
     double spent = 0;
 
@@ -506,15 +518,7 @@ class FirebaseFireStoreService {
         .get()
         .then((value) =>
             value.docs.map((e) => spent += e.get('amount')).toList());
-
-    // gán spent cho budget
-    budget.spent = spent;
-
-    // thực hiện add budget
-    await budgetsRef
-        .set(budget.toMap())
-        .then((value) => print('budget added!'))
-        .catchError((error) => print(error));
+    return spent;
   }
 
   // demo add
@@ -596,23 +600,10 @@ class FirebaseFireStoreService {
 
   // edit budget
   Future updateBudget(Budget budget, Wallet wallet) async {
-    // khái báo spent vì khi user thay đổi thông tin budget thì có thể thay đổi category
-    // nên spent sẽ có thể bị tính lại từ đầu
-    double spent = 0;
-
-    // lấy các transaction dựa trên category để tính toán spent
-    await users
-        .doc(uid)
-        .collection('wallets')
-        .doc(wallet.id)
-        .collection('transactions')
-        .where('category.id', isEqualTo: budget.category.id)
-        .get()
-        .then((value) =>
-            value.docs.map((e) => spent += e.get('amount')).toList());
-
+    // user thay đổi thông tin budget thì có thể thay đổi category
+    // nên spent sẽ có thể bị tính lại từ đầu => tính toán spent
     // gán spent cho budget
-    budget.spent = spent;
+    budget.spent = await calculateBudgetSpent(wallet, budget);
 
     // thực hiện update budget
     await users
@@ -766,6 +757,7 @@ class FirebaseFireStoreService {
   // EVENT START //
 
   // add event
+  Future addEvent(Event event, Wallet wallet) async {}
 
   // edit event
 
