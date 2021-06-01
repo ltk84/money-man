@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
+import 'package:money_man/ui/screens/planning_screen/bills_screens/add_bill_sceen.dart';
 
 class BillsMainScreen extends StatelessWidget {
   const BillsMainScreen({Key key}) : super(key: key);
@@ -46,7 +48,14 @@ class BillsMainScreen extends StatelessWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () async {},
+              onPressed: () async {
+                showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return AddBillScreen();
+                    }
+                );
+              },
               child: Text(
                   'Add',
                   style: TextStyle(
