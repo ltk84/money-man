@@ -160,6 +160,7 @@ class RecurringTransactionMainScreen extends StatelessWidget {
                     Text('Wednesday, 02/06/2021')
                   ],
                 ),
+                // chỗ này chưa biết xử lý nhau
                 SizedBox(
                   width: 110,
                 ),
