@@ -481,8 +481,7 @@ class FirebaseFireStoreService {
   // BUDGET START //
 
   // add budget
-  Future addBudget(MyCategory category, double amount, DateTime beginDate,
-      DateTime endDate, Wallet wallet, bool isRepeat) async {
+  Future addBudget(Budget budget, Wallet wallet) async {
     // lấy reference đến collection budgets
     final budgetsRef = users
         .doc(uid)
@@ -490,6 +489,9 @@ class FirebaseFireStoreService {
         .doc(wallet.id)
         .collection('budgets')
         .doc();
+
+    // lấy auto id gán cho budget
+    budget.id = budgetsRef.id;
 
     // khai báo biến spent (số tiền của các transaction thỏa yêu cầu của budget)
     double spent = 0;
@@ -500,22 +502,13 @@ class FirebaseFireStoreService {
         .collection('wallets')
         .doc(wallet.id)
         .collection('transactions')
-        .where('category.id', isEqualTo: category.id)
+        .where('category.id', isEqualTo: budget.category.id)
         .get()
         .then((value) =>
             value.docs.map((e) => spent += e.get('amount')).toList());
 
-    // dựa trên các thông tin đã có để tạo instance budget
-    Budget budget = Budget(
-        id: budgetsRef.id,
-        category: category,
-        amount: amount,
-        spent: spent,
-        walletId: wallet.id,
-        isFinished: false,
-        beginDate: beginDate,
-        endDate: endDate,
-        isRepeat: isRepeat);
+    // gán spent cho budget
+    budget.spent = spent;
 
     // thực hiện add budget
     await budgetsRef
@@ -763,6 +756,22 @@ class FirebaseFireStoreService {
   // }
 
   // BUDGET END //
+
+  // BILL START //
+  // BILL END //
+
+  // RECURRING TRANSACTION START //
+  // RECURRING TRANSACTION END //
+
+  // EVENT START //
+
+  // add event
+
+  // edit event
+
+  // delete event
+
+  // EVENT END //
 
   // // edit player
   // Future editPlayer(Player player) async {
