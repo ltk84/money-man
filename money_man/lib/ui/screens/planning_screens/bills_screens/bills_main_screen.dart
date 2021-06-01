@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/superIconModel.dart';
-import 'package:money_man/ui/screens/planning_screen/bills_screens/add_bill_sceen.dart';
-import 'package:money_man/ui/screens/planning_screen/bills_screens/bill_detail_screen.dart';
-import 'package:money_man/ui/screens/planning_screen/bills_screens/edit_bill_screen.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/ui/screens/planning_screens/bills_screens/add_bill_sceen.dart';
+import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 class BillsMainScreen extends StatelessWidget {
