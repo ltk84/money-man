@@ -3,10 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/add_bill_sceen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
+import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class BillsMainScreen extends StatelessWidget {
   const BillsMainScreen({Key key}) : super(key: key);
@@ -86,6 +90,23 @@ class BillsMainScreen extends StatelessWidget {
                 ),
               ),
             ),
+            // GestureDetector(
+            //   onTap: () async {
+            //     buildShowDialog(context, _wallet.id);
+            //   },
+            //   child: Container(
+            //     padding: EdgeInsets.only(left: 20.0),
+            //     child: Row(
+            //       children: [
+            //         SuperIcon(
+            //           iconPath: _wallet.iconID,
+            //           size: 25.0,
+            //         ),
+            //         Icon(Icons.arrow_drop_down, color: Colors.grey)
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         body:
@@ -327,5 +348,23 @@ class BillsMainScreen extends StatelessWidget {
           ],
         )
     );
+  }
+
+  void buildShowDialog(BuildContext context, id) async {
+    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+
+    final result = await showCupertinoModalBottomSheet(
+        isDismissible: true,
+        backgroundColor: Colors.grey[900],
+        context: context,
+        builder: (context) {
+          return Provider(
+              create: (_) {
+                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+              },
+              child: WalletSelectionScreen(
+                id: id,
+              ));
+        });
   }
 }
