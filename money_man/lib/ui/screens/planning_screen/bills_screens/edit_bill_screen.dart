@@ -71,7 +71,7 @@ class EditBillScreen extends StatelessWidget {
                 child: Column(
                     children: [
                       // Hàm build Amount Input.
-                      buildAmountInput(display: '\$ 1000'),
+                      buildAmountInput(display: '\$ 1, 000'),
 
                       // Divider ngăn cách giữa các input field.
                       Container(
@@ -83,7 +83,7 @@ class EditBillScreen extends StatelessWidget {
                       ),
 
                       // Hàm build Category Selection.
-                      buildCategorySelection(display: 'My Category'),
+                      buildCategorySelection(display: 'Investment'),
 
                       // Divider ngăn cách giữa các input field.
                       Container(
