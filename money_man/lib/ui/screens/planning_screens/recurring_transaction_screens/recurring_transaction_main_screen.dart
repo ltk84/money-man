@@ -5,10 +5,12 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/add_bill_sceen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/add_recurring_transaction_sceen.dart';
+import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_detail_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
-class BillsMainScreen extends StatelessWidget {
-  const BillsMainScreen({Key key}) : super(key: key);
+class RecurringTransactionMainScreen extends StatelessWidget {
+  const RecurringTransactionMainScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,7 @@ class BillsMainScreen extends StatelessWidget {
           backgroundColor: Colors.grey[900].withOpacity(0.2),
           elevation: 0.0,
           leading: Hero(
+            // hong hiu ??
             tag: 'billToDetail_backBtn',
             child: MaterialButton(
                 onPressed: () {
@@ -31,7 +34,7 @@ class BillsMainScreen extends StatelessWidget {
           ),
           title: Hero(
             tag: 'billToDetail_title',
-            child: Text('Bills',
+            child: Text('Recurring transactions',
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontSize: 17.0,
@@ -39,7 +42,6 @@ class BillsMainScreen extends StatelessWidget {
                   color: Colors.white,
                 )),
           ),
-          centerTitle: true,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(
               opacity: 1,
@@ -65,7 +67,7 @@ class BillsMainScreen extends StatelessWidget {
                   showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) {
-                        return AddBillScreen();
+                        return AddRecurringTransactionScreen();
                       });
                 },
                 child: Text('Add',
@@ -83,17 +85,17 @@ class BillsMainScreen extends StatelessWidget {
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
-            buildOverallInfo(
-                overdue: '\$ 1,000',
-                forToday: '\$ 1,000',
-                thisPeriod: '\$ 1,000'),
-            SizedBox(height: 20.0),
-            buildListBills(context),
+            // buildOverallInfo(
+            //     overdue: '\$ 1,000',
+            //     forToday: '\$ 1,000',
+            //     thisPeriod: '\$ 1,000'),
+            // SizedBox(height: 20.0),
+            buildListRecurringTransactionList(context),
           ],
         ));
   }
 
-  Widget buildListBills(context) {
+  Widget buildListRecurringTransactionList(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -113,7 +115,7 @@ class BillsMainScreen extends StatelessWidget {
                 context,
                 PageTransition(
                     childCurrent: this,
-                    child: BillDetailScreen(),
+                    child: RecurringTransactionDetailScreen(),
                     type: PageTransitionType.rightToLeft));
           },
           child: Container(
@@ -133,69 +135,35 @@ class BillsMainScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SuperIcon(
-                  iconPath: 'assets/icons/investment_3.svg',
+                  iconPath: 'assets/icons/food.svg',
                   size: 38.0,
                 ),
                 SizedBox(width: 20.0),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Investment',
+                    Text('Restaurants',
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 14.0,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         )),
-                    Text('Next bill is 02/06/2021',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white70,
-                        )),
-                    SizedBox(height: 8.0),
-                    Text('Due in 1 day',
+                    SizedBox(height: 20.0),
+                    Text('Next occurence:',
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 14.0,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         )),
-                    TextButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.white;
-                            else
-                              return Color(
-                                  0xFF4FCC5C); // Use the component's default.
-                          },
-                        ),
-                        foregroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Color(0xFF4FCC5C);
-                            else
-                              return Colors
-                                  .white; // Use the component's default.
-                          },
-                        ),
-                      ),
-                      child: Text("PAY \$ 1,000",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w700,
-                          ),
-                          textAlign: TextAlign.center),
-                    )
+                    Text('Wednesday, 02/06/2021')
                   ],
-                )
+                ),
+                SizedBox(
+                  width: 110,
+                ),
+                Text('20000')
               ],
             ),
           ),

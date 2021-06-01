@@ -2,7 +2,8 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bills_main_screen.dart';
-import 'package:money_man/ui/screens/planning_screens/budget_screen/budget_home.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
+import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_main_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 class PlanningScreen extends StatelessWidget {
@@ -200,7 +201,14 @@ class _TestState extends State<Test> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: RecurringTransactionMainScreen(),
+                          type: PageTransitionType.rightToLeft),
+                    );
+                  },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
