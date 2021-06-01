@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -430,48 +431,6 @@ class FirebaseFireStoreService {
     return listTrans;
   }
 
-  // void setup() async {
-  //   List<String> cateName = [];
-  //   List<String> idList = [];
-  //   await categories.get().then((value) {
-  //     value.docs.forEach((element) {
-  //       idList.add(element.id);
-  //       cateName.add(element.get('name'));
-  //     });
-  //   });
-
-  //   List<List<String>> result = [[]];
-  //   List<List<String>> single = [[]];
-  //   int index = 0;
-
-  //   for (var name in cateName) {
-  //     String total = '';
-  //     for (int i = 0; i < name.length; i++) {
-  //       String k = name[i].toLowerCase();
-  //       total += k;
-  //       total = total.toLowerCase();
-  //       result[index].add(total);
-  //       if (!single[index].contains(k)) single[index].add(k);
-  //     }
-  //     result.add([]);
-  //     single.add([]);
-  //     result[index].addAll(single[index]);
-  //     index++;
-  //   }
-
-  //   // print(result[0]);
-
-  //   // print(idList);
-  //   for (int i = 0; i < idList.length; i++) {
-  //     setUp2(idList[i], result[i]);
-  //   }
-  //   // setUp2('2Gx7qrHpF1LrIQP89sIU', result[1]);
-  // }
-
-  // void setUp2(String id, List<String> list) async {
-  //   await categories.doc(id).update({'searchIndex': list});
-  // }
-
   // TRANSACTION END//
 
   // CATERGORY START//
@@ -518,6 +477,292 @@ class FirebaseFireStoreService {
     return snapshot.get(FieldPath(['userName'])).toString();
   }
   // USER END //
+
+  // BUDGET START //
+
+  // add budget
+  Future addBudget(MyCategory category, double amount, DateTime beginDate,
+      DateTime endDate, Wallet wallet, bool isRepeat) async {
+    // lấy reference đến collection budgets
+    final budgetsRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('budgets')
+        .doc();
+
+    // khai báo biến spent (số tiền của các transaction thỏa yêu cầu của budget)
+    double spent = 0;
+
+    // dựa trên category để lấy các transaction thỏa yêu cầu => tính toán spent
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions')
+        .where('category.id', isEqualTo: category.id)
+        .get()
+        .then((value) =>
+            value.docs.map((e) => spent += e.get('amount')).toList());
+
+    // dựa trên các thông tin đã có để tạo instance budget
+    Budget budget = Budget(
+        id: budgetsRef.id,
+        category: category,
+        amount: amount,
+        spent: spent,
+        walletId: wallet.id,
+        isFinished: false,
+        beginDate: beginDate,
+        endDate: endDate,
+        isRepeat: isRepeat);
+
+    // thực hiện add budget
+    await budgetsRef
+        .set(budget.toMap())
+        .then((value) => print('budget added!'))
+        .catchError((error) => print(error));
+  }
+
+  // demo add
+  // Future addBudget() async {
+  //   MyCategory category = MyCategory(
+  //       id: 'A6V8wN5GRMrWAthzx0YH',
+  //       name: 'Education',
+  //       type: 'expense',
+  //       iconID: 'assets/icons/education.svg');
+
+  //   Wallet wallet = Wallet(
+  //       id: '6EYteq8rWqNJjJbJBJZZ',
+  //       name: 'vi moi',
+  //       amount: 1294495,
+  //       currencyID: 'JPY',
+  //       iconID: 'assets/icons/health.svg');
+
+  //   double amount = 20000;
+  //   DateTime now = DateTime.now();
+  //   DateTime beginDate = DateTime(now.year, now.month, 1);
+  //   DateTime endDate = DateTime(now.year, now.month, 30);
+
+  //   final budgetsRef = users
+  //       .doc(uid)
+  //       .collection('wallets')
+  //       .doc(wallet.id)
+  //       .collection('budgets')
+  //       .doc();
+
+  //   double spent = 0;
+
+  //   await users
+  //       .doc(uid)
+  //       .collection('wallets')
+  //       .doc(wallet.id)
+  //       .collection('transactions')
+  //       .where('category.id', isEqualTo: category.id)
+  //       .get()
+  //       .then((value) =>
+  //           value.docs.map((e) => spent += e.get('amount')).toList());
+
+  //   Budget budget = Budget(
+  //       id: budgetsRef.id,
+  //       category: category,
+  //       amount: amount,
+  //       spent: spent,
+  //       walletId: wallet.id,
+  //       isFinished: false,
+  //       beginDate: beginDate,
+  //       endDate: endDate,
+  //       isRepeat: false);
+
+  //   await budgetsRef
+  //       .set(budget.toMap())
+  //       .then((value) => print('budget added!'))
+  //       .catchError((error) => print(error));
+  // }
+
+  // Stream budget dùng để hiển thị list các budget đã có dựa trên wallet id
+  // tìm chỗ thích hợp để đặt 1 streambuilder<List<Budget>> để lấy dữ liệu
+  // khuyến khích đặt ở screen gốc (budget_home) để có sẵn dữ liệu rồi truyền vào các screen child sẽ dễ hơn
+  Stream<List<Budget>> budgetStream(String walletId) {
+    return users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('budgets')
+        .snapshots()
+        .map(_budgetFromSnapshot);
+  }
+
+  // convert budget from snapshot (hàm này convert từ dữ liệu firebase thành budget)
+  List<Budget> _budgetFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((e) {
+      print(e.data());
+      return Budget.fromMap(e.data());
+    }).toList();
+  }
+
+  // edit budget
+  Future updateBudget(Budget budget, Wallet wallet) async {
+    // khái báo spent vì khi user thay đổi thông tin budget thì có thể thay đổi category
+    // nên spent sẽ có thể bị tính lại từ đầu
+    double spent = 0;
+
+    // lấy các transaction dựa trên category để tính toán spent
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions')
+        .where('category.id', isEqualTo: budget.category.id)
+        .get()
+        .then((value) =>
+            value.docs.map((e) => spent += e.get('amount')).toList());
+
+    // gán spent cho budget
+    budget.spent = spent;
+
+    // thực hiện update budget
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('budgets')
+        .doc(budget.id)
+        .update(budget.toMap())
+        .then((value) => print('budget updated!'))
+        .catchError((error) => print(error));
+  }
+
+  // demo edit budget
+  // Future updateBudget() async {
+  //   MyCategory category = MyCategory(
+  //       id: '1EAiphBEEQ1Eu7rAuRn5',
+  //       name: 'Bills & Utilities',
+  //       type: 'expense',
+  //       iconID: 'assets/icons/bills.svg');
+
+  //   Wallet wallet = Wallet(
+  //       id: '6EYteq8rWqNJjJbJBJZZ',
+  //       name: 'vi moi',
+  //       amount: 1294495,
+  //       currencyID: 'JPY',
+  //       iconID: 'assets/icons/health.svg');
+
+  //   DateTime now = DateTime.now();
+  //   DateTime beginDate = DateTime(now.year, now.month, 1);
+  //   DateTime endDate = DateTime(now.year, now.month, 30);
+
+  //   Budget budget = Budget(
+  //       id: 'YSqibmd5tQXRFhTXNQRN',
+  //       category: category,
+  //       amount: 40000,
+  //       spent: 31200,
+  //       walletId: wallet.id,
+  //       isFinished: false,
+  //       beginDate: beginDate,
+  //       endDate: endDate,
+  //       isRepeat: false);
+
+  //   double spent = 0;
+
+  //   await users
+  //       .doc(uid)
+  //       .collection('wallets')
+  //       .doc(wallet.id)
+  //       .collection('transactions')
+  //       .where('category.id', isEqualTo: budget.category.id)
+  //       .get()
+  //       .then((value) =>
+  //           value.docs.map((e) => spent += e.get('amount')).toList());
+
+  //   budget.spent = spent;
+
+  //   await users
+  //       .doc(uid)
+  //       .collection('wallets')
+  //       .doc(wallet.id)
+  //       .collection('budgets')
+  //       .doc(budget.id)
+  //       .update(budget.toMap())
+  //       .then((value) => print('budget updated!'))
+  //       .catchError((error) => print(error));
+  // }
+
+  // delete budget
+  Future deleteBudget(String walletId, String budgetId) async {
+    // thực hiện delete budget thôi
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('budgets')
+        .doc(budgetId)
+        .delete()
+        .then((value) => print('budget deleted!'))
+        .catchError((error) => print(error));
+  }
+
+  // demo add budget
+  // Future addBudget() async {
+  //   MyCategory category = MyCategory(
+  //       id: 'A6V8wN5GRMrWAthzx0YH',
+  //       name: 'Education',
+  //       type: 'expense',
+  //       iconID: 'assets/icons/education.svg');
+
+  //   Wallet wallet = Wallet(
+  //       id: '6EYteq8rWqNJjJbJBJZZ',
+  //       name: 'vi moi',
+  //       amount: 1294495,
+  //       currencyID: 'JPY',
+  //       iconID: 'assets/icons/health.svg');
+
+  //   List<MyTransaction> transactionList = [];
+
+  //   final budgetsRef = users
+  //       .doc(uid)
+  //       .collection('wallets')
+  //       .doc(wallet.id)
+  //       .collection('budgets')
+  //       .doc();
+
+  //   await users
+  //       .doc(uid)
+  //       .collection('wallets')
+  //       .doc(wallet.id)
+  //       .collection('transactions')
+  //       .where('category.id', isEqualTo: category.id)
+  //       .get()
+  //       .then((value) => List<MyTransaction>.from(
+  //           value.docs.map((e) => MyTransaction.fromMap(e.data()))))
+  //       .then((value) => transactionList = value);
+
+  //   double spent = 0;
+  //   double amount = 2000000;
+  //   transactionList.map((e) => spent += e.amount).toList();
+
+  //   DateTime now = DateTime.now();
+  //   DateTime beginMonth = DateTime(now.year, now.month, 1);
+  //   DateTime endMonth = DateTime(now.year, now.month, 30);
+
+  //   Budget budget = Budget(
+  //       id: budgetsRef.id,
+  //       category: category,
+  //       amount: amount,
+  //       spent: spent,
+  //       walletId: wallet.id,
+  //       isFinished: false,
+  //       beginDate: beginMonth,
+  //       endDate: endMonth,
+  //       isRepeat: false);
+
+  //   budgetsRef
+  //       .set(budget.toMap())
+  //       .then((value) => print('budget added!'))
+  //       .catchError((error) => print(error));
+  // }
+
+  // BUDGET END //
 
   // // edit player
   // Future editPlayer(Player player) async {

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:money_formatter/money_formatter.dart';
-import 'package:money_man/core/models/categoryModel.dart';
-import 'package:money_man/core/models/superIconModel.dart';
-import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/constaints.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:provider/provider.dart';
 
 class AddBudget extends StatefulWidget {
   @override
@@ -26,6 +28,7 @@ class _AddBudgetState extends State<AddBudget> {
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Container(
       color: Color(0xff111111),
       padding: EdgeInsets.all(15),

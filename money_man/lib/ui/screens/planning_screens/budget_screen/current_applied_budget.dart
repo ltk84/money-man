@@ -1,17 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/budget_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:provider/provider.dart';
 
 class CurrentlyApplied extends StatelessWidget {
-  const CurrentlyApplied({Key key}) : super(key: key);
+  Wallet wallet;
+
+  CurrentlyApplied({
+    Key key,
+    @required this.wallet,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Container(
       padding: EdgeInsets.only(top: 30),
       color: Color(0xff1a1a1a),
       //child: MyBudgetTile(),
-      child: Column(
-        children: [MyTimeRange(), MyBudgetTile()],
-      ),
+      child: StreamBuilder<List<Budget>>(
+          stream: _firestore.budgetStream(wallet.id),
+          builder: (context, snapshot) {
+            List<Budget> budgets = snapshot.data;
+            print(budgets);
+            return ListView.builder(
+              itemCount: budgets.length,
+              itemBuilder: (context, index) => Column(
+                children: [MyTimeRange(), MyBudgetTile()],
+              ),
+            );
+          }),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:money_man/ui/screens/planning_screen/budget_screen/budget_home.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screen/budget_home.dart';
 
 class PlanningScreen extends StatelessWidget {
   @override
