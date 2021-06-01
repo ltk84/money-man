@@ -228,8 +228,9 @@ class _AddBudgetState extends State<AddBudget> {
             height: 30,
           ),
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               //TODO: Add new budget
+              // await _firestore.updateEvent();
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 15),

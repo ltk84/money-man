@@ -8,6 +8,7 @@ import './transaction_model.dart';
 import './wallet_model.dart';
 
 class RecurringTransaction {
+  String id;
   MyCategory category;
   double amount;
   Wallet wallet;
@@ -15,6 +16,7 @@ class RecurringTransaction {
   RepeatOption repeatOption;
 
   RecurringTransaction({
+    @required this.id,
     @required this.category,
     @required this.amount,
     @required this.wallet,
@@ -24,6 +26,7 @@ class RecurringTransaction {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'category': category.toMap(),
       'amount': amount,
       'wallet': wallet.toMap(),
@@ -32,14 +35,15 @@ class RecurringTransaction {
     };
   }
 
-  factory RecurringTransaction.fromMap(Map<String, dynamic> map) {
+  factory RecurringTransaction.fromMap(Map<String, dynamic> data) {
     return RecurringTransaction(
-      category: MyCategory.fromMap(map['category']),
-      amount: map['amount'],
-      wallet: Wallet.fromMap(map['wallet']),
+      id: data['id'],
+      category: MyCategory.fromMap(data['category']),
+      amount: data['amount'],
+      wallet: Wallet.fromMap(data['wallet']),
       transactionIdList: List<MyTransaction>.from(
-          map['transactionIdList']?.map((x) => MyTransaction.fromMap(x))),
-      repeatOption: RepeatOption.fromMap(map['repeatOption']),
+          data['transactionIdList']?.map((x) => MyTransaction.fromMap(x))),
+      repeatOption: RepeatOption.fromMap(data['repeatOption']),
     );
   }
 }

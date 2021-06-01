@@ -8,6 +8,7 @@ import './transaction_model.dart';
 import './wallet_model.dart';
 
 class Bill {
+  String id;
   MyCategory category;
   double amount;
   Wallet wallet;
@@ -15,6 +16,7 @@ class Bill {
   RepeatOption repeatOption;
 
   Bill({
+    @required this.id,
     @required this.category,
     @required this.amount,
     @required this.wallet,
@@ -24,6 +26,7 @@ class Bill {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'category': category.toMap(),
       'amount': amount,
       'wallet': wallet.toMap(),
@@ -32,14 +35,15 @@ class Bill {
     };
   }
 
-  factory Bill.fromMap(Map<String, dynamic> map) {
+  factory Bill.fromMap(Map<String, dynamic> data) {
     return Bill(
-      category: MyCategory.fromMap(map['category']),
-      amount: map['amount'],
-      wallet: Wallet.fromMap(map['wallet']),
+      id: data['id'],
+      category: MyCategory.fromMap(data['category']),
+      amount: data['amount'],
+      wallet: Wallet.fromMap(data['wallet']),
       transactionIdList: List<MyTransaction>.from(
-          map['transactionIdList']?.map((x) => MyTransaction.fromMap(x))),
-      repeatOption: RepeatOption.fromMap(map['repeatOption']),
+          data['transactionIdList']?.map((x) => MyTransaction.fromMap(x))),
+      repeatOption: RepeatOption.fromMap(data['repeatOption']),
     );
   }
 }

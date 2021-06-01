@@ -521,62 +521,6 @@ class FirebaseFireStoreService {
     return spent;
   }
 
-  // demo add
-  // Future addBudget() async {
-  //   MyCategory category = MyCategory(
-  //       id: 'A6V8wN5GRMrWAthzx0YH',
-  //       name: 'Education',
-  //       type: 'expense',
-  //       iconID: 'assets/icons/education.svg');
-
-  //   Wallet wallet = Wallet(
-  //       id: '6EYteq8rWqNJjJbJBJZZ',
-  //       name: 'vi moi',
-  //       amount: 1294495,
-  //       currencyID: 'JPY',
-  //       iconID: 'assets/icons/health.svg');
-
-  //   double amount = 20000;
-  //   DateTime now = DateTime.now();
-  //   DateTime beginDate = DateTime(now.year, now.month, 1);
-  //   DateTime endDate = DateTime(now.year, now.month, 30);
-
-  //   final budgetsRef = users
-  //       .doc(uid)
-  //       .collection('wallets')
-  //       .doc(wallet.id)
-  //       .collection('budgets')
-  //       .doc();
-
-  //   double spent = 0;
-
-  //   await users
-  //       .doc(uid)
-  //       .collection('wallets')
-  //       .doc(wallet.id)
-  //       .collection('transactions')
-  //       .where('category.id', isEqualTo: category.id)
-  //       .get()
-  //       .then((value) =>
-  //           value.docs.map((e) => spent += e.get('amount')).toList());
-
-  //   Budget budget = Budget(
-  //       id: budgetsRef.id,
-  //       category: category,
-  //       amount: amount,
-  //       spent: spent,
-  //       walletId: wallet.id,
-  //       isFinished: false,
-  //       beginDate: beginDate,
-  //       endDate: endDate,
-  //       isRepeat: false);
-
-  //   await budgetsRef
-  //       .set(budget.toMap())
-  //       .then((value) => print('budget added!'))
-  //       .catchError((error) => print(error));
-  // }
-
   // Stream budget dùng để hiển thị list các budget đã có dựa trên wallet id
   // tìm chỗ thích hợp để đặt 1 streambuilder<List<Budget>> để lấy dữ liệu
   // khuyến khích đặt ở screen gốc (budget_home) để có sẵn dữ liệu rồi truyền vào các screen child sẽ dễ hơn
@@ -617,61 +561,6 @@ class FirebaseFireStoreService {
         .catchError((error) => print(error));
   }
 
-  // demo edit budget
-  // Future updateBudget() async {
-  //   MyCategory category = MyCategory(
-  //       id: '1EAiphBEEQ1Eu7rAuRn5',
-  //       name: 'Bills & Utilities',
-  //       type: 'expense',
-  //       iconID: 'assets/icons/bills.svg');
-
-  //   Wallet wallet = Wallet(
-  //       id: '6EYteq8rWqNJjJbJBJZZ',
-  //       name: 'vi moi',
-  //       amount: 1294495,
-  //       currencyID: 'JPY',
-  //       iconID: 'assets/icons/health.svg');
-
-  //   DateTime now = DateTime.now();
-  //   DateTime beginDate = DateTime(now.year, now.month, 1);
-  //   DateTime endDate = DateTime(now.year, now.month, 30);
-
-  //   Budget budget = Budget(
-  //       id: 'YSqibmd5tQXRFhTXNQRN',
-  //       category: category,
-  //       amount: 40000,
-  //       spent: 31200,
-  //       walletId: wallet.id,
-  //       isFinished: false,
-  //       beginDate: beginDate,
-  //       endDate: endDate,
-  //       isRepeat: false);
-
-  //   double spent = 0;
-
-  //   await users
-  //       .doc(uid)
-  //       .collection('wallets')
-  //       .doc(wallet.id)
-  //       .collection('transactions')
-  //       .where('category.id', isEqualTo: budget.category.id)
-  //       .get()
-  //       .then((value) =>
-  //           value.docs.map((e) => spent += e.get('amount')).toList());
-
-  //   budget.spent = spent;
-
-  //   await users
-  //       .doc(uid)
-  //       .collection('wallets')
-  //       .doc(wallet.id)
-  //       .collection('budgets')
-  //       .doc(budget.id)
-  //       .update(budget.toMap())
-  //       .then((value) => print('budget updated!'))
-  //       .catchError((error) => print(error));
-  // }
-
   // delete budget
   Future deleteBudget(String walletId, String budgetId) async {
     // thực hiện delete budget thôi
@@ -686,66 +575,6 @@ class FirebaseFireStoreService {
         .catchError((error) => print(error));
   }
 
-  // demo add budget
-  // Future addBudget() async {
-  //   MyCategory category = MyCategory(
-  //       id: 'A6V8wN5GRMrWAthzx0YH',
-  //       name: 'Education',
-  //       type: 'expense',
-  //       iconID: 'assets/icons/education.svg');
-
-  //   Wallet wallet = Wallet(
-  //       id: '6EYteq8rWqNJjJbJBJZZ',
-  //       name: 'vi moi',
-  //       amount: 1294495,
-  //       currencyID: 'JPY',
-  //       iconID: 'assets/icons/health.svg');
-
-  //   List<MyTransaction> transactionList = [];
-
-  //   final budgetsRef = users
-  //       .doc(uid)
-  //       .collection('wallets')
-  //       .doc(wallet.id)
-  //       .collection('budgets')
-  //       .doc();
-
-  //   await users
-  //       .doc(uid)
-  //       .collection('wallets')
-  //       .doc(wallet.id)
-  //       .collection('transactions')
-  //       .where('category.id', isEqualTo: category.id)
-  //       .get()
-  //       .then((value) => List<MyTransaction>.from(
-  //           value.docs.map((e) => MyTransaction.fromMap(e.data()))))
-  //       .then((value) => transactionList = value);
-
-  //   double spent = 0;
-  //   double amount = 2000000;
-  //   transactionList.map((e) => spent += e.amount).toList();
-
-  //   DateTime now = DateTime.now();
-  //   DateTime beginMonth = DateTime(now.year, now.month, 1);
-  //   DateTime endMonth = DateTime(now.year, now.month, 30);
-
-  //   Budget budget = Budget(
-  //       id: budgetsRef.id,
-  //       category: category,
-  //       amount: amount,
-  //       spent: spent,
-  //       walletId: wallet.id,
-  //       isFinished: false,
-  //       beginDate: beginMonth,
-  //       endDate: endMonth,
-  //       isRepeat: false);
-
-  //   budgetsRef
-  //       .set(budget.toMap())
-  //       .then((value) => print('budget added!'))
-  //       .catchError((error) => print(error));
-  // }
-
   // BUDGET END //
 
   // BILL START //
@@ -757,11 +586,79 @@ class FirebaseFireStoreService {
   // EVENT START //
 
   // add event
-  Future addEvent(Event event, Wallet wallet) async {}
+  Future addEvent(Event event, Wallet wallet) async {
+    final eventsRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('events')
+        .doc();
+
+    event.id = eventsRef.id;
+
+    await eventsRef
+        .set(event.toMap())
+        .then((value) => print('event added!'))
+        .catchError((error) => print(error));
+  }
 
   // edit event
+  Future updateEvent(Event event, Wallet wallet) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('events')
+        .doc(event.id)
+        .update(event.toMap())
+        .then((value) => print('event updated!'))
+        .catchError((error) => print(error));
+  }
+
+  // update event amount and transaction id list
+  Future updateEventAmountAndTransList(
+      Event event, Wallet wallet, MyTransaction transaction) async {
+    if (transaction.category.type == 'income')
+      event.spent += transaction.amount;
+    else if (transaction.category.type == 'expense')
+      event.spent -= transaction.amount;
+
+    event.transactionIdList.add(transaction.id);
+
+    // await updateEvent(event, wallet);
+  }
 
   // delete event
+  Future deleteEvent(String eventId, String walletId) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('events')
+        .doc(eventId)
+        .delete();
+  }
+
+  // Stream list event
+  Stream<List<Event>> eventStream(String walletId) {
+    return users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('events')
+        .snapshots()
+        .map(_eventFromSnapshot);
+  }
+
+  // convert budget from snapshot (hàm này convert từ dữ liệu firebase thành budget)
+  List<Event> _eventFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((e) {
+      print(e.data());
+      return Event.fromMap(e.data());
+    }).toList();
+  }
+
+  // convert from snapshot to list event
 
   // EVENT END //
 
