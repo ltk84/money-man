@@ -171,7 +171,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     Navigator.push(
                       context,
                       PageTransition(
-                          child: BillsMainScreen(),
+                          child: BillsMainScreen(currentWallet: _wallet,),
                           type: PageTransitionType.rightToLeft),
                     );
                   },

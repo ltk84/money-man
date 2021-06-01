@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/add_bill_sceen.dart';
@@ -12,8 +13,43 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.d
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-class BillsMainScreen extends StatelessWidget {
-  const BillsMainScreen({Key key}) : super(key: key);
+class BillsMainScreen extends StatefulWidget {
+  Wallet currentWallet;
+
+  BillsMainScreen({Key key, this.currentWallet}) : super(key: key);
+
+  @override
+  _BillsMainScreenState createState() => _BillsMainScreenState();
+}
+
+class _BillsMainScreenState extends State<BillsMainScreen> {
+  Wallet _wallet;
+
+  @override
+  void initState() {
+    super.initState();
+    _wallet = widget.currentWallet == null
+        ? Wallet(
+        id: 'id',
+        name: 'defaultName',
+        amount: 0,
+        currencyID: 'USD',
+        iconID: 'assets/icons/wallet_2.svg')
+        : widget.currentWallet;
+  }
+
+  @override
+  void didUpdateWidget(covariant BillsMainScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    _wallet = widget.currentWallet ??
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 0,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,23 +126,22 @@ class BillsMainScreen extends StatelessWidget {
                 ),
               ),
             ),
-            // GestureDetector(
-            //   onTap: () async {
-            //     buildShowDialog(context, _wallet.id);
-            //   },
-            //   child: Container(
-            //     padding: EdgeInsets.only(left: 20.0),
-            //     child: Row(
-            //       children: [
-            //         SuperIcon(
-            //           iconPath: _wallet.iconID,
-            //           size: 25.0,
-            //         ),
-            //         Icon(Icons.arrow_drop_down, color: Colors.grey)
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            GestureDetector(
+              onTap: () async {
+                buildShowDialog(context, _wallet.id);
+              },
+              child: Container(
+                child: Row(
+                  children: [
+                    SuperIcon(
+                      iconPath: _wallet.iconID,
+                      size: 25.0,
+                    ),
+                    Icon(Icons.arrow_drop_down, color: Colors.grey)
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
         body:
@@ -145,7 +180,7 @@ class BillsMainScreen extends StatelessWidget {
             Navigator.push(
                 context,
                 PageTransition(
-                    childCurrent: this,
+                    childCurrent: this.widget,
                     child: BillDetailScreen(),
                     type: PageTransitionType.rightToLeft)
             );
