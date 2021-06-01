@@ -1,12 +1,43 @@
 import 'dart:ui';
 
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 
-class AddBillScreen extends StatelessWidget {
-  const AddBillScreen({Key key}) : super(key: key);
+class AddBillScreen extends StatefulWidget {
+  Wallet currentWallet;
+
+  AddBillScreen({Key key, this.currentWallet}) : super(key: key);
+
+  @override
+  _AddBillScreenState createState() => _AddBillScreenState();
+}
+
+class _AddBillScreenState extends State<AddBillScreen> {
+  Wallet selectedWallet;
+
+  String currencySymbol;
+  double amount;
+  MyCategory category;
+  String note;
+  RepeatOption repeatOption;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedWallet = widget.currentWallet;
+    currencySymbol = CurrencyService().findByCode(selectedWallet.currencyID).symbol;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +59,7 @@ class AddBillScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () async {
-                // showCupertinoModalBottomSheet(
-                //     context: context,
-                //     builder: (context) {
-                //
-                //     }
-                // );
+
               },
               child: Text('Save',
                   style: TextStyle(
@@ -64,7 +90,20 @@ class AddBillScreen extends StatelessWidget {
                         ))),
                 child: Column(children: [
                   // Hàm build Amount Input.
-                  buildAmountInput(),
+                  GestureDetector(
+                      onTap: () async {
+                        final resultAmount = await Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                        if (resultAmount != null)
+                          setState(() {
+                            print(resultAmount);
+                            this.amount = double.parse(resultAmount);
+                          });
+                      },
+                      child: buildAmountInput(
+                          display: this.amount == null ? null : this.amount.toString()
+                      )
+                  ),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -76,7 +115,24 @@ class AddBillScreen extends StatelessWidget {
                   ),
 
                   // Hàm build Category Selection.
-                  buildCategorySelection(),
+                  GestureDetector(
+                      onTap: () async {
+                        final selectCate = await showCupertinoModalBottomSheet(
+                            isDismissible: true,
+                            backgroundColor: Colors.grey[900],
+                            context: context,
+                            builder: (context) => CategoriesTransactionScreen());
+                        if (selectCate != null) {
+                          setState(() {
+                            this.category = selectCate;
+                          });
+                        }
+                      },
+                      child: buildCategorySelection(
+                          display: this.category == null ? null : this.category.name,
+                          iconPath: this.category == null ? null : this.category.iconID,
+                      )
+                  ),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -89,7 +145,25 @@ class AddBillScreen extends StatelessWidget {
                   ),
 
                   // Hàm build Note Input.
-                  buildNoteInput(),
+                  GestureDetector(
+                      onTap: () async {
+                        final noteContent = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => NoteTransactionScreen(
+                                  content: note ?? '',
+                                )));
+                        print(noteContent);
+                        if (noteContent != null) {
+                          setState(() {
+                            note = noteContent;
+                          });
+                        }
+                      },
+                      child: buildNoteInput(
+                        display: this.note == null ? null : this.note,
+                      )
+                  ),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -102,7 +176,26 @@ class AddBillScreen extends StatelessWidget {
                   ),
 
                   // Hàm build Wallet Selection.
-                  buildWalletSelection(),
+                  GestureDetector(
+                    onTap: () async {
+                      var res = await showCupertinoModalBottomSheet(
+                          isDismissible: true,
+                          backgroundColor: Colors.grey[900],
+                          context: context,
+                          builder: (context) => SelectWalletAccountScreen(wallet: selectedWallet));
+                      if (res != null)
+                        setState(() {
+                          selectedWallet = res;
+                          currencySymbol = CurrencyService()
+                              .findByCode(selectedWallet.currencyID)
+                              .symbol;
+                        });
+                    },
+                    child: buildWalletSelection(
+                      display: this.selectedWallet == null ? null : this.selectedWallet.name,
+                      iconPath: this.selectedWallet == null ? null : this.selectedWallet.iconID,
+                    ),
+                  ),
                 ])),
             Container(
                 margin: EdgeInsets.only(top: 30.0),
@@ -117,7 +210,25 @@ class AddBillScreen extends StatelessWidget {
                           color: Colors.white12,
                           width: 0.5,
                         ))),
-                child: buildRepeatOptions()),
+                child: GestureDetector(
+                    onTap: () async {
+                      var res = await showCupertinoModalBottomSheet(
+                          isDismissible: true,
+                          backgroundColor: Colors.grey[900],
+                          context: context,
+                          builder: (context) => SelectWalletAccountScreen(wallet: selectedWallet)
+                      );
+                      if (res != null)
+                        setState(() {
+                          selectedWallet = res;
+                          currencySymbol = CurrencyService()
+                              .findByCode(selectedWallet.currencyID)
+                              .symbol;
+                        });
+                    },
+                    child: buildRepeatOptions()
+                )
+            ),
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Text(
@@ -135,7 +246,8 @@ class AddBillScreen extends StatelessWidget {
 
   Widget buildAmountInput({String display}) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      color: Colors.transparent,
+      padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -179,7 +291,8 @@ class AddBillScreen extends StatelessWidget {
 
   Widget buildCategorySelection({String iconPath, String display}) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      color: Colors.transparent,
+      padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -212,7 +325,8 @@ class AddBillScreen extends StatelessWidget {
 
   Widget buildNoteInput({String display}) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      color: Colors.transparent,
+      padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -242,7 +356,8 @@ class AddBillScreen extends StatelessWidget {
 
   Widget buildWalletSelection({String iconPath, String display}) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      color: Colors.transparent,
+      padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -275,7 +390,8 @@ class AddBillScreen extends StatelessWidget {
 
   Widget buildRepeatOptions() {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      color: Colors.transparent,
+      padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

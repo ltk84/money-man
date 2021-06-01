@@ -111,7 +111,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                   showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) {
-                        return AddBillScreen();
+                        return AddBillScreen(currentWallet: _wallet);
                       }
                   );
                 },
