@@ -4,10 +4,10 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
-import 'package:money_man/core/models/categoryModel.dart';
-import 'package:money_man/core/models/superIconModel.dart';
-import 'package:money_man/core/models/transactionModel.dart';
-import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/transaction_model.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
@@ -428,7 +428,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   final noteContent = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => NoteTransactionScreen()));
+                          builder: (_) => NoteTransactionScreen(
+                                content: note ?? '',
+                              )));
                   print(noteContent);
                   if (noteContent != null) {
                     setState(() {

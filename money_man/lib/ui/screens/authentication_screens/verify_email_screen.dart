@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:money_man/core/models/superIconModel.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/screens/account_screens/account_edit_information_screen.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
@@ -64,8 +64,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                               color: Colors.white,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w300,
-                              fontSize: 16
-                          ),
+                              fontSize: 16),
                         ),
                         Text(
                           'Money Man',
@@ -81,8 +80,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                               color: Colors.white,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w300,
-                              fontSize: 16
-                          ),
+                              fontSize: 16),
                         ),
                       ],
                     ),
@@ -104,8 +102,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
             ),
             Expanded(
               child: SuperIcon(
-                  iconPath: "assets/images/email.svg",
-                  size: 120.0,
+                iconPath: "assets/images/email.svg",
+                size: 120.0,
               ),
             ),
             Expanded(
@@ -122,12 +120,11 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         color: Color(0xff2FB49C),
                         child: Text('Tap to verify email',
                             style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16.0,
-                                color: white,
-                            )
-                        ),
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16.0,
+                              color: white,
+                            )),
                         controller: _btnController,
                         onPressed: () async {
                           if (user.email.contains('gmail') == false) {
@@ -135,7 +132,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                           } else {
                             final res = await _handleLinkWithGoogle(user.email);
                             if (res == null) {
-                              await _showAlertDialog('There is something wrong!');
+                              await _showAlertDialog(
+                                  'There is something wrong!');
                               await user.delete();
                             }
                           }
@@ -161,8 +159,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                               fontWeight: FontWeight.w700,
                               fontSize: 16.0,
                               color: Color(0xff2FB49C),
-                            )
-                        ),
+                            )),
                         controller: _btnController2,
                         onPressed: () async {
                           await auth.signOut();
@@ -184,13 +181,13 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
-      Navigator.pushReplacement(context,
+      Navigator.pushReplacement(
+          context,
           PageTransition(
             child: AccountInformationScreen(),
             type: PageTransitionType.scale,
             curve: Curves.elasticInOut,
-          )
-      );
+          ));
     }
   }
 

@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 
 class NoteTransactionScreen extends StatefulWidget {
+  String content;
+  NoteTransactionScreen({
+    Key key,
+    @required this.content,
+  }) : super(key: key);
+
   @override
   _NoteTransactionScreenState createState() => _NoteTransactionScreenState();
 }
 
 class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
-  String noteContent = '';
+  // String noteContent = '';
   final _formKey = GlobalKey<FormState>();
   final myController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    myController.text = widget.content;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +28,7 @@ class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           myController.clear();
-          noteContent = null;
+          // noteContent = '';
         },
         child: Icon(Icons.delete_forever_rounded),
         elevation: 0,
@@ -29,7 +41,7 @@ class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
           TextButton(
               onPressed: () {
                 _formKey.currentState.save();
-                Navigator.pop(context, noteContent);
+                Navigator.pop(context, myController.text);
               },
               child: Text(
                 'Save',
@@ -46,7 +58,7 @@ class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
               controller: myController,
               keyboardType: TextInputType.text,
               onSaved: (String val) {
-                noteContent = val;
+                myController.text = val;
               },
               cursorColor: Color(0xFF2FB49C),
               style: TextStyle(

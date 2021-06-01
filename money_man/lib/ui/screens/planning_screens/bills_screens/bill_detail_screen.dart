@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/superIconModel.dart';
-import 'package:money_man/ui/screens/planning_screen/bills_screens/edit_bill_screen.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
 
 class BillDetailScreen extends StatelessWidget {
   const BillDetailScreen({Key key}) : super(key: key);
@@ -25,20 +25,17 @@ class BillDetailScreen extends StatelessWidget {
                 child: Icon(
                   Icons.arrow_back_outlined,
                   color: Colors.white,
-                )
-            ),
+                )),
           ),
           title: Hero(
             tag: 'billToDetail_title',
-            child: Text(
-                'Bills',
+            child: Text('Bills',
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontSize: 17.0,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
-                )
-            ),
+                )),
           ),
           centerTitle: true,
           flexibleSpace: ClipRect(
@@ -47,16 +44,14 @@ class BillDetailScreen extends StatelessWidget {
               duration: Duration(milliseconds: 0),
               child: BackdropFilter(
                 filter: ImageFilter.blur(
-                    sigmaX: 500,
-                    sigmaY: 500,
-                    tileMode: TileMode.values[0]),
+                    sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
                 child: AnimatedContainer(
                     duration: Duration(milliseconds: 1),
                     //child: Container(
                     //color: Colors.transparent,
                     color: Colors.transparent
-                  //),
-                ),
+                    //),
+                    ),
               ),
             ),
           ),
@@ -69,26 +64,22 @@ class BillDetailScreen extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return EditBillScreen();
-                      }
-                  );
+                      });
                 },
-                child: Text(
-                    'Edit',
+                child: Text('Edit',
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
                       color: Colors.white,
-                    )
-                ),
+                    )),
               ),
             ),
           ],
         ),
-        body:
-        ListView(
-          physics: BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
+        body: ListView(
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
                 margin: EdgeInsets.only(top: 30.0),
@@ -103,9 +94,7 @@ class BillDetailScreen extends StatelessWidget {
                         bottom: BorderSide(
                           color: Colors.white12,
                           width: 0.5,
-                        )
-                    )
-                ),
+                        ))),
                 child: Column(
                   children: [
                     buildInfoCategory(
@@ -143,8 +132,7 @@ class BillDetailScreen extends StatelessWidget {
                       display: 'My Wallet',
                     ),
                   ],
-                )
-            ),
+                )),
             Container(
               margin: EdgeInsets.only(top: 30.0),
               decoration: BoxDecoration(
@@ -157,19 +145,17 @@ class BillDetailScreen extends StatelessWidget {
                       bottom: BorderSide(
                         color: Colors.white12,
                         width: 0.5,
-                      )
-                  )
-              ),
+                      ))),
               child: TextButton(
                 onPressed: () {},
                 style: ButtonStyle(
-                  foregroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xFF4FCC5C).withOpacity(0.4);
                       else
-                        return Color(0xFF4FCC5C); // Use the component's default.
+                        return Color(
+                            0xFF4FCC5C); // Use the component's default.
                     },
                   ),
                 ),
@@ -182,8 +168,7 @@ class BillDetailScreen extends StatelessWidget {
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w700,
                         ),
-                        textAlign: TextAlign.center
-                    ),
+                        textAlign: TextAlign.center),
                     SizedBox(width: 8.0),
                     Icon(Icons.check, size: 20.0)
                   ],
@@ -195,21 +180,19 @@ class BillDetailScreen extends StatelessWidget {
                   color: Color(0xFF1c1c1c),
                   border: Border(
                       bottom: BorderSide(
-                        color: Colors.white12,
-                        width: 0.5,
-                      )
-                  )
-              ),
+                    color: Colors.white12,
+                    width: 0.5,
+                  ))),
               child: TextButton(
                 onPressed: () {},
                 style: ButtonStyle(
-                  foregroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xFF4FCC5C).withOpacity(0.4);
                       else
-                        return Color(0xFF4FCC5C); // Use the component's default.
+                        return Color(
+                            0xFF4FCC5C); // Use the component's default.
                     },
                   ),
                 ),
@@ -222,8 +205,7 @@ class BillDetailScreen extends StatelessWidget {
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w700,
                         ),
-                        textAlign: TextAlign.center
-                    ),
+                        textAlign: TextAlign.center),
                     SizedBox(width: 8.0),
                     Icon(Icons.view_list, size: 20.0)
                   ],
@@ -236,17 +218,14 @@ class BillDetailScreen extends StatelessWidget {
                   color: Color(0xFF1c1c1c),
                   border: Border(
                       bottom: BorderSide(
-                        color: Colors.white12,
-                        width: 0.5,
-                      )
-                  )
-              ),
+                    color: Colors.white12,
+                    width: 0.5,
+                  ))),
               child: TextButton(
                 onPressed: () {},
                 style: ButtonStyle(
-                  foregroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Colors.redAccent.withOpacity(0.4);
                       else
@@ -260,13 +239,11 @@ class BillDetailScreen extends StatelessWidget {
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w700,
                     ),
-                    textAlign: TextAlign.center
-                ),
+                    textAlign: TextAlign.center),
               ),
             )
           ],
-        )
-    );
+        ));
   }
 
   Widget buildInfoAmount({String display}) {
@@ -277,33 +254,26 @@ class BillDetailScreen extends StatelessWidget {
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child: Icon(
-                  Icons.attach_money,
-                  color: Colors.white70,
-                  size: 40.0)
-          ),
+              child:
+                  Icon(Icons.attach_money, color: Colors.white70, size: 40.0)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                  'Amount',
+              Text('Amount',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 12.0,
                     fontWeight: FontWeight.w500,
                     color: Colors.white60,
-                  )
-              ),
+                  )),
               SizedBox(height: 5.0),
-              Text(
-                  display ?? 'Enter amount',
+              Text(display ?? 'Enter amount',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
                     color: display == null ? Colors.white24 : Colors.white,
-                  )
-              ),
+                  )),
             ],
           ),
         ],
@@ -322,17 +292,14 @@ class BillDetailScreen extends StatelessWidget {
               child: SuperIcon(
                 iconPath: iconPath ?? "assets/icons/other.svg",
                 size: 34.0,
-              )
-          ),
-          Text(
-              display ?? 'Select category',
+              )),
+          Text(display ?? 'Select category',
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontSize: 20.0,
                 fontWeight: FontWeight.w500,
                 color: display == null ? Colors.white24 : Colors.white,
-              )
-          ),
+              )),
         ],
       ),
     );
@@ -349,17 +316,14 @@ class BillDetailScreen extends StatelessWidget {
               child: SuperIcon(
                 iconPath: iconPath ?? "assets/icons/wallet_2.svg",
                 size: 24.0,
-              )
-          ),
-          Text(
-              display ?? 'Select wallet',
+              )),
+          Text(display ?? 'Select wallet',
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
                 color: display == null ? Colors.white24 : Colors.white,
-              )
-          ),
+              )),
         ],
       ),
     );
@@ -373,31 +337,25 @@ class BillDetailScreen extends StatelessWidget {
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 23.0),
-              child: Icon(
-                  Icons.calendar_today,
-                  color: Colors.white70,
-                  size: 24.0)
-          ),
+              child: Icon(Icons.calendar_today,
+                  color: Colors.white70, size: 24.0)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                  'Next bill is 02/06/2021',
+              Text('Next bill is 02/06/2021',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 14.0,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
-                  )
-              ),
+                  )),
               Text('Due in 1 day',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 12.0,
                     fontWeight: FontWeight.w400,
                     color: Colors.white70,
-                  )
-              ),
+                  )),
             ],
           )
         ],

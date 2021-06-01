@@ -1,14 +1,14 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:money_man/core/models/transactionModel.dart';
-import 'dart:math';
+import 'package:money_man/core/models/transaction_model.dart';
 
 class BarChartScreen extends StatefulWidget {
   final List<MyTransaction> currentList;
   final DateTime beginDate;
   final DateTime endDate;
-  BarChartScreen({Key key, this.currentList, this.beginDate, this.endDate}) : super(key: key);
+  BarChartScreen({Key key, this.currentList, this.beginDate, this.endDate})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() => BarChartScreenState();
 }
@@ -30,43 +30,54 @@ class BarChartScreenState extends State<BarChartScreen> {
 
   int touchedGroupIndex;
 
-  void generateData (DateTime beginDate, DateTime endDate, List<String> timeRangeList, List<MyTransaction> transactionList, List<BarChartGroupData> rawBarGroups){
+  void generateData(
+      DateTime beginDate,
+      DateTime endDate,
+      List<String> timeRangeList,
+      List<MyTransaction> transactionList,
+      List<BarChartGroupData> rawBarGroups) {
     rawBarGroups.clear();
     timeRangeList.clear();
     DateTimeRange value = DateTimeRange(start: beginDate, end: endDate);
-    if (value.duration >= Duration(days: 6))
-    {
+    if (value.duration >= Duration(days: 6)) {
       List<dynamic> calculationList = [];
-      var x = (value.duration.inDays/6).round();
+      var x = (value.duration.inDays / 6).round();
       var firstDate = beginDate.subtract(Duration(days: 1));
       for (int i = 0; i < 6; i++) {
         firstDate = firstDate.add(Duration(days: 1));
         var secondDate = (i != 5) ? firstDate.add(Duration(days: x)) : endDate;
 
-        var calculation = calculateByTimeRange(firstDate, secondDate, transactionList);
+        var calculation =
+            calculateByTimeRange(firstDate, secondDate, transactionList);
         calculationList.add(calculation);
-        double temp = calculation.first > calculation.last ? calculation.first : calculation.last;
-        if (temp > _maximumAmount)
-          _maximumAmount = temp;
-        timeRangeList.add(firstDate.day.toString() + "-" + secondDate.day.toString());
+        double temp = calculation.first > calculation.last
+            ? calculation.first
+            : calculation.last;
+        if (temp > _maximumAmount) _maximumAmount = temp;
+        timeRangeList
+            .add(firstDate.day.toString() + "-" + secondDate.day.toString());
         firstDate = firstDate.add(Duration(days: x));
       }
-      if (!calculationList.isEmpty)
-      {
-        for (int i = 0; i < calculationList.length; i++){
-          var barGroup = makeGroupData(i, (calculationList[i].first*19)/_maximumAmount.round(), (calculationList[i].last*19)/_maximumAmount.round());
+      if (!calculationList.isEmpty) {
+        for (int i = 0; i < calculationList.length; i++) {
+          var barGroup = makeGroupData(
+              i,
+              (calculationList[i].first * 19) / _maximumAmount.round(),
+              (calculationList[i].last * 19) / _maximumAmount.round());
           rawBarGroups.add(barGroup);
         }
       }
     }
   }
 
-  List<double> calculateByTimeRange(DateTime beginDate, DateTime endDate, List<MyTransaction> transactionList) {
+  List<double> calculateByTimeRange(DateTime beginDate, DateTime endDate,
+      List<MyTransaction> transactionList) {
     double income = 0;
     double expense = 0;
 
     transactionList.forEach((element) {
-      if (element.date.compareTo(beginDate) >= 0 && element.date.compareTo(endDate) <= 0) {
+      if (element.date.compareTo(beginDate) >= 0 &&
+          element.date.compareTo(endDate) <= 0) {
         if (element.category.type == 'expense')
           expense += element.amount;
         else
@@ -86,9 +97,11 @@ class BarChartScreenState extends State<BarChartScreen> {
     // _maximumAmount = (_transactionList != null && _transactionList.isNotEmpty)
     //     ? _transactionList.map<double>((e) => e.amount).reduce(max)
     //     : 10000;
-    generateData(_beginDate, _endDate, timeRangeList, _transactionList, rawBarGroups);
+    generateData(
+        _beginDate, _endDate, timeRangeList, _transactionList, rawBarGroups);
     showingBarGroups = rawBarGroups;
   }
+
   @override
   void didUpdateWidget(covariant BarChartScreen oldWidget) {
     // TODO: implement didUpdateWidget
@@ -102,7 +115,8 @@ class BarChartScreenState extends State<BarChartScreen> {
     // _maximumAmount = (_transactionList != null && _transactionList.isNotEmpty)
     //     ? _transactionList.map<double>((e) => e.amount).reduce(max)
     //     : 10000;
-    generateData(_beginDate, _endDate, timeRangeList, _transactionList, rawBarGroups);
+    generateData(
+        _beginDate, _endDate, timeRangeList, _transactionList, rawBarGroups);
     showingBarGroups = rawBarGroups;
   }
 
@@ -142,7 +156,8 @@ class BarChartScreenState extends State<BarChartScreen> {
                               return;
                             }
 
-                            touchedGroupIndex = response.spot.touchedBarGroupIndex;
+                            touchedGroupIndex =
+                                response.spot.touchedBarGroupIndex;
 
                             setState(() {
                               if (response.touchInput is PointerExitEvent ||
@@ -154,18 +169,24 @@ class BarChartScreenState extends State<BarChartScreen> {
                                 if (touchedGroupIndex != -1) {
                                   double sum = 0;
                                   for (BarChartRodData rod
-                                  in showingBarGroups[touchedGroupIndex].barRods) {
+                                      in showingBarGroups[touchedGroupIndex]
+                                          .barRods) {
                                     sum += rod.y;
                                   }
-                                  final avg =
-                                      sum / showingBarGroups[touchedGroupIndex].barRods.length;
+                                  final avg = sum /
+                                      showingBarGroups[touchedGroupIndex]
+                                          .barRods
+                                          .length;
 
                                   showingBarGroups[touchedGroupIndex] =
-                                      showingBarGroups[touchedGroupIndex].copyWith(
-                                        barRods: showingBarGroups[touchedGroupIndex].barRods.map((rod) {
-                                          return rod.copyWith(y: avg);
-                                        }).toList(),
-                                      );
+                                      showingBarGroups[touchedGroupIndex]
+                                          .copyWith(
+                                    barRods: showingBarGroups[touchedGroupIndex]
+                                        .barRods
+                                        .map((rod) {
+                                      return rod.copyWith(y: avg);
+                                    }).toList(),
+                                  );
                                 }
                               }
                             });
@@ -175,9 +196,9 @@ class BarChartScreenState extends State<BarChartScreen> {
                         bottomTitles: SideTitles(
                           showTitles: true,
                           getTextStyles: (value) => const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 13,
                             fontFamily: 'Montserrat',
                           ),
                           margin: 5,
@@ -199,7 +220,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                             if (value == 0) {
                               return '0';
                             } else if (value == 10) {
-                              return (_maximumAmount/2).round().toString();
+                              return (_maximumAmount / 2).round().toString();
                             } else if (value == 19) {
                               return _maximumAmount.round().toString();
                             } else {

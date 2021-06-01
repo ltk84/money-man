@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/superIconModel.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 
-class AddBillScreen extends StatelessWidget {
-  const AddBillScreen({Key key}) : super(key: key);
+class EditBillScreen extends StatelessWidget {
+  const EditBillScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +17,13 @@ class AddBillScreen extends StatelessWidget {
           backgroundColor: Color(0xFF1c1c1c),
           elevation: 0.0,
           leading: CloseButton(),
-          title: Text(
-              'Add Bill',
+          title: Text('Edit Bill',
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
-              )
-          ),
+              )),
           centerTitle: true,
           actions: [
             TextButton(
@@ -37,41 +35,36 @@ class AddBillScreen extends StatelessWidget {
                 //     }
                 // );
               },
-              child: Text(
-                  'Save',
+              child: Text('Save',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF4FCC5C),
-                  )
-              ),
+                  )),
             ),
           ],
         ),
         body: ListView(
-          physics: BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
-              margin: EdgeInsets.only(top: 30.0),
-              decoration: BoxDecoration(
-                  color: Colors.grey[900],
-                  border: Border(
-                      top: BorderSide(
-                        color: Colors.white12,
-                        width: 0.5,
-                      ),
-                      bottom: BorderSide(
-                        color: Colors.white12,
-                        width: 0.5,
-                      )
-                  )
-              ),
-              child: Column(
-                children: [
+                margin: EdgeInsets.only(top: 30.0),
+                decoration: BoxDecoration(
+                    color: Colors.grey[900],
+                    border: Border(
+                        top: BorderSide(
+                          color: Colors.white12,
+                          width: 0.5,
+                        ),
+                        bottom: BorderSide(
+                          color: Colors.white12,
+                          width: 0.5,
+                        ))),
+                child: Column(children: [
                   // Hàm build Amount Input.
-                  buildAmountInput(),
+                  buildAmountInput(display: '\$ 1, 000'),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -83,7 +76,7 @@ class AddBillScreen extends StatelessWidget {
                   ),
 
                   // Hàm build Category Selection.
-                  buildCategorySelection(),
+                  buildCategorySelection(display: 'Investment'),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -109,10 +102,8 @@ class AddBillScreen extends StatelessWidget {
                   ),
 
                   // Hàm build Wallet Selection.
-                  buildWalletSelection(),
-                ]
-              )
-            ),
+                  buildWalletSelection(display: 'My Wallet'),
+                ])),
             Container(
                 margin: EdgeInsets.only(top: 30.0),
                 decoration: BoxDecoration(
@@ -125,26 +116,21 @@ class AddBillScreen extends StatelessWidget {
                         bottom: BorderSide(
                           color: Colors.white12,
                           width: 0.5,
-                        )
-                    )
-                ),
-                child: buildRepeatOptions()
-            ),
+                        ))),
+                child: buildRepeatOptions()),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-              child: Text(
-                'Repeat everyday from 01/06/2021',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 13.0,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white60,
-                ),
-              )
-            )
+                margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                child: Text(
+                  'Repeat everyday from 01/06/2021',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white60,
+                  ),
+                ))
           ],
-        )
-    );
+        ));
   }
 
   Widget buildAmountInput({String display}) {
@@ -158,33 +144,26 @@ class AddBillScreen extends StatelessWidget {
             children: [
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Icon(
-                      Icons.attach_money,
-                      color: Colors.white70,
-                      size: 40.0)
-              ),
+                  child: Icon(Icons.attach_money,
+                      color: Colors.white70, size: 40.0)),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                      'Amount',
+                  Text('Amount',
                       style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 12.0,
                         fontWeight: FontWeight.w500,
                         color: Colors.white60,
-                      )
-                  ),
+                      )),
                   SizedBox(height: 5.0),
-                  Text(
-                      display ?? 'Enter amount',
+                  Text(display ?? 'Enter amount',
                       style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
                         color: display == null ? Colors.white24 : Colors.white,
-                      )
-                  ),
+                      )),
                 ],
               ),
             ],
@@ -212,17 +191,14 @@ class AddBillScreen extends StatelessWidget {
                   child: SuperIcon(
                     iconPath: iconPath ?? "assets/icons/other.svg",
                     size: 34.0,
-                  )
-              ),
-              Text(
-                  display ?? 'Select category',
+                  )),
+              Text(display ?? 'Select category',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
                     color: display == null ? Colors.white24 : Colors.white,
-                  )
-              ),
+                  )),
             ],
           ),
           Icon(
@@ -245,20 +221,14 @@ class AddBillScreen extends StatelessWidget {
             children: [
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
-                  child: Icon(
-                      Icons.notes,
-                      color: Colors.white70,
-                      size: 24.0)
-              ),
-              Text(
-                  display ?? 'Note',
+                  child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
+              Text(display ?? 'Note',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
                     color: display == null ? Colors.white24 : Colors.white,
-                  )
-              ),
+                  )),
             ],
           ),
           Icon(
@@ -284,17 +254,14 @@ class AddBillScreen extends StatelessWidget {
                   child: SuperIcon(
                     iconPath: iconPath ?? "assets/icons/wallet_2.svg",
                     size: 24.0,
-                  )
-              ),
-              Text(
-                  display ?? 'Select wallet',
+                  )),
+              Text(display ?? 'Select wallet',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
                     color: display == null ? Colors.white24 : Colors.white,
-                  )
-              ),
+                  )),
             ],
           ),
           Icon(
@@ -317,20 +284,15 @@ class AddBillScreen extends StatelessWidget {
             children: [
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
-                  child: Icon(
-                      Icons.calendar_today,
-                      color: Colors.white70,
-                      size: 24.0)
-              ),
-              Text(
-                  'Repeat Options',
+                  child: Icon(Icons.calendar_today,
+                      color: Colors.white70, size: 24.0)),
+              Text('Repeat Options',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
-                  )
-              ),
+                  )),
             ],
           ),
           Icon(
