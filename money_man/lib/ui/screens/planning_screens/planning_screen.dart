@@ -1,24 +1,24 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bills_main_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_main_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
-class PlanningScreen extends StatelessWidget {
+class PlanningScreen extends StatefulWidget {
+  Wallet currentWallet;
+
+  PlanningScreen({Key key, this.currentWallet}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return Test();
-  }
+  _PlanningScreenState createState() => _PlanningScreenState();
 }
 
-class Test extends StatefulWidget {
-  @override
-  _TestState createState() => _TestState();
-}
+class _PlanningScreenState extends State<PlanningScreen> {
+  Wallet _wallet;
 
-class _TestState extends State<Test> {
   final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
@@ -56,6 +56,27 @@ class _TestState extends State<Test> {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
+    _wallet = widget.currentWallet == null
+        ? Wallet(
+        id: 'id',
+        name: 'defaultName',
+        amount: 0,
+        currencyID: 'USD',
+        iconID: 'assets/icons/wallet_2.svg')
+        : widget.currentWallet;
+  }
+
+  @override
+  void didUpdateWidget(covariant PlanningScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    _wallet = widget.currentWallet ??
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 100,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg');
   }
 
   @override
