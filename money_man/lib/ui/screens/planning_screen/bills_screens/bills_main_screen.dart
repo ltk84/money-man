@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 import 'package:money_man/ui/screens/planning_screen/bills_screens/add_bill_sceen.dart';
+import 'package:money_man/ui/screens/planning_screen/bills_screens/edit_bill_screen.dart';
 
 class BillsMainScreen extends StatelessWidget {
   const BillsMainScreen({Key key}) : super(key: key);
@@ -52,7 +53,7 @@ class BillsMainScreen extends StatelessWidget {
                 showCupertinoModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return AddBillScreen();
+                      return EditBillScreen();
                     }
                 );
               },
@@ -88,7 +89,7 @@ class BillsMainScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+          margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
           child: Text(
               'THIS PERIOD',
               style: TextStyle(
@@ -100,7 +101,7 @@ class BillsMainScreen extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.fromLTRB(20, 14, 20, 8),
           decoration: BoxDecoration(
               color: Color(0xFF1c1c1c),
               border: Border(

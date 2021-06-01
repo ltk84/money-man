@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/superIconModel.dart';
 
-class AddBillScreen extends StatelessWidget {
-  const AddBillScreen({Key key}) : super(key: key);
+class EditBillScreen extends StatelessWidget {
+  const EditBillScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class AddBillScreen extends StatelessWidget {
           elevation: 0.0,
           leading: CloseButton(),
           title: Text(
-              'Add Bill',
+              'Edit Bill',
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontSize: 17.0,
@@ -54,64 +54,64 @@ class AddBillScreen extends StatelessWidget {
               parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
-              margin: EdgeInsets.only(top: 30.0),
-              decoration: BoxDecoration(
-                  color: Colors.grey[900],
-                  border: Border(
-                      top: BorderSide(
-                        color: Colors.white12,
-                        width: 0.5,
+                margin: EdgeInsets.only(top: 30.0),
+                decoration: BoxDecoration(
+                    color: Colors.grey[900],
+                    border: Border(
+                        top: BorderSide(
+                          color: Colors.white12,
+                          width: 0.5,
+                        ),
+                        bottom: BorderSide(
+                          color: Colors.white12,
+                          width: 0.5,
+                        )
+                    )
+                ),
+                child: Column(
+                    children: [
+                      // Hàm build Amount Input.
+                      buildAmountInput(display: '\$ 1000'),
+
+                      // Divider ngăn cách giữa các input field.
+                      Container(
+                        margin: EdgeInsets.only(left: 70),
+                        child: Divider(
+                          color: Colors.white12,
+                          thickness: 1,
+                        ),
                       ),
-                      bottom: BorderSide(
-                        color: Colors.white12,
-                        width: 0.5,
-                      )
-                  )
-              ),
-              child: Column(
-                children: [
-                  // Hàm build Amount Input.
-                  buildAmountInput(),
 
-                  // Divider ngăn cách giữa các input field.
-                  Container(
-                    margin: EdgeInsets.only(left: 70),
-                    child: Divider(
-                      color: Colors.white12,
-                      thickness: 1,
-                    ),
-                  ),
+                      // Hàm build Category Selection.
+                      buildCategorySelection(display: 'My Category'),
 
-                  // Hàm build Category Selection.
-                  buildCategorySelection(),
+                      // Divider ngăn cách giữa các input field.
+                      Container(
+                        margin: EdgeInsets.only(left: 70, top: 8),
+                        child: Divider(
+                          color: Colors.white12,
+                          thickness: 1,
+                        ),
+                        height: 2,
+                      ),
 
-                  // Divider ngăn cách giữa các input field.
-                  Container(
-                    margin: EdgeInsets.only(left: 70, top: 8),
-                    child: Divider(
-                      color: Colors.white12,
-                      thickness: 1,
-                    ),
-                    height: 2,
-                  ),
+                      // Hàm build Note Input.
+                      buildNoteInput(),
 
-                  // Hàm build Note Input.
-                  buildNoteInput(),
+                      // Divider ngăn cách giữa các input field.
+                      Container(
+                        margin: EdgeInsets.only(left: 70),
+                        child: Divider(
+                          color: Colors.white12,
+                          thickness: 1,
+                        ),
+                        height: 2,
+                      ),
 
-                  // Divider ngăn cách giữa các input field.
-                  Container(
-                    margin: EdgeInsets.only(left: 70),
-                    child: Divider(
-                      color: Colors.white12,
-                      thickness: 1,
-                    ),
-                    height: 2,
-                  ),
-
-                  // Hàm build Wallet Selection.
-                  buildWalletSelection(),
-                ]
-              )
+                      // Hàm build Wallet Selection.
+                      buildWalletSelection(display: 'My Wallet'),
+                    ]
+                )
             ),
             Container(
                 margin: EdgeInsets.only(top: 30.0),
@@ -131,16 +131,16 @@ class AddBillScreen extends StatelessWidget {
                 child: buildRepeatOptions()
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-              child: Text(
-                'Repeat everyday from 01/06/2021',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 13.0,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white60,
-                ),
-              )
+                margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                child: Text(
+                  'Repeat everyday from 01/06/2021',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white60,
+                  ),
+                )
             )
           ],
         )
