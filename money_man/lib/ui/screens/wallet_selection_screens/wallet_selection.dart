@@ -335,10 +335,11 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                       width: 1.0,
                                     ))),
                             child: ListTile(
-                              onTap: () {
+                              onTap: () async {
                                 widget.id = listWallet[index].id;
-                                _firestore.updateSelectedWallet(widget.id);
-                                Navigator.pop(context);
+                                final updateWalletId = await _firestore
+                                    .updateSelectedWallet(widget.id);
+                                Navigator.pop(context, updateWalletId);
                               },
                               leading: SuperIcon(
                                 iconPath: iconData,
