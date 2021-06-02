@@ -9,6 +9,7 @@ import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/bills_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
@@ -213,17 +214,15 @@ class _AddBillScreenState extends State<AddBillScreen> {
                 child: GestureDetector(
                     onTap: () async {
                       var res = await showCupertinoModalBottomSheet(
-                          isDismissible: true,
+                          enableDrag: false,
+                          isDismissible: false,
                           backgroundColor: Colors.grey[900],
                           context: context,
-                          builder: (context) => SelectWalletAccountScreen(wallet: selectedWallet)
+                          builder: (context) => RepeatOptionScreen()
                       );
                       if (res != null)
                         setState(() {
-                          selectedWallet = res;
-                          currencySymbol = CurrencyService()
-                              .findByCode(selectedWallet.currencyID)
-                              .symbol;
+
                         });
                     },
                     child: buildRepeatOptions()
