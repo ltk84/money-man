@@ -348,7 +348,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color: Colors.grey[600],
+                        color: Colors.white,
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500),
@@ -364,7 +364,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   final noteContent = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => NoteTransactionScreen()));
+                          builder: (_) => NoteTransactionScreen(
+                            noteContent: widget.transaction.note,
+                          ))
+                  );
                   print(noteContent);
                   if (noteContent != null) {
                     setState(() {
