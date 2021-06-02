@@ -2,15 +2,32 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/recurring_transaction_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
+import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/edit_recurring_transaction_screen.dart';
+import 'package:provider/provider.dart';
 
-class RecurringTransactionDetailScreen extends StatelessWidget {
-  const RecurringTransactionDetailScreen({Key key}) : super(key: key);
+class RecurringTransactionDetailScreen extends StatefulWidget {
+  RecurringTransaction recurringTransaction;
+  Wallet wallet;
+  RecurringTransactionDetailScreen({
+    Key key,
+    @required this.recurringTransaction,
+    @required this.wallet,
+  }) : super(key: key);
 
   @override
+  _RecurringTransactionDetailScreenState createState() =>
+      _RecurringTransactionDetailScreenState();
+}
+
+class _RecurringTransactionDetailScreenState
+    extends State<RecurringTransactionDetailScreen> {
+  @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Colors.black,
         extendBodyBehindAppBar: true,
@@ -99,8 +116,8 @@ class RecurringTransactionDetailScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     buildInfoCategory(
-                      iconPath: 'assets/icons/food.svg',
-                      display: 'Restaurants',
+                      iconPath: widget.recurringTransaction.category.iconID,
+                      display: widget.recurringTransaction.category.name,
                     ),
                     // Divider ngăn cách giữa các input field.
                     Container(
@@ -110,7 +127,9 @@ class RecurringTransactionDetailScreen extends StatelessWidget {
                         thickness: 1,
                       ),
                     ),
-                    buildInfoAmount(display: '\$ 1,000'),
+                    buildInfoAmount(
+                        display: '\$ ' +
+                            widget.recurringTransaction.amount.toString()),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -129,8 +148,8 @@ class RecurringTransactionDetailScreen extends StatelessWidget {
                     //   ),
                     // ),
                     buildInfoWallet(
-                      iconPath: 'assets/icons/wallet_2.svg',
-                      display: 'My Wallet',
+                      iconPath: widget.wallet.iconID,
+                      display: widget.wallet.name,
                     ),
                   ],
                 )),
@@ -223,7 +242,11 @@ class RecurringTransactionDetailScreen extends StatelessWidget {
                     width: 0.5,
                   ))),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await _firestore.deleteRecurringTransaction(
+                      widget.recurringTransaction, widget.wallet);
+                  Navigator.pop(context);
+                },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {

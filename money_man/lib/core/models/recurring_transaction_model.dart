@@ -23,7 +23,7 @@ class RecurringTransaction {
     @required this.wallet,
     @required this.note,
     @required this.transactionIdList,
-    @required this.repeatOption,
+    // @required this.repeatOption,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,7 +34,7 @@ class RecurringTransaction {
       'wallet': wallet.toMap(),
       'note': note,
       'transactionIdList': transactionIdList?.map((x) => x.toMap())?.toList(),
-      'repeatOption': repeatOption.toMap(),
+      // 'repeatOption': repeatOption.toMap(),
     };
   }
 
@@ -47,7 +47,7 @@ class RecurringTransaction {
       note: data['note'],
       transactionIdList: List<MyTransaction>.from(
           data['transactionIdList']?.map((x) => MyTransaction.fromMap(x))),
-      repeatOption: RepeatOption.fromMap(data['repeatOption']),
+      // repeatOption: RepeatOption.fromMap(data['repeatOption']),
     );
   }
 }

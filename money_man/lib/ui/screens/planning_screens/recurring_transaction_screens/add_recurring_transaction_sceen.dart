@@ -2,13 +2,50 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/recurring_transaction_model.dart';
+import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
+import 'package:provider/provider.dart';
 
-class AddRecurringTransactionScreen extends StatelessWidget {
-  const AddRecurringTransactionScreen({Key key}) : super(key: key);
+class AddRecurringTransactionScreen extends StatefulWidget {
+  Wallet defaultWallet;
+  AddRecurringTransactionScreen({
+    Key key,
+    @required this.defaultWallet,
+  }) : super(key: key);
+
+  @override
+  _AddRecurringTransactionScreenState createState() =>
+      _AddRecurringTransactionScreenState();
+}
+
+class _AddRecurringTransactionScreenState
+    extends State<AddRecurringTransactionScreen> {
+  double amount;
+  MyCategory category;
+  String note;
+  Wallet wallet;
+  RepeatOption repeatOption;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    wallet = widget.defaultWallet;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Color(0xFF111111),
         extendBodyBehindAppBar: true,
@@ -27,12 +64,25 @@ class AddRecurringTransactionScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () async {
-                // showCupertinoModalBottomSheet(
-                //     context: context,
-                //     builder: (context) {
-                //
-                //     }
-                // );
+                if (amount == null) {
+                  _showAlertDialog('Please enter amount!');
+                } else if (category == null) {
+                  _showAlertDialog('Please pick category!');
+                  // } else if (repeatOption == null) {
+                  //   _showAlertDialog('Please pick repeat option');
+                } else {
+                  var reTrans = RecurringTransaction(
+                    id: 'id',
+                    category: category,
+                    amount: amount,
+                    wallet: wallet,
+                    note: note,
+                    transactionIdList: [],
+                    // repeatOption: repeatOption);
+                  );
+                  await _firestore.addRecurringTransaction(reTrans, wallet);
+                  Navigator.pop(context);
+                }
               },
               child: Text('Save',
                   style: TextStyle(
@@ -63,7 +113,24 @@ class AddRecurringTransactionScreen extends StatelessWidget {
                         ))),
                 child: Column(children: [
                   // Hàm build Amount Input.
-                  buildAmountInput(),
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () async {
+                      final resultAmount = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => EnterAmountScreen()));
+                      if (resultAmount != null)
+                        setState(() {
+                          print(resultAmount);
+                          this.amount = double.parse(resultAmount);
+                        });
+                    },
+                    child: buildAmountInput(
+                        display: this.amount == null
+                            ? null
+                            : this.amount.toString()),
+                  ),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -75,7 +142,27 @@ class AddRecurringTransactionScreen extends StatelessWidget {
                   ),
 
                   // Hàm build Category Selection.
-                  buildCategorySelection(),
+                  GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () async {
+                        final selectCate = await showCupertinoModalBottomSheet(
+                            isDismissible: true,
+                            backgroundColor: Colors.grey[900],
+                            context: context,
+                            builder: (context) =>
+                                CategoriesTransactionScreen());
+                        if (selectCate != null) {
+                          setState(() {
+                            this.category = selectCate;
+                          });
+                        }
+                      },
+                      child: buildCategorySelection(
+                        display:
+                            this.category == null ? null : this.category.name,
+                        iconPath:
+                            this.category == null ? null : this.category.iconID,
+                      )),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -88,7 +175,25 @@ class AddRecurringTransactionScreen extends StatelessWidget {
                   ),
 
                   // Hàm build Note Input.
-                  buildNoteInput(),
+                  GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () async {
+                        final noteContent = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => NoteTransactionScreen(
+                                      content: note ?? '',
+                                    )));
+                        print(noteContent);
+                        if (noteContent != null) {
+                          setState(() {
+                            note = noteContent;
+                          });
+                        }
+                      },
+                      child: buildNoteInput(
+                        display: this.note == null ? null : this.note,
+                      )),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -101,33 +206,54 @@ class AddRecurringTransactionScreen extends StatelessWidget {
                   ),
 
                   // Hàm build Wallet Selection.
-                  buildWalletSelection(),
+                  GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () async {
+                        var res = await showCupertinoModalBottomSheet(
+                            isDismissible: true,
+                            backgroundColor: Colors.grey[900],
+                            context: context,
+                            builder: (context) =>
+                                SelectWalletAccountScreen(wallet: wallet));
+                        if (res != null)
+                          setState(() {
+                            wallet = res;
+                            // currencySymbol = CurrencyService()
+                            //     .findByCode(selectedWallet.currencyID)
+                            //     .symbol;
+                          });
+                      },
+                      child: buildWalletSelection(
+                        display: this.wallet == null ? null : this.wallet.name,
+                        iconPath:
+                            this.wallet == null ? null : this.wallet.iconID,
+                      )),
                 ])),
-            // Container(
-            //     margin: EdgeInsets.only(top: 30.0),
-            //     decoration: BoxDecoration(
-            //         color: Colors.grey[900],
-            //         border: Border(
-            //             top: BorderSide(
-            //               color: Colors.white12,
-            //               width: 0.5,
-            //             ),
-            //             bottom: BorderSide(
-            //               color: Colors.white12,
-            //               width: 0.5,
-            //             ))),
-            //     child: buildRepeatOptions()),
-            // Container(
-            //     margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-            //     child: Text(
-            //       'Repeat everyday from 01/06/2021',
-            //       style: TextStyle(
-            //         fontFamily: 'Montserrat',
-            //         fontSize: 13.0,
-            //         fontWeight: FontWeight.w500,
-            //         color: Colors.white60,
-            //       ),
-            //     ))
+            Container(
+                margin: EdgeInsets.only(top: 30.0),
+                decoration: BoxDecoration(
+                    color: Colors.grey[900],
+                    border: Border(
+                        top: BorderSide(
+                          color: Colors.white12,
+                          width: 0.5,
+                        ),
+                        bottom: BorderSide(
+                          color: Colors.white12,
+                          width: 0.5,
+                        ))),
+                child: buildRepeatOptions()),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                child: Text(
+                  'Repeat everyday from 01/06/2021',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white60,
+                  ),
+                ))
           ],
         ));
   }
@@ -239,6 +365,37 @@ class AddRecurringTransactionScreen extends StatelessWidget {
     );
   }
 
+  Widget buildRepeatOptionInput({String display}) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 23.0),
+                  child: Icon(Icons.calendar_today_outlined,
+                      color: Colors.white70, size: 24.0)),
+              Text(display ?? 'No repeat',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                    color: display == null ? Colors.white24 : Colors.white,
+                  )),
+            ],
+          ),
+          Icon(
+            Icons.chevron_right,
+            color: Colors.white54,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget buildWalletSelection({String iconPath, String display}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
@@ -300,6 +457,17 @@ class AddRecurringTransactionScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
     );
   }
 }

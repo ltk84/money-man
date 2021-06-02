@@ -58,11 +58,11 @@ class _PlanningScreenState extends State<PlanningScreen> {
     super.initState();
     _wallet = widget.currentWallet == null
         ? Wallet(
-        id: 'id',
-        name: 'defaultName',
-        amount: 0,
-        currencyID: 'USD',
-        iconID: 'assets/icons/wallet_2.svg')
+            id: 'id',
+            name: 'defaultName',
+            amount: 0,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
   }
 
@@ -226,7 +226,8 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     Navigator.push(
                       context,
                       PageTransition(
-                          child: RecurringTransactionMainScreen(),
+                          child:
+                              RecurringTransactionMainScreen(wallet: _wallet),
                           type: PageTransitionType.rightToLeft),
                     );
                   },

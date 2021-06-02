@@ -644,9 +644,9 @@ class FirebaseFireStoreService {
   // RECURRING TRANSACTION START //
 
   // add recurring transaction
-  Future addBRecurringTransaction(
+  Future addRecurringTransaction(
       RecurringTransaction reTrans, Wallet wallet) async {
-    final reTranssRef = await users
+    final reTranssRef = users
         .doc(uid)
         .collection('wallets')
         .doc(wallet.id)
@@ -658,6 +658,20 @@ class FirebaseFireStoreService {
         .then((value) => print('recurring transaction added!'))
         .catchError((error) => print('error'));
   }
+
+  // Future addRecurringTransaction(Wallet wallet) async {
+  //   final reTranssRef = users
+  //       .doc(uid)
+  //       .collection('wallets')
+  //       .doc(wallet.id)
+  //       .collection('recurring transactions')
+  //       .doc();
+  //   reTrans.id = reTranssRef.id;
+  //   await reTranssRef
+  //       .set(reTrans.toMap())
+  //       .then((value) => print('recurring transaction added!'))
+  //       .catchError((error) => print('error'));
+  // }
 
   // edit recurring transaction
   Future updateRecurringTransaction(
