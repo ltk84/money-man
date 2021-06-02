@@ -39,19 +39,21 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
     // Biến để lưu chuỗi đơn vị cho rangeAmount.
     freqType = 'day';
 
-    // Biến để lưu các giá trị tùy chọn.
+    // Biến để lưu các giá trị tùy chọn. Khởi tạo với giá trị mặc định dưới đây.
     rangeAmount = 1;
     beginDateTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     endDateTime = beginDateTime.add(Duration(days: 1));
     repeatTime = 1;
 
-    // Biến triggẻ để xử lý các tùy chọn.
+    // Biến trigger để xử lý các tùy chọn.
     expandOption = false;
-    selectedOption = 0;
+    selectedOption = 0; // Biến này bắt đầu từ 1 đến 3 tương ứng: Select Frequency, Every (range amount), From (begin date).
+                        // Đặt giá trị 0 bởi vì ban đầu không chọn gì hết (tránh expand selection - ở dưới có đánh dấu widget đó - expand lúc đầu).
 
     // Biến trigger để xử lý chọn loại lặp lại.
     expandTypeOption = false;
-    selectedTypeOption = 1;
+    selectedTypeOption = 1; // Biến này bắt đầu từ 1 đến 3 tương ứng: Forever, Until (ending date), For (repeat time).
+                            // Mặc định loại lặp ban đầu là Forever nên biến này có giá trị là 1.
 
     super.initState();
   }
