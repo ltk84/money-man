@@ -57,11 +57,11 @@ class _PlanningScreenState extends State<PlanningScreen> {
     super.initState();
     _wallet = widget.currentWallet == null
         ? Wallet(
-        id: 'id',
-        name: 'defaultName',
-        amount: 0,
-        currencyID: 'USD',
-        iconID: 'assets/icons/wallet_2.svg')
+            id: 'id',
+            name: 'defaultName',
+            amount: 0,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
   }
 
@@ -168,10 +168,14 @@ class _PlanningScreenState extends State<PlanningScreen> {
               ),
               child: TextButton(
                   onPressed: () {
+                    print('planing' + widget.currentWallet.id);
+                    print('planing' + _wallet.id);
                     Navigator.push(
                       context,
                       PageTransition(
-                          child: BillsMainScreen(currentWallet: _wallet,),
+                          child: BillsMainScreen(
+                            currentWallet: _wallet,
+                          ),
                           type: PageTransitionType.rightToLeft),
                     );
                   },
