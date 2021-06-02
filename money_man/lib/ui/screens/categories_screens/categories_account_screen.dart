@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/categoryModel.dart';
-import 'package:money_man/core/models/superIconModel.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
 
@@ -90,7 +90,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
               child: Row(
                 children: [
                   Icon(Icons.arrow_back_ios, color: Colors.white),
-                Text('More', style: Theme.of(context).textTheme.headline6),
+                  Text('More', style: Theme.of(context).textTheme.headline6),
                   // Hero(
                   //     tag: 'alo',
                   //     child: Text('More',
@@ -166,7 +166,9 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                       itemCount: _selectCateTab.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          leading: SuperIcon(iconPath: _selectCateTab[index].iconID, size: 35.0),
+                          leading: SuperIcon(
+                              iconPath: _selectCateTab[index].iconID,
+                              size: 35.0),
                           title: Text(_selectCateTab[index].name,
                               style: Theme.of(context).textTheme.subtitle1),
                           onTap: () {

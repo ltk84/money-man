@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/categoryModel.dart';
-import 'package:money_man/core/models/superIconModel.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
 

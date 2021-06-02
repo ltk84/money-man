@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/superIconModel.dart';
-import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/transaction_model.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
@@ -214,7 +216,8 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                       showCurrencyPicker(
                         theme: CurrencyPickerThemeData(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                           flagSize: 26,
                           titleTextStyle: TextStyle(
@@ -225,8 +228,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           subtitleTextStyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontSize: 15,
-                              color: Colors.black
-                          ),
+                              color: Colors.black),
                           //backgroundColor: Colors.grey[900],
                         ),
                         onSelect: (value) {
@@ -249,9 +251,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             color: Colors.white,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w600,
-                            fontSize: 16.0
-                        )
-                    ),
+                            fontSize: 16.0)),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Colors.white),
                   ),
@@ -270,8 +270,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                       // );
                       final resultAmount = await showCupertinoModalBottomSheet(
                           context: context,
-                          builder: (context) => EnterAmountScreen()
-                      );
+                          builder: (context) => EnterAmountScreen());
                       if (resultAmount != null)
                         setState(() {
                           print(resultAmount);
@@ -289,9 +288,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             color: Colors.white,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w600,
-                            fontSize: 16.0
-                        )
-                    ),
+                            fontSize: 16.0)),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Colors.white),
                   )

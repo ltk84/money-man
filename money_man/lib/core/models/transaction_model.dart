@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/categoryModel.dart';
+import './category_model.dart';
 
 class MyTransaction {
   String id;
