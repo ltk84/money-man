@@ -10,6 +10,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
@@ -36,11 +37,21 @@ class _AddRecurringTransactionScreenState
   Wallet wallet;
   RepeatOption repeatOption;
 
+  DateTime now =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     wallet = widget.defaultWallet;
+    repeatOption = RepeatOption(
+        frequency: 'daily',
+        rangeAmount: 1,
+        extraAmountInfo: null,
+        beginDateTime: now,
+        type: 'forever',
+        extraTypeInfo: null);
   }
 
   @override
@@ -72,14 +83,14 @@ class _AddRecurringTransactionScreenState
                   //   _showAlertDialog('Please pick repeat option');
                 } else {
                   var reTrans = RecurringTransaction(
-                    id: 'id',
-                    category: category,
-                    amount: amount,
-                    wallet: wallet,
-                    note: note,
-                    transactionIdList: [],
-                    // repeatOption: repeatOption);
-                  );
+                      id: 'id',
+                      category: category,
+                      amount: amount,
+                      walletId: wallet.id,
+                      note: note,
+                      transactionIdList: [],
+                      repeatOption: repeatOption);
+                  // );
                   await _firestore.addRecurringTransaction(reTrans, wallet);
                   Navigator.pop(context);
                 }
@@ -229,24 +240,44 @@ class _AddRecurringTransactionScreenState
                             this.wallet == null ? null : this.wallet.iconID,
                       )),
                 ])),
-            Container(
-                margin: EdgeInsets.only(top: 30.0),
-                decoration: BoxDecoration(
-                    color: Colors.grey[900],
-                    border: Border(
-                        top: BorderSide(
-                          color: Colors.white12,
-                          width: 0.5,
-                        ),
-                        bottom: BorderSide(
-                          color: Colors.white12,
-                          width: 0.5,
-                        ))),
-                child: buildRepeatOptions()),
+
+            // build repeat option
+            GestureDetector(
+              onTap: () async {
+                print(repeatOption.toMap());
+                var res = await showCupertinoModalBottomSheet(
+                    enableDrag: false,
+                    isDismissible: false,
+                    backgroundColor: Colors.grey[900],
+                    context: context,
+                    builder: (context) => RepeatOptionScreen(
+                          repeatOption: repeatOption,
+                        ));
+                if (res != null)
+                  setState(() {
+                    print(res.toMap());
+                    repeatOption = res;
+                  });
+              },
+              child: Container(
+                  margin: EdgeInsets.only(top: 30.0),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[900],
+                      border: Border(
+                          top: BorderSide(
+                            color: Colors.white12,
+                            width: 0.5,
+                          ),
+                          bottom: BorderSide(
+                            color: Colors.white12,
+                            width: 0.5,
+                          ))),
+                  child: buildRepeatOptions()),
+            ),
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Text(
-                  'Repeat everyday from 01/06/2021',
+                  'Repeat ${repeatOption.frequency} from ${repeatOption.beginDateTime}',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 13.0,

@@ -10,8 +10,8 @@ import 'package:money_man/ui/screens/planning_screens/recurring_transaction_scre
 import 'package:provider/provider.dart';
 
 class RecurringTransactionDetailScreen extends StatefulWidget {
-  RecurringTransaction recurringTransaction;
-  Wallet wallet;
+  final RecurringTransaction recurringTransaction;
+  final Wallet wallet;
   RecurringTransactionDetailScreen({
     Key key,
     @required this.recurringTransaction,
@@ -81,7 +81,10 @@ class _RecurringTransactionDetailScreenState
                   showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) {
-                        return EditRecurringTransactionScreen();
+                        return EditRecurringTransactionScreen(
+                          recurringTransaction: widget.recurringTransaction,
+                          wallet: widget.wallet,
+                        );
                       });
                 },
                 child: Text('Edit',

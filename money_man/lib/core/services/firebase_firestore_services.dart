@@ -715,7 +715,7 @@ class FirebaseFireStoreService {
   List<RecurringTransaction> _recurringTransactionFromSnapshot(
       QuerySnapshot snapshot) {
     return snapshot.docs.map((e) {
-      print(e.data());
+      // print(e.data());
       return RecurringTransaction.fromMap(e.data());
     }).toList();
   }
