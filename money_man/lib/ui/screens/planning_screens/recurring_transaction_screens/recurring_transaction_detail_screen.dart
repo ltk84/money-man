@@ -25,6 +25,14 @@ class RecurringTransactionDetailScreen extends StatefulWidget {
 
 class _RecurringTransactionDetailScreenState
     extends State<RecurringTransactionDetailScreen> {
+  RecurringTransaction _recurringTransaction;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _recurringTransaction = widget.recurringTransaction;
+  }
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -78,14 +86,17 @@ class _RecurringTransactionDetailScreenState
               tag: 'billToDetail_actionBtn',
               child: TextButton(
                 onPressed: () async {
-                  showCupertinoModalBottomSheet(
+                  final updatedReTrans = await showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) {
                         return EditRecurringTransactionScreen(
-                          recurringTransaction: widget.recurringTransaction,
+                          recurringTransaction: _recurringTransaction,
                           wallet: widget.wallet,
                         );
                       });
+                  setState(() {
+                    _recurringTransaction = updatedReTrans;
+                  });
                 },
                 child: Text('Edit',
                     style: TextStyle(
@@ -119,8 +130,8 @@ class _RecurringTransactionDetailScreenState
                 child: Column(
                   children: [
                     buildInfoCategory(
-                      iconPath: widget.recurringTransaction.category.iconID,
-                      display: widget.recurringTransaction.category.name,
+                      iconPath: _recurringTransaction.category.iconID,
+                      display: _recurringTransaction.category.name,
                     ),
                     // Divider ngăn cách giữa các input field.
                     Container(
@@ -131,8 +142,8 @@ class _RecurringTransactionDetailScreenState
                       ),
                     ),
                     buildInfoAmount(
-                        display: '\$ ' +
-                            widget.recurringTransaction.amount.toString()),
+                        display:
+                            '\$ ' + _recurringTransaction.amount.toString()),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -247,7 +258,7 @@ class _RecurringTransactionDetailScreenState
               child: TextButton(
                 onPressed: () async {
                   await _firestore.deleteRecurringTransaction(
-                      widget.recurringTransaction, widget.wallet);
+                      _recurringTransaction, widget.wallet);
                   Navigator.pop(context);
                 },
                 style: ButtonStyle(

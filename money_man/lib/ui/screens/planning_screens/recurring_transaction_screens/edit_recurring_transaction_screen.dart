@@ -6,10 +6,12 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/recurring_transaction_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:provider/provider.dart';
 
 class EditRecurringTransactionScreen extends StatefulWidget {
   final RecurringTransaction recurringTransaction;
@@ -39,6 +41,7 @@ class _EditRecurringTransactionScreenState
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Color(0xFF111111),
         extendBodyBehindAppBar: true,
@@ -57,12 +60,9 @@ class _EditRecurringTransactionScreenState
           actions: [
             TextButton(
               onPressed: () async {
-                // showCupertinoModalBottomSheet(
-                //     context: context,
-                //     builder: (context) {
-                //
-                //     }
-                // );
+                await _firestore.updateRecurringTransaction(
+                    _recurringTransaction, widget.wallet);
+                Navigator.pop(context, _recurringTransaction);
               },
               child: Text('Save',
                   style: TextStyle(

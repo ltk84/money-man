@@ -34,8 +34,6 @@ class RepeatOption {
   }
 
   factory RepeatOption.fromMap(Map<String, dynamic> map) {
-    print('alo');
-    print(map['extraAmountInfo']);
     return RepeatOption(
       frequency: map['frequency'],
       rangeAmount: map['rangeAmount'],

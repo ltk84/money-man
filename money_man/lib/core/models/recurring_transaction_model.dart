@@ -38,7 +38,6 @@ class RecurringTransaction {
   }
 
   factory RecurringTransaction.fromMap(Map<String, dynamic> data) {
-    print(data);
     return RecurringTransaction(
       id: data['id'],
       category: MyCategory.fromMap(data['category']),

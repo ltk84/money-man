@@ -59,7 +59,9 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
     // Biến để lưu các giá trị tùy chọn.
     rangeAmount = _repeatOption.rangeAmount;
     beginDateTime = _repeatOption.beginDateTime;
-    endDateTime = beginDateTime.add(Duration(days: 1));
+    endDateTime = _repeatOption.extraTypeInfo is DateTime == false
+        ? beginDateTime.add(Duration(days: 1))
+        : _repeatOption.extraTypeInfo;
     repeatTime = _repeatOption.type == 'for' ? _repeatOption.extraTypeInfo : 1;
 
     // Biến triggẻ để xử lý các tùy chọn.
