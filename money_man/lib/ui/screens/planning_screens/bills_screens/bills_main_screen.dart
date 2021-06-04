@@ -162,7 +162,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
             context,
             PageTransition(
                 childCurrent: this.widget,
-                child: BillDetailScreen(),
+                child: BillDetailScreen(
+                  bill: bill,
+                  wallet: widget.currentWallet,
+                ),
                 type: PageTransitionType.rightToLeft));
       },
       child: Container(

@@ -1,15 +1,53 @@
 import 'dart:ui';
 
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/bill_model.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/bills_screens/repeat_option_screen.dart';
+import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
-class EditBillScreen extends StatelessWidget {
-  const EditBillScreen({Key key}) : super(key: key);
+class EditBillScreen extends StatefulWidget {
+  final Bill bill;
+  final Wallet wallet;
+
+  const EditBillScreen({
+    Key key,
+    @required this.bill,
+    @required this.wallet,
+  }) : super(key: key);
+
+  @override
+  _EditBillScreenState createState() => _EditBillScreenState();
+}
+
+class _EditBillScreenState extends State<EditBillScreen> {
+  Bill _bill;
+  String currencySymbol;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _bill = widget.bill;
+    currencySymbol = CurrencyService().findByCode(widget.wallet.currencyID).symbol;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Color(0xFF111111),
         extendBodyBehindAppBar: true,
@@ -28,12 +66,9 @@ class EditBillScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () async {
-                // showCupertinoModalBottomSheet(
-                //     context: context,
-                //     builder: (context) {
-                //
-                //     }
-                // );
+                await _firestore.updateBill(
+                    _bill, widget.wallet);
+                Navigator.pop(context, _bill);
               },
               child: Text('Save',
                   style: TextStyle(
@@ -47,7 +82,7 @@ class EditBillScreen extends StatelessWidget {
         ),
         body: ListView(
           physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
                 margin: EdgeInsets.only(top: 30.0),
@@ -64,7 +99,21 @@ class EditBillScreen extends StatelessWidget {
                         ))),
                 child: Column(children: [
                   // Hàm build Amount Input.
-                  buildAmountInput(display: '\$ 1, 000'),
+                  GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () async {
+                        final resultAmount = await Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                        if (resultAmount != null)
+                          setState(() {
+                            _bill.amount =
+                                double.parse(resultAmount);
+                          });
+                      },
+                      child: buildAmountInput(
+                          display: _bill.amount == null ? null : (currencySymbol + ' ' + _bill.amount.toString())
+                      )
+                  ),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -76,7 +125,25 @@ class EditBillScreen extends StatelessWidget {
                   ),
 
                   // Hàm build Category Selection.
-                  buildCategorySelection(display: 'Investment'),
+                  GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () async {
+                        final selectCate = await showCupertinoModalBottomSheet(
+                            isDismissible: true,
+                            backgroundColor: Colors.grey[900],
+                            context: context,
+                            builder: (context) => CategoriesTransactionScreen());
+                        if (selectCate != null) {
+                          setState(() {
+                            _bill.category = selectCate;
+                          });
+                        }
+                      },
+                      child: buildCategorySelection(
+                        display: _bill.category == null ? null : _bill.category.name,
+                        iconPath: _bill.category == null ? null : _bill.category.iconID,
+                      )
+                  ),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -89,7 +156,26 @@ class EditBillScreen extends StatelessWidget {
                   ),
 
                   // Hàm build Note Input.
-                  buildNoteInput(),
+                  GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () async {
+                        final noteContent = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => NoteTransactionScreen(
+                                  content: _bill.note ?? '',
+                                )));
+                        print(noteContent);
+                        if (noteContent != null) {
+                          setState(() {
+                            _bill.note = noteContent;
+                          });
+                        }
+                      },
+                      child: buildNoteInput(
+                        display: _bill.note == null ? null : _bill.note,
+                      )
+                  ),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -101,8 +187,12 @@ class EditBillScreen extends StatelessWidget {
                     height: 2,
                   ),
 
+                  // Không cho phép sửa Wallet khi edit bill.
                   // Hàm build Wallet Selection.
-                  buildWalletSelection(display: 'My Wallet'),
+                  buildWalletSelection(
+                    display: widget.wallet == null ? null : widget.wallet.name,
+                    iconPath: widget.wallet == null ? null : widget.wallet.iconID,
+                  ),
                 ])),
             Container(
                 margin: EdgeInsets.only(top: 30.0),
@@ -117,11 +207,32 @@ class EditBillScreen extends StatelessWidget {
                           color: Colors.white12,
                           width: 0.5,
                         ))),
-                child: buildRepeatOptions()),
+                child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () async {
+                      var res = await showCupertinoModalBottomSheet(
+                          enableDrag: false,
+                          isDismissible: false,
+                          backgroundColor: Colors.grey[900],
+                          context: context,
+                          builder: (context) => RepeatOptionScreen(
+                            repeatOption: _bill.repeatOption,
+                          )
+                      );
+                      if (res != null)
+                        setState(() {
+                          _bill.repeatOption = res;
+                        });
+                    },
+                    child: buildRepeatOptions()
+                )
+            ),
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Text(
-                  'Repeat everyday from 01/06/2021',
+                  'Repeat every ${_bill.repeatOption.rangeAmount} ${_bill.repeatOption.extraAmountInfo}'
+                      '${_bill.repeatOption.rangeAmount == 1 ? '' : 's'} '
+                      'from ${DateFormat('dd/MM/yyyy').format(_bill.repeatOption.beginDateTime)}',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 13.0,
@@ -135,7 +246,8 @@ class EditBillScreen extends StatelessWidget {
 
   Widget buildAmountInput({String display}) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      color: Colors.transparent,
+      padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -179,7 +291,8 @@ class EditBillScreen extends StatelessWidget {
 
   Widget buildCategorySelection({String iconPath, String display}) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      color: Colors.transparent,
+      padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -212,7 +325,8 @@ class EditBillScreen extends StatelessWidget {
 
   Widget buildNoteInput({String display}) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      color: Colors.transparent,
+      padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -242,7 +356,8 @@ class EditBillScreen extends StatelessWidget {
 
   Widget buildWalletSelection({String iconPath, String display}) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      color: Colors.transparent,
+      padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -275,7 +390,8 @@ class EditBillScreen extends StatelessWidget {
 
   Widget buildRepeatOptions() {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      color: Colors.transparent,
+      padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -301,6 +417,17 @@ class EditBillScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
     );
   }
 }

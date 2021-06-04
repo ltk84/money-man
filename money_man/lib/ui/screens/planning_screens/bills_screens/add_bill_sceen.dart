@@ -136,7 +136,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                           });
                       },
                       child: buildAmountInput(
-                          display: this.amount == null ? null : this.amount.toString()
+                          display: this.amount == null ? null : (currencySymbol + ' ' + this.amount.toString())
                       )
                   ),
 
