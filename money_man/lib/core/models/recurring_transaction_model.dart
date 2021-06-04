@@ -5,13 +5,12 @@ import 'package:money_man/core/models/repeat_option_model.dart';
 
 import './category_model.dart';
 import './transaction_model.dart';
-import './wallet_model.dart';
 
 class RecurringTransaction {
   String id;
   MyCategory category;
   double amount;
-  Wallet wallet;
+  String walletId;
   String note;
   List<MyTransaction> transactionIdList;
   RepeatOption repeatOption;
@@ -20,7 +19,7 @@ class RecurringTransaction {
     @required this.id,
     @required this.category,
     @required this.amount,
-    @required this.wallet,
+    @required this.walletId,
     @required this.note,
     @required this.transactionIdList,
     @required this.repeatOption,
@@ -31,7 +30,7 @@ class RecurringTransaction {
       'id': id,
       'category': category.toMap(),
       'amount': amount,
-      'wallet': wallet.toMap(),
+      'walletId': walletId,
       'note': note,
       'transactionIdList': transactionIdList?.map((x) => x.toMap())?.toList(),
       'repeatOption': repeatOption.toMap(),
@@ -43,7 +42,7 @@ class RecurringTransaction {
       id: data['id'],
       category: MyCategory.fromMap(data['category']),
       amount: data['amount'],
-      wallet: Wallet.fromMap(data['wallet']),
+      walletId: data['walletId'],
       note: data['note'],
       transactionIdList: List<MyTransaction>.from(
           data['transactionIdList']?.map((x) => MyTransaction.fromMap(x))),

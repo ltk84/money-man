@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ExpandableWidget extends StatefulWidget {
-
   final Widget child;
   final bool expand;
   ExpandableWidget({this.expand = false, this.child});

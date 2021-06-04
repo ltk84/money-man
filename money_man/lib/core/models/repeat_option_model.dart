@@ -14,22 +14,22 @@ class RepeatOption {
   dynamic extraTypeInfo;
 
   RepeatOption({
-    this.frequency = 'daily',
-    this.rangeAmount = 1,
-    this.extraAmountInfo,
-    this.beginDateTime,
-    this.type = 'forever',
-    this.extraTypeInfo,
+    @required this.frequency,
+    @required this.rangeAmount,
+    @required this.extraAmountInfo,
+    @required this.beginDateTime,
+    @required this.type,
+    @required this.extraTypeInfo,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'frequency': frequency,
       'rangeAmount': rangeAmount,
-      'extraAmountInfo': extraAmountInfo,
-      'beginDateTime': beginDateTime.millisecondsSinceEpoch,
+      'extraAmountInfo': extraAmountInfo ?? '',
+      'beginDateTime': beginDateTime,
       'type': type,
-      'extraTypeInfo': extraTypeInfo,
+      'extraTypeInfo': extraTypeInfo ?? '',
     };
   }
 
@@ -38,9 +38,12 @@ class RepeatOption {
       frequency: map['frequency'],
       rangeAmount: map['rangeAmount'],
       extraAmountInfo: map['extraAmountInfo'],
-      beginDateTime: DateTime.tryParse(map['beginDateTime']),
+      beginDateTime:
+          DateTime.tryParse(map['beginDateTime'].toDate().toString()) ?? '',
       type: map['type'],
-      extraTypeInfo: map['extraTypeInfo'],
+      extraTypeInfo: int.tryParse(map['extraTypeInfo'].toString()) ??
+          DateTime.tryParse(map['extraTypeInfo'].toString()) ??
+          '',
     );
   }
 }
