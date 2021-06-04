@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/superIconModel.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
@@ -196,8 +196,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           onPressed: () {
                             showCupertinoModalBottomSheet(
                                 context: context,
-                                builder: (context) => ForgotPasswordScreen()
-                            );
+                                builder: (context) => ForgotPasswordScreen());
                           },
                           child: Text("Forgot password?",
                               style: TextStyle(

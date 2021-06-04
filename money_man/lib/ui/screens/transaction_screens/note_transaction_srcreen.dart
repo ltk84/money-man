@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+//import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class NoteTransactionScreen extends StatefulWidget {
   final String noteContent;
@@ -10,22 +10,23 @@ class NoteTransactionScreen extends StatefulWidget {
 }
 
 class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
-  String noteContent ;
+  String noteContent;
   final _formKey = GlobalKey<FormState>();
   final myController = TextEditingController();
   @override
   void initState() {
     noteContent = widget.noteContent;
-    myController.text = noteContent ;
+    myController.text = noteContent;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           myController.clear();
-          noteContent = null;
+          // noteContent = '';
         },
         child: Icon(Icons.delete_forever_rounded),
         elevation: 0,
@@ -38,7 +39,7 @@ class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
           TextButton(
               onPressed: () {
                 _formKey.currentState.save();
-                Navigator.pop(context, noteContent);
+                Navigator.pop(context, myController.text);
               },
               child: Text(
                 'Save',
@@ -52,11 +53,11 @@ class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
         child: Form(
           key: _formKey,
           child: TextFormField(
-           // initialValue: noteContent,
-             controller: myController,
+              // initialValue: noteContent,
+              controller: myController,
               keyboardType: TextInputType.text,
               onSaved: (String val) {
-                noteContent = val;
+                myController.text = val;
               },
               cursorColor: Color(0xFF2FB49C),
               style: TextStyle(

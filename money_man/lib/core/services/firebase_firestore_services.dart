@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/categoryModel.dart';
-import 'package:money_man/core/models/transactionModel.dart';
-import 'package:money_man/core/models/walletModel.dart';
+import 'package:money_man/core/models/bill_model.dart';
+import 'package:money_man/core/models/budget_model.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/event_model.dart';
+import 'package:money_man/core/models/recurring_transaction_model.dart';
+import 'package:money_man/core/models/transaction_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 
 class FirebaseFireStoreService {
   final String uid;
@@ -430,48 +434,6 @@ class FirebaseFireStoreService {
     return listTrans;
   }
 
-  // void setup() async {
-  //   List<String> cateName = [];
-  //   List<String> idList = [];
-  //   await categories.get().then((value) {
-  //     value.docs.forEach((element) {
-  //       idList.add(element.id);
-  //       cateName.add(element.get('name'));
-  //     });
-  //   });
-
-  //   List<List<String>> result = [[]];
-  //   List<List<String>> single = [[]];
-  //   int index = 0;
-
-  //   for (var name in cateName) {
-  //     String total = '';
-  //     for (int i = 0; i < name.length; i++) {
-  //       String k = name[i].toLowerCase();
-  //       total += k;
-  //       total = total.toLowerCase();
-  //       result[index].add(total);
-  //       if (!single[index].contains(k)) single[index].add(k);
-  //     }
-  //     result.add([]);
-  //     single.add([]);
-  //     result[index].addAll(single[index]);
-  //     index++;
-  //   }
-
-  //   // print(result[0]);
-
-  //   // print(idList);
-  //   for (int i = 0; i < idList.length; i++) {
-  //     setUp2(idList[i], result[i]);
-  //   }
-  //   // setUp2('2Gx7qrHpF1LrIQP89sIU', result[1]);
-  // }
-
-  // void setUp2(String id, List<String> list) async {
-  //   await categories.doc(id).update({'searchIndex': list});
-  // }
-
   // TRANSACTION END//
 
   // CATERGORY START//
@@ -518,6 +480,320 @@ class FirebaseFireStoreService {
     return snapshot.get(FieldPath(['userName'])).toString();
   }
   // USER END //
+
+  // BUDGET START //
+
+  // add budget
+  Future addBudget(Budget budget, Wallet wallet) async {
+    // lấy reference đến collection budgets
+    final budgetsRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('budgets')
+        .doc();
+
+    // lấy auto id gán cho budget
+    budget.id = budgetsRef.id;
+
+    // tính toán spent và gán spent cho budget
+    budget.spent = await calculateBudgetSpent(wallet, budget);
+
+    // thực hiện add budget
+    await budgetsRef
+        .set(budget.toMap())
+        .then((value) => print('budget added!'))
+        .catchError((error) => print(error));
+  }
+
+  Future<double> calculateBudgetSpent(Wallet wallet, Budget budget) async {
+    // khai báo biến spent (số tiền của các transaction thỏa yêu cầu của budget)
+    double spent = 0;
+
+    // dựa trên category để lấy các transaction thỏa yêu cầu => tính toán spent
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions')
+        .where('category.id', isEqualTo: budget.category.id)
+        .get()
+        .then((value) =>
+            value.docs.map((e) => spent += e.get('amount')).toList());
+    return spent;
+  }
+
+  // Stream budget dùng để hiển thị list các budget đã có dựa trên wallet id
+  // tìm chỗ thích hợp để đặt 1 streambuilder<List<Budget>> để lấy dữ liệu
+  // khuyến khích đặt ở screen gốc (budget_home) để có sẵn dữ liệu rồi truyền vào các screen child sẽ dễ hơn
+  Stream<List<Budget>> budgetStream(String walletId) {
+    return users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('budgets')
+        .snapshots()
+        .map(_budgetFromSnapshot);
+  }
+
+  // convert budget from snapshot (hàm này convert từ dữ liệu firebase thành budget)
+  List<Budget> _budgetFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((e) {
+      print(e.data());
+      return Budget.fromMap(e.data());
+    }).toList();
+  }
+
+  // edit budget
+  Future updateBudget(Budget budget, Wallet wallet) async {
+    // user thay đổi thông tin budget thì có thể thay đổi category
+    // nên spent sẽ có thể bị tính lại từ đầu => tính toán spent
+    // gán spent cho budget
+    budget.spent = await calculateBudgetSpent(wallet, budget);
+
+    // thực hiện update budget
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('budgets')
+        .doc(budget.id)
+        .update(budget.toMap())
+        .then((value) => print('budget updated!'))
+        .catchError((error) => print(error));
+  }
+
+  // delete budget
+  Future deleteBudget(String walletId, String budgetId) async {
+    // thực hiện delete budget thôi
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('budgets')
+        .doc(budgetId)
+        .delete()
+        .then((value) => print('budget deleted!'))
+        .catchError((error) => print(error));
+  }
+
+  // BUDGET END //
+
+  // BILL START //
+
+  // add bill
+  Future addBill(Bill bill, Wallet wallet) async {
+    final billsRef = await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('bills')
+        .doc();
+    bill.id = billsRef.id;
+    await billsRef
+        .set(bill.toMap())
+        .then((value) => print('bill added!'))
+        .catchError((error) => print('error'));
+  }
+
+  // edit bill
+  Future updateBill(Bill bill, Wallet wallet) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('bills')
+        .doc(bill.id)
+        .update(bill.toMap())
+        .then((value) => print('bill updated!'))
+        .catchError((error) => print(error));
+  }
+
+  // delete bill
+  Future deleteBill(Bill bill, Wallet wallet) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('bills')
+        .doc(bill.id)
+        .delete();
+  }
+
+  // Stream list bill
+  Stream<List<Bill>> billStream(String walletId) {
+    return users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('bills')
+        .snapshots()
+        .map(_billFromSnapshot);
+  }
+
+  // convert bill from snapshot (hàm này convert từ dữ liệu firebase thành budget)
+  List<Bill> _billFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((e) {
+      print(e.data());
+      return Bill.fromMap(e.data());
+    }).toList();
+  }
+
+  // BILL END //
+
+  // RECURRING TRANSACTION START //
+
+  // add recurring transaction
+  Future addBRecurringTransaction(
+      RecurringTransaction reTrans, Wallet wallet) async {
+    final reTranssRef = await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('recurring transactions')
+        .doc();
+    reTrans.id = reTranssRef.id;
+    await reTranssRef
+        .set(reTrans.toMap())
+        .then((value) => print('recurring transaction added!'))
+        .catchError((error) => print('error'));
+  }
+
+  // edit recurring transaction
+  Future updateRecurringTransaction(
+      RecurringTransaction reTrans, Wallet wallet) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('recurring transactions')
+        .doc(reTrans.id)
+        .update(reTrans.toMap())
+        .then((value) => print('recurring transaction updated!'))
+        .catchError((error) => print(error));
+  }
+
+  // delete recurring transaction
+  Future deleteRecurringTransaction(
+      RecurringTransaction reTrans, Wallet wallet) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('recurring transactions')
+        .doc(reTrans.id)
+        .delete();
+  }
+
+  // stream list recurring transaction
+  Stream<List<RecurringTransaction>> recurringTransactionStream(
+      String walletId) {
+    return users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('recurring transactions')
+        .snapshots()
+        .map(_recurringTransactionFromSnapshot);
+  }
+
+  // convert budget from snapshot (hàm này convert từ dữ liệu firebase thành budget)
+  List<RecurringTransaction> _recurringTransactionFromSnapshot(
+      QuerySnapshot snapshot) {
+    return snapshot.docs.map((e) {
+      print(e.data());
+      return RecurringTransaction.fromMap(e.data());
+    }).toList();
+  }
+
+  // RECURRING TRANSACTION END //
+
+  // EVENT START //
+
+  // add event
+  Future addEvent(Event event, Wallet wallet) async {
+    // lấy reference tới collection events
+    final eventsRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('events')
+        .doc();
+
+    // gán id cho event
+    event.id = eventsRef.id;
+
+    // thực hiện add event
+    await eventsRef
+        .set(event.toMap())
+        .then((value) => print('event added!'))
+        .catchError((error) => print(error));
+  }
+
+  // edit event
+  Future updateEvent(Event event, Wallet wallet) async {
+    // thực hiện upudate event
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('events')
+        .doc(event.id)
+        .update(event.toMap())
+        .then((value) => print('event updated!'))
+        .catchError((error) => print(error));
+  }
+
+  // update event amount and transaction id list (dùng sau khi add, edit transaction mà có liên quan event)
+  Future updateEventAmountAndTransList(
+      Event event, Wallet wallet, MyTransaction transaction) async {
+    // dựa trên type của category để xử lý spent
+    // trường hợp type = incone
+    if (transaction.category.type == 'income')
+      event.spent += transaction.amount;
+    // trường hợp type = expense
+    else if (transaction.category.type == 'expense')
+      event.spent -= transaction.amount;
+    // trường hợp type = deft & loan
+
+    // add id của transaction vào list (sau này muốn display thì thông qua 1 hàm get)
+    event.transactionIdList.add(transaction.id);
+
+    // update lại event với thông tin mới
+    await updateEvent(event, wallet);
+  }
+
+  // delete event
+  Future deleteEvent(String eventId, String walletId) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('events')
+        .doc(eventId)
+        .delete();
+  }
+
+  // Stream list event để display các event đang có của wallet
+  Stream<List<Event>> eventStream(String walletId) {
+    return users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('events')
+        .snapshots()
+        .map(_eventFromSnapshot);
+  }
+
+  // convert event from snapshot (hàm này convert từ dữ liệu firebase thành event)
+  List<Event> _eventFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((e) {
+      print(e.data());
+      return Event.fromMap(e.data());
+    }).toList();
+  }
+
+  // EVENT END //
 
   // // edit player
   // Future editPlayer(Player player) async {
