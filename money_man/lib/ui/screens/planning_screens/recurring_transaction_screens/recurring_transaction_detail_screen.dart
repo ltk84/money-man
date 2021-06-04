@@ -94,9 +94,11 @@ class _RecurringTransactionDetailScreenState
                           wallet: widget.wallet,
                         );
                       });
-                  setState(() {
-                    _recurringTransaction = updatedReTrans;
-                  });
+                  if (updatedReTrans != null) {
+                    setState(() {
+                      _recurringTransaction = updatedReTrans;
+                    });
+                  }
                 },
                 child: Text('Edit',
                     style: TextStyle(
