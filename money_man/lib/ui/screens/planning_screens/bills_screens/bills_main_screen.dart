@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/bill_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
@@ -16,7 +17,7 @@ import 'package:provider/provider.dart';
 class BillsMainScreen extends StatefulWidget {
   Wallet currentWallet;
 
-  BillsMainScreen({Key key, this.currentWallet}) : super(key: key);
+  BillsMainScreen({Key key, @required this.currentWallet}) : super(key: key);
 
   @override
   _BillsMainScreenState createState() => _BillsMainScreenState();
@@ -124,6 +125,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
   }
 
   Widget buildListBills(context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -137,100 +139,115 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 color: Colors.white70,
               )),
         ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                PageTransition(
-                    childCurrent: this.widget,
-                    child: BillDetailScreen(),
-                    type: PageTransitionType.rightToLeft));
-          },
-          child: Container(
-            padding: EdgeInsets.fromLTRB(20, 14, 20, 8),
-            decoration: BoxDecoration(
-                color: Color(0xFF1c1c1c),
-                border: Border(
-                    top: BorderSide(
-                      color: Colors.white12,
-                      width: 0.5,
-                    ),
-                    bottom: BorderSide(
-                      color: Colors.white12,
-                      width: 0.5,
-                    ))),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SuperIcon(
-                  iconPath: 'assets/icons/investment_3.svg',
-                  size: 38.0,
-                ),
-                SizedBox(width: 20.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Investment',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        )),
-                    Text('Next bill is 02/06/2021',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white70,
-                        )),
-                    SizedBox(height: 8.0),
-                    Text('Due in 1 day',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        )),
-                    TextButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.white;
-                            else
-                              return Color(
-                                  0xFF4FCC5C); // Use the component's default.
-                          },
-                        ),
-                        foregroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Color(0xFF4FCC5C);
-                            else
-                              return Colors
-                                  .white; // Use the component's default.
-                          },
-                        ),
-                      ),
-                      child: Text("PAY \$ 1,000",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w700,
-                          ),
-                          textAlign: TextAlign.center),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
+        StreamBuilder<List<Bill>>(
+            stream: _firestore.billStream(widget.currentWallet.id),
+            builder: (context, snapshot) {
+              List<Bill> listBills = snapshot.data ?? [];
+              if (listBills.length == 0) return Container();
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: listBills.length,
+                  itemBuilder: (context, index) =>
+                      buildBillCard(listBills[index]));
+            }
         ),
       ],
+    );
+  }
+
+  Widget buildBillCard(Bill bill) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            PageTransition(
+                childCurrent: this.widget,
+                child: BillDetailScreen(),
+                type: PageTransitionType.rightToLeft));
+      },
+      child: Container(
+        padding: EdgeInsets.fromLTRB(20, 14, 20, 8),
+        decoration: BoxDecoration(
+            color: Color(0xFF1c1c1c),
+            border: Border(
+                top: BorderSide(
+                  color: Colors.white12,
+                  width: 0.5,
+                ),
+                bottom: BorderSide(
+                  color: Colors.white12,
+                  width: 0.5,
+                ))),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SuperIcon(
+              iconPath: bill.category.iconID,
+              size: 38.0,
+            ),
+            SizedBox(width: 20.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(bill.category.name,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    )),
+                Text('Next bill is 02/06/2021',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white70,
+                    )),
+                SizedBox(height: 8.0),
+                Text('Due in 1 day',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    )),
+                TextButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                    backgroundColor:
+                    MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.white;
+                        else
+                          return Color(
+                              0xFF4FCC5C); // Use the component's default.
+                      },
+                    ),
+                    foregroundColor:
+                    MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Color(0xFF4FCC5C);
+                        else
+                          return Colors
+                              .white; // Use the component's default.
+                      },
+                    ),
+                  ),
+                  child: Text("PAY \$ 1,000",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w700,
+                      ),
+                      textAlign: TextAlign.center),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 

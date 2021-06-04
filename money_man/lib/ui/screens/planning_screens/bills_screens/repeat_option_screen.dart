@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/ui/widgets/expandable_widget.dart';
 
 class RepeatOptionScreen extends StatefulWidget {
-  const RepeatOptionScreen({Key key}) : super(key: key);
+  final RepeatOption repeatOption;
+  RepeatOptionScreen({
+    Key key,
+    @required this.repeatOption,
+  }) : super(key: key);
 
   @override
   _RepeatOptionScreenState createState() => _RepeatOptionScreenState();
@@ -28,22 +33,32 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
   bool expandTypeOption;
   int selectedTypeOption;
 
+  RepeatOption _repeatOption;
+
   @override
   void initState() {
     // TODO: implement initState
 
+    _repeatOption = widget.repeatOption;
+
     // Này là để lấy Frequency đang chọn để quyết định đơn vị của rangeAmount là ngày, tuần, tháng hay là năm.
     frequencyList = ['daily', 'weekly', 'monthly', 'yearly'];
-    selectedFrequencyIndex = 0;
+    selectedFrequencyIndex = frequencyList.indexOf(_repeatOption.frequency);
 
     // Biến để lưu chuỗi đơn vị cho rangeAmount.
-    freqType = 'day';
+    //freqType = getFreqTypeString(selectedFrequencyIndex);
+    freqType = _repeatOption.extraAmountInfo; // Note
 
     // Biến để lưu các giá trị tùy chọn. Khởi tạo với giá trị mặc định dưới đây.
-    rangeAmount = 1;
-    beginDateTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    endDateTime = beginDateTime.add(Duration(days: 1));
-    repeatTime = 1;
+    rangeAmount = _repeatOption.rangeAmount;
+    beginDateTime = _repeatOption.beginDateTime;
+    endDateTime = _repeatOption.extraTypeInfo is DateTime == false
+        ? beginDateTime.add(Duration(days: 1))
+        : _repeatOption.extraTypeInfo;
+    repeatTime = _repeatOption.type == 'for' ? _repeatOption.extraTypeInfo : 1;
+    //beginDateTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    //endDateTime = beginDateTime.add(Duration(days: 1));
+    //repeatTime = 1;
 
     // Biến trigger để xử lý các tùy chọn.
     expandOption = false;
@@ -52,8 +67,16 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
 
     // Biến trigger để xử lý chọn loại lặp lại.
     expandTypeOption = false;
-    selectedTypeOption = 1; // Biến này bắt đầu từ 1 đến 3 tương ứng: Forever, Until (ending date), For (repeat time).
-                            // Mặc định loại lặp ban đầu là Forever nên biến này có giá trị là 1.
+
+    // Biến này bắt đầu từ 1 đến 3 tương ứng: Forever, Until (ending date), For (repeat time).
+    // Mặc định loại lặp ban đầu là Forever nên biến này có giá trị là 1.
+    if (_repeatOption.type == 'forever') {
+      selectedTypeOption = 1;
+    } else if (_repeatOption.type == 'until') {
+      selectedTypeOption = 2;
+    } else {
+      selectedTypeOption = 3;
+    }
 
     super.initState();
   }
@@ -68,7 +91,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
           elevation: 0.0,
           leading: CloseButton(
             onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(_repeatOption);
             },
           ),
           title: Text('Repeat Options',
@@ -140,6 +163,8 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                         setState(() {
                                           selectedFrequencyIndex = index;
                                           freqType = getFreqTypeString(selectedFrequencyIndex);
+                                          _repeatOption.extraAmountInfo = freqType; // Note.
+                                          _repeatOption.frequency = frequencyList[selectedFrequencyIndex];
                                         });
                                       },
                                       itemBuilder: (context, index) {
@@ -207,6 +232,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                       onSelectedItemChanged: (index) {
                                         setState(() {
                                           rangeAmount = index + 1;
+                                          _repeatOption.rangeAmount = rangeAmount;
                                         });
                                       },
                                       itemBuilder: (context, index) {
@@ -275,6 +301,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                     setState(() {
                                       beginDateTime = val;
                                       endDateTime = beginDateTime.add(Duration(days: 1));
+                                      _repeatOption.beginDateTime = beginDateTime;
                                     });
                                   }),
                             ),
@@ -298,6 +325,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                           onTap: () {
                             setState(() {
                               selectedTypeOption = 1;
+                              _repeatOption.type = 'forever';
                             });
                           },
                           child: buildForeverOption(selected: selectedTypeOption == 1)
@@ -310,6 +338,8 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                               if (selectedTypeOption != 2) {
                                 selectedTypeOption = 2;
                                 expandTypeOption = true;
+                                _repeatOption.type = 'until';
+                                _repeatOption.extraTypeInfo = endDateTime;
                               }
                               else
                                 expandTypeOption = !expandTypeOption;
@@ -348,6 +378,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 onDateTimeChanged: (val) {
                                   setState(() {
                                     endDateTime = val;
+                                    _repeatOption.extraTypeInfo = endDateTime;
                                   });
                                 }),
                           ),
@@ -362,6 +393,8 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                               if (selectedTypeOption != 3) {
                                 selectedTypeOption = 3;
                                 expandTypeOption = true;
+                                _repeatOption.type = 'for';
+                                _repeatOption.extraTypeInfo = repeatTime;
                               }
                               else
                                 expandTypeOption = !expandTypeOption;
@@ -395,6 +428,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                   onChanged: (value) {
                                     setState(() {
                                       repeatTime = int.parse(value);
+                                      _repeatOption.extraTypeInfo = repeatTime;
                                     });
                                   },
                                   style: TextStyle(

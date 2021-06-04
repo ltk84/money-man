@@ -4,6 +4,7 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/bill_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
@@ -13,11 +14,15 @@ import 'package:money_man/ui/screens/planning_screens/bills_screens/repeat_optio
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class AddBillScreen extends StatefulWidget {
   Wallet currentWallet;
 
-  AddBillScreen({Key key, this.currentWallet}) : super(key: key);
+  AddBillScreen({Key key, @required this.currentWallet}) : super(key: key);
 
   @override
   _AddBillScreenState createState() => _AddBillScreenState();
@@ -32,16 +37,27 @@ class _AddBillScreenState extends State<AddBillScreen> {
   String note;
   RepeatOption repeatOption;
 
+  DateTime now =
+  DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     selectedWallet = widget.currentWallet;
     currencySymbol = CurrencyService().findByCode(selectedWallet.currencyID).symbol;
+    repeatOption = RepeatOption(
+        frequency: 'daily',
+        rangeAmount: 1,
+        extraAmountInfo: 'day',
+        beginDateTime: now,
+        type: 'forever',
+        extraTypeInfo: null);
   }
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Color(0xFF111111),
         extendBodyBehindAppBar: true,
@@ -60,7 +76,24 @@ class _AddBillScreenState extends State<AddBillScreen> {
           actions: [
             TextButton(
               onPressed: () async {
+                if (amount == null) {
+                  _showAlertDialog('Please enter amount!');
+                } else if (category == null) {
+                  _showAlertDialog('Please pick category!');
+                } else {
+                  var bill = Bill(
+                      id: 'id',
+                      category: category,
+                      amount: amount,
+                      walletId: selectedWallet.id,
+                      note: note,
+                      transactionIdList: [],
+                      repeatOption: repeatOption,
+                      isFinished: false);
 
+                  await _firestore.addBill(bill, selectedWallet);
+                  Navigator.pop(context);
+                }
               },
               child: Text('Save',
                   style: TextStyle(
@@ -92,6 +125,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                 child: Column(children: [
                   // Hàm build Amount Input.
                   GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () async {
                         final resultAmount = await Navigator.push(context,
                             MaterialPageRoute(builder: (_) => EnterAmountScreen()));
@@ -117,6 +151,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
 
                   // Hàm build Category Selection.
                   GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () async {
                         final selectCate = await showCupertinoModalBottomSheet(
                             isDismissible: true,
@@ -147,6 +182,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
 
                   // Hàm build Note Input.
                   GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () async {
                         final noteContent = await Navigator.push(
                             context,
@@ -178,6 +214,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
 
                   // Hàm build Wallet Selection.
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () async {
                       var res = await showCupertinoModalBottomSheet(
                           isDismissible: true,
@@ -212,17 +249,20 @@ class _AddBillScreenState extends State<AddBillScreen> {
                           width: 0.5,
                         ))),
                 child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () async {
                       var res = await showCupertinoModalBottomSheet(
                           enableDrag: false,
                           isDismissible: false,
                           backgroundColor: Colors.grey[900],
                           context: context,
-                          builder: (context) => RepeatOptionScreen()
+                          builder: (context) => RepeatOptionScreen(
+                            repeatOption: repeatOption,
+                          )
                       );
                       if (res != null)
                         setState(() {
-
+                          repeatOption = res;
                         });
                     },
                     child: buildRepeatOptions()
@@ -231,7 +271,9 @@ class _AddBillScreenState extends State<AddBillScreen> {
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Text(
-                  'Repeat everyday from 01/06/2021',
+                  'Repeat every ${repeatOption.rangeAmount} ${repeatOption.extraAmountInfo}'
+                      '${repeatOption.rangeAmount == 1 ? '' : 's'} '
+                      'from ${DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime)}',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 13.0,
@@ -416,6 +458,17 @@ class _AddBillScreenState extends State<AddBillScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
     );
   }
 }
