@@ -86,6 +86,7 @@ class _RecurringTransactionDetailScreenState
               tag: 'billToDetail_actionBtn',
               child: TextButton(
                 onPressed: () async {
+                  print('before' + _recurringTransaction.category.name);
                   final updatedReTrans = await showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) {
@@ -94,6 +95,8 @@ class _RecurringTransactionDetailScreenState
                           wallet: widget.wallet,
                         );
                       });
+                  print('after' + _recurringTransaction.category.name);
+
                   if (updatedReTrans != null) {
                     setState(() {
                       _recurringTransaction = updatedReTrans;

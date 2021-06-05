@@ -59,10 +59,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       builder: (_) => EditTransactionScreen(
                           transaction: widget.transaction,
                           wallet: widget.wallet)));
-              if (updatedTrans != null)
+              if (updatedTrans != null) {
                 setState(() {
                   widget.transaction = updatedTrans;
                 });
+                print(updatedTrans.toMap());
+              }
             },
             child: const Text('Edit',
                 style: TextStyle(

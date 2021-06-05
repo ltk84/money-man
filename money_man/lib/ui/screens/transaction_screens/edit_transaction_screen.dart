@@ -14,8 +14,8 @@ import 'package:provider/provider.dart';
 import 'note_transaction_srcreen.dart';
 
 class EditTransactionScreen extends StatefulWidget {
-  MyTransaction transaction;
-  Wallet wallet;
+  final MyTransaction transaction;
+  final Wallet wallet;
   EditTransactionScreen({
     Key key,
     @required this.wallet,
@@ -30,14 +30,22 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
   DateTime pickDate;
   DateTime formatTransDate;
   String currencySymbol;
+  double amount;
+  String note;
+
+  @override
+  void initState() {
+    super.initState();
+    pickDate = widget.transaction.date;
+    currencySymbol =
+        CurrencyService().findByCode(widget.wallet.currencyID).symbol;
+    amount = widget.transaction.amount;
+    note = widget.transaction.note;
+  }
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    formatTransDate = DateTime(widget.transaction.date.year,
-        widget.transaction.date.month, widget.transaction.date.day);
-    currencySymbol =
-        CurrencyService().findByCode(widget.wallet.currencyID).symbol;
 
     return Scaffold(
       backgroundColor: Colors.black26,
@@ -76,9 +84,17 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
           TextButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(FocusNode());
-                await _firestore.updateTransaction(
-                    widget.transaction, widget.wallet);
-                Navigator.pop(context, widget.transaction);
+                MyTransaction _transaction = MyTransaction(
+                  id: widget.transaction.id,
+                  amount: amount,
+                  date: pickDate,
+                  currencyID: widget.transaction.currencyID,
+                  category: widget.transaction.category,
+                  note: note,
+                );
+
+                await _firestore.updateTransaction(_transaction, widget.wallet);
+                Navigator.pop(context, _transaction);
               },
               child: const Text(
                 'Save',
@@ -119,7 +135,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 if (resultAmount != null)
                   setState(() {
                     print(resultAmount);
-                    widget.transaction.amount = double.parse(resultAmount);
+                    amount = double.parse(resultAmount);
                   });
               },
               leading: Icon(Icons.money, color: Colors.white54, size: 45.0),
@@ -130,7 +146,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       MaterialPageRoute(builder: (_) => EnterAmountScreen()));
                   if (resultAmount != null)
                     setState(() {
-                      widget.transaction.amount = double.parse(resultAmount);
+                      amount = double.parse(resultAmount);
                     });
                 },
                 // onChanged: (value) => amount = double.tryParse(value),
@@ -146,20 +162,17 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                      color: widget.transaction.amount == null
-                          ? Colors.grey[600]
-                          : Colors.white,
-                      fontSize: widget.transaction.amount == null ? 22 : 30.0,
+                      color: amount == null ? Colors.grey[600] : Colors.white,
+                      fontSize: amount == null ? 22 : 30.0,
                       fontFamily: 'Montserrat',
-                      fontWeight: widget.transaction.amount == null
-                          ? FontWeight.w500
-                          : FontWeight.w600,
+                      fontWeight:
+                          amount == null ? FontWeight.w500 : FontWeight.w600,
                     ),
-                    hintText: widget.transaction.amount == null
+                    hintText: amount == null
                         ? 'Enter amount'
                         : currencySymbol +
                             ' ' +
-                            MoneyFormatter(amount: widget.transaction.amount)
+                            MoneyFormatter(amount: amount)
                                 .output
                                 .withoutFractionDigits),
               ),
@@ -221,13 +234,11 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               title: TextFormField(
                 onTap: () async {
                   DatePicker.showDatePicker(context,
-                      currentTime:
-                          pickDate == null ? formatTransDate : pickDate,
+                      currentTime: pickDate,
                       showTitleActions: true, onConfirm: (date) {
                     if (date != null) {
                       setState(() {
                         pickDate = date;
-                        widget.transaction.date = pickDate;
                       });
                     }
                   },
@@ -252,33 +263,30 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                      color: widget.transaction.date == null
-                          ? Colors.grey[600]
-                          : Colors.white,
+                      color: pickDate == null ? Colors.grey[600] : Colors.white,
                       fontFamily: 'Montserrat',
                       fontSize: 16.0,
-                      fontWeight: widget.transaction.date == null
-                          ? FontWeight.w500
-                          : FontWeight.w600,
+                      fontWeight:
+                          pickDate == null ? FontWeight.w500 : FontWeight.w600,
                     ),
-                    hintText: widget.transaction.date == null
+                    hintText: pickDate == null
                         ? 'Select date'
-                        : formatTransDate ==
+                        : pickDate ==
                                 DateTime.parse(DateFormat("yyyy-MM-dd")
                                     .format(DateTime.now()))
                             ? 'Today'
-                            : formatTransDate ==
+                            : pickDate ==
                                     DateTime.parse(DateFormat("yyyy-MM-dd")
                                         .format(DateTime.now()
                                             .add(Duration(days: 1))))
                                 ? 'Tomorrow'
-                                : formatTransDate ==
+                                : pickDate ==
                                         DateTime.parse(DateFormat("yyyy-MM-dd")
                                             .format(DateTime.now()
                                                 .subtract(Duration(days: 1))))
                                     ? 'Yesterday'
                                     : DateFormat('EEEE, dd-MM-yyyy')
-                                        .format(widget.transaction.date)),
+                                        .format(pickDate)),
               ),
               trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
@@ -352,9 +360,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500),
-                    hintText: widget.transaction.note.length == 0
-                        ? 'Write note'
-                        : widget.transaction.note),
+                    hintText: note.length == 0 ? 'Write note' : note),
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',
@@ -365,12 +371,13 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (_) => NoteTransactionScreen(
-                                content: widget.transaction.note,
+                                content: note,
                               )));
                   print(noteContent);
                   if (noteContent != null) {
                     setState(() {
-                      widget.transaction.note = noteContent;
+                      note = noteContent;
+                      print(note);
                     });
                   }
                 },
