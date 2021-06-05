@@ -497,7 +497,7 @@ class FirebaseFireStoreService {
     budget.id = budgetsRef.id;
 
     // tính toán spent và gán spent cho budget
-    budget.spent = await calculateBudgetSpent(wallet, budget);
+    budget.spent = await calculateBudgetSpent(budget);
 
     // thực hiện add budget
     await budgetsRef
@@ -506,20 +506,59 @@ class FirebaseFireStoreService {
         .catchError((error) => print(error));
   }
 
-  Future<double> calculateBudgetSpent(Wallet wallet, Budget budget) async {
+  Future<double> calculateBudgetSpent(Budget budget) async {
     // khai báo biến spent (số tiền của các transaction thỏa yêu cầu của budget)
     double spent = 0;
+    List<MyTransaction> listTrans = [];
 
     // dựa trên category để lấy các transaction thỏa yêu cầu => tính toán spent
     await users
         .doc(uid)
         .collection('wallets')
-        .doc(wallet.id)
+        .doc(budget.walletId)
         .collection('transactions')
         .where('category.id', isEqualTo: budget.category.id)
         .get()
-        .then((value) =>
-            value.docs.map((e) => spent += e.get('amount')).toList());
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        value.docs.forEach((element) {
+          MyTransaction trans = MyTransaction.fromMap(element.data());
+          if (!listTrans.contains(trans)) listTrans.add(trans);
+        });
+        for (int i = 0; i < listTrans.length; i++)
+          if (listTrans[i].date.isBefore(budget.endDate) &&
+              budget.beginDate.isBefore(listTrans[i].date))
+            spent += listTrans[i].amount;
+      }
+    });
+    return spent;
+  }
+
+  Future<double> calculateBudgetSpentFromDay(
+      Budget budget, DateTime dateTime) async {
+    double spent = 0;
+    List<MyTransaction> listTrans = [];
+
+    // dựa trên category để lấy các transaction thỏa yêu cầu => tính toán spent
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(budget.walletId)
+        .collection('transactions')
+        .where('category.id', isEqualTo: budget.category.id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        value.docs.forEach((element) {
+          MyTransaction trans = MyTransaction.fromMap(element.data());
+          if (!listTrans.contains(trans)) listTrans.add(trans);
+        });
+        for (int i = 0; i < listTrans.length; i++)
+          if (listTrans[i].date.isBefore(dateTime.add(Duration(days: 1))) &&
+              budget.beginDate.isBefore(listTrans[i].date))
+            spent += listTrans[i].amount;
+      }
+    });
     return spent;
   }
 
@@ -545,17 +584,17 @@ class FirebaseFireStoreService {
   }
 
   // edit budget
-  Future updateBudget(Budget budget, Wallet wallet) async {
+  Future updateBudget(Budget budget) async {
     // user thay đổi thông tin budget thì có thể thay đổi category
     // nên spent sẽ có thể bị tính lại từ đầu => tính toán spent
     // gán spent cho budget
-    budget.spent = await calculateBudgetSpent(wallet, budget);
+    budget.spent = await calculateBudgetSpent(budget);
 
     // thực hiện update budget
     await users
         .doc(uid)
         .collection('wallets')
-        .doc(wallet.id)
+        .doc(budget.walletId)
         .collection('budgets')
         .doc(budget.id)
         .update(budget.toMap())

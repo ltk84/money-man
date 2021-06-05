@@ -37,92 +37,88 @@ class _BudgetScreenState extends State<BudgetScreen>
     //_wallet = _firestore.currentWallet
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: 1 == 65
-          ? Scaffold(
-              body: MyTimeRange(),
-            )
-          : DefaultTabController(
-              length: 3,
-              child: StreamBuilder<Wallet>(
-                  stream: _firestore.currentWallet,
-                  builder: (context, snapshot) {
-                    Wallet wallet = snapshot.data;
-                    print(wallet.id);
-                    return Scaffold(
-                      appBar: AppBar(
-                        backgroundColor: Color(0xff333333),
-                        leading: IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        title: Text(
-                          "Budget",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                          ),
-                        ),
-                        actions: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.account_balance_wallet_rounded),
-                              Icon(Icons.arrow_drop_down),
-                            ],
-                          )
-                        ],
-                        bottom: TabBar(
-                          isScrollable: true,
-                          controller: _tabController,
-                          indicatorColor: Color(0xffd3db00),
-                          indicatorWeight: 3,
-                          labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                          unselectedLabelColor: Colors.white30,
-                          tabs: [
-                            Tab(
-                              child: Container(
-                                  child: Icon(
-                                Icons.add_circle,
-                                color: Color(0xFF2FB49C),
-                                size: 35,
-                              )),
-                            ),
-                            Tab(
-                                child: Container(
-                              width: 120,
-                              child: Text(
-                                "Currently applied",
-                              ),
-                            )),
-                            Tab(
-                                child: Container(
-                              width: 120,
-                              child: Text(
-                                "Applied",
-                              ),
-                            )),
-                          ],
-                        ),
-                        elevation: 3,
+      home: DefaultTabController(
+        length: 3,
+        child: StreamBuilder<Wallet>(
+            stream: _firestore.currentWallet,
+            builder: (context, snapshot) {
+              Wallet wallet = snapshot.data;
+              print(wallet.id);
+              return Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Color(0xff333333),
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  title: Text(
+                    "Budget",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Montserrat',
+                    ),
+                  ),
+                  actions: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.account_balance_wallet_rounded),
+                        Icon(Icons.arrow_drop_down),
+                      ],
+                    )
+                  ],
+                  bottom: TabBar(
+                    isScrollable: true,
+                    controller: _tabController,
+                    indicatorColor: Color(0xffd3db00),
+                    indicatorWeight: 3,
+                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                    unselectedLabelColor: Colors.white30,
+                    tabs: [
+                      Tab(
+                        child: Container(
+                            child: Icon(
+                          Icons.add_circle,
+                          color: Color(0xFF2FB49C),
+                          size: 35,
+                        )),
                       ),
-                      body: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          AddBudget(
-                            tabController: _tabController,
-                          ),
-                          CurrentlyApplied(
-                            wallet: wallet,
-                          ),
-                          Applied()
-                        ],
-                      ),
-                    );
-                  }),
-            ),
+                      Tab(
+                          child: Container(
+                        width: 120,
+                        child: Text(
+                          "Currently applied",
+                        ),
+                      )),
+                      Tab(
+                          child: Container(
+                        width: 120,
+                        child: Text(
+                          "Applied",
+                        ),
+                      )),
+                    ],
+                  ),
+                  elevation: 3,
+                ),
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    AddBudget(
+                      tabController: _tabController,
+                    ),
+                    CurrentlyApplied(
+                      wallet: wallet,
+                    ),
+                    Applied()
+                  ],
+                ),
+              );
+            }),
+      ),
     );
   }
 }

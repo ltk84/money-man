@@ -15,6 +15,7 @@ class Budget {
   DateTime beginDate;
   DateTime endDate;
   bool isRepeat;
+  String label;
 
   Budget({
     @required this.id,

@@ -12,7 +12,7 @@ class Applied extends StatelessWidget {
       color: Color(0xff1a1a1a),
       //child: MyBudgetTile(),
       child: Column(
-        children: [MyTimeRange(), MyBudgetTile()],
+        children: [MyBudgetTile()],
       ),
     );
   }

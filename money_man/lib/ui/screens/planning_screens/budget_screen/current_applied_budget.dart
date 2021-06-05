@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/budget_model.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screen/budget_detail.dart';
 import 'package:provider/provider.dart';
-
-import 'line_chart_progress.dart';
+import 'package:intl/intl.dart';
 
 class CurrentlyApplied extends StatelessWidget {
   Wallet wallet;
@@ -21,16 +23,22 @@ class CurrentlyApplied extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: 30),
       color: Color(0xff1a1a1a),
-      //child: MyBudgetTile(),
       child: StreamBuilder<List<Budget>>(
           stream: _firestore.budgetStream(wallet.id),
           builder: (context, snapshot) {
             List<Budget> budgets = snapshot.data;
+            budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
+
             print(budgets);
             return ListView.builder(
               itemCount: budgets == null ? 0 : budgets.length,
               itemBuilder: (context, index) => Column(
-                children: [MyTimeRange(), MyBudgetTile()],
+                children: [
+                  //MyTimeRange(),
+                  MyBudgetTile(
+                    budget: budgets[index],
+                  )
+                ],
               ),
             );
           }),
@@ -39,77 +47,135 @@ class CurrentlyApplied extends StatelessWidget {
 }
 
 class MyBudgetTile extends StatelessWidget {
-  const MyBudgetTile({Key key}) : super(key: key);
+  const MyBudgetTile({Key key, this.budget}) : super(key: key);
+  final Budget budget;
 
   @override
   Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    var todayRate = today.difference(budget.beginDate).inDays /
+        budget.endDate.difference(budget.beginDate).inDays;
+    print('today rate:  $todayRate');
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    _firestore.updateBudget(budget);
+    budget.label = getBudgetLabel(budget);
+
     return Center(
       child: GestureDetector(
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => BudgetDetailScreen()),
+            MaterialPageRoute(
+                builder: (context) => BudgetDetailScreen(budget: this.budget)),
           );
         },
         child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Color(0xff222222),
+          ),
           width: MediaQuery.of(context).size.width,
-          height: 110,
-          color: Color(0xff1b1b1b),
+          height: 140,
+          margin: EdgeInsets.only(bottom: 15, left: 5, right: 5),
+          padding: EdgeInsets.only(bottom: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                        left: 15, bottom: 10, top: 10, right: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                            padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
-                            child: Icon(
-                              Icons.circle,
-                              color: Colors.redAccent,
-                              size: 50,
-                            )),
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 20),
                           child: Text(
-                            "All expend",
+                            budget.label == null
+                                ? 'Custom '
+                                : '${budget.label} ',
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+                                color: white,
+                                fontSize: 18,
+                                fontFamily: 'Montserrat'),
                           ),
-                        ), //Title cho khoản chi thu đã chọn
+                        ),
+                        Container(
+                          child: Text(
+                            budget.label != 'Custom'
+                                ? ''
+                                : '${DateFormat('dd/MM/yyyy').format(budget.beginDate) + ' - ' + DateFormat('dd/MM/yyyy').format(budget.endDate)}',
+                            style: TextStyle(
+                                color: Colors.white54,
+                                fontFamily: 'Montserrat',
+                                fontSize: 12),
+                          ),
+                        )
                       ],
                     ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(15, 25, 15, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            '3.000.000',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ), // Target
-                          Text(
-                            'Remain: 1.300.000',
-                            style: TextStyle(color: Colors.white54),
-                          ), // Remain
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  Container(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                                padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
+                                child: SuperIcon(
+                                  iconPath: this.budget.category.iconID,
+                                  size: 50,
+                                )),
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                this.budget.category.name,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ), //Title cho khoản chi thu đã chọn
+                          ],
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(15, 25, 15, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                MoneyFormatter(amount: this.budget.amount)
+                                    .output
+                                    .withoutFractionDigits,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ), // Target
+                              Text(
+                                'Remain: ' +
+                                    MoneyFormatter(
+                                            amount: this.budget.amount -
+                                                this.budget.spent)
+                                        .output
+                                        .withoutFractionDigits,
+                                style: TextStyle(color: Colors.white54),
+                              ), // Remain
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(80, 0, 15, 0),
+                padding: EdgeInsets.fromLTRB(80, 3, 15, 0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: LinearProgressIndicator(
@@ -117,71 +183,92 @@ class MyBudgetTile extends StatelessWidget {
                     valueColor:
                         AlwaysStoppedAnimation<Color>(Color(0xFF2FB49C)),
                     minHeight: 8,
-                    value: 0.5,
+                    value: this.budget.spent / this.budget.amount,
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Color(0xff171717)),
-                margin: EdgeInsets.fromLTRB(300, 3, 15, 0),
-                child: Text(
-                  "Today",
-                  style: TextStyle(color: Colors.white, fontSize: 10),
-                ),
-              )
+              SizedBox(
+                height: 5,
+              ),
+              todayRate < 0
+                  ? Container()
+                  : Container(
+                      margin: EdgeInsets.only(
+                          left: 65 +
+                              (MediaQuery.of(context).size.width - 95) *
+                                  todayRate),
+                      height: 20,
+                      width: 40,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Color(0xff171717)),
+                      child: Text(
+                        "Today",
+                        style: TextStyle(color: Colors.white, fontSize: 10),
+                      ),
+                    ),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-class MyTimeRange extends StatelessWidget {
-  const MyTimeRange({Key key}) : super(key: key);
+  String getBudgetLabel(Budget budget) {
+    DateTime today = DateTime.now();
+    DateTime begin = budget.beginDate;
+    DateTime end = budget.endDate;
+    if (end.weekday == 7 &&
+        begin.weekday == 1 &&
+        begin.isBefore(today) &&
+        end.isAfter(today)) return 'This week';
+    if (begin.day == 1 &&
+        end.day ==
+            DateTime(begin.year, begin.month + 1, 1)
+                .subtract(Duration(days: 1))
+                .day &&
+        end.month == today.month &&
+        begin.month == end.month &&
+        begin.isBefore(today) &&
+        end.isAfter(today)) return 'This month';
+    var temp = DateTime(today.year, today.month + 1, today.day);
+    if (begin.day == 1 &&
+        end.day ==
+            DateTime(begin.year, begin.month + 1, 1)
+                .subtract(Duration(days: 1))
+                .day &&
+        end.month == temp.month &&
+        begin.isBefore(temp) &&
+        end.isAfter(temp)) return 'Next month';
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Container(
-        padding: EdgeInsets.all(15),
-        width: MediaQuery.of(context).size.width,
-        height: 70,
-        color: Color(0xff1b1b1b),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              child: Text(
-                "This month",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  '3,000,000',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'Remain: 1,300,000',
-                  style: TextStyle(color: Colors.white),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+    double quarterNumber = (today.month - 1) / 3 + 3;
+    DateTime firstDayOfQuarter =
+        new DateTime(today.year, quarterNumber.toInt(), 1);
+    final endDayOfQuarter =
+        new DateTime(today.year, quarterNumber.toInt() + 3, 1)
+            .subtract(Duration(days: 1));
+
+    if (begin.compareTo(firstDayOfQuarter) == 0 &&
+        end.compareTo(endDayOfQuarter) == 0) return 'This quarter';
+
+    double nextQuarterNumber = (today.month - 1) / 3 + 6;
+    DateTime firstDayOfNQuarter =
+        new DateTime(today.year, nextQuarterNumber.toInt(), 1);
+    final endDayOfNQuarter =
+        new DateTime(today.year, nextQuarterNumber.toInt() + 3, 1)
+            .subtract(Duration(days: 1));
+    print('1$firstDayOfNQuarter');
+    print(begin);
+    if (begin.compareTo(firstDayOfNQuarter) == 0 &&
+        end.compareTo(endDayOfNQuarter) == 0) return 'Next quarter';
+
+    if (begin.compareTo(DateTime(today.year, 1, 1)) == 0 &&
+        end.compareTo(DateTime(today.year, 12, 31)) == 0) return 'This year';
+
+    if (begin.compareTo(DateTime(today.year + 1, 1, 1)) == 0 &&
+        end.compareTo(DateTime(today.year + 1, 12, 31)) == 0)
+      return 'Next year';
+    return 'Custom';
   }
 }
