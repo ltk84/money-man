@@ -44,8 +44,8 @@ class _AddBudgetState extends State<EditBudget> {
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     _budget = this.widget.budget;
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Theme(
       data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
@@ -75,7 +75,13 @@ class _AddBudgetState extends State<EditBudget> {
           ),
           actions: [
             GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                _firestore.updateBudget(_budget, widget.wallet);
+                await _showAlertDialog(
+                    "Congratulations, Update budget successfully!");
+                String result = 'Ajojo';
+                Navigator.pop(context, result);
+              },
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   alignment: Alignment.center,
@@ -89,8 +95,10 @@ class _AddBudgetState extends State<EditBudget> {
             ),
           ],
         ),
+        backgroundColor: Color(0xff111111),
         body: Container(
           color: Color(0xff111111),
+          margin: EdgeInsets.symmetric(vertical: 15),
           padding: EdgeInsets.all(15),
           child: Column(
             children: [
@@ -110,6 +118,7 @@ class _AddBudgetState extends State<EditBudget> {
                     if (selectCate != null) {
                       setState(() {
                         this.cate = selectCate;
+                        _budget.category = this.cate;
                       });
                     }
                   },
@@ -153,6 +162,7 @@ class _AddBudgetState extends State<EditBudget> {
                             if (selectCate != null) {
                               setState(() {
                                 this.cate = selectCate;
+                                _budget.category = this.cate;
                               });
                             }
                           },
@@ -193,8 +203,8 @@ class _AddBudgetState extends State<EditBudget> {
                         MaterialPageRoute(builder: (_) => EnterAmountScreen()));
                     if (resultAmount != null)
                       setState(() {
-                        print(resultAmount);
                         amount = double.parse(resultAmount);
+                        this._budget.amount = amount;
                       });
                   },
                   trailing: Icon(
@@ -232,8 +242,8 @@ class _AddBudgetState extends State<EditBudget> {
                                     builder: (_) => EnterAmountScreen()));
                             if (resultAmount != null)
                               setState(() {
-                                print(resultAmount);
                                 amount = double.parse(resultAmount);
+                                this._budget.amount = amount;
                               });
                           },
                           readOnly: true,
@@ -267,9 +277,6 @@ class _AddBudgetState extends State<EditBudget> {
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
                   onTap: () async {
-                    /*final resultAmount = await Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => SelectTimeRangeScreen()));
-                    if (resultAmount != null) setState(() {});*/
                     var resultAmount = await showCupertinoModalBottomSheet(
                         isDismissible: true,
                         backgroundColor: Colors.grey[900],
@@ -278,6 +285,9 @@ class _AddBudgetState extends State<EditBudget> {
                     if (resultAmount != null)
                       setState(() {
                         // Change the time ahihi
+                        mTimeRange = resultAmount;
+                        _budget.beginDate = resultAmount.beginDay;
+                        _budget.endDate = resultAmount.endDay;
                       });
                   },
                   trailing: Icon(
@@ -309,7 +319,7 @@ class _AddBudgetState extends State<EditBudget> {
                         ),
                         TextFormField(
                           onTap: () async {
-                            var resultAmount =
+                            BudgetTimeRange resultAmount =
                                 await showCupertinoModalBottomSheet(
                                     isDismissible: true,
                                     backgroundColor: Colors.grey[900],
@@ -321,6 +331,8 @@ class _AddBudgetState extends State<EditBudget> {
                               setState(() {
                                 // Change the time ahihi
                                 mTimeRange = resultAmount;
+                                _budget.beginDate = resultAmount.beginDay;
+                                _budget.endDate = resultAmount.endDay;
                               });
                           },
                           readOnly: true,
@@ -359,14 +371,15 @@ class _AddBudgetState extends State<EditBudget> {
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
                   onTap: () async {
-                    var res = await showCupertinoModalBottomSheet(
+                    Wallet res = await showCupertinoModalBottomSheet(
                         isDismissible: true,
                         backgroundColor: Colors.grey[900],
                         context: context,
                         builder: (context) =>
-                            SelectWalletAccountScreen(wallet: selectedWallet));
+                            SelectWalletAccountScreen(wallet: widget.wallet));
                     if (res != null)
                       setState(() {
+                        _budget.walletId = res.id;
                         selectedWallet = res;
                         currencySymbol = CurrencyService()
                             .findByCode(selectedWallet.currencyID)
@@ -404,7 +417,7 @@ class _AddBudgetState extends State<EditBudget> {
                         ),
                         TextFormField(
                           onTap: () async {
-                            var res = await showCupertinoModalBottomSheet(
+                            Wallet res = await showCupertinoModalBottomSheet(
                                 isDismissible: true,
                                 backgroundColor: Colors.grey[900],
                                 context: context,
@@ -412,6 +425,8 @@ class _AddBudgetState extends State<EditBudget> {
                                     wallet: selectedWallet));
                             if (res != null)
                               setState(() {
+                                _budget.walletId = res.id;
+
                                 selectedWallet = res;
                                 currencySymbol = CurrencyService()
                                     .findByCode(selectedWallet.currencyID)

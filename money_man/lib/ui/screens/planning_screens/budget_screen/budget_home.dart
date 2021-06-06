@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:provider/provider.dart';
 
 import 'add_budget.dart';
@@ -61,13 +65,37 @@ class _BudgetScreenState extends State<BudgetScreen>
                     ),
                   ),
                   actions: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.account_balance_wallet_rounded),
-                        Icon(Icons.arrow_drop_down),
-                      ],
+                    GestureDetector(
+                      onTap: () async {
+                        final _auth = Provider.of<FirebaseAuthService>(context,
+                            listen: false);
+
+                        final result = await showCupertinoModalBottomSheet(
+                            isDismissible: true,
+                            backgroundColor: Colors.grey[900],
+                            context: context,
+                            builder: (context) {
+                              return Provider(
+                                  create: (_) {
+                                    return FirebaseFireStoreService(
+                                        uid: _auth.currentUser.uid);
+                                  },
+                                  child: WalletSelectionScreen(
+                                    id: wallet.id,
+                                  ));
+                            });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SuperIcon(
+                            iconPath: wallet.iconID,
+                            size: 30,
+                          ),
+                          Icon(Icons.arrow_drop_down),
+                        ],
+                      ),
                     )
                   ],
                   bottom: TabBar(

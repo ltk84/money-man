@@ -29,7 +29,6 @@ class CurrentlyApplied extends StatelessWidget {
             List<Budget> budgets = snapshot.data;
             budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
 
-            print(budgets);
             return ListView.builder(
               itemCount: budgets == null ? 0 : budgets.length,
               itemBuilder: (context, index) => Column(
@@ -37,6 +36,7 @@ class CurrentlyApplied extends StatelessWidget {
                   //MyTimeRange(),
                   MyBudgetTile(
                     budget: budgets[index],
+                    wallet: wallet,
                   )
                 ],
               ),
@@ -47,8 +47,9 @@ class CurrentlyApplied extends StatelessWidget {
 }
 
 class MyBudgetTile extends StatelessWidget {
-  const MyBudgetTile({Key key, this.budget}) : super(key: key);
+  const MyBudgetTile({Key key, this.budget, this.wallet}) : super(key: key);
   final Budget budget;
+  final Wallet wallet;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,7 @@ class MyBudgetTile extends StatelessWidget {
         budget.endDate.difference(budget.beginDate).inDays;
     print('today rate:  $todayRate');
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    _firestore.updateBudget(budget);
+    _firestore.updateBudget(budget, wallet);
     budget.label = getBudgetLabel(budget);
 
     return Center(
@@ -199,7 +200,7 @@ class MyBudgetTile extends StatelessWidget {
                   : Container(
                       margin: EdgeInsets.only(
                           left: 65 +
-                              (MediaQuery.of(context).size.width - 95) *
+                              (MediaQuery.of(context).size.width - 105) *
                                   todayRate),
                       height: 20,
                       width: 40,

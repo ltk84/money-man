@@ -584,7 +584,7 @@ class FirebaseFireStoreService {
   }
 
   // edit budget
-  Future updateBudget(Budget budget) async {
+  Future updateBudget(Budget budget, Wallet wallet) async {
     // user thay đổi thông tin budget thì có thể thay đổi category
     // nên spent sẽ có thể bị tính lại từ đầu => tính toán spent
     // gán spent cho budget
@@ -594,7 +594,7 @@ class FirebaseFireStoreService {
     await users
         .doc(uid)
         .collection('wallets')
-        .doc(budget.walletId)
+        .doc(wallet.id)
         .collection('budgets')
         .doc(budget.id)
         .update(budget.toMap())

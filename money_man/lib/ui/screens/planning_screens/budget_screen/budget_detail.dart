@@ -65,9 +65,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 Icons.edit,
                 color: Colors.white,
               ),
-              onPressed: () {
-                print('ne nha ${widget.wallet.iconID}');
-                Navigator.push(
+              onPressed: () async {
+                var result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => EditBudget(
@@ -75,6 +74,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                             wallet: widget.wallet,
                           )),
                 );
+                if (result != null) Navigator.pop(context);
               }),
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white), onPressed: () {})
@@ -203,27 +203,24 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
             ),
             Row(
               children: [
-                SizedBox(
-                  width: 55,
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      left:
-                          (MediaQuery.of(context).size.width - 95) * todayRate <
-                                  0
-                              ? 0
-                              : todayRate),
-                  height: 20,
-                  width: 40,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Color(0xff171717)),
-                  child: Text(
-                    "Today",
-                    style: TextStyle(color: Colors.white, fontSize: 10),
-                  ),
-                ),
+                todayRate < 0
+                    ? Container()
+                    : Container(
+                        margin: EdgeInsets.only(
+                            left: 60 +
+                                (MediaQuery.of(context).size.width - 60 - 45) *
+                                    todayRate),
+                        height: 20,
+                        width: 40,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Color(0xff171717)),
+                        child: Text(
+                          "Today",
+                          style: TextStyle(color: Colors.white, fontSize: 10),
+                        ),
+                      ),
               ],
             ),
             ListTile(

@@ -228,6 +228,7 @@ class _AddBudgetState extends State<AddBudget> {
                   if (resultAmount != null)
                     setState(() {
                       // Change the time ahihi
+                      mTimeRange = resultAmount;
                     });
                 },
                 trailing: Icon(
