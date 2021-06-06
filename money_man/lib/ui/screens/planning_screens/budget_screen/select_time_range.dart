@@ -2,6 +2,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/time_range_info_model.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screen/time_range.dart';
 import 'package:money_man/ui/screens/report_screens/custom_time_range.dart';
@@ -215,15 +216,19 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
         onTap: mCustom
             ? () async {
                 print('psoidjb oker');
-                final result = await showCupertinoModalBottomSheet(
+                TimeRangeInfo result = await showCupertinoModalBottomSheet(
+                    //TimeRangeInfor
                     isDismissible: true,
                     backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) => CustomTimeRange(
                         beginDate: beginDate, endDate: endDate));
                 if (result != null) {
-                  setState(() {});
-                  Navigator.of(context).pop(result);
+                  setState(() {
+                    mTimeRange = new BudgetTimeRange(
+                        beginDay: result.begin, endDay: result.end);
+                  });
+                  Navigator.of(context).pop(mTimeRange);
                 }
               }
             : () {

@@ -9,6 +9,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screen/current_applied_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screen/select_time_range.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screen/time_range.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
@@ -331,10 +332,11 @@ class _AddBudgetState extends State<EditBudget> {
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
                               hintText: mTimeRange == null
-                                  ? 'Time range:'
-                                  : mTimeRange.description == null
-                                      ? mTimeRange.TimeRangeString()
-                                      : mTimeRange.description,
+                                  ? new BudgetTimeRange(
+                                          beginDay: widget.budget.beginDate,
+                                          endDay: widget.budget.endDate)
+                                      .getBudgetLabel()
+                                  : mTimeRange.getBudgetLabel(),
                               hintStyle: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,

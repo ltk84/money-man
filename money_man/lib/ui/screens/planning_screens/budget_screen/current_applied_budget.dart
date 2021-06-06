@@ -225,8 +225,8 @@ class MyBudgetTile extends StatelessWidget {
     DateTime end = budget.endDate;
     if (end.weekday == 7 &&
         begin.weekday == 1 &&
-        begin.isBefore(today) &&
-        end.isAfter(today)) return 'This week';
+        begin.isBefore(today.add(Duration(days: 1))) &&
+        end.isAfter(today.subtract(Duration(days: 1)))) return 'This week';
     if (begin.day == 1 &&
         end.day ==
             DateTime(begin.year, begin.month + 1, 1)
