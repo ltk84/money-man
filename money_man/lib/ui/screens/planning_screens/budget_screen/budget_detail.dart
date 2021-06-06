@@ -2,13 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/budget_model.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screen/edit_budget.dart';
 
 import 'line_chart_progress.dart';
 
-class BudgetDetailScreen extends StatelessWidget {
-  const BudgetDetailScreen({Key key, this.budget}) : super(key: key);
+class BudgetDetailScreen extends StatefulWidget {
+  const BudgetDetailScreen({Key key, this.budget, this.wallet})
+      : super(key: key);
   final Budget budget;
+  final Wallet wallet;
 
+  @override
+  _BudgetDetailScreenState createState() => _BudgetDetailScreenState();
+}
+
+class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
   String valueDate(DateTime temp) {
     var array = [
       'Jan',
@@ -31,9 +41,9 @@ class BudgetDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isStart;
     DateTime today = DateTime.now();
-    var todayRate = today.difference(budget.beginDate).inDays /
-        budget.endDate.difference(budget.beginDate).inDays;
-    if (today.isBefore(budget.beginDate))
+    var todayRate = today.difference(widget.budget.beginDate).inDays /
+        widget.budget.endDate.difference(widget.budget.beginDate).inDays;
+    if (today.isBefore(widget.budget.beginDate))
       isStart = false;
     else
       isStart = true;
@@ -55,7 +65,17 @@ class BudgetDetailScreen extends StatelessWidget {
                 Icons.edit,
                 color: Colors.white,
               ),
-              onPressed: () {}),
+              onPressed: () {
+                print('ne nha ${widget.wallet.iconID}');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditBudget(
+                            budget: widget.budget,
+                            wallet: widget.wallet,
+                          )),
+                );
+              }),
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white), onPressed: () {})
         ],
@@ -67,9 +87,8 @@ class BudgetDetailScreen extends StatelessWidget {
           children: [
             ListTile(
               leading: Container(
-                  child: Icon(
-                Icons.circle,
-                color: Colors.white,
+                  child: SuperIcon(
+                iconPath: widget.budget.category.iconID,
                 size: 45,
               )),
               title: Container(
@@ -78,7 +97,7 @@ class BudgetDetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      this.budget.category.name,
+                      this.widget.budget.category.name,
                       style: TextStyle(
                         fontWeight: FontWeight.w200,
                         color: Colors.white,
@@ -88,7 +107,7 @@ class BudgetDetailScreen extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.only(top: 30),
                       child: Text(
-                        MoneyFormatter(amount: this.budget.amount)
+                        MoneyFormatter(amount: this.widget.budget.amount)
                             .output
                             .withoutFractionDigits,
                         style: TextStyle(
@@ -118,7 +137,8 @@ class BudgetDetailScreen extends StatelessWidget {
                                     ),
                                     SizedBox(height: 2),
                                     Text(
-                                      MoneyFormatter(amount: this.budget.spent)
+                                      MoneyFormatter(
+                                              amount: this.widget.budget.spent)
                                           .output
                                           .withoutFractionDigits,
                                       style: TextStyle(
@@ -146,8 +166,9 @@ class BudgetDetailScreen extends StatelessWidget {
                                     SizedBox(height: 2),
                                     Text(
                                       MoneyFormatter(
-                                              amount: this.budget.amount -
-                                                  this.budget.spent)
+                                              amount:
+                                                  this.widget.budget.amount -
+                                                      this.widget.budget.spent)
                                           .output
                                           .withoutFractionDigits,
                                       style: TextStyle(
@@ -169,8 +190,8 @@ class BudgetDetailScreen extends StatelessWidget {
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       Color(0xFF2FB49C)),
                                   minHeight: 8,
-                                  value:
-                                      this.budget.spent / this.budget.amount),
+                                  value: this.widget.budget.spent /
+                                      this.widget.budget.amount),
                             ),
                           ),
                         ],
@@ -187,9 +208,11 @@ class BudgetDetailScreen extends StatelessWidget {
                 ),
                 Container(
                   margin: EdgeInsets.only(
-                      left: (MediaQuery.of(context).size.width - 95) *
-                          this.budget.spent /
-                          this.budget.amount),
+                      left:
+                          (MediaQuery.of(context).size.width - 95) * todayRate <
+                                  0
+                              ? 0
+                              : todayRate),
                   height: 20,
                   width: 40,
                   alignment: Alignment.center,
@@ -223,12 +246,14 @@ class BudgetDetailScreen extends StatelessWidget {
                 padding: EdgeInsets.only(left: 5),
                 child: Text(
                   isStart
-                      ? this.budget.beginDate.difference(today).inDays > 1
-                          ? '${today.difference(this.budget.beginDate).inDays} days remain'
-                          : '${today.difference(this.budget.beginDate).inDays} day remain'
-                      : this.budget.beginDate.difference(today).inDays < -1
-                          ? '${-1 * today.difference(this.budget.beginDate).inDays} days remain'
-                          : '${-1 * today.difference(this.budget.beginDate).inDays} day remain',
+                      ? this.widget.budget.beginDate.difference(today).inDays >
+                              1
+                          ? '${today.difference(this.widget.budget.beginDate).inDays} days remain'
+                          : '${today.difference(this.widget.budget.beginDate).inDays} day remain'
+                      : this.widget.budget.beginDate.difference(today).inDays <
+                              -1
+                          ? '${-1 * today.difference(this.widget.budget.beginDate).inDays} day to begin'
+                          : '${-1 * today.difference(this.widget.budget.beginDate).inDays} days to begin',
                   style: TextStyle(
                     color: Colors.white54,
                   ),
@@ -238,15 +263,15 @@ class BudgetDetailScreen extends StatelessWidget {
             ListTile(
               leading: Container(
                 padding: EdgeInsets.only(left: 10),
-                child: Icon(
-                  Icons.cloud_circle_sharp,
-                  color: Colors.white,
+                child: SuperIcon(
+                  iconPath: '${widget.wallet.iconID}',
+                  size: 25,
                 ),
               ),
               title: Container(
                 padding: EdgeInsets.only(left: 5),
                 child: Text(
-                  'Cash',
+                  '${widget.wallet.name}',
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -287,7 +312,13 @@ class BudgetDetailScreen extends StatelessWidget {
                           height: 2,
                         ),
                         Text(
-                          '4,994,000 đ',
+                          MoneyFormatter(
+                                  amount: widget.budget.amount /
+                                      (widget.budget.endDate)
+                                          .difference(widget.budget.beginDate)
+                                          .inDays)
+                              .output
+                              .withoutFractionDigits,
                           style: TextStyle(color: Colors.white, fontSize: 15),
                         )
                       ],
@@ -305,7 +336,13 @@ class BudgetDetailScreen extends StatelessWidget {
                           height: 2,
                         ),
                         Text(
-                          '4,994,000 đ',
+                          MoneyFormatter(
+                                  amount: widget.budget.spent /
+                                      (today)
+                                          .difference(widget.budget.beginDate)
+                                          .inDays)
+                              .output
+                              .withoutFractionDigits,
                           style: TextStyle(color: Colors.white, fontSize: 15),
                         )
                       ],
@@ -327,7 +364,16 @@ class BudgetDetailScreen extends StatelessWidget {
                             fontSize: 13),
                       ),
                       Text(
-                        '5.156 đ',
+                        MoneyFormatter(
+                                amount: widget.budget.spent /
+                                    (today)
+                                        .difference(widget.budget.beginDate)
+                                        .inDays *
+                                    (widget.budget.endDate)
+                                        .difference(widget.budget.beginDate)
+                                        .inDays)
+                            .output
+                            .withoutFractionDigits,
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       )
                     ],

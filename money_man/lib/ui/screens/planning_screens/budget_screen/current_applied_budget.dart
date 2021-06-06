@@ -62,11 +62,15 @@ class MyBudgetTile extends StatelessWidget {
 
     return Center(
       child: GestureDetector(
-        onTap: () {
+        onTap: () async {
+          Wallet wallet = await _firestore.getWalletByID(budget.walletId);
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => BudgetDetailScreen(budget: this.budget)),
+                builder: (context) => BudgetDetailScreen(
+                      budget: this.budget,
+                      wallet: wallet,
+                    )),
           );
         },
         child: Container(
