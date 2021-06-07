@@ -117,6 +117,8 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
   }
 
   Widget buildListBills(context) {
+    String currencySymbol = CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
+
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<List<Bill>>(
         stream: _firestore.billStream(widget.currentWallet.id),
@@ -147,9 +149,9 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
             physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               buildOverallInfo(
-                  overdue: '\$ 1,000',
-                  forToday: '\$ 1,000',
-                  thisPeriod: '\$ 1,000'),
+                  overdue: '$currencySymbol ' + overDueBills.fold(0, (value, element) => value + element['bill'].amount).toString(),
+                  forToday: '$currencySymbol ' + todayBills.fold(0, (value, element) => value + element['bill'].amount).toString(),
+                  thisPeriod: '$currencySymbol ' + thisPeriodBills.fold(0, (value, element) => value + element['bill'].amount).toString()),
               SizedBox(height: 20.0),
               buildListDue(overDueBills, 0),
               buildListDue(todayBills, 1),
