@@ -6,8 +6,10 @@ import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/recurring_transaction_model.dart';
+import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:date_util/date_util.dart';
 
 class FirebaseFireStoreService {
   final String uid;
@@ -224,7 +226,8 @@ class FirebaseFireStoreService {
   // TRANSACTION START//
 
   // add transaction
-  Future addTransaction(Wallet wallet, MyTransaction transaction) async {
+  Future<MyTransaction> addTransaction(
+      Wallet wallet, MyTransaction transaction) async {
     // lấy reference của list transaction để lấy auto-generate id
     final transactionRef = users
         .doc(uid)
@@ -257,6 +260,8 @@ class FirebaseFireStoreService {
     // udpate wallet trong list và wallet đang được chọn
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
+
+    return transaction;
   }
 
   List<String> splitNumber(int number) {
@@ -718,6 +723,130 @@ class FirebaseFireStoreService {
       // print(e.data());
       return RecurringTransaction.fromMap(e.data());
     }).toList();
+  }
+
+  // check add transation or not
+  Future getListRecurringTransactionToBeExecute(String walletId) async {
+    DateTime now =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+    List<RecurringTransaction> todayRecurringTransList = await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('recurring transactions')
+        .where('repeatOption.beginDateTime', isEqualTo: now)
+        .get()
+        .then((value) => List<RecurringTransaction>.from(value.docs
+            .map((e) => RecurringTransaction.fromMap(e.data()))
+            .toList()));
+    return todayRecurringTransList;
+  }
+
+  // execute recurring transaction
+  Future executeRecurringTransaction(Wallet wallet) async {
+    List<RecurringTransaction> todayList =
+        await getListRecurringTransactionToBeExecute(wallet.id);
+    if (todayList.isEmpty) return;
+
+    List<String> transactionIdList =
+        await addTransactionOfRecurringTransaction(todayList, wallet);
+
+    if (transactionIdList.isNotEmpty)
+      await updateNewBeginDateOfRecurringTransaction(
+          todayList, transactionIdList, wallet);
+  }
+
+  Future updateNewBeginDateOfRecurringTransaction(
+      List<RecurringTransaction> todayList,
+      List<String> transactionIdList,
+      Wallet wallet) async {
+    int index = 0;
+    todayList.map((RecurringTransaction recurringTrans) async {
+      if (recurringTrans.repeatOption.type == 'until') {
+        if (recurringTrans.repeatOption.beginDateTime
+            .isAfter(recurringTrans.repeatOption.extraTypeInfo)) {
+          return;
+        }
+      } else if (recurringTrans.repeatOption.type == 'for') {
+        if (recurringTrans.repeatOption.extraTypeInfo == 0) {
+          return;
+        }
+      }
+
+      if (recurringTrans.repeatOption.type == 'for') {
+        recurringTrans.repeatOption.beginDateTime =
+            _calculateNextDate(recurringTrans);
+        recurringTrans.repeatOption.extraTypeInfo =
+            (int.parse(recurringTrans.repeatOption.type) - 1).toString();
+      } else {
+        recurringTrans.repeatOption.beginDateTime =
+            _calculateNextDate(recurringTrans);
+      }
+
+      recurringTrans.transactionIdList.add(transactionIdList[index]);
+      index = index + 1;
+
+      await updateRecurringTransaction(recurringTrans, wallet);
+    }).toList();
+    // todayList1[0].id = '1';
+  }
+
+  Future<List<String>> addTransactionOfRecurringTransaction(
+      List<RecurringTransaction> todayList, Wallet wallet) async {
+    List<String> transactionIdList = [];
+    // todayList.forEach((RecurringTransaction recurringTrans) async {
+    //   MyTransaction transaction = MyTransaction(
+    //       id: 'id',
+    //       amount: recurringTrans.amount,
+    //       date: recurringTrans.repeatOption.beginDateTime,
+    //       currencyID: wallet.currencyID,
+    //       category: recurringTrans.category);
+    //   transaction = await addTransaction(wallet, transaction);
+    //   print('transaction id' + transaction.id);
+    //   transactionIdList.add(transaction.id);
+    //   print('added');
+    //   print(transactionIdList.length);
+    // });
+    for (int i = 0; i < todayList.length; i++) {
+      RecurringTransaction recurringTrans = todayList[i];
+      MyTransaction transaction = MyTransaction(
+          id: 'id',
+          amount: recurringTrans.amount,
+          date: recurringTrans.repeatOption.beginDateTime,
+          currencyID: wallet.currencyID,
+          category: recurringTrans.category);
+      transaction = await addTransaction(wallet, transaction);
+      transactionIdList.add(transaction.id);
+      print(transactionIdList.length);
+    }
+    return transactionIdList;
+    // todayList2[0].id = '3';
+  }
+
+  DateTime _calculateNextDate(RecurringTransaction recurringTrans) {
+    DateUtil dateUtility = DateUtil();
+    RepeatOption repeatOption = recurringTrans.repeatOption;
+    DateTime nextDate;
+    if (repeatOption.frequency == 'daily') {
+      nextDate = repeatOption.beginDateTime
+          .add(Duration(days: repeatOption.rangeAmount));
+    } else if (repeatOption.frequency == 'weekly') {
+      nextDate = repeatOption.beginDateTime
+          .add(Duration(days: 7 * repeatOption.rangeAmount));
+    } else if (repeatOption.frequency == 'monthly') {
+      DateTime beginDate = repeatOption.beginDateTime;
+      int days = dateUtility.daysInMonth(beginDate.month, beginDate.year) *
+          repeatOption.rangeAmount;
+      nextDate = beginDate.add(Duration(days: days));
+    } else {
+      DateTime beginDate = repeatOption.beginDateTime;
+      int days = (dateUtility.leapYear(beginDate.year) == true ? 365 : 366) *
+          repeatOption.rangeAmount;
+      print(days);
+      nextDate = beginDate.add(Duration(days: days));
+    }
+    return nextDate;
   }
 
   // RECURRING TRANSACTION END //

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,10 @@ class _TransactionScreen extends State<TransactionScreen>
         : widget.currentWallet;
     currencySymbol =
         CurrencyService().findByCode(_wallet.currencyID).symbol ?? '';
+
+    var _auth = FirebaseAuthService();
+    var _firestore = FirebaseFireStoreService(uid: _auth.currentUser.uid);
+    _firestore.executeRecurringTransaction(_wallet);
   }
 
   @override
@@ -773,6 +778,8 @@ class _TransactionScreen extends State<TransactionScreen>
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     print('transaction build ' + _wallet.amount.toString());
+
+    // _firestore.executeRecurringTransaction(_wallet);
 
     return Scaffold(
         appBar: AppBar(

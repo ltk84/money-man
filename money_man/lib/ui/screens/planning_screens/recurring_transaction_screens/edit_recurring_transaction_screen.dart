@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:date_util/date_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,9 @@ class _EditRecurringTransactionScreenState
   MyCategory category;
   String note;
   RepeatOption repeatOption;
+  DateTime nextDate;
 
+  var dateUtility = DateUtil();
   @override
   void initState() {
     // TODO: implement initState
@@ -46,6 +49,7 @@ class _EditRecurringTransactionScreenState
     category = widget.recurringTransaction.category;
     note = widget.recurringTransaction.note;
     repeatOption = widget.recurringTransaction.repeatOption;
+    // nextDate = widget.recurringTransaction.nextDate;
   }
 
   @override
@@ -71,14 +75,16 @@ class _EditRecurringTransactionScreenState
               onPressed: () async {
                 RecurringTransaction _recurringTransaction =
                     RecurringTransaction(
-                        id: widget.recurringTransaction.id,
-                        category: category,
-                        amount: amount,
-                        walletId: widget.wallet.id,
-                        note: note,
-                        transactionIdList:
-                            widget.recurringTransaction.transactionIdList,
-                        repeatOption: repeatOption);
+                  id: widget.recurringTransaction.id,
+                  category: category,
+                  amount: amount,
+                  walletId: widget.wallet.id,
+                  note: note,
+                  transactionIdList:
+                      widget.recurringTransaction.transactionIdList,
+                  repeatOption: repeatOption,
+                );
+                // nextDate: nextDate);
 
                 await _firestore.updateRecurringTransaction(
                     _recurringTransaction, widget.wallet);
@@ -233,6 +239,29 @@ class _EditRecurringTransactionScreenState
                       if (res != null)
                         setState(() {
                           repeatOption = res;
+                          if (repeatOption.frequency == 'daily') {
+                            nextDate = repeatOption.beginDateTime
+                                .add(Duration(days: repeatOption.rangeAmount));
+                          } else if (repeatOption.frequency == 'weekly') {
+                            nextDate = repeatOption.beginDateTime.add(
+                                Duration(days: 7 * repeatOption.rangeAmount));
+                          } else if (repeatOption.frequency == 'monthly') {
+                            DateTime beginDate = repeatOption.beginDateTime;
+                            int days = dateUtility.daysInMonth(
+                                    beginDate.month, beginDate.year) *
+                                repeatOption.rangeAmount;
+                            nextDate = beginDate.add(Duration(days: days));
+                          } else {
+                            DateTime beginDate = repeatOption.beginDateTime;
+                            int days =
+                                (dateUtility.leapYear(beginDate.year) == true
+                                        ? 365
+                                        : 366) *
+                                    repeatOption.rangeAmount;
+                            print(days);
+                            nextDate = beginDate.add(Duration(days: days));
+                          }
+                          print(nextDate);
                         });
                     },
                     child: buildRepeatOptions())),

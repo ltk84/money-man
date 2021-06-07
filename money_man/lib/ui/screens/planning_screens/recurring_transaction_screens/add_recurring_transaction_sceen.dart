@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:date_util/date_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -7,6 +8,7 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/recurring_transaction_model.dart';
 import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
@@ -37,6 +39,7 @@ class _AddRecurringTransactionScreenState
   Wallet wallet;
   RepeatOption repeatOption;
 
+  var dateUtility = new DateUtil();
   DateTime now =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
@@ -83,14 +86,14 @@ class _AddRecurringTransactionScreenState
                   //   _showAlertDialog('Please pick repeat option');
                 } else {
                   var reTrans = RecurringTransaction(
-                      id: 'id',
-                      category: category,
-                      amount: amount,
-                      walletId: wallet.id,
-                      note: note,
-                      transactionIdList: [],
-                      repeatOption: repeatOption);
-                  // );
+                    id: 'id',
+                    category: category,
+                    amount: amount,
+                    walletId: wallet.id,
+                    note: note,
+                    transactionIdList: [],
+                    repeatOption: repeatOption,
+                  );
                   await _firestore.addRecurringTransaction(reTrans, wallet);
                   Navigator.pop(context);
                 }
@@ -244,7 +247,6 @@ class _AddRecurringTransactionScreenState
             // build repeat option
             GestureDetector(
               onTap: () async {
-                print(repeatOption.toMap());
                 var res = await showCupertinoModalBottomSheet(
                     enableDrag: false,
                     isDismissible: false,
@@ -255,8 +257,30 @@ class _AddRecurringTransactionScreenState
                         ));
                 if (res != null)
                   setState(() {
-                    print(res.toMap());
                     repeatOption = res;
+
+                    // if (repeatOption.frequency == 'daily') {
+                    //   nextDate = repeatOption.beginDateTime
+                    //       .add(Duration(days: repeatOption.rangeAmount));
+                    // } else if (repeatOption.frequency == 'weekly') {
+                    //   nextDate = repeatOption.beginDateTime
+                    //       .add(Duration(days: 7 * repeatOption.rangeAmount));
+                    // } else if (repeatOption.frequency == 'monthly') {
+                    //   DateTime beginDate = repeatOption.beginDateTime;
+                    //   int days = dateUtility.daysInMonth(
+                    //           beginDate.month, beginDate.year) *
+                    //       repeatOption.rangeAmount;
+                    //   nextDate = beginDate.add(Duration(days: days));
+                    // } else {
+                    //   DateTime beginDate = repeatOption.beginDateTime;
+                    //   int days = (dateUtility.leapYear(beginDate.year) == true
+                    //           ? 365
+                    //           : 366) *
+                    //       repeatOption.rangeAmount;
+                    //   print(days);
+                    //   nextDate = beginDate.add(Duration(days: days));
+                    // }
+                    // print(nextDate);
                   });
               },
               child: Container(

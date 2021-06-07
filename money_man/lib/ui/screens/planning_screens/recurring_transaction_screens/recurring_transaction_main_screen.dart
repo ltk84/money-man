@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/recurring_transaction_model.dart';
@@ -210,7 +210,8 @@ class _RecurringTransactionMainScreenState
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     )),
-                Text('Wednesday, 02/06/2021')
+                Text(DateFormat('EEEE, dd-MM-yyyy')
+                    .format(reTrans.repeatOption.beginDateTime))
               ],
             ),
             // chỗ này chưa biết xử lý sao

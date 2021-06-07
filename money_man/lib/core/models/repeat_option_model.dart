@@ -41,9 +41,11 @@ class RepeatOption {
       beginDateTime:
           DateTime.tryParse(map['beginDateTime'].toDate().toString()) ?? '',
       type: map['type'],
-      extraTypeInfo: int.tryParse(map['extraTypeInfo'].toString()) ??
-          DateTime.tryParse(map['extraTypeInfo'].toString()) ??
-          '',
+      extraTypeInfo: map['extraTypeInfo'] == ''
+          ? map['extraTypeInfo']
+          : map['extraTypeInfo'].runtimeType is int
+              ? map['extraTypeInfo']
+              : DateTime.tryParse(map['extraTypeInfo'].toDate().toString()),
     );
   }
 }
