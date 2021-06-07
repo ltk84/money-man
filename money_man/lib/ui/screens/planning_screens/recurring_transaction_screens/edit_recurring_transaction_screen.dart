@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/recurring_transaction_model.dart';
+import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -30,13 +32,19 @@ class EditRecurringTransactionScreen extends StatefulWidget {
 
 class _EditRecurringTransactionScreenState
     extends State<EditRecurringTransactionScreen> {
-  RecurringTransaction _recurringTransaction;
+  double amount;
+  MyCategory category;
+  String note;
+  RepeatOption repeatOption;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _recurringTransaction = widget.recurringTransaction;
+    amount = widget.recurringTransaction.amount;
+    category = widget.recurringTransaction.category;
+    note = widget.recurringTransaction.note;
+    repeatOption = widget.recurringTransaction.repeatOption;
   }
 
   @override
@@ -60,6 +68,17 @@ class _EditRecurringTransactionScreenState
           actions: [
             TextButton(
               onPressed: () async {
+                RecurringTransaction _recurringTransaction =
+                  RecurringTransaction(
+                      id: widget.recurringTransaction.id,
+                      category: category,
+                      amount: amount,
+                      walletId: widget.wallet.id,
+                      note: note,
+                      transactionIdList:
+                      widget.recurringTransaction.transactionIdList,
+                      repeatOption: repeatOption);
+
                 await _firestore.updateRecurringTransaction(
                     _recurringTransaction, widget.wallet);
                 Navigator.pop(context, _recurringTransaction);
@@ -103,13 +122,12 @@ class _EditRecurringTransactionScreenState
                       if (resultAmount != null)
                         setState(() {
                           print(resultAmount);
-                          _recurringTransaction.amount =
-                              double.parse(resultAmount);
+                          amount = double.parse(resultAmount);
                         });
                     },
                     child: buildAmountInput(
                         display:
-                            '\$ ' + _recurringTransaction.amount.toString()),
+                            '\$ ' + amount.toString()),
                   ),
 
                   // Divider ngăn cách giữa các input field.
@@ -132,13 +150,13 @@ class _EditRecurringTransactionScreenState
                           builder: (context) => CategoriesTransactionScreen());
                       if (selectCate != null) {
                         setState(() {
-                          _recurringTransaction.category = selectCate;
+                          category = selectCate;
                         });
                       }
                     },
                     child: buildCategorySelection(
-                      iconPath: _recurringTransaction.category.iconID,
-                      display: _recurringTransaction.category.name,
+                      iconPath: category.iconID,
+                      display: category.name,
                     ),
                   ),
 
@@ -160,17 +178,17 @@ class _EditRecurringTransactionScreenState
                             context,
                             MaterialPageRoute(
                                 builder: (_) => NoteTransactionScreen(
-                                      content: _recurringTransaction.note ?? '',
+                                      content: note ?? '',
                                     )));
                         print(noteContent);
                         if (noteContent != null) {
                           setState(() {
-                            _recurringTransaction.note = noteContent;
+                            note = noteContent;
                           });
                         }
                       },
                       child:
-                          buildNoteInput(display: _recurringTransaction.note)),
+                          buildNoteInput(display: note)),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -210,11 +228,11 @@ class _EditRecurringTransactionScreenState
                           context: context,
                           builder: (context) => RepeatOptionScreen(
                                 repeatOption:
-                                    _recurringTransaction.repeatOption,
+                                    repeatOption,
                               ));
                       if (res != null)
                         setState(() {
-                          _recurringTransaction.repeatOption = res;
+                          repeatOption = res;
                         });
                     },
                     child: buildRepeatOptions())),

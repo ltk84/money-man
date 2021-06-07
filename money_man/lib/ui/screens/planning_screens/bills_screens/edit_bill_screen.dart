@@ -34,14 +34,20 @@ class EditBillScreen extends StatefulWidget {
 }
 
 class _EditBillScreenState extends State<EditBillScreen> {
-  Bill _bill;
   String currencySymbol;
+  double amount;
+  MyCategory category;
+  String note;
+  RepeatOption repeatOption;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _bill = widget.bill;
+    amount = widget.bill.amount;
+    category = widget.bill.category;
+    note = widget.bill.note;
+    repeatOption = widget.bill.repeatOption;
     currencySymbol = CurrencyService().findByCode(widget.wallet.currencyID).symbol;
   }
 
@@ -66,6 +72,18 @@ class _EditBillScreenState extends State<EditBillScreen> {
           actions: [
             TextButton(
               onPressed: () async {
+                Bill _bill =
+                Bill(
+                    id: widget.bill.id,
+                    category: category,
+                    amount: amount,
+                    walletId: widget.wallet.id,
+                    note: note,
+                    transactionIdList: widget.bill.transactionIdList,
+                    repeatOption: repeatOption,
+                    isFinished: widget.bill.isFinished,
+                    dueDates: widget.bill.dueDates);
+
                 await _firestore.updateBill(
                     _bill, widget.wallet);
                 Navigator.pop(context, _bill);
@@ -106,12 +124,12 @@ class _EditBillScreenState extends State<EditBillScreen> {
                             MaterialPageRoute(builder: (_) => EnterAmountScreen()));
                         if (resultAmount != null)
                           setState(() {
-                            _bill.amount =
+                            amount =
                                 double.parse(resultAmount);
                           });
                       },
                       child: buildAmountInput(
-                          display: _bill.amount == null ? null : (currencySymbol + ' ' + _bill.amount.toString())
+                          display: amount == null ? null : (currencySymbol + ' ' + amount.toString())
                       )
                   ),
 
@@ -135,13 +153,13 @@ class _EditBillScreenState extends State<EditBillScreen> {
                             builder: (context) => CategoriesTransactionScreen());
                         if (selectCate != null) {
                           setState(() {
-                            _bill.category = selectCate;
+                            category = selectCate;
                           });
                         }
                       },
                       child: buildCategorySelection(
-                        display: _bill.category == null ? null : _bill.category.name,
-                        iconPath: _bill.category == null ? null : _bill.category.iconID,
+                        display: category == null ? null : category.name,
+                        iconPath: category == null ? null : category.iconID,
                       )
                   ),
 
@@ -163,17 +181,17 @@ class _EditBillScreenState extends State<EditBillScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => NoteTransactionScreen(
-                                  content: _bill.note ?? '',
+                                  content: note ?? '',
                                 )));
                         print(noteContent);
                         if (noteContent != null) {
                           setState(() {
-                            _bill.note = noteContent;
+                            note = noteContent;
                           });
                         }
                       },
                       child: buildNoteInput(
-                        display: _bill.note == null ? null : _bill.note,
+                        display: note == null ? null : note,
                       )
                   ),
 
@@ -216,12 +234,12 @@ class _EditBillScreenState extends State<EditBillScreen> {
                           backgroundColor: Colors.grey[900],
                           context: context,
                           builder: (context) => RepeatOptionScreen(
-                            repeatOption: _bill.repeatOption,
+                            repeatOption: repeatOption,
                           )
                       );
                       if (res != null)
                         setState(() {
-                          _bill.repeatOption = res;
+                          repeatOption = res;
                         });
                     },
                     child: buildRepeatOptions()
@@ -230,9 +248,9 @@ class _EditBillScreenState extends State<EditBillScreen> {
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Text(
-                  'Repeat every ${_bill.repeatOption.rangeAmount} ${_bill.repeatOption.extraAmountInfo}'
-                      '${_bill.repeatOption.rangeAmount == 1 ? '' : 's'} '
-                      'from ${DateFormat('dd/MM/yyyy').format(_bill.repeatOption.beginDateTime)}',
+                  'Repeat every ${repeatOption.rangeAmount} ${repeatOption.extraAmountInfo}'
+                      '${repeatOption.rangeAmount == 1 ? '' : 's'} '
+                      'from ${DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime)}',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 13.0,

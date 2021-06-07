@@ -89,7 +89,8 @@ class _AddBillScreenState extends State<AddBillScreen> {
                       note: note,
                       transactionIdList: [],
                       repeatOption: repeatOption,
-                      isFinished: false);
+                      isFinished: false,
+                  );
 
                   await _firestore.addBill(bill, selectedWallet);
                   Navigator.pop(context);

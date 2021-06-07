@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/bill_model.dart';
@@ -13,6 +14,7 @@ import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_sc
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class BillsMainScreen extends StatefulWidget {
   Wallet currentWallet;
@@ -110,28 +112,76 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
             ),
           ],
         ),
-        body: ListView(
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          children: [
-            buildOverallInfo(
-                overdue: '\$ 1,000',
-                forToday: '\$ 1,000',
-                thisPeriod: '\$ 1,000'),
-            SizedBox(height: 20.0),
-            buildListBills(context),
-          ],
-        ));
+        body: buildListBills(context)
+    );
   }
 
   Widget buildListBills(context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    return StreamBuilder<List<Bill>>(
+        stream: _firestore.billStream(widget.currentWallet.id),
+        builder: (context, snapshot) {
+          List<Bill> listBills = snapshot.data ?? [];
+
+          List<Map> overDueBills = [];
+          List<Map> todayBills = [];
+          List<Map> thisPeriodBills = [];
+
+          listBills.forEach((element) {
+            element.updateDueDate();
+            _firestore.updateBill(element, widget.currentWallet);
+
+            var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+            element.dueDates.forEach((e) {
+              if (e.compareTo(now) == 0) {
+                todayBills.add({'bill': element, 'due': e});
+              } else if (e.compareTo(now) > 0) {
+                thisPeriodBills.add({'bill': element, 'due': e});
+              } else {
+                overDueBills.add({'bill': element, 'due': e});
+              }
+            });
+          });
+          return ListView(
+            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            children: [
+              buildOverallInfo(
+                  overdue: '\$ 1,000',
+                  forToday: '\$ 1,000',
+                  thisPeriod: '\$ 1,000'),
+              SizedBox(height: 20.0),
+              buildListDue(overDueBills, 0),
+              buildListDue(todayBills, 1),
+              buildListDue(thisPeriodBills, 2),
+            ],
+          );
+        }
+    );
+  }
+
+  Widget buildListDue (List<Map> listDue, int dueState) {
+    String title;
+
+    switch (dueState) {
+      case 0:
+        title = 'OVERDUE';
+        break;
+      case 1:
+        title = 'TODAY';
+        break;
+      case 2:
+        title = 'THIS PERIOD';
+        break;
+    }
+
+    if (listDue.length == 0) return Container();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-          child: Text('THIS PERIOD',
+          child: Text(title,
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontSize: 14.0,
@@ -139,23 +189,38 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 color: Colors.white70,
               )),
         ),
-        StreamBuilder<List<Bill>>(
-            stream: _firestore.billStream(widget.currentWallet.id),
-            builder: (context, snapshot) {
-              List<Bill> listBills = snapshot.data ?? [];
-              if (listBills.length == 0) return Container();
-              return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: listBills.length,
-                  itemBuilder: (context, index) =>
-                      buildBillCard(listBills[index]));
-            }
+        ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: listDue.length,
+            itemBuilder: (context, index) =>
+                buildBillCard(listDue[index], dueState)
         ),
+        SizedBox(height: 20.0),
       ],
     );
   }
 
-  Widget buildBillCard(Bill bill) {
+  Widget buildBillCard(Map info, int dueState) {
+    String currencySymbol = CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
+    String payContent = info['bill'].isFinished ? 'PAID' : 'PAY $currencySymbol ' + info['bill'].amount.toString();
+    String dueDate = DateFormat('dd/MM/yyyy').format(info['due']);
+    String dueDescription;
+
+    var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+    switch (dueState) {
+      case 0:
+        dueDescription = 'Overdue';
+        break;
+      case 1:
+        dueDescription = 'Due today';
+        break;
+      case 2:
+        dueDescription = 'Due in ' + info['due'].difference(now).inDays.toString() + ' day';
+        break;
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -163,7 +228,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
             PageTransition(
                 childCurrent: this.widget,
                 child: BillDetailScreen(
-                  bill: bill,
+                  bill: info['bill'],
                   wallet: widget.currentWallet,
                 ),
                 type: PageTransitionType.rightToLeft));
@@ -185,21 +250,21 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SuperIcon(
-              iconPath: bill.category.iconID,
+              iconPath: info['bill'].category.iconID,
               size: 38.0,
             ),
             SizedBox(width: 20.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(bill.category.name,
+                Text(info['bill'].category.name,
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 14.0,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     )),
-                Text('Next bill is 02/06/2021',
+                Text('Due day is $dueDate',
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 12.0,
@@ -207,13 +272,14 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       color: Colors.white70,
                     )),
                 SizedBox(height: 8.0),
-                Text('Due in 1 day',
+                Text(dueDescription,
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 14.0,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
-                    )),
+                    )
+                ),
                 TextButton(
                   onPressed: () {},
                   style: ButtonStyle(
@@ -238,7 +304,8 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       },
                     ),
                   ),
-                  child: Text("PAY \$ 1,000",
+                  child: Text(
+                      payContent,
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: 'Montserrat',
