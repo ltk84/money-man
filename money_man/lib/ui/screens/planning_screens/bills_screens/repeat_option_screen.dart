@@ -427,8 +427,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                   initialValue: repeatTime.toString(),
                                   onChanged: (value) {
                                     setState(() {
-                                      repeatTime = int.parse(value);
-                                      _repeatOption.extraTypeInfo = repeatTime;
+                                      if (value.isNotEmpty) {
+                                        repeatTime = int.parse(value);
+                                        _repeatOption.extraTypeInfo = repeatTime;
+                                      }
                                     });
                                   },
                                   style: TextStyle(

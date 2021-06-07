@@ -36,6 +36,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
   MyCategory category;
   String note;
   RepeatOption repeatOption;
+  List<DateTime> dueDates;
 
   DateTime now =
   DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -81,6 +82,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                 } else if (category == null) {
                   _showAlertDialog('Please pick category!');
                 } else {
+                  dueDates = initDueDate();
                   var bill = Bill(
                       id: 'id',
                       category: category,
@@ -90,6 +92,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                       transactionIdList: [],
                       repeatOption: repeatOption,
                       isFinished: false,
+                      dueDates: dueDates,
                   );
 
                   await _firestore.addBill(bill, selectedWallet);
@@ -460,6 +463,47 @@ class _AddBillScreenState extends State<AddBillScreen> {
         ],
       ),
     );
+  }
+
+  List<DateTime> initDueDate () {
+    List<DateTime> dueDates = [];
+    var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+    int freq;
+    switch (repeatOption.frequency)
+    {
+      case 'daily':
+        freq = repeatOption.rangeAmount;
+        break;
+      case 'weekly':
+        freq = 7 * repeatOption.rangeAmount;
+        break;
+      case 'monthly':
+        int dayOfMonth = DateTime(now.year, now.month + 1, 0).day;
+        freq = dayOfMonth * repeatOption.rangeAmount;
+        break;
+      case 'yearly':
+        bool isLeap = DateTime(now.year, 3, 0).day == 29;
+        int dayOfYear = isLeap ? 366 : 365;
+        freq = dayOfYear  * repeatOption.rangeAmount;
+        break;
+    }
+
+    var timeRange = now.difference(repeatOption.beginDateTime).inDays;
+    if (repeatOption.beginDateTime.compareTo(now) >= 0) {
+      if (!dueDates.contains(repeatOption.beginDateTime))
+        dueDates.add(repeatOption.beginDateTime);
+    } else {
+      if (timeRange % freq == 0) {
+        if (!dueDates.contains(now))
+          dueDates.add(now);
+      } else {
+        var realDue = now.add(Duration(days: freq - (timeRange % freq)));
+        if (!dueDates.contains(realDue))
+          dueDates.add(realDue);
+      }
+    }
+    return dueDates;
   }
 
   Future<void> _showAlertDialog(String content) async {

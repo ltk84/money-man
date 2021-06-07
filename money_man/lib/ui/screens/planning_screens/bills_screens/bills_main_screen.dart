@@ -131,7 +131,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
 
           listBills.forEach((element) {
             element.updateDueDate();
-            _firestore.updateBill(element, widget.currentWallet);
+            //_firestore.updateBill(element, widget.currentWallet);
 
             var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
@@ -153,16 +153,16 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                   forToday: '$currencySymbol ' + todayBills.fold(0, (value, element) => value + element['bill'].amount).toString(),
                   thisPeriod: '$currencySymbol ' + thisPeriodBills.fold(0, (value, element) => value + element['bill'].amount).toString()),
               SizedBox(height: 20.0),
-              buildListDue(overDueBills, 0),
-              buildListDue(todayBills, 1),
-              buildListDue(thisPeriodBills, 2),
+              buildListDue(_firestore, overDueBills, 0),
+              buildListDue(_firestore, todayBills, 1),
+              buildListDue(_firestore, thisPeriodBills, 2),
             ],
           );
         }
     );
   }
 
-  Widget buildListDue (List<Map> listDue, int dueState) {
+  Widget buildListDue (dynamic _firestore, List<Map> listDue, int dueState) {
     String title;
 
     switch (dueState) {
@@ -196,14 +196,14 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
             shrinkWrap: true,
             itemCount: listDue.length,
             itemBuilder: (context, index) =>
-                buildBillCard(listDue[index], dueState)
+                buildBillCard(_firestore, listDue[index], dueState)
         ),
         SizedBox(height: 20.0),
       ],
     );
   }
 
-  Widget buildBillCard(Map info, int dueState) {
+  Widget buildBillCard(dynamic _firestore, Map info, int dueState) {
     String currencySymbol = CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
     String payContent = info['bill'].isFinished ? 'PAID' : 'PAY $currencySymbol ' + info['bill'].amount.toString();
     String dueDate = DateFormat('dd/MM/yyyy').format(info['due']);
@@ -283,7 +283,15 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                     )
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (!info['bill'].isFinished) {
+                      print (info['bill'].dueDates);
+                      await info['bill'].dueDates.remove(info['due']);
+                      print (info['bill'].dueDates);
+                      await _firestore.updateBill(
+                          info['bill'], widget.currentWallet);
+                    }
+                  },
                   style: ButtonStyle(
                     backgroundColor:
                     MaterialStateProperty.resolveWith<Color>(

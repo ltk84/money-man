@@ -27,11 +27,8 @@ class Bill {
     @required this.transactionIdList,
     @required this.repeatOption,
     @required this.isFinished,
-    this.dueDates,
-  }) {
-    this.dueDates = [];
-    initDueDate ();
-  }
+    @required this.dueDates,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -63,46 +60,8 @@ class Bill {
     );
   }
 
-  void initDueDate () {
-    var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-
-    int freq;
-    switch (repeatOption.frequency)
-    {
-      case 'daily':
-        freq = repeatOption.rangeAmount;
-        break;
-      case 'weekly':
-        freq = 7 * repeatOption.rangeAmount;
-        break;
-      case 'monthly':
-        int dayOfMonth = DateTime(now.year, now.month + 1, 0).day;
-        freq = dayOfMonth * repeatOption.rangeAmount;
-        break;
-      case 'yearly':
-        bool isLeap = DateTime(now.year, 3, 0).day == 29;
-        int dayOfYear = isLeap ? 366 : 365;
-        freq = dayOfYear  * repeatOption.rangeAmount;
-        break;
-    }
-
-    var timeRange = now.difference(repeatOption.beginDateTime).inDays;
-    if (repeatOption.beginDateTime.compareTo(now) >= 0) {
-      if (!dueDates.contains(repeatOption.beginDateTime))
-        dueDates.add(repeatOption.beginDateTime);
-    } else {
-      if (timeRange % freq == 0) {
-        if (!dueDates.contains(now))
-          dueDates.add(now);
-      } else {
-        var realDue = now.add(Duration(days: freq - (timeRange % freq)));
-        if (!dueDates.contains(realDue))
-          dueDates.add(realDue);
-      }
-    }
-  }
-
   void updateDueDate () {
+    print("loz");
     if (!isFinished) {
       var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
