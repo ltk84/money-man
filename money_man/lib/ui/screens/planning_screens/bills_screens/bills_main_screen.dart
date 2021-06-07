@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/bill_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -231,6 +232,8 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 childCurrent: this.widget,
                 child: BillDetailScreen(
                   bill: info['bill'],
+                  dueDate: info['due'],
+                  description: dueDescription,
                   wallet: widget.currentWallet,
                 ),
                 type: PageTransitionType.rightToLeft));
@@ -285,15 +288,32 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 TextButton(
                   onPressed: () async {
                     if (!info['bill'].isFinished) {
-                      print (info['bill'].dueDates);
+                      // Xử lý các dueDate. (Thanh toán rồi thì dueDate sẽ được cho vào list due Dates đã thanh toán,
+                      // và xóa khỏi list due Dates chưa thanh toán.
                       if (!info['bill'].paidDueDates.contains(info['due'])) {
                         info['bill'].paidDueDates.add(info['due']);
                         info['bill'].dueDates.remove(info['due']);
                       }
-                      print (info['bill'].dueDates);
+
+                      // Cập nhật thông tin bill lên firestore.
                       await _firestore.updateBill(
                           info['bill'], widget.currentWallet);
-                      setState(() { });
+
+                      if (this.mounted) {
+                        setState(() { });
+                      } // tránh bị lỗi setState() được call sau khi dispose().
+
+                      // Xử lý thêm transaction từ bill.
+                      MyTransaction transFromBill;
+                      transFromBill = MyTransaction(
+                          id: 'id',
+                          amount: info['bill'].amount,
+                          note: info['bill'].note,
+                          date: now,
+                          currencyID: widget.currentWallet.currencyID,
+                          category: info['bill'].category);
+
+                      await _firestore.addTransaction(widget.currentWallet, transFromBill);
                     }
                   },
                   style: ButtonStyle(

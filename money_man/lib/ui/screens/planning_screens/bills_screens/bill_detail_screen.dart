@@ -9,15 +9,20 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class BillDetailScreen extends StatefulWidget {
   final Bill bill;
   final Wallet wallet;
+  final DateTime dueDate;
+  final String description;
 
   const BillDetailScreen({
     Key key,
     @required this.bill,
     @required this.wallet,
+    @required this.dueDate,
+    @required this.description,
   }) : super(key: key);
 
   @override
@@ -155,7 +160,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                         thickness: 1,
                       ),
                     ),
-                    buildInfoRepeat(),
+                    buildInfoRepeat(dueDate: DateFormat('dd/MM/yyyy').format(widget.dueDate), dueDescription: widget.description),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -370,7 +375,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
     );
   }
 
-  Widget buildInfoRepeat() {
+  Widget buildInfoRepeat({String dueDate, String dueDescription}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
@@ -383,14 +388,14 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Next bill is 02/06/2021',
+              Text(dueDate ?? '',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 14.0,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   )),
-              Text('Due in 1 day',
+              Text(dueDescription ?? '',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 12.0,
