@@ -141,7 +141,7 @@ class _BudgetScreenState extends State<BudgetScreen>
                     CurrentlyApplied(
                       wallet: wallet,
                     ),
-                    Applied()
+                    Applied(wallet: wallet)
                   ],
                 ),
               );

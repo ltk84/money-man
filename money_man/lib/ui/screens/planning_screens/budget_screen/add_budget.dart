@@ -24,6 +24,8 @@ class AddBudget extends StatefulWidget {
 }
 
 class _AddBudgetState extends State<AddBudget> {
+  bool isRepeat = true;
+
   Wallet currentWallet;
 
   BudgetTimeRange mTimeRange;
@@ -393,8 +395,49 @@ class _AddBudgetState extends State<AddBudget> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 30,
+            Container(
+              margin: EdgeInsets.only(bottom: 10, top: 5),
+              padding: EdgeInsets.only(right: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isRepeat = !isRepeat;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(1),
+                      margin: EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 1),
+                          shape: BoxShape.circle,
+                          color: Color(0xff111111)),
+                      child: isRepeat
+                          ? Icon(
+                              Icons.check,
+                              size: 17,
+                              color: Colors.white,
+                            )
+                          : Icon(
+                              null,
+                              size: 17,
+                              color: Colors.black,
+                            ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      'Repeat this budget',
+                      style: TextStyle(
+                          color: white, fontFamily: 'Montserrat', fontSize: 13),
+                    ),
+                  )
+                ],
+              ),
             ),
             GestureDetector(
               onTap: () async {
@@ -420,7 +463,7 @@ class _AddBudgetState extends State<AddBudget> {
                           : false,
                       beginDate: mTimeRange.beginDay,
                       endDate: mTimeRange.endDay,
-                      isRepeat: false);
+                      isRepeat: isRepeat);
                   await _firestore.addBudget(mBudget, selectedWallet);
                   await _showAlertDialog(
                       "Congratulations, Add budget successfully!");

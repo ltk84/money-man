@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import 'package:math_expressions/math_expressions.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
@@ -19,22 +22,31 @@ class BudgetDetailScreen extends StatefulWidget {
 }
 
 class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
-  String valueDate(DateTime temp) {
-    var array = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'July',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    return array[temp.month - 1] + ' ${temp.year}';
+  bool isNotifi = false;
+  String valueDate(Budget budget) {
+    String result = DateFormat('dd/MM/yyyy').format(budget.beginDate) +
+        ' - ' +
+        DateFormat('dd/MM/yyyy').format(budget.endDate);
+    return result;
+  }
+
+  String TimeLeft(Budget budget) {
+    var today = DateTime.now();
+    if (today.isBefore(budget.beginDate)) {
+      int n = budget.beginDate.difference(today).inDays;
+      if (n > 1) {
+        return '$n days to begin';
+      } else
+        return '$n day to begin';
+    } else if (today.isAfter(budget.endDate)) {
+      return 'Finished';
+    } else {
+      int n = budget.endDate.difference(today).inDays;
+      if (n > 1) {
+        return '$n days left';
+      } else
+        return '$n day left';
+    }
   }
 
   @override
@@ -203,7 +215,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
             ),
             Row(
               children: [
-                todayRate < 0
+                widget.budget.beginDate.isAfter(today) ||
+                        today.isAfter(widget.budget.endDate)
                     ? Container()
                     : Container(
                         margin: EdgeInsets.only(
@@ -233,7 +246,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               title: Container(
                 padding: EdgeInsets.only(left: 5),
                 child: Text(
-                  valueDate(today),
+                  valueDate(widget.budget),
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -242,15 +255,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               subtitle: Container(
                 padding: EdgeInsets.only(left: 5),
                 child: Text(
-                  isStart
-                      ? this.widget.budget.beginDate.difference(today).inDays >
-                              1
-                          ? '${today.difference(this.widget.budget.beginDate).inDays} days remain'
-                          : '${today.difference(this.widget.budget.beginDate).inDays} day remain'
-                      : this.widget.budget.beginDate.difference(today).inDays <
-                              -1
-                          ? '${-1 * today.difference(this.widget.budget.beginDate).inDays} day to begin'
-                          : '${-1 * today.difference(this.widget.budget.beginDate).inDays} days to begin',
+                  TimeLeft(widget.budget),
                   style: TextStyle(
                     color: Colors.white54,
                   ),
@@ -392,7 +397,13 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       color: Colors.white,
                     ),
                   ),
-                  Switch(value: true, onChanged: (val) {})
+                  Switch(
+                      value: isNotifi,
+                      onChanged: (val) {
+                        setState(() {
+                          isNotifi = !isNotifi;
+                        });
+                      })
                 ],
               ),
             ),

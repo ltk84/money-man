@@ -28,7 +28,12 @@ class CurrentlyApplied extends StatelessWidget {
           builder: (context, snapshot) {
             List<Budget> budgets = snapshot.data;
             budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
-
+            for (int i = 0; i < budgets.length; i++) {
+              if (budgets[i].endDate.isBefore(DateTime.now())) {
+                budgets.removeAt(i);
+                i--;
+              }
+            }
             return ListView.builder(
               itemCount: budgets == null ? 0 : budgets.length,
               itemBuilder: (context, index) => Column(
@@ -59,6 +64,20 @@ class MyBudgetTile extends StatelessWidget {
     print('today rate:  $todayRate');
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     _firestore.updateBudget(budget, wallet);
+    if (budget.isRepeat && budget.endDate.isBefore(today)) {
+      Budget newBudget = new Budget(
+          id: 'id',
+          category: budget.category,
+          amount: budget.amount,
+          spent: budget.spent,
+          walletId: budget.walletId,
+          isFinished: budget.isFinished,
+          beginDate: budget.endDate.add(Duration(days: 1)),
+          endDate:
+              budget.endDate.add(budget.endDate.difference(budget.beginDate)),
+          isRepeat: budget.isRepeat);
+      _firestore.addBudget(newBudget, wallet);
+    }
     budget.label = getBudgetLabel(budget);
 
     return Center(
@@ -195,7 +214,7 @@ class MyBudgetTile extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
-              todayRate < 0
+              budget.beginDate.isAfter(today) || today.isAfter(budget.endDate)
                   ? Container()
                   : Container(
                       margin: EdgeInsets.only(
@@ -263,8 +282,6 @@ class MyBudgetTile extends StatelessWidget {
     final endDayOfNQuarter =
         new DateTime(today.year, nextQuarterNumber.toInt() + 3, 1)
             .subtract(Duration(days: 1));
-    print('1$firstDayOfNQuarter');
-    print(begin);
     if (begin.compareTo(firstDayOfNQuarter) == 0 &&
         end.compareTo(endDayOfNQuarter) == 0) return 'Next quarter';
 
