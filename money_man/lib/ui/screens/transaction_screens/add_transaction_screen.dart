@@ -16,6 +16,7 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_scr
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
+
 class AddTransactionScreen extends StatefulWidget {
   Wallet currentWallet;
   AddTransactionScreen({
@@ -429,7 +430,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (_) => NoteTransactionScreen(
-                                content: note ?? '',
+                                noteContent: note ?? '',
                               )));
                   print(noteContent);
                   if (noteContent != null) {

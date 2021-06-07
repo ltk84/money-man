@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screen/budget_home.dart';
+import 'package:money_man/ui/screens/planning_screens/event_screen/event_home.dart';
 
 class PlanningScreen extends StatelessWidget {
   @override
@@ -144,7 +145,9 @@ class _TestState extends State<Test> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+
+                  },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
@@ -168,7 +171,12 @@ class _TestState extends State<Test> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EventScreen()));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
