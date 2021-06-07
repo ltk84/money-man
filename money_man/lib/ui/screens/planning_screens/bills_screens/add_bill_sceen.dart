@@ -93,6 +93,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                       repeatOption: repeatOption,
                       isFinished: false,
                       dueDates: dueDates,
+                      paidDueDates: [],
                   );
 
                   await _firestore.addBill(bill, selectedWallet);

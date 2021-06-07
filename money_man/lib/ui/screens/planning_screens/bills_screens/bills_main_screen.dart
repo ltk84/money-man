@@ -219,7 +219,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
         dueDescription = 'Due today';
         break;
       case 2:
-        dueDescription = 'Due in ' + info['due'].difference(now).inDays.toString() + ' day';
+        dueDescription = 'Due in ' + info['due'].difference(now).inDays.toString() + ' day(s)';
         break;
     }
 
@@ -286,10 +286,14 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                   onPressed: () async {
                     if (!info['bill'].isFinished) {
                       print (info['bill'].dueDates);
-                      await info['bill'].dueDates.remove(info['due']);
+                      if (!info['bill'].paidDueDates.contains(info['due'])) {
+                        info['bill'].paidDueDates.add(info['due']);
+                        info['bill'].dueDates.remove(info['due']);
+                      }
                       print (info['bill'].dueDates);
                       await _firestore.updateBill(
                           info['bill'], widget.currentWallet);
+                      setState(() { });
                     }
                   },
                   style: ButtonStyle(

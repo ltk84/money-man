@@ -17,6 +17,7 @@ class Bill {
   RepeatOption repeatOption;
   bool isFinished;
   List<DateTime> dueDates;
+  List<DateTime> paidDueDates;
 
   Bill({
     @required this.id,
@@ -28,6 +29,7 @@ class Bill {
     @required this.repeatOption,
     @required this.isFinished,
     @required this.dueDates,
+    @required this.paidDueDates,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,7 +42,8 @@ class Bill {
       'transactionIdList': transactionIdList?.map((x) => x.toMap())?.toList(),
       'repeatOption': repeatOption.toMap(),
       'isFinished': isFinished,
-      'dueDates': dueDates
+      'dueDates': dueDates,
+      'paidDueDates': paidDueDates,
     };
   }
 
@@ -57,20 +60,21 @@ class Bill {
       isFinished: data['isFinished'],
       dueDates: List<DateTime>.from(data['dueDates']?.map((x) =>
           DateTime.tryParse(x.toDate().toString()))),
+      paidDueDates: List<DateTime>.from(data['paidDueDates']?.map((x) =>
+          DateTime.tryParse(x.toDate().toString()))),
     );
   }
 
   void updateDueDate () {
-    print("loz");
     if (!isFinished) {
       var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
       if (now.compareTo(repeatOption.beginDateTime) >= 0) {
         if (repeatOption.type == 'until' && now.isAfter(repeatOption.extraTypeInfo)) {
-          isFinished = true;
+          //isFinished = true;
           return;
-        } else if (repeatOption.type == 'for' && repeatOption.extraTypeInfo == 0) {
-          isFinished = true;
+        } else if (repeatOption.type == 'for' && repeatOption.extraTypeInfo - 1 == 0) {
+          //isFinished = true;
           return;
         }
         var timeRange = now.difference(repeatOption.beginDateTime).inDays;
@@ -98,10 +102,13 @@ class Bill {
         if (timeRange % freq == 0) {
           DateTime nextDue;
           nextDue = now.add(Duration(days: freq));
-          if (!dueDates.contains(nextDue))
-            dueDates.add(nextDue);
-          if (repeatOption.type == 'for')
-            repeatOption.extraTypeInfo--;
+          if (!paidDueDates.contains(nextDue)) {
+            if (!dueDates.contains(nextDue)) {
+              dueDates.add(nextDue);
+              if (repeatOption.type == 'for')
+                repeatOption.extraTypeInfo--;
+            }
+          }
         }
       }
     }
