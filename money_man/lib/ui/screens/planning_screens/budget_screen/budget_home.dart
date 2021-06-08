@@ -129,12 +129,13 @@ class _BudgetScreenState extends State<BudgetScreen>
             body: StreamBuilder<Object>(
                 stream: _firestore.currentWallet,
                 builder: (context, snapshot) {
-                  _wallet = snapshot.data;
+                  _wallet = snapshot.data ?? _wallet;
                   return TabBarView(
                     controller: _tabController,
                     children: [
                       AddBudget(
                         tabController: _tabController,
+                        wallet: _wallet,
                       ),
                       CurrentlyApplied(
                         wallet: _wallet,

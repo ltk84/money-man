@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import 'package:math_expressions/math_expressions.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screen/edit_budget.dart';
+import 'package:money_man/ui/widgets/accept_dialog.dart';
+import 'package:provider/provider.dart';
 
 import 'line_chart_progress.dart';
 
@@ -51,6 +52,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     bool isStart;
     DateTime today = DateTime.now();
     var todayRate = today.difference(widget.budget.beginDate).inDays /
@@ -89,7 +91,19 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 if (result != null) Navigator.pop(context);
               }),
           IconButton(
-              icon: Icon(Icons.delete, color: Colors.white), onPressed: () {})
+              icon: Icon(Icons.delete, color: Colors.white),
+              onPressed: () async {
+                //TODO: Thuc hien xoa budget
+                String result = await _showAcceptionDialog();
+                print(result);
+                if (result == 'no') {
+                  return;
+                } else {
+                  await _firestore.deleteBudget(
+                      widget.budget.walletId, widget.budget.id);
+                  Navigator.pop(context);
+                }
+              })
         ],
         backgroundColor: Color(0xff333333),
       ),
@@ -431,6 +445,19 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<String> _showAcceptionDialog() async {
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAcceptAlert(
+          content: 'Do you want to delete this budget?',
+        );
+      },
     );
   }
 }

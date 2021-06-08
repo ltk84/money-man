@@ -17,16 +17,15 @@ import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
 class AddBudget extends StatefulWidget {
-  AddBudget({this.tabController, Key key}) : super(key: key);
+  AddBudget({this.tabController, Key key, this.wallet}) : super(key: key);
   @override
   _AddBudgetState createState() => _AddBudgetState();
   TabController tabController;
+  Wallet wallet;
 }
 
 class _AddBudgetState extends State<AddBudget> {
   bool isRepeat = true;
-
-  Wallet currentWallet;
 
   BudgetTimeRange mTimeRange;
 
@@ -219,9 +218,6 @@ class _AddBudgetState extends State<AddBudget> {
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: ListTile(
                 onTap: () async {
-                  /*final resultAmount = await Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => SelectTimeRangeScreen()));
-                  if (resultAmount != null) setState(() {});*/
                   var resultAmount = await showCupertinoModalBottomSheet(
                       isDismissible: true,
                       backgroundColor: Colors.grey[900],
@@ -316,7 +312,7 @@ class _AddBudgetState extends State<AddBudget> {
                       backgroundColor: Colors.grey[900],
                       context: context,
                       builder: (context) =>
-                          SelectWalletAccountScreen(wallet: selectedWallet));
+                          SelectWalletAccountScreen(wallet: widget.wallet));
                   if (res != null)
                     setState(() {
                       selectedWallet = res;
@@ -361,7 +357,7 @@ class _AddBudgetState extends State<AddBudget> {
                               backgroundColor: Colors.grey[900],
                               context: context,
                               builder: (context) => SelectWalletAccountScreen(
-                                  wallet: selectedWallet));
+                                  wallet: widget.wallet));
                           if (res != null)
                             setState(() {
                               selectedWallet = res;
