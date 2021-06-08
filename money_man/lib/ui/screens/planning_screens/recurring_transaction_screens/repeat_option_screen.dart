@@ -378,7 +378,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                             selectedTypeOption = 3;
                             expandTypeOption = true;
                             _repeatOption.type = 'for';
-                            _repeatOption.extraTypeInfo = repeatTime;
+                            _repeatOption.extraTypeInfo = repeatTime + 1;
                           } else
                             expandTypeOption = !expandTypeOption;
                         });

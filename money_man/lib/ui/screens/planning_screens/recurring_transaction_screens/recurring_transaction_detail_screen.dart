@@ -7,6 +7,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/edit_recurring_transaction_screen.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
 class RecurringTransactionDetailScreen extends StatefulWidget {
@@ -86,7 +87,6 @@ class _RecurringTransactionDetailScreenState
               tag: 'billToDetail_actionBtn',
               child: TextButton(
                 onPressed: () async {
-                  print('before' + _recurringTransaction.category.name);
                   final updatedReTrans = await showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) {
@@ -95,7 +95,6 @@ class _RecurringTransactionDetailScreenState
                           wallet: widget.wallet,
                         );
                       });
-                  print('after' + _recurringTransaction.category.name);
 
                   if (updatedReTrans != null) {
                     setState(() {
@@ -262,6 +261,48 @@ class _RecurringTransactionDetailScreenState
                   ))),
               child: TextButton(
                 onPressed: () async {
+                  var result =
+                      await _firestore.executeInstantRecurringTransaction(
+                          widget.recurringTransaction, widget.wallet);
+                  if (result > 0) {
+                    await _showAlertDialog(
+                        title: 'Congratulation!', content: 'Execute success!');
+                  } else {
+                    await _showAlertDialog(
+                        content: 'Recurring transaction expired!');
+                  }
+                  Navigator.pop(context);
+                },
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return Colors.green.withOpacity(0.4);
+                      else
+                        return Colors.green; // Use the component's default.
+                    },
+                  ),
+                ),
+                child: Text("Execute transaction",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.center),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 30.0),
+              decoration: BoxDecoration(
+                  color: Color(0xFF1c1c1c),
+                  border: Border(
+                      bottom: BorderSide(
+                    color: Colors.white12,
+                    width: 0.5,
+                  ))),
+              child: TextButton(
+                onPressed: () async {
                   await _firestore.deleteRecurringTransaction(
                       _recurringTransaction, widget.wallet);
                   Navigator.pop(context);
@@ -403,6 +444,21 @@ class _RecurringTransactionDetailScreenState
           )
         ],
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(
+      {String title = 'Oops...', String content}) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(
+          content: content,
+          title: title,
+        );
+      },
     );
   }
 }

@@ -747,14 +747,17 @@ class FirebaseFireStoreService {
   Future executeRecurringTransaction(Wallet wallet) async {
     List<RecurringTransaction> todayList =
         await getListRecurringTransactionToBeExecute(wallet.id);
-    if (todayList.isEmpty) return;
+    if (todayList.isEmpty) return -1;
 
     List<String> transactionIdList =
         await addTransactionOfRecurringTransaction(todayList, wallet);
 
-    if (transactionIdList.isNotEmpty)
+    if (transactionIdList.isNotEmpty) {
       await updateNewBeginDateOfRecurringTransaction(
           todayList, transactionIdList, wallet);
+      return 1;
+    } else
+      return -1;
   }
 
   Future updateNewBeginDateOfRecurringTransaction(
@@ -778,7 +781,9 @@ class FirebaseFireStoreService {
         recurringTrans.repeatOption.beginDateTime =
             _calculateNextDate(recurringTrans);
         recurringTrans.repeatOption.extraTypeInfo =
-            (int.parse(recurringTrans.repeatOption.type) - 1).toString();
+            (int.parse(recurringTrans.repeatOption.extraTypeInfo.toString()) -
+                    1)
+                .toString();
       } else {
         recurringTrans.repeatOption.beginDateTime =
             _calculateNextDate(recurringTrans);
@@ -795,19 +800,6 @@ class FirebaseFireStoreService {
   Future<List<String>> addTransactionOfRecurringTransaction(
       List<RecurringTransaction> todayList, Wallet wallet) async {
     List<String> transactionIdList = [];
-    // todayList.forEach((RecurringTransaction recurringTrans) async {
-    //   MyTransaction transaction = MyTransaction(
-    //       id: 'id',
-    //       amount: recurringTrans.amount,
-    //       date: recurringTrans.repeatOption.beginDateTime,
-    //       currencyID: wallet.currencyID,
-    //       category: recurringTrans.category);
-    //   transaction = await addTransaction(wallet, transaction);
-    //   print('transaction id' + transaction.id);
-    //   transactionIdList.add(transaction.id);
-    //   print('added');
-    //   print(transactionIdList.length);
-    // });
     for (int i = 0; i < todayList.length; i++) {
       RecurringTransaction recurringTrans = todayList[i];
       MyTransaction transaction = MyTransaction(
@@ -847,6 +839,20 @@ class FirebaseFireStoreService {
       nextDate = beginDate.add(Duration(days: days));
     }
     return nextDate;
+  }
+
+  Future executeInstantRecurringTransaction(
+      RecurringTransaction recurringTransaction, Wallet wallet) async {
+    List<String> transactionIdList = await addTransactionOfRecurringTransaction(
+        [recurringTransaction], wallet);
+
+    if (transactionIdList.isNotEmpty) {
+      await updateNewBeginDateOfRecurringTransaction(
+          [recurringTransaction], transactionIdList, wallet);
+      return 1;
+    } else {
+      return -1;
+    }
   }
 
   // RECURRING TRANSACTION END //

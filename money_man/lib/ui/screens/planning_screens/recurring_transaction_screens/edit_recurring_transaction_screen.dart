@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:date_util/date_util.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class _EditRecurringTransactionScreenState
   String note;
   RepeatOption repeatOption;
   DateTime nextDate;
+  String repeatContent;
 
   var dateUtility = DateUtil();
   @override
@@ -49,6 +51,12 @@ class _EditRecurringTransactionScreenState
     category = widget.recurringTransaction.category;
     note = widget.recurringTransaction.note;
     repeatOption = widget.recurringTransaction.repeatOption;
+    var dateTime = DateFormat('dd-MM-yyyy').format(repeatOption.beginDateTime);
+    var type = repeatOption.type == 'until'
+        ? 'until ${DateFormat('dd-MM-yyyy').format(repeatOption.extraTypeInfo)}'
+        : 'for ${repeatOption.extraTypeInfo} times';
+    repeatContent = 'Repeat ${repeatOption.frequency} from $dateTime $type';
+
     // nextDate = widget.recurringTransaction.nextDate;
   }
 
@@ -268,7 +276,7 @@ class _EditRecurringTransactionScreenState
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Text(
-                  'Repeat everyday from 01/06/2021',
+                  repeatContent,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 13.0,
