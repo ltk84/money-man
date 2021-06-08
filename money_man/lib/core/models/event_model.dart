@@ -11,7 +11,7 @@ class Event {
   DateTime endDate;
   String walletId;
   bool isFinished;
-  List<String> transactionIdList;
+  List<String> transactionIdList ;
   double spent;
 
   Event({

@@ -21,13 +21,14 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen>
     with TickerProviderStateMixin {
-
   TabController _tabController;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _tabController = new TabController(length: 2, vsync: this, initialIndex: 1);
+    _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
+    _tabController.addListener(() {
+      setState(() {});
+    });
   }
   Wallet _wallet = Wallet(
       id: 'id',
@@ -36,15 +37,16 @@ class _EventScreenState extends State<EventScreen>
       currencyID: 'USD',
       iconID: 'assets/icons/wallet_2.svg');
   @override
+  void didUpdateWidget(covariant EventScreen oldWidget) {
+
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: 1 == 65
-          ? Scaffold(
-        body: MyTimeRange(),
-      )
-          : DefaultTabController(
+      home: DefaultTabController(
         length: 2,
         child: StreamBuilder<Object>(
             stream: _firestore.currentWallet,
@@ -105,14 +107,14 @@ class _EventScreenState extends State<EventScreen>
                           child: Container(
                             width: 120,
                             child: Text(
-                              "Currently applied",
+                              "Running",
                             ),
                           )),
                       Tab(
                           child: Container(
                             width: 120,
                             child: Text(
-                              "Applied",
+                              "Finished",
                             ),
                           )),
                     ],
@@ -125,7 +127,9 @@ class _EventScreenState extends State<EventScreen>
                     CurrentlyAppliedEvent(
                       wallet: wallet,
                     ),
-                    AppliedEvent(),
+                    AppliedEvent(
+                      wallet: wallet,
+                    ),
                   ],
                 ),
                 floatingActionButton: IconButton(
@@ -134,8 +138,8 @@ class _EventScreenState extends State<EventScreen>
                     color: Color(0xFF2FB49C),
                     size: 50.0,
                   ),
-                  padding: EdgeInsets.fromLTRB(0,0,MediaQuery.of(context).size.width-50,
-                      MediaQuery.of(context).size.height-150),
+                  //padding: EdgeInsets.fromLTRB(0,0,MediaQuery.of(context).size.width-50,
+                  //    MediaQuery.of(context).size.height-150),
                   onPressed:   () async {
                     Navigator.push(context,
                       MaterialPageRoute(

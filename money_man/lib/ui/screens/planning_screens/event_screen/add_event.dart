@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -5,6 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
@@ -27,6 +29,8 @@ class _AddEventState extends State<AddEvent> {
   String currencySymbol = 'Viet Nam Dong';
 
   String nameEvent;
+
+  List<String> transactionIdList = [];
   @override
   void initState() {
     endDate = DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
@@ -101,6 +105,7 @@ class _AddEventState extends State<AddEvent> {
                         .day) ? true : false,
                     walletId: selectedWallet.id,
                     spent: 0,
+                    transactionIdList: [],
                   );
                   await _firestore.addEvent(event, selectedWallet);
                   Navigator.pop(context);
