@@ -664,20 +664,6 @@ class FirebaseFireStoreService {
         .catchError((error) => print('error'));
   }
 
-  // Future addRecurringTransaction(Wallet wallet) async {
-  //   final reTranssRef = users
-  //       .doc(uid)
-  //       .collection('wallets')
-  //       .doc(wallet.id)
-  //       .collection('recurring transactions')
-  //       .doc();
-  //   reTrans.id = reTranssRef.id;
-  //   await reTranssRef
-  //       .set(reTrans.toMap())
-  //       .then((value) => print('recurring transaction added!'))
-  //       .catchError((error) => print('error'));
-  // }
-
   // edit recurring transaction
   Future updateRecurringTransaction(
       RecurringTransaction reTrans, Wallet wallet) async {
@@ -720,12 +706,11 @@ class FirebaseFireStoreService {
   List<RecurringTransaction> _recurringTransactionFromSnapshot(
       QuerySnapshot snapshot) {
     return snapshot.docs.map((e) {
-      // print(e.data());
       return RecurringTransaction.fromMap(e.data());
     }).toList();
   }
 
-  // check add transation or not
+  // lấy danh sách các transaction cần thực hiện trong hôm nay (của recurring transaction)
   Future getListRecurringTransactionToBeExecute(String walletId) async {
     DateTime now =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -743,16 +728,22 @@ class FirebaseFireStoreService {
     return todayRecurringTransList;
   }
 
-  // execute recurring transaction
+  // thực hiện add transaction của recurring transaction
   Future executeRecurringTransaction(Wallet wallet) async {
+    // lấy danh sách cần thực hiện hôm nay
     List<RecurringTransaction> todayList =
         await getListRecurringTransactionToBeExecute(wallet.id);
+
+    // nếu không có thì return
     if (todayList.isEmpty) return -1;
 
+    // thực hiện add transaction dựa trên list đã lấy ở trên và trả về danh sách id
     List<String> transactionIdList =
         await addTransactionOfRecurringTransaction(todayList, wallet);
 
+    // nếu danh sách id có
     if (transactionIdList.isNotEmpty) {
+      // thực hiện update begin date của recurring transaction
       await updateNewBeginDateOfRecurringTransaction(
           todayList, transactionIdList, wallet);
       return 1;
@@ -760,23 +751,33 @@ class FirebaseFireStoreService {
       return -1;
   }
 
+  // update begin date của recurring transaction
   Future updateNewBeginDateOfRecurringTransaction(
       List<RecurringTransaction> todayList,
       List<String> transactionIdList,
       Wallet wallet) async {
+    // index cho transaction id list
     int index = 0;
+
+    // map today list để xử lý
     todayList.map((RecurringTransaction recurringTrans) async {
+      // nếu type là until mà begin date > extra type info (datetime) (recurring transaction hết hạn)
       if (recurringTrans.repeatOption.type == 'until') {
         if (recurringTrans.repeatOption.beginDateTime
             .isAfter(recurringTrans.repeatOption.extraTypeInfo)) {
           return;
         }
-      } else if (recurringTrans.repeatOption.type == 'for') {
+      }
+      // nếu type là for mà extra type info (int) = 0 rồi (recurrin transaction hết hạn)
+      else if (recurringTrans.repeatOption.type == 'for') {
         if (recurringTrans.repeatOption.extraTypeInfo == 0) {
           return;
         }
       }
 
+      // trường hợp chưa hết hạn
+      // tính toán next date
+      // trường hợp for thì lấy extra type info -1
       if (recurringTrans.repeatOption.type == 'for') {
         recurringTrans.repeatOption.beginDateTime =
             _calculateNextDate(recurringTrans);
@@ -789,17 +790,21 @@ class FirebaseFireStoreService {
             _calculateNextDate(recurringTrans);
       }
 
+      // lấy transaction id list add vào recurring transaction
       recurringTrans.transactionIdList.add(transactionIdList[index]);
       index = index + 1;
 
+      // update lại recurring transaction
       await updateRecurringTransaction(recurringTrans, wallet);
     }).toList();
-    // todayList1[0].id = '1';
   }
 
+  // thực hiện việc add transaction của recurring transaction
   Future<List<String>> addTransactionOfRecurringTransaction(
       List<RecurringTransaction> todayList, Wallet wallet) async {
     List<String> transactionIdList = [];
+
+    // thực hiện add transaction rồi lưu id lại vào transactionIdList
     for (int i = 0; i < todayList.length; i++) {
       RecurringTransaction recurringTrans = todayList[i];
       MyTransaction transaction = MyTransaction(
@@ -813,34 +818,42 @@ class FirebaseFireStoreService {
       print(transactionIdList.length);
     }
     return transactionIdList;
-    // todayList2[0].id = '3';
   }
 
+  // tính toán next date cho recurring transaction
   DateTime _calculateNextDate(RecurringTransaction recurringTrans) {
     DateUtil dateUtility = DateUtil();
     RepeatOption repeatOption = recurringTrans.repeatOption;
     DateTime nextDate;
+
+    // trường hợp daily
     if (repeatOption.frequency == 'daily') {
       nextDate = repeatOption.beginDateTime
           .add(Duration(days: repeatOption.rangeAmount));
-    } else if (repeatOption.frequency == 'weekly') {
+    }
+    // trường hợp weekly
+    else if (repeatOption.frequency == 'weekly') {
       nextDate = repeatOption.beginDateTime
           .add(Duration(days: 7 * repeatOption.rangeAmount));
-    } else if (repeatOption.frequency == 'monthly') {
+    }
+    // trường hợp monthly
+    else if (repeatOption.frequency == 'monthly') {
       DateTime beginDate = repeatOption.beginDateTime;
       int days = dateUtility.daysInMonth(beginDate.month, beginDate.year) *
           repeatOption.rangeAmount;
       nextDate = beginDate.add(Duration(days: days));
-    } else {
+    }
+    // trường hợp yearly
+    else {
       DateTime beginDate = repeatOption.beginDateTime;
       int days = (dateUtility.leapYear(beginDate.year) == true ? 365 : 366) *
           repeatOption.rangeAmount;
-      print(days);
       nextDate = beginDate.add(Duration(days: days));
     }
     return nextDate;
   }
 
+  // thực hiện add transaction của recurring transaction ngay lập tức (tương tự trên)
   Future executeInstantRecurringTransaction(
       RecurringTransaction recurringTransaction, Wallet wallet) async {
     List<String> transactionIdList = await addTransactionOfRecurringTransaction(
