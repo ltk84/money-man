@@ -19,23 +19,18 @@ class Applied extends StatelessWidget {
       child: StreamBuilder<List<Budget>>(
           stream: _firestore.budgetStream(wallet.id),
           builder: (context, snapshot) {
-            List<Budget> budgets = snapshot.data;
+            List<Budget> budgets = snapshot.data ?? [];
             budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
             for (int i = 0; i < budgets.length; i++) {
               if (DateTime.now().isBefore(budgets[i].endDate)) {
                 budgets.removeAt(i);
                 i--;
-                print(i);
-                //print(DateTime.now());
-                // print(budgets[i].endDate);
-                // print(budgets[i].category.name);
               }
             }
             return ListView.builder(
               itemCount: budgets == null ? 0 : budgets.length,
               itemBuilder: (context, index) => Column(
                 children: [
-                  //MyTimeRange(),
                   MyBudgetTile(
                     budget: budgets[index],
                     wallet: wallet,
