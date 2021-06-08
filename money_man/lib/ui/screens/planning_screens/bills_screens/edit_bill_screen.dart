@@ -82,7 +82,9 @@ class _EditBillScreenState extends State<EditBillScreen> {
                     transactionIdList: widget.bill.transactionIdList,
                     repeatOption: repeatOption,
                     isFinished: widget.bill.isFinished,
-                    dueDates: widget.bill.dueDates);
+                    dueDates: widget.bill.dueDates,
+                    paidDueDates: widget.bill.paidDueDates,
+                );
 
                 await _firestore.updateBill(
                     _bill, widget.wallet);
