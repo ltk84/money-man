@@ -575,6 +575,19 @@ class FirebaseFireStoreService {
         .map(_budgetFromSnapshot);
   }
 
+//Stream budget dùng để hiển thị list các budget có cùng category với transaction
+  Stream<List<Budget>> budgetTransactionStream(
+      MyTransaction transaction, String walletID) {
+    return users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletID)
+        .collection('budgets')
+        .where('category.id', isEqualTo: transaction.category.id)
+        .snapshots()
+        .map(_budgetFromSnapshot);
+  }
+
   // convert budget from snapshot (hàm này convert từ dữ liệu firebase thành budget)
   List<Budget> _budgetFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((e) {
