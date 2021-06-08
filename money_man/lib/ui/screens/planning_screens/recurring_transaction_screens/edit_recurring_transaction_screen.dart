@@ -56,8 +56,6 @@ class _EditRecurringTransactionScreenState
         ? 'until ${DateFormat('dd-MM-yyyy').format(repeatOption.extraTypeInfo)}'
         : 'for ${repeatOption.extraTypeInfo} times';
     repeatContent = 'Repeat ${repeatOption.frequency} from $dateTime $type';
-
-    // nextDate = widget.recurringTransaction.nextDate;
   }
 
   @override
@@ -92,7 +90,6 @@ class _EditRecurringTransactionScreenState
                       widget.recurringTransaction.transactionIdList,
                   repeatOption: repeatOption,
                 );
-                // nextDate: nextDate);
 
                 await _firestore.updateRecurringTransaction(
                     _recurringTransaction, widget.wallet);

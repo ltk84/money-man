@@ -8,7 +8,6 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/recurring_transaction_model.dart';
 import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
@@ -20,10 +19,10 @@ import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
 class AddRecurringTransactionScreen extends StatefulWidget {
-  Wallet defaultWallet;
+  final Wallet wallet;
   AddRecurringTransactionScreen({
     Key key,
-    @required this.defaultWallet,
+    @required this.wallet,
   }) : super(key: key);
 
   @override
@@ -36,7 +35,7 @@ class _AddRecurringTransactionScreenState
   double amount;
   MyCategory category;
   String note;
-  Wallet wallet;
+  Wallet _wallet;
   RepeatOption repeatOption;
 
   var dateUtility = new DateUtil();
@@ -47,7 +46,7 @@ class _AddRecurringTransactionScreenState
   void initState() {
     // TODO: implement initState
     super.initState();
-    wallet = widget.defaultWallet;
+    _wallet = widget.wallet;
     repeatOption = RepeatOption(
         frequency: 'daily',
         rangeAmount: 1,
@@ -78,23 +77,24 @@ class _AddRecurringTransactionScreenState
           actions: [
             TextButton(
               onPressed: () async {
+                // chưa pick amount
                 if (amount == null) {
                   _showAlertDialog('Please enter amount!');
-                } else if (category == null) {
+                }
+                // chưa pick category
+                else if (category == null) {
                   _showAlertDialog('Please pick category!');
-                  // } else if (repeatOption == null) {
-                  //   _showAlertDialog('Please pick repeat option');
                 } else {
                   var reTrans = RecurringTransaction(
                     id: 'id',
                     category: category,
                     amount: amount,
-                    walletId: wallet.id,
+                    walletId: _wallet.id,
                     note: note,
                     transactionIdList: [],
                     repeatOption: repeatOption,
                   );
-                  await _firestore.addRecurringTransaction(reTrans, wallet);
+                  await _firestore.addRecurringTransaction(reTrans, _wallet);
                   Navigator.pop(context);
                 }
               },
@@ -198,7 +198,7 @@ class _AddRecurringTransactionScreenState
                                 builder: (_) => NoteTransactionScreen(
                                       content: note ?? '',
                                     )));
-                        print(noteContent);
+
                         if (noteContent != null) {
                           setState(() {
                             note = noteContent;
@@ -228,19 +228,17 @@ class _AddRecurringTransactionScreenState
                             backgroundColor: Colors.grey[900],
                             context: context,
                             builder: (context) =>
-                                SelectWalletAccountScreen(wallet: wallet));
+                                SelectWalletAccountScreen(wallet: _wallet));
                         if (res != null)
                           setState(() {
-                            wallet = res;
-                            // currencySymbol = CurrencyService()
-                            //     .findByCode(selectedWallet.currencyID)
-                            //     .symbol;
+                            _wallet = res;
                           });
                       },
                       child: buildWalletSelection(
-                        display: this.wallet == null ? null : this.wallet.name,
+                        display:
+                            this._wallet == null ? null : this._wallet.name,
                         iconPath:
-                            this.wallet == null ? null : this.wallet.iconID,
+                            this._wallet == null ? null : this._wallet.iconID,
                       )),
                 ])),
 
@@ -258,29 +256,6 @@ class _AddRecurringTransactionScreenState
                 if (res != null)
                   setState(() {
                     repeatOption = res;
-
-                    // if (repeatOption.frequency == 'daily') {
-                    //   nextDate = repeatOption.beginDateTime
-                    //       .add(Duration(days: repeatOption.rangeAmount));
-                    // } else if (repeatOption.frequency == 'weekly') {
-                    //   nextDate = repeatOption.beginDateTime
-                    //       .add(Duration(days: 7 * repeatOption.rangeAmount));
-                    // } else if (repeatOption.frequency == 'monthly') {
-                    //   DateTime beginDate = repeatOption.beginDateTime;
-                    //   int days = dateUtility.daysInMonth(
-                    //           beginDate.month, beginDate.year) *
-                    //       repeatOption.rangeAmount;
-                    //   nextDate = beginDate.add(Duration(days: days));
-                    // } else {
-                    //   DateTime beginDate = repeatOption.beginDateTime;
-                    //   int days = (dateUtility.leapYear(beginDate.year) == true
-                    //           ? 365
-                    //           : 366) *
-                    //       repeatOption.rangeAmount;
-                    //   print(days);
-                    //   nextDate = beginDate.add(Duration(days: days));
-                    // }
-                    // print(nextDate);
                   });
               },
               child: Container(
@@ -515,6 +490,7 @@ class _AddRecurringTransactionScreenState
     );
   }
 
+  // hiện thông báo
   Future<void> _showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
