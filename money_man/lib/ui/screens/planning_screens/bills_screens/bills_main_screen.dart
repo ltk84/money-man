@@ -288,6 +288,22 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 TextButton(
                   onPressed: () async {
                     if (!info['bill'].isFinished) {
+                      // Xử lý thêm transaction từ bill.
+                      MyTransaction transFromBill;
+                      transFromBill = MyTransaction(
+                          id: 'id',
+                          amount: info['bill'].amount,
+                          note: info['bill'].note,
+                          date: now,
+                          currencyID: widget.currentWallet.currencyID,
+                          category: info['bill'].category);
+                      await _firestore.addTransaction(widget.currentWallet, transFromBill);
+
+                      // Thêm transaction vào bill.
+                      if (!info['bill'].transactionIdList.contains(transFromBill)) {
+                        info['bill'].transactionIdList.add(transFromBill);
+                      }
+
                       // Xử lý các dueDate. (Thanh toán rồi thì dueDate sẽ được cho vào list due Dates đã thanh toán,
                       // và xóa khỏi list due Dates chưa thanh toán.
                       if (!info['bill'].paidDueDates.contains(info['due'])) {
@@ -303,17 +319,6 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                         setState(() { });
                       } // tránh bị lỗi setState() được call sau khi dispose().
 
-                      // Xử lý thêm transaction từ bill.
-                      MyTransaction transFromBill;
-                      transFromBill = MyTransaction(
-                          id: 'id',
-                          amount: info['bill'].amount,
-                          note: info['bill'].note,
-                          date: now,
-                          currencyID: widget.currentWallet.currencyID,
-                          category: info['bill'].category);
-
-                      await _firestore.addTransaction(widget.currentWallet, transFromBill);
                     }
                   },
                   style: ButtonStyle(

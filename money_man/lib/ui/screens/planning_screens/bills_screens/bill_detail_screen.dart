@@ -8,6 +8,8 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/bills_screens/transaction_list.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -226,7 +228,14 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                     width: 0.5,
                   ))),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          childCurrent: this.widget,
+                          child: BillTransactionList(transactionList: _bill.transactionIdList, currentWallet: widget.wallet),
+                          type: PageTransitionType.rightToLeft));
+                },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
