@@ -764,21 +764,6 @@ class FirebaseFireStoreService {
 
     // map today list để xử lý
     todayList.map((RecurringTransaction recurringTrans) async {
-      // // nếu type là until mà begin date > extra type info (datetime) (recurring transaction hết hạn)
-      // if (recurringTrans.repeatOption.type == 'until') {
-      //   if (recurringTrans.repeatOption.beginDateTime
-      //       .isAfter(recurringTrans.repeatOption.extraTypeInfo)) {
-      //     return;
-      //   }
-      // }
-      // // nếu type là for mà extra type info (int) = 0 rồi (recurrin transaction hết hạn)
-      // else if (recurringTrans.repeatOption.type == 'for') {
-      //   if (recurringTrans.repeatOption.extraTypeInfo == 0) {
-      //     return;
-      //   }
-      // }
-
-      // trường hợp chưa hết hạn
       // tính toán next date
       // trường hợp for thì lấy extra type info -1
 
@@ -808,22 +793,6 @@ class FirebaseFireStoreService {
       await updateRecurringTransaction(recurringTrans, wallet);
     }).toList();
   }
-
-  // List<RecurringTransaction> checkValidRecurringList(
-  //     List<RecurringTransaction> todayList) {
-  //   List<int> removeList = [];
-  //   for (int i = 0; i < todayList.length; i++) {
-  //     if (todayList[i].repeatOption.type == 'until') {
-  //       if (todayList[i]
-  //           .repeatOption
-  //           .beginDateTime
-  //           .isAfter(todayList[i].repeatOption.extraTypeInfo)) {
-  //         removeList.add(i);
-  //       }
-  //     } else if (todayList[i].repeatOption.type == 'for') {}
-  //   }
-  //   return todayList;
-  // }
 
   // thực hiện việc add transaction của recurring transaction
   Future<List<String>> addTransactionOfRecurringTransaction(
