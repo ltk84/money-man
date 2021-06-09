@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -6,7 +6,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
@@ -95,6 +94,15 @@ class _AddEventState extends State<AddEvent> {
                     id: 'id',
                     iconPath: cate.iconID,
                     isFinished: (endDate.year < DateTime
+                        .now()
+                        .year) ? true :
+                    (endDate.month < DateTime
+                        .now()
+                        .month) ? true :
+                    (endDate.day < DateTime
+                        .now()
+                        .day) ? true : false,
+                    finishedByHand: (endDate.year < DateTime
                         .now()
                         .year) ? true :
                     (endDate.month < DateTime

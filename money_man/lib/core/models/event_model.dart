@@ -13,6 +13,7 @@ class Event {
   bool isFinished;
   List<String> transactionIdList ;
   double spent;
+  bool finishedByHand;
 
   Event({
     @required this.id,
@@ -23,6 +24,7 @@ class Event {
     @required this.isFinished,
     @required this.transactionIdList,
     @required this.spent,
+    @required this.finishedByHand,
   });
 
   Map<String, dynamic> toMap() {
@@ -35,6 +37,7 @@ class Event {
       'isFinished': isFinished,
       'transactionIdList': transactionIdList,
       'spent': spent,
+      'finishedByHand' : finishedByHand,
     };
   }
 
@@ -50,6 +53,7 @@ class Event {
       isFinished: data['isFinished'],
       transactionIdList: List<String>.from(data['transactionIdList']),
       spent: data['spent'],
+      finishedByHand: data['finishedByHand'],
     );
   }
 }

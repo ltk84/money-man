@@ -3,7 +3,10 @@ import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+
+import 'event_detail.dart';
 
 class AppliedEvent extends StatefulWidget {
   Wallet wallet;
@@ -49,7 +52,7 @@ class _AppliedEvent extends State<AppliedEvent>
             {
               element.isFinished = true;
             }
-            if(element.isFinished)
+            if(element.isFinished || element.finishedByHand )
             {
               appliedEvent.add(element);
             }
@@ -60,7 +63,19 @@ class _AppliedEvent extends State<AppliedEvent>
               itemCount: appliedEvent.length,
               itemBuilder: (context,index)
               {
-                return Container(
+                return GestureDetector(
+                    onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: EventDetailScreen(
+                            currentEvent: appliedEvent[index],
+                            eventWallet: _wallet,
+                          )
+                      )
+                  );
+                },
+                child:Container(
                     decoration: BoxDecoration(
                         color: Colors.grey[900],
                         border: Border(
@@ -138,6 +153,7 @@ class _AppliedEvent extends State<AppliedEvent>
                       ),
                     ]
                     )
+                )
                 );
               }
           );
