@@ -17,7 +17,6 @@ class CurrentlyAppliedEvent extends StatefulWidget {
 }
 class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
     with TickerProviderStateMixin {
-  List<Event> currentlyEvent = [];
   Wallet _wallet;
   @override
   void initState() {
@@ -38,9 +37,8 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
       child: StreamBuilder<List<Event>>(
         stream: _firestore.eventStream(_wallet.id),
         builder: (context, snapshot) {
-
+          List<Event> currentlyEvent = [];
           List<Event> eventList = snapshot.data ?? [];
-
           eventList.forEach((element) {
             if(element.endDate.year < DateTime.now().year||
                 (element.endDate.year == DateTime.now().year

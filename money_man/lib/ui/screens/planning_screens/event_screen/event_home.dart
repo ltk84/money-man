@@ -13,9 +13,6 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.d
 import 'package:provider/provider.dart';
 
 class EventScreen extends StatefulWidget {
-  Wallet currentWallet;
-  EventScreen({Key key, this.currentWallet}) : super(key: key);
-
   @override
   _EventScreenState createState() => _EventScreenState();
 }
@@ -26,130 +23,154 @@ class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _wallet = widget.currentWallet ;
     _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
   }
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: DefaultTabController(
-        length: 2,
-        child: StreamBuilder<Object>(
-            stream: _firestore.currentWallet,
-            builder: (context, snapshot) {
-              _wallet = snapshot.data;
-              return Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Color(0xff333333),
-                  leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  title: Text(
-                    "Event",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montserrat',
-                    ),
-                  ),
-                  actions: [
-                    GestureDetector(
-                      onTap: () async {
-                        buildShowDialog(context, _wallet.id);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Row(
-                          children: [
-                            SuperIcon(
-                              iconPath: _wallet.iconID,
-                              size: 25.0,
-                            ),
-                            Icon(Icons.arrow_drop_down, color: Colors.grey)
-                          ],
+        debugShowCheckedModeBanner: false,
+        home: DefaultTabController(
+            length: 2,
+            child: StreamBuilder<Object>(
+                stream: _firestore.currentWallet,
+                builder: (context, snapshot) {
+                  _wallet = snapshot.data??[];
+                  return Scaffold(
+                    appBar: AppBar(
+                      backgroundColor: Color(0xff333333),
+                      leading: IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      title: Text(
+                        "Event",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
                         ),
                       ),
-                    ),
-                  ],
-                  bottom: TabBar(
-                    isScrollable: true,
-                    labelPadding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                    indicatorPadding: EdgeInsets.zero,
-                    controller: _tabController,
-                    indicatorColor: Color(0xffd3db00),
-                    indicatorWeight: 2,
-                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                    unselectedLabelColor: Colors.white30,
-                    tabs: [
-                      Tab(
-                          child: Container(
-                            width: 120,
-                            child: Text(
-                              "Running",
-                            ),
-                          )),
-                      Tab(
-                          child: Container(
-                            width: 120,
-                            child: Text(
-                              "Finished",
-                            ),
-                          )),
-                    ],
-                  ),
-                  elevation: 2,
-                ),
-                body: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    CurrentlyAppliedEvent(
-                      wallet: _wallet,
-                    ),
-                    AppliedEvent(
-                      wallet: _wallet,
-                    ),
-                  ],
-                ),
-                floatingActionButton: FloatingActionButton(
-                  backgroundColor: Theme.of(context).hintColor,
-                  child:  Icon(
-                  Icons.add_circle,
-                  color: Color(0xFF2FB49C),
-                  size: 50.0,
-                  ),
-                    onPressed:   () async {
-                      Navigator.push(context,
-                          MaterialPageRoute(
-                            builder: (_) => AddEvent(),
-                          )
-                      );
-                    }
-                ),
-                floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-              );
-            }),
-      ),
-    );
-  }
-  void buildShowDialog(BuildContext context, id) async {
-    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+                      actions: [
+                        GestureDetector(
+                          onTap: () async {
+                            final _auth = Provider.of<FirebaseAuthService>(
+                                context, listen: false);
 
-    showCupertinoModalBottomSheet(
-        isDismissible: true,
-        backgroundColor: Colors.grey[900],
-        context: context,
-        builder: (context) {
-          return Provider(
-              create: (_) {
-                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
-              },
-              child: WalletSelectionScreen(
-                id: id,
-              ));
-        });
+                            showCupertinoModalBottomSheet(
+                                isDismissible: true,
+                                backgroundColor: Colors.grey[900],
+                                context: context,
+                                builder: (context) {
+                                  return Provider(
+                                      create: (_) {
+                                        return FirebaseFireStoreService(
+                                            uid: _auth.currentUser.uid);
+                                      },
+                                      child: WalletSelectionScreen(
+                                        id: _wallet.id,
+                                      )
+                                  );
+                                  
+                                }
+                                );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(left: 20.0),
+                            child: Row(
+                              children: [
+                                SuperIcon(
+                                  iconPath: _wallet.iconID,
+                                  size: 25.0,
+                                ),
+                                Icon(Icons.arrow_drop_down, color: Colors.grey)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                      bottom: PreferredSize(
+                        preferredSize: Size.fromHeight(40),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: TabBar(
+                            isScrollable: true,
+                            labelPadding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                            indicatorPadding: EdgeInsets.zero,
+                            controller: _tabController,
+                            indicatorColor: Color(0xffd3db00),
+                            indicatorWeight: 2,
+                            labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                            unselectedLabelColor: Colors.white30,
+                            tabs: [
+                              Tab(
+                                  child: Container(
+                                    width: 120,
+                                    child: Text(
+                                      "Running",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  )),
+                              Tab(
+                                  child: Container(
+                                    width: 120,
+                                    child: Text(
+                                      "Finished",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
+                      elevation: 2,
+                    ),
+                    body: Container(
+                      color: Color(0xff1a1a1a),
+                      padding: EdgeInsets.only(top: 15),
+                      child: TabBarView(
+                              controller: _tabController,
+                              children: [
+                                CurrentlyAppliedEvent(
+                                  wallet: _wallet,
+                                ),
+                                AppliedEvent(
+                                  wallet: _wallet,
+                                ),
+                              ],
+                            )
+                          ),
+                    floatingActionButton: FloatingActionButton(
+                      backgroundColor: Theme
+                          .of(context)
+                          .hintColor,
+                      child: Icon(
+                        Icons.add_circle,
+                        color: Color(0xFF2FB49C),
+                        size: 50.0,
+                      ),
+                      onPressed: () async {
+                        await showCupertinoModalBottomSheet(
+                            isDismissible: true,
+                            backgroundColor: Colors.grey[900],
+                            context: context,
+                            builder: (context) =>
+                                AddEvent(
+                                  wallet: _wallet,
+                                ));
+                      },
+                    ),
+                    floatingActionButtonLocation: FloatingActionButtonLocation
+                        .startTop,
+                  );
+                }
+            )
+        )
+    );
   }
 }

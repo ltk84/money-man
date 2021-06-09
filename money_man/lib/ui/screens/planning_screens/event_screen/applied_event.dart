@@ -18,7 +18,6 @@ class AppliedEvent extends StatefulWidget {
 }
 class _AppliedEvent extends State<AppliedEvent>
     with TickerProviderStateMixin {
-  List<Event> appliedEvent = [];
   Wallet _wallet;
   @override
   void initState() {
@@ -39,7 +38,7 @@ class _AppliedEvent extends State<AppliedEvent>
       child: StreamBuilder<List<Event>>(
         stream: _firestore.eventStream(_wallet.id),
         builder: (context, snapshot) {
-
+          List<Event> appliedEvent = [];
           List<Event> eventList = snapshot.data ?? [];
 
           eventList.forEach((element) {

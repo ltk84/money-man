@@ -14,6 +14,8 @@ import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/src/intl/date_format.dart';
 class AddEvent extends StatefulWidget {
+  Wallet wallet;
+  AddEvent({Key key, this.wallet}) : super(key: key);
   @override
   _AddEventState createState() => _AddEventState();
 }
@@ -32,6 +34,7 @@ class _AddEventState extends State<AddEvent> {
   List<String> transactionIdList = [];
   @override
   void initState() {
+    selectedWallet = widget.wallet;
     endDate = DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
     cate = MyCategory(
       id: '0',

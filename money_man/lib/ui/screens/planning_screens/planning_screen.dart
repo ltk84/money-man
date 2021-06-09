@@ -6,9 +6,6 @@ import 'package:money_man/ui/screens/planning_screens/budget_screen/budget_home.
 import 'package:money_man/ui/screens/planning_screens/event_screen/event_home.dart';
 
 class PlanningScreen extends StatefulWidget {
-  Wallet currentWallet;
-
-  PlanningScreen({Key key, this.currentWallet}) : super(key: key);
   @override
   _TestState createState() => _TestState();
 }
@@ -172,7 +169,7 @@ class _TestState extends State<PlanningScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => EventScreen(currentWallet: widget.currentWallet,)));
+                            builder: (context) => EventScreen()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),

@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
             TransactionScreen(currentWallet: wallet),
             ReportScreen(currentWallet: wallet),
             AddTransactionScreen(currentWallet: wallet),
-            PlanningScreen(currentWallet: wallet),
+            PlanningScreen(),
             AccountScreen(),
           ];
 
