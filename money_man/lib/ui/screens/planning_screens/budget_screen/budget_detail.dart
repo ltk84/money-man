@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
@@ -75,11 +76,22 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-              icon: Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-              onPressed: () async {
+            icon: Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+            onPressed: () async {
+              var result = await showCupertinoModalBottomSheet(
+                  isDismissible: true,
+                  backgroundColor: Colors.grey[900],
+                  context: context,
+                  builder: (context) => EditBudget(
+                        budget: widget.budget,
+                        wallet: widget.wallet,
+                      ));
+              if (result != null) Navigator.pop(context);
+            },
+            /*onPressed: () async {
                 var result = await Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -89,7 +101,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                           )),
                 );
                 if (result != null) Navigator.pop(context);
-              }),
+              }*/
+          ),
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white),
               onPressed: () async {

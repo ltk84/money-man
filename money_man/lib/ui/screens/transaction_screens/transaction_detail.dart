@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
@@ -53,17 +54,59 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 //Todo: Edit transaction
               }),
           IconButton(
-              icon: Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-              onPressed: () async {
-                //Todo: Edit transaction
-              }),
+            icon: Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+            onPressed: () async {
+              final updatedTrans = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => EditTransactionScreen(
+                          transaction: widget.transaction,
+                          wallet: widget.wallet)));
+              if (updatedTrans != null)
+                setState(() {
+                  widget.transaction = updatedTrans;
+                });
+            },
+          ),
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white),
               onPressed: () async {
                 //TODO: Thuc hien xoa transaction
+
+                await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(
+                          'Delete this transaction?',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        actions: [
+                          FlatButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('No')),
+                          FlatButton(
+                              onPressed: () async {
+                                await _firestore.deleteTransaction(
+                                    widget.transaction, widget.wallet);
+                                Navigator.pop(context);
+                                // chưa có animation để back ra transaction screen
+                                Navigator.pop(context);
+                              },
+                              child: Text('Yes'))
+                        ],
+                      );
+                    });
               })
         ],
         backgroundColor: Color(0xff333333),
@@ -181,39 +224,41 @@ class _TransactionDetailState extends State<TransactionDetail> {
 
                   // Nếu không có budgets nào có categories trùng với transaction hiển thị tùy chọn thêm transaction
                   if (budgets.length == 0)
-                    return GestureDetector(
-                      onTap: () {
-                        // todo: Naviga to add budget, tạm thời để vô edit vì còn cải tiến
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditBudget(
-                                      wallet: widget.wallet,
-                                    )));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(top: 25, bottom: 15),
-                              child: Text('Budget',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 25,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w500)),
-                            ),
-                            Text(
-                              'This transaction is not within a budget, but it should be within a budget so you can better manage your finances.',
-                              style: TextStyle(
-                                  color: Colors.white70, fontSize: 15),
-                            ),
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Center(
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(top: 25, bottom: 15),
+                            child: Text('Budget',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                          Text(
+                            'This transaction is not within a budget, but it should be within a budget so you can better manage your finances.',
+                            style:
+                                TextStyle(color: Colors.white70, fontSize: 15),
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Center(
+                            child: GestureDetector(
+                              onTap: () async {
+                                await showCupertinoModalBottomSheet(
+                                    isDismissible: true,
+                                    backgroundColor: Colors.grey[900],
+                                    context: context,
+                                    builder: (context) => AddBudget(
+                                          wallet: widget.wallet,
+                                          myCategory:
+                                              widget.transaction.category,
+                                        ));
+                              },
                               child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
@@ -231,9 +276,9 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
                     );
                   budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));

@@ -26,7 +26,7 @@ class _BudgetScreenState extends State<BudgetScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = new TabController(length: 3, vsync: this, initialIndex: 1);
+    _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
   Wallet _wallet = Wallet(
@@ -41,7 +41,7 @@ class _BudgetScreenState extends State<BudgetScreen>
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: DefaultTabController(
-          length: 3,
+          length: 2,
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: Color(0xff333333),
@@ -92,58 +92,82 @@ class _BudgetScreenState extends State<BudgetScreen>
                   ),
                 )
               ],
-              bottom: TabBar(
-                isScrollable: true,
-                controller: _tabController,
-                indicatorColor: Color(0xffd3db00),
-                indicatorWeight: 3,
-                labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                unselectedLabelColor: Colors.white30,
-                tabs: [
-                  Tab(
-                    child: Container(
-                        child: Icon(
-                      Icons.add_circle,
-                      color: Color(0xFF2FB49C),
-                      size: 35,
-                    )),
-                  ),
-                  Tab(
-                      child: Container(
-                    width: 120,
-                    child: Text(
-                      "Currently applied",
-                    ),
-                  )),
-                  Tab(
-                      child: Container(
-                    width: 120,
-                    child: Text(
-                      "Applied",
-                    ),
-                  )),
-                ],
-              ),
-              elevation: 3,
-            ),
-            body: StreamBuilder<Object>(
-                stream: _firestore.currentWallet,
-                builder: (context, snapshot) {
-                  _wallet = snapshot.data ?? _wallet;
-                  return TabBarView(
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(40),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: TabBar(
+                    isScrollable: true,
                     controller: _tabController,
-                    children: [
-                      AddBudget(
-                        tabController: _tabController,
-                        wallet: _wallet,
-                      ),
-                      CurrentlyApplied(
-                        wallet: _wallet,
-                      ),
-                      Applied(wallet: _wallet)
+                    indicatorColor: Color(0xffd3db00),
+                    indicatorWeight: 3,
+                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                    unselectedLabelColor: Colors.white30,
+                    tabs: [
+                      Tab(
+                          child: Container(
+                        width: 120,
+                        child: Center(
+                          child: Text(
+                            "Currently applied",
+                          ),
+                        ),
+                      )),
+                      Tab(
+                          child: Container(
+                        width: 120,
+                        child: Center(
+                          child: Text(
+                            "Applied",
+                          ),
+                        ),
+                      )),
                     ],
-                  );
-                }),
+                  ),
+                ),
+              ),
+              elevation: 0,
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                await showCupertinoModalBottomSheet(
+                    isDismissible: true,
+                    backgroundColor: Colors.grey[900],
+                    context: context,
+                    builder: (context) => AddBudget(
+                          wallet: _wallet,
+                        ));
+              },
+              child: Icon(
+                Icons.add,
+                size: 30,
+              ),
+              backgroundColor: Color(0xFF2FB49C),
+              elevation: 0,
+            ),
+            body: Container(
+              color: Color(0xff1a1a1a),
+              padding: EdgeInsets.only(top: 15),
+              child: StreamBuilder<Object>(
+                  stream: _firestore.currentWallet,
+                  builder: (context, snapshot) {
+                    _wallet = snapshot.data ?? _wallet;
+                    return TabBarView(
+                      controller: _tabController,
+                      children: [
+                        /*AddBudget(
+                          tabController: _tabController,
+                          wallet: _wallet,
+                        ),*/
+                        CurrentlyApplied(
+                          wallet: _wallet,
+                        ),
+                        Applied(wallet: _wallet)
+                      ],
+                    );
+                  }),
+            ),
           ),
         ));
   }

@@ -17,11 +17,13 @@ import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
 class AddBudget extends StatefulWidget {
-  AddBudget({this.tabController, Key key, this.wallet}) : super(key: key);
+  AddBudget({this.tabController, Key key, this.wallet, this.myCategory})
+      : super(key: key);
   @override
   _AddBudgetState createState() => _AddBudgetState();
   TabController tabController;
   Wallet wallet;
+  MyCategory myCategory;
 }
 
 class _AddBudgetState extends State<AddBudget> {
@@ -42,399 +44,27 @@ class _AddBudgetState extends State<AddBudget> {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    if (widget.myCategory != null) cate = widget.myCategory;
 
     return Theme(
       data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
-      child: Container(
-        color: Color(0xff111111),
-        padding: EdgeInsets.all(15),
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              decoration: BoxDecoration(
-                  color: Color(0xff333333),
-                  borderRadius: BorderRadius.circular(17)),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: ListTile(
-                onTap: () async {
-                  final selectCate = await showCupertinoModalBottomSheet(
-                      isDismissible: true,
-                      backgroundColor: Colors.transparent,
-                      context: context,
-                      builder: (context) => CategoriesTransactionScreen());
-                  if (selectCate != null) {
-                    setState(() {
-                      this.cate = selectCate;
-                    });
-                  }
-                },
-                trailing: Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.white70,
-                ),
-                dense: true,
-                leading: SuperIcon(
-                  iconPath: cate == null ? 'assets/icons/box.svg' : cate.iconID,
-                  size: 35,
-                ),
-                title: Theme(
-                  data: Theme.of(context).copyWith(
-                    primaryColor: Colors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(
-                          'Choose group:',
-                          style:
-                              TextStyle(color: white, fontFamily: 'Montserrat'),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      TextFormField(
-                        onTap: () async {
-                          final selectCate =
-                              await showCupertinoModalBottomSheet(
-                                  isDismissible: true,
-                                  backgroundColor: Colors.transparent,
-                                  context: context,
-                                  builder: (context) =>
-                                      CategoriesTransactionScreen());
-                          if (selectCate != null) {
-                            setState(() {
-                              this.cate = selectCate;
-                            });
-                          }
-                        },
-                        readOnly: true,
-                        obscureText: false,
-                        cursorColor: Colors.white60,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontFamily: 'Montserrat'),
-                        decoration: InputDecoration(
-                            hintText: cate == null ? 'Choose group' : cate.name,
-                            hintStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: 'Montserrat'),
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10)),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+      child: Scaffold(
+        appBar: AppBar(
+          leadingWidth: 65,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 0),
+              child: Center(
+                  child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white70),
+              )),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              decoration: BoxDecoration(
-                  color: Color(0xff333333),
-                  borderRadius: BorderRadius.circular(17)),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: ListTile(
-                onTap: () async {
-                  final resultAmount = await Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => EnterAmountScreen()));
-                  if (resultAmount != null)
-                    setState(() {
-                      print(resultAmount);
-                      amount = double.parse(resultAmount);
-                    });
-                },
-                trailing: Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.white70,
-                ),
-                dense: true,
-                leading: SuperIcon(
-                  iconPath: 'assets/images/coin.svg',
-                  size: 30,
-                ),
-                title: Theme(
-                  data: Theme.of(context).copyWith(
-                    primaryColor: Colors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(
-                          'Target:',
-                          style:
-                              TextStyle(color: white, fontFamily: 'Montserrat'),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      TextFormField(
-                        onTap: () async {
-                          final resultAmount = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => EnterAmountScreen()));
-                          if (resultAmount != null)
-                            setState(() {
-                              print(resultAmount);
-                              amount = double.parse(resultAmount);
-                            });
-                        },
-                        readOnly: true,
-                        decoration: InputDecoration(
-                            hintText: amount == null
-                                ? 'Enter amount' //: currencySymbol +
-                                : MoneyFormatter(amount: amount)
-                                    .output
-                                    .withoutFractionDigits,
-                            hintStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: 'Montserrat'),
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10)),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              decoration: BoxDecoration(
-                  color: Color(0xff333333),
-                  borderRadius: BorderRadius.circular(17)),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: ListTile(
-                onTap: () async {
-                  var resultAmount = await showCupertinoModalBottomSheet(
-                      isDismissible: true,
-                      backgroundColor: Colors.grey[900],
-                      context: context,
-                      builder: (context) => SelectTimeRangeScreen());
-                  if (resultAmount != null)
-                    setState(() {
-                      // Change the time ahihi
-                      mTimeRange = resultAmount;
-                    });
-                },
-                trailing: Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.white70,
-                ),
-                dense: true,
-                leading: SuperIcon(
-                  iconPath: 'assets/images/time.svg',
-                  size: 30,
-                ),
-                title: Theme(
-                  data: Theme.of(context).copyWith(
-                    primaryColor: Colors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(
-                          'Time range:',
-                          style:
-                              TextStyle(color: white, fontFamily: 'Montserrat'),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      TextFormField(
-                        onTap: () async {
-                          var resultAmount =
-                              await showCupertinoModalBottomSheet(
-                                  isDismissible: true,
-                                  backgroundColor: Colors.grey[900],
-                                  context: context,
-                                  builder: (context) =>
-                                      SelectTimeRangeScreen());
-                          print('object ok');
-                          if (resultAmount != null)
-                            setState(() {
-                              // Change the time ahihi
-                              mTimeRange = resultAmount;
-                            });
-                        },
-                        readOnly: true,
-                        obscureText: false,
-                        cursorColor: Colors.white60,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontFamily: 'Montserrat'),
-                        decoration: InputDecoration(
-                            hintText: mTimeRange == null
-                                ? 'Time range:'
-                                : mTimeRange.description == null
-                                    ? mTimeRange.TimeRangeString()
-                                    : mTimeRange.description,
-                            hintStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: 'Montserrat'),
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10)),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              decoration: BoxDecoration(
-                  color: Color(0xff333333),
-                  borderRadius: BorderRadius.circular(17)),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: ListTile(
-                onTap: () async {
-                  var res = await showCupertinoModalBottomSheet(
-                      isDismissible: true,
-                      backgroundColor: Colors.grey[900],
-                      context: context,
-                      builder: (context) =>
-                          SelectWalletAccountScreen(wallet: widget.wallet));
-                  if (res != null)
-                    setState(() {
-                      selectedWallet = res;
-                      currencySymbol = CurrencyService()
-                          .findByCode(selectedWallet.currencyID)
-                          .symbol;
-                    });
-                },
-                trailing: Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.white70,
-                ),
-                dense: true,
-                leading: SuperIcon(
-                  iconPath: selectedWallet == null
-                      ? 'assets/icons/wallet_2.svg'
-                      : selectedWallet.iconID,
-                  size: 30,
-                ),
-                title: Theme(
-                  data: Theme.of(context).copyWith(
-                    primaryColor: Colors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(
-                          'Select wallet:',
-                          style:
-                              TextStyle(color: white, fontFamily: 'Montserrat'),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      TextFormField(
-                        onTap: () async {
-                          var res = await showCupertinoModalBottomSheet(
-                              isDismissible: true,
-                              backgroundColor: Colors.grey[900],
-                              context: context,
-                              builder: (context) => SelectWalletAccountScreen(
-                                  wallet: widget.wallet));
-                          if (res != null)
-                            setState(() {
-                              selectedWallet = res;
-                              currencySymbol = CurrencyService()
-                                  .findByCode(selectedWallet.currencyID)
-                                  .symbol;
-                            });
-                        },
-                        readOnly: true,
-                        obscureText: false,
-                        cursorColor: Colors.white60,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontFamily: 'Montserrat'),
-                        decoration: InputDecoration(
-                            hintText: selectedWallet == null
-                                ? 'Select wallet'
-                                : selectedWallet.name,
-                            hintStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: 'Montserrat'),
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10)),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 10, top: 5),
-              padding: EdgeInsets.only(right: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isRepeat = !isRepeat;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(1),
-                      margin: EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 1),
-                          shape: BoxShape.circle,
-                          color: Color(0xff111111)),
-                      child: isRepeat
-                          ? Icon(
-                              Icons.check,
-                              size: 17,
-                              color: Colors.white,
-                            )
-                          : Icon(
-                              null,
-                              size: 17,
-                              color: Colors.black,
-                            ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(bottom: 10),
-                    child: Text(
-                      'Repeat this budget',
-                      style: TextStyle(
-                          color: white, fontFamily: 'Montserrat', fontSize: 13),
-                    ),
-                  )
-                ],
-              ),
-            ),
+          ),
+          actions: [
             GestureDetector(
               onTap: () async {
                 //TODO: Add new budget
@@ -463,28 +93,428 @@ class _AddBudgetState extends State<AddBudget> {
                   await _firestore.addBudget(mBudget, selectedWallet);
                   await _showAlertDialog(
                       "Congratulations, Add budget successfully!");
-                  widget.tabController.animateTo(1);
+                  String result = "Success";
+                  Navigator.pop(context, result);
                 }
               },
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 15),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Color(0xFF2FB49C),
-                ),
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: Text(
-                  'Add budget',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25),
+                padding: EdgeInsets.only(right: 5),
+                child: Center(
+                  child: Text(
+                    'Save',
+                    style: TextStyle(color: Colors.white70),
+                  ),
                 ),
               ),
-            ),
+            )
           ],
+          backgroundColor: Color(0xff333333),
+          centerTitle: true,
+          title: Text(
+            'Add budget',
+            style: TextStyle(color: white),
+          ),
+        ),
+        body: Container(
+          color: Color(0xff111111),
+          padding: EdgeInsets.only(left: 15, right: 15, top: 30),
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                decoration: BoxDecoration(
+                    color: Color(0xff333333),
+                    borderRadius: BorderRadius.circular(17)),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: ListTile(
+                  onTap: () async {
+                    final selectCate = await showCupertinoModalBottomSheet(
+                        isDismissible: true,
+                        backgroundColor: Colors.transparent,
+                        context: context,
+                        builder: (context) => CategoriesTransactionScreen());
+                    if (selectCate != null) {
+                      setState(() {
+                        this.cate = selectCate;
+                      });
+                    }
+                  },
+                  trailing: Icon(
+                    Icons.keyboard_arrow_right,
+                    color: Colors.white70,
+                  ),
+                  dense: true,
+                  leading: SuperIcon(
+                    iconPath:
+                        cate == null ? 'assets/icons/box.svg' : cate.iconID,
+                    size: 35,
+                  ),
+                  title: Theme(
+                    data: Theme.of(context).copyWith(
+                      primaryColor: Colors.white,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Choose group:',
+                            style: TextStyle(
+                                color: white, fontFamily: 'Montserrat'),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          onTap: () async {
+                            final selectCate =
+                                await showCupertinoModalBottomSheet(
+                                    isDismissible: true,
+                                    backgroundColor: Colors.transparent,
+                                    context: context,
+                                    builder: (context) =>
+                                        CategoriesTransactionScreen());
+                            if (selectCate != null) {
+                              setState(() {
+                                this.cate = selectCate;
+                              });
+                            }
+                          },
+                          readOnly: true,
+                          obscureText: false,
+                          cursorColor: Colors.white60,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: 'Montserrat'),
+                          decoration: InputDecoration(
+                              hintText:
+                                  cate == null ? 'Choose group' : cate.name,
+                              hintStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontFamily: 'Montserrat'),
+                              isDense: true,
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                decoration: BoxDecoration(
+                    color: Color(0xff333333),
+                    borderRadius: BorderRadius.circular(17)),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: ListTile(
+                  onTap: () async {
+                    final resultAmount = await Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                    if (resultAmount != null)
+                      setState(() {
+                        print(resultAmount);
+                        amount = double.parse(resultAmount);
+                      });
+                  },
+                  trailing: Icon(
+                    Icons.keyboard_arrow_right,
+                    color: Colors.white70,
+                  ),
+                  dense: true,
+                  leading: SuperIcon(
+                    iconPath: 'assets/images/coin.svg',
+                    size: 30,
+                  ),
+                  title: Theme(
+                    data: Theme.of(context).copyWith(
+                      primaryColor: Colors.white,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Target:',
+                            style: TextStyle(
+                                color: white, fontFamily: 'Montserrat'),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          onTap: () async {
+                            final resultAmount = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => EnterAmountScreen()));
+                            if (resultAmount != null)
+                              setState(() {
+                                print(resultAmount);
+                                amount = double.parse(resultAmount);
+                              });
+                          },
+                          readOnly: true,
+                          decoration: InputDecoration(
+                              hintText: amount == null
+                                  ? 'Enter amount' //: currencySymbol +
+                                  : MoneyFormatter(amount: amount)
+                                      .output
+                                      .withoutFractionDigits,
+                              hintStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontFamily: 'Montserrat'),
+                              isDense: true,
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                decoration: BoxDecoration(
+                    color: Color(0xff333333),
+                    borderRadius: BorderRadius.circular(17)),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: ListTile(
+                  onTap: () async {
+                    var resultAmount = await showCupertinoModalBottomSheet(
+                        isDismissible: true,
+                        backgroundColor: Colors.grey[900],
+                        context: context,
+                        builder: (context) => SelectTimeRangeScreen());
+                    if (resultAmount != null)
+                      setState(() {
+                        // Change the time ahihi
+                        mTimeRange = resultAmount;
+                      });
+                  },
+                  trailing: Icon(
+                    Icons.keyboard_arrow_right,
+                    color: Colors.white70,
+                  ),
+                  dense: true,
+                  leading: SuperIcon(
+                    iconPath: 'assets/images/time.svg',
+                    size: 30,
+                  ),
+                  title: Theme(
+                    data: Theme.of(context).copyWith(
+                      primaryColor: Colors.white,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Time range:',
+                            style: TextStyle(
+                                color: white, fontFamily: 'Montserrat'),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          onTap: () async {
+                            var resultAmount =
+                                await showCupertinoModalBottomSheet(
+                                    isDismissible: true,
+                                    backgroundColor: Colors.grey[900],
+                                    context: context,
+                                    builder: (context) =>
+                                        SelectTimeRangeScreen());
+                            print('object ok');
+                            if (resultAmount != null)
+                              setState(() {
+                                // Change the time ahihi
+                                mTimeRange = resultAmount;
+                              });
+                          },
+                          readOnly: true,
+                          obscureText: false,
+                          cursorColor: Colors.white60,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: 'Montserrat'),
+                          decoration: InputDecoration(
+                              hintText: mTimeRange == null
+                                  ? 'Time range:'
+                                  : mTimeRange.description == null
+                                      ? mTimeRange.TimeRangeString()
+                                      : mTimeRange.description,
+                              hintStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontFamily: 'Montserrat'),
+                              isDense: true,
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                decoration: BoxDecoration(
+                    color: Color(0xff333333),
+                    borderRadius: BorderRadius.circular(17)),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: ListTile(
+                  onTap: () async {
+                    var res = await showCupertinoModalBottomSheet(
+                        isDismissible: true,
+                        backgroundColor: Colors.grey[900],
+                        context: context,
+                        builder: (context) =>
+                            SelectWalletAccountScreen(wallet: widget.wallet));
+                    if (res != null)
+                      setState(() {
+                        selectedWallet = res;
+                        currencySymbol = CurrencyService()
+                            .findByCode(selectedWallet.currencyID)
+                            .symbol;
+                      });
+                  },
+                  trailing: Icon(
+                    Icons.keyboard_arrow_right,
+                    color: Colors.white70,
+                  ),
+                  dense: true,
+                  leading: SuperIcon(
+                    iconPath: selectedWallet == null
+                        ? 'assets/icons/wallet_2.svg'
+                        : selectedWallet.iconID,
+                    size: 30,
+                  ),
+                  title: Theme(
+                    data: Theme.of(context).copyWith(
+                      primaryColor: Colors.white,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Select wallet:',
+                            style: TextStyle(
+                                color: white, fontFamily: 'Montserrat'),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          onTap: () async {
+                            var res = await showCupertinoModalBottomSheet(
+                                isDismissible: true,
+                                backgroundColor: Colors.grey[900],
+                                context: context,
+                                builder: (context) => SelectWalletAccountScreen(
+                                    wallet: widget.wallet));
+                            if (res != null)
+                              setState(() {
+                                selectedWallet = res;
+                                currencySymbol = CurrencyService()
+                                    .findByCode(selectedWallet.currencyID)
+                                    .symbol;
+                              });
+                          },
+                          readOnly: true,
+                          obscureText: false,
+                          cursorColor: Colors.white60,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: 'Montserrat'),
+                          decoration: InputDecoration(
+                              hintText: selectedWallet == null
+                                  ? 'Select wallet'
+                                  : selectedWallet.name,
+                              hintStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontFamily: 'Montserrat'),
+                              isDense: true,
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10, top: 5),
+                padding: EdgeInsets.only(right: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isRepeat = !isRepeat;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(1),
+                        margin:
+                            EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white, width: 1),
+                            shape: BoxShape.circle,
+                            color: Color(0xff111111)),
+                        child: isRepeat
+                            ? Icon(
+                                Icons.check,
+                                size: 17,
+                                color: Colors.white,
+                              )
+                            : Icon(
+                                null,
+                                size: 17,
+                                color: Colors.black,
+                              ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        'Repeat this budget',
+                        style: TextStyle(
+                            color: white,
+                            fontFamily: 'Montserrat',
+                            fontSize: 13),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
