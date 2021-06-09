@@ -3,6 +3,7 @@ import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/planning_screens/event_screen/delete_event.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/edit_event.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/list_transaction_of_event.dart';
 import 'package:provider/provider.dart';
@@ -68,7 +69,6 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       )));
               if (updatedTrans != null)
                 setState(() {
-
                 });
             },
             icon: Icon(Icons.edit),
@@ -77,7 +77,52 @@ class _EventDetailScreen extends State<EventDetailScreen>
           IconButton(
               icon: Icon(Icons.delete, color:  Colors.white,),
               iconSize: 25,
-              onPressed: null
+              onPressed: () async {
+                if (_currentEvent.transactionIdList.length == 0) {
+                  await showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: Text(
+                            'Do you want to delete this transaction?',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          actions: [
+                            FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context, rootNavigator: true).pop();
+                                },
+                                child: Text('No')),
+                            FlatButton(
+                                onPressed: () async {
+                                  _firestore.deleteEvent(_currentEvent.id, _eventWallet.id);
+                                  Navigator.of(context, rootNavigator: true).pop();
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Yes'))
+                          ],
+                        );
+                      }
+                  );
+                }
+                else {
+                  final delete = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) =>
+                              DeleteEventScreen(
+                                currentEvent: _currentEvent,
+                                eventWallet: _eventWallet,
+                              )));
+                  if (delete != null)
+                    setState(() {});
+                }
+              }
           )
         ],
       ),
