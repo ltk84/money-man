@@ -19,7 +19,13 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
   Wallet _wallet;
   @override
   void initState() {
-    _wallet = widget.wallet;
+    _wallet = widget.wallet ??
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 100,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg');
     super.initState();
   }
   @override
@@ -64,53 +70,71 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                             ))),
                     padding: EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 0),
                     child: Row(children: <Widget>[
-                      Padding(
+                      Container(
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         child: SuperIcon(
                           iconPath: currentlyEvent[index].iconPath,
                           size: 45,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 14, 0),
-                        child: Column(
+                      Container(
+                        width: MediaQuery.of(context).size.width - 80,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[900],
+                              border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                  ))),
+                          padding: EdgeInsets.fromLTRB(6.0, 6.0, 0.0, 10),
+                        child:Column(
                           children: <Widget>[
-                            Text(currentlyEvent[index].name ,
-                              style: TextStyle(
-                                fontSize: 22.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
-                              ),
-                              textAlign: TextAlign.start,
-                              strutStyle: StrutStyle(
-                                leading: 2,
+                            Container(
+                              margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(currentlyEvent[index].name ,
+                                    style: TextStyle(
+                                      fontSize: 22.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                    strutStyle: StrutStyle(
+                                      leading: 1.5,
+                                    ),
+                                  ),
+                                  Text('',
+                                      style: TextStyle(color: Colors.white)),
+                                ],
                               ),
                             ),
-                            Row(
-                              children: [
-                                Text('Spent',
-                                  style: TextStyle(
-                                      fontSize: 19.0,
-                                      color: Colors.white),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ],
+                            Container(
+                              margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisSize : MainAxisSize.max,
+                                children: <Widget>[
+                                  Text('Spent: ',
+                                    style: TextStyle(
+                                        fontSize: 19.0,
+                                        color: Colors.white),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  Text( currentlyEvent[index].spent.toString(),
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.white
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                         )
-                      ),
-                      Expanded(
-                        child: Text('\n' + currentlyEvent[index].spent.toString(),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontSize: 19,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white
-                          ),
-                          strutStyle: StrutStyle(
-                            leading: 2.2,
-                          ),
-                        ),
                       ),
                     ]
                     )

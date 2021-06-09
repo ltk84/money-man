@@ -1,27 +1,24 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screen/budget_home.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/event_home.dart';
 
-class PlanningScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Test();
-  }
-}
+class PlanningScreen extends StatefulWidget {
+  Wallet currentWallet;
 
-class Test extends StatefulWidget {
+  PlanningScreen({Key key, this.currentWallet}) : super(key: key);
   @override
   _TestState createState() => _TestState();
 }
 
-class _TestState extends State<Test> {
+
+class _TestState extends State<PlanningScreen> {
   final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
-
   //
   // Text title = Text('Planning', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
   // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
@@ -175,7 +172,7 @@ class _TestState extends State<Test> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => EventScreen()));
+                            builder: (context) => EventScreen(currentWallet: widget.currentWallet,)));
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),

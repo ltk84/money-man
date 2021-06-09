@@ -114,14 +114,18 @@
   <component name="ChangeListManager">
     <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/home_screen/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/home_screen/home_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/applied_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/applied_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/current_applied_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/current_applied_event.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/event_home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/event_home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/planning_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/planning_screen.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VirtualDevicePath@C:\Users\Asus\.android\avd\Nexus_5_API_28.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VirtualDevicePath@C:\Users\Asus\.android\avd\Pixel_2_API_28_1.avd]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -214,10 +218,10 @@
     </state>
     <state x="61" y="0" key="#Project_Structure/0.0.1280.720@0.0.1280.720" timestamp="1621069200386" />
     <state x="73" y="0" key="#Project_Structure/0.0.1536.834@0.0.1536.834" timestamp="1618988245081" />
-    <state x="0" y="30" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1620554356384">
+    <state x="0" y="30" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1623220018022">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state x="0" y="30" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.720@0.0.1280.720" timestamp="1620554356384" />
+    <state x="0" y="30" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.720@0.0.1280.720" timestamp="1623220018022" />
     <state x="0" y="39" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1616481170240" />
     <state x="321" y="96" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1621067711590">
       <screen x="0" y="0" width="1280" height="720" />
@@ -242,25 +246,25 @@
     <state x="297" y="130" key="FileChooserDialogImpl/0.0.1280.720@0.0.1280.720" timestamp="1622922388678" />
     <state x="317" y="139" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1616494633016" />
     <state x="356" y="151" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1618643935553" />
-    <state width="959" height="22" key="GridCell.Tab.0.bottom" timestamp="1623209368089">
+    <state width="959" height="72" key="GridCell.Tab.0.bottom" timestamp="1623225667146">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="959" height="22" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1623209368089" />
+    <state width="959" height="72" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1623225667146" />
     <state width="1014" height="189" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
-    <state width="959" height="22" key="GridCell.Tab.0.center" timestamp="1623209368089">
+    <state width="959" height="72" key="GridCell.Tab.0.center" timestamp="1623225667145">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="959" height="22" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1623209368089" />
+    <state width="959" height="72" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1623225667145" />
     <state width="1014" height="189" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
-    <state width="959" height="22" key="GridCell.Tab.0.left" timestamp="1623209368089">
+    <state width="959" height="72" key="GridCell.Tab.0.left" timestamp="1623225667145">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="959" height="22" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1623209368089" />
+    <state width="959" height="72" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1623225667145" />
     <state width="1014" height="189" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1618980309777" />
-    <state width="959" height="22" key="GridCell.Tab.0.right" timestamp="1623209368089">
+    <state width="959" height="72" key="GridCell.Tab.0.right" timestamp="1623225667145">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="959" height="22" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1623209368089" />
+    <state width="959" height="72" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1623225667145" />
     <state width="1014" height="189" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
     <state x="36" y="0" key="SettingsEditor" timestamp="1621069438056">
       <screen x="0" y="0" width="1280" height="720" />

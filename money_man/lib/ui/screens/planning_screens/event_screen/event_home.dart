@@ -1,11 +1,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/event_model.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/screens/planning_screens/budget_screen/current_applied_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/add_event.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/applied_event.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/current_applied_event.dart';
@@ -13,18 +13,20 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.d
 import 'package:provider/provider.dart';
 
 class EventScreen extends StatefulWidget {
-  EventScreen({Key key}) : super(key: key);
+  Wallet currentWallet;
+  EventScreen({Key key, this.currentWallet}) : super(key: key);
 
   @override
   _EventScreenState createState() => _EventScreenState();
 }
 
-class _EventScreenState extends State<EventScreen>
-    with TickerProviderStateMixin {
+class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin {
   TabController _tabController;
+  Wallet _wallet;
   @override
   void initState() {
     super.initState();
+    _wallet = widget.currentWallet ;
     _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
   }
   @override
@@ -37,8 +39,7 @@ class _EventScreenState extends State<EventScreen>
         child: StreamBuilder<Object>(
             stream: _firestore.currentWallet,
             builder: (context, snapshot) {
-              Wallet wallet = snapshot.data;
-              print(wallet.id);
+              _wallet = snapshot.data;
               return Scaffold(
                 appBar: AppBar(
                   backgroundColor: Color(0xff333333),
@@ -58,20 +59,14 @@ class _EventScreenState extends State<EventScreen>
                   actions: [
                     GestureDetector(
                       onTap: () async {
-                        Navigator.push(context,
-                            MaterialPageRoute(
-                              builder: (_) => WalletSelectionScreen(
-                                id: wallet.id,
-                              ),
-                            )
-                        );
+                        buildShowDialog(context, _wallet.id);
                       },
                       child: Container(
                         padding: EdgeInsets.only(left: 20.0),
                         child: Row(
                           children: [
                             SuperIcon(
-                              iconPath: wallet.iconID,
+                              iconPath: _wallet.iconID,
                               size: 25.0,
                             ),
                             Icon(Icons.arrow_drop_down, color: Colors.grey)
@@ -112,15 +107,15 @@ class _EventScreenState extends State<EventScreen>
                   controller: _tabController,
                   children: [
                     CurrentlyAppliedEvent(
-                      wallet: wallet,
+                      wallet: _wallet,
                     ),
                     AppliedEvent(
-                      wallet: wallet,
+                      wallet: _wallet,
                     ),
                   ],
                 ),
                 floatingActionButton: FloatingActionButton(
-                  backgroundColor: Colors.grey[900],
+                  backgroundColor: Theme.of(context).hintColor,
                   child:  Icon(
                   Icons.add_circle,
                   color: Color(0xFF2FB49C),
@@ -139,5 +134,22 @@ class _EventScreenState extends State<EventScreen>
             }),
       ),
     );
+  }
+  void buildShowDialog(BuildContext context, id) async {
+    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+
+    showCupertinoModalBottomSheet(
+        isDismissible: true,
+        backgroundColor: Colors.grey[900],
+        context: context,
+        builder: (context) {
+          return Provider(
+              create: (_) {
+                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+              },
+              child: WalletSelectionScreen(
+                id: id,
+              ));
+        });
   }
 }

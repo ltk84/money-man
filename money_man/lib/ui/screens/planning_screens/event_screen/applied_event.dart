@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
 
 class AppliedEvent extends StatefulWidget {
   Wallet wallet;
-
   AppliedEvent({Key key, this.wallet}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -19,25 +17,16 @@ class _AppliedEvent extends State<AppliedEvent>
     with TickerProviderStateMixin {
   List<Event> appliedEvent = [];
   Wallet _wallet;
-  int _limit = 50;
-  int _limitIncrement = 20;
-  ScrollController listScrollController;
   @override
   void initState() {
-    _wallet = widget.wallet;
-    listScrollController = ScrollController();
-    listScrollController.addListener(scrollListener);
+    _wallet = widget.wallet ??
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 100,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg');
     super.initState();
-  }
-  @override
-  void scrollListener() {
-    if (listScrollController.offset >=
-        listScrollController.position.maxScrollExtent &&
-        !listScrollController.position.outOfRange) {
-      setState(() {
-        _limit += _limitIncrement;
-      });
-    }
   }
   @override
   Widget build(BuildContext context) {
@@ -79,42 +68,73 @@ class _AppliedEvent extends State<AppliedEvent>
                               color: Colors.black,
                               width: 1.0,
                             ))),
-                    padding: EdgeInsets.fromLTRB(12.0, 35.0, 12.0, 0),
+                    padding: EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 0),
                     child: Row(children: <Widget>[
-                      Padding(
+                      Container(
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         child: SuperIcon(
                           iconPath: appliedEvent[index].iconPath,
                           size: 45,
                         ),
                       ),
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 14, 0),
-                          child: Column(
+                      Container(
+                          width: MediaQuery.of(context).size.width - 80,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[900],
+                              border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                  ))),
+                          padding: EdgeInsets.fromLTRB(6.0, 6.0, 0.0, 10),
+                          child:Column(
                             children: <Widget>[
-                              Text(appliedEvent[index].name ,
-                                  style: TextStyle(
-                                    fontSize: 22.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w800,
-                                  )
+                              Container(
+                                margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(appliedEvent[index].name ,
+                                      style: TextStyle(
+                                        fontSize: 22.0,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                      textAlign: TextAlign.start,
+                                      strutStyle: StrutStyle(
+                                        leading: 1.5,
+                                      ),
+                                    ),
+                                    Text('',
+                                        style: TextStyle(color: Colors.white)),
+                                  ],
+                                ),
                               ),
-                              Text('Spent',
-                                  style: TextStyle(
-                                      fontSize: 19.0,
-                                      color: Colors.white)),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisSize : MainAxisSize.max,
+                                  children: <Widget>[
+                                    Text('Spent: ',
+                                      style: TextStyle(
+                                          fontSize: 19.0,
+                                          color: Colors.white),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    Text( appliedEvent[index].spent.toString(),
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.w800,
+                                          color: Colors.white
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ],
                           )
-                      ),
-                      Expanded(
-                        child: Text('\n' + appliedEvent[index].spent.toString(),
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontSize: 19,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white
-                            )
-                        ),
                       ),
                     ]
                     )
