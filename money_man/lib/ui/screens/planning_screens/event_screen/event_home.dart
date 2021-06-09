@@ -13,7 +13,7 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.d
 import 'package:provider/provider.dart';
 
 class EventScreen extends StatefulWidget {
-  const EventScreen({Key key}) : super(key: key);
+  EventScreen({Key key}) : super(key: key);
 
   @override
   _EventScreenState createState() => _EventScreenState();
@@ -26,20 +26,6 @@ class _EventScreenState extends State<EventScreen>
   void initState() {
     super.initState();
     _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
-    _tabController.addListener(() {
-      setState(() {});
-    });
-  }
-  Wallet _wallet = Wallet(
-      id: 'id',
-      name: 'defaultName',
-      amount: 0,
-      currencyID: 'USD',
-      iconID: 'assets/icons/wallet_2.svg');
-  @override
-  void didUpdateWidget(covariant EventScreen oldWidget) {
-
-    super.didUpdateWidget(oldWidget);
   }
   @override
   Widget build(BuildContext context) {
@@ -96,12 +82,13 @@ class _EventScreenState extends State<EventScreen>
                   ],
                   bottom: TabBar(
                     isScrollable: true,
+                    labelPadding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                    indicatorPadding: EdgeInsets.zero,
                     controller: _tabController,
                     indicatorColor: Color(0xffd3db00),
                     indicatorWeight: 2,
                     labelStyle: TextStyle(fontWeight: FontWeight.bold),
                     unselectedLabelColor: Colors.white30,
-
                     tabs: [
                       Tab(
                           child: Container(
@@ -132,22 +119,22 @@ class _EventScreenState extends State<EventScreen>
                     ),
                   ],
                 ),
-                floatingActionButton: IconButton(
-                  icon:  Icon(
-                    Icons.add_circle,
-                    color: Color(0xFF2FB49C),
-                    size: 50.0,
+                floatingActionButton: FloatingActionButton(
+                  backgroundColor: Colors.grey[900],
+                  child:  Icon(
+                  Icons.add_circle,
+                  color: Color(0xFF2FB49C),
+                  size: 50.0,
                   ),
-                  //padding: EdgeInsets.fromLTRB(0,0,MediaQuery.of(context).size.width-50,
-                  //    MediaQuery.of(context).size.height-150),
-                  onPressed:   () async {
-                    Navigator.push(context,
-                      MaterialPageRoute(
-                          builder: (_) => AddEvent(),
-                      )
-                    );
-                  }
+                    onPressed:   () async {
+                      Navigator.push(context,
+                          MaterialPageRoute(
+                            builder: (_) => AddEvent(),
+                          )
+                      );
+                    }
                 ),
+                floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
               );
             }),
       ),
