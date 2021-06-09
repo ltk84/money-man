@@ -63,6 +63,8 @@ class _EventDetailScreen extends State<EventDetailScreen>
                   context,
                   MaterialPageRoute(
                       builder: (_) => EditEventScreen(
+                        currentEvent: _currentEvent,
+                        eventWallet: _eventWallet,
                       )));
               if (updatedTrans != null)
                 setState(() {
