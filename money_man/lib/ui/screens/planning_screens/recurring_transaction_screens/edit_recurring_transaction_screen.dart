@@ -89,6 +89,7 @@ class _EditRecurringTransactionScreenState
                   transactionIdList:
                       widget.recurringTransaction.transactionIdList,
                   repeatOption: repeatOption,
+                  isFinished: false,
                 );
 
                 await _firestore.updateRecurringTransaction(

@@ -93,6 +93,7 @@ class _AddRecurringTransactionScreenState
                     note: note,
                     transactionIdList: [],
                     repeatOption: repeatOption,
+                    isFinished: false,
                   );
                   await _firestore.addRecurringTransaction(reTrans, _wallet);
                   Navigator.pop(context);

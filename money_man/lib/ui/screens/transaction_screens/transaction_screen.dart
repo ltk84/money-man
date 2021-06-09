@@ -36,7 +36,7 @@ class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
   ScrollController listScrollController;
-  int _limit = 50;
+  int _limit = 200;
   int _limitIncrement = 20;
   Wallet _wallet;
   bool viewByCategory;
@@ -102,9 +102,6 @@ class _TransactionScreen extends State<TransactionScreen>
 
   void _handleSelectTimeRange(int selected) {
     showMenu(
-      // padding: EdgeInsets.all(10.0),
-      // //icon: Icon(Icons.arrow_drop_down, color: Colors.white),
-      // offset: Offset.fromDirection(40, 40),
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -858,14 +855,6 @@ class _TransactionScreen extends State<TransactionScreen>
                       viewByCategory = !viewByCategory;
                     });
                   } else if (value == 'Adjust Balance') {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (_) => AdjustBalanceScreen(
-                    //               wallet: _wallet,
-                    //             )
-                    //     )
-                    // );
                     showCupertinoModalBottomSheet(
                         context: context,
                         builder: (context) =>
