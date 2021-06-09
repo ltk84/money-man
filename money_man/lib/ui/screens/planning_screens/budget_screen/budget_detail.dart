@@ -58,6 +58,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
     DateTime today = DateTime.now();
     var todayRate = today.difference(widget.budget.beginDate).inDays /
         widget.budget.endDate.difference(widget.budget.beginDate).inDays;
+    var todayTarget = widget.budget.spent / widget.budget.amount;
     if (today.isBefore(widget.budget.beginDate))
       isStart = false;
     else
@@ -193,10 +194,10 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                               )),*/
                               Container(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      'Remain',
+                                      todayTarget > 1 ? 'Over spent' : 'Remain',
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.white54,
@@ -205,8 +206,10 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                     SizedBox(height: 2),
                                     Text(
                                       MoneyFormatter(
-                                              amount:
-                                                  this.widget.budget.amount -
+                                              amount: todayTarget > 1
+                                                  ? this.widget.budget.spent -
+                                                      this.widget.budget.amount
+                                                  : this.widget.budget.amount -
                                                       this.widget.budget.spent)
                                           .output
                                           .withoutFractionDigits,
@@ -227,7 +230,11 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                               child: LinearProgressIndicator(
                                   backgroundColor: Color(0xff333333),
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                      Color(0xFF2FB49C)),
+                                      todayTarget > 1
+                                          ? Colors.red[700]
+                                          : todayTarget > todayRate
+                                              ? Colors.orange[700]
+                                              : Color(0xFF2FB49C)),
                                   minHeight: 8,
                                   value: this.widget.budget.spent /
                                       this.widget.budget.amount),

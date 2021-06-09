@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screen/widget/budget_tile.dart';
 import 'package:provider/provider.dart';
-
-import 'current_applied_budget.dart';
 
 class Applied extends StatelessWidget {
   const Applied({Key key, this.wallet}) : super(key: key);
