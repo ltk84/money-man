@@ -242,7 +242,8 @@ class _EventDetailScreen extends State<EventDetailScreen>
                   Navigator.push(context,
                       MaterialPageRoute(
                         builder: (_) => EventListTransactionScreen(
-
+                          currentEvent: _currentEvent,
+                          eventWallet: _eventWallet,
                         ),
                       )
                   );
