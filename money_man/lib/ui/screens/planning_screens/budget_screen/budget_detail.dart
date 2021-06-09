@@ -8,10 +8,9 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screen/edit_budget.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screen/widget/line_chart_progress.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
 import 'package:provider/provider.dart';
-
-import 'line_chart_progress.dart';
 
 class BudgetDetailScreen extends StatefulWidget {
   const BudgetDetailScreen({Key key, this.budget, this.wallet})
@@ -316,9 +315,13 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
             ),
             GestureDetector(
               onTap: () {
+                print('root ${widget.budget}');
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LineCharts()),
+                  MaterialPageRoute(
+                      builder: (context) => LineCharts(
+                            budget: widget.budget,
+                          )),
                 );
               },
               child: Container(
@@ -327,7 +330,11 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 color: Color(0xff1a1a1a),
                 width: MediaQuery.of(context).size.width,
                 height: 200,
-                child: LineCharts(),
+                child: LineCharts(
+                  budget: widget.budget,
+                  todayRate: todayRate,
+                  todayTaget: todayTarget,
+                ),
               ),
             ),
             Container(
