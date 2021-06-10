@@ -81,6 +81,7 @@ flutter:
   assets:
      - assets/images/
      - assets/images/carousel/
+     - assets/images/avatars/
      - assets/icons/
 
 
