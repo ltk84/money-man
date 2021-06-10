@@ -31,6 +31,17 @@ class _AppliedEvent extends State<AppliedEvent>
     super.initState();
   }
   @override
+  void didUpdateWidget(covariant AppliedEvent oldWidget) {
+    _wallet = widget.wallet ??
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 100,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg');
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Container(
@@ -51,7 +62,9 @@ class _AppliedEvent extends State<AppliedEvent>
             {
               element.isFinished = true;
             }
-            if(element.isFinished || element.finishedByHand )
+            if((!element.isFinished && element.autofinish)
+            ||(element.isFinished && element.finishedByHand)
+                ||(element.finishedByHand && !element.autofinish))
             {
               appliedEvent.add(element);
             }

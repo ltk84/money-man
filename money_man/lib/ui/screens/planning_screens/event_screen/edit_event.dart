@@ -268,49 +268,19 @@ class _EditEventScreen extends State<EditEventScreen>
                     ),
                   ),
                   ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                     onTap: () {
-                      showCurrencyPicker(
-                        theme: CurrencyPickerThemeData(
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
-                          ),
-                          flagSize: 26,
-                          titleTextStyle: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 17,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700),
-                          subtitleTextStyle: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 15,
-                              color: Colors.black),
-                          //backgroundColor: Colors.grey[900],
-                        ),
-                        onSelect: (value) {
-                          currencySymbol = value.code;
-                          setState(() {
-                            currencySymbol = value.name;
-                          });
-                        },
-                        context: context,
-                        showFlag: true,
-                        showCurrencyName: true,
-                        showCurrencyCode: true,
-                      );
                     },
                     dense: true,
                     leading: Icon(Icons.monetization_on,
-                        size: 30.0, color: Colors.white24),
+                        size: 30.0, color: Colors.white54),
                     title: Text(currencySymbol,
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w600,
                             fontSize: 16.0)),
-                    trailing: Icon(Icons.chevron_right,
-                        size: 20.0, color: Colors.white),
+                    trailing: Icon(Icons.lock,
+                        size: 20.0, color: Colors.white54),
                   ),
                   Divider(
                     thickness: 0.05,

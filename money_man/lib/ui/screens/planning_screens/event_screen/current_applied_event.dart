@@ -30,6 +30,17 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
     super.initState();
   }
   @override
+  void didUpdateWidget(covariant CurrentlyAppliedEvent oldWidget) {
+    _wallet = widget.wallet ??
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 100,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg');
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Container(
@@ -49,7 +60,8 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
               {
                 element.isFinished = true;
               }
-            if(!element.isFinished && !element.finishedByHand)
+            if((!element.isFinished && !element.finishedByHand) ||
+                (element.isFinished && !element.finishedByHand && !element.autofinish))
               {
                 currentlyEvent.add(element);
               }
@@ -113,12 +125,26 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                                       fontWeight: FontWeight.w800,
                                     ),
                                     textAlign: TextAlign.start,
-                                    strutStyle: StrutStyle(
-                                      leading: 1.5,
-                                    ),
                                   ),
                                   Text('',
                                       style: TextStyle(color: Colors.white)),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisSize : MainAxisSize.max,
+                                children: <Widget>[
+                                  Text((currentlyEvent[index].isFinished)?
+                                  'Out of Date':'',
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.white54),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  Text(''),
                                 ],
                               ),
                             ),

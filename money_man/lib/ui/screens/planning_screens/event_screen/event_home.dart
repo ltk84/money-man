@@ -43,7 +43,12 @@ class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin
             child: StreamBuilder<Object>(
                 stream: _firestore.currentWallet,
                 builder: (context, snapshot) {
-                  _wallet = snapshot.data??[];
+                  _wallet = snapshot.data?? Wallet(
+                      id: 'id',
+                      name: 'defaultName',
+                      amount: 100,
+                      currencyID: 'USD',
+                      iconID: 'assets/icons/wallet_2.svg');
                   return Scaffold(
                     appBar: AppBar(
                       backgroundColor: Color(0xff333333),
@@ -63,20 +68,7 @@ class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin
                       actions: [
                         GestureDetector(
                           onTap: () async {
-                            final change = await showCupertinoModalBottomSheet(
-                                isDismissible: true,
-                                backgroundColor: Colors.grey[900],
-                                context: context,
-                                builder: (context) =>
-                                   WalletSelectionScreen(
-                                        id: _wallet.id,
-                                      ),
-                                );
-                            if(change != null)
-                              {
-                                setState(() {
-                                });
-                              }
+                            buildShowDialog(context, _wallet.id);
                           },
                           child: Container(
                             padding: EdgeInsets.only(left: 20.0),
@@ -174,5 +166,26 @@ class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin
             )
         )
     );
+  }
+  void buildShowDialog(BuildContext context, id) async {
+    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+    final _firebase = Provider.of<FirebaseFireStoreService>(context, listen: false);
+    final result = await showCupertinoModalBottomSheet(
+        isDismissible: true,
+        backgroundColor: Colors.grey[900],
+        context: context,
+        builder: (context) {
+          return Provider(
+              create: (_) {
+                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+              },
+              child: WalletSelectionScreen(
+                id: id,
+              ));
+        });
+    final updateWallet = await _firebase.getWalletByID(result);
+    setState(() {
+      _wallet = updateWallet;
+    });
   }
 }

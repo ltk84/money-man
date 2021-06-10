@@ -247,6 +247,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                     _currentEvent.finishedByHand == true?
                     _currentEvent.finishedByHand = false:
                     _currentEvent.finishedByHand = true;
+                    _currentEvent.autofinish = false;
                     _firestore.updateEvent(_currentEvent, _eventWallet);
                   });
                 },
