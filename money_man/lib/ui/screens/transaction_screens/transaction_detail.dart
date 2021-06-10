@@ -307,7 +307,9 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Text(
-                            'This transaction belongs to the following budgets'),
+                          'This transaction belongs to the following budgets',
+                          style: TextStyle(color: white),
+                        ),
                       ),
                       SizedBox(
                         height: 14,

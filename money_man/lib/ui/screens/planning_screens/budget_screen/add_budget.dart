@@ -70,13 +70,13 @@ class _AddBudgetState extends State<AddBudget> {
                 //TODO: Add new budget
                 // await _firestore.updateEvent();
                 if (selectedWallet == null) {
-                  _showAlertDialog('Please pick your wallet!');
+                  _showAlertDialog('Please pick your wallet!', null);
                 } else if (amount == null) {
-                  _showAlertDialog('Please enter amount!');
+                  _showAlertDialog('Please enter amount!', null);
                 } else if (cate == null) {
-                  _showAlertDialog('Please pick category');
+                  _showAlertDialog('Please pick category', null);
                 } else if (mTimeRange == null) {
-                  _showAlertDialog("Please pick time range");
+                  _showAlertDialog("Please pick time range", null);
                 } else {
                   Budget mBudget = new Budget(
                       id: 'id',
@@ -92,7 +92,7 @@ class _AddBudgetState extends State<AddBudget> {
                       isRepeat: isRepeat);
                   await _firestore.addBudget(mBudget, selectedWallet);
                   await _showAlertDialog(
-                      "Congratulations, Add budget successfully!");
+                      "Add budget successfully!", 'Congratulations');
                   String result = "Success";
                   Navigator.pop(context, result);
                 }
@@ -520,13 +520,23 @@ class _AddBudgetState extends State<AddBudget> {
     );
   }
 
-  Future<void> _showAlertDialog(String content) async {
+  Future<void> _showAlertDialog(String content, String title) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       barrierColor: Colors.black54,
       builder: (BuildContext context) {
-        return CustomAlert(content: content);
+        if (title == null)
+          return CustomAlert(
+            content: content,
+          );
+        else
+          return CustomAlert(
+            content: content,
+            title: title,
+            iconPath: 'assets/images/success.svg',
+            //iconPath: iconpath,
+          );
       },
     );
   }

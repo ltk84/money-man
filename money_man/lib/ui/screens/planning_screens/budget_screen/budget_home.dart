@@ -109,7 +109,7 @@ class _BudgetScreenState extends State<BudgetScreen>
                         width: 120,
                         child: Center(
                           child: Text(
-                            "Currently applied",
+                            "Running",
                           ),
                         ),
                       )),
@@ -118,7 +118,7 @@ class _BudgetScreenState extends State<BudgetScreen>
                         width: 120,
                         child: Center(
                           child: Text(
-                            "Applied",
+                            "Finished",
                           ),
                         ),
                       )),

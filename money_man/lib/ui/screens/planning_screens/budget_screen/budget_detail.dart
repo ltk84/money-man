@@ -9,6 +9,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screen/edit_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screen/widget/line_chart_progress.dart';
+import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,8 @@ class BudgetDetailScreen extends StatefulWidget {
 
 class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
   bool isNotifi = false;
+
+  // Hàm trả về string mô tả khoảng thời gian theo ngày tháng năm
   String valueDate(Budget budget) {
     String result = DateFormat('dd/MM/yyyy').format(budget.beginDate) +
         ' - ' +
@@ -31,6 +34,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
     return result;
   }
 
+  //Hàm trả về string mô tả thời gian hiện tại tương ứng với thời gian của budget như thế nào
   String TimeLeft(Budget budget) {
     var today = DateTime.now();
     if (today.isBefore(budget.beginDate)) {
@@ -55,6 +59,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     bool isStart;
     DateTime today = DateTime.now();
+    // todayRate là biến biểu thị tỉ lệ thời gian hiện tại trong khoảng thời gian của budget. nếu >1 đã kết thúc, <0 chưa bắt đầu
     var todayRate = today.difference(widget.budget.beginDate).inDays /
         widget.budget.endDate.difference(widget.budget.beginDate).inDays;
     var todayTarget = widget.budget.spent / widget.budget.amount;
@@ -75,6 +80,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
         title: Text('Budget'),
         centerTitle: true,
         actions: [
+          // Button chỉnh sửa budget
           IconButton(
             icon: Icon(
               Icons.edit,
@@ -91,17 +97,6 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       ));
               if (result != null) Navigator.pop(context);
             },
-            /*onPressed: () async {
-                var result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EditBudget(
-                            budget: widget.budget,
-                            wallet: widget.wallet,
-                          )),
-                );
-                if (result != null) Navigator.pop(context);
-              }*/
           ),
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white),
@@ -188,9 +183,6 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                   ],
                                 ),
                               ),
-                              /*Expanded(child: Container(
-
-                              )),*/
                               Container(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -248,10 +240,12 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
             ),
             Row(
               children: [
+                // Nếu chưa bắt đầu hoặc hết hạn thì không để today
                 widget.budget.beginDate.isAfter(today) ||
                         today.isAfter(widget.budget.endDate)
                     ? Container()
                     : Container(
+                        // Căn lề theo từng pixel, sử dụng kiến thức toán học để tính toán margin
                         margin: EdgeInsets.only(
                             left: 60 +
                                 (MediaQuery.of(context).size.width - 60 - 45) *
@@ -314,16 +308,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                print('root ${widget.budget}');
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LineCharts(
-                            budget: widget.budget,
-                          )),
-                );
-              },
+              onTap: () {},
               child: Container(
                 margin: EdgeInsets.only(top: 30),
                 padding: EdgeInsets.only(left: 15, right: 30),
@@ -455,7 +440,14 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               margin: EdgeInsets.only(top: 10, bottom: 20),
               alignment: Alignment.center,
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (context) => SearchTransactionScreen(
+                              wallet: widget.wallet,
+                              muserSearch: widget.budget.category.name,
+                            ));
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                     decoration: BoxDecoration(
