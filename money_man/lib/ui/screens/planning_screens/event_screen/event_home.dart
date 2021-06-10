@@ -20,9 +20,17 @@ class EventScreen extends StatefulWidget {
 class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin {
   TabController _tabController;
   Wallet _wallet;
+
   @override
   void initState() {
     super.initState();
+    _wallet =
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 100,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg');
     _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
   }
   @override
@@ -55,26 +63,21 @@ class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin
                       actions: [
                         GestureDetector(
                           onTap: () async {
-                            final _auth = Provider.of<FirebaseAuthService>(
-                                context, listen: false);
-
-                            showCupertinoModalBottomSheet(
+                            final change = await showCupertinoModalBottomSheet(
                                 isDismissible: true,
                                 backgroundColor: Colors.grey[900],
                                 context: context,
-                                builder: (context) {
-                                  return Provider(
-                                      create: (_) {
-                                        return FirebaseFireStoreService(
-                                            uid: _auth.currentUser.uid);
-                                      },
-                                      child: WalletSelectionScreen(
+                                builder: (context) =>
+                                   WalletSelectionScreen(
                                         id: _wallet.id,
-                                      )
-                                  );
-                                  
-                                }
+                                      ),
                                 );
+                            if(change != null)
+                              {
+                                setState(() {
+                                  _wallet = change;
+                                });
+                              }
                           },
                           child: Container(
                             padding: EdgeInsets.only(left: 20.0),
