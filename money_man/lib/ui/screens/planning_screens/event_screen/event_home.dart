@@ -75,7 +75,6 @@ class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin
                             if(change != null)
                               {
                                 setState(() {
-                                  _wallet = change;
                                 });
                               }
                           },

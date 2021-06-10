@@ -55,6 +55,16 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                     elevation: 0,
                     title: Text('Transaction List'),
                   ),
+                  body: Container(
+                    alignment:  Alignment.center,
+                    child: Text(
+                          'No transaction',
+                        style: TextStyle(
+                          fontSize: 45,
+                          color: Colors.white54,
+                        ),
+                      ),
+                  )
                 ):
               ReportListTransaction(
                 endDate : listTransactionOfEventByDate[0].date,
