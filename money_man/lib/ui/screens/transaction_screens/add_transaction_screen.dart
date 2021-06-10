@@ -38,6 +38,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   String note;
   String currencySymbol;
   Event event;
+  bool pickEvent = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -45,7 +46,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     pickDate = DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
     selectedWallet = widget.currentWallet;
     currencySymbol =
-        CurrencyService().findByCode(selectedWallet.currencyID).symbol;
+        CurrencyService()
+            .findByCode(selectedWallet.currencyID)
+            .symbol;
     note = null;
   }
 
@@ -116,11 +119,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       date: pickDate,
                       currencyID: selectedWallet.currencyID,
                       category: cate,
-                    eventID: (event != null) ? event.id : ""
+                      eventID: (event != null) ? event.id : ""
                   );
                   // }
                   await _firestore.addTransaction(selectedWallet, trans);
-                  if(event != null) {
+                  if (event != null) {
                     event.transactionIdList.add(trans.id);
                     await _firestore.updateEventAmountAndTransList(
                         event, selectedWallet, trans);
@@ -199,15 +202,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       fontSize: amount == null ? 22 : 30.0,
                       fontFamily: 'Montserrat',
                       fontWeight:
-                          amount == null ? FontWeight.w500 : FontWeight.w600,
+                      amount == null ? FontWeight.w500 : FontWeight.w600,
                     ),
                     hintText: amount == null
                         ? 'Enter amount'
                         : currencySymbol +
-                            ' ' +
-                            MoneyFormatter(amount: amount)
-                                .output
-                                .withoutFractionDigits),
+                        ' ' +
+                        MoneyFormatter(amount: amount)
+                            .output
+                            .withoutFractionDigits),
               ),
             ),
             Container(
@@ -235,11 +238,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               },
               leading: cate == null
                   ? Icon(Icons.question_answer,
-                      color: Colors.white54, size: 28.0)
+                  color: Colors.white54, size: 28.0)
                   : SuperIcon(
-                      iconPath: cate.iconID,
-                      size: 28.0,
-                    ),
+                iconPath: cate.iconID,
+                size: 28.0,
+              ),
               title: TextField(
                 autocorrect: false,
                 onTap: () async {
@@ -268,14 +271,14 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
                         color:
-                            this.cate == null ? Colors.grey[600] : Colors.white,
+                        this.cate == null ? Colors.grey[600] : Colors.white,
                         fontSize: 16.0,
                         fontFamily: 'Montserrat',
                         fontWeight: this.cate == null
                             ? FontWeight.w500
                             : FontWeight.w600),
                     hintText:
-                        this.cate == null ? 'Select category' : this.cate.name),
+                    this.cate == null ? 'Select category' : this.cate.name),
               ),
               trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
@@ -290,21 +293,28 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ListTile(
               dense: true,
               leading:
-                  Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
+              Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
               title: TextFormField(
                 onTap: () async {
                   DatePicker.showDatePicker(context,
                       currentTime: pickDate == null
-                          ? DateTime(DateTime.now().year, DateTime.now().month,
-                              DateTime.now().day)
+                          ? DateTime(DateTime
+                          .now()
+                          .year, DateTime
+                          .now()
+                          .month,
+                          DateTime
+                              .now()
+                              .day)
                           : pickDate,
-                      showTitleActions: true, onConfirm: (date) {
-                    if (date != null) {
-                      setState(() {
-                        pickDate = date;
-                      });
-                    }
-                  },
+                      showTitleActions: true,
+                      onConfirm: (date) {
+                        if (date != null) {
+                          setState(() {
+                            pickDate = date;
+                          });
+                        }
+                      },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(color: Colors.white),
@@ -330,23 +340,23 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       fontFamily: 'Montserrat',
                       fontSize: 16.0,
                       fontWeight:
-                          pickDate == null ? FontWeight.w500 : FontWeight.w600,
+                      pickDate == null ? FontWeight.w500 : FontWeight.w600,
                     ),
                     hintText: pickDate ==
-                            DateTime.parse(
-                                DateFormat("yyyy-MM-dd").format(DateTime.now()))
+                        DateTime.parse(
+                            DateFormat("yyyy-MM-dd").format(DateTime.now()))
                         ? 'Today'
                         : pickDate ==
-                                DateTime.parse(DateFormat("yyyy-MM-dd").format(
-                                    DateTime.now().add(Duration(days: 1))))
-                            ? 'Tomorrow'
-                            : pickDate ==
-                                    DateTime.parse(DateFormat("yyyy-MM-dd")
-                                        .format(DateTime.now()
-                                            .subtract(Duration(days: 1))))
-                                ? 'Yesterday'
-                                : DateFormat('EEEE, dd-MM-yyyy')
-                                    .format(pickDate)),
+                        DateTime.parse(DateFormat("yyyy-MM-dd").format(
+                            DateTime.now().add(Duration(days: 1))))
+                        ? 'Tomorrow'
+                        : pickDate ==
+                        DateTime.parse(DateFormat("yyyy-MM-dd")
+                            .format(DateTime.now()
+                            .subtract(Duration(days: 1))))
+                        ? 'Yesterday'
+                        : DateFormat('EEEE, dd-MM-yyyy')
+                        .format(pickDate)),
               ),
               trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
@@ -438,7 +448,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   final noteContent = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => NoteTransactionScreen(
+                          builder: (_) =>
+                              NoteTransactionScreen(
                                 noteContent: note ?? '',
                               )));
                   print(noteContent);
@@ -478,71 +489,90 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 thickness: 0.2,
               ),
             ),
-            ListTile(
-              dense: true,
-              onTap: () async {
-                var res = await showCupertinoModalBottomSheet(
-                    isDismissible: true,
-                    backgroundColor: Colors.grey[900],
-                    context: context,
-                    builder: (context) =>
-                        SelectEventScreen(
-                            wallet: selectedWallet)
-                );
-                if (res != null)
-                  setState(() {
-                    event = res;
-                  });
-              },
-              leading: event == null
-                  ? Icon(Icons.event , size:  28.0, color: Colors.white54,)
-                  : SuperIcon(iconPath: event.iconPath, size: 28.0),
-              title: TextFormField(
-                readOnly: true,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600),
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    hintStyle: TextStyle(
-                      color: selectedWallet == null
-                          ? Colors.grey[600]
-                          : Colors.white,
-                      fontFamily: 'Montserrat',
-                      fontSize: 16.0,
-                      fontWeight: selectedWallet == null
-                          ? FontWeight.w500
-                          : FontWeight.w600,
-                    ),
-                    hintText: event == null
-                        ? 'Select event'
-                        : event.name),
-                onTap: () async {
-                  var res = await showCupertinoModalBottomSheet(
-                      isDismissible: true,
-                      backgroundColor: Colors.grey[900],
-                      context: context,
-                      builder: (context) =>
-                          SelectEventScreen(
-                              wallet: selectedWallet)
-                  );
-                  if (res != null)
+            Visibility(
+              visible: !pickEvent,
+                child: TextButton(
+                  onPressed: () {
                     setState(() {
-                      event = res;
+                      pickEvent = true;
                     });
-                },
-              ),
-              trailing: Icon(Icons.chevron_right, color: Colors.white54),
+                  },
+                  child: Text(
+                    'More',
+                    style: TextStyle(color: Color(0xff36D1B5)),
+                  ),
+                  style: TextButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                ),
             ),
-          ],
+            Visibility(
+              visible: pickEvent,
+                child:ListTile(
+                  dense: true,
+                  onTap: () async {
+                    var res = await showCupertinoModalBottomSheet(
+                        isDismissible: true,
+                        backgroundColor: Colors.grey[900],
+                        context: context,
+                        builder: (context) =>
+                            SelectEventScreen(
+                                wallet: selectedWallet)
+                    );
+                    if (res != null)
+                      setState(() {
+                        event = res;
+                      });
+                  },
+                  leading: event == null
+                      ? Icon(Icons.event, size: 28.0, color: Colors.white54,)
+                      : SuperIcon(iconPath: event.iconPath, size: 28.0),
+                  title: TextFormField(
+                    readOnly: true,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: selectedWallet == null
+                              ? Colors.grey[600]
+                              : Colors.white,
+                          fontFamily: 'Montserrat',
+                          fontSize: 16.0,
+                          fontWeight: selectedWallet == null
+                              ? FontWeight.w500
+                              : FontWeight.w600,
+                        ),
+                        hintText: event == null
+                            ? 'Select event'
+                            : event.name),
+                    onTap: () async {
+                      var res = await showCupertinoModalBottomSheet(
+                          isDismissible: true,
+                          backgroundColor: Colors.grey[900],
+                          context: context,
+                          builder: (context) =>
+                              SelectEventScreen(
+                                  wallet: selectedWallet)
+                      );
+                      if (res != null)
+                        setState(() {
+                          event = res;
+                        });
+                    },
+                  ),
+                  trailing: Icon(Icons.chevron_right, color: Colors.white54),
+                )
+            )
+          ]
         ),
-      ),
+      )
     );
   }
 

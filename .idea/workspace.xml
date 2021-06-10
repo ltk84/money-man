@@ -113,13 +113,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/core/services/firebase_firestore_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/core/services/firebase_firestore_services.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/applied_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/applied_event.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/selection_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/selection_event.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/add_transaction_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/add_transaction_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/transaction_detail.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/transaction_detail.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/transaction_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/transaction_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/pubspec.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,13 +153,13 @@
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man\assets" />
-      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man\assets" />
       <recent name="D:\Personal\Flutter_Project\MoneyMan\assets" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man\assets" />
+      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man" />
     </key>
   </component>
   <component name="RunManager">
@@ -248,25 +245,25 @@
     <state x="297" y="130" key="FileChooserDialogImpl/0.0.1280.720@0.0.1280.720" timestamp="1622922388678" />
     <state x="317" y="139" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1616494633016" />
     <state x="356" y="151" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1618643935553" />
-    <state width="960" height="262" key="GridCell.Tab.0.bottom" timestamp="1623336840888">
+    <state width="960" height="191" key="GridCell.Tab.0.bottom" timestamp="1623356431131">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="960" height="262" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1623336840888" />
+    <state width="960" height="191" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1623356431131" />
     <state width="1014" height="189" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
-    <state width="960" height="262" key="GridCell.Tab.0.center" timestamp="1623336840888">
+    <state width="960" height="191" key="GridCell.Tab.0.center" timestamp="1623356431131">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="960" height="262" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1623336840888" />
+    <state width="960" height="191" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1623356431131" />
     <state width="1014" height="189" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
-    <state width="960" height="262" key="GridCell.Tab.0.left" timestamp="1623336840888">
+    <state width="960" height="191" key="GridCell.Tab.0.left" timestamp="1623356431131">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="960" height="262" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1623336840888" />
+    <state width="960" height="191" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1623356431131" />
     <state width="1014" height="189" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1618980309777" />
-    <state width="960" height="262" key="GridCell.Tab.0.right" timestamp="1623336840888">
+    <state width="960" height="191" key="GridCell.Tab.0.right" timestamp="1623356431131">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state width="960" height="262" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1623336840888" />
+    <state width="960" height="191" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1623356431131" />
     <state width="1014" height="189" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
     <state x="36" y="0" key="SettingsEditor" timestamp="1621069438056">
       <screen x="0" y="0" width="1280" height="720" />
