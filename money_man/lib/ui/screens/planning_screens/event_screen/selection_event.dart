@@ -76,6 +76,9 @@ class _SelectEventScreen extends State<SelectEventScreen> {
                   stream: _firestore.eventStream(_wallet.id),
                   builder: (context, snapshot) {
                     final listEvent = snapshot.data ?? [];
+                    listEvent.removeWhere((element) => (!element.isFinished && element.finishedByHand)
+                        ||(element.isFinished && element.finishedByHand)
+                        ||(!element.finishedByHand && element.autofinish && element.isFinished));
                     return ListView.builder(
                         itemCount: listEvent.length,
                         itemBuilder: (context, index) {

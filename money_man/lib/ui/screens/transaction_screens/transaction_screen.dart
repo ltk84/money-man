@@ -1332,12 +1332,18 @@ class _TransactionScreen extends State<TransactionScreen>
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
-                        child: Text(
+                        child: (transListSortByDate[xIndex][yIndex].eventID == "")?
+                        Text(
                             transListSortByDate[xIndex][yIndex].category.name,
                             style: TextStyle(
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white)),
+                                color: Colors.white)):
+                        Text(transListSortByDate[xIndex][yIndex].category.name + "\n🌴",
+                            style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white))
                       ),
                       Expanded(
                         child: Text(

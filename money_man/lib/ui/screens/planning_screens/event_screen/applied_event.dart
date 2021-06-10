@@ -62,9 +62,9 @@ class _AppliedEvent extends State<AppliedEvent>
             {
               element.isFinished = true;
             }
-            if((!element.isFinished && element.autofinish)
+            if((!element.isFinished && element.finishedByHand)
             ||(element.isFinished && element.finishedByHand)
-                ||(element.finishedByHand && !element.autofinish))
+                ||(!element.finishedByHand && element.autofinish && element.isFinished))
             {
               appliedEvent.add(element);
             }

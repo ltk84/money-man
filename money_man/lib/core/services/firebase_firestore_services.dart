@@ -793,6 +793,17 @@ class FirebaseFireStoreService {
     }).toList();
   }
 
+  Future<Event> getEventByID(String id, Wallet wallet) async {
+    return await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('events')
+        .doc(id)
+        .get()
+        .then((value) => Event.fromMap(value.data()));
+  }
+
   // EVENT END //
 
   // // edit player

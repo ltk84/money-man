@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -23,8 +24,32 @@ class TransactionDetail extends StatefulWidget {
 
 class _TransactionDetailState extends State<TransactionDetail> {
   @override
+  Event event = Event(
+    iconPath: 'assets/icons/wallet_2.svg',
+    id: 'id',
+    name: 'name',
+    endDate: DateTime.now(),
+    walletId:'id',
+    isFinished: false,
+    transactionIdList: [],
+    spent:0,
+    finishedByHand:false,
+    autofinish: false,
+  );
+  Future<void> GetEvent(String id, Wallet wallet)
+  async {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    if(widget.transaction.eventID != "")
+    {
+      final _event =  await _firestore.getEventByID(id, wallet);
+      setState(() {
+        event = _event;
+      });
+    }
+  }
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    GetEvent(widget.transaction.eventID, widget.wallet);
     return Scaffold(
       backgroundColor: Color(0xff1b1b1b),
       appBar: AppBar(
@@ -198,7 +223,28 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.0))),
                     ],
-                  )
+                  ),
+                  SizedBox(height: 10),
+                  (widget.transaction.eventID != "")?
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: SuperIcon(
+                            iconPath: event.iconPath ,
+                            size: 25.0,
+                          )),
+                      Expanded(
+                          flex: 3,
+                          child: Text('Event: ' + event.name,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: ' Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0))),
+                    ],
+                  ): Row(),
                 ],
               ),
             ),

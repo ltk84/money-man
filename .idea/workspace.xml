@@ -113,15 +113,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/core/models/event_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/core/models/event_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/add_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/add_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/core/services/firebase_firestore_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/core/services/firebase_firestore_services.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/applied_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/applied_event.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/current_applied_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/current_applied_event.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/edit_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/edit_event.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/event_detail.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/event_detail.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/event_home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/event_home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/selection_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/event_screen/selection_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/add_transaction_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/add_transaction_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/transaction_detail.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/transaction_detail.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/transaction_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/transaction_screen.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

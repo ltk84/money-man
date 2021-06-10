@@ -4,12 +4,14 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/event_screen/selection_event.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
@@ -35,7 +37,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   Wallet selectedWallet;
   String note;
   String currencySymbol;
-
+  Event event;
   @override
   void initState() {
     // TODO: implement initState
@@ -113,9 +115,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       note: note,
                       date: pickDate,
                       currencyID: selectedWallet.currencyID,
-                      category: cate);
+                      category: cate,
+                    eventID: (event != null) ? event.id : ""
+                  );
                   // }
                   await _firestore.addTransaction(selectedWallet, trans);
+                  if(event != null) {
+                    event.transactionIdList.add(trans.id);
+                    await _firestore.updateEventAmountAndTransList(
+                        event, selectedWallet, trans);
+                  }
                   Navigator.pop(context);
                 }
               },
@@ -458,6 +467,76 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
+              ),
+              trailing: Icon(Icons.chevron_right, color: Colors.white54),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+              child: Divider(
+                color: Colors.white24,
+                height: 1,
+                thickness: 0.2,
+              ),
+            ),
+            ListTile(
+              dense: true,
+              onTap: () async {
+                var res = await showCupertinoModalBottomSheet(
+                    isDismissible: true,
+                    backgroundColor: Colors.grey[900],
+                    context: context,
+                    builder: (context) =>
+                        SelectEventScreen(
+                            wallet: selectedWallet)
+                );
+                if (res != null)
+                  setState(() {
+                    event = res;
+                  });
+              },
+              leading: event == null
+                  ? Icon(Icons.event , size:  28.0, color: Colors.white54,)
+                  : SuperIcon(iconPath: event.iconPath, size: 28.0),
+              title: TextFormField(
+                readOnly: true,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    hintStyle: TextStyle(
+                      color: selectedWallet == null
+                          ? Colors.grey[600]
+                          : Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight: selectedWallet == null
+                          ? FontWeight.w500
+                          : FontWeight.w600,
+                    ),
+                    hintText: event == null
+                        ? 'Select event'
+                        : event.name),
+                onTap: () async {
+                  var res = await showCupertinoModalBottomSheet(
+                      isDismissible: true,
+                      backgroundColor: Colors.grey[900],
+                      context: context,
+                      builder: (context) =>
+                          SelectEventScreen(
+                              wallet: selectedWallet)
+                  );
+                  if (res != null)
+                    setState(() {
+                      event = res;
+                    });
+                },
               ),
               trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
