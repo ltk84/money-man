@@ -329,7 +329,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 padding: EdgeInsets.only(left: 15, right: 30),
                 color: Color(0xff1a1a1a),
                 width: MediaQuery.of(context).size.width,
-                height: 200,
+                height: 170,
                 child: LineCharts(
                   budget: widget.budget,
                   todayRate: todayRate,
