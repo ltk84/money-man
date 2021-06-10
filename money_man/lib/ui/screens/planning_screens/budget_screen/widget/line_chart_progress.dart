@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class LineCharts extends StatefulWidget {
   LineCharts({Key key, @required this.budget, this.todayRate, this.todayTaget})
@@ -18,7 +19,8 @@ class LineCharts extends StatefulWidget {
 
 class _LineChartsState extends State<LineCharts> {
   String fomatDate(DateTime variable) {
-    return 'kkk';
+    String result = DateFormat('dd/MM/yyyy').format(variable);
+    return result;
   }
 
   String fomatMonney(double money) {
@@ -237,7 +239,7 @@ class _LineChartsState extends State<LineCharts> {
                             case 0:
                               return fomatDate(widget.budget.beginDate);
                             case 6:
-                              return '2019';
+                              return fomatDate(widget.budget.endDate);
                               return '';
                           }
                         }),
