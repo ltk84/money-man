@@ -69,7 +69,7 @@ class Bill {
     if (!isFinished) {
       var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
-      if (1 == 1) { // now.compareTo(repeatOption.beginDateTime) >= 0 
+      if (1 == 1) { // now.compareTo(repeatOption.beginDateTime) >= 0
         if (repeatOption.type == 'until' && now.isAfter(repeatOption.extraTypeInfo)) {
           //isFinished = true;
           return;

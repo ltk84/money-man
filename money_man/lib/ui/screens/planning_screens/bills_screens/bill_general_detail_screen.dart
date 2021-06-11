@@ -12,28 +12,27 @@ import 'package:money_man/ui/screens/planning_screens/bills_screens/transaction_
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:money_man/ui/widgets/expandable_widget.dart';
 
-class BillDetailScreen extends StatefulWidget {
+class BillGeneralDetailScreen extends StatefulWidget {
   final Bill bill;
   final Wallet wallet;
-  final DateTime dueDate;
-  final String description;
 
-  const BillDetailScreen({
+  const BillGeneralDetailScreen({
     Key key,
     @required this.bill,
     @required this.wallet,
-    @required this.dueDate,
-    @required this.description,
   }) : super(key: key);
 
   @override
-  _BillDetailScreenState createState() => _BillDetailScreenState();
+  _BillGeneralDetailScreenState createState() => _BillGeneralDetailScreenState();
 }
 
-class _BillDetailScreenState extends State<BillDetailScreen> {
+class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
   Bill _bill;
   String currencySymbol;
+
+  bool expandDueDates;
 
   @override
   void initState() {
@@ -41,6 +40,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
     super.initState();
     _bill = widget.bill;
     currencySymbol = CurrencyService().findByCode(widget.wallet.currencyID).symbol;
+    expandDueDates = false;
   }
 
   @override
@@ -86,8 +86,8 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                     //child: Container(
                     //color: Colors.transparent,
                     color: Colors.transparent
-                    //),
-                    ),
+                  //),
+                ),
               ),
             ),
           ),
@@ -123,7 +123,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
         ),
         body: ListView(
           physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
                 margin: EdgeInsets.only(top: 30.0),
@@ -162,7 +162,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                         thickness: 1,
                       ),
                     ),
-                    buildInfoRepeat(dueDate: DateFormat('dd/MM/yyyy').format(widget.dueDate), dueDescription: widget.description),
+                    buildInfoRepeat(listDueDates: _bill.dueDates),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -199,7 +199,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
+                        (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xFF4FCC5C).withOpacity(0.4);
                       else
@@ -229,9 +229,9 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                   color: Color(0xFF1c1c1c),
                   border: Border(
                       bottom: BorderSide(
-                    color: Colors.white12,
-                    width: 0.5,
-                  ))),
+                        color: Colors.white12,
+                        width: 0.5,
+                      ))),
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -243,7 +243,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
+                        (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xFF4FCC5C).withOpacity(0.4);
                       else
@@ -274,9 +274,9 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                   color: Color(0xFF1c1c1c),
                   border: Border(
                       bottom: BorderSide(
-                    color: Colors.white12,
-                    width: 0.5,
-                  ))),
+                        color: Colors.white12,
+                        width: 0.5,
+                      ))),
               child: TextButton(
                 onPressed: () async {
                   await _firestore.deleteBill(
@@ -285,7 +285,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
+                        (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Colors.redAccent.withOpacity(0.4);
                       else
@@ -315,7 +315,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
           Container(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
               child:
-                  Icon(Icons.attach_money, color: Colors.white70, size: 40.0)),
+              Icon(Icons.attach_money, color: Colors.white70, size: 40.0)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -389,36 +389,73 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
     );
   }
 
-  Widget buildInfoRepeat({String dueDate, String dueDescription}) {
+  Widget buildInfoRepeat({List<DateTime> listDueDates}) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-              padding: EdgeInsets.symmetric(horizontal: 23.0),
-              child: Icon(Icons.calendar_today,
-                  color: Colors.white70, size: 24.0)),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            expandDueDates = !expandDueDates;
+          });
+        },
+        child: Container(
+          color: Colors.transparent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Text(dueDate ?? '',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  )),
-              Text(dueDescription ?? '',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white70,
-                  )),
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 23.0),
+                  child: Icon(Icons.calendar_today,
+                      color: Colors.white70, size: 24.0)),
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Due dates',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white60,
+                        )),
+                    Row(
+                      children: [
+                        Text(
+                            listDueDates.length == 0 ? 'None' : DateFormat('dd/MM/yyyy').format(listDueDates[0]),
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                              color: listDueDates.length == 0 ? Colors.white24 : Colors.white,
+                            )
+                        ),
+                        listDueDates.length < 2 ? Container() : Icon(Icons.arrow_drop_down, color: Colors.grey)
+                      ],
+                    ),
+                    ExpandableWidget(
+                      expand: expandDueDates,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            for (int i = 1; i < listDueDates.length; i++)
+                              Text(
+                                  DateFormat('dd/MM/yyyy').format(listDueDates[i]),
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  )
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

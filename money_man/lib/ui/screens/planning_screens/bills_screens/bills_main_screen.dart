@@ -10,6 +10,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/add_bill_sceen.dart';
+import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_category_list_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
@@ -46,16 +47,31 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                   color: Colors.white,
                 )),
           ),
-          title: Hero(
-            tag: 'billToDetail_title',
-            child: Text('Bills',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                )),
-          ),
+          title: GestureDetector(
+              onTap: () {
+                showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (context) => BillCategoryList(currentWallet: widget.currentWallet)
+                );
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Hero(
+                    tag: 'billToDetail_title',
+                    child: Text('Bills',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        )),
+                  ),
+                  Icon(Icons.arrow_drop_down, color: Colors.grey)
+                ],
+              ),
+            ),
           centerTitle: true,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(
@@ -146,19 +162,41 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               }
             });
           });
-          return ListView(
-            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            children: [
-              buildOverallInfo(
-                  overdue: '$currencySymbol ' + overDueBills.fold(0, (value, element) => value + element['bill'].amount).toString(),
-                  forToday: '$currencySymbol ' + todayBills.fold(0, (value, element) => value + element['bill'].amount).toString(),
-                  thisPeriod: '$currencySymbol ' + thisPeriodBills.fold(0, (value, element) => value + element['bill'].amount).toString()),
-              SizedBox(height: 20.0),
-              buildListDue(_firestore, overDueBills, 0),
-              buildListDue(_firestore, todayBills, 1),
-              buildListDue(_firestore, thisPeriodBills, 2),
-            ],
-          );
+          if (overDueBills.length == 0 && todayBills.length == 0 && thisPeriodBills.length == 0) {
+            return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  'There are no bills to pay',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white54,
+                  ),
+                )
+            );
+          } else {
+            return ListView(
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              children: [
+                buildOverallInfo(
+                    overdue: '$currencySymbol ' + overDueBills.fold(
+                        0, (value, element) => value + element['bill'].amount)
+                        .toString(),
+                    forToday: '$currencySymbol ' + todayBills.fold(
+                        0, (value, element) => value + element['bill'].amount)
+                        .toString(),
+                    thisPeriod: '$currencySymbol ' + thisPeriodBills.fold(
+                        0, (value, element) => value + element['bill'].amount)
+                        .toString()),
+                SizedBox(height: 20.0),
+                buildListDue(_firestore, overDueBills, 0),
+                buildListDue(_firestore, todayBills, 1),
+                buildListDue(_firestore, thisPeriodBills, 2),
+              ],
+            );
+          }
         }
     );
   }
@@ -206,7 +244,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
 
   Widget buildBillCard(dynamic _firestore, Map info, int dueState) {
     String currencySymbol = CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
-    String payContent = info['bill'].isFinished ? 'PAID' : 'PAY $currencySymbol ' + info['bill'].amount.toString();
+    String payContent = info['bill'].isFinished ? 'Finished' : 'PAY $currencySymbol ' + info['bill'].amount.toString();
     String dueDate = DateFormat('dd/MM/yyyy').format(info['due']);
     String dueDescription;
 
@@ -326,20 +364,20 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                     MaterialStateProperty.resolveWith<Color>(
                           (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Colors.white;
+                          return !info['bill'].isFinished ? Colors.white : Color(0xFFcccccc);
                         else
-                          return Color(
-                              0xFF4FCC5C); // Use the component's default.
+                          return !info['bill'].isFinished ? Color(
+                              0xFF4FCC5C) : Color(0xFFcccccc); // Use the component's default.
                       },
                     ),
                     foregroundColor:
                     MaterialStateProperty.resolveWith<Color>(
                           (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Color(0xFF4FCC5C);
+                          return !info['bill'].isFinished ? Color(0xFF4FCC5C) : Color(0xFFA8a8a8);
                         else
-                          return Colors
-                              .white; // Use the component's default.
+                          return !info['bill'].isFinished ? Colors
+                              .white : Color(0xFFA8a8a8); // Use the component's default.
                       },
                     ),
                   ),
