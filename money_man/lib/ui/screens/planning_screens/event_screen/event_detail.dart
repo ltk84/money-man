@@ -85,7 +85,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       builder: (_) {
                         return AlertDialog(
                           title: Text(
-                            'Do you want to delete this transaction?',
+                            'Do you want to delete this event?',
                             style: TextStyle(
                               color: Colors.red,
                               fontFamily: 'Montserrat',

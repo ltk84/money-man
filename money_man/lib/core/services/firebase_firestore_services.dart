@@ -395,7 +395,7 @@ class FirebaseFireStoreService {
       event.transactionIdList.add(transaction.id);
       await updateEventAmountAndTransList(event, wallet, transaction);
     }
-    if (transaction.eventID != "")
+    if (transaction.eventID != "" && oldTransaction.eventID == "")
       {
         event.transactionIdList.add(transaction.id);
         transaction.eventID = event.id;
