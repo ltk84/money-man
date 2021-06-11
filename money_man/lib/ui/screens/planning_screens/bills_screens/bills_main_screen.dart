@@ -300,8 +300,8 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       await _firestore.addTransaction(widget.currentWallet, transFromBill);
 
                       // Thêm transaction vào bill.
-                      if (!info['bill'].transactionIdList.contains(transFromBill)) {
-                        info['bill'].transactionIdList.add(transFromBill);
+                      if (!info['bill'].transactionIdList.contains(transFromBill.id)) {
+                        info['bill'].transactionIdList.add(transFromBill.id);
                       }
 
                       // Xử lý các dueDate. (Thanh toán rồi thì dueDate sẽ được cho vào list due Dates đã thanh toán,

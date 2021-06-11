@@ -7,16 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class BillTransactionList extends StatefulWidget {
   final Wallet currentWallet;
-  final List<MyTransaction> transactionList;
+  final List<String> transactionListID;
   const BillTransactionList(
       {Key key,
-        this.transactionList,
+        this.transactionListID,
         this.currentWallet})
       : super(key: key);
   @override
@@ -24,10 +26,7 @@ class BillTransactionList extends StatefulWidget {
 }
 
 class BillTransactionListState extends State<BillTransactionList> {
-  List<MyTransaction> _transactionList;
-  List<List<MyTransaction>> transactionListSorted = [];
-  List<DateTime> dateInChoosenTime = [];
-  double total;
+  List<String> _transactionListID;
 
   String currencySymbol;
 
@@ -35,31 +34,16 @@ class BillTransactionListState extends State<BillTransactionList> {
   void initState() {
     super.initState();
     currencySymbol = CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
-    _transactionList = widget.transactionList ?? [];
-    total = 0;
-    filterData();
+    _transactionListID = widget.transactionListID ?? [];
   }
 
   @override
   void didUpdateWidget(covariant BillTransactionList oldWidget) {
-    _transactionList = widget.transactionList ?? [];
-  }
-
-  void filterData () {
-    _transactionList.sort((a, b) => b.date.compareTo(a.date));
-    _transactionList.forEach((element) {
-      if (!dateInChoosenTime.contains(element.date))
-        dateInChoosenTime.add(element.date);
-      total += element.amount;
-    });
-    dateInChoosenTime.forEach((date) {
-      final b = _transactionList
-          .where((element) => element.date.compareTo(date) == 0);
-      transactionListSorted.add(b.toList());
-    });
+    _transactionListID = widget.transactionListID ?? [];
   }
 
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: new AppBar(
@@ -105,12 +89,56 @@ class BillTransactionListState extends State<BillTransactionList> {
           ),
         ),
       ),
-      body: buildDisplayTransactionByDate(transactionListSorted),
+      body: StreamBuilder<Object>(
+        stream: _firestore.transactionStream(widget.currentWallet, 'full'),
+        builder: (context, snapshot) {
+          List<MyTransaction> listTransactions = snapshot.data ?? [];
+
+          print("test 1: " + listTransactions.length.toString());
+          // Lấy danh sách transaction từ transaction ID của bill.
+          List<MyTransaction> billTransactions = listTransactions.where((element) => _transactionListID.contains(element.id)).toList();
+
+
+          print("test 2: " + billTransactions.length.toString());
+          List<List<MyTransaction>> transactionListSorted = [];
+          List<DateTime> dateInChoosenTime = [];
+          double total = 0;
+
+          billTransactions.sort((a, b) => b.date.compareTo(a.date));
+          billTransactions.forEach((element) {
+            if (!dateInChoosenTime.contains(element.date))
+              dateInChoosenTime.add(element.date);
+            total += element.amount;
+          });
+          dateInChoosenTime.forEach((date) {
+            final b = billTransactions
+                .where((element) => element.date.compareTo(date) == 0);
+            transactionListSorted.add(b.toList());
+          });
+
+          if (transactionListSorted.length == 0) {
+              return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  'No transaction',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white54,
+                  ),
+                )
+              );
+          } else {
+            return buildDisplayTransactionByDate(transactionListSorted, total);
+          }
+        }
+      ),
     );
   }
 
   Container buildDisplayTransactionByDate(
-      List<List<MyTransaction>> transactionListSortByDate) {
+      List<List<MyTransaction>> transactionListSortByDate, double total) {
     return Container(
       height: double.infinity,
       color: Colors.black,

@@ -9,6 +9,7 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/ui/screens/categories_screens/categories_bill_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
@@ -160,7 +161,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
                                 isDismissible: true,
                                 backgroundColor: Colors.grey[900],
                                 context: context,
-                                builder: (context) => CategoriesTransactionScreen());
+                                builder: (context) => CategoriesBillScreen());
                             if (selectCate != null) {
                               setState(() {
                                 category = selectCate;

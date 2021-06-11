@@ -233,7 +233,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                       context,
                       PageTransition(
                           childCurrent: this.widget,
-                          child: BillTransactionList(transactionList: _bill.transactionIdList, currentWallet: widget.wallet),
+                          child: BillTransactionList(transactionListID: _bill.transactionIdList, currentWallet: widget.wallet),
                           type: PageTransitionType.rightToLeft));
                 },
                 style: ButtonStyle(
