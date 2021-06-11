@@ -457,7 +457,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color: Colors.grey[600],
+                        color: Colors.white,
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500),
