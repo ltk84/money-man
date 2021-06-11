@@ -485,6 +485,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                             if (res != null)
                               setState(() {
                                 _event = res;
+                                widget.transaction.eventID = _event.id;
                               });
                           },
                           leading: _event.id == 'id'
@@ -528,6 +529,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                               if (res != null)
                                 setState(() {
                                   _event = res;
+                                  widget.transaction.eventID = _event.id;
                                 });
                             },
                           ),

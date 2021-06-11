@@ -363,19 +363,19 @@ class FirebaseFireStoreService {
       wallet.amount += transaction.amount;
 
     //lấy event cũ
-    Event oldEvent;
-    CollectionReference eventRef = users
-        .doc(uid)
-        .collection('wallets')
-        .doc(wallet.id)
-        .collection('events');
-
-    await eventRef
-        .doc(transaction.eventID)
-        .get().then((value) {
-      oldEvent = Event.fromMap(value.data());
-    });
     if(oldTransaction.eventID != "") {
+      Event oldEvent;
+      CollectionReference eventRef = users
+          .doc(uid)
+          .collection('wallets')
+          .doc(wallet.id)
+          .collection('events');
+
+      await eventRef
+          .doc(transaction.eventID)
+          .get().then((value) {
+        oldEvent = Event.fromMap(value.data());
+      });
       //Tính toán lại spent cho event cũ
       if (oldTransaction.category.type == 'expense')
         oldEvent.spent += oldTransaction.amount;
@@ -395,6 +395,12 @@ class FirebaseFireStoreService {
       event.transactionIdList.add(transaction.id);
       await updateEventAmountAndTransList(event, wallet, transaction);
     }
+    if (transaction.eventID != "")
+      {
+        event.transactionIdList.add(transaction.id);
+        transaction.eventID = event.id;
+        await updateEventAmountAndTransList(event, wallet, transaction);
+      }
     // update transaction
     await transactionRef.doc(transaction.id).update(transaction.toMap());
 
