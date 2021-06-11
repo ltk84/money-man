@@ -77,7 +77,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
               actions: [
                 TextButton(
                   onPressed: () async {
-                    if (listBills.any((element) => element.category.name == category.name)) {
+                    if (listBills.any((element) => element.category.name == category.name) && category.name != widget.bill.category.name) {
                       _showAlertDialog('This category has already been used,\nplease pick again!');
                     } else {
                       Bill _bill =
