@@ -720,7 +720,7 @@ class FirebaseFireStoreService {
         .collection('wallets')
         .doc(walletId)
         .collection('recurring transactions')
-        .where('repeatOption.beginDateTime', isEqualTo: now)
+        .where('repeatOption.beginDateTime', isLessThanOrEqualTo: now)
         .where('isFinished', isEqualTo: false)
         .get()
         .then((value) => List<RecurringTransaction>.from(value.docs
