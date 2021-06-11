@@ -54,214 +54,224 @@ class _EditBillScreenState extends State<EditBillScreen> {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    return Scaffold(
-        backgroundColor: Color(0xFF111111),
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Color(0xFF1c1c1c),
-          elevation: 0.0,
-          leading: CloseButton(),
-          title: Text('Edit Bill',
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 17.0,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              )),
-          centerTitle: true,
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Bill _bill =
-                Bill(
-                    id: widget.bill.id,
-                    category: category,
-                    amount: amount,
-                    walletId: widget.wallet.id,
-                    note: note,
-                    transactionIdList: widget.bill.transactionIdList,
-                    repeatOption: repeatOption,
-                    isFinished: widget.bill.isFinished,
-                    dueDates: widget.bill.dueDates,
-                    paidDueDates: widget.bill.paidDueDates,
-                );
-
-                await _firestore.updateBill(
-                    _bill, widget.wallet);
-                Navigator.pop(context, _bill);
-              },
-              child: Text('Save',
+    return StreamBuilder<Object>(
+      stream: _firestore.billStream(widget.wallet.id),
+      builder: (context, snapshot) {
+        List<Bill> listBills = snapshot.data ?? [];
+        return Scaffold(
+            backgroundColor: Color(0xFF111111),
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              backgroundColor: Color(0xFF1c1c1c),
+              elevation: 0.0,
+              leading: CloseButton(),
+              title: Text('Edit Bill',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
-                    fontSize: 16.0,
+                    fontSize: 17.0,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF4FCC5C),
+                    color: Colors.white,
                   )),
-            ),
-          ],
-        ),
-        body: ListView(
-          physics:
-          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          children: [
-            Container(
-                margin: EdgeInsets.only(top: 30.0),
-                decoration: BoxDecoration(
-                    color: Colors.grey[900],
-                    border: Border(
-                        top: BorderSide(
-                          color: Colors.white12,
-                          width: 0.5,
-                        ),
-                        bottom: BorderSide(
-                          color: Colors.white12,
-                          width: 0.5,
-                        ))),
-                child: Column(children: [
-                  // Hàm build Amount Input.
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () async {
-                        final resultAmount = await Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => EnterAmountScreen()));
-                        if (resultAmount != null)
-                          setState(() {
-                            amount =
-                                double.parse(resultAmount);
-                          });
-                      },
-                      child: buildAmountInput(
-                          display: amount == null ? null : (currencySymbol + ' ' + amount.toString())
-                      )
-                  ),
-
-                  // Divider ngăn cách giữa các input field.
-                  Container(
-                    margin: EdgeInsets.only(left: 70),
-                    child: Divider(
-                      color: Colors.white12,
-                      thickness: 1,
-                    ),
-                  ),
-
-                  // Hàm build Category Selection.
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () async {
-                        final selectCate = await showCupertinoModalBottomSheet(
-                            isDismissible: true,
-                            backgroundColor: Colors.grey[900],
-                            context: context,
-                            builder: (context) => CategoriesTransactionScreen());
-                        if (selectCate != null) {
-                          setState(() {
-                            category = selectCate;
-                          });
-                        }
-                      },
-                      child: buildCategorySelection(
-                        display: category == null ? null : category.name,
-                        iconPath: category == null ? null : category.iconID,
-                      )
-                  ),
-
-                  // Divider ngăn cách giữa các input field.
-                  Container(
-                    margin: EdgeInsets.only(left: 70, top: 8),
-                    child: Divider(
-                      color: Colors.white12,
-                      thickness: 1,
-                    ),
-                    height: 2,
-                  ),
-
-                  // Hàm build Note Input.
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () async {
-                        final noteContent = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => NoteTransactionScreen(
-                                  content: note ?? '',
-                                )));
-                        print(noteContent);
-                        if (noteContent != null) {
-                          setState(() {
-                            note = noteContent;
-                          });
-                        }
-                      },
-                      child: buildNoteInput(
-                        display: note == null ? null : note,
-                      )
-                  ),
-
-                  // Divider ngăn cách giữa các input field.
-                  Container(
-                    margin: EdgeInsets.only(left: 70),
-                    child: Divider(
-                      color: Colors.white12,
-                      thickness: 1,
-                    ),
-                    height: 2,
-                  ),
-
-                  // Không cho phép sửa Wallet khi edit bill.
-                  // Hàm build Wallet Selection.
-                  buildWalletSelection(
-                    display: widget.wallet == null ? null : widget.wallet.name,
-                    iconPath: widget.wallet == null ? null : widget.wallet.iconID,
-                  ),
-                ])),
-            Container(
-                margin: EdgeInsets.only(top: 30.0),
-                decoration: BoxDecoration(
-                    color: Colors.grey[900],
-                    border: Border(
-                        top: BorderSide(
-                          color: Colors.white12,
-                          width: 0.5,
-                        ),
-                        bottom: BorderSide(
-                          color: Colors.white12,
-                          width: 0.5,
-                        ))),
-                child: GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () async {
-                      var res = await showCupertinoModalBottomSheet(
-                          enableDrag: false,
-                          isDismissible: false,
-                          backgroundColor: Colors.grey[900],
-                          context: context,
-                          builder: (context) => RepeatOptionScreen(
-                            repeatOption: repeatOption,
-                          )
+              centerTitle: true,
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    if (listBills.any((element) => element.category.name == category.name)) {
+                      _showAlertDialog('This category has already been used,\nplease pick again!');
+                    } else {
+                      Bill _bill =
+                      Bill(
+                        id: widget.bill.id,
+                        category: category,
+                        amount: amount,
+                        walletId: widget.wallet.id,
+                        note: note,
+                        transactionIdList: widget.bill.transactionIdList,
+                        repeatOption: repeatOption,
+                        isFinished: widget.bill.isFinished,
+                        dueDates: widget.bill.dueDates,
+                        paidDueDates: widget.bill.paidDueDates,
                       );
-                      if (res != null)
-                        setState(() {
-                          repeatOption = res;
-                        });
-                    },
-                    child: buildRepeatOptions()
-                )
+
+                      await _firestore.updateBill(
+                          _bill, widget.wallet);
+                      Navigator.pop(context, _bill);
+                    }
+                  },
+                  child: Text('Save',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF4FCC5C),
+                      )),
+                ),
+              ],
             ),
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-                child: Text(
-                  'Repeat every ${repeatOption.rangeAmount} ${repeatOption.extraAmountInfo}'
-                      '${repeatOption.rangeAmount == 1 ? '' : 's'} '
-                      'from ${DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime)}',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 13.0,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white60,
-                  ),
-                ))
-          ],
-        ));
+            body: ListView(
+              physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              children: [
+                Container(
+                    margin: EdgeInsets.only(top: 30.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[900],
+                        border: Border(
+                            top: BorderSide(
+                              color: Colors.white12,
+                              width: 0.5,
+                            ),
+                            bottom: BorderSide(
+                              color: Colors.white12,
+                              width: 0.5,
+                            ))),
+                    child: Column(children: [
+                      // Hàm build Amount Input.
+                      GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            final resultAmount = await Navigator.push(context,
+                                MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                            if (resultAmount != null)
+                              setState(() {
+                                amount =
+                                    double.parse(resultAmount);
+                              });
+                          },
+                          child: buildAmountInput(
+                              display: amount == null ? null : (currencySymbol + ' ' + amount.toString())
+                          )
+                      ),
+
+                      // Divider ngăn cách giữa các input field.
+                      Container(
+                        margin: EdgeInsets.only(left: 70),
+                        child: Divider(
+                          color: Colors.white12,
+                          thickness: 1,
+                        ),
+                      ),
+
+                      // Hàm build Category Selection.
+                      GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            final selectCate = await showCupertinoModalBottomSheet(
+                                isDismissible: true,
+                                backgroundColor: Colors.grey[900],
+                                context: context,
+                                builder: (context) => CategoriesTransactionScreen());
+                            if (selectCate != null) {
+                              setState(() {
+                                category = selectCate;
+                              });
+                            }
+                          },
+                          child: buildCategorySelection(
+                            display: category == null ? null : category.name,
+                            iconPath: category == null ? null : category.iconID,
+                          )
+                      ),
+
+                      // Divider ngăn cách giữa các input field.
+                      Container(
+                        margin: EdgeInsets.only(left: 70, top: 8),
+                        child: Divider(
+                          color: Colors.white12,
+                          thickness: 1,
+                        ),
+                        height: 2,
+                      ),
+
+                      // Hàm build Note Input.
+                      GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            final noteContent = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => NoteTransactionScreen(
+                                      content: note ?? '',
+                                    )));
+                            print(noteContent);
+                            if (noteContent != null) {
+                              setState(() {
+                                note = noteContent;
+                              });
+                            }
+                          },
+                          child: buildNoteInput(
+                            display: note == null ? null : note,
+                          )
+                      ),
+
+                      // Divider ngăn cách giữa các input field.
+                      Container(
+                        margin: EdgeInsets.only(left: 70),
+                        child: Divider(
+                          color: Colors.white12,
+                          thickness: 1,
+                        ),
+                        height: 2,
+                      ),
+
+                      // Không cho phép sửa Wallet khi edit bill.
+                      // Hàm build Wallet Selection.
+                      buildWalletSelection(
+                        display: widget.wallet == null ? null : widget.wallet.name,
+                        iconPath: widget.wallet == null ? null : widget.wallet.iconID,
+                      ),
+                    ])),
+                Container(
+                    margin: EdgeInsets.only(top: 30.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[900],
+                        border: Border(
+                            top: BorderSide(
+                              color: Colors.white12,
+                              width: 0.5,
+                            ),
+                            bottom: BorderSide(
+                              color: Colors.white12,
+                              width: 0.5,
+                            ))),
+                    child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () async {
+                          var res = await showCupertinoModalBottomSheet(
+                              enableDrag: false,
+                              isDismissible: false,
+                              backgroundColor: Colors.grey[900],
+                              context: context,
+                              builder: (context) => RepeatOptionScreen(
+                                repeatOption: repeatOption,
+                              )
+                          );
+                          if (res != null)
+                            setState(() {
+                              repeatOption = res;
+                            });
+                        },
+                        child: buildRepeatOptions()
+                    )
+                ),
+                Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                    child: Text(
+                      'Repeat every ${repeatOption.rangeAmount} ${repeatOption.extraAmountInfo}'
+                          '${repeatOption.rangeAmount == 1 ? '' : 's'} '
+                          'from ${DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime)}',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white60,
+                      ),
+                    ))
+              ],
+            ));
+      }
+    );
   }
 
   Widget buildAmountInput({String display}) {

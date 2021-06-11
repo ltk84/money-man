@@ -264,8 +264,8 @@ class BillTransactionListState extends State<BillTransactionList> {
             itemCount: transListSortByDate[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  await Navigator.push(
                       context,
                       PageTransition(
                           child: TransactionDetail(
@@ -273,6 +273,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                             wallet: widget.currentWallet,
                           ),
                           type: PageTransitionType.rightToLeft));
+                  setState(() { });
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
