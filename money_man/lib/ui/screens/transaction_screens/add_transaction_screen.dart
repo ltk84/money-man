@@ -101,17 +101,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   _showAlertDialog('Please pick category');
                 } else {
                   MyTransaction trans;
-                  // if (pickDate == null) {
-                  //   trans = MyTransaction(
-                  //       id: 'id',
-                  //       amount: amount,
-                  //       note: note,
-                  //       date: DateTime.parse(
-                  //           DateFormat("yyyy-MM-dd").format(DateTime.now())),
-                  //       currencyID: wallet.currencyID,
-                  //       category: cate);
-                  //   print(trans.date.toString() + "chua pick");
-                  // } else {
                   trans = MyTransaction(
                       id: 'id',
                       amount: amount,
@@ -124,7 +113,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   // }
                   await _firestore.addTransaction(selectedWallet, trans);
                   if (event != null) {
-                    event.transactionIdList.add(trans.id);
                     await _firestore.updateEventAmountAndTransList(
                         event, selectedWallet, trans);
                   }
@@ -427,6 +415,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       currencySymbol = CurrencyService()
                           .findByCode(selectedWallet.currencyID)
                           .symbol;
+                      event = null;
                     });
                 },
               ),
@@ -540,12 +529,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintStyle: TextStyle(
-                          color: selectedWallet == null
+                          color: event == null
                               ? Colors.grey[600]
                               : Colors.white,
                           fontFamily: 'Montserrat',
                           fontSize: 16.0,
-                          fontWeight: selectedWallet == null
+                          fontWeight: event == null
                               ? FontWeight.w500
                               : FontWeight.w600,
                         ),

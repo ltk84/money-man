@@ -27,7 +27,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
   Event event = Event(
     iconPath: 'assets/icons/wallet_2.svg',
     id: 'id',
-    name: 'name',
+    name: 'na',
     endDate: DateTime.now(),
     walletId:'id',
     isFinished: false,
@@ -83,7 +83,9 @@ class _TransactionDetailState extends State<TransactionDetail> {
                   MaterialPageRoute(
                       builder: (_) => EditTransactionScreen(
                           transaction: widget.transaction,
-                          wallet: widget.wallet)));
+                          wallet: widget.wallet,
+                        event: event,
+                      )));
               if (updatedTrans != null)
                 setState(() {
                   widget.transaction = updatedTrans;

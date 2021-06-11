@@ -27,6 +27,12 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
     super.initState();
   }
   @override
+  void didUpdateWidget(covariant EventListTransactionScreen oldWidget) {
+    _currentEvent = widget.currentEvent;
+    _eventWallet = widget.eventWallet;
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
      return StreamBuilder<Object>(

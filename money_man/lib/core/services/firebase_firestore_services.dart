@@ -320,12 +320,23 @@ class FirebaseFireStoreService {
     else
       wallet.amount -= transaction.amount;
 
+    if(transaction.eventID != "")
+      {
+        final event = await getEventByID(transaction.eventID, wallet);
+        Event _event = event;
+        if (transaction.category.type == 'expense')
+          _event.spent += transaction.amount;
+        else
+          _event.spent -= transaction.amount;
+        _event.transactionIdList.removeWhere((element) => element == transaction.id);
+        await updateEvent(_event, wallet);
+      }
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
   }
 
   // update transaction
-  Future updateTransaction(MyTransaction transaction, Wallet wallet) async {
+  Future updateTransaction(MyTransaction transaction, Wallet wallet ,  Event event) async {
     // Lấy reference đến collection transactions
     CollectionReference transactionRef = users
         .doc(uid)
@@ -351,6 +362,39 @@ class FirebaseFireStoreService {
     else
       wallet.amount += transaction.amount;
 
+    //lấy event cũ
+    Event oldEvent;
+    CollectionReference eventRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('events');
+
+    await eventRef
+        .doc(transaction.eventID)
+        .get().then((value) {
+      oldEvent = Event.fromMap(value.data());
+    });
+    if(oldTransaction.eventID != "") {
+      //Tính toán lại spent cho event cũ
+      if (oldTransaction.category.type == 'expense')
+        oldEvent.spent += oldTransaction.amount;
+      else
+        oldEvent.spent -= oldTransaction.amount;
+
+      transaction.eventID = event.id;
+
+      //Loại bỏ transaction khỏi event cũ
+      oldEvent.transactionIdList.removeWhere(
+              (element) => element == oldTransaction.id);
+
+      //update cho event cũ
+      await updateEvent(oldEvent, wallet);
+
+      //update cho event mới
+      event.transactionIdList.add(transaction.id);
+      await updateEventAmountAndTransList(event, wallet, transaction);
+    }
     // update transaction
     await transactionRef.doc(transaction.id).update(transaction.toMap());
 
