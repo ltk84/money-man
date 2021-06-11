@@ -218,6 +218,7 @@ class _AnalyticRevenueAndExpenditureScreen
                                 beginDate: beginDate,
                                 endDate: endDate,
                                 currentWallet: widget.currentWallet,
+
                               ),
                             )
                           ]);

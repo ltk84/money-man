@@ -84,7 +84,7 @@ class _BarChartInformation extends State<BarChartInformation> {
   Widget build(BuildContext context) {
     return Container(
       width: 450,
-      height: 450,
+      height: 1000,
       decoration: BoxDecoration(
           border: Border(
               bottom: BorderSide(

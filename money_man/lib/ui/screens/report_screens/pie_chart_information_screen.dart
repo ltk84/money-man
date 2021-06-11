@@ -30,14 +30,16 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
   List<MyCategory> _categoryList;
   List<double> _info = [];
   Color _color;
+  double _height;
+  List<MyCategory> _listCategoryReport = [];
+
   final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
-  List<MyCategory> _listCategoryReport = [];
+
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
-
   _scrollListener() {
     if (_controller.offset > 0) {
       setState(() {
@@ -58,7 +60,7 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
       });
     }
   }
-
+  // Phần này để check xem mình đã Scroll tới đâu trong ListView
   bool isContained(MyCategory currentCategory, List<MyCategory> categoryList) {
     if (categoryList.isEmpty) return false;
     int n = 0;
@@ -101,35 +103,41 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
 
   @override
   void initState() {
-    super.initState();
     _transactionList = widget.currentList;
     _transactionList.sort((a, b) => b.date.compareTo(a.date));
     _categoryList = widget.categoryList;
-    _controller = ScrollController();
     _color = widget.color;
-    _controller.addListener(_scrollListener);
     generateData(_categoryList, _transactionList);
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
+    super.initState();
+    _height = _listCategoryReport.length.toDouble()*65;
   }
 
   @override
   void didUpdateWidget(covariant PieChartInformationScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
     _transactionList = widget.currentList ?? [];
     _transactionList.sort((a, b) => b.date.compareTo(a.date));
     _categoryList = widget.categoryList ?? [];
-    _controller = ScrollController();
     _color = widget.color;
+    _controller = ScrollController();
     _controller.addListener(_scrollListener);
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 500,
-      height: MediaQuery.of(context).size.height - 400,
+      width: 450,
+      height: _height,
+      decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                color: Colors.black,
+                width: 1.0,
+              ))),
       padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
       child: ListView.builder(
-        physics: BouncingScrollPhysics(),
         controller: _controller,
         itemCount: _listCategoryReport.length,
         itemBuilder: (context, index) {
@@ -184,18 +192,6 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                                 color: _color,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold)),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                                _listCategoryReport[index].type == 'expense'
-                                    ? '-' + _info[index].toString()
-                                    : '+' + _info[index].toString(),
-                                style: TextStyle(
-                                    color: _color,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
                       ],
                     )
                   ],
@@ -203,6 +199,7 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                 Container(
                   height: 25,
                 )
+
               ],
             ),
           );

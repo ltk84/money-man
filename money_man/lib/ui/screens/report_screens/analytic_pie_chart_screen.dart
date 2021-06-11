@@ -37,6 +37,31 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
   List<double> _info = [];
   String _content;
   GlobalKey key1;
+  final double fontSizeText = 30;
+  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
+  int reachTop = 0;
+  int reachAppBar = 0;
+  ScrollController _controller = ScrollController();
+  _scrollListener() {
+    if (_controller.offset > 0) {
+      setState(() {
+        reachAppBar = 1;
+      });
+    } else {
+      setState(() {
+        reachAppBar = 0;
+      });
+    }
+    if (_controller.offset >= fontSizeText - 5) {
+      setState(() {
+        reachTop = 1;
+      });
+    } else {
+      setState(() {
+        reachTop = 0;
+      });
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -44,7 +69,9 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     _categoryList = widget.categoryList;
     _total = widget.total;
     _content = widget.content;
+    _controller = ScrollController();
     _color = widget.color;
+    _controller.addListener(_scrollListener);
   }
 
   @override
@@ -55,7 +82,9 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     _categoryList = widget.categoryList ?? [];
     _total = widget.total;
     _content = widget.content;
+    _controller = ScrollController();
     _color = widget.color;
+    _controller.addListener(_scrollListener);
   }
 
   @override
@@ -73,10 +102,13 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
           elevation: 0,
         ),
         body: Container(
-          child: Column(
+          color: Colors.black,
+          child: ListView(
+            controller: _controller,
+            physics: BouncingScrollPhysics(),
             children: <Widget>[
               Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                 decoration: BoxDecoration(
                     color: Colors.black,
                     border: Border(
@@ -117,7 +149,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                       Container(
                         width: 200,
                         height: 200,
-                        child: PieChartScreen(
+                        child:  PieChartScreen(
                             isShowPercent: true,
                             currentList: _transactionList,
                             categoryList: _categoryList,
@@ -130,13 +162,14 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                           currentWallet: widget.currentWallet,
                           color: _color,
                         ),
-                      ),
+                      )
                     ]);
                   },
                 ),
               ),
             ],
           ),
-        ));
+        )
+    );
   }
 }
