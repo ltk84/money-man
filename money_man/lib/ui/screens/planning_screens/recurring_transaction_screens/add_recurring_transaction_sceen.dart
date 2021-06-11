@@ -13,7 +13,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +38,7 @@ class _AddRecurringTransactionScreenState
   Wallet _wallet;
   RepeatOption repeatOption;
 
-  var dateUtility = new DateUtil();
+  var dateUtility;
   DateTime now =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
@@ -54,6 +54,7 @@ class _AddRecurringTransactionScreenState
         beginDateTime: now,
         type: 'forever',
         extraTypeInfo: null);
+    dateUtility = new DateUtil();
   }
 
   @override
@@ -196,7 +197,7 @@ class _AddRecurringTransactionScreenState
                         final noteContent = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => NoteTransactionScreen(
+                                builder: (_) => NoteScreen(
                                       content: note ?? '',
                                     )));
 
@@ -207,7 +208,7 @@ class _AddRecurringTransactionScreenState
                         }
                       },
                       child: buildNoteInput(
-                        display: this.note == null ? null : this.note,
+                        display: this.note == '' ? null : this.note,
                       )),
 
                   // Divider ngăn cách giữa các input field.

@@ -15,7 +15,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:provider/provider.dart';
 
 class EditRecurringTransactionScreen extends StatefulWidget {
@@ -191,7 +191,7 @@ class _EditRecurringTransactionScreenState
                         final noteContent = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => NoteTransactionScreen(
+                                builder: (_) => NoteScreen(
                                       content: note ?? '',
                                     )));
                         print(noteContent);
@@ -375,7 +375,7 @@ class _EditRecurringTransactionScreenState
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
                   child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
-              Text(display ?? 'Note',
+              Text(display == null || display == '' ? 'Note' : display,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,

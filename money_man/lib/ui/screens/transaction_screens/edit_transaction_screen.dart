@@ -9,9 +9,8 @@ import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:provider/provider.dart';
-
-import 'note_transaction_srcreen.dart';
 
 class EditTransactionScreen extends StatefulWidget {
   final MyTransaction transaction;
@@ -360,7 +359,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500),
-                    hintText: note.length == 0 ? 'Write note' : note),
+                    hintText: note == '' || note == null ? 'Write note' : note),
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',
@@ -370,7 +369,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   final noteContent = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => NoteTransactionScreen(
+                          builder: (_) => NoteScreen(
                                 content: note,
                               )));
                   print(noteContent);

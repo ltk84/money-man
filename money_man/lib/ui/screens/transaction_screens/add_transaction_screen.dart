@@ -11,7 +11,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +43,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     selectedWallet = widget.currentWallet;
     currencySymbol =
         CurrencyService().findByCode(selectedWallet.currencyID).symbol;
-    note = null;
   }
 
   @override
@@ -428,7 +427,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   final noteContent = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => NoteTransactionScreen(
+                          builder: (_) => NoteScreen(
                                 content: note ?? '',
                               )));
                   print(noteContent);
@@ -451,7 +450,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500),
-                    hintText: note == null ? 'Write note' : note),
+                    hintText: note == '' || note == null ? 'Write note' : note),
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',

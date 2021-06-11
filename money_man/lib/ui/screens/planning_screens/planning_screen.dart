@@ -81,6 +81,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('planning build');
     return Scaffold(
         backgroundColor: Colors.black,
         //extendBodyBehindAppBar: true,
@@ -121,131 +122,186 @@ class _PlanningScreenState extends State<PlanningScreen> {
           physics: BouncingScrollPhysics(),
           controller: _controller,
           children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
-                child: reachTop == 0
-                    ? Hero(
-                        tag: 'alo',
-                        child: Text('Planning',
-                            style: Theme.of(context).textTheme.headline4))
-                    : Text('', style: Theme.of(context).textTheme.headline4),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
-              //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[900],
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => BudgetScreen()));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                    child: Column(
-                      children: [
-                        Icon(Icons.all_inbox, color: Colors.white, size: 40.0),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Text('BUDGET',
-                            style: Theme.of(context).textTheme.subtitle2),
-                      ],
-                    ),
-                  )),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
-              //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[900],
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                          child: BillsMainScreen(),
-                          type: PageTransitionType.rightToLeft),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                    child: Column(
-                      children: [
-                        Icon(Icons.sticky_note_2_outlined,
-                            color: Colors.white, size: 40.0),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Text('BILLS',
-                            style: Theme.of(context).textTheme.subtitle2),
-                      ],
-                    ),
-                  )),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
-              //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[900],
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: TextButton(
-                  onPressed: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                    child: Column(
-                      children: [
-                        Icon(Icons.event, color: Colors.white, size: 40.0),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Text('EVENTS',
-                            style: Theme.of(context).textTheme.subtitle2),
-                      ],
-                    ),
-                  )),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
-              //padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[900],
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                          child:
-                              RecurringTransactionMainScreen(wallet: _wallet),
-                          type: PageTransitionType.rightToLeft),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                    child: Column(
-                      children: [
-                        Icon(Icons.event, color: Colors.white, size: 40.0),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Text('RECURRING',
-                            style: Theme.of(context).textTheme.subtitle2),
-                      ],
-                    ),
-                  )),
-            ),
+            PlanningTitle(reachTop: reachTop),
+            BudgetContainer(),
+            BillContainer(),
+            EventContainer(),
+            RecurringTransactionContainer(wallet: _wallet),
           ],
         ));
+  }
+}
+
+class PlanningTitle extends StatelessWidget {
+  const PlanningTitle({
+    Key key,
+    @required this.reachTop,
+  }) : super(key: key);
+
+  final int reachTop;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
+        child: reachTop == 0
+            ? Hero(
+                tag: 'alo',
+                child: Text('Planning',
+                    style: Theme.of(context).textTheme.headline4))
+            : Text('', style: Theme.of(context).textTheme.headline4),
+      ),
+    );
+  }
+}
+
+class RecurringTransactionContainer extends StatelessWidget {
+  const RecurringTransactionContainer({
+    Key key,
+    @required Wallet wallet,
+  })  : _wallet = wallet,
+        super(key: key);
+
+  final Wallet _wallet;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
+      //padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                  child: RecurringTransactionMainScreen(wallet: _wallet),
+                  type: PageTransitionType.rightToLeft),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            child: Column(
+              children: [
+                Icon(Icons.event, color: Colors.white, size: 40.0),
+                SizedBox(
+                  height: 5.0,
+                ),
+                Text('RECURRING', style: Theme.of(context).textTheme.subtitle2),
+              ],
+            ),
+          )),
+    );
+  }
+}
+
+class EventContainer extends StatelessWidget {
+  const EventContainer({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
+      //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: TextButton(
+          onPressed: () {},
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            child: Column(
+              children: [
+                Icon(Icons.event, color: Colors.white, size: 40.0),
+                SizedBox(
+                  height: 5.0,
+                ),
+                Text('EVENTS', style: Theme.of(context).textTheme.subtitle2),
+              ],
+            ),
+          )),
+    );
+  }
+}
+
+class BillContainer extends StatelessWidget {
+  const BillContainer({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
+      //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                  child: BillsMainScreen(),
+                  type: PageTransitionType.rightToLeft),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            child: Column(
+              children: [
+                Icon(Icons.sticky_note_2_outlined,
+                    color: Colors.white, size: 40.0),
+                SizedBox(
+                  height: 5.0,
+                ),
+                Text('BILLS', style: Theme.of(context).textTheme.subtitle2),
+              ],
+            ),
+          )),
+    );
+  }
+}
+
+class BudgetContainer extends StatelessWidget {
+  const BudgetContainer({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
+      //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: TextButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => BudgetScreen()));
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            child: Column(
+              children: [
+                Icon(Icons.all_inbox, color: Colors.white, size: 40.0),
+                SizedBox(
+                  height: 5.0,
+                ),
+                Text('BUDGET', style: Theme.of(context).textTheme.subtitle2),
+              ],
+            ),
+          )),
+    );
   }
 }
