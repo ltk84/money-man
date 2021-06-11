@@ -864,6 +864,7 @@ class _TransactionScreen extends State<TransactionScreen>
                   }
                 },
                 itemBuilder: (context) {
+                  print('popup build');
                   return [
                     PopupMenuItem(
                         value: 'Select time range',
@@ -977,6 +978,7 @@ class _TransactionScreen extends State<TransactionScreen>
         body: StreamBuilder<List<MyTransaction>>(
             stream: _firestore.transactionStream(_wallet, _limit),
             builder: (context, snapshot) {
+              print('streambuilder build');
               List<MyTransaction> _transactionList = snapshot.data ?? [];
 
               _transactionList = sortTransactionBasedOnTime(
@@ -1058,6 +1060,7 @@ class _TransactionScreen extends State<TransactionScreen>
       double totalInCome,
       double totalOutCome,
       double total) {
+    print('build function');
     return Container(
       color: Colors.black,
       child: ListView.builder(
@@ -1093,6 +1096,7 @@ class _TransactionScreen extends State<TransactionScreen>
       double totalInCome,
       double totalOutCome,
       double total) {
+    print('build function');
     return Container(
       color: Colors.black,
       child: ListView.builder(
@@ -1249,6 +1253,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
   Container buildBottomViewByDate(List<List<MyTransaction>> transListSortByDate,
       int xIndex, double totalAmountInDay) {
+    print('build bottom by date');
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
@@ -1362,6 +1367,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
   StickyHeader buildHeader(
       double totalInCome, double totalOutCome, double total) {
+    print('build header');
     return StickyHeader(
       header: SizedBox(height: 0),
       content: Container(
