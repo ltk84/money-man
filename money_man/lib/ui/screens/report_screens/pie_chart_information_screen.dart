@@ -151,16 +151,10 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                             endDate:
                                 _listTransactionOfEachCatecory[index][0].date,
                             beginDate: _listTransactionOfEachCatecory[index][
-                                    _listTransactionOfEachCatecory[index]
-                                            .length -
-                                        1]
-                                .date,
+                                    _listTransactionOfEachCatecory[index].length - 1].date,
                             totalMoney: _listTransactionOfEachCatecory[index][0]
                                         .category
-                                        .type ==
-                                    'expense'
-                                ? -_info[index]
-                                : _info[index],
+                                        .type == 'expense' ? -_info[index] : _info[index],
                             currentWallet: widget.currentWallet,
                           )));
             },

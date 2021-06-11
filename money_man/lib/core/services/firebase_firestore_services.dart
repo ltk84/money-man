@@ -393,7 +393,10 @@ class FirebaseFireStoreService {
 
       //update cho event mới
       event.transactionIdList.add(transaction.id);
-      await updateEventAmountAndTransList(event, wallet, transaction);
+      if(event.id == oldEvent.id)
+        await updateEventAmountAndTransList(oldEvent, wallet, transaction);
+      else
+        await updateEventAmountAndTransList(event, wallet, transaction);
     }
     if (transaction.eventID != "" && oldTransaction.eventID == "")
       {

@@ -5,6 +5,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_time.dart';
 import 'package:provider/provider.dart';
+import 'package:money_man/ui/screens/planning_screens/event_screen/list_transaction_event.dart';
 class EventListTransactionScreen extends StatefulWidget {
   Event currentEvent;
   Wallet eventWallet;
@@ -72,12 +73,13 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                       ),
                   )
                 ):
-              ReportListTransaction(
+            ListTransactionEvent(
                 endDate : listTransactionOfEventByDate[0].date,
                 beginDate: listTransactionOfEventByDate[listTransactionOfEventByDate.length-1].date,
                 currentList: listTransactionOfEventByDate,
                 totalMoney : total,
                 currentWallet: _eventWallet,
+              event: _currentEvent,
             );
          }
        );
