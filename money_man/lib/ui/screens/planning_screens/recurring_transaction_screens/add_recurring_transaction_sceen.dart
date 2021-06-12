@@ -55,6 +55,7 @@ class _AddRecurringTransactionScreenState
         type: 'forever',
         extraTypeInfo: null);
     dateUtility = new DateUtil();
+    note = '';
   }
 
   @override

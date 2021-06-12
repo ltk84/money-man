@@ -236,6 +236,25 @@ class FirebaseFireStoreService {
         .collection('transactions')
         .doc();
 
+    // Update amount của wallet
+    if (transaction.category.type == 'expense')
+      wallet.amount -= transaction.amount;
+    else if (transaction.category.type == 'income')
+      wallet.amount += transaction.amount;
+    else {
+      if (transaction.category.name == 'Debt') {
+        wallet.amount += transaction.amount;
+        transaction.note += ' from someone';
+      } else if (transaction.category.name == 'Loan') {
+        wallet.amount -= transaction.amount;
+        transaction.note += ' to someone';
+      } else if (transaction.category.name == 'Repayment') {
+        wallet.amount -= transaction.amount;
+      } else {
+        wallet.amount += transaction.amount;
+      }
+    }
+
     // gán id cho transaction
     transaction.id = transactionRef.id;
 
@@ -250,12 +269,6 @@ class FirebaseFireStoreService {
     await transactionRef
         .update({'amountSearch': FieldValue.arrayUnion(searchList)}).catchError(
             (error) => print(error));
-
-    // Update amount của wallet
-    if (transaction.category.type == 'expense')
-      wallet.amount -= transaction.amount;
-    else
-      wallet.amount += transaction.amount;
 
     // udpate wallet trong list và wallet đang được chọn
     await updateWallet(wallet);
@@ -347,14 +360,38 @@ class FirebaseFireStoreService {
     // Tính toán để lấy lại amount cũ của ví
     if (oldTransaction.category.type == 'expense')
       wallet.amount += oldTransaction.amount;
-    else
+    else if (oldTransaction.category.type == 'income')
       wallet.amount -= oldTransaction.amount;
+    else {
+      if (oldTransaction.category.name == 'Debt') {
+        wallet.amount -= oldTransaction.amount;
+      } else if (oldTransaction.category.name == 'Loan') {
+        wallet.amount += oldTransaction.amount;
+      } else if (oldTransaction.category.name == 'Repayment') {
+        wallet.amount += oldTransaction.amount;
+      } else {
+        wallet.amount -= oldTransaction.amount;
+      }
+    }
 
     // Tính toán lấy amount mới của ví
     if (transaction.category.type == 'expense')
       wallet.amount -= transaction.amount;
-    else
+    else if (transaction.category.type == 'income')
       wallet.amount += transaction.amount;
+    else {
+      if (transaction.category.name == 'Debt') {
+        wallet.amount += transaction.amount;
+        transaction.note += ' from someone';
+      } else if (transaction.category.name == 'Loan') {
+        wallet.amount -= transaction.amount;
+        transaction.note += ' to someone';
+      } else if (transaction.category.name == 'Repayment') {
+        wallet.amount -= transaction.amount;
+      } else {
+        wallet.amount += transaction.amount;
+      }
+    }
 
     // update transaction
     await transactionRef.doc(transaction.id).update(transaction.toMap());

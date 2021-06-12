@@ -62,6 +62,7 @@ dependencies:
   path_provider: ^2.0.1
   image_gallery_saver: ^1.6.9
   date_util: ^0.1.4
+  fluttercontactpicker: ^4.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

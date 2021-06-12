@@ -200,6 +200,27 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.0))),
                     ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: Icon(Icons.account_balance,
+                              color: Colors.grey[500], size: 25.0)),
+                      Expanded(
+                          flex: 3,
+                          child: Text(
+                              widget.transaction.contact == null
+                                  ? 'With someone'
+                                  : 'With ${widget.transaction.contact}',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: ' Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0))),
+                    ],
                   )
                 ],
               ),

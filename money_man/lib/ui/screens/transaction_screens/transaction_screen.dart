@@ -1218,10 +1218,11 @@ class _TransactionScreen extends State<TransactionScreen>
                       ),
                       Expanded(
                         child: Text(
-                            transListSortByCategory[xIndex][yIndex]
-                                        .category
-                                        .type ==
-                                    'income'
+                            transListSortByCategory[xIndex][yIndex].category.type == 'income' ||
+                                    transListSortByCategory[xIndex][yIndex].category.name ==
+                                        'Debt' ||
+                                    transListSortByCategory[xIndex][yIndex].category.name ==
+                                        'Deft Collection'
                                 ? '+' +
                                     transListSortByCategory[xIndex][yIndex]
                                         .amount
@@ -1236,9 +1237,17 @@ class _TransactionScreen extends State<TransactionScreen>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: transListSortByCategory[xIndex][yIndex]
-                                            .category
-                                            .type ==
-                                        'income'
+                                                .category
+                                                .type ==
+                                            'income' ||
+                                        transListSortByCategory[xIndex][yIndex]
+                                                .category
+                                                .name ==
+                                            'Debt' ||
+                                        transListSortByCategory[xIndex][yIndex]
+                                                .category
+                                                .name ==
+                                            'Deft Collection'
                                     ? Colors.green
                                     : Colors.red[600])),
                       ),
@@ -1343,16 +1352,32 @@ class _TransactionScreen extends State<TransactionScreen>
                       Expanded(
                         child: Text(
                             transListSortByDate[xIndex][yIndex].category.type ==
-                                    'income'
+                                        'income' ||
+                                    transListSortByDate[xIndex][yIndex]
+                                            .category
+                                            .name ==
+                                        'Debt' ||
+                                    transListSortByDate[xIndex][yIndex]
+                                            .category
+                                            .name ==
+                                        'Deft Collection'
                                 ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()} $currencySymbol"
                                 : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()} $currencySymbol",
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .type ==
-                                        'income'
+                                                .category
+                                                .type ==
+                                            'income' ||
+                                        transListSortByDate[xIndex][yIndex]
+                                                .category
+                                                .name ==
+                                            'Debt' ||
+                                        transListSortByDate[xIndex][yIndex]
+                                                .category
+                                                .name ==
+                                            'Deft Collection'
                                     ? Colors.green
                                     : Colors.red[600])),
                       ),

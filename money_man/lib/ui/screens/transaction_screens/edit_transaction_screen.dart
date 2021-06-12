@@ -2,6 +2,7 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:intl/intl.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
@@ -31,6 +32,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
   String currencySymbol;
   double amount;
   String note;
+  String contact;
 
   @override
   void initState() {
@@ -40,6 +42,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
         CurrencyService().findByCode(widget.wallet.currencyID).symbol;
     amount = widget.transaction.amount;
     note = widget.transaction.note;
+    contact = widget.transaction.contact;
   }
 
   @override
@@ -84,13 +87,13 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               onPressed: () async {
                 FocusScope.of(context).requestFocus(FocusNode());
                 MyTransaction _transaction = MyTransaction(
-                  id: widget.transaction.id,
-                  amount: amount,
-                  date: pickDate,
-                  currencyID: widget.transaction.currencyID,
-                  category: widget.transaction.category,
-                  note: note,
-                );
+                    id: widget.transaction.id,
+                    amount: amount,
+                    date: pickDate,
+                    currencyID: widget.transaction.currencyID,
+                    category: widget.transaction.category,
+                    note: note,
+                    contact: contact);
 
                 await _firestore.updateTransaction(_transaction, widget.wallet);
                 Navigator.pop(context, _transaction);
@@ -381,6 +384,41 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   }
                 },
               ),
+            ),
+            ListTile(
+              dense: true,
+              leading: Icon(Icons.account_balance_outlined,
+                  color: Colors.white54, size: 28.0),
+              title: TextFormField(
+                onTap: () async {
+                  final PhoneContact phoneContact =
+                      await FlutterContactPicker.pickPhoneContact();
+                  print(phoneContact.fullName);
+                  setState(() {
+                    contact = phoneContact.fullName;
+                  });
+                },
+                readOnly: true,
+                autocorrect: false,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    hintStyle: TextStyle(
+                        color: Colors.grey[600],
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500),
+                    hintText: contact ?? 'With'),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600),
+              ),
+              trailing: Icon(Icons.chevron_right, color: Colors.white54),
             ),
           ],
         ),
