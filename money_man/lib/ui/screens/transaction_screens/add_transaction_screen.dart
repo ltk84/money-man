@@ -36,6 +36,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   String note;
   String currencySymbol;
   String contact;
+  String hintTextConact;
 
   @override
   void initState() {
@@ -46,6 +47,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     currencySymbol =
         CurrencyService().findByCode(selectedWallet.currencyID).symbol;
     note = '';
+    hintTextConact = 'With';
   }
 
   @override
@@ -96,18 +98,17 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 } else if (cate == null) {
                   _showAlertDialog('Please pick category');
                 } else {
+                  if (contact != null) {
+                    if (cate.type == 'debt & loan') {
+                      if (cate.name == 'Debt') {
+                        note += ' from $contact';
+                      } else if (cate.name == 'Loan') {
+                        note += ' to $contact';
+                      }
+                    }
+                  }
+
                   MyTransaction trans;
-                  // if (pickDate == null) {
-                  //   trans = MyTransaction(
-                  //       id: 'id',
-                  //       amount: amount,
-                  //       note: note,
-                  //       date: DateTime.parse(
-                  //           DateFormat("yyyy-MM-dd").format(DateTime.now())),
-                  //       currencyID: wallet.currencyID,
-                  //       category: cate);
-                  //   print(trans.date.toString() + "chua pick");
-                  // } else {
                   trans = MyTransaction(
                       id: 'id',
                       amount: amount,
@@ -219,10 +220,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     isDismissible: true,
                     backgroundColor: Colors.transparent,
                     context: context,
-                    builder: (context) => CategoriesTransactionScreen());
+                    builder: (context) => CategoriesTransactionScreen(
+                          walletId: widget.currentWallet.id,
+                        ));
                 if (selectCate != null) {
                   setState(() {
                     this.cate = selectCate;
+                    if (cate.type == 'debt & loan') {
+                      if (cate.name == 'Debt') {
+                        hintTextConact = 'Lender';
+                      } else if (cate.name == 'Loan') {
+                        hintTextConact = 'Borrower';
+                      }
+                    }
                   });
                 }
               },
@@ -240,10 +250,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       isDismissible: true,
                       backgroundColor: Colors.grey[900],
                       context: context,
-                      builder: (context) => CategoriesTransactionScreen());
+                      builder: (context) => CategoriesTransactionScreen(
+                            walletId: widget.currentWallet.id,
+                          ));
                   if (selectCate != null) {
                     setState(() {
                       this.cate = selectCate;
+                      if (cate.type == 'debt & loan') {
+                        if (cate.name == 'Debt') {
+                          hintTextConact = 'Lender';
+                        } else if (cate.name == 'Loan') {
+                          hintTextConact = 'Borrower';
+                        }
+                      }
                     });
                   }
                 },
@@ -471,10 +490,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 onTap: () async {
                   final PhoneContact phoneContact =
                       await FlutterContactPicker.pickPhoneContact();
-                  print(phoneContact.fullName);
-                  setState(() {
-                    contact = phoneContact.fullName;
-                  });
+                  if (phoneContact != null) {
+                    print(phoneContact.fullName);
+                    setState(() {
+                      contact = phoneContact.fullName;
+                    });
+                  }
                 },
                 readOnly: true,
                 autocorrect: false,
@@ -489,7 +510,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500),
-                    hintText: contact ?? 'With'),
+                    hintText: contact ?? hintTextConact),
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',

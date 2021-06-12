@@ -225,6 +225,24 @@ class FirebaseFireStoreService {
 
   // TRANSACTION START//
 
+  // get list of transaction with criteria
+  Future<List<MyTransaction>> getListOfTransactionWithCriteria(
+      String criteria, String walletId) async {
+    List<MyTransaction> list = [];
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactions')
+        .where('amount', isEqualTo: 5555)
+        .get()
+        .then((value) {
+      print('get complete with criteria: $criteria');
+      value.docs.map((e) => list.add(MyTransaction.fromMap(e.data()))).toList();
+    }).catchError((error) => print(error));
+    return list;
+  }
+
   // add transaction
   Future<MyTransaction> addTransaction(
       Wallet wallet, MyTransaction transaction) async {

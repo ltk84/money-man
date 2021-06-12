@@ -1,11 +1,26 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/select_other_source.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesTransactionScreen extends StatefulWidget {
+  final String walletId;
+
+  const CategoriesTransactionScreen({Key key, @required this.walletId})
+      : super(key: key);
+
+  @override
+  _CategoriesTransactionScreenState createState() =>
+      _CategoriesTransactionScreenState();
+}
+
+class _CategoriesTransactionScreenState
+    extends State<CategoriesTransactionScreen> with TickerProviderStateMixin {
   // list tab category
   final List<Tab> categoryTypeTab = [
     Tab(
@@ -19,13 +34,6 @@ class CategoriesTransactionScreen extends StatefulWidget {
     ),
   ];
 
-  @override
-  _CategoriesTransactionScreenState createState() =>
-      _CategoriesTransactionScreenState();
-}
-
-class _CategoriesTransactionScreenState
-    extends State<CategoriesTransactionScreen> with TickerProviderStateMixin {
   final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
@@ -141,12 +149,12 @@ class _CategoriesTransactionScreenState
             isScrollable: true,
             indicatorWeight: 3.0,
             controller: _tabController,
-            tabs: widget.categoryTypeTab,
+            tabs: categoryTypeTab,
           ),
         ),
         body: TabBarView(
           controller: _tabController,
-          children: widget.categoryTypeTab.map((e) {
+          children: categoryTypeTab.map((e) {
             return StreamBuilder<List<MyCategory>>(
                 stream: _firestore.categoryStream,
                 builder: (context, snapshot) {
@@ -154,7 +162,8 @@ class _CategoriesTransactionScreenState
                   final _selectCateTab = _listCategories
                       .where((element) =>
                           element.type ==
-                          widget.categoryTypeTab[_tabController.index].text
+                          categoryTypeTab[_tabController.index]
+                              .text
                               .toLowerCase())
                       .toList();
                   return ListView.builder(
@@ -168,7 +177,27 @@ class _CategoriesTransactionScreenState
                               size: 35.0),
                           title: Text(_selectCateTab[index].name,
                               style: Theme.of(context).textTheme.subtitle1),
-                          onTap: () {
+                          onTap: () async {
+                            if (_selectCateTab[index].type == 'debt & loan') {
+                              if (_selectCateTab[index].name == 'Repayment') {
+                                var res = await showCupertinoModalBottomSheet(
+                                    isDismissible: true,
+                                    backgroundColor: Colors.grey[900],
+                                    context: context,
+                                    builder: (context) =>
+                                        SelectOtherSourceScreen(
+                                            title: 'Select payment source',
+                                            titleAtEnd: 'Pay for other payment',
+                                            criteria: 'Debt',
+                                            walletId: widget.walletId));
+                                // if (res != null) {
+                                //   Navigator.pop(context, [
+                                //     _selectCateTab[index],
+                                //   ]);
+                                // }
+                              }
+                            }
+
                             Navigator.pop(context, _selectCateTab[index]);
                           },
                         );

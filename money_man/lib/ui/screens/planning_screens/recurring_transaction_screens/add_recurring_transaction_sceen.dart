@@ -166,8 +166,9 @@ class _AddRecurringTransactionScreenState
                             isDismissible: true,
                             backgroundColor: Colors.grey[900],
                             context: context,
-                            builder: (context) =>
-                                CategoriesTransactionScreen());
+                            builder: (context) => CategoriesTransactionScreen(
+                                  walletId: widget.wallet.id,
+                                ));
                         if (selectCate != null) {
                           setState(() {
                             this.category = selectCate;
