@@ -119,13 +119,9 @@
   <component name="ChangeListManager">
     <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/about_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/about_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_detail_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_edit_information_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_edit_information_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/change_password_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/change_password_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/my_wallets_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/my_wallets_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/style.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/style.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/categories_screens/categories_account_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/categories_screens/categories_account_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/categories_screens/categories_bill_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/categories_screens/categories_bill_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/categories_screens/categories_transaction_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/categories_screens/categories_transaction_screen.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
