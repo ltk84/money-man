@@ -118,10 +118,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/lib/core/models/bill_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/core/models/bill_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bills_main_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bills_main_screen.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
