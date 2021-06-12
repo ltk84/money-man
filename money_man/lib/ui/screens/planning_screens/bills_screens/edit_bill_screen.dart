@@ -13,7 +13,7 @@ import 'package:money_man/ui/screens/categories_screens/categories_bill_screen.d
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
@@ -191,7 +191,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
                             final noteContent = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => NoteTransactionScreen(
+                                    builder: (_) => NoteScreen(
                                       content: note ?? '',
                                     )));
                             print(noteContent);
@@ -201,10 +201,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
                               });
                             }
                           },
-                          child: buildNoteInput(
-                            display: note == null ? null : note,
-                          )
-                      ),
+                          child: buildNoteInput(display: note)),
 
                       // Divider ngăn cách giữa các input field.
                       Container(

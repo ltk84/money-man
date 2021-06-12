@@ -11,10 +11,11 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   Wallet currentWallet;
@@ -34,6 +35,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   Wallet selectedWallet;
   String note;
   String currencySymbol;
+  String contact;
 
   @override
   void initState() {
@@ -43,7 +45,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     selectedWallet = widget.currentWallet;
     currencySymbol =
         CurrencyService().findByCode(selectedWallet.currencyID).symbol;
-    note = null;
+    note = '';
   }
 
   @override
@@ -112,7 +114,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       note: note,
                       date: pickDate,
                       currencyID: selectedWallet.currencyID,
-                      category: cate);
+                      category: cate,
+                      contact: contact);
                   // }
                   await _firestore.addTransaction(selectedWallet, trans);
                   Navigator.pop(context);
@@ -428,7 +431,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   final noteContent = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => NoteTransactionScreen(
+                          builder: (_) => NoteScreen(
                                 content: note ?? '',
                               )));
                   print(noteContent);
@@ -451,7 +454,42 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500),
-                    hintText: note == null ? 'Write note' : note),
+                    hintText: note == '' || note == null ? 'Write note' : note),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600),
+              ),
+              trailing: Icon(Icons.chevron_right, color: Colors.white54),
+            ),
+            ListTile(
+              dense: true,
+              leading: Icon(Icons.account_balance_outlined,
+                  color: Colors.white54, size: 28.0),
+              title: TextFormField(
+                onTap: () async {
+                  final PhoneContact phoneContact =
+                      await FlutterContactPicker.pickPhoneContact();
+                  print(phoneContact.fullName);
+                  setState(() {
+                    contact = phoneContact.fullName;
+                  });
+                },
+                readOnly: true,
+                autocorrect: false,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    hintStyle: TextStyle(
+                        color: Colors.grey[600],
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500),
+                    hintText: contact ?? 'With'),
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',

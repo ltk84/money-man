@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class NoteTransactionScreen extends StatefulWidget {
+class NoteScreen extends StatefulWidget {
   String content;
-  NoteTransactionScreen({
+  NoteScreen({
     Key key,
     @required this.content,
   }) : super(key: key);
 
   @override
-  _NoteTransactionScreenState createState() => _NoteTransactionScreenState();
+  _NoteScreenState createState() => _NoteScreenState();
 }
 
-class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
+class _NoteScreenState extends State<NoteScreen> {
   // String noteContent = '';
   final _formKey = GlobalKey<FormState>();
   final myController = TextEditingController();

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
   ScrollController listScrollController;
-  int _limit = 50;
+  int _limit = 200;
   int _limitIncrement = 20;
   Wallet _wallet;
   bool viewByCategory;
@@ -68,6 +69,10 @@ class _TransactionScreen extends State<TransactionScreen>
         : widget.currentWallet;
     currencySymbol =
         CurrencyService().findByCode(_wallet.currencyID).symbol ?? '';
+
+    var _auth = FirebaseAuthService();
+    var _firestore = FirebaseFireStoreService(uid: _auth.currentUser.uid);
+    _firestore.executeRecurringTransaction(_wallet);
   }
 
   @override
@@ -97,9 +102,6 @@ class _TransactionScreen extends State<TransactionScreen>
 
   void _handleSelectTimeRange(int selected) {
     showMenu(
-      // padding: EdgeInsets.all(10.0),
-      // //icon: Icon(Icons.arrow_drop_down, color: Colors.white),
-      // offset: Offset.fromDirection(40, 40),
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -774,6 +776,8 @@ class _TransactionScreen extends State<TransactionScreen>
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     print('transaction build ' + _wallet.amount.toString());
 
+    // _firestore.executeRecurringTransaction(_wallet);
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black,
@@ -851,14 +855,6 @@ class _TransactionScreen extends State<TransactionScreen>
                       viewByCategory = !viewByCategory;
                     });
                   } else if (value == 'Adjust Balance') {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (_) => AdjustBalanceScreen(
-                    //               wallet: _wallet,
-                    //             )
-                    //     )
-                    // );
                     showCupertinoModalBottomSheet(
                         context: context,
                         builder: (context) =>
@@ -868,6 +864,7 @@ class _TransactionScreen extends State<TransactionScreen>
                   }
                 },
                 itemBuilder: (context) {
+                  print('popup build');
                   return [
                     PopupMenuItem(
                         value: 'Select time range',
@@ -981,6 +978,7 @@ class _TransactionScreen extends State<TransactionScreen>
         body: StreamBuilder<List<MyTransaction>>(
             stream: _firestore.transactionStream(_wallet, _limit),
             builder: (context, snapshot) {
+              print('streambuilder build');
               List<MyTransaction> _transactionList = snapshot.data ?? [];
 
               _transactionList = sortTransactionBasedOnTime(
@@ -1062,6 +1060,7 @@ class _TransactionScreen extends State<TransactionScreen>
       double totalInCome,
       double totalOutCome,
       double total) {
+    print('build function');
     return Container(
       color: Colors.black,
       child: ListView.builder(
@@ -1097,6 +1096,7 @@ class _TransactionScreen extends State<TransactionScreen>
       double totalInCome,
       double totalOutCome,
       double total) {
+    print('build function');
     return Container(
       color: Colors.black,
       child: ListView.builder(
@@ -1218,10 +1218,11 @@ class _TransactionScreen extends State<TransactionScreen>
                       ),
                       Expanded(
                         child: Text(
-                            transListSortByCategory[xIndex][yIndex]
-                                        .category
-                                        .type ==
-                                    'income'
+                            transListSortByCategory[xIndex][yIndex].category.type == 'income' ||
+                                    transListSortByCategory[xIndex][yIndex].category.name ==
+                                        'Debt' ||
+                                    transListSortByCategory[xIndex][yIndex].category.name ==
+                                        'Deft Collection'
                                 ? '+' +
                                     transListSortByCategory[xIndex][yIndex]
                                         .amount
@@ -1236,9 +1237,17 @@ class _TransactionScreen extends State<TransactionScreen>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: transListSortByCategory[xIndex][yIndex]
-                                            .category
-                                            .type ==
-                                        'income'
+                                                .category
+                                                .type ==
+                                            'income' ||
+                                        transListSortByCategory[xIndex][yIndex]
+                                                .category
+                                                .name ==
+                                            'Debt' ||
+                                        transListSortByCategory[xIndex][yIndex]
+                                                .category
+                                                .name ==
+                                            'Deft Collection'
                                     ? Colors.green
                                     : Colors.red[600])),
                       ),
@@ -1253,6 +1262,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
   Container buildBottomViewByDate(List<List<MyTransaction>> transListSortByDate,
       int xIndex, double totalAmountInDay) {
+    print('build bottom by date');
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
@@ -1342,16 +1352,32 @@ class _TransactionScreen extends State<TransactionScreen>
                       Expanded(
                         child: Text(
                             transListSortByDate[xIndex][yIndex].category.type ==
-                                    'income'
+                                        'income' ||
+                                    transListSortByDate[xIndex][yIndex]
+                                            .category
+                                            .name ==
+                                        'Debt' ||
+                                    transListSortByDate[xIndex][yIndex]
+                                            .category
+                                            .name ==
+                                        'Deft Collection'
                                 ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()} $currencySymbol"
                                 : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()} $currencySymbol",
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .type ==
-                                        'income'
+                                                .category
+                                                .type ==
+                                            'income' ||
+                                        transListSortByDate[xIndex][yIndex]
+                                                .category
+                                                .name ==
+                                            'Debt' ||
+                                        transListSortByDate[xIndex][yIndex]
+                                                .category
+                                                .name ==
+                                            'Deft Collection'
                                     ? Colors.green
                                     : Colors.red[600])),
                       ),
@@ -1366,6 +1392,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
   StickyHeader buildHeader(
       double totalInCome, double totalOutCome, double total) {
+    print('build header');
     return StickyHeader(
       header: SizedBox(height: 0),
       content: Container(

@@ -1,11 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 
 class RepeatOption {
-  static List<String> frequencyList = ['daily', 'weekly', 'monthly', 'yearly'];
-  static List<String> typeList = ['forever', 'for', 'until'];
-
   String frequency;
   int rangeAmount;
   dynamic extraAmountInfo;
@@ -42,10 +37,10 @@ class RepeatOption {
           DateTime.tryParse(map['beginDateTime'].toDate().toString()) ?? '',
       type: map['type'],
       extraTypeInfo: map['extraTypeInfo'] == ''
-        ? map['extraTypeInfo']
-        : int.tryParse(map['extraTypeInfo'].toString()) != null
-          ? int.tryParse(map['extraTypeInfo'].toString())
-          : DateTime.tryParse(map['extraTypeInfo'].toDate().toString())
+          ? map['extraTypeInfo']
+          : int.tryParse(map['extraTypeInfo'].toString()) != null
+              ? int.tryParse(map['extraTypeInfo'].toString())
+              : DateTime.tryParse(map['extraTypeInfo'].toDate().toString()),
     );
   }
 }

@@ -59,10 +59,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       builder: (_) => EditTransactionScreen(
                           transaction: widget.transaction,
                           wallet: widget.wallet)));
-              if (updatedTrans != null)
+              if (updatedTrans != null) {
                 setState(() {
                   widget.transaction = updatedTrans;
                 });
+                print(updatedTrans.toMap());
+              }
             },
             child: const Text('Edit',
                 style: TextStyle(
@@ -192,6 +194,27 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       Expanded(
                           flex: 3,
                           child: Text(widget.wallet.name,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: ' Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0))),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: Icon(Icons.account_balance,
+                              color: Colors.grey[500], size: 25.0)),
+                      Expanded(
+                          flex: 3,
+                          child: Text(
+                              widget.transaction.contact == null
+                                  ? 'With someone'
+                                  : 'With ${widget.transaction.contact}',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: ' Montserrat',

@@ -58,11 +58,11 @@ class _PlanningScreenState extends State<PlanningScreen> {
     super.initState();
     _wallet = widget.currentWallet == null
         ? Wallet(
-            id: 'id',
-            name: 'defaultName',
-            amount: 0,
-            currencyID: 'USD',
-            iconID: 'assets/icons/wallet_2.svg')
+        id: 'id',
+        name: 'defaultName',
+        amount: 0,
+        currencyID: 'USD',
+        iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
   }
 
@@ -100,11 +100,11 @@ class _PlanningScreenState extends State<PlanningScreen> {
                 child: AnimatedContainer(
                   duration: Duration(
                       milliseconds:
-                          reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                   //child: Container(
                   //color: Colors.transparent,
                   color: Colors.grey[
-                          reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+                  reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
                   //),
                 ),
@@ -126,9 +126,9 @@ class _PlanningScreenState extends State<PlanningScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
                 child: reachTop == 0
                     ? Hero(
-                        tag: 'alo',
-                        child: Text('Planning',
-                            style: Theme.of(context).textTheme.headline4))
+                    tag: 'alo',
+                    child: Text('Planning',
+                        style: Theme.of(context).textTheme.headline4))
                     : Text('', style: Theme.of(context).textTheme.headline4),
               ),
             ),
@@ -231,7 +231,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                       context,
                       PageTransition(
                           child:
-                              RecurringTransactionMainScreen(wallet: _wallet),
+                          RecurringTransactionMainScreen(wallet: _wallet),
                           type: PageTransitionType.rightToLeft),
                     );
                   },
