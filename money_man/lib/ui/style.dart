@@ -58,6 +58,7 @@ const TextStyle tsChild_Sec = TextStyle(
 // NEW
 
 String fontFamily = 'Montserrat';
+
 Color backgroundColor = Colors.black;
 Color backgroundColor1 = Color(0xFF111111);
 Color foregroundColor = Colors.white;
@@ -68,4 +69,7 @@ Color igButtonColor = Color(0xFFc65072);
 Color fbButtonColor = Color(0xFF2c84d4);
 Color primaryColor = Color(0xff2FB49C);
 Color errorColor = Colors.red[700];
+Color expenseColor = Colors.red[600];
+Color incomeColor = Colors.green;
 Color runningColor = Color(0xFF51f08d);
+Color successColor = Color(0xFF4FCC5C); // Nut Save

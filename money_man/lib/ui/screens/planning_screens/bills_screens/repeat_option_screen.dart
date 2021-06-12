@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/expandable_widget.dart';
 
 class RepeatOptionScreen extends StatefulWidget {
@@ -84,10 +85,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFF111111),
+        backgroundColor: backgroundColor1,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Color(0xFF1c1c1c),
+          backgroundColor: boxBackgroundColor2,
           elevation: 0.0,
           leading: CloseButton(
             onPressed: () {
@@ -96,10 +97,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
           ),
           title: Text('Repeat Options',
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: foregroundColor,
               )),
           centerTitle: true,
         ),
@@ -108,7 +109,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
           BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
-                color: Colors.grey[900],
+                color: boxBackgroundColor,
                 margin: EdgeInsets.only(top: 30.0),
                 child: Column(
                   children: [
@@ -136,10 +137,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                               child: Container(
                                 height: 160,
                                 decoration: BoxDecoration(
-                                    color: Colors.grey[900],
+                                    color: boxBackgroundColor,
                                     border: Border(
                                         bottom: BorderSide(
-                                          color: Colors.white12,
+                                          color: foregroundColor.withOpacity(0.12),
                                           width: 0.5,
                                         )
                                     )
@@ -149,7 +150,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                       brightness: Brightness.dark,
                                       textTheme: CupertinoTextThemeData(
                                           pickerTextStyle: TextStyle(
-                                            fontFamily: 'Montserrat',
+                                            fontFamily: fontFamily,
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.w500,
                                           )
@@ -207,10 +208,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                               child: Container(
                                 height: 160,
                                 decoration: BoxDecoration(
-                                    color: Colors.grey[900],
+                                    color: boxBackgroundColor,
                                     border: Border(
                                         bottom: BorderSide(
-                                          color: Colors.white12,
+                                          color: foregroundColor.withOpacity(0.12),
                                           width: 0.5,
                                         )
                                     )
@@ -220,7 +221,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                       brightness: Brightness.dark,
                                       textTheme: CupertinoTextThemeData(
                                           pickerTextStyle: TextStyle(
-                                            fontFamily: 'Montserrat',
+                                            fontFamily: fontFamily,
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.w500,
                                           )
@@ -275,10 +276,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                           child: Container(
                             height: 160,
                             decoration: BoxDecoration(
-                                color: Colors.grey[900],
+                                color: boxBackgroundColor,
                                 border: Border(
                                     bottom: BorderSide(
-                                      color: Colors.white12,
+                                      color: foregroundColor.withOpacity(0.12),
                                       width: 0.5,
                                     )
                                 )
@@ -288,7 +289,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 brightness: Brightness.dark,
                                 textTheme: CupertinoTextThemeData(
                                   dateTimePickerTextStyle: TextStyle(
-                                    fontFamily: 'Montserrat',
+                                    fontFamily: fontFamily,
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w500,
                                   )
@@ -315,7 +316,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
 
             // Phần dưới này là phần chọn loại lặp lại.
             Container(
-                color: Colors.grey[900],
+                color: boxBackgroundColor,
                 margin: EdgeInsets.only(top: 30.0),
                 child: Column(
                     children: [
@@ -352,10 +353,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                         child: Container(
                           height: 160,
                           decoration: BoxDecoration(
-                              color: Colors.grey[900],
+                              color: boxBackgroundColor,
                               border: Border(
                                   bottom: BorderSide(
-                                    color: Colors.white12,
+                                    color: foregroundColor.withOpacity(0.12),
                                     width: 0.5,
                                   )
                               )
@@ -365,7 +366,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 brightness: Brightness.dark,
                                 textTheme: CupertinoTextThemeData(
                                     dateTimePickerTextStyle: TextStyle(
-                                      fontFamily: 'Montserrat',
+                                      fontFamily: fontFamily,
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w500,
                                     )
@@ -410,10 +411,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                         child: Container(
                           height: 80,
                           decoration: BoxDecoration(
-                              color: Colors.grey[900],
+                              color: boxBackgroundColor,
                               border: Border(
                                   bottom: BorderSide(
-                                    color: Colors.white12,
+                                    color: foregroundColor.withOpacity(0.12),
                                     width: 0.5,
                                   )
                               )
@@ -434,9 +435,9 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                     });
                                   },
                                   style: TextStyle(
-                                    fontFamily: 'Montserrat',
+                                    fontFamily: fontFamily,
                                     fontSize: 15.0,
-                                    color: Colors.white70,
+                                    color: foregroundColor.withOpacity(0.7),
                                     fontWeight: FontWeight.w500,
                                   ),
                                   keyboardAppearance: Brightness.dark,
@@ -447,14 +448,14 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                       enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(5),
                                           borderSide: BorderSide(
-                                            color: Colors.white24,
+                                            color: foregroundColor.withOpacity(0.24),
                                             width: 0.5,
                                           )
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(5),
                                           borderSide: BorderSide(
-                                            color: Colors.white24,
+                                            color: foregroundColor.withOpacity(0.24),
                                             width: 0.5,
                                           )
                                       ),
@@ -465,10 +466,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                               Text(
                                   'time(s)',
                                   style: TextStyle(
-                                    fontFamily: 'Montserrat',
+                                    fontFamily: fontFamily,
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.w500,
-                                    color: Colors.white70,
+                                    color: foregroundColor.withOpacity(0.7),
                                   )
                               ),
                             ],
@@ -486,10 +487,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 12, 15, 12),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.white12,
+                color: foregroundColor.withOpacity(0.12),
                 width: 0.5,
               )
           )
@@ -499,17 +500,17 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
         children: [
           Text('Frequency',
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: foregroundColor,
               )),
           Text(display,
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.white38,
+                color: foregroundColor.withOpacity(0.38),
               )),
         ],
       ),
@@ -520,10 +521,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 12, 15, 12),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.white12,
+                color: foregroundColor.withOpacity(0.12),
                 width: 0.5,
               )
           )
@@ -533,17 +534,17 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
         children: [
           Text('Every',
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: foregroundColor,
               )),
           Text(display,
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.white38,
+                color: foregroundColor.withOpacity(0.38),
               )),
         ],
       ),
@@ -554,10 +555,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 12, 15, 12),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.white12,
+                color: foregroundColor.withOpacity(0.12),
                 width: 0.5,
               )
           )
@@ -567,17 +568,17 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
         children: [
           Text('From',
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: foregroundColor,
               )),
           Text(display,
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.white38,
+                color: foregroundColor.withOpacity(0.38),
               )),
         ],
       ),
@@ -588,10 +589,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
     return Container(
         padding: EdgeInsets.fromLTRB(15, 12, 15, 12),
         decoration: BoxDecoration(
-            color: Colors.grey[900],
+            color: boxBackgroundColor,
             border: Border(
                 bottom: BorderSide(
-                  color: Colors.white12,
+                  color: foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 )
             )
@@ -601,12 +602,12 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
           children: [
             Text('Forever',
                 style: TextStyle(
-                  fontFamily: 'Montserrat',
+                  fontFamily: fontFamily,
                   fontSize: 15.0,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white,
+                  color: foregroundColor,
                 )),
-            !selected ? Container() : Icon(Icons.check, color: Color(0xFF4FCC5C), size: 20.0),
+            !selected ? Container() : Icon(Icons.check, color: successColor, size: 20.0),
             ],
         ),
     );
@@ -616,10 +617,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 12, 15, 12),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.white12,
+                color: foregroundColor.withOpacity(0.12),
                 width: 0.5,
               )
           )
@@ -629,19 +630,19 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
         children: [
           Text('Until',
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: foregroundColor,
               )),
           !selected ? Container() : Text(display,
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.white38,
+                color: foregroundColor.withOpacity(0.38),
               )),
-          !selected ? Container() : Icon(Icons.check, color: Color(0xFF4FCC5C), size: 20.0),
+          !selected ? Container() : Icon(Icons.check, color: successColor, size: 20.0),
         ],
       ),
     );
@@ -651,10 +652,10 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 12, 15, 12),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.white12,
+                color: foregroundColor.withOpacity(0.12),
                 width: 0.5,
               )
           )
@@ -664,19 +665,19 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
         children: [
           Text('For',
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: foregroundColor,
               )),
           !selected ? Container() : Text(display,
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: fontFamily,
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.white38,
+                color: foregroundColor.withOpacity(0.38),
               )),
-          !selected ? Container() : Icon(Icons.check, color: Color(0xFF4FCC5C), size: 20.0),
+          !selected ? Container() : Icon(Icons.check, color: successColor, size: 20.0),
         ],
       ),
     );
