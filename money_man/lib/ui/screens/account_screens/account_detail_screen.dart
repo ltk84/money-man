@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
@@ -73,12 +74,13 @@ class _AccountDetailState extends State<AccountDetail> {
                 tag: 'alo',
                 child: Row(
                   children: [
-                    Icon(Icons.arrow_back_ios, color: Colors.white),
-                    Text('More', style: Theme.of(context).textTheme.headline6)
-                    // Hero(
-                    //     tag: 'alo',
-                    //     child: Text('More', style: Theme.of(context).textTheme.headline6)
-                    // ),
+                    Icon(Icons.arrow_back_ios, color: foregroundColor),
+                    Text('More', style: TextStyle(
+                        color: foregroundColor,
+                        fontFamily: fontFamily,
+                        fontSize: 17.0
+                    )
+                    )
                   ],
                 ),
               ),
@@ -115,32 +117,47 @@ class _AccountDetailState extends State<AccountDetail> {
                 opacity: reachTop == 1 ? 1 : 0,
                 duration: Duration(milliseconds: 100),
                 child: Text('My Account',
-                    style: Theme.of(context).textTheme.headline6)
+                    style: TextStyle(
+                        color: foregroundColor,
+                        fontFamily: fontFamily,
+                        fontSize: 17.0,
+                        fontWeight: FontWeight.w600,
+                    ))
             )
         ),
         body: ListView(
-          physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           controller: _controller,
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
               child: reachTop == 0
                   ? Text('My Account',
-                      style: Theme.of(context).textTheme.headline4)
-                  : Text('', style: Theme.of(context).textTheme.headline4),
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: foregroundColor,
+                          fontFamily: fontFamily,
+                          fontWeight: FontWeight.bold
+                      ))
+                  : Text('', style: TextStyle(
+                  fontSize: 30,
+                  color: foregroundColor,
+                  fontFamily: fontFamily,
+                  fontWeight: FontWeight.bold
+              )),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
               decoration: BoxDecoration(
-                  color: Colors.grey[900],
+                  color: boxBackgroundColor,
                   border: Border(
                       top: BorderSide(
                         width: 0.1,
-                        color: Colors.white,
+                        color: foregroundColor.withOpacity(0.12),
                       ),
                       bottom: BorderSide(
                         width: 0.1,
-                        color: Colors.white,
+                        color: foregroundColor.withOpacity(0.12),
                       ))),
               child: Column(
                 children: [
@@ -155,9 +172,9 @@ class _AccountDetailState extends State<AccountDetail> {
                                 ? _user.displayName.substring(0, 1)
                                 : 'Y',
                       style: TextStyle(
-                          color: Color(0xff2FB49C),
+                          color: primaryColor,
                           fontSize: 30.0,
-                          fontFamily: 'Montserrat',
+                          fontFamily: fontFamily,
                           fontWeight: FontWeight.w400
                       ),
                     ),
@@ -173,28 +190,33 @@ class _AccountDetailState extends State<AccountDetail> {
                             : (_user.phoneNumber != null
                                 ? _user.phoneNumber
                                 : 'Your name'),
-                        style: Theme.of(context).textTheme.subtitle2),
+                        style: TextStyle(
+                            color: foregroundColor,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: fontFamily,
+                            fontSize: 15.0
+                        )),
                   ),
                   Text(
                       _user.email == null
                           ? 'Your email'
                           : (_user.email != '' ? _user.email : 'Your email'),
-                      style: Theme.of(context).textTheme.bodyText2),
+                      style: TextStyle(
+                          color: foregroundColor.withOpacity(0.54),
+                          fontWeight: FontWeight.w400,
+                          fontFamily: fontFamily,
+                          fontSize: 13.0
+                      )),
                   SizedBox(
                     height: 20.0,
                   ),
                   Divider(
                     height: 5,
                     thickness: 0.1,
-                    color: Colors.white,
+                    color: foregroundColor,
                   ),
                   ListTile(
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (BuildContext context) =>
-                      //             ChangePasswordScreen()));
                       showCupertinoModalBottomSheet(
                           context: context,
                           builder: (context) => ChangePasswordScreen()
@@ -203,7 +225,12 @@ class _AccountDetailState extends State<AccountDetail> {
                     dense: true,
                     title: Text(
                       'Change password',
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: TextStyle(
+                          color: foregroundColor,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: fontFamily,
+                          fontSize: 15.0
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   )
@@ -213,15 +240,15 @@ class _AccountDetailState extends State<AccountDetail> {
             Container(
               margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
               decoration: BoxDecoration(
-                  color: Colors.grey[900],
+                  color: boxBackgroundColor,
                   border: Border(
                       top: BorderSide(
                         width: 0.1,
-                        color: Colors.white,
+                        color: foregroundColor.withOpacity(0.12),
                       ),
                       bottom: BorderSide(
                         width: 0.1,
-                        color: Colors.white,
+                        color: foregroundColor.withOpacity(0.12),
                       ))),
               child: Column(
                 children: [
@@ -233,7 +260,12 @@ class _AccountDetailState extends State<AccountDetail> {
                     dense: true,
                     title: Text(
                       'Sign out',
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: TextStyle(
+                          color: foregroundColor,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: fontFamily,
+                          fontSize: 15.0
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -247,15 +279,3 @@ class _AccountDetailState extends State<AccountDetail> {
         ));
   }
 }
-
-// class Test extends StatelessWidget {
-//   Text title = Text('More', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Hero(tag: 'alo', child: title),
-//       )
-//     );
-//   }
-// }

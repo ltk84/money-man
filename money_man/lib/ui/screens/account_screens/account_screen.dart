@@ -7,6 +7,7 @@ import 'package:money_man/ui/screens/account_screens/about_screen.dart';
 import 'package:money_man/ui/screens/account_screens/my_wallets_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_account_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'account_detail_screen.dart';
@@ -14,16 +15,16 @@ import 'account_detail_screen.dart';
 class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Test();
+    return AcountScreenWidget();
   }
 }
 
-class Test extends StatefulWidget {
+class AcountScreenWidget extends StatefulWidget {
   @override
-  _TestState createState() => _TestState();
+  _AcountScreenWidgetState createState() => _AcountScreenWidgetState();
 }
 
-class _TestState extends State<Test> {
+class _AcountScreenWidgetState extends State<AcountScreenWidget> {
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
@@ -32,18 +33,19 @@ class _TestState extends State<Test> {
   Text title = Text('More',
       style: TextStyle(
           fontSize: 30,
-          color: Colors.white,
-          fontFamily: 'Montserrat',
+          color: foregroundColor,
+          fontFamily: fontFamily,
           fontWeight: FontWeight.bold));
   Text emptyTitle = Text('',
       style: TextStyle(
           fontSize: 30,
-          color: Colors.white,
-          fontFamily: 'Montserrat',
+          color: foregroundColor,
+          fontFamily: fontFamily,
           fontWeight: FontWeight.bold));
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
+
   _scrollListener() {
     if (_controller.offset > 0) {
       setState(() {
@@ -76,7 +78,7 @@ class _TestState extends State<Test> {
   Widget build(BuildContext context) {
     final _auth = Provider.of<FirebaseAuthService>(context);
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: backgroundColor,
         //extendBodyBehindAppBar: true,
         appBar: AppBar(
           centerTitle: true,
@@ -94,11 +96,11 @@ class _TestState extends State<Test> {
                 child: AnimatedContainer(
                   duration: Duration(
                       milliseconds:
-                          reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                   //child: Container(
                   //color: Colors.transparent,
                   color: Colors.grey[
-                          reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+                  reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
                   //),
                 ),
@@ -110,16 +112,19 @@ class _TestState extends State<Test> {
               duration: Duration(milliseconds: 100),
               child: Text('More',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montseratt',
-                      fontSize: 17.0))),
+                    color: foregroundColor,
+                    fontFamily: fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                  ))),
         ),
         body: StreamBuilder<User>(
             stream: _auth.userStream,
             builder: (context, snapshot) {
               User _user = snapshot.data;
               return ListView(
-                physics: BouncingScrollPhysics(),
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 controller: _controller,
                 children: [
                   Padding(
@@ -131,15 +136,15 @@ class _TestState extends State<Test> {
                   Container(
                       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                       decoration: BoxDecoration(
-                          color: Colors.grey[900],
+                          color: boxBackgroundColor,
                           border: Border(
                               top: BorderSide(
                                 width: 0.1,
-                                color: Colors.white,
+                                color: foregroundColor.withOpacity(0.12),
                               ),
                               bottom: BorderSide(
                                 width: 0.1,
-                                color: Colors.white,
+                                color: foregroundColor.withOpacity(0.12),
                               ))),
                       child: Column(
                         children: [
@@ -147,16 +152,16 @@ class _TestState extends State<Test> {
                             backgroundColor: Colors.white,
                             radius: 30.0,
                             child: Text(
-                                (_user == null)
-                                    ? ''
-                                    : (_user.displayName != '' &&
-                                            _user.displayName != null)
-                                        ? _user.displayName.substring(0, 1)
-                                        : 'Y',
+                              (_user == null)
+                                  ? ''
+                                  : (_user.displayName != '' &&
+                                  _user.displayName != null)
+                                  ? _user.displayName.substring(0, 1)
+                                  : 'Y',
                               style: TextStyle(
-                                  color: Color(0xff2FB49C),
+                                  color: primaryColor,
                                   fontSize: 30.0,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: fontFamily,
                                   fontWeight: FontWeight.w400
                               ),
                             ),
@@ -170,29 +175,29 @@ class _TestState extends State<Test> {
                                 (_user == null)
                                     ? ''
                                     : (_user.displayName != '' &&
-                                            _user.displayName != null)
-                                        ? _user.displayName
-                                        : (_user.phoneNumber != null
-                                            ? _user.phoneNumber
-                                            : 'Your name'),
+                                    _user.displayName != null)
+                                    ? _user.displayName
+                                    : (_user.phoneNumber != null
+                                    ? _user.phoneNumber
+                                    : 'Your name'),
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: foregroundColor,
                                     fontWeight: FontWeight.w600,
-                                    fontFamily: 'Montserrat',
+                                    fontFamily: fontFamily,
                                     fontSize: 15.0)),
                           ),
                           Text(
                               (_user == null)
                                   ? ''
                                   : _user.email == null
-                                      ? 'Your email'
-                                      : (_user.email != ''
-                                          ? _user.email
-                                          : 'Your email'),
+                                  ? 'Your email'
+                                  : (_user.email != ''
+                                  ? _user.email
+                                  : 'Your email'),
                               style: TextStyle(
-                                  color: Colors.grey[400],
+                                  color: foregroundColor.withOpacity(0.54),
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: fontFamily,
                                   fontSize: 13.0)),
                           SizedBox(
                             height: 20.0,
@@ -200,7 +205,7 @@ class _TestState extends State<Test> {
                           Divider(
                             height: 5,
                             thickness: 0.1,
-                            color: Colors.white,
+                            color: foregroundColor,
                           ),
                           ListTile(
                             onTap: () {
@@ -214,35 +219,35 @@ class _TestState extends State<Test> {
                             },
                             dense: true,
                             leading: Icon(Icons.person,
-                                color: Colors.white, size: 38.0),
+                                color: foregroundColor.withOpacity(0.54), size: 38.0),
                             title: Text('My Account',
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: foregroundColor,
                                     fontWeight: FontWeight.w700,
-                                    fontFamily: 'Montserrat')),
+                                    fontFamily: fontFamily)),
                             subtitle: Text('Your infomation',
                                 style: TextStyle(
-                                    color: Colors.grey[400],
+                                    color: foregroundColor.withOpacity(0.54),
                                     fontWeight: FontWeight.w400,
-                                    fontFamily: 'Montserrat',
+                                    fontFamily: fontFamily,
                                     fontSize: 13.0)),
                             trailing: Icon(Icons.chevron_right,
-                                color: Colors.grey[400]),
+                                color: foregroundColor.withOpacity(0.54)),
                           )
                         ],
                       )),
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
                     decoration: BoxDecoration(
-                        color: Colors.grey[900],
+                        color: boxBackgroundColor,
                         border: Border(
                             top: BorderSide(
                               width: 0.1,
-                              color: Colors.white,
+                              color: foregroundColor.withOpacity(0.12),
                             ),
                             bottom: BorderSide(
                               width: 0.1,
-                              color: Colors.white,
+                              color: foregroundColor.withOpacity(0.12),
                             ))),
                     child: Column(
                       children: [
@@ -256,22 +261,23 @@ class _TestState extends State<Test> {
                           },
                           dense: true,
                           leading: Icon(Icons.account_balance_wallet_rounded,
-                              color: Colors.grey[400], size: 25.0),
+                              color: foregroundColor.withOpacity(0.54),
+                              size: 25.0),
                           title: Text('My Wallets',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: Colors.white,
+                            color: foregroundColor,
                           ),
                         ),
                         ListTile(
@@ -284,15 +290,16 @@ class _TestState extends State<Test> {
                           },
                           dense: true,
                           leading: Icon(Icons.category,
-                              color: Colors.grey[400], size: 25.0),
+                              color: foregroundColor.withOpacity(0.54),
+                              size: 25.0),
                           title: Text('Categories',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: foregroundColor.withOpacity(0.54)),
                         ),
                       ],
                     ),
@@ -300,15 +307,15 @@ class _TestState extends State<Test> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
                     decoration: BoxDecoration(
-                        color: Colors.grey[900],
+                        color: boxBackgroundColor,
                         border: Border(
                             top: BorderSide(
                               width: 0.1,
-                              color: Colors.white,
+                              color: foregroundColor.withOpacity(0.12),
                             ),
                             bottom: BorderSide(
                               width: 0.1,
-                              color: Colors.white,
+                              color: foregroundColor.withOpacity(0.12),
                             ))),
                     child: Column(
                       children: [
@@ -316,87 +323,91 @@ class _TestState extends State<Test> {
                           onTap: () {},
                           dense: true,
                           leading: Icon(Icons.explore,
-                              color: Colors.grey[400], size: 25.0),
+                              color: foregroundColor.withOpacity(0.54),
+                              size: 25.0),
                           title: Text('Explore',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: Colors.white,
+                            color: foregroundColor,
                           ),
                         ),
                         ListTile(
                           onTap: () {},
                           dense: true,
                           leading: Icon(Icons.help_outline,
-                              color: Colors.grey[400], size: 25.0),
+                              color: foregroundColor.withOpacity(0.54),
+                              size: 25.0),
                           title: Text('Help & Support',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: Colors.white,
+                            color: foregroundColor,
                           ),
                         ),
                         ListTile(
                           onTap: () {},
                           dense: true,
                           leading: Icon(Icons.settings,
-                              color: Colors.grey[400], size: 25.0),
+                              color: foregroundColor.withOpacity(0.54),
+                              size: 25.0),
                           title: Text('Settings',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: Colors.white,
+                            color: foregroundColor,
                           ),
                         ),
                         ListTile(
                           onTap: () {
                             Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: AboutScreen(),
-                                  type: PageTransitionType.rightToLeft));
+                                context,
+                                PageTransition(
+                                    child: AboutScreen(),
+                                    type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
                           leading: Icon(Icons.info,
-                              color: Colors.grey[400], size: 25.0),
+                              color: foregroundColor.withOpacity(0.54),
+                              size: 25.0),
                           title: Text('About',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: foregroundColor.withOpacity(0.54)),
                         ),
                       ],
                     ),

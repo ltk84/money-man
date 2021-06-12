@@ -119,9 +119,13 @@
   <component name="ChangeListManager">
     <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/core/models/bill_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/core/models/bill_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bills_main_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bills_main_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/about_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/about_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_detail_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_edit_information_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_edit_information_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/account_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/change_password_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/change_password_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/my_wallets_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/account_screens/my_wallets_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/style.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/style.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,12 +239,12 @@
       <screen x="0" y="0" width="1280" height="720" />
     </state>
     <state x="371" y="107" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1280.720@0.0.1280.720" timestamp="1620975808503" />
-    <state x="121" y="138" width="983" height="610" key="AVDManager" timestamp="1623411637377">
+    <state x="121" y="138" width="983" height="610" key="AVDManager" timestamp="1623463395697">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="101" y="121" width="819" height="533" key="AVDManager/0.0.1280.720@0.0.1280.720" timestamp="1621868911296" />
     <state x="176" y="91" width="874" height="568" key="AVDManager/0.0.1366.768@0.0.1366.768" timestamp="1616587589007" />
-    <state x="121" y="138" width="983" height="610" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1623411637377" />
+    <state x="121" y="138" width="983" height="610" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1623463395697" />
     <state x="356" y="130" key="AndroidProcessChooserDialog" timestamp="1616489546448">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -251,30 +255,30 @@
     <state x="297" y="130" key="FileChooserDialogImpl/0.0.1280.720@0.0.1280.720" timestamp="1621958218525" />
     <state x="317" y="139" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1616494633016" />
     <state x="356" y="151" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1618643935553" />
-    <state width="1493" height="161" key="GridCell.Tab.0.bottom" timestamp="1623427552855">
+    <state width="1493" height="161" key="GridCell.Tab.0.bottom" timestamp="1623482870763">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1236" height="138" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1622194925597" />
     <state width="1014" height="189" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
-    <state width="1493" height="161" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1623427552855" />
-    <state width="1493" height="161" key="GridCell.Tab.0.center" timestamp="1623427552854">
+    <state width="1493" height="161" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1623482870763" />
+    <state width="1493" height="161" key="GridCell.Tab.0.center" timestamp="1623482870762">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1236" height="138" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1622194925597" />
     <state width="1014" height="189" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
-    <state width="1493" height="161" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1623427552854" />
-    <state width="1493" height="161" key="GridCell.Tab.0.left" timestamp="1623427552854">
+    <state width="1493" height="161" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1623482870762" />
+    <state width="1493" height="161" key="GridCell.Tab.0.left" timestamp="1623482870762">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1236" height="138" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1622194925597" />
     <state width="1014" height="189" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1618980309777" />
-    <state width="1493" height="161" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1623427552854" />
-    <state width="1493" height="161" key="GridCell.Tab.0.right" timestamp="1623427552855">
+    <state width="1493" height="161" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1623482870762" />
+    <state width="1493" height="161" key="GridCell.Tab.0.right" timestamp="1623482870762">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1236" height="138" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1622194925597" />
     <state width="1014" height="189" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
-    <state width="1493" height="161" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1623427552855" />
+    <state width="1493" height="161" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1623482870762" />
     <state x="36" y="0" key="SettingsEditor" timestamp="1621069438056">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
