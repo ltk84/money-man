@@ -290,6 +290,8 @@ class _ListTransactionEvent extends State<ListTransactionEvent> {
                             wallet: widget.currentWallet,
                           ),
                           type: PageTransitionType.rightToLeft));
+                  setState(() {
+                  });
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),

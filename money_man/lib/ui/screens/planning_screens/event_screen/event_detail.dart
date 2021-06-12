@@ -29,6 +29,12 @@ class _EventDetailScreen extends State<EventDetailScreen>
     super.initState();
   }
   @override
+  void didUpdateWidget(covariant EventDetailScreen oldWidget) {
+    _currentEvent = widget.currentEvent;
+    _eventWallet = widget.eventWallet;
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     final _wallet = _firestore.getWalletByID(_currentEvent.walletId);
@@ -111,6 +117,10 @@ class _EventDetailScreen extends State<EventDetailScreen>
                   );
                 }
                 else {
+                  final getEvent = await _firestore.getEventByID(_currentEvent.id, _eventWallet);
+                  setState(() {
+                    _currentEvent = getEvent;
+                  });
                   final delete = await Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -118,6 +128,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                               DeleteEventScreen(
                                 currentEvent: _currentEvent,
                                 eventWallet: _eventWallet,
+                                count: _currentEvent.transactionIdList.length,
                               )));
                   if (delete != null)
                     setState(() {});

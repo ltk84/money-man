@@ -381,8 +381,10 @@ class FirebaseFireStoreService {
         oldEvent.spent += oldTransaction.amount;
       else
         oldEvent.spent -= oldTransaction.amount;
-
-      transaction.eventID = event.id;
+      if(event.id != "")
+        transaction.eventID = event.id;
+      else
+        transaction.eventID = "";
 
       //Loại bỏ transaction khỏi event cũ
       oldEvent.transactionIdList.removeWhere(
@@ -392,15 +394,13 @@ class FirebaseFireStoreService {
       await updateEvent(oldEvent, wallet);
 
       //update cho event mới
-      event.transactionIdList.add(transaction.id);
       if(event.id == oldEvent.id)
         await updateEventAmountAndTransList(oldEvent, wallet, transaction);
-      else
+      else if(event.id != "")
         await updateEventAmountAndTransList(event, wallet, transaction);
     }
-    if (transaction.eventID != "" && oldTransaction.eventID == "")
+    else if (transaction.eventID != "" && oldTransaction.eventID == "")
       {
-        event.transactionIdList.add(transaction.id);
         transaction.eventID = event.id;
         await updateEventAmountAndTransList(event, wallet, transaction);
       }
@@ -417,7 +417,17 @@ class FirebaseFireStoreService {
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
   }
-
+  Future updateTransactionAfterDeletingEvent(MyTransaction transaction, Wallet wallet )
+  async {
+    CollectionReference transactionRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions');
+    transaction.eventID = "";
+    // Lấy transaction cũ
+    await transactionRef.doc(transaction.id).update(transaction.toMap());
+  }
   // Query transaction by category
   Future<List<MyTransaction>> queryTransationByCategory(
       String searchPattern, Wallet wallet) async {
