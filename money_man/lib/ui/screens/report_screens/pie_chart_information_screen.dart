@@ -4,7 +4,9 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_time.dart';
+import 'package:provider/provider.dart';
 
 class PieChartInformationScreen extends StatefulWidget {
   List<MyTransaction> currentList;
@@ -122,83 +124,94 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
     _color = widget.color;
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+    _listTransactionOfEachCatecory = [];
+    _info = [];
+    _listCategoryReport = [];
+    generateData(_categoryList, _transactionList);
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 450,
-      height: _height,
-      decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                color: Colors.black,
-                width: 1.0,
-              ))),
-      padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
-      child: ListView.builder(
-        controller: _controller,
-        itemCount: _listCategoryReport.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => ReportListTransaction(
-                            currentList: _listTransactionOfEachCatecory[index],
-                            endDate:
-                                _listTransactionOfEachCatecory[index][0].date,
-                            beginDate: _listTransactionOfEachCatecory[index][
-                                    _listTransactionOfEachCatecory[index].length - 1].date,
-                            totalMoney: _listTransactionOfEachCatecory[index][0]
-                                        .category
-                                        .type == 'expense' ? -_info[index] : _info[index],
-                            currentWallet: widget.currentWallet,
-                          )));
-            },
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 6, 0),
-                        child: SuperIcon(
-                          iconPath: _listCategoryReport[index].iconID,
-                          size: 35,
-                        )),
-                    Expanded(
-                      child: Text(_listCategoryReport[index].name,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                            _listCategoryReport[index].type == 'expense'
-                                ? '-' + _info[index].toString()
-                                : '+' + _info[index].toString(),
-                            style: TextStyle(
-                                color: _color,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                      ],
-                    )
-                  ],
-                ),
-                Container(
-                  height: 25,
-                )
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    return StreamBuilder<Object>(
+      stream: _firestore.transactionStream(widget.currentWallet, 50),
+        builder: (context,snapshot){
+          return Container(
+            width: 450,
+            height: _height,
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black,
+                      width: 1.0,
+                    ))),
+            padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
+            child: ListView.builder(
+              controller: _controller,
+              itemCount: _listCategoryReport.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => ReportListTransaction(
+                              currentList: _listTransactionOfEachCatecory[index],
+                              endDate:
+                              _listTransactionOfEachCatecory[index][0].date,
+                              beginDate: _listTransactionOfEachCatecory[index][
+                              _listTransactionOfEachCatecory[index].length - 1].date,
+                              totalMoney: _listTransactionOfEachCatecory[index][0]
+                                  .category
+                                  .type == 'expense' ? -_info[index] : _info[index],
+                              currentWallet: widget.currentWallet,
+                            )));
+                  },
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 6, 0),
+                              child: SuperIcon(
+                                iconPath: _listCategoryReport[index].iconID,
+                                size: 35,
+                              )),
+                          Expanded(
+                            child: Text(_listCategoryReport[index].name,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                  _listCategoryReport[index].type == 'expense'
+                                      ? '-' + _info[index].toString()
+                                      : '+' + _info[index].toString(),
+                                  style: TextStyle(
+                                      color: _color,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          )
+                        ],
+                      ),
+                      Container(
+                        height: 25,
+                      )
 
-              ],
+                    ],
+                  ),
+                );
+              },
             ),
           );
-        },
-      ),
-    );
+        }
+        );
+
   }
 }

@@ -59,6 +59,7 @@ class _BarChartInformation extends State<BarChartInformation> {
   List<String> timeRangeList = [];
   List<DateTime> fisrtDayList = [];
   List<DateTime> secondDayList = [];
+  double heigt;
   @override
   void initState() {
     super.initState();
@@ -68,6 +69,7 @@ class _BarChartInformation extends State<BarChartInformation> {
     generateData(_beginDate, _endDate, timeRangeList, _transactionList);
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+    heigt = timeRangeList.length.toDouble()*70;
   }
 
   @override
@@ -78,13 +80,14 @@ class _BarChartInformation extends State<BarChartInformation> {
     generateData(_beginDate, _endDate, timeRangeList, _transactionList);
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+    heigt = timeRangeList.length.toDouble()*100;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 450,
-      height: 1000,
+      height: heigt,
       decoration: BoxDecoration(
           border: Border(
               bottom: BorderSide(
@@ -93,7 +96,7 @@ class _BarChartInformation extends State<BarChartInformation> {
       ))),
       padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
       child: ListView.builder(
-        physics: BouncingScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         controller: _controller,
         itemCount: timeRangeList.length,
         itemBuilder: (context, index) {

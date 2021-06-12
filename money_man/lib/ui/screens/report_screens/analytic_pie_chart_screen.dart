@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart_information_screen.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
+import 'package:provider/provider.dart';
 
 class AnalyticPieChartSreen extends StatefulWidget {
   List<MyTransaction> currentList;
@@ -34,7 +36,6 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
   Color _color;
   List<MyTransaction> _transactionList;
   List<MyCategory> _categoryList;
-  List<double> _info = [];
   String _content;
   GlobalKey key1;
   final double fontSizeText = 30;
@@ -76,8 +77,6 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
 
   @override
   void didUpdateWidget(covariant AnalyticPieChartSreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
     _transactionList = widget.currentList ?? [];
     _categoryList = widget.categoryList ?? [];
     _total = widget.total;
@@ -85,6 +84,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     _controller = ScrollController();
     _color = widget.color;
     _controller.addListener(_scrollListener);
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -94,6 +94,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: new AppBar(
@@ -101,74 +102,79 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
           centerTitle: true,
           elevation: 0,
         ),
-        body: Container(
-          color: Colors.black,
-          child: ListView(
-            controller: _controller,
-            physics: BouncingScrollPhysics(),
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    border: Border(
-                        bottom: BorderSide(
-                          color: Colors.grey[900],
-                          width: 1.0,
-                        ),
-                        top: BorderSide(
-                          color: Colors.grey[900],
-                          width: 1.0,
-                        ))),
-                child: WidgetToImage(
-                  builder: (key) {
-                    this.key1 = key;
+        body: StreamBuilder<Object>(
+          stream: _firestore.transactionStream(widget.currentWallet, 50),
+          builder: (context,snapshot){
+            return Container(
+              color: Colors.black,
+              child: ListView(
+                controller: _controller,
+                physics: BouncingScrollPhysics(),
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        border: Border(
+                            bottom: BorderSide(
+                              color: Colors.grey[900],
+                              width: 1.0,
+                            ),
+                            top: BorderSide(
+                              color: Colors.grey[900],
+                              width: 1.0,
+                            ))),
+                    child: WidgetToImage(
+                      builder: (key) {
+                        this.key1 = key;
 
-                    return Column(children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Text(_content,
-                              style: TextStyle(
-                                color: Colors.grey[300],
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 30,
-                              )),
-                          Text(_total.toString(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 22,
-                              )),
-                        ],
-                      ),
-                      Container(
-                        height: 30,
-                      ),
-                      Container(
-                        width: 200,
-                        height: 200,
-                        child:  PieChartScreen(
-                            isShowPercent: true,
-                            currentList: _transactionList,
-                            categoryList: _categoryList,
-                            total: _total),
-                      ),
-                      Container(
-                        child: PieChartInformationScreen(
-                          currentList: _transactionList,
-                          categoryList: _categoryList,
-                          currentWallet: widget.currentWallet,
-                          color: _color,
-                        ),
-                      )
-                    ]);
-                  },
-                ),
+                        return Column(children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Text(_content,
+                                  style: TextStyle(
+                                    color: Colors.grey[300],
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 30,
+                                  )),
+                              Text(_total.toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 22,
+                                  )),
+                            ],
+                          ),
+                          Container(
+                            height: 30,
+                          ),
+                          Container(
+                            width: 200,
+                            height: 200,
+                            child:  PieChartScreen(
+                                isShowPercent: true,
+                                currentList: _transactionList,
+                                categoryList: _categoryList,
+                                total: _total),
+                          ),
+                          Container(
+                            child: PieChartInformationScreen(
+                              currentList: _transactionList,
+                              categoryList: _categoryList,
+                              currentWallet: widget.currentWallet,
+                              color: _color,
+                            ),
+                          )
+                        ]);
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         )
     );
   }
