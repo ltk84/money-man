@@ -338,12 +338,23 @@ class FirebaseFireStoreService {
     else
       wallet.amount -= transaction.amount;
 
+    if(transaction.eventID != "")
+      {
+        final event = await getEventByID(transaction.eventID, wallet);
+        Event _event = event;
+        if (transaction.category.type == 'expense')
+          _event.spent += transaction.amount;
+        else
+          _event.spent -= transaction.amount;
+        _event.transactionIdList.removeWhere((element) => element == transaction.id);
+        await updateEvent(_event, wallet);
+      }
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
   }
 
   // update transaction
-  Future updateTransaction(MyTransaction transaction, Wallet wallet) async {
+  Future updateTransaction(MyTransaction transaction, Wallet wallet ,  Event event) async {
     // Lấy reference đến collection transactions
     CollectionReference transactionRef = users
         .doc(uid)
@@ -393,6 +404,48 @@ class FirebaseFireStoreService {
       }
     }
 
+    //lấy event cũ
+    if(oldTransaction.eventID != "") {
+      Event oldEvent;
+      CollectionReference eventRef = users
+          .doc(uid)
+          .collection('wallets')
+          .doc(wallet.id)
+          .collection('events');
+
+      await eventRef
+          .doc(transaction.eventID)
+          .get().then((value) {
+        oldEvent = Event.fromMap(value.data());
+      });
+      //Tính toán lại spent cho event cũ
+      if (oldTransaction.category.type == 'expense')
+        oldEvent.spent += oldTransaction.amount;
+      else
+        oldEvent.spent -= oldTransaction.amount;
+      if(event.id != "")
+        transaction.eventID = event.id;
+      else
+        transaction.eventID = "";
+
+      //Loại bỏ transaction khỏi event cũ
+      oldEvent.transactionIdList.removeWhere(
+              (element) => element == oldTransaction.id);
+
+      //update cho event cũ
+      await updateEvent(oldEvent, wallet);
+
+      //update cho event mới
+      if(event.id == oldEvent.id)
+        await updateEventAmountAndTransList(oldEvent, wallet, transaction);
+      else if(event.id != "")
+        await updateEventAmountAndTransList(event, wallet, transaction);
+    }
+    else if (transaction.eventID != "" && oldTransaction.eventID == "")
+      {
+        transaction.eventID = event.id;
+        await updateEventAmountAndTransList(event, wallet, transaction);
+      }
     // update transaction
     await transactionRef.doc(transaction.id).update(transaction.toMap());
 
@@ -406,7 +459,17 @@ class FirebaseFireStoreService {
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
   }
-
+  Future updateTransactionAfterDeletingEvent(MyTransaction transaction, Wallet wallet )
+  async {
+    CollectionReference transactionRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions');
+    transaction.eventID = "";
+    // Lấy transaction cũ
+    await transactionRef.doc(transaction.id).update(transaction.toMap());
+  }
   // Query transaction by category
   Future<List<MyTransaction>> queryTransationByCategory(
       String searchPattern, Wallet wallet) async {
@@ -1037,6 +1100,17 @@ class FirebaseFireStoreService {
       print(e.data());
       return Event.fromMap(e.data());
     }).toList();
+  }
+
+  Future<Event> getEventByID(String id, Wallet wallet) async {
+    return await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('events')
+        .doc(id)
+        .get()
+        .then((value) => Event.fromMap(value.data()));
   }
 
   // EVENT END //

@@ -121,6 +121,7 @@
     <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/money_man/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/android/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/lib/core/models/recurring_transaction_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/core/models/recurring_transaction_model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/lib/core/models/repeat_option_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/core/models/repeat_option_model.dart" afterDir="false" />
@@ -141,6 +142,12 @@
       <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/transaction_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/transaction_screens/transaction_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/pubspec.yaml" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/analytic_pie_chart_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/analytic_pie_chart_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/bar_chart_information_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/bar_chart_information_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/pie_chart_information_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/pie_chart_information_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/report_list_transaction_in_time.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/report_list_transaction_in_time.dart" afterDir="false" />
+>>>>>>> phuc/sprint2
     </list>
 =======
     <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="" />
@@ -151,10 +158,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
 <<<<<<< HEAD
+<<<<<<< HEAD
   <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VirtualDevicePath@C:\Users\kiaco\.android\avd\Nexus_6_API_30.avd]" />
 =======
   <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VirtualDevicePath@C:\Users\ASUS\.android\avd\Nexus_5_API_30.avd]" />
 >>>>>>> the/sprint2
+=======
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VirtualDevicePath@C:\Users\Asus\.android\avd\Pixel_2_API_28_1.avd]" />
+>>>>>>> phuc/sprint2
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -252,10 +263,10 @@
     </state>
     <state x="61" y="0" key="#Project_Structure/0.0.1280.720@0.0.1280.720" timestamp="1621069200386" />
     <state x="73" y="0" key="#Project_Structure/0.0.1536.834@0.0.1536.834" timestamp="1618988245081" />
-    <state x="0" y="30" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1620554356384">
+    <state x="0" y="30" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1623220018022">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state x="0" y="30" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.720@0.0.1280.720" timestamp="1620554356384" />
+    <state x="0" y="30" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.720@0.0.1280.720" timestamp="1623220018022" />
     <state x="0" y="39" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1616481170240" />
     <state x="321" y="96" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1621067711590">
       <screen x="0" y="0" width="1280" height="720" />
@@ -265,50 +276,85 @@
       <screen x="0" y="0" width="1280" height="720" />
     </state>
     <state x="371" y="107" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1280.720@0.0.1280.720" timestamp="1620975808503" />
+<<<<<<< HEAD
     <state x="121" y="138" width="983" height="610" key="AVDManager" timestamp="1623512610472">
       <screen x="0" y="0" width="1536" height="824" />
+=======
+    <state x="101" y="121" width="819" height="533" key="AVDManager" timestamp="1623398116393">
+      <screen x="0" y="0" width="1280" height="720" />
+>>>>>>> phuc/sprint2
     </state>
-    <state x="101" y="121" width="819" height="533" key="AVDManager/0.0.1280.720@0.0.1280.720" timestamp="1621868911296" />
+    <state x="101" y="121" width="819" height="533" key="AVDManager/0.0.1280.720@0.0.1280.720" timestamp="1623398116393" />
     <state x="176" y="91" width="874" height="568" key="AVDManager/0.0.1366.768@0.0.1366.768" timestamp="1616587589007" />
+<<<<<<< HEAD
     <state x="121" y="138" width="983" height="610" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1623512610472" />
     <state x="356" y="130" key="AndroidProcessChooserDialog" timestamp="1616489546448">
       <screen x="0" y="0" width="1366" height="768" />
+=======
+    <state x="334" y="122" key="AndroidProcessChooserDialog" timestamp="1623251775850">
+      <screen x="0" y="0" width="1280" height="720" />
+>>>>>>> phuc/sprint2
     </state>
+    <state x="334" y="122" key="AndroidProcessChooserDialog/0.0.1280.720@0.0.1280.720" timestamp="1623251775850" />
     <state x="356" y="130" key="AndroidProcessChooserDialog/0.0.1366.768@0.0.1366.768" timestamp="1616489546448" />
+<<<<<<< HEAD
     <state x="356" y="151" key="FileChooserDialogImpl" timestamp="1622976469619">
       <screen x="0" y="0" width="1536" height="834" />
+=======
+    <state x="297" y="130" key="FileChooserDialogImpl" timestamp="1622922388678">
+      <screen x="0" y="0" width="1280" height="720" />
+>>>>>>> phuc/sprint2
     </state>
-    <state x="297" y="130" key="FileChooserDialogImpl/0.0.1280.720@0.0.1280.720" timestamp="1621958218525" />
+    <state x="297" y="130" key="FileChooserDialogImpl/0.0.1280.720@0.0.1280.720" timestamp="1622922388678" />
     <state x="317" y="139" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1616494633016" />
 <<<<<<< HEAD
     <state x="356" y="151" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1618643935553" />
+<<<<<<< HEAD
     <state width="1493" height="161" key="GridCell.Tab.0.bottom" timestamp="1623512809678">
       <screen x="0" y="0" width="1536" height="824" />
 =======
     <state x="356" y="151" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1622976469619" />
     <state width="1236" height="138" key="GridCell.Tab.0.bottom" timestamp="1622194925597">
+=======
+    <state width="966" height="115" key="GridCell.Tab.0.bottom" timestamp="1623520331150">
+>>>>>>> phuc/sprint2
       <screen x="0" y="0" width="1280" height="720" />
 >>>>>>> the/sprint2
     </state>
-    <state width="1236" height="138" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1622194925597" />
+    <state width="966" height="115" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1623520331150" />
     <state width="1014" height="189" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
+<<<<<<< HEAD
     <state width="1493" height="161" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1623512809678" />
     <state width="1493" height="161" key="GridCell.Tab.0.center" timestamp="1623512809678">
       <screen x="0" y="0" width="1536" height="824" />
+=======
+    <state width="966" height="115" key="GridCell.Tab.0.center" timestamp="1623520331149">
+      <screen x="0" y="0" width="1280" height="720" />
+>>>>>>> phuc/sprint2
     </state>
-    <state width="1236" height="138" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1622194925597" />
+    <state width="966" height="115" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1623520331149" />
     <state width="1014" height="189" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
+<<<<<<< HEAD
     <state width="1493" height="161" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1623512809678" />
     <state width="1493" height="161" key="GridCell.Tab.0.left" timestamp="1623512809678">
       <screen x="0" y="0" width="1536" height="824" />
+=======
+    <state width="966" height="115" key="GridCell.Tab.0.left" timestamp="1623520331149">
+      <screen x="0" y="0" width="1280" height="720" />
+>>>>>>> phuc/sprint2
     </state>
-    <state width="1236" height="138" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1622194925597" />
+    <state width="966" height="115" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1623520331149" />
     <state width="1014" height="189" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1618980309777" />
+<<<<<<< HEAD
     <state width="1493" height="161" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1623512809678" />
     <state width="1493" height="161" key="GridCell.Tab.0.right" timestamp="1623512809678">
       <screen x="0" y="0" width="1536" height="824" />
+=======
+    <state width="966" height="115" key="GridCell.Tab.0.right" timestamp="1623520331149">
+      <screen x="0" y="0" width="1280" height="720" />
+>>>>>>> phuc/sprint2
     </state>
-    <state width="1236" height="138" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1622194925597" />
+    <state width="966" height="115" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1623520331149" />
     <state width="1014" height="189" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
     <state width="1493" height="161" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1623512809678" />
     <state x="36" y="0" key="SettingsEditor" timestamp="1621069438056">
@@ -325,18 +371,26 @@
       <screen x="0" y="0" width="1280" height="720" />
     </state>
     <state x="451" y="274" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.720@0.0.1280.720" timestamp="1621066886327" />
-    <state x="221" y="44" key="new project wizard" timestamp="1621872911292">
+    <state x="221" y="44" key="new project wizard" timestamp="1622922404494">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
-    <state x="221" y="44" key="new project wizard/0.0.1280.720@0.0.1280.720" timestamp="1621872911292" />
-    <state x="193" y="174" key="run.anything.popup" timestamp="1616501338867">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="221" y="44" key="new project wizard/0.0.1280.720@0.0.1280.720" timestamp="1622922404494" />
+    <state x="181" y="163" key="run.anything.popup" timestamp="1623406004377">
+      <screen x="0" y="0" width="1280" height="720" />
     </state>
+    <state x="181" y="163" key="run.anything.popup/0.0.1280.720@0.0.1280.720" timestamp="1623406004377" />
     <state x="193" y="174" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1616501338867" />
+<<<<<<< HEAD
     <state x="358" y="16" width="807" height="774" key="search.everywhere.popup" timestamp="1623419073621">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="298" y="14" width="672" height="676" key="search.everywhere.popup/0.0.1280.720@0.0.1280.720" timestamp="1622183772700" />
     <state x="358" y="16" width="807" height="774" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1623419073621" />
+=======
+    <state x="298" y="14" width="672" height="676" key="search.everywhere.popup" timestamp="1623257782166">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="298" y="14" width="672" height="676" key="search.everywhere.popup/0.0.1280.720@0.0.1280.720" timestamp="1623257782166" />
+>>>>>>> phuc/sprint2
   </component>
 </project>

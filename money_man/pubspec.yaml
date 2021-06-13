@@ -45,7 +45,7 @@ dependencies:
   sticky_headers: "^0.1.8"
   flutter_facebook_auth: "^1.0.0"
   flutter_facebook_login: ^3.0.0
-  currency_picker: ^2.0.3
+  currency_picker: ^2.0.4
   flutter_iconpicker: ^3.0.0
   page_transition: ^1.1.7+6
   modal_bottom_sheet: ^2.0.0

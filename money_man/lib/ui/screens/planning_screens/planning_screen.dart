@@ -5,6 +5,8 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bills_main_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_main_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
+import 'package:money_man/ui/screens/planning_screens/event_screen/event_home.dart';
 import 'package:page_transition/page_transition.dart';
 
 class PlanningScreen extends StatefulWidget {
@@ -23,7 +25,6 @@ class _PlanningScreenState extends State<PlanningScreen> {
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
-
   //
   // Text title = Text('Planning', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
   // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
@@ -203,7 +204,12 @@ class _PlanningScreenState extends State<PlanningScreen> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EventScreen()));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
