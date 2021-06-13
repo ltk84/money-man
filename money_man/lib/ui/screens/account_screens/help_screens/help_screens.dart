@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/basic%20questions.dart';
+import 'package:money_man/core/models/basic_questions.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/basic_questions_screen.dart';
+import 'package:money_man/ui/screens/account_screens/help_screens/send_question_screen.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/user_guide_screens.dart';
 
 class HelpScreens extends StatelessWidget {
@@ -10,6 +11,15 @@ class HelpScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SendQuestionScreen()));
+        },
+        child: Icon(Icons.message),
+        elevation: 0,
+        backgroundColor: Color(0xFF2FB49C),
+      ),
       appBar: AppBar(
         centerTitle: true,
         title: Text(

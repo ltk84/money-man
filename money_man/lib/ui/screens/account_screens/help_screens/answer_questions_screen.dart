@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/basic%20questions.dart';
+import 'package:money_man/core/models/basic_questions.dart';
 
 class AnswerTheQuestions extends StatelessWidget {
   const AnswerTheQuestions({Key key, this.index}) : super(key: key);

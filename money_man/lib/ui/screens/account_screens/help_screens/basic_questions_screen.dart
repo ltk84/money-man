@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/basic%20questions.dart';
+import 'package:money_man/core/models/basic_questions.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/answer_questions_screen.dart';
 
 class BasicQuestionsScreens extends StatelessWidget {
