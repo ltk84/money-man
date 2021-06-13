@@ -65,6 +65,7 @@ dependencies:
   url_launcher: ^6.0.6
   date_util: ^0.1.4
   fluttercontactpicker: ^4.4.0
+  mailer: ^5.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -9,6 +9,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screens/current_applied_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/select_time_range.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
@@ -16,18 +17,18 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_scr
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
-class AddBudget extends StatefulWidget {
-  AddBudget({this.tabController, Key key, this.wallet, this.myCategory})
+class EditBudget extends StatefulWidget {
+  EditBudget({this.tabController, Key key, this.budget, this.wallet})
       : super(key: key);
   @override
   _AddBudgetState createState() => _AddBudgetState();
   TabController tabController;
+  Budget budget;
   Wallet wallet;
-  MyCategory myCategory;
 }
 
-class _AddBudgetState extends State<AddBudget> {
-  bool isRepeat = true;
+class _AddBudgetState extends State<EditBudget> {
+  Budget _budget;
 
   BudgetTimeRange mTimeRange;
 
@@ -43,81 +44,62 @@ class _AddBudgetState extends State<AddBudget> {
 
   @override
   Widget build(BuildContext context) {
+    _budget = this.widget.budget;
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    if (widget.myCategory != null) cate = widget.myCategory;
 
     return Theme(
       data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
       child: Scaffold(
         appBar: AppBar(
-          leadingWidth: 65,
+          leadingWidth: 70,
+          backgroundColor: Color(0xff333333),
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 0),
-              child: Center(
-                  child: Text(
-                'Cancel',
-                style: TextStyle(color: Colors.white70),
-              )),
-            ),
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                alignment: Alignment.center,
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                      color: Colors.white70,
+                      fontFamily: 'Montserrat',
+                      fontSize: 13),
+                )),
+          ),
+          centerTitle: true,
+          title: Text(
+            'Edit Budget',
+            style: TextStyle(color: white, fontFamily: 'Montserrat'),
           ),
           actions: [
             GestureDetector(
               onTap: () async {
-                //TODO: Add new budget
-                // await _firestore.updateEvent();
-                if (selectedWallet == null) {
-                  _showAlertDialog('Please pick your wallet!', null);
-                } else if (amount == null) {
-                  _showAlertDialog('Please enter amount!', null);
-                } else if (cate == null) {
-                  _showAlertDialog('Please pick category', null);
-                } else if (mTimeRange == null) {
-                  _showAlertDialog("Please pick time range", null);
-                } else {
-                  Budget mBudget = new Budget(
-                      id: 'id',
-                      category: this.cate,
-                      amount: this.amount,
-                      spent: 0,
-                      walletId: this.selectedWallet.id,
-                      isFinished: mTimeRange.endDay.isBefore(DateTime.now())
-                          ? true
-                          : false,
-                      beginDate: mTimeRange.beginDay,
-                      endDate: mTimeRange.endDay,
-                      isRepeat: isRepeat);
-                  await _firestore.addBudget(mBudget, selectedWallet);
-                  await _showAlertDialog(
-                      "Add budget successfully!", 'Congratulations');
-                  String result = "Success";
-                  Navigator.pop(context, result);
-                }
+                _firestore.updateBudget(_budget, widget.wallet);
+                await _showAlertDialog(
+                    "Congratulations, Update budget successfully!");
+                String result = 'Ajojo';
+                Navigator.pop(context, result);
               },
               child: Container(
-                padding: EdgeInsets.only(right: 5),
-                child: Center(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  alignment: Alignment.center,
                   child: Text(
                     'Save',
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ),
-              ),
-            )
+                    style: TextStyle(
+                        color: Colors.white70,
+                        fontFamily: 'Montserrat',
+                        fontSize: 13),
+                  )),
+            ),
           ],
-          backgroundColor: Color(0xff333333),
-          centerTitle: true,
-          title: Text(
-            'Add budget',
-            style: TextStyle(color: white),
-          ),
         ),
+        backgroundColor: Color(0xff111111),
         body: Container(
           color: Color(0xff111111),
-          padding: EdgeInsets.only(left: 15, right: 15, top: 30),
+          margin: EdgeInsets.symmetric(vertical: 15),
+          padding: EdgeInsets.all(15),
           child: Column(
             children: [
               Container(
@@ -136,6 +118,7 @@ class _AddBudgetState extends State<AddBudget> {
                     if (selectCate != null) {
                       setState(() {
                         this.cate = selectCate;
+                        _budget.category = this.cate;
                       });
                     }
                   },
@@ -146,7 +129,7 @@ class _AddBudgetState extends State<AddBudget> {
                   dense: true,
                   leading: SuperIcon(
                     iconPath:
-                        cate == null ? 'assets/icons/box.svg' : cate.iconID,
+                        cate == null ? _budget.category.iconID : cate.iconID,
                     size: 35,
                   ),
                   title: Theme(
@@ -179,6 +162,7 @@ class _AddBudgetState extends State<AddBudget> {
                             if (selectCate != null) {
                               setState(() {
                                 this.cate = selectCate;
+                                _budget.category = this.cate;
                               });
                             }
                           },
@@ -190,8 +174,9 @@ class _AddBudgetState extends State<AddBudget> {
                               fontSize: 20,
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
-                              hintText:
-                                  cate == null ? 'Choose group' : cate.name,
+                              hintText: cate == null
+                                  ? _budget.category.name
+                                  : cate.name,
                               hintStyle: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -218,8 +203,8 @@ class _AddBudgetState extends State<AddBudget> {
                         MaterialPageRoute(builder: (_) => EnterAmountScreen()));
                     if (resultAmount != null)
                       setState(() {
-                        print(resultAmount);
                         amount = double.parse(resultAmount);
+                        this._budget.amount = amount;
                       });
                   },
                   trailing: Icon(
@@ -257,14 +242,16 @@ class _AddBudgetState extends State<AddBudget> {
                                     builder: (_) => EnterAmountScreen()));
                             if (resultAmount != null)
                               setState(() {
-                                print(resultAmount);
                                 amount = double.parse(resultAmount);
+                                this._budget.amount = amount;
                               });
                           },
                           readOnly: true,
                           decoration: InputDecoration(
                               hintText: amount == null
-                                  ? 'Enter amount' //: currencySymbol +
+                                  ? MoneyFormatter(amount: _budget.amount)
+                                      .output
+                                      .withoutFractionDigits
                                   : MoneyFormatter(amount: amount)
                                       .output
                                       .withoutFractionDigits,
@@ -299,6 +286,8 @@ class _AddBudgetState extends State<AddBudget> {
                       setState(() {
                         // Change the time ahihi
                         mTimeRange = resultAmount;
+                        _budget.beginDate = resultAmount.beginDay;
+                        _budget.endDate = resultAmount.endDay;
                       });
                   },
                   trailing: Icon(
@@ -330,7 +319,7 @@ class _AddBudgetState extends State<AddBudget> {
                         ),
                         TextFormField(
                           onTap: () async {
-                            var resultAmount =
+                            BudgetTimeRange resultAmount =
                                 await showCupertinoModalBottomSheet(
                                     isDismissible: true,
                                     backgroundColor: Colors.grey[900],
@@ -342,6 +331,8 @@ class _AddBudgetState extends State<AddBudget> {
                               setState(() {
                                 // Change the time ahihi
                                 mTimeRange = resultAmount;
+                                _budget.beginDate = resultAmount.beginDay;
+                                _budget.endDate = resultAmount.endDay;
                               });
                           },
                           readOnly: true,
@@ -353,10 +344,11 @@ class _AddBudgetState extends State<AddBudget> {
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
                               hintText: mTimeRange == null
-                                  ? 'Time range:'
-                                  : mTimeRange.description == null
-                                      ? mTimeRange.TimeRangeString()
-                                      : mTimeRange.description,
+                                  ? new BudgetTimeRange(
+                                          beginDay: widget.budget.beginDate,
+                                          endDay: widget.budget.endDate)
+                                      .getBudgetLabel()
+                                  : mTimeRange.getBudgetLabel(),
                               hintStyle: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -379,7 +371,7 @@ class _AddBudgetState extends State<AddBudget> {
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
                   onTap: () async {
-                    var res = await showCupertinoModalBottomSheet(
+                    Wallet res = await showCupertinoModalBottomSheet(
                         isDismissible: true,
                         backgroundColor: Colors.grey[900],
                         context: context,
@@ -387,6 +379,7 @@ class _AddBudgetState extends State<AddBudget> {
                             SelectWalletAccountScreen(wallet: widget.wallet));
                     if (res != null)
                       setState(() {
+                        _budget.walletId = res.id;
                         selectedWallet = res;
                         currencySymbol = CurrencyService()
                             .findByCode(selectedWallet.currencyID)
@@ -400,7 +393,7 @@ class _AddBudgetState extends State<AddBudget> {
                   dense: true,
                   leading: SuperIcon(
                     iconPath: selectedWallet == null
-                        ? 'assets/icons/wallet_2.svg'
+                        ? this.widget.wallet.iconID
                         : selectedWallet.iconID,
                     size: 30,
                   ),
@@ -424,14 +417,16 @@ class _AddBudgetState extends State<AddBudget> {
                         ),
                         TextFormField(
                           onTap: () async {
-                            var res = await showCupertinoModalBottomSheet(
+                            Wallet res = await showCupertinoModalBottomSheet(
                                 isDismissible: true,
                                 backgroundColor: Colors.grey[900],
                                 context: context,
                                 builder: (context) => SelectWalletAccountScreen(
-                                    wallet: widget.wallet));
+                                    wallet: selectedWallet));
                             if (res != null)
                               setState(() {
+                                _budget.walletId = res.id;
+
                                 selectedWallet = res;
                                 currencySymbol = CurrencyService()
                                     .findByCode(selectedWallet.currencyID)
@@ -447,7 +442,7 @@ class _AddBudgetState extends State<AddBudget> {
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
                               hintText: selectedWallet == null
-                                  ? 'Select wallet'
+                                  ? widget.wallet.name
                                   : selectedWallet.name,
                               hintStyle: TextStyle(
                                   color: Colors.white,
@@ -464,55 +459,57 @@ class _AddBudgetState extends State<AddBudget> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 30,
               ),
-              Container(
-                margin: EdgeInsets.only(bottom: 10, top: 5),
-                padding: EdgeInsets.only(right: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isRepeat = !isRepeat;
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(1),
-                        margin:
-                            EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 1),
-                            shape: BoxShape.circle,
-                            color: Color(0xff111111)),
-                        child: isRepeat
-                            ? Icon(
-                                Icons.check,
-                                size: 17,
-                                color: Colors.white,
-                              )
-                            : Icon(
-                                null,
-                                size: 17,
-                                color: Colors.black,
-                              ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        'Repeat this budget',
-                        style: TextStyle(
-                            color: white,
-                            fontFamily: 'Montserrat',
-                            fontSize: 13),
-                      ),
-                    )
-                  ],
+              /*GestureDetector(
+                onTap: () async {
+                  //TODO: Add new budget
+                  // await _firestore.updateEvent();
+                  if (selectedWallet == null) {
+                    _showAlertDialog('Please pick your wallet!');
+                  } else if (amount == null) {
+                    _showAlertDialog('Please enter amount!');
+                  } else if (cate == null) {
+                    _showAlertDialog('Please pick category');
+                  } else if (mTimeRange == null) {
+                    _showAlertDialog("Please pick time range");
+                  } else {
+                    Budget mBudget = new Budget(
+                        id: 'id',
+                        category: this.cate,
+                        amount: this.amount,
+                        spent: 0,
+                        walletId: this.selectedWallet.id,
+                        isFinished: mTimeRange.endDay.isBefore(DateTime.now())
+                            ? true
+                            : false,
+                        beginDate: mTimeRange.beginDay,
+                        endDate: mTimeRange.endDay,
+                        isRepeat: false);
+                    await _firestore.addBudget(mBudget, selectedWallet);
+                    await _showAlertDialog(
+                        "Congratulations, Add budget successfully!");
+                    widget.tabController.animateTo(1);
+                  }
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Color(0xFF2FB49C),
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: Text(
+                    'Add budget',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25),
+                  ),
                 ),
-              ),
+              ),*/
             ],
           ),
         ),
@@ -520,23 +517,13 @@ class _AddBudgetState extends State<AddBudget> {
     );
   }
 
-  Future<void> _showAlertDialog(String content, String title) async {
+  Future<void> _showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       barrierColor: Colors.black54,
       builder: (BuildContext context) {
-        if (title == null)
-          return CustomAlert(
-            content: content,
-          );
-        else
-          return CustomAlert(
-            content: content,
-            title: title,
-            iconPath: 'assets/images/success.svg',
-            //iconPath: iconpath,
-          );
+        return CustomAlert(content: content);
       },
     );
   }
