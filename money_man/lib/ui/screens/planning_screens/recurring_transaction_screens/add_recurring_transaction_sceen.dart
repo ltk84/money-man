@@ -10,6 +10,7 @@ import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/categories_screens/categories_recurring_transaction_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
@@ -163,10 +164,11 @@ class _AddRecurringTransactionScreenState
                       behavior: HitTestBehavior.translucent,
                       onTap: () async {
                         final selectCate = await showCupertinoModalBottomSheet(
-                            isDismissible: true,
+                            // isDismissible: true,
                             backgroundColor: Colors.grey[900],
                             context: context,
-                            builder: (context) => CategoriesTransactionScreen(
+                            builder: (context) =>
+                                CategoriesRecurringTransactionScreen(
                                   walletId: widget.wallet.id,
                                 ));
                         if (selectCate != null) {

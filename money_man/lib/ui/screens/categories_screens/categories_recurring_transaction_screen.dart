@@ -7,19 +7,20 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/select_other_source.dart';
 import 'package:provider/provider.dart';
 
-class CategoriesTransactionScreen extends StatefulWidget {
+class CategoriesRecurringTransactionScreen extends StatefulWidget {
   final String walletId;
 
-  const CategoriesTransactionScreen({Key key, @required this.walletId})
+  const CategoriesRecurringTransactionScreen({Key key, @required this.walletId})
       : super(key: key);
 
   @override
-  _CategoriesTransactionScreenState createState() =>
-      _CategoriesTransactionScreenState();
+  _CategoriesRecurringTransactionScreenState createState() =>
+      _CategoriesRecurringTransactionScreenState();
 }
 
-class _CategoriesTransactionScreenState
-    extends State<CategoriesTransactionScreen> with TickerProviderStateMixin {
+class _CategoriesRecurringTransactionScreenState
+    extends State<CategoriesRecurringTransactionScreen>
+    with TickerProviderStateMixin {
   // list tab category
   final List<Tab> categoryTypeTab = [
     Tab(
@@ -177,37 +178,7 @@ class _CategoriesTransactionScreenState
                           title: Text(_selectCateTab[index].name,
                               style: Theme.of(context).textTheme.subtitle1),
                           onTap: () async {
-                            if (_selectCateTab[index].name == 'Repayment') {
-                              var result = await showCupertinoModalBottomSheet(
-                                  isDismissible: true,
-                                  backgroundColor: Colors.grey[900],
-                                  context: context,
-                                  builder: (context) => SelectOtherSourceScreen(
-                                      title: 'Select payment source',
-                                      titleAtEnd: 'Tap to pay off other debt',
-                                      criteria: 'Debt',
-                                      walletId: widget.walletId));
-                              if (result != null) {
-                                Navigator.pop(
-                                    context, [_selectCateTab[index], result]);
-                              }
-                            } else if (_selectCateTab[index].name ==
-                                'Debt Collection') {
-                              var result = await showCupertinoModalBottomSheet(
-                                  backgroundColor: Colors.grey[900],
-                                  context: context,
-                                  builder: (context) => SelectOtherSourceScreen(
-                                      title: 'Select debt collection source',
-                                      titleAtEnd:
-                                          'Tap to receive other debt collection',
-                                      criteria: 'Loan',
-                                      walletId: widget.walletId));
-                              if (result != null) {
-                                Navigator.pop(
-                                    context, [_selectCateTab[index], result]);
-                              }
-                            } else
-                              Navigator.pop(context, _selectCateTab[index]);
+                            Navigator.pop(context, _selectCateTab[index]);
                           },
                         );
                       });

@@ -234,7 +234,7 @@ class FirebaseFireStoreService {
         .collection('wallets')
         .doc(walletId)
         .collection('transactions')
-        .where('amount', isEqualTo: 5555)
+        .where('category.name', isEqualTo: criteria)
         .get()
         .then((value) {
       print('get complete with criteria: $criteria');
@@ -262,10 +262,10 @@ class FirebaseFireStoreService {
     else {
       if (transaction.category.name == 'Debt') {
         wallet.amount += transaction.amount;
-        transaction.note += ' from someone';
+        // transaction.note += ' from someone';
       } else if (transaction.category.name == 'Loan') {
         wallet.amount -= transaction.amount;
-        transaction.note += ' to someone';
+        // transaction.note += ' to someone';
       } else if (transaction.category.name == 'Repayment') {
         wallet.amount -= transaction.amount;
       } else {
@@ -400,10 +400,10 @@ class FirebaseFireStoreService {
     else {
       if (transaction.category.name == 'Debt') {
         wallet.amount += transaction.amount;
-        transaction.note += ' from someone';
+        // transaction.note += ' from someone';
       } else if (transaction.category.name == 'Loan') {
         wallet.amount -= transaction.amount;
-        transaction.note += ' to someone';
+        // transaction.note += ' to someone';
       } else if (transaction.category.name == 'Repayment') {
         wallet.amount -= transaction.amount;
       } else {

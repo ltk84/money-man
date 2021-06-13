@@ -390,13 +390,13 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               leading: Icon(Icons.account_balance_outlined,
                   color: Colors.white54, size: 28.0),
               title: TextFormField(
-                onTap: () async {
-                  final PhoneContact phoneContact =
-                      await FlutterContactPicker.pickPhoneContact();
-                  print(phoneContact.fullName);
-                  setState(() {
-                    contact = phoneContact.fullName;
-                  });
+                onTap: () {
+                  // final PhoneContact phoneContact =
+                  //     await FlutterContactPicker.pickPhoneContact();
+                  // print(phoneContact.fullName);
+                  // setState(() {
+                  //   contact = phoneContact.fullName;
+                  // });
                 },
                 readOnly: true,
                 autocorrect: false,
@@ -411,7 +411,12 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500),
-                    hintText: contact ?? 'With'),
+                    hintText:
+                        contact ?? widget.transaction.category.name == 'Debt'
+                            ? 'Lender'
+                            : widget.transaction.category.name == 'Loan'
+                                ? 'Borrower'
+                                : 'With'),
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',

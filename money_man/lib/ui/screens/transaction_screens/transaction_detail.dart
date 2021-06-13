@@ -202,6 +202,10 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     ],
                   ),
                   SizedBox(height: 10),
+                  // widget.transaction.contact == null
+                  //     ? Container()
+                  // :
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -211,10 +215,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               color: Colors.grey[500], size: 25.0)),
                       Expanded(
                           flex: 3,
-                          child: Text(
-                              widget.transaction.contact == null
-                                  ? 'With someone'
-                                  : 'With ${widget.transaction.contact}',
+                          child: Text('${widget.transaction.contact}',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: ' Montserrat',

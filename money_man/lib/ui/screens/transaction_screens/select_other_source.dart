@@ -76,6 +76,9 @@ class OtherSourceListView extends StatelessWidget {
                 itemBuilder: (context, index) {
                   MyTransaction trans = transList[index];
                   return ListTile(
+                    onTap: () {
+                      Navigator.pop(context, trans);
+                    },
                     leading:
                         SuperIcon(iconPath: trans.category.iconID, size: 25.0),
                     title: Text(

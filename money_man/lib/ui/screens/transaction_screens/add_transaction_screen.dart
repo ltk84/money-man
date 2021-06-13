@@ -37,6 +37,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   String currencySymbol;
   String contact;
   String hintTextConact;
+  MyTransaction extraTransaction;
 
   @override
   void initState() {
@@ -98,18 +99,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 } else if (cate == null) {
                   _showAlertDialog('Please pick category');
                 } else {
-                  if (contact != null) {
-                    if (cate.type == 'debt & loan') {
-                      if (cate.name == 'Debt') {
-                        note += ' from $contact';
-                      } else if (cate.name == 'Loan') {
-                        note += ' to $contact';
-                      }
-                    }
-                  }
-
-                  MyTransaction trans;
-                  trans = MyTransaction(
+                  MyTransaction trans = MyTransaction(
                       id: 'id',
                       amount: amount,
                       note: note,
@@ -119,6 +109,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       contact: contact);
                   // }
                   await _firestore.addTransaction(selectedWallet, trans);
+                  if (extraTransaction != null) {
+                    extraTransaction.extraAmountInfo = trans.amount;
+                    await _firestore.updateTransaction(
+                        extraTransaction, selectedWallet);
+                  }
                   Navigator.pop(context);
                 }
               },
@@ -224,16 +219,20 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           walletId: widget.currentWallet.id,
                         ));
                 if (selectCate != null) {
-                  setState(() {
-                    this.cate = selectCate;
-                    if (cate.type == 'debt & loan') {
-                      if (cate.name == 'Debt') {
-                        hintTextConact = 'Lender';
-                      } else if (cate.name == 'Loan') {
-                        hintTextConact = 'Borrower';
+                  if (selectCate.length == 2) {
+                    print('alo');
+                  } else {
+                    setState(() {
+                      this.cate = selectCate;
+                      if (cate.type == 'debt & loan') {
+                        if (cate.name == 'Debt') {
+                          hintTextConact = 'Lender';
+                        } else if (cate.name == 'Loan') {
+                          hintTextConact = 'Borrower';
+                        }
                       }
-                    }
-                  });
+                    });
+                  }
                 }
               },
               leading: cate == null
@@ -254,16 +253,32 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                             walletId: widget.currentWallet.id,
                           ));
                   if (selectCate != null) {
-                    setState(() {
-                      this.cate = selectCate;
-                      if (cate.type == 'debt & loan') {
-                        if (cate.name == 'Debt') {
-                          hintTextConact = 'Lender';
-                        } else if (cate.name == 'Loan') {
-                          hintTextConact = 'Borrower';
+                    if (selectCate is List && selectCate.length == 2) {
+                      MyCategory category = selectCate[0];
+                      setState(() {
+                        this.cate = category;
+                        if (cate.type == 'debt & loan') {
+                          if (cate.name == 'Debt') {
+                            hintTextConact = 'Lender';
+                          } else if (cate.name == 'Loan') {
+                            hintTextConact = 'Borrower';
+                          }
                         }
-                      }
-                    });
+                        extraTransaction = selectCate[1];
+                        this.contact = extraTransaction.contact;
+                      });
+                    } else {
+                      setState(() {
+                        this.cate = selectCate;
+                        if (cate.type == 'debt & loan') {
+                          if (cate.name == 'Debt') {
+                            hintTextConact = 'Lender';
+                          } else if (cate.name == 'Loan') {
+                            hintTextConact = 'Borrower';
+                          }
+                        }
+                      });
+                    }
                   }
                 },
                 readOnly: true,
