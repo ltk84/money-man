@@ -203,7 +203,9 @@ class _RecurringTransactionDetailScreenState
                           widget.recurringTransaction, widget.wallet);
                   if (result > 0) {
                     await _showAlertDialog(
-                        title: 'Congratulation!', content: 'Execute success!');
+                        title: 'Congratulation!',
+                        content: 'Execute success!',
+                        iconPath: 'assets/images/success.svg');
                   } else {
                     await _showAlertDialog(
                         content: 'Recurring transaction expired!');
@@ -385,13 +387,14 @@ class _RecurringTransactionDetailScreenState
   }
 
   Future<void> _showAlertDialog(
-      {String title = 'Oops...', String content}) async {
+      {String title = 'Oops...', String content, String iconPath}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       barrierColor: Colors.black54,
       builder: (BuildContext context) {
         return CustomAlert(
+          iconPath: iconPath,
           content: content,
           title: title,
         );

@@ -288,6 +288,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 ))),
                             child: CupertinoDatePicker(
                                 mode: CupertinoDatePickerMode.date,
+                                minimumDate: beginDateTime,
                                 initialDateTime: beginDateTime,
                                 onDateTimeChanged: (val) {
                                   setState(() {
