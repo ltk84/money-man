@@ -942,7 +942,7 @@ class FirebaseFireStoreService {
             (int.parse(recurringTrans.repeatOption.extraTypeInfo.toString()) -
                     1)
                 .toString();
-        if (recurringTrans.repeatOption.extraTypeInfo == 0) {
+        if (int.parse(recurringTrans.repeatOption.extraTypeInfo) <= 0) {
           recurringTrans.isFinished = true;
         }
       } else if (recurringTrans.repeatOption.type == 'until') {
@@ -1018,6 +1018,7 @@ class FirebaseFireStoreService {
   // thực hiện add transaction của recurring transaction ngay lập tức (tương tự trên)
   Future executeInstantRecurringTransaction(
       RecurringTransaction recurringTransaction, Wallet wallet) async {
+    if (recurringTransaction.isFinished == true) return -1;
     List<String> transactionIdList = await addTransactionOfRecurringTransaction(
         [recurringTransaction], wallet);
 

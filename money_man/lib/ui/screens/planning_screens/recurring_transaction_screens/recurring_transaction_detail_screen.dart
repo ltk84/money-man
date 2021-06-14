@@ -387,7 +387,9 @@ class _RecurringTransactionDetailScreenState
   }
 
   Future<void> _showAlertDialog(
-      {String title = 'Oops...', String content, String iconPath}) async {
+      {String title = 'Oops...',
+      String content,
+      String iconPath = 'assets/images/alert.svg'}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
