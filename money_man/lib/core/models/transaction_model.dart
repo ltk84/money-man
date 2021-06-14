@@ -11,6 +11,8 @@ class MyTransaction {
   String budgetID;
   String eventID;
   String billID;
+  String contact;
+
   MyTransaction({
     @required this.id,
     @required this.amount,
@@ -21,22 +23,23 @@ class MyTransaction {
     this.budgetID,
     this.eventID,
     this.billID,
+    this.contact,
   });
 
   factory MyTransaction.fromMap(Map<String, dynamic> data) {
     if (data == null) return null;
 
     return MyTransaction(
-            id: data['id'],
-            amount: data['amount'],
-            date: DateTime.tryParse(data['date'].toDate().toString()),
-            currencyID: data['currencyID'],
-            category: MyCategory.fromMap(data['category']),
-            note: data['note'],
-            budgetID: data['budgetID'] ?? "",
-            eventID: data['eventID'] ?? "",
-            billID: data['billID']) ??
-        "";
+        id: data['id'],
+        amount: data['amount'],
+        date: DateTime.tryParse(data['date'].toDate().toString()),
+        currencyID: data['currencyID'],
+        category: MyCategory.fromMap(data['category']),
+        note: data['note'],
+        budgetID: data['budgetID'],
+        eventID: data['eventID'],
+        billID: data['billID'],
+        contact: data['contact']);
   }
 
   Map<String, dynamic> toMap() {
@@ -47,9 +50,10 @@ class MyTransaction {
       'currencyID': currencyID,
       'category': category.toMap(),
       'note': note ?? "",
-      'budgetID': budgetID ?? null,
-      'eventID': eventID ?? null,
-      'billID': billID ?? null,
+      'budgetID': budgetID,
+      'eventID': eventID,
+      'billID': billID,
+      'contact': contact,
     };
   }
 }

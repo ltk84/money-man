@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +29,7 @@ class _AccountInformation extends State<AccountInformation> {
       margin: EdgeInsets.fromLTRB(30, 15, 30, 30),
       //padding: EdgeInsets.fromLTRB(20,10,20,20),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: boxBackgroundColor,
           borderRadius: BorderRadius.circular(10)
       ),
       child: Column(
@@ -40,12 +41,12 @@ class _AccountInformation extends State<AccountInformation> {
             contentPadding: EdgeInsets.fromLTRB(30, 10, 40, 20),
             leading: Icon(
               Icons.person_rounded,
-              color: white,
+              color: foregroundColor,
               size: 30,
             ),
             title: Theme(
               data: Theme.of(context).copyWith(
-                primaryColor: Colors.white,
+                primaryColor: foregroundColor,
               ),
               child: TextFormField(
                 validator: (value) {
@@ -60,45 +61,45 @@ class _AccountInformation extends State<AccountInformation> {
                   print(username);
                 },
                 style: TextStyle(
-                    color: white,
+                    color: foregroundColor,
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
-                    fontFamily: 'Montserrat'
+                    fontFamily: fontFamily
                 ),
                 autocorrect: false,
                 decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white12,
+                        color: foregroundColor.withOpacity(0.12),
                         width: 1.5,
                       )
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white,
+                        color: foregroundColor.withOpacity(0.12),
                         width: 2.0,
                       )
                     ),
                     errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                          color: Colors.red[700],
+                          color: errorColor,
                           width: 1.5,
                         )
                     ),
                     focusedErrorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                          color: Colors.red[700],
+                          color: errorColor,
                           width: 2.0,
                         )
                     ),
                     errorStyle: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: fontFamily,
                       fontWeight: FontWeight.w400,
                     ),
                     labelText: 'Enter your name',
                     labelStyle: TextStyle(
-                        color: Colors.white24,
-                        fontFamily: 'Montserrat',
+                        color: foregroundColor.withOpacity(0.24),
+                        fontFamily: fontFamily,
                         fontSize: 16.0,
                         fontWeight: FontWeight.w400
                     ),
@@ -119,7 +120,7 @@ class _AccountInformation extends State<AccountInformation> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Color(0xFF111111),
+        backgroundColor: backgroundColor1,
         leadingWidth: 60.0,
         leading: RotatedBox(
             quarterTurns: 2,
@@ -130,7 +131,7 @@ class _AccountInformation extends State<AccountInformation> {
               },
               icon: Icon(
                   Icons.exit_to_app,
-                  color: Colors.white24,
+                  color: foregroundColor.withOpacity(0.24),
                   size: 28.0,
               ),
             )
@@ -139,7 +140,7 @@ class _AccountInformation extends State<AccountInformation> {
       body: Container(
         height: double.infinity,
         padding: EdgeInsets.only(top: 30),
-        color: Color(0xFF111111),
+        color: backgroundColor1,
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -158,9 +159,9 @@ class _AccountInformation extends State<AccountInformation> {
                             ? 'M'
                             : username[0].toUpperCase(),
                         style: TextStyle(
-                            color: Color(0xff2FB49C),
+                            color: primaryColor,
                             fontSize: 65,
-                            fontFamily: 'Montserrat',
+                            fontFamily: fontFamily,
                             fontWeight: FontWeight.w400),
                       ),
                       alignment: Alignment.center),
@@ -168,10 +169,10 @@ class _AccountInformation extends State<AccountInformation> {
                 Text(
                   'Tell me what your name is.',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
+                    fontFamily: fontFamily,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w300,
-                    color: Colors.white,
+                    color: foregroundColor,
                   )
                 ),
                 InputTile(context),
@@ -213,7 +214,7 @@ class _AccountInformation extends State<AccountInformation> {
                     child: Text('CONFIRM',
                         style: TextStyle(
                             fontSize: 15,
-                            fontFamily: 'Montserrat',
+                            fontFamily: fontFamily,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.5,
                             wordSpacing: 2.0
@@ -228,69 +229,5 @@ class _AccountInformation extends State<AccountInformation> {
         ),
       ),
     );
-  }
-
-// Đây là cái cũ, không xài, nhưng để cho có kỷ niệm.
-  Widget buildInputField() {
-    final _auth = Provider.of<FirebaseAuthService>(context);
-    return StreamBuilder<User>(
-        stream: _auth.userStream,
-        builder: (context, snapshot) {
-          User _user = snapshot.data;
-          return Column(children: [
-            SizedBox(height: 50),
-            Row(
-              children: <Widget>[
-                Text(
-                  'Username',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-            Theme(
-              data: Theme.of(context).copyWith(
-                // override textfield's icon color when selected
-                primaryColor: Colors.black,
-              ),
-              child: TextFormField(
-                initialValue:
-                    (_user.displayName != '' && _user.displayName != null)
-                        ? _user.displayName
-                        : (_user.phoneNumber != null ? _user.phoneNumber : ''),
-                validator: (value) {
-                  if (value == null || value.isEmpty)
-                    return 'Username not empty';
-                  return null;
-                },
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal),
-                textAlign: TextAlign.left,
-                onChanged: (value) => username = value,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.account_circle,
-                    size: 30,
-                  ),
-                  labelStyle: TextStyle(
-                    fontFamily: 'Montserrat',
-                  ),
-                  fillColor: Colors.white,
-                ),
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.next,
-                autocorrect: false,
-                cursorColor: Colors.black,
-              ),
-            ),
-            SizedBox(height: 10)
-          ]);
-        });
   }
 }

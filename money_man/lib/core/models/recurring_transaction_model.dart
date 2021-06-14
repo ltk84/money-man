@@ -12,8 +12,9 @@ class RecurringTransaction {
   double amount;
   String walletId;
   String note;
-  List<MyTransaction> transactionIdList;
+  List<String> transactionIdList;
   RepeatOption repeatOption;
+  bool isFinished;
 
   RecurringTransaction({
     @required this.id,
@@ -23,6 +24,7 @@ class RecurringTransaction {
     @required this.note,
     @required this.transactionIdList,
     @required this.repeatOption,
+    @required this.isFinished,
   });
 
   Map<String, dynamic> toMap() {
@@ -32,8 +34,9 @@ class RecurringTransaction {
       'amount': amount,
       'walletId': walletId,
       'note': note,
-      'transactionIdList': transactionIdList?.map((x) => x.toMap())?.toList(),
+      'transactionIdList': transactionIdList,
       'repeatOption': repeatOption.toMap(),
+      'isFinished': isFinished,
     };
   }
 
@@ -44,9 +47,20 @@ class RecurringTransaction {
       amount: data['amount'],
       walletId: data['walletId'],
       note: data['note'],
-      transactionIdList: List<MyTransaction>.from(
-          data['transactionIdList']?.map((x) => MyTransaction.fromMap(x))),
+      transactionIdList: List<String>.from(data['transactionIdList']),
       repeatOption: RepeatOption.fromMap(data['repeatOption']),
+      isFinished: data['isFinished'],
     );
+  }
+
+  RecurringTransaction.clone(RecurringTransaction source) {
+    this.id = source.id;
+    this.category = source.category;
+    this.amount = source.amount;
+    this.walletId = source.walletId;
+    this.note = source.note;
+    this.transactionIdList = source.transactionIdList;
+    this.repeatOption = source.repeatOption;
+    this.isFinished = source.isFinished;
   }
 }

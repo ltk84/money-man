@@ -9,10 +9,11 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/ui/screens/categories_screens/categories_bill_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
@@ -59,235 +60,243 @@ class _AddBillScreenState extends State<AddBillScreen> {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    return Scaffold(
-        backgroundColor: Color(0xFF111111),
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Color(0xFF1c1c1c),
-          elevation: 0.0,
-          leading: CloseButton(),
-          title: Text('Add Bill',
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 17.0,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              )),
-          centerTitle: true,
-          actions: [
-            TextButton(
-              onPressed: () async {
-                if (amount == null) {
-                  _showAlertDialog('Please enter amount!');
-                } else if (category == null) {
-                  _showAlertDialog('Please pick category!');
-                } else {
-                  dueDates = initDueDate();
-                  var bill = Bill(
-                      id: 'id',
-                      category: category,
-                      amount: amount,
-                      walletId: selectedWallet.id,
-                      note: note,
-                      transactionIdList: [],
-                      repeatOption: repeatOption,
-                      isFinished: false,
-                      dueDates: dueDates,
-                      paidDueDates: [],
-                  );
-
-                  await _firestore.addBill(bill, selectedWallet);
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Save',
+    return StreamBuilder<Object>(
+      stream: _firestore.billStream(selectedWallet.id),
+      builder: (context, snapshot) {
+        List<Bill> listBills = snapshot.data ?? [];
+        return Scaffold(
+            backgroundColor: Color(0xFF111111),
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              backgroundColor: Color(0xFF1c1c1c),
+              elevation: 0.0,
+              leading: CloseButton(),
+              title: Text('Add Bill',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
-                    fontSize: 16.0,
+                    fontSize: 17.0,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF4FCC5C),
+                    color: Colors.white,
                   )),
-            ),
-          ],
-        ),
-        body: ListView(
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          children: [
-            Container(
-                margin: EdgeInsets.only(top: 30.0),
-                decoration: BoxDecoration(
-                    color: Colors.grey[900],
-                    border: Border(
-                        top: BorderSide(
-                          color: Colors.white12,
-                          width: 0.5,
-                        ),
-                        bottom: BorderSide(
-                          color: Colors.white12,
-                          width: 0.5,
-                        ))),
-                child: Column(children: [
-                  // Hàm build Amount Input.
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () async {
-                        final resultAmount = await Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => EnterAmountScreen()));
-                        if (resultAmount != null)
-                          setState(() {
-                            print(resultAmount);
-                            this.amount = double.parse(resultAmount);
-                          });
-                      },
-                      child: buildAmountInput(
-                          display: this.amount == null ? null : (currencySymbol + ' ' + this.amount.toString())
-                      )
-                  ),
-
-                  // Divider ngăn cách giữa các input field.
-                  Container(
-                    margin: EdgeInsets.only(left: 70),
-                    child: Divider(
-                      color: Colors.white12,
-                      thickness: 1,
-                    ),
-                  ),
-
-                  // Hàm build Category Selection.
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () async {
-                        final selectCate = await showCupertinoModalBottomSheet(
-                            isDismissible: true,
-                            backgroundColor: Colors.grey[900],
-                            context: context,
-                            builder: (context) => CategoriesTransactionScreen());
-                        if (selectCate != null) {
-                          setState(() {
-                            this.category = selectCate;
-                          });
-                        }
-                      },
-                      child: buildCategorySelection(
-                          display: this.category == null ? null : this.category.name,
-                          iconPath: this.category == null ? null : this.category.iconID,
-                      )
-                  ),
-
-                  // Divider ngăn cách giữa các input field.
-                  Container(
-                    margin: EdgeInsets.only(left: 70, top: 8),
-                    child: Divider(
-                      color: Colors.white12,
-                      thickness: 1,
-                    ),
-                    height: 2,
-                  ),
-
-                  // Hàm build Note Input.
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () async {
-                        final noteContent = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => NoteTransactionScreen(
-                                  content: note ?? '',
-                                )));
-                        print(noteContent);
-                        if (noteContent != null) {
-                          setState(() {
-                            note = noteContent;
-                          });
-                        }
-                      },
-                      child: buildNoteInput(
-                        display: this.note == null ? null : this.note,
-                      )
-                  ),
-
-                  // Divider ngăn cách giữa các input field.
-                  Container(
-                    margin: EdgeInsets.only(left: 70),
-                    child: Divider(
-                      color: Colors.white12,
-                      thickness: 1,
-                    ),
-                    height: 2,
-                  ),
-
-                  // Hàm build Wallet Selection.
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () async {
-                      var res = await showCupertinoModalBottomSheet(
-                          isDismissible: true,
-                          backgroundColor: Colors.grey[900],
-                          context: context,
-                          builder: (context) => SelectWalletAccountScreen(wallet: selectedWallet));
-                      if (res != null)
-                        setState(() {
-                          selectedWallet = res;
-                          currencySymbol = CurrencyService()
-                              .findByCode(selectedWallet.currencyID)
-                              .symbol;
-                        });
-                    },
-                    child: buildWalletSelection(
-                      display: this.selectedWallet == null ? null : this.selectedWallet.name,
-                      iconPath: this.selectedWallet == null ? null : this.selectedWallet.iconID,
-                    ),
-                  ),
-                ])),
-            Container(
-                margin: EdgeInsets.only(top: 30.0),
-                decoration: BoxDecoration(
-                    color: Colors.grey[900],
-                    border: Border(
-                        top: BorderSide(
-                          color: Colors.white12,
-                          width: 0.5,
-                        ),
-                        bottom: BorderSide(
-                          color: Colors.white12,
-                          width: 0.5,
-                        ))),
-                child: GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () async {
-                      var res = await showCupertinoModalBottomSheet(
-                          enableDrag: false,
-                          isDismissible: false,
-                          backgroundColor: Colors.grey[900],
-                          context: context,
-                          builder: (context) => RepeatOptionScreen(
-                            repeatOption: repeatOption,
-                          )
+              centerTitle: true,
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    if (amount == null) {
+                      _showAlertDialog('Please enter amount!');
+                    } else if (category == null) {
+                      _showAlertDialog('Please pick category!');
+                    } else if (listBills.any((element) => element.category.name == category.name)) {
+                      _showAlertDialog('This category has already been used,\nplease pick again!');
+                    } else {
+                      dueDates = initDueDate();
+                      var bill = Bill(
+                          id: 'id',
+                          category: category,
+                          amount: amount,
+                          walletId: selectedWallet.id,
+                          note: note,
+                          transactionIdList: [],
+                          repeatOption: repeatOption,
+                          isFinished: false,
+                          dueDates: dueDates,
+                          paidDueDates: [],
                       );
-                      if (res != null)
-                        setState(() {
-                          repeatOption = res;
-                        });
-                    },
-                    child: buildRepeatOptions()
-                )
+
+                      await _firestore.addBill(bill, selectedWallet);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text('Save',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF4FCC5C),
+                      )),
+                ),
+              ],
             ),
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-                child: Text(
-                  'Repeat every ${repeatOption.rangeAmount} ${repeatOption.extraAmountInfo}'
-                      '${repeatOption.rangeAmount == 1 ? '' : 's'} '
-                      'from ${DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime)}',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 13.0,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white60,
-                  ),
-                ))
-          ],
-        ));
+            body: ListView(
+              physics:
+                  BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              children: [
+                Container(
+                    margin: EdgeInsets.only(top: 30.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[900],
+                        border: Border(
+                            top: BorderSide(
+                              color: Colors.white12,
+                              width: 0.5,
+                            ),
+                            bottom: BorderSide(
+                              color: Colors.white12,
+                              width: 0.5,
+                            ))),
+                    child: Column(children: [
+                      // Hàm build Amount Input.
+                      GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            final resultAmount = await Navigator.push(context,
+                                MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                            if (resultAmount != null)
+                              setState(() {
+                                print(resultAmount);
+                                this.amount = double.parse(resultAmount);
+                              });
+                          },
+                          child: buildAmountInput(
+                              display: this.amount == null ? null : (currencySymbol + ' ' + this.amount.toString())
+                          )
+                      ),
+
+                      // Divider ngăn cách giữa các input field.
+                      Container(
+                        margin: EdgeInsets.only(left: 70),
+                        child: Divider(
+                          color: Colors.white12,
+                          thickness: 1,
+                        ),
+                      ),
+
+                      // Hàm build Category Selection.
+                      GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            final selectCate = await showCupertinoModalBottomSheet(
+                                isDismissible: true,
+                                backgroundColor: Colors.grey[900],
+                                context: context,
+                                builder: (context) => CategoriesBillScreen());
+                            if (selectCate != null) {
+                              setState(() {
+                                this.category = selectCate;
+                              });
+                            }
+                          },
+                          child: buildCategorySelection(
+                              display: this.category == null ? null : this.category.name,
+                              iconPath: this.category == null ? null : this.category.iconID,
+                          )
+                      ),
+
+                      // Divider ngăn cách giữa các input field.
+                      Container(
+                        margin: EdgeInsets.only(left: 70, top: 8),
+                        child: Divider(
+                          color: Colors.white12,
+                          thickness: 1,
+                        ),
+                        height: 2,
+                      ),
+
+                      // Hàm build Note Input.
+                      GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            final noteContent = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => NoteScreen(
+                                      content: note ?? '',
+                                    )));
+
+                            if (noteContent != null) {
+                              setState(() {
+                                note = noteContent;
+                              });
+                            }
+                          },
+                          child: buildNoteInput(
+                            display: this.note == '' ? null : this.note,
+                          )),
+
+
+                      // Divider ngăn cách giữa các input field.
+                      Container(
+                        margin: EdgeInsets.only(left: 70),
+                        child: Divider(
+                          color: Colors.white12,
+                          thickness: 1,
+                        ),
+                        height: 2,
+                      ),
+
+                      // Hàm build Wallet Selection.
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () async {
+                          var res = await showCupertinoModalBottomSheet(
+                              isDismissible: true,
+                              backgroundColor: Colors.grey[900],
+                              context: context,
+                              builder: (context) => SelectWalletAccountScreen(wallet: selectedWallet));
+                          if (res != null)
+                            setState(() {
+                              selectedWallet = res;
+                              currencySymbol = CurrencyService()
+                                  .findByCode(selectedWallet.currencyID)
+                                  .symbol;
+                            });
+                        },
+                        child: buildWalletSelection(
+                          display: this.selectedWallet == null ? null : this.selectedWallet.name,
+                          iconPath: this.selectedWallet == null ? null : this.selectedWallet.iconID,
+                        ),
+                      ),
+                    ])),
+                Container(
+                    margin: EdgeInsets.only(top: 30.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[900],
+                        border: Border(
+                            top: BorderSide(
+                              color: Colors.white12,
+                              width: 0.5,
+                            ),
+                            bottom: BorderSide(
+                              color: Colors.white12,
+                              width: 0.5,
+                            ))),
+                    child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () async {
+                          var res = await showCupertinoModalBottomSheet(
+                              enableDrag: false,
+                              isDismissible: false,
+                              backgroundColor: Colors.grey[900],
+                              context: context,
+                              builder: (context) => RepeatOptionScreen(
+                                repeatOption: repeatOption,
+                              )
+                          );
+                          if (res != null)
+                            setState(() {
+                              repeatOption = res;
+                            });
+                        },
+                        child: buildRepeatOptions()
+                    )
+                ),
+                Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                    child: Text(
+                      'Repeat every ${repeatOption.rangeAmount} ${repeatOption.extraAmountInfo}'
+                          '${repeatOption.rangeAmount == 1 ? '' : 's'} '
+                          'from ${DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime)}',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white60,
+                      ),
+                    ))
+              ],
+            ));
+      }
+    );
   }
 
   Widget buildAmountInput({String display}) {

@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-class NoteTransactionScreen extends StatefulWidget {
+class NoteScreen extends StatefulWidget {
   String content;
-  NoteTransactionScreen({
+  NoteScreen({
     Key key,
     @required this.content,
   }) : super(key: key);
-
   @override
-  _NoteTransactionScreenState createState() => _NoteTransactionScreenState();
+  _NoteScreenState createState() => _NoteScreenState();
 }
 
-class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
-  // String noteContent = '';
+class _NoteScreenState extends State<NoteScreen> {
+  String noteContent = '';
   final _formKey = GlobalKey<FormState>();
   final myController = TextEditingController();
-
   @override
   void initState() {
+    noteContent = widget.content;
+    myController.text = noteContent;
     super.initState();
-    myController.text = widget.content;
   }
 
   @override
@@ -55,6 +55,7 @@ class _NoteTransactionScreenState extends State<NoteTransactionScreen> {
         child: Form(
           key: _formKey,
           child: TextFormField(
+              // initialValue: noteContent,
               controller: myController,
               keyboardType: TextInputType.text,
               onSaved: (String val) {

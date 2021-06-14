@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:date_util/date_util.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/category_model.dart';
@@ -12,7 +15,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:provider/provider.dart';
 
 class EditRecurringTransactionScreen extends StatefulWidget {
@@ -36,7 +39,10 @@ class _EditRecurringTransactionScreenState
   MyCategory category;
   String note;
   RepeatOption repeatOption;
+  DateTime nextDate;
+  String repeatContent;
 
+  var dateUtility = DateUtil();
   @override
   void initState() {
     // TODO: implement initState
@@ -45,6 +51,11 @@ class _EditRecurringTransactionScreenState
     category = widget.recurringTransaction.category;
     note = widget.recurringTransaction.note;
     repeatOption = widget.recurringTransaction.repeatOption;
+    var dateTime = DateFormat('dd-MM-yyyy').format(repeatOption.beginDateTime);
+    var type = repeatOption.type == 'until'
+        ? 'until ${DateFormat('dd-MM-yyyy').format(repeatOption.extraTypeInfo)}'
+        : 'for ${repeatOption.extraTypeInfo} times';
+    repeatContent = 'Repeat ${repeatOption.frequency} from $dateTime $type';
   }
 
   @override
@@ -69,15 +80,17 @@ class _EditRecurringTransactionScreenState
             TextButton(
               onPressed: () async {
                 RecurringTransaction _recurringTransaction =
-                  RecurringTransaction(
-                      id: widget.recurringTransaction.id,
-                      category: category,
-                      amount: amount,
-                      walletId: widget.wallet.id,
-                      note: note,
-                      transactionIdList:
+                    RecurringTransaction(
+                  id: widget.recurringTransaction.id,
+                  category: category,
+                  amount: amount,
+                  walletId: widget.wallet.id,
+                  note: note,
+                  transactionIdList:
                       widget.recurringTransaction.transactionIdList,
-                      repeatOption: repeatOption);
+                  repeatOption: repeatOption,
+                  isFinished: false,
+                );
 
                 await _firestore.updateRecurringTransaction(
                     _recurringTransaction, widget.wallet);
@@ -125,9 +138,7 @@ class _EditRecurringTransactionScreenState
                           amount = double.parse(resultAmount);
                         });
                     },
-                    child: buildAmountInput(
-                        display:
-                            '\$ ' + amount.toString()),
+                    child: buildAmountInput(display: '\$ ' + amount.toString()),
                   ),
 
                   // Divider ngăn cách giữa các input field.
@@ -152,6 +163,9 @@ class _EditRecurringTransactionScreenState
                         setState(() {
                           category = selectCate;
                         });
+                        print('inside' + category.name);
+                        print('outside' +
+                            widget.recurringTransaction.category.name);
                       }
                     },
                     child: buildCategorySelection(
@@ -177,7 +191,7 @@ class _EditRecurringTransactionScreenState
                         final noteContent = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => NoteTransactionScreen(
+                                builder: (_) => NoteScreen(
                                       content: note ?? '',
                                     )));
                         print(noteContent);
@@ -187,8 +201,7 @@ class _EditRecurringTransactionScreenState
                           });
                         }
                       },
-                      child:
-                          buildNoteInput(display: note)),
+                      child: buildNoteInput(display: note)),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
@@ -227,19 +240,41 @@ class _EditRecurringTransactionScreenState
                           backgroundColor: Colors.grey[900],
                           context: context,
                           builder: (context) => RepeatOptionScreen(
-                                repeatOption:
-                                    repeatOption,
+                                repeatOption: repeatOption,
                               ));
                       if (res != null)
                         setState(() {
                           repeatOption = res;
+                          if (repeatOption.frequency == 'daily') {
+                            nextDate = repeatOption.beginDateTime
+                                .add(Duration(days: repeatOption.rangeAmount));
+                          } else if (repeatOption.frequency == 'weekly') {
+                            nextDate = repeatOption.beginDateTime.add(
+                                Duration(days: 7 * repeatOption.rangeAmount));
+                          } else if (repeatOption.frequency == 'monthly') {
+                            DateTime beginDate = repeatOption.beginDateTime;
+                            int days = dateUtility.daysInMonth(
+                                    beginDate.month, beginDate.year) *
+                                repeatOption.rangeAmount;
+                            nextDate = beginDate.add(Duration(days: days));
+                          } else {
+                            DateTime beginDate = repeatOption.beginDateTime;
+                            int days =
+                                (dateUtility.leapYear(beginDate.year) == true
+                                        ? 365
+                                        : 366) *
+                                    repeatOption.rangeAmount;
+                            print(days);
+                            nextDate = beginDate.add(Duration(days: days));
+                          }
+                          print(nextDate);
                         });
                     },
                     child: buildRepeatOptions())),
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Text(
-                  'Repeat everyday from 01/06/2021',
+                  repeatContent,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 13.0,
@@ -340,7 +375,7 @@ class _EditRecurringTransactionScreenState
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
                   child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
-              Text(display ?? 'Note',
+              Text(display == null || display == '' ? 'Note' : display,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,

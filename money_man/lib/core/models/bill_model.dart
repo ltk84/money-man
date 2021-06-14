@@ -13,7 +13,7 @@ class Bill {
   double amount;
   String note;
   String walletId;
-  List<MyTransaction> transactionIdList;
+  List<String> transactionIdList;
   RepeatOption repeatOption;
   bool isFinished;
   List<DateTime> dueDates;
@@ -39,7 +39,7 @@ class Bill {
       'amount': amount,
       'note': note,
       'walletId': walletId,
-      'transactionIdList': transactionIdList?.map((x) => x.toMap())?.toList(),
+      'transactionIdList': transactionIdList,
       'repeatOption': repeatOption.toMap(),
       'isFinished': isFinished,
       'dueDates': dueDates,
@@ -54,8 +54,8 @@ class Bill {
       amount: data['amount'],
       note: data['note'],
       walletId: data['walletId'],
-      transactionIdList: List<MyTransaction>.from(
-          data['transactionIdList']?.map((x) => MyTransaction.fromMap(x))),
+      transactionIdList: List<String>.from(
+          data['transactionIdList']?.map((x) => x)),
       repeatOption: RepeatOption.fromMap(data['repeatOption']),
       isFinished: data['isFinished'],
       dueDates: List<DateTime>.from(data['dueDates']?.map((x) =>

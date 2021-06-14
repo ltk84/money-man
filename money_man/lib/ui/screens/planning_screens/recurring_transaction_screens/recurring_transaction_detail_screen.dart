@@ -7,6 +7,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/edit_recurring_transaction_screen.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
 class RecurringTransactionDetailScreen extends StatefulWidget {
@@ -154,100 +155,54 @@ class _RecurringTransactionDetailScreenState
                         thickness: 1,
                       ),
                     ),
-                    // buildInfoRepeat(),
-                    // Divider ngăn cách giữa các input field.
-                    // Container(
-                    //   margin: EdgeInsets.only(left: 70),
-                    //   child: Divider(
-                    //     color: Colors.white12,
-                    //     thickness: 1,
-                    //   ),
-                    // ),
                     buildInfoWallet(
                       iconPath: widget.wallet.iconID,
                       display: widget.wallet.name,
                     ),
                   ],
                 )),
-            // Container(
-            //   margin: EdgeInsets.only(top: 30.0),
-            //   decoration: BoxDecoration(
-            //       color: Color(0xFF1c1c1c),
-            //       border: Border(
-            //           top: BorderSide(
-            //             color: Colors.white12,
-            //             width: 0.5,
-            //           ),
-            //           bottom: BorderSide(
-            //             color: Colors.white12,
-            //             width: 0.5,
-            //           ))),
-            //   child: TextButton(
-            //     onPressed: () {},
-            //     style: ButtonStyle(
-            //       foregroundColor: MaterialStateProperty.resolveWith<Color>(
-            //         (Set<MaterialState> states) {
-            //           if (states.contains(MaterialState.pressed))
-            //             return Color(0xFF4FCC5C).withOpacity(0.4);
-            //           else
-            //             return Color(
-            //                 0xFF4FCC5C); // Use the component's default.
-            //         },
-            //       ),
-            //     ),
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         Text("Mark as finished",
-            //             style: TextStyle(
-            //               fontSize: 14,
-            //               fontFamily: 'Montserrat',
-            //               fontWeight: FontWeight.w700,
-            //             ),
-            //             textAlign: TextAlign.center),
-            //         SizedBox(width: 8.0),
-            //         Icon(Icons.check, size: 20.0)
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // Container(
-            //   decoration: BoxDecoration(
-            //       color: Color(0xFF1c1c1c),
-            //       border: Border(
-            //           bottom: BorderSide(
-            //         color: Colors.white12,
-            //         width: 0.5,
-            //       ))),
-            //   child: TextButton(
-            //     onPressed: () {},
-            //     style: ButtonStyle(
-            //       foregroundColor: MaterialStateProperty.resolveWith<Color>(
-            //         (Set<MaterialState> states) {
-            //           if (states.contains(MaterialState.pressed))
-            //             return Color(0xFF4FCC5C).withOpacity(0.4);
-            //           else
-            //             return Color(
-            //                 0xFF4FCC5C); // Use the component's default.
-            //         },
-            //       ),
-            //     ),
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         Text("View list Transactions",
-            //             style: TextStyle(
-            //               fontSize: 14,
-            //               fontFamily: 'Montserrat',
-            //               fontWeight: FontWeight.w700,
-            //             ),
-            //             textAlign: TextAlign.center),
-            //         SizedBox(width: 8.0),
-            //         Icon(Icons.view_list, size: 20.0)
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            Container(
+              margin: EdgeInsets.only(top: 30.0),
+              decoration: BoxDecoration(
+                  color: Color(0xFF1c1c1c),
+                  border: Border(
+                      bottom: BorderSide(
+                    color: Colors.white12,
+                    width: 0.5,
+                  ))),
+              child: TextButton(
+                onPressed: () async {
+                  var result =
+                      await _firestore.executeInstantRecurringTransaction(
+                          widget.recurringTransaction, widget.wallet);
+                  if (result > 0) {
+                    await _showAlertDialog(
+                        title: 'Congratulation!', content: 'Execute success!');
+                  } else {
+                    await _showAlertDialog(
+                        content: 'Recurring transaction expired!');
+                  }
+                  Navigator.pop(context);
+                },
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return Colors.green.withOpacity(0.4);
+                      else
+                        return Colors.green; // Use the component's default.
+                    },
+                  ),
+                ),
+                child: Text("Execute transaction",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.center),
+              ),
+            ),
             Container(
               margin: EdgeInsets.only(top: 30.0),
               decoration: BoxDecoration(
@@ -400,6 +355,21 @@ class _RecurringTransactionDetailScreenState
           )
         ],
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(
+      {String title = 'Oops...', String content}) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(
+          content: content,
+          title: title,
+        );
+      },
     );
   }
 }
