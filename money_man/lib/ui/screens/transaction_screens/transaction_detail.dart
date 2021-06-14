@@ -14,8 +14,6 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/widget/budg
 import 'package:money_man/ui/screens/transaction_screens/edit_transaction_screen.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
 import 'package:provider/provider.dart';
-import '../../style.dart';
-import 'package:intl/intl.dart';
 
 class TransactionDetail extends StatefulWidget {
   MyTransaction transaction;
@@ -30,11 +28,10 @@ class TransactionDetail extends StatefulWidget {
 }
 
 class _TransactionDetailState extends State<TransactionDetail> {
-  @override
   Event event = Event(
     iconPath: 'assets/icons/wallet_2.svg',
-    id: 'id',
-    name: 'na',
+    id: '',
+    name: 'Select event',
     endDate: DateTime.now(),
     walletId: 'id',
     isFinished: false,
@@ -43,6 +40,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
     finishedByHand: false,
     autofinish: false,
   );
+
   Future<void> GetEvent(String id, Wallet wallet) async {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     if (widget.transaction.eventID != "") {
@@ -55,6 +53,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     GetEvent(widget.transaction.eventID, widget.wallet);
@@ -96,7 +95,6 @@ class _TransactionDetailState extends State<TransactionDetail> {
                   setState(() {
                     widget.transaction = updatedTrans;
                   });
-                print(updatedTrans.toMap());
               }),
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white),

@@ -40,9 +40,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   String contact;
   String hintTextConact;
   MyTransaction extraTransaction;
-
-  Event event;
   bool pickEvent = false;
+  Event event;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -56,9 +56,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
-
     print('add build');
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Colors.black26,
         appBar: AppBar(
@@ -110,19 +109,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         currencyID: selectedWallet.currencyID,
                         category: cate,
                         contact: contact,
-                        eventID: (event != null) ? event.id : "");
+                        eventID: event == null ? '' : event.id);
                     // }
                     await _firestore.addTransaction(selectedWallet, trans);
+
                     if (event != null) {
                       await _firestore.updateEventAmountAndTransList(
                           event, selectedWallet, trans);
-                      // if (extraTransaction != null) {
-                      //   extraTransaction.extraAmountInfo = trans.amount;
-                      //   await _firestore.updateTransaction(
-                      //       extraTransaction, selectedWallet);
-                      // }
-                      Navigator.pop(context);
                     }
+                    Navigator.pop(context);
                   }
                 },
                 child: const Text(
@@ -450,7 +445,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       currencySymbol = CurrencyService()
                           .findByCode(selectedWallet.currencyID)
                           .symbol;
-                      event = null;
+                      // event = null;
                     });
                 },
               ),

@@ -43,7 +43,6 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
 
   @override
   void initState() {
-    _event = widget.event;
     super.initState();
     pickDate = widget.transaction.date;
     currencySymbol =
@@ -51,6 +50,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
     amount = widget.transaction.amount;
     note = widget.transaction.note;
     contact = widget.transaction.contact;
+    _event = widget.event;
   }
 
   @override
@@ -102,11 +102,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   category: widget.transaction.category,
                   note: note,
                   contact: contact,
-                  eventID: widget.transaction.eventID,
+                  eventID: _event.id,
                 );
 
-                await _firestore.updateTransaction(
-                    _transaction, widget.wallet, _event);
+                await _firestore.updateTransaction(_transaction, widget.wallet);
                 Navigator.pop(context, _transaction);
               },
               child: const Text(
@@ -396,7 +395,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 },
               ),
             ),
-            (widget.transaction.eventID != "")
+            (_event.id != "")
                 ? ListTile(
                     dense: true,
                     onTap: () async {
@@ -453,7 +452,6 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         if (res != null)
                           setState(() {
                             _event = res;
-                            widget.event = _event;
                           });
                       },
                     ),
@@ -536,7 +534,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                               if (res != null)
                                 setState(() {
                                   _event = res;
-                                  widget.transaction.eventID = _event.id;
+                                  // widget.transaction.eventID = _event.id;
                                 });
                             },
                             leading: _event.id == 'id'
@@ -583,7 +581,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                 if (res != null)
                                   setState(() {
                                     _event = res;
-                                    widget.transaction.eventID = _event.id;
+                                    // widget.transaction.eventID = _event.id;
                                   });
                               },
                             ),

@@ -39,7 +39,7 @@ class MyTransaction {
         category: MyCategory.fromMap(data['category']),
         note: data['note'],
         budgetID: data['budgetID'],
-        eventID: data['eventID'],
+        eventID: data['eventID'] ?? '',
         billID: data['billID'],
         contact: data['contact'],
         extraAmountInfo: data['extraAmountInfo']);
@@ -54,7 +54,7 @@ class MyTransaction {
       'category': category.toMap(),
       'note': note ?? "",
       'budgetID': budgetID,
-      'eventID': eventID,
+      'eventID': eventID ?? '',
       'billID': billID,
       'contact': contact,
       'extraAmountInfo': extraAmountInfo,
