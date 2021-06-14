@@ -184,22 +184,7 @@ class _RecurringTransactionDetailScreenState
                                     _recurringTransaction
                                         .repeatOption.extraTypeInfo
                                         .toString() +
-                                    ' time'
-
-                        //         '1' +
-                        //         ' ' +
-                        //         _recurringTransaction.repeatOption
-                        //             .extraTypeInfo.runtimeType
-                        //             .toString() ==
-                        //     'DateTime'
-                        // ? DateFormat('dd/MM/yyyy').format(
-                        //     _recurringTransaction
-                        //         .repeatOption.extraTypeInfo)
-                        // : _recurringTransaction
-                        //         .repeatOption.extraTypeInfo
-                        //         .toString() +
-                        //     ' time'),
-                        ),
+                                    ' time'),
                   ],
                 )),
             Container(
