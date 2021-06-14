@@ -73,7 +73,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 5, 30, 5),
                     leading: Icon(
-                      Icons.security,
+                      Icons.lock,
                       color: foregroundColor.withOpacity(0.24),
                       size: 25,
                     ),
@@ -183,7 +183,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 5,30, 5),
                     leading: Icon(
-                      Icons.security,
+                      Icons.lock,
                       color: foregroundColor.withOpacity(0.24),
                       size: 25,
                     ),
@@ -265,7 +265,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 5,30, 5),
                     leading: Icon(
-                      Icons.security,
+                      Icons.lock,
                       color: foregroundColor.withOpacity(0.24),
                       size: 25,
                     ),

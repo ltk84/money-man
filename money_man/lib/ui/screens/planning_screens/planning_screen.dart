@@ -6,6 +6,7 @@ import 'package:money_man/ui/screens/planning_screens/bills_screens/bills_main_s
 import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_main_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/screens/planning_screens/event_screen/event_home.dart';
 import 'package:page_transition/page_transition.dart';
 
 class PlanningScreen extends StatefulWidget {
@@ -55,11 +56,11 @@ class _PlanningScreenState extends State<PlanningScreen> {
     super.initState();
     _wallet = widget.currentWallet == null
         ? Wallet(
-            id: 'id',
-            name: 'defaultName',
-            amount: 0,
-            currencyID: 'USD',
-            iconID: 'assets/icons/wallet_2.svg')
+        id: 'id',
+        name: 'defaultName',
+        amount: 0,
+        currencyID: 'USD',
+        iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
   }
 
@@ -99,7 +100,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                   color: Colors.grey[
-                          reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+                  reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
                 ),
               ),
@@ -221,7 +222,12 @@ class _PlanningScreenState extends State<PlanningScreen> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EventScreen()));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
@@ -253,7 +259,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                       context,
                       PageTransition(
                           child:
-                              RecurringTransactionMainScreen(wallet: _wallet),
+                          RecurringTransactionMainScreen(wallet: _wallet),
                           type: PageTransitionType.rightToLeft),
                     );
                   },

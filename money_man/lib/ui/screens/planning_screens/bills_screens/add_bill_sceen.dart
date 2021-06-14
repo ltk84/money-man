@@ -13,7 +13,7 @@ import 'package:money_man/ui/screens/categories_screens/categories_bill_screen.d
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
@@ -199,10 +199,10 @@ class _AddBillScreenState extends State<AddBillScreen> {
                             final noteContent = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => NoteTransactionScreen(
+                                    builder: (_) => NoteScreen(
                                       content: note ?? '',
                                     )));
-                            print(noteContent);
+
                             if (noteContent != null) {
                               setState(() {
                                 note = noteContent;
@@ -210,9 +210,9 @@ class _AddBillScreenState extends State<AddBillScreen> {
                             }
                           },
                           child: buildNoteInput(
-                            display: this.note == null ? null : this.note,
-                          )
-                      ),
+                            display: this.note == '' ? null : this.note,
+                          )),
+
 
                       // Divider ngăn cách giữa các input field.
                       Container(

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:date_util/date_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -12,16 +13,16 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/screens/transaction_screens/note_transaction_srcreen.dart';
+import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
 class AddRecurringTransactionScreen extends StatefulWidget {
-  Wallet defaultWallet;
+  final Wallet wallet;
   AddRecurringTransactionScreen({
     Key key,
-    @required this.defaultWallet,
+    @required this.wallet,
   }) : super(key: key);
 
   @override
@@ -34,9 +35,10 @@ class _AddRecurringTransactionScreenState
   double amount;
   MyCategory category;
   String note;
-  Wallet wallet;
+  Wallet _wallet;
   RepeatOption repeatOption;
 
+  var dateUtility;
   DateTime now =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
@@ -44,7 +46,7 @@ class _AddRecurringTransactionScreenState
   void initState() {
     // TODO: implement initState
     super.initState();
-    wallet = widget.defaultWallet;
+    _wallet = widget.wallet;
     repeatOption = RepeatOption(
         frequency: 'daily',
         rangeAmount: 1,
@@ -52,6 +54,8 @@ class _AddRecurringTransactionScreenState
         beginDateTime: now,
         type: 'forever',
         extraTypeInfo: null);
+    dateUtility = new DateUtil();
+    note = '';
   }
 
   @override
@@ -75,23 +79,25 @@ class _AddRecurringTransactionScreenState
           actions: [
             TextButton(
               onPressed: () async {
+                // chưa pick amount
                 if (amount == null) {
                   _showAlertDialog('Please enter amount!');
-                } else if (category == null) {
+                }
+                // chưa pick category
+                else if (category == null) {
                   _showAlertDialog('Please pick category!');
-                  // } else if (repeatOption == null) {
-                  //   _showAlertDialog('Please pick repeat option');
                 } else {
                   var reTrans = RecurringTransaction(
-                      id: 'id',
-                      category: category,
-                      amount: amount,
-                      walletId: wallet.id,
-                      note: note,
-                      transactionIdList: [],
-                      repeatOption: repeatOption);
-                  // );
-                  await _firestore.addRecurringTransaction(reTrans, wallet);
+                    id: 'id',
+                    category: category,
+                    amount: amount,
+                    walletId: _wallet.id,
+                    note: note,
+                    transactionIdList: [],
+                    repeatOption: repeatOption,
+                    isFinished: false,
+                  );
+                  await _firestore.addRecurringTransaction(reTrans, _wallet);
                   Navigator.pop(context);
                 }
               },
@@ -192,10 +198,10 @@ class _AddRecurringTransactionScreenState
                         final noteContent = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => NoteTransactionScreen(
+                                builder: (_) => NoteScreen(
                                       content: note ?? '',
                                     )));
-                        print(noteContent);
+
                         if (noteContent != null) {
                           setState(() {
                             note = noteContent;
@@ -203,7 +209,7 @@ class _AddRecurringTransactionScreenState
                         }
                       },
                       child: buildNoteInput(
-                        display: this.note == null ? null : this.note,
+                        display: this.note == '' ? null : this.note,
                       )),
 
                   // Divider ngăn cách giữa các input field.
@@ -225,26 +231,23 @@ class _AddRecurringTransactionScreenState
                             backgroundColor: Colors.grey[900],
                             context: context,
                             builder: (context) =>
-                                SelectWalletAccountScreen(wallet: wallet));
+                                SelectWalletAccountScreen(wallet: _wallet));
                         if (res != null)
                           setState(() {
-                            wallet = res;
-                            // currencySymbol = CurrencyService()
-                            //     .findByCode(selectedWallet.currencyID)
-                            //     .symbol;
+                            _wallet = res;
                           });
                       },
                       child: buildWalletSelection(
-                        display: this.wallet == null ? null : this.wallet.name,
+                        display:
+                            this._wallet == null ? null : this._wallet.name,
                         iconPath:
-                            this.wallet == null ? null : this.wallet.iconID,
+                            this._wallet == null ? null : this._wallet.iconID,
                       )),
                 ])),
 
             // build repeat option
             GestureDetector(
               onTap: () async {
-                print(repeatOption.toMap());
                 var res = await showCupertinoModalBottomSheet(
                     enableDrag: false,
                     isDismissible: false,
@@ -255,7 +258,6 @@ class _AddRecurringTransactionScreenState
                         ));
                 if (res != null)
                   setState(() {
-                    print(res.toMap());
                     repeatOption = res;
                   });
               },
@@ -491,6 +493,7 @@ class _AddRecurringTransactionScreenState
     );
   }
 
+  // hiện thông báo
   Future<void> _showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,

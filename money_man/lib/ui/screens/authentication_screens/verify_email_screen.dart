@@ -19,6 +19,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   final auth = FirebaseAuth.instance;
 
   Timer timer;
+  Timer timer2;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +32,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   @override
   void dispose() {
     timer.cancel();
+    timer2.cancel();
     super.dispose();
   }
 
@@ -137,7 +140,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                               await user.delete();
                             }
                           }
-                          final timer2 =
+                          timer2 =
                               Timer.periodic(Duration(seconds: 3), (timer) {});
 
                           _btnController.success();

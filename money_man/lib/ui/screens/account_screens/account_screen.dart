@@ -11,6 +11,7 @@ import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'account_detail_screen.dart';
+import 'help_screens/help_screens.dart';
 
 class AccountScreen extends StatelessWidget {
   @override
@@ -343,7 +344,12 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                           ),
                         ),
                         ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HelpScreens()));
+                          },
                           dense: true,
                           leading: Icon(Icons.help_outline,
                               color: foregroundColor.withOpacity(0.54),

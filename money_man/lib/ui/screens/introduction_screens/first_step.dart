@@ -280,10 +280,12 @@ class _FirstStepState extends State<FirstStep> {
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700),
                                       subtitleTextStyle: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 15,
-                                          color: Colors.black),
-                                      //backgroundColor: Colors.grey[900],
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey[900],
+                                      ),
+                                      backgroundColor: Color(0xFF08997E),
                                     ),
                                     onSelect: (value) {
                                       wallet.currencyID = value.code;

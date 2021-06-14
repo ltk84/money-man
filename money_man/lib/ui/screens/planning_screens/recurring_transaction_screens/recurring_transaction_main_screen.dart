@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/recurring_transaction_model.dart';
@@ -9,7 +9,6 @@ import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/add_recurring_transaction_sceen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_detail_screen.dart';
-import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +36,6 @@ class _RecurringTransactionMainScreenState
           backgroundColor: Colors.grey[900].withOpacity(0.2),
           elevation: 0.0,
           leading: Hero(
-            // hong hiu ??
             tag: 'billToDetail_backBtn',
             child: MaterialButton(
                 onPressed: () {
@@ -67,11 +65,7 @@ class _RecurringTransactionMainScreenState
                     sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
                 child: AnimatedContainer(
                     duration: Duration(milliseconds: 1),
-                    //child: Container(
-                    //color: Colors.transparent,
-                    color: Colors.transparent
-                    //),
-                    ),
+                    color: Colors.transparent),
               ),
             ),
           ),
@@ -84,7 +78,7 @@ class _RecurringTransactionMainScreenState
                       context: context,
                       builder: (context) {
                         return AddRecurringTransactionScreen(
-                            defaultWallet: widget.wallet);
+                            wallet: widget.wallet);
                       });
                 },
                 child: Text('Add',
@@ -118,11 +112,6 @@ class _RecurringTransactionMainScreenState
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
-            // buildOverallInfo(
-            //     overdue: '\$ 1,000',
-            //     forToday: '\$ 1,000',
-            //     thisPeriod: '\$ 1,000'),
-            // SizedBox(height: 20.0),
             buildListRecurringTransactionList(context),
           ],
         ));
@@ -210,7 +199,8 @@ class _RecurringTransactionMainScreenState
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     )),
-                Text('Wednesday, 02/06/2021')
+                Text(DateFormat('EEEE, dd-MM-yyyy')
+                    .format(reTrans.repeatOption.beginDateTime))
               ],
             ),
             // chỗ này chưa biết xử lý sao
