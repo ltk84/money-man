@@ -220,6 +220,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           try {
             UserCredential res =
                 await auth.currentUser.linkWithCredential(credential);
+            return res;
           } on FirebaseAuthException catch (e) {
             // TODO
             print(e.code);
