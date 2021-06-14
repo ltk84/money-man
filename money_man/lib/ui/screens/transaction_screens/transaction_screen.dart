@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -1340,20 +1339,28 @@ class _TransactionScreen extends State<TransactionScreen>
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
-                        child: (transListSortByDate[xIndex][yIndex].eventID == "" || transListSortByDate[xIndex][yIndex].eventID == null)?
-                        Text(
-                            transListSortByDate[xIndex][yIndex].category.name,
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)):
-                        Text(transListSortByDate[xIndex][yIndex].category.name + "\n🌴",
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white))
-                      ),
+                          padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
+                          child: (transListSortByDate[xIndex][yIndex].eventID ==
+                                      "" ||
+                                  transListSortByDate[xIndex][yIndex].eventID ==
+                                      null)
+                              ? Text(
+                                  transListSortByDate[xIndex][yIndex]
+                                      .category
+                                      .name,
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white))
+                              : Text(
+                                  transListSortByDate[xIndex][yIndex]
+                                          .category
+                                          .name +
+                                      "\n🌴",
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white))),
                       Expanded(
                         child: Text(
                             transListSortByDate[xIndex][yIndex].category.type ==
