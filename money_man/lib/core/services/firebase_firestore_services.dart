@@ -225,6 +225,24 @@ class FirebaseFireStoreService {
 
   // TRANSACTION START//
 
+  // get list of transaction with criteria
+  Future<List<MyTransaction>> getListOfTransactionWithCriteria(
+      String criteria, String walletId) async {
+    List<MyTransaction> list = [];
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactions')
+        .where('category.name', isEqualTo: criteria)
+        .get()
+        .then((value) {
+      print('get complete with criteria: $criteria');
+      value.docs.map((e) => list.add(MyTransaction.fromMap(e.data()))).toList();
+    }).catchError((error) => print(error));
+    return list;
+  }
+
   // add transaction
   Future<MyTransaction> addTransaction(
       Wallet wallet, MyTransaction transaction) async {
@@ -244,10 +262,10 @@ class FirebaseFireStoreService {
     else {
       if (transaction.category.name == 'Debt') {
         wallet.amount += transaction.amount;
-        transaction.note += ' from someone';
+        // transaction.note += ' from someone';
       } else if (transaction.category.name == 'Loan') {
         wallet.amount -= transaction.amount;
-        transaction.note += ' to someone';
+        // transaction.note += ' to someone';
       } else if (transaction.category.name == 'Repayment') {
         wallet.amount -= transaction.amount;
       } else {
@@ -393,10 +411,10 @@ class FirebaseFireStoreService {
     else {
       if (transaction.category.name == 'Debt') {
         wallet.amount += transaction.amount;
-        transaction.note += ' from someone';
+        // transaction.note += ' from someone';
       } else if (transaction.category.name == 'Loan') {
         wallet.amount -= transaction.amount;
-        transaction.note += ' to someone';
+        // transaction.note += ' to someone';
       } else if (transaction.category.name == 'Repayment') {
         wallet.amount -= transaction.amount;
       } else {

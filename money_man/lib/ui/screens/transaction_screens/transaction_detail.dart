@@ -36,19 +36,17 @@ class _TransactionDetailState extends State<TransactionDetail> {
     id: 'id',
     name: 'na',
     endDate: DateTime.now(),
-    walletId:'id',
+    walletId: 'id',
     isFinished: false,
     transactionIdList: [],
-    spent:0,
-    finishedByHand:false,
+    spent: 0,
+    finishedByHand: false,
     autofinish: false,
   );
-  Future<void> GetEvent(String id, Wallet wallet)
-  async {
+  Future<void> GetEvent(String id, Wallet wallet) async {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    if(widget.transaction.eventID != "")
-    {
-      final _event =  await _firestore.getEventByID(id, wallet);
+    if (widget.transaction.eventID != "") {
+      final _event = await _firestore.getEventByID(id, wallet);
       if (this.mounted) {
         setState(() {
           event = _event;
@@ -56,6 +54,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
       }
     }
   }
+
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     GetEvent(widget.transaction.eventID, widget.wallet);
@@ -80,26 +79,25 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 //Todo: Edit transaction
               }),
           IconButton(
-            icon: Icon(
-              Icons.edit,
-              color: Colors.white,
-            ),
-            onPressed: () async {
-              final updatedTrans = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => EditTransactionScreen(
-                          transaction: widget.transaction,
-                          wallet: widget.wallet,
-                        event: event,
-                      )));
-              if (updatedTrans != null)
-                setState(() {
-                  widget.transaction = updatedTrans;
-                });
+              icon: Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+              onPressed: () async {
+                final updatedTrans = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => EditTransactionScreen(
+                              transaction: widget.transaction,
+                              wallet: widget.wallet,
+                              event: event,
+                            )));
+                if (updatedTrans != null)
+                  setState(() {
+                    widget.transaction = updatedTrans;
+                  });
                 print(updatedTrans.toMap());
-              }
-          ),
+              }),
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white),
               onPressed: () async {
@@ -262,14 +260,15 @@ class _TransactionDetailState extends State<TransactionDetail> {
               ],
             ),
             SizedBox(height: 10),
-            (widget.transaction.eventID != "" && widget.transaction.eventID != null)?
-                  Row(
+            (widget.transaction.eventID != "" &&
+                    widget.transaction.eventID != null)
+                ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
                           flex: 1,
                           child: SuperIcon(
-                            iconPath: event.iconPath ,
+                            iconPath: event.iconPath,
                             size: 25.0,
                           )),
                       Expanded(
@@ -281,11 +280,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.0))),
                     ],
-                  ): Row(),
+                  )
+                : Row(),
             Divider(
               color: Colors.white60,
             ),
-            
+
             // Này là để hiện budget đã có hoặc tùy chọn thêm budget
             StreamBuilder<List<Budget>>(
                 stream: _firestore.budgetTransactionStream(
