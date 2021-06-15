@@ -296,88 +296,20 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                     physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey[900],
-                                  width: 1.0,
-                                ),
-                                top: BorderSide(
-                                  color: Colors.grey[900],
-                                  width: 1.0,
-                                ))),
-                        child: Column(children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Opening balance',
-                                      style: TextStyle(
-                                        color: foregroundColor.withOpacity(0.7),
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      openingBalance.toString(),
-                                      style: TextStyle(
-                                        color: foregroundColor,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 24,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Closing balance',
-                                      style: TextStyle(
-                                        color: foregroundColor.withOpacity(0.7),
-                                        fontFamily: fontFamily,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      closingBalance.toString(),
-                                      style: TextStyle(
-                                        color: foregroundColor,
-                                        fontFamily: fontFamily,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 24,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ]),
-                      ),
-                      Container(
                         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                         decoration: BoxDecoration(
                             color: Colors.black,
                             border: Border(
                                 bottom: BorderSide(
-                                  color: Colors.grey[900],
+                                  color: foregroundColor.withOpacity(0.24),
                                   width: 1.0,
                                 ),
                                 top: BorderSide(
-                                  color: Colors.grey[900],
+                                  color: foregroundColor.withOpacity(0.24),
                                   width: 1.0,
-                                ))),
+                                )
+                            )
+                        ),
                         child: WidgetToImage(
                           builder: (key) {
                             this.key1 = key;
@@ -385,12 +317,72 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             return Column(children: <Widget>[
                               Column(
                                 children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              'Opening balance',
+                                              style: TextStyle(
+                                                color: foregroundColor.withOpacity(0.7),
+                                                fontFamily: 'Montserrat',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            Text(
+                                              openingBalance.toString(),
+                                              style: TextStyle(
+                                                color: foregroundColor,
+                                                fontFamily: 'Montserrat',
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 24,
+                                                height: 1.5,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              'Closing balance',
+                                              style: TextStyle(
+                                                color: foregroundColor.withOpacity(0.7),
+                                                fontFamily: fontFamily,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            Text(
+                                              closingBalance.toString(),
+                                              style: TextStyle(
+                                                color: foregroundColor,
+                                                fontFamily: fontFamily,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 24,
+                                                height: 1.5,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: foregroundColor.withOpacity(0.24),
+                                    thickness: 1.0,
+                                    height: 20,
+                                  ),
+                                  SizedBox(height: 10,),
                                   Text('Net Income',
                                       style: TextStyle(
                                         color: foregroundColor.withOpacity(0.7),
                                         fontFamily: 'Montserrat',
                                         fontWeight: FontWeight.w400,
-                                        fontSize: 18,
+                                        fontSize: 16,
                                       )),
                                   Text(
                                       (closingBalance - openingBalance)

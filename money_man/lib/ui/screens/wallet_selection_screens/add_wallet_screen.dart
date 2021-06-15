@@ -62,7 +62,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     Navigator.of(context).pop(res);
                   }
                 },
-                child: Text('Save',
+                child: Text('Done',
                     style: TextStyle(
                       fontFamily: fontFamily,
                       fontSize: 16.0,
