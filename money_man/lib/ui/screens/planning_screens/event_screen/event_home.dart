@@ -40,16 +40,7 @@ class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin
         debugShowCheckedModeBanner: false,
         home: DefaultTabController(
             length: 2,
-            child: StreamBuilder<Object>(
-                stream: _firestore.currentWallet,
-                builder: (context, snapshot) {
-                  _wallet = snapshot.data?? Wallet(
-                      id: 'id',
-                      name: 'defaultName',
-                      amount: 100,
-                      currencyID: 'USD',
-                      iconID: 'assets/icons/wallet_2.svg');
-                  return Scaffold(
+            child:  Scaffold(
                     appBar: AppBar(
                       backgroundColor: Color(0xff333333),
                       leading: IconButton(
@@ -124,20 +115,30 @@ class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin
                       ),
                       elevation: 2,
                     ),
-                    body: Container(
-                      color: Color(0xff1a1a1a),
-                      padding: EdgeInsets.only(top: 15),
-                      child: TabBarView(
-                              controller: _tabController,
-                              children: [
-                                CurrentlyAppliedEvent(
-                                  wallet: _wallet,
-                                ),
-                                AppliedEvent(
-                                  wallet: _wallet,
-                                ),
-                              ],
-                            )
+                    body: StreamBuilder<Object>(
+                        stream: _firestore.currentWallet,
+                        builder: (context, snapshot) {
+                          _wallet = snapshot.data?? Wallet(
+                              id: 'id',
+                              name: 'defaultName',
+                              amount: 100,
+                              currencyID: 'USD',
+                              iconID: 'assets/icons/wallet_2.svg');
+                          return Container(
+                              color: Color(0xff1a1a1a),
+                              padding: EdgeInsets.only(top: 15),
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: [
+                                  CurrentlyAppliedEvent(
+                                    wallet: _wallet,
+                                  ),
+                                  AppliedEvent(
+                                    wallet: _wallet,
+                                  ),
+                                ],
+                              )
+                          );}
                           ),
                     floatingActionButton: FloatingActionButton(
                       backgroundColor: Theme
@@ -161,11 +162,9 @@ class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin
                     ),
                     floatingActionButtonLocation: FloatingActionButtonLocation
                         .startTop,
-                  );
-                }
+                  )
             )
-        )
-    );
+        );
   }
   void buildShowDialog(BuildContext context, id) async {
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
