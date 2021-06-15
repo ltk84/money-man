@@ -262,9 +262,11 @@ class FirebaseFireStoreService {
     else {
       if (transaction.category.name == 'Debt') {
         wallet.amount += transaction.amount;
+        transaction.extraAmountInfo = transaction.amount;
         // transaction.note += ' from someone';
       } else if (transaction.category.name == 'Loan') {
         wallet.amount -= transaction.amount;
+        transaction.extraAmountInfo = transaction.amount;
         // transaction.note += ' to someone';
       } else if (transaction.category.name == 'Repayment') {
         wallet.amount -= transaction.amount;

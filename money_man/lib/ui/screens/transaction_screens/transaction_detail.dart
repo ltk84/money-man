@@ -29,20 +29,27 @@ class TransactionDetail extends StatefulWidget {
 }
 
 class _TransactionDetailState extends State<TransactionDetail> {
-  Event event = Event(
-    iconPath: 'assets/icons/wallet_2.svg',
-    id: '',
-    name: 'Select event',
-    endDate: DateTime.now(),
-    walletId: 'id',
-    isFinished: false,
-    transactionIdList: [],
-    spent: 0,
-    finishedByHand: false,
-    autofinish: false,
-  );
+  // Event event = Event(
+  //   iconPath: 'assets/icons/wallet_2.svg',
+  //   id: '',
+  //   name: 'Select event',
+  //   endDate: DateTime.now(),
+  //   walletId: 'id',
+  //   isFinished: false,
+  //   transactionIdList: [],
+  //   spent: 0,
+  //   finishedByHand: false,
+  //   autofinish: false,
+  // );
+  Event event;
 
-  Future<void> GetEvent(String id, Wallet wallet) async {
+  @override
+  void initState() {
+    super.initState();
+    getEvent(widget.transaction.eventID, widget.wallet);
+  }
+
+  Future<void> getEvent(String id, Wallet wallet) async {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     if (widget.transaction.eventID != "") {
       final _event = await _firestore.getEventByID(id, wallet);
@@ -57,7 +64,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    GetEvent(widget.transaction.eventID, widget.wallet);
+    getEvent(widget.transaction.eventID, widget.wallet);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
