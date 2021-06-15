@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:money_formatter/money_formatter.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -9,8 +11,10 @@ import 'package:intl/intl.dart';
 
 class SearchTransactionScreen extends StatefulWidget {
   final Wallet wallet;
+  final String muserSearch;
 
-  const SearchTransactionScreen({Key key, @required this.wallet})
+  const SearchTransactionScreen(
+      {Key key, @required this.wallet, this.muserSearch})
       : super(key: key);
   @override
   _SearchTransactionScreenState createState() =>
@@ -33,6 +37,11 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.muserSearch != null) {
+      setState(() {
+        searchPattern = widget.muserSearch;
+      });
+    }
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       backgroundColor: Color(0xFF111111),
@@ -59,7 +68,8 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
               color: Colors.grey[900].withOpacity(0.8),
               borderRadius: BorderRadius.all(Radius.circular(15.0)),
             ),
-            child: TextField(
+            child: TextFormField(
+              initialValue: searchPattern,
               onChanged: (value) => searchPattern = value,
               onEditingComplete: () async {
                 // làm bàn phím down
@@ -242,7 +252,10 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString(),
+                child: Text(
+                    MoneyFormatter(amount: totalAmountInDay)
+                        .output
+                        .withoutFractionDigits,
                     textAlign: TextAlign.end,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.white)),
@@ -270,8 +283,10 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                        child: Icon(Icons.school,
-                            size: 30.0, color: Colors.grey[600]),
+                        child: SuperIcon(
+                          iconPath: x[xIndex][yIndex].category.iconID,
+                          size: 30.0,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
@@ -282,7 +297,18 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                                 color: Colors.white)),
                       ),
                       Expanded(
-                        child: Text(x[xIndex][yIndex].amount.toString(),
+                        child: Text(
+                            x[xIndex][yIndex].category.type == 'income'
+                                ? '+' +
+                                    MoneyFormatter(
+                                            amount: x[xIndex][yIndex].amount)
+                                        .output
+                                        .withoutFractionDigits
+                                : '-' +
+                                    MoneyFormatter(
+                                            amount: x[xIndex][yIndex].amount)
+                                        .output
+                                        .withoutFractionDigits,
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -321,7 +347,11 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                 children: <Widget>[
                   Text('Opening balance',
                       style: TextStyle(color: Colors.grey[500])),
-                  Text('+$totalInCome đ',
+                  Text(
+                      '+' +
+                          MoneyFormatter(amount: totalInCome)
+                              .output
+                              .withoutFractionDigits,
                       style: TextStyle(color: Colors.white)),
                 ],
               ),
@@ -333,7 +363,11 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                   children: <Widget>[
                     Text('Ending balance',
                         style: TextStyle(color: Colors.grey[500])),
-                    Text('-$totalOutCome đ',
+                    Text(
+                        '-' +
+                            MoneyFormatter(amount: totalOutCome)
+                                .output
+                                .withoutFractionDigits,
                         style: TextStyle(color: Colors.white)),
                   ]),
             ),
@@ -362,7 +396,11 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                     SizedBox(
                       width: 10,
                     ),
-                    Text('$total đ', style: TextStyle(color: Colors.white)),
+                    Text(
+                        MoneyFormatter(amount: total)
+                            .output
+                            .withoutFractionDigits,
+                        style: TextStyle(color: Colors.white)),
                   ]),
             ),
             TextButton(

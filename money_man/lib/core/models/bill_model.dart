@@ -13,9 +13,11 @@ class Bill {
   double amount;
   String note;
   String walletId;
-  List<MyTransaction> transactionIdList;
+  List<String> transactionIdList;
   RepeatOption repeatOption;
   bool isFinished;
+  List<DateTime> dueDates;
+  List<DateTime> paidDueDates;
 
   Bill({
     @required this.id,
@@ -26,6 +28,8 @@ class Bill {
     @required this.transactionIdList,
     @required this.repeatOption,
     @required this.isFinished,
+    @required this.dueDates,
+    @required this.paidDueDates,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,10 +38,12 @@ class Bill {
       'category': category.toMap(),
       'amount': amount,
       'note': note,
-      'wallet': walletId,
-      'transactionIdList': transactionIdList?.map((x) => x.toMap())?.toList(),
+      'walletId': walletId,
+      'transactionIdList': transactionIdList,
       'repeatOption': repeatOption.toMap(),
-      'isFinised': isFinished
+      'isFinished': isFinished,
+      'dueDates': dueDates,
+      'paidDueDates': paidDueDates,
     };
   }
 
@@ -48,10 +54,65 @@ class Bill {
       amount: data['amount'],
       note: data['note'],
       walletId: data['walletId'],
-      transactionIdList: List<MyTransaction>.from(
-          data['transactionIdList']?.map((x) => MyTransaction.fromMap(x))),
+      transactionIdList: List<String>.from(
+          data['transactionIdList']?.map((x) => x)),
       repeatOption: RepeatOption.fromMap(data['repeatOption']),
       isFinished: data['isFinished'],
+      dueDates: List<DateTime>.from(data['dueDates']?.map((x) =>
+          DateTime.tryParse(x.toDate().toString()))),
+      paidDueDates: List<DateTime>.from(data['paidDueDates']?.map((x) =>
+          DateTime.tryParse(x.toDate().toString()))),
     );
   }
+
+  void updateDueDate () {
+    if (!isFinished) {
+      var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+      if (now.compareTo(repeatOption.beginDateTime) >= 0) {
+        if (repeatOption.type == 'until' && now.isAfter(repeatOption.extraTypeInfo)) {
+          //isFinished = true;
+          return;
+        } else if (repeatOption.type == 'for' && repeatOption.extraTypeInfo - 1 == 0) {
+          //isFinished = true;
+          return;
+        }
+        var timeRange = now.difference(repeatOption.beginDateTime).inDays;
+        int freq;
+
+        switch (repeatOption.frequency)
+        {
+          case 'daily':
+            freq = repeatOption.rangeAmount;
+            break;
+          case 'weekly':
+            freq = 7 * repeatOption.rangeAmount;
+            break;
+          case 'monthly':
+            int dayOfMonth = DateTime(now.year, now.month + 1, 0).day;
+            freq = dayOfMonth * repeatOption.rangeAmount;
+            break;
+          case 'yearly':
+            bool isLeap = DateTime(now.year, 3, 0).day == 29;
+            int dayOfYear = isLeap ? 366 : 365;
+            freq = dayOfYear  * repeatOption.rangeAmount;
+            break;
+        }
+
+        if (timeRange % freq == 0) {
+          DateTime nextDue;
+          nextDue = now.add(Duration(days: freq));
+          if (!paidDueDates.contains(nextDue)) {
+            if (!dueDates.contains(nextDue)) {
+              dueDates.add(nextDue);
+              if (repeatOption.type == 'for')
+                repeatOption.extraTypeInfo--;
+            }
+          }
+        }
+      }
+    }
+  }
+
+
 }

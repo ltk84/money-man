@@ -9,8 +9,7 @@ class ExpandableWidget extends StatefulWidget {
   _ExpandableWidgetState createState() => _ExpandableWidgetState();
 }
 
-class _ExpandableWidgetState extends State<ExpandableWidget>
-    with SingleTickerProviderStateMixin {
+class _ExpandableWidgetState extends State<ExpandableWidget> with SingleTickerProviderStateMixin {
   AnimationController expandController;
   Animation<double> animation;
 
@@ -23,8 +22,10 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
 
   ///Setting up the animation
   void prepareAnimations() {
-    expandController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    expandController = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 500)
+    );
     animation = CurvedAnimation(
       parent: expandController,
       curve: Curves.fastOutSlowIn,
@@ -32,9 +33,10 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
   }
 
   void _runExpandCheck() {
-    if (widget.expand) {
+    if(widget.expand) {
       expandController.forward();
-    } else {
+    }
+    else {
       expandController.reverse();
     }
   }
@@ -54,6 +56,9 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
   @override
   Widget build(BuildContext context) {
     return SizeTransition(
-        axisAlignment: 1.0, sizeFactor: animation, child: widget.child);
+        axisAlignment: 1.0,
+        sizeFactor: animation,
+        child: widget.child
+    );
   }
 }

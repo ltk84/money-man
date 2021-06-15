@@ -1,12 +1,8 @@
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iconpicker/IconPicker/iconPicker.dart';
-import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/models/transaction_model.dart';
-import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';

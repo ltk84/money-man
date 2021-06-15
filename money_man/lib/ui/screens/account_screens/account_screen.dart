@@ -3,12 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/ui/screens/account_screens/about_screen.dart';
 import 'package:money_man/ui/screens/account_screens/my_wallets_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_account_screen.dart';
-import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'account_detail_screen.dart';
+import 'help_screens/help_screens.dart';
 
 class AccountScreen extends StatelessWidget {
   @override
@@ -146,18 +147,17 @@ class _TestState extends State<Test> {
                             backgroundColor: Colors.white,
                             radius: 30.0,
                             child: Text(
-                                (_user == null)
-                                    ? ''
-                                    : (_user.displayName != '' &&
-                                            _user.displayName != null)
-                                        ? _user.displayName.substring(0, 1)
-                                        : 'Y',
+                              (_user == null)
+                                  ? ''
+                                  : (_user.displayName != '' &&
+                                          _user.displayName != null)
+                                      ? _user.displayName.substring(0, 1)
+                                      : 'Y',
                               style: TextStyle(
                                   color: Color(0xff2FB49C),
                                   fontSize: 30.0,
                                   fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w400
-                              ),
+                                  fontWeight: FontWeight.w400),
                             ),
                           ),
                           SizedBox(
@@ -210,9 +210,6 @@ class _TestState extends State<Test> {
                                         user: _user,
                                       ),
                                       type: PageTransitionType.rightToLeft));
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(builder: (context) => AccountDetail()));
                             },
                             dense: true,
                             leading: Icon(Icons.person,
@@ -337,7 +334,12 @@ class _TestState extends State<Test> {
                           ),
                         ),
                         ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HelpScreens()));
+                          },
                           dense: true,
                           leading: Icon(Icons.help_outline,
                               color: Colors.grey[400], size: 25.0),
@@ -381,7 +383,13 @@ class _TestState extends State<Test> {
                           ),
                         ),
                         ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: AboutScreen(),
+                                  type: PageTransitionType.rightToLeft));
+                          },
                           dense: true,
                           leading: Icon(Icons.info,
                               color: Colors.grey[400], size: 25.0),

@@ -356,6 +356,17 @@ class FirebaseFireStoreService {
     else
       wallet.amount -= transaction.amount;
 
+    if (transaction.eventID != "") {
+      final event = await getEventByID(transaction.eventID, wallet);
+      Event _event = event;
+      if (transaction.category.type == 'expense')
+        _event.spent += transaction.amount;
+      else
+        _event.spent -= transaction.amount;
+      _event.transactionIdList
+          .removeWhere((element) => element == transaction.id);
+      await updateEvent(_event, wallet);
+    }
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
   }
@@ -411,6 +422,43 @@ class FirebaseFireStoreService {
       }
     }
 
+    //lấy event cũ
+    if (oldTransaction.eventID != "") {
+      Event oldEvent;
+      CollectionReference eventRef = users
+          .doc(uid)
+          .collection('wallets')
+          .doc(wallet.id)
+          .collection('events');
+
+      await eventRef.doc(transaction.eventID).get().then((value) {
+        oldEvent = Event.fromMap(value.data());
+      });
+      //Tính toán lại spent cho event cũ
+      if (oldTransaction.category.type == 'expense')
+        oldEvent.spent += oldTransaction.amount;
+      else
+        oldEvent.spent -= oldTransaction.amount;
+
+      //Loại bỏ transaction khỏi event cũ
+      oldEvent.transactionIdList
+          .removeWhere((element) => element == oldTransaction.id);
+
+      //update cho event cũ
+      await updateEvent(oldEvent, wallet);
+
+      //update cho event mới
+      if (transaction.eventID == oldEvent.id)
+        await updateEventAmountAndTransList(oldEvent, wallet, transaction);
+      else if (transaction.eventID != "") {
+        Event event = await getEventByID(transaction.eventID, wallet);
+        await updateEventAmountAndTransList(event, wallet, transaction);
+      }
+    } else if (transaction.eventID != "" && oldTransaction.eventID == "") {
+      Event event = await getEventByID(transaction.eventID, wallet);
+      await updateEventAmountAndTransList(event, wallet, transaction);
+    }
+
     // update transaction
     await transactionRef.doc(transaction.id).update(transaction.toMap());
 
@@ -423,6 +471,18 @@ class FirebaseFireStoreService {
     // update ví trong list và ví đang được chọn
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
+  }
+
+  Future updateTransactionAfterDeletingEvent(
+      MyTransaction transaction, Wallet wallet) async {
+    CollectionReference transactionRef = users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions');
+    transaction.eventID = "";
+    // Lấy transaction cũ
+    await transactionRef.doc(transaction.id).update(transaction.toMap());
   }
 
   // Query transaction by category
@@ -557,7 +617,7 @@ class FirebaseFireStoreService {
     budget.id = budgetsRef.id;
 
     // tính toán spent và gán spent cho budget
-    budget.spent = await calculateBudgetSpent(wallet, budget);
+    budget.spent = await calculateBudgetSpent(budget);
 
     // thực hiện add budget
     await budgetsRef
@@ -566,20 +626,59 @@ class FirebaseFireStoreService {
         .catchError((error) => print(error));
   }
 
-  Future<double> calculateBudgetSpent(Wallet wallet, Budget budget) async {
+  Future<double> calculateBudgetSpent(Budget budget) async {
     // khai báo biến spent (số tiền của các transaction thỏa yêu cầu của budget)
     double spent = 0;
+    List<MyTransaction> listTrans = [];
 
     // dựa trên category để lấy các transaction thỏa yêu cầu => tính toán spent
     await users
         .doc(uid)
         .collection('wallets')
-        .doc(wallet.id)
+        .doc(budget.walletId)
         .collection('transactions')
         .where('category.id', isEqualTo: budget.category.id)
         .get()
-        .then((value) =>
-            value.docs.map((e) => spent += e.get('amount')).toList());
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        value.docs.forEach((element) {
+          MyTransaction trans = MyTransaction.fromMap(element.data());
+          if (!listTrans.contains(trans)) listTrans.add(trans);
+        });
+        for (int i = 0; i < listTrans.length; i++)
+          if (listTrans[i].date.isBefore(budget.endDate) &&
+              budget.beginDate.isBefore(listTrans[i].date))
+            spent += listTrans[i].amount;
+      }
+    });
+    return spent;
+  }
+
+  Future<double> calculateBudgetSpentFromDay(
+      Budget budget, DateTime dateTime) async {
+    double spent = 0;
+    List<MyTransaction> listTrans = [];
+
+    // dựa trên category để lấy các transaction thỏa yêu cầu => tính toán spent
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(budget.walletId)
+        .collection('transactions')
+        .where('category.id', isEqualTo: budget.category.id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        value.docs.forEach((element) {
+          MyTransaction trans = MyTransaction.fromMap(element.data());
+          if (!listTrans.contains(trans)) listTrans.add(trans);
+        });
+        for (int i = 0; i < listTrans.length; i++)
+          if (listTrans[i].date.isBefore(dateTime.add(Duration(days: 1))) &&
+              budget.beginDate.isBefore(listTrans[i].date))
+            spent += listTrans[i].amount;
+      }
+    });
     return spent;
   }
 
@@ -592,6 +691,19 @@ class FirebaseFireStoreService {
         .collection('wallets')
         .doc(walletId)
         .collection('budgets')
+        .snapshots()
+        .map(_budgetFromSnapshot);
+  }
+
+//Stream budget dùng để hiển thị list các budget có cùng category với transaction
+  Stream<List<Budget>> budgetTransactionStream(
+      MyTransaction transaction, String walletID) {
+    return users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletID)
+        .collection('budgets')
+        .where('category.id', isEqualTo: transaction.category.id)
         .snapshots()
         .map(_budgetFromSnapshot);
   }
@@ -609,7 +721,7 @@ class FirebaseFireStoreService {
     // user thay đổi thông tin budget thì có thể thay đổi category
     // nên spent sẽ có thể bị tính lại từ đầu => tính toán spent
     // gán spent cho budget
-    budget.spent = await calculateBudgetSpent(wallet, budget);
+    budget.spent = await calculateBudgetSpent(budget);
 
     // thực hiện update budget
     await users
@@ -830,7 +942,7 @@ class FirebaseFireStoreService {
             (int.parse(recurringTrans.repeatOption.extraTypeInfo.toString()) -
                     1)
                 .toString();
-        if (recurringTrans.repeatOption.extraTypeInfo == 0) {
+        if (int.parse(recurringTrans.repeatOption.extraTypeInfo) <= 0) {
           recurringTrans.isFinished = true;
         }
       } else if (recurringTrans.repeatOption.type == 'until') {
@@ -906,6 +1018,7 @@ class FirebaseFireStoreService {
   // thực hiện add transaction của recurring transaction ngay lập tức (tương tự trên)
   Future executeInstantRecurringTransaction(
       RecurringTransaction recurringTransaction, Wallet wallet) async {
+    if (recurringTransaction.isFinished == true) return -1;
     List<String> transactionIdList = await addTransactionOfRecurringTransaction(
         [recurringTransaction], wallet);
 
@@ -1003,6 +1116,17 @@ class FirebaseFireStoreService {
       print(e.data());
       return Event.fromMap(e.data());
     }).toList();
+  }
+
+  Future<Event> getEventByID(String id, Wallet wallet) async {
+    return await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('events')
+        .doc(id)
+        .get()
+        .then((value) => Event.fromMap(value.data()));
   }
 
   // EVENT END //

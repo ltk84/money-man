@@ -1,15 +1,51 @@
 import 'dart:ui';
 
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_man/core/models/bill_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/bills_screens/transaction_list.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
-class BillDetailScreen extends StatelessWidget {
-  const BillDetailScreen({Key key}) : super(key: key);
+class BillDetailScreen extends StatefulWidget {
+  final Bill bill;
+  final Wallet wallet;
+  final DateTime dueDate;
+  final String description;
+
+  const BillDetailScreen({
+    Key key,
+    @required this.bill,
+    @required this.wallet,
+    @required this.dueDate,
+    @required this.description,
+  }) : super(key: key);
+
+  @override
+  _BillDetailScreenState createState() => _BillDetailScreenState();
+}
+
+class _BillDetailScreenState extends State<BillDetailScreen> {
+  Bill _bill;
+  String currencySymbol;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _bill = widget.bill;
+    currencySymbol = CurrencyService().findByCode(widget.wallet.currencyID).symbol;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Colors.black,
         extendBodyBehindAppBar: true,
@@ -60,11 +96,19 @@ class BillDetailScreen extends StatelessWidget {
               tag: 'billToDetail_actionBtn',
               child: TextButton(
                 onPressed: () async {
-                  showCupertinoModalBottomSheet(
+                  final updatedBill = await showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) {
-                        return EditBillScreen();
+                        return EditBillScreen(
+                          bill: _bill,
+                          wallet: widget.wallet,
+                        );
                       });
+                  if (updatedBill != null) {
+                    setState(() {
+                      _bill = updatedBill;
+                    });
+                  }
                 },
                 child: Text('Edit',
                     style: TextStyle(
@@ -98,8 +142,8 @@ class BillDetailScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     buildInfoCategory(
-                      iconPath: 'assets/icons/investment_3.svg',
-                      display: 'Investment',
+                      iconPath: _bill.category.iconID,
+                      display: _bill.category.name,
                     ),
                     // Divider ngăn cách giữa các input field.
                     Container(
@@ -109,7 +153,7 @@ class BillDetailScreen extends StatelessWidget {
                         thickness: 1,
                       ),
                     ),
-                    buildInfoAmount(display: '\$ 1,000'),
+                    buildInfoAmount(display: currencySymbol + ' ' + _bill.amount.toString()),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -118,7 +162,7 @@ class BillDetailScreen extends StatelessWidget {
                         thickness: 1,
                       ),
                     ),
-                    buildInfoRepeat(),
+                    buildInfoRepeat(dueDate: DateFormat('dd/MM/yyyy').format(widget.dueDate), dueDescription: widget.description),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -128,8 +172,8 @@ class BillDetailScreen extends StatelessWidget {
                       ),
                     ),
                     buildInfoWallet(
-                      iconPath: 'assets/icons/wallet_2.svg',
-                      display: 'My Wallet',
+                      iconPath: widget.wallet.iconID,
+                      display: widget.wallet.name,
                     ),
                   ],
                 )),
@@ -147,7 +191,12 @@ class BillDetailScreen extends StatelessWidget {
                         width: 0.5,
                       ))),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () async {
+                  _bill.isFinished = !_bill.isFinished;
+                  await _firestore.updateBill(
+                      _bill, widget.wallet);
+                  setState(() { });
+                },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
@@ -162,7 +211,7 @@ class BillDetailScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Mark as finished",
+                    Text(_bill.isFinished ? "Mark as running" : "Mark as finished",
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: 'Montserrat',
@@ -184,7 +233,14 @@ class BillDetailScreen extends StatelessWidget {
                     width: 0.5,
                   ))),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          childCurrent: this.widget,
+                          child: BillTransactionList(transactionListID: _bill.transactionIdList, currentWallet: widget.wallet),
+                          type: PageTransitionType.rightToLeft));
+                },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
@@ -222,7 +278,11 @@ class BillDetailScreen extends StatelessWidget {
                     width: 0.5,
                   ))),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await _firestore.deleteBill(
+                      _bill, widget.wallet);
+                  Navigator.pop(context);
+                },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
@@ -329,7 +389,7 @@ class BillDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildInfoRepeat() {
+  Widget buildInfoRepeat({String dueDate, String dueDescription}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
@@ -342,14 +402,14 @@ class BillDetailScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Next bill is 02/06/2021',
+              Text(dueDate ?? '',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 14.0,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   )),
-              Text('Due in 1 day',
+              Text(dueDescription ?? '',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 12.0,
