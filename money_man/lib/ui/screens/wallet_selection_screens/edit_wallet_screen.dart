@@ -7,6 +7,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +39,6 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
     return Scaffold(
         backgroundColor: Colors.grey[900],
         appBar: AppBar(
-          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
           backgroundColor: Colors.grey[900],
@@ -48,26 +48,11 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                   topRight: Radius.circular(20.0))),
           title: Text('Edit Wallet',
               style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15.0)),
-          leading: TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                backgroundColor: Colors.transparent,
-              )),
+                fontFamily: fontFamily,
+                fontSize: 17.0,
+                fontWeight: FontWeight.w600,
+                color: foregroundColor,)),
+          leading: CloseButton(),
           actions: <Widget>[
             TextButton(
                 onPressed: () async {
@@ -82,18 +67,15 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     Navigator.pop(context, widget.wallet.id);
                   }
                 },
-                child: const Text(
-                  'Save',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.w600,
-                  ),
+                child: Text('Save',
+                    style: TextStyle(
+                      fontFamily: fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      color: foregroundColor,
+                    )
                 ),
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.transparent,
-                )),
+            ),
           ],
         ),
         body: Container(
@@ -118,26 +100,34 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 children: [
                   Row(
                     children: [
-                      IconButton(
-                        icon: SuperIcon(
-                          iconPath: iconData,
-                          size: 45.0,
+                      Container(
+                        color: Colors.transparent, // Không thừa đâu, như vậy mới ấn vùng ngoài được.
+                        padding: EdgeInsets.fromLTRB(24, 20, 10, 0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            // TODO: Chọn icon cho ví
+                            var data = await showCupertinoModalBottomSheet(
+                              context: context,
+                              builder: (context) => IconPicker(),
+                            );
+                            if (data != null) {
+                              widget.wallet.iconID = data;
+                              setState(() {
+                                iconData = data;
+                              });
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SuperIcon(
+                                iconPath: iconData,
+                                size: 45.0,
+                              ),
+                              Icon(Icons.arrow_drop_down, color: Colors.grey),
+                            ],
+                          ),
                         ),
-                        onPressed: () async {
-                          // TODO: Chọn icon cho ví
-                          var data = await showCupertinoModalBottomSheet(
-                            context: context,
-                            builder: (context) => IconPicker(),
-                          );
-                          if (data != null) {
-                            widget.wallet.iconID = data;
-                            setState(() {
-                              iconData = data;
-                            });
-                          }
-                        },
-                        iconSize: 70,
-                        color: Color(0xff8f8f8f),
                       ),
                       Expanded(
                         child: Container(
@@ -185,6 +175,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       )
                     ],
                   ),
+                  SizedBox(height: 20,),
                   Divider(
                     thickness: 0.05,
                     color: Colors.white,
@@ -326,54 +317,52 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                // Xử lý sự kiện click ở đây.
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                alignment: Alignment.center,
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 40),
+                height: 40,
                 width: double.infinity,
-                color: Colors.grey[900],
-                child: Text(
-                  'Link to service',
-                  style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Montserrat'),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () async {
-                // Xử lý sự kiện click ở đây.
-                final _firestore = Provider.of<FirebaseFireStoreService>(
-                    context,
-                    listen: false);
-                final res = await _firestore.deleteWallet(widget.wallet.id);
-                if (res is String && res == 'only 1 wallet') {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(res.toString())));
-                  return;
-                }
-                Navigator.pop(context, res);
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                alignment: Alignment.center,
-                width: double.infinity,
-                color: Colors.grey[900],
-                child: Text(
-                  'Delete wallet',
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Montserrat'),
-                ),
-              ),
-            ),
+                child: TextButton(
+                  onPressed: () async {
+                    // Xử lý sự kiện click ở đây.
+                    final _firestore = Provider.of<FirebaseFireStoreService>(
+                        context,
+                        listen: false);
+                    final res = await _firestore.deleteWallet(widget.wallet.id);
+                    if (res is String && res == 'only 1 wallet') {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(res.toString())));
+                      return;
+                    }
+                    Navigator.pop(context, res);
+                  },
+                  child: Text("DELETE THIS WALLET",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: fontFamily,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
+                          wordSpacing: 2.0),
+                      textAlign: TextAlign.center),
+                  style: ButtonStyle(
+                    backgroundColor:
+                    MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.white;
+                        return Colors.red[700]; // Use the component's default.
+                      },
+                    ),
+                    foregroundColor:
+                    MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.red[700];
+                        return Colors
+                            .white; // Use the component's default.
+                      },
+                    ),
+                  ),
+                )),
           ],
         ),
       ],

@@ -10,6 +10,7 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
 
   Wallet wallet = Wallet(
       id: '0',
-      name: 'newWallet',
+      name: '',
       amount: 0,
       currencyID: 'VND',
       iconID: 'assets/icons/wallet_2.svg');
@@ -34,41 +35,26 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: boxBackgroundColor,
         appBar: AppBar(
-          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.grey[900],
+          backgroundColor: boxBackgroundColor,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.0),
                   topRight: Radius.circular(20.0))),
           title: Text('Add Wallet',
               style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15.0)),
-          leading: TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                backgroundColor: Colors.transparent,
-              )),
+                fontFamily: fontFamily,
+                fontSize: 17.0,
+                fontWeight: FontWeight.w600,
+                color: foregroundColor,)),
+          leading: CloseButton(),
           actions: <Widget>[
             TextButton(
                 onPressed: () async {
+                  if (wallet.name == '' || wallet.name == null) return;
                   if (_formKey.currentState.validate()) {
                     FocusScope.of(context).requestFocus(FocusNode());
                     var res = await _firestore.addWallet(this.wallet);
@@ -76,18 +62,15 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     Navigator.of(context).pop(res);
                   }
                 },
-                child: const Text(
-                  'Save',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.w600,
-                  ),
+                child: Text('Save',
+                    style: TextStyle(
+                      fontFamily: fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      color: (wallet.name == '' || wallet.name == null) ? foregroundColor.withOpacity(0.24) : foregroundColor,
+                    )
                 ),
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.transparent,
-                )),
+            ),
           ],
         ),
         body: Container(
@@ -144,25 +127,33 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                   Row(
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        icon: SuperIcon(
-                          iconPath: wallet.iconID,
-                          size: 49.0,
+                      Container(
+                        color: Colors.transparent, // Không thừa đâu, như vậy mới ấn vùng ngoài được.
+                        padding: EdgeInsets.fromLTRB(24, 20, 10, 0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            // TODO: Chọn icon cho ví
+                            var data = await showCupertinoModalBottomSheet(
+                              context: context,
+                              builder: (context) => IconPicker(),
+                            );
+                            if (data != null) {
+                              setState(() {
+                                wallet.iconID = data;
+                              });
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SuperIcon(
+                                iconPath: wallet.iconID,
+                                size: 45.0,
+                              ),
+                              Icon(Icons.arrow_drop_down, color: Colors.grey),
+                            ],
+                          ),
                         ),
-                        onPressed: () async {
-                          // TODO: Chọn icon cho ví
-                          var data = await showCupertinoModalBottomSheet(
-                            context: context,
-                            builder: (context) => IconPicker(),
-                          );
-                          if (data != null) {
-                            setState(() {
-                              wallet.iconID = data;
-                            });
-                          }
-                        },
-                        iconSize: 70,
-                        color: Color(0xff8f8f8f),
                       ),
                       Expanded(
                         child: Container(
@@ -206,6 +197,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                       )
                     ],
                   ),
+                  SizedBox(height: 20,),
                   Divider(
                     thickness: 0.05,
                     color: Colors.white,
@@ -222,12 +214,12 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           ),
                           flagSize: 26,
                           titleTextStyle: TextStyle(
-                              fontFamily: 'Montserrat',
+                              fontFamily: fontFamily,
                               fontSize: 17,
                               color: Colors.white,
                               fontWeight: FontWeight.w700),
                           subtitleTextStyle: TextStyle(
-                              fontFamily: 'Montserrat',
+                              fontFamily: fontFamily,
                               fontSize: 15,
                               color: Colors.white),
                           //backgroundColor: Colors.grey[900],
@@ -328,25 +320,25 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                // Xử lý sự kiện click ở đây.
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                alignment: Alignment.center,
-                width: double.infinity,
-                color: Colors.grey[900],
-                child: Text(
-                  'Link to service',
-                  style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Montserrat'),
-                ),
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     // Xử lý sự kiện click ở đây.
+            //   },
+            //   child: Container(
+            //     padding: EdgeInsets.symmetric(vertical: 10.0),
+            //     alignment: Alignment.center,
+            //     width: double.infinity,
+            //     color: Colors.grey[900],
+            //     child: Text(
+            //       'Link to service',
+            //       style: TextStyle(
+            //           color: Colors.green,
+            //           fontSize: 15,
+            //           fontWeight: FontWeight.w500,
+            //           fontFamily: 'Montserrat'),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ],
