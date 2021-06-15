@@ -16,6 +16,7 @@ import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image
 import 'package:money_man/ui/screens/report_screens/share_screen.dart';
 import 'package:money_man/ui/screens/report_screens/time_selection.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../style.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/core/models/transaction_model.dart';
@@ -113,6 +114,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
       length: 300,
       child: Scaffold(
           backgroundColor: backgroundColor,
+          extendBodyBehindAppBar: true,
           appBar: new AppBar(
             backgroundColor: backgroundColor,
             centerTitle: true,
@@ -386,7 +388,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         fontFamily: 'Montserrat',
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16,
-                                      )),
+                                      )
+                                  ),
                                   MoneySymbolFormatter(
                                       text: closingBalance - openingBalance,
                                       currencyId: _wallet.currencyID,
@@ -402,15 +405,16 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  return showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AnalyticRevenueAndExpenditureScreen(
-                                          currentWallet: _wallet,
-                                          beginDate: beginDate,
-                                          endDate: endDate,
-                                        );
-                                      });
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          childCurrent: this.widget,
+                                          child: AnalyticRevenueAndExpenditureScreen(
+                                            currentWallet: _wallet,
+                                            beginDate: beginDate,
+                                            endDate: endDate,
+                                          ),
+                                          type: PageTransitionType.rightToLeft));
                                 },
                                 child: Container(
                                   width: 450,

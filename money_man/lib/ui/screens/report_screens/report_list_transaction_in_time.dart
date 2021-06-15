@@ -83,6 +83,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
 
   @override
   void didUpdateWidget(covariant ReportListTransaction oldWidget) {
+    super.didUpdateWidget(oldWidget);
     transactionListSorted = [];
     dateInChoosenTime = [];
     categoryInChoosenTime = [];
@@ -91,9 +92,8 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     _endDate = widget.endDate;
     total = 0;
     _controller = ScrollController();
-    filterData(_transactionList, _beginDate, _endDate);
     _controller.addListener(_scrollListener);
-    super.didUpdateWidget(oldWidget);
+    filterData(_transactionList, _beginDate, _endDate);
   }
 
   bool CompareDate(DateTime a, DateTime b) {
@@ -322,7 +322,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   itemBuilder: (context, yIndex) {
                     return GestureDetector(
                       onTap: () async {
-                        Navigator.push(
+                        await Navigator.push(
                             context,
                             PageTransition(
                                 child: TransactionDetail(
@@ -331,6 +331,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                                   wallet: widget.currentWallet,
                                 ),
                                 type: PageTransitionType.rightToLeft));
+                        setState(() { });
                       },
                       child: Container(
                         padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
