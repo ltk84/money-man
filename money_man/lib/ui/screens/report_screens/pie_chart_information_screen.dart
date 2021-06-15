@@ -159,8 +159,6 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (_) => ReportListTransaction(
-                                  currentList:
-                                      _listTransactionOfEachCatecory[index],
                                   endDate: _listTransactionOfEachCatecory[index]
                                           [0]
                                       .date,

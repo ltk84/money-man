@@ -16,13 +16,11 @@ class ReportListTransaction extends StatefulWidget {
   final DateTime beginDate;
   final DateTime endDate;
   final Wallet currentWallet;
-  final List<MyTransaction> currentList;
   final double totalMoney;
   const ReportListTransaction(
       {Key key,
       this.beginDate,
       this.endDate,
-      this.currentList,
       this.totalMoney,
       this.currentWallet})
       : super(key: key);
@@ -58,12 +56,6 @@ class _ReportListTransaction extends State<ReportListTransaction> {
       });
     }
   }
-
-  // list các list transaction đã lọc
-  List<List<MyTransaction>> transactionListSorted = [];
-  List<MyTransaction> _transactionList;
-  List<DateTime> dateInChoosenTime = [];
-  List<String> categoryInChoosenTime = [];
   // sort theo date giảm dần
   DateTime _beginDate;
   DateTime _endDate;
@@ -72,28 +64,11 @@ class _ReportListTransaction extends State<ReportListTransaction> {
   @override
   void initState() {
     super.initState();
-    _transactionList = widget.currentList ?? [];
     _beginDate = widget.beginDate;
     _endDate = widget.endDate;
     total = 0;
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
-    filterData(_transactionList, _beginDate, _endDate);
-  }
-
-  @override
-  void didUpdateWidget(covariant ReportListTransaction oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    transactionListSorted = [];
-    dateInChoosenTime = [];
-    categoryInChoosenTime = [];
-    _transactionList = widget.currentList ?? [];
-    _beginDate = widget.beginDate;
-    _endDate = widget.endDate;
-    total = 0;
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
-    filterData(_transactionList, _beginDate, _endDate);
   }
 
   bool CompareDate(DateTime a, DateTime b) {
@@ -101,30 +76,6 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     if (a.year == b.year && a.month < b.month) return true;
     if (a.year == b.year && a.month == b.month && a.day <= b.day) return true;
     return false;
-  }
-
-  void filterData(List<MyTransaction> transactionList, DateTime beginDate,
-      DateTime endDate) {
-    transactionList = transactionList
-        .where((element) =>
-            CompareDate(element.date, endDate) &&
-            CompareDate(beginDate, element.date))
-        .toList();
-    transactionList.sort((a, b) => b.date.compareTo(a.date));
-    transactionList.forEach((element) {
-      if (!dateInChoosenTime.contains(element.date))
-        dateInChoosenTime.add(element.date);
-    });
-    dateInChoosenTime.forEach((date) {
-      final b = _transactionList
-          .where((element) => element.date.compareTo(date) == 0);
-      b.forEach((element) {
-        element.category.type == "income"
-            ? total += element.amount
-            : total -= element.amount;
-      });
-      transactionListSorted.add(b.toList());
-    });
   }
 
   Widget build(BuildContext context) {
@@ -137,7 +88,36 @@ class _ReportListTransaction extends State<ReportListTransaction> {
           elevation: 0,
           title: Text('Transaction List'),
         ),
-        body: buildDisplayTransactionByDate(transactionListSorted, total));
+        body: StreamBuilder<Object>(
+          stream: _firestore.transactionStream(widget.currentWallet, 'full'),
+          builder: (context, snapshot) {
+            List<MyTransaction> transactionList = snapshot.data ?? [];
+            List<List<MyTransaction>> transactionListSorted = [];
+            List<DateTime> dateInChoosenTime = [];
+            transactionList = transactionList
+                .where((element) =>
+            CompareDate(element.date, _endDate) &&
+                CompareDate(_beginDate, element.date))
+                .toList();
+            transactionList.sort((a, b) => b.date.compareTo(a.date));
+            transactionList.forEach((element) {
+              if (!dateInChoosenTime.contains(element.date))
+                dateInChoosenTime.add(element.date);
+            });
+            dateInChoosenTime.forEach((date) {
+              final b = transactionList
+                  .where((element) => element.date.compareTo(date) == 0);
+              b.forEach((element) {
+                element.category.type == "income"
+                    ? total += element.amount
+                    : total -= element.amount;
+              });
+              transactionListSorted.add(b.toList());
+            });
+
+            return buildDisplayTransactionByDate(transactionListSorted, total);
+          }
+        ));
   }
 
   Container buildDisplayTransactionByDate(
@@ -162,7 +142,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
             return xIndex == 0
                 ? Column(
                     children: [
-                      buildHeader(total),
+                      buildHeader(transactionListSortByDate, total),
                       buildBottomViewByDate(
                           transactionListSortByDate, xIndex, totalAmountInDay)
                     ],
@@ -173,13 +153,9 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     );
   }
 
-  Widget buildHeader(double total) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    return StreamBuilder(
-        stream: _firestore.transactionStream(widget.currentWallet, 50),
-        builder: (context, snapshot) {
+  Widget buildHeader(List<List<MyTransaction>> transListSortByDate, double total) {
           _totalMoney = 0;
-          transactionListSorted.forEach((element) {
+          transListSortByDate.forEach((element) {
             element.forEach((e) {
               if (e.category.type == "income") {
                 _totalMoney += e.amount;
@@ -247,15 +223,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   ),
                 ])),
           );
-        });
   }
 
   Widget buildBottomViewByDate(List<List<MyTransaction>> transListSortByDate,
       int xIndex, double totalAmountInDay) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    return StreamBuilder<Object>(
-        stream: _firestore.transactionStream(widget.currentWallet, 50),
-        builder: (context, snapshot) {
           totalAmountInDay = 0;
           transListSortByDate[xIndex].forEach((element) {
             element.category.type == 'income'
@@ -331,7 +302,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                                   wallet: widget.currentWallet,
                                 ),
                                 type: PageTransitionType.rightToLeft));
-                        setState(() { });
+                        setState(() {});
                       },
                       child: Container(
                         padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
@@ -381,6 +352,5 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   }),
             ),
           );
-        });
   }
 }

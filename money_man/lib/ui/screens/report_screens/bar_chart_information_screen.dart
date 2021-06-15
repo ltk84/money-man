@@ -82,7 +82,6 @@ class _BarChartInformation extends State<BarChartInformation> {
                   context,
                   MaterialPageRoute(
                       builder: (_) => ReportListTransaction(
-                            currentList: _transactionList,
                             beginDate: fisrtDayList[index],
                             endDate: secondDayList[index],
                             totalMoney: calculationList[index].first -
