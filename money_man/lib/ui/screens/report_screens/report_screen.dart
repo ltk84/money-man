@@ -317,8 +317,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                           builder: (key) {
                             this.key1 = key;
 
-                            return Column(children: <Widget>[
-                              Column(
+                            return Column(
                                 children: <Widget>[
                                   Row(
                                     children: <Widget>[
@@ -382,50 +381,56 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     height: 20,
                                   ),
                                   SizedBox(height: 10,),
-                                  Text('Net Income',
-                                      style: TextStyle(
-                                        color: foregroundColor.withOpacity(0.7),
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                      )
-                                  ),
-                                  MoneySymbolFormatter(
-                                      text: closingBalance - openingBalance,
-                                      currencyId: _wallet.currencyID,
-                                      textStyle: TextStyle(
-                                        color: (closingBalance - openingBalance) > 0 ? incomeColor
-                                            : (closingBalance - openingBalance) == 0 ? foregroundColor : expenseColor,
-                                        fontFamily: fontFamily,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 26,
-                                        height: 1.5,
-                                      ))
-                                ],
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          childCurrent: this.widget,
-                                          child: AnalyticRevenueAndExpenditureScreen(
-                                            currentWallet: _wallet,
-                                            beginDate: beginDate,
-                                            endDate: endDate,
+                                  Hero(
+                                    tag: 'netIncomeChart',
+                                    child: Column(
+                                      children: [
+                                        Text('Net Income',
+                                            style: TextStyle(
+                                              color: foregroundColor.withOpacity(0.7),
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16,
+                                            )
+                                        ),
+                                        MoneySymbolFormatter(
+                                            text: closingBalance - openingBalance,
+                                            currencyId: _wallet.currencyID,
+                                            textStyle: TextStyle(
+                                              color: (closingBalance - openingBalance) > 0 ? incomeColor
+                                                  : (closingBalance - openingBalance) == 0 ? foregroundColor : expenseColor,
+                                              fontFamily: fontFamily,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 26,
+                                              height: 1.5,
+                                            )),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    childCurrent: this.widget,
+                                                    child: AnalyticRevenueAndExpenditureScreen(
+                                                      currentWallet: _wallet,
+                                                      beginDate: beginDate,
+                                                      endDate: endDate,
+                                                    ),
+                                                    type: PageTransitionType.rightToLeft));
+                                          },
+                                          child: Container(
+                                            width: 450,
+                                            height: 200,
+                                            child: BarChartScreen(
+                                                currentList: _transactionList,
+                                                beginDate: beginDate,
+                                                endDate: endDate),
                                           ),
-                                          type: PageTransitionType.rightToLeft));
-                                },
-                                child: Container(
-                                  width: 450,
-                                  height: 200,
-                                  child: BarChartScreen(
-                                      currentList: _transactionList,
-                                      beginDate: beginDate,
-                                      endDate: endDate),
-                                ),
-                              ),
-                            ]);
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                            );
                           },
                         ),
                       ),
