@@ -157,10 +157,6 @@ class _BudgetScreenState extends State<BudgetScreen>
                     return TabBarView(
                       controller: _tabController,
                       children: [
-                        /*AddBudget(
-                          tabController: _tabController,
-                          wallet: _wallet,
-                        ),*/
                         CurrentlyApplied(
                           wallet: _wallet,
                         ),

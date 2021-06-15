@@ -77,11 +77,8 @@ class _AddBudgetState extends State<EditBudget> {
           actions: [
             GestureDetector(
               onTap: () async {
-                _firestore.updateBudget(_budget, widget.wallet);
-                await _showAlertDialog(
-                    "Congratulations, Update budget successfully!");
-                String result = 'Ajojo';
-                Navigator.pop(context, result);
+                await _firestore.updateBudget(_budget, widget.wallet);
+                Navigator.pop(context);
               },
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -371,24 +368,9 @@ class _AddBudgetState extends State<EditBudget> {
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
-                  onTap: () async {
-                    Wallet res = await showCupertinoModalBottomSheet(
-                        isDismissible: true,
-                        backgroundColor: Colors.grey[900],
-                        context: context,
-                        builder: (context) =>
-                            SelectWalletAccountScreen(wallet: widget.wallet));
-                    if (res != null)
-                      setState(() {
-                        _budget.walletId = res.id;
-                        selectedWallet = res;
-                        currencySymbol = CurrencyService()
-                            .findByCode(selectedWallet.currencyID)
-                            .symbol;
-                      });
-                  },
+                  onTap: () {},
                   trailing: Icon(
-                    Icons.keyboard_arrow_right,
+                    Icons.lock,
                     color: Colors.white70,
                   ),
                   dense: true,
@@ -410,30 +392,15 @@ class _AddBudgetState extends State<EditBudget> {
                           child: Text(
                             'Select wallet:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Colors.white54,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         TextFormField(
-                          onTap: () async {
-                            Wallet res = await showCupertinoModalBottomSheet(
-                                isDismissible: true,
-                                backgroundColor: Colors.grey[900],
-                                context: context,
-                                builder: (context) => SelectWalletAccountScreen(
-                                    wallet: selectedWallet));
-                            if (res != null)
-                              setState(() {
-                                _budget.walletId = res.id;
-
-                                selectedWallet = res;
-                                currencySymbol = CurrencyService()
-                                    .findByCode(selectedWallet.currencyID)
-                                    .symbol;
-                              });
-                          },
+                          onTap: () {},
                           readOnly: true,
                           obscureText: false,
                           cursorColor: Colors.white60,
@@ -446,7 +413,7 @@ class _AddBudgetState extends State<EditBudget> {
                                   ? widget.wallet.name
                                   : selectedWallet.name,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.white54,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -459,58 +426,53 @@ class _AddBudgetState extends State<EditBudget> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 30,
-              ),
-              /*GestureDetector(
-                onTap: () async {
-                  //TODO: Add new budget
-                  // await _firestore.updateEvent();
-                  if (selectedWallet == null) {
-                    _showAlertDialog('Please pick your wallet!');
-                  } else if (amount == null) {
-                    _showAlertDialog('Please enter amount!');
-                  } else if (cate == null) {
-                    _showAlertDialog('Please pick category');
-                  } else if (mTimeRange == null) {
-                    _showAlertDialog("Please pick time range");
-                  } else {
-                    Budget mBudget = new Budget(
-                        id: 'id',
-                        category: this.cate,
-                        amount: this.amount,
-                        spent: 0,
-                        walletId: this.selectedWallet.id,
-                        isFinished: mTimeRange.endDay.isBefore(DateTime.now())
-                            ? true
-                            : false,
-                        beginDate: mTimeRange.beginDay,
-                        endDate: mTimeRange.endDay,
-                        isRepeat: false);
-                    await _firestore.addBudget(mBudget, selectedWallet);
-                    await _showAlertDialog(
-                        "Congratulations, Add budget successfully!");
-                    widget.tabController.animateTo(1);
-                  }
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Color(0xFF2FB49C),
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  child: Text(
-                    'Add budget',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25),
-                  ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10, top: 5),
+                padding: EdgeInsets.only(right: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _budget.isRepeat = !_budget.isRepeat;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(1),
+                        margin:
+                            EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white, width: 1),
+                            shape: BoxShape.circle,
+                            color: Color(0xff111111)),
+                        child: _budget.isRepeat
+                            ? Icon(
+                                Icons.check,
+                                size: 17,
+                                color: Colors.white,
+                              )
+                            : Icon(
+                                null,
+                                size: 17,
+                                color: Colors.black,
+                              ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        'Repeat this budget',
+                        style: TextStyle(
+                            color: white,
+                            fontFamily: 'Montserrat',
+                            fontSize: 13),
+                      ),
+                    )
+                  ],
                 ),
-              ),*/
+              ),
             ],
           ),
         ),

@@ -95,7 +95,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                         budget: widget.budget,
                         wallet: widget.wallet,
                       ));
-              if (result != null) Navigator.pop(context);
+              setState(() {});
             },
           ),
           IconButton(

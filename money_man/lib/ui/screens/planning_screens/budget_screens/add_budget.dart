@@ -28,6 +28,17 @@ class AddBudget extends StatefulWidget {
 }
 
 class _AddBudgetState extends State<AddBudget> {
+  BudgetTimeRange GetmTimeRangeMonth(DateTime today) {
+    var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
+    var endDayOfMonth =
+        DateTime(today.year, today.month + 1, 1).subtract(Duration(days: 1));
+    return new BudgetTimeRange(
+        beginDay: firstDayOfMonth,
+        endDay: endDayOfMonth,
+        description:
+            DateTime.now().isBefore(today) ? 'Next month' : 'This month');
+  }
+
   bool isRepeat = true;
 
   BudgetTimeRange mTimeRange;
@@ -46,6 +57,8 @@ class _AddBudgetState extends State<AddBudget> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     if (widget.myCategory != null) cate = widget.myCategory;
+    if (selectedWallet == null) selectedWallet = widget.wallet;
+    if (mTimeRange == null) mTimeRange = GetmTimeRangeMonth(DateTime.now());
 
     return Theme(
       data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
@@ -92,10 +105,7 @@ class _AddBudgetState extends State<AddBudget> {
                       endDate: mTimeRange.endDay,
                       isRepeat: isRepeat);
                   await _firestore.addBudget(mBudget, selectedWallet);
-                  await _showAlertDialog(
-                      "Add budget successfully!", 'Congratulations');
-                  String result = "Success";
-                  Navigator.pop(context, result);
+                  Navigator.pop(context);
                 }
               },
               child: Container(
@@ -194,7 +204,9 @@ class _AddBudgetState extends State<AddBudget> {
                               hintText:
                                   cate == null ? 'Choose group' : cate.name,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: cate == null
+                                      ? Colors.white54
+                                      : Colors.white,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -270,7 +282,9 @@ class _AddBudgetState extends State<AddBudget> {
                                       .output
                                       .withoutFractionDigits,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: amount == null
+                                      ? Colors.white54
+                                      : Colors.white,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
