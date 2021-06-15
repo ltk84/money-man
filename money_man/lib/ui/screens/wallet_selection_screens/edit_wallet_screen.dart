@@ -194,20 +194,21 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     onTap: () {
                       showCurrencyPicker(
                         theme: CurrencyPickerThemeData(
+                          backgroundColor: Colors.grey[900],
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                            BorderRadius.all(Radius.circular(20.0)),
                           ),
                           flagSize: 26,
                           titleTextStyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontSize: 17,
-                              color: Colors.black,
+                              color: Colors.white,
                               fontWeight: FontWeight.w700),
                           subtitleTextStyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontSize: 15,
-                              color: Colors.black),
+                              color: Colors.white),
                           //backgroundColor: Colors.grey[900],
                         ),
                         onSelect: (value) {
