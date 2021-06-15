@@ -431,7 +431,7 @@ class FirebaseFireStoreService {
           .doc(wallet.id)
           .collection('events');
 
-      await eventRef.doc(transaction.eventID).get().then((value) {
+      await eventRef.doc(oldTransaction.eventID).get().then((value) {
         oldEvent = Event.fromMap(value.data());
       });
       //Tính toán lại spent cho event cũ

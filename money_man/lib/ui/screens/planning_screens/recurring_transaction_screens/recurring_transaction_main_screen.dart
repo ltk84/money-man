@@ -124,7 +124,7 @@ class _RecurringTransactionMainScreenState
       children: [
         Container(
           margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-          child: Text('THIS PERIOD',
+          child: Text('All',
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontSize: 14.0,

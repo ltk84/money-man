@@ -186,6 +186,7 @@ class _FirstStepState extends State<FirstStep> {
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           width: 250.0,
                           child: TextFormField(
+                              autocorrect: false,
                               validator: (value) {
                                 if (value == null || value.length == 0)
                                   return 'Wallet name is empty';
