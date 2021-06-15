@@ -570,7 +570,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         backgroundColor: Colors.grey[900],
                         context: context,
                         builder: (context) =>
-                            SelectEventScreen(wallet: selectedWallet));
+                            SelectEventScreen(
+                                wallet: selectedWallet,
+                              timeTransaction: pickDate,
+                            ));
                     if (res != null)
                       setState(() {
                         event = res;
@@ -611,7 +614,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           backgroundColor: Colors.grey[900],
                           context: context,
                           builder: (context) =>
-                              SelectEventScreen(wallet: selectedWallet));
+                              SelectEventScreen(
+                                  wallet: selectedWallet,
+                                timeTransaction: pickDate,
+                              ));
                       if (res != null)
                         setState(() {
                           event = res;

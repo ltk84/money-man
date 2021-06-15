@@ -5,6 +5,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/src/intl/date_format.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/event_detail.dart';
 
 class CurrentlyAppliedEvent extends StatefulWidget {
@@ -60,8 +61,9 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
               {
                 element.isFinished = true;
               }
-            if((!element.isFinished && !element.finishedByHand) ||
-                (element.isFinished && !element.finishedByHand && !element.autofinish))
+            if((!element.isFinished && !element.finishedByHand)
+                || (element.isFinished && !element.finishedByHand && !element.autofinish)
+            ||(!element.isFinished && element.autofinish))
               {
                 currentlyEvent.add(element);
               }
@@ -134,17 +136,21 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                             Container(
                               margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 mainAxisSize : MainAxisSize.max,
                                 children: <Widget>[
-                                  Text((currentlyEvent[index].isFinished)?
-                                  'Out of Date':'',
+                                  Text('End date: ' + DateFormat('EEEE, dd-MM-yyyy').format(currentlyEvent[index].endDate),
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: Colors.white54),
                                     textAlign: TextAlign.start,
                                   ),
-                                  Text(''),
+                                  Text((currentlyEvent[index].isFinished)?' (Out of date)':'',
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.red),
+                                    textAlign: TextAlign.start,
+                                  ),
                                 ],
                               ),
                             ),

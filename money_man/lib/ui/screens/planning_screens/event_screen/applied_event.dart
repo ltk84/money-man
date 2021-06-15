@@ -4,6 +4,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:intl/src/intl/date_format.dart';
 import 'package:provider/provider.dart';
 
 import 'event_detail.dart';
@@ -63,7 +64,7 @@ class _AppliedEvent extends State<AppliedEvent>
               element.isFinished = true;
             }
             if((!element.isFinished && element.finishedByHand)
-            ||(element.isFinished && element.finishedByHand)
+            ||(element.isFinished && element.finishedByHand && !element.autofinish)
                 ||(!element.finishedByHand && element.autofinish && element.isFinished))
             {
               appliedEvent.add(element);
@@ -134,6 +135,22 @@ class _AppliedEvent extends State<AppliedEvent>
                                     ),
                                     Text('',
                                         style: TextStyle(color: Colors.white)),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisSize : MainAxisSize.max,
+                                  children: <Widget>[
+                                    Text('End date: ' + DateFormat('EEEE, dd-MM-yyyy').format(appliedEvent[index].endDate),
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.white54),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    Text(''),
                                   ],
                                 ),
                               ),

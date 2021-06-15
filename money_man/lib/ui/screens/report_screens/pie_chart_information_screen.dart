@@ -148,6 +148,7 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                     ))),
             padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
             child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
               controller: _controller,
               itemCount: _listCategoryReport.length,
               itemBuilder: (context, index) {

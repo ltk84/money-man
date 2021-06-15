@@ -206,9 +206,12 @@ class _PlanningScreenState extends State<PlanningScreen> {
               child: TextButton(
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EventScreen()));
+                      context,
+                      PageTransition(
+                          child: EventScreen(
+                          ),
+                          type: PageTransitionType.rightToLeft),
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),

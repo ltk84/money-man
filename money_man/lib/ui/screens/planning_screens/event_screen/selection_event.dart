@@ -6,9 +6,10 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:provider/provider.dart';
 
 class SelectEventScreen extends StatefulWidget {
-  Wallet wallet;
+  final Wallet wallet;
   Event event;
-  SelectEventScreen({Key key, this.wallet, this.event}) : super(key: key);
+  final DateTime timeTransaction;
+  SelectEventScreen({Key key, this.wallet, this.event ,this.timeTransaction}) : super(key: key);
   @override
   _SelectEventScreen createState() =>
       _SelectEventScreen();
@@ -16,10 +17,12 @@ class SelectEventScreen extends StatefulWidget {
 
 class _SelectEventScreen extends State<SelectEventScreen> {
   Wallet _wallet;
+  DateTime _timeTransaction;
   @override
   void initState() {
     super.initState();
     _wallet = widget.wallet;
+    _timeTransaction = widget.timeTransaction;
   }
 
   @override
@@ -27,8 +30,18 @@ class _SelectEventScreen extends State<SelectEventScreen> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     _wallet = widget.wallet;
+    _timeTransaction = widget.timeTransaction;
   }
-
+  bool CompareDate(DateTime a, DateTime b)
+  {
+    if( a.year < b.year)
+      return true;
+    if(a.year == b.year && a.month < b.month)
+      return true;
+    if(a.year == b.year && a.month == b.month && a.day < b.day)
+      return true;
+    return false;
+  }
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -77,8 +90,9 @@ class _SelectEventScreen extends State<SelectEventScreen> {
                   builder: (context, snapshot) {
                     final listEvent = snapshot.data ?? [];
                     listEvent.removeWhere((element) => (!element.isFinished && element.finishedByHand)
-                        ||(element.isFinished && element.finishedByHand)
+                        ||(element.isFinished && element.finishedByHand && !element.autofinish)
                         ||(!element.finishedByHand && element.autofinish && element.isFinished));
+                    listEvent.removeWhere((element) => CompareDate(element.endDate, _timeTransaction ));
                     return ListView.builder(
                         itemCount: listEvent.length,
                         itemBuilder: (context, index) {
