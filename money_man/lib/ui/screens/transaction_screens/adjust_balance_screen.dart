@@ -6,6 +6,7 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AdjustBalanceScreen extends StatefulWidget {
@@ -183,15 +184,12 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
                         ),
                         contentPadding: EdgeInsets.symmetric(horizontal: 20),
                         title: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 25),
-                          child: Text(
-                              MoneyFormatter(
-                                      amount:
-                                          adjustAmount ?? widget.wallet.amount)
-                                  .output
-                                  .withoutFractionDigits,
-                              style: TextStyle(color: Colors.white)),
-                        ),
+                            padding: EdgeInsets.symmetric(horizontal: 25),
+                            child: MoneySymbolFormatter(
+                              text: adjustAmount ?? widget.wallet.amount,
+                              currencyId: widget.wallet.currencyID,
+                              textStyle: TextStyle(color: Colors.white),
+                            )),
                         trailing: Icon(
                           Icons.chevron_right,
                           color: white,

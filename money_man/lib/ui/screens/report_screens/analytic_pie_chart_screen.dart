@@ -7,6 +7,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart_information_screen.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AnalyticPieChartSreen extends StatefulWidget {
@@ -63,6 +64,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
       });
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -104,7 +106,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
         ),
         body: StreamBuilder<Object>(
           stream: _firestore.transactionStream(widget.currentWallet, 50),
-          builder: (context,snapshot){
+          builder: (context, snapshot) {
             return Container(
               color: Colors.black,
               child: ListView(
@@ -138,8 +140,10 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 30,
                                   )),
-                              Text(_total.toString(),
-                                  style: TextStyle(
+                              MoneySymbolFormatter(
+                                  text: _total,
+                                  currencyId: widget.currentWallet.currencyID,
+                                  textStyle: TextStyle(
                                     color: Colors.white,
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w400,
@@ -153,7 +157,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                           Container(
                             width: 200,
                             height: 200,
-                            child:  PieChartScreen(
+                            child: PieChartScreen(
                                 isShowPercent: true,
                                 currentList: _transactionList,
                                 categoryList: _categoryList,
@@ -175,7 +179,6 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
               ),
             );
           },
-        )
-    );
+        ));
   }
 }

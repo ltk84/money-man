@@ -15,6 +15,7 @@ import 'package:money_man/ui/screens/report_screens/share_report/utils.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
 import 'package:money_man/ui/screens/report_screens/share_screen.dart';
 import 'package:money_man/ui/screens/report_screens/time_selection.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import '../../style.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/core/models/transaction_model.dart';
@@ -321,16 +322,17 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         fontSize: 14,
                                       ),
                                     ),
-                                    Text(
-                                      openingBalance.toString(),
-                                      style: TextStyle(
+                                    MoneySymbolFormatter(
+                                      text: openingBalance,
+                                      currencyId: _wallet.currencyID,
+                                      textStyle: TextStyle(
                                         color: Colors.white,
                                         fontFamily: 'Montserrat',
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16,
                                         height: 1.5,
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               ),
@@ -346,16 +348,17 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         fontSize: 14,
                                       ),
                                     ),
-                                    Text(
-                                      closingBalance.toString(),
-                                      style: TextStyle(
+                                    MoneySymbolFormatter(
+                                      text: closingBalance,
+                                      currencyId: _wallet.currencyID,
+                                      textStyle: TextStyle(
                                         color: Colors.white,
                                         fontFamily: 'Montserrat',
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16,
                                         height: 1.5,
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               )
@@ -389,15 +392,15 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         fontFamily: 'Montserrat',
                                         fontWeight: FontWeight.w500,
                                       )),
-                                  Text(
-                                      (closingBalance - openingBalance)
-                                          .toString(),
-                                      style: TextStyle(
+                                  MoneySymbolFormatter(
+                                      text: closingBalance - openingBalance,
+                                      currencyId: _wallet.currencyID,
+                                      textStyle: TextStyle(
                                         color: Colors.white,
                                         fontFamily: 'Montserrat',
                                         fontWeight: FontWeight.w400,
                                         fontSize: 22,
-                                      )),
+                                      ))
                                 ],
                               ),
                               GestureDetector(
@@ -446,9 +449,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         ),
                                         textAlign: TextAlign.start,
                                       ),
-                                      Text(
-                                        income.toString(),
-                                        style: TextStyle(
+                                      MoneySymbolFormatter(
+                                        text: income,
+                                        currencyId: _wallet.currencyID,
+                                        textStyle: TextStyle(
                                           color: Colors.blueAccent,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w400,
@@ -506,9 +510,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       ),
                                       textAlign: TextAlign.start,
                                     ),
-                                    Text(
-                                      expense.toString(),
-                                      style: TextStyle(
+                                    MoneySymbolFormatter(
+                                      text: expense,
+                                      currencyId: _wallet.currencyID,
+                                      textStyle: TextStyle(
                                         color: Colors.redAccent,
                                         fontFamily: 'Montserrat',
                                         fontWeight: FontWeight.w400,

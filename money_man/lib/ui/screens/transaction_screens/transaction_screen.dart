@@ -13,6 +13,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -802,16 +803,14 @@ class _TransactionScreen extends State<TransactionScreen>
           title: Column(children: [
             Text(_wallet.name,
                 style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
-            Text(
-                MoneyFormatter(amount: _wallet.amount)
-                        .output
-                        .withoutFractionDigits +
-                    ' ' +
-                    currencySymbol,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold)),
+            MoneySymbolFormatter(
+              text: _wallet.amount,
+              currencyId: _wallet.currencyID,
+              textStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold),
+            )
           ]),
           bottom: TabBar(
             unselectedLabelColor: Colors.grey[500],
@@ -1168,10 +1167,13 @@ class _TransactionScreen extends State<TransactionScreen>
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString() + ' $currencySymbol',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white)),
+                child: MoneySymbolFormatter(
+                  text: totalAmountInDay,
+                  currencyId: _wallet.currencyID,
+                  textAlign: TextAlign.end,
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -1215,39 +1217,38 @@ class _TransactionScreen extends State<TransactionScreen>
                                 color: Colors.white)),
                       ),
                       Expanded(
-                        child: Text(
-                            transListSortByCategory[xIndex][yIndex].category.type == 'income' ||
-                                    transListSortByCategory[xIndex][yIndex].category.name ==
-                                        'Debt' ||
-                                    transListSortByCategory[xIndex][yIndex].category.name ==
-                                        'Deft Collection'
-                                ? '+' +
-                                    transListSortByCategory[xIndex][yIndex]
-                                        .amount
-                                        .toString() +
-                                    ' $currencySymbol'
-                                : '-' +
-                                    transListSortByCategory[xIndex][yIndex]
-                                        .amount
-                                        .toString() +
-                                    ' $currencySymbol',
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: transListSortByCategory[xIndex][yIndex]
-                                                .category
-                                                .type ==
-                                            'income' ||
-                                        transListSortByCategory[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Debt' ||
-                                        transListSortByCategory[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Deft Collection'
-                                    ? Colors.green
-                                    : Colors.red[600])),
+                        child: transListSortByCategory[xIndex][yIndex]
+                                        .category
+                                        .type ==
+                                    'income' ||
+                                transListSortByCategory[xIndex][yIndex]
+                                        .category
+                                        .name ==
+                                    'Debt' ||
+                                transListSortByCategory[xIndex][yIndex]
+                                        .category
+                                        .name ==
+                                    'Debt Collection'
+                            ? MoneySymbolFormatter(
+                                text: transListSortByCategory[xIndex][yIndex]
+                                    .amount,
+                                currencyId: _wallet.currencyID,
+                                textAlign: TextAlign.end,
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green),
+                                digit: '+',
+                              )
+                            : MoneySymbolFormatter(
+                                text: transListSortByCategory[xIndex][yIndex]
+                                    .amount,
+                                currencyId: _wallet.currencyID,
+                                textAlign: TextAlign.end,
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red[600]),
+                                digit: '-',
+                              ),
                       ),
                     ],
                   ),
@@ -1301,10 +1302,13 @@ class _TransactionScreen extends State<TransactionScreen>
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString() + ' $currencySymbol',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white)),
+                child: MoneySymbolFormatter(
+                  text: totalAmountInDay,
+                  currencyId: _wallet.currencyID,
+                  textAlign: TextAlign.end,
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -1362,36 +1366,38 @@ class _TransactionScreen extends State<TransactionScreen>
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white))),
                       Expanded(
-                        child: Text(
-                            transListSortByDate[xIndex][yIndex].category.type ==
-                                        'income' ||
-                                    transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .name ==
-                                        'Debt' ||
-                                    transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .name ==
-                                        'Deft Collection'
-                                ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()} $currencySymbol"
-                                : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()} $currencySymbol",
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .type ==
-                                            'income' ||
-                                        transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Debt' ||
-                                        transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Deft Collection'
-                                    ? Colors.green
-                                    : Colors.red[600])),
+                        child: transListSortByDate[xIndex][yIndex]
+                                        .category
+                                        .type ==
+                                    'income' ||
+                                transListSortByDate[xIndex][yIndex]
+                                        .category
+                                        .name ==
+                                    'Debt' ||
+                                transListSortByDate[xIndex][yIndex]
+                                        .category
+                                        .name ==
+                                    'Debt Collection'
+                            ? MoneySymbolFormatter(
+                                text:
+                                    transListSortByDate[xIndex][yIndex].amount,
+                                currencyId: _wallet.currencyID,
+                                textAlign: TextAlign.end,
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green),
+                                digit: '+',
+                              )
+                            : MoneySymbolFormatter(
+                                text:
+                                    transListSortByDate[xIndex][yIndex].amount,
+                                currencyId: _wallet.currencyID,
+                                textAlign: TextAlign.end,
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red[600]),
+                                digit: '-',
+                              ),
                       ),
                     ],
                   ),
@@ -1423,8 +1429,12 @@ class _TransactionScreen extends State<TransactionScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text('Inflow', style: TextStyle(color: Colors.grey[500])),
-                  Text('+$totalInCome $currencySymbol',
-                      style: TextStyle(color: Colors.white)),
+                  MoneySymbolFormatter(
+                    text: totalInCome,
+                    currencyId: _wallet.currencyID,
+                    textStyle: TextStyle(color: Colors.white),
+                    digit: '+',
+                  )
                 ],
               ),
             ),
@@ -1434,8 +1444,12 @@ class _TransactionScreen extends State<TransactionScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text('Outflow', style: TextStyle(color: Colors.grey[500])),
-                    Text('-$totalOutCome $currencySymbol',
-                        style: TextStyle(color: Colors.white)),
+                    MoneySymbolFormatter(
+                      text: totalOutCome,
+                      currencyId: _wallet.currencyID,
+                      textStyle: TextStyle(color: Colors.white),
+                      digit: '-',
+                    ),
                   ]),
             ),
             Container(
@@ -1463,8 +1477,11 @@ class _TransactionScreen extends State<TransactionScreen>
                     SizedBox(
                       width: 10,
                     ),
-                    Text('$total $currencySymbol',
-                        style: TextStyle(color: Colors.white)),
+                    MoneySymbolFormatter(
+                      text: total,
+                      currencyId: _wallet.currencyID,
+                      textStyle: TextStyle(color: Colors.white),
+                    ),
                   ]),
             ),
             TextButton(
