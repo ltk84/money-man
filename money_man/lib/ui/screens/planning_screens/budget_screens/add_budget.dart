@@ -59,6 +59,7 @@ class _AddBudgetState extends State<AddBudget> {
     if (widget.myCategory != null) cate = widget.myCategory;
     if (selectedWallet == null) selectedWallet = widget.wallet;
     if (mTimeRange == null) mTimeRange = GetmTimeRangeMonth(DateTime.now());
+    if (mTimeRange.getBudgetLabel() == 'Custom') isRepeat = false;
 
     return Theme(
       data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
@@ -314,6 +315,7 @@ class _AddBudgetState extends State<AddBudget> {
                       setState(() {
                         // Change the time ahihi
                         mTimeRange = resultAmount;
+                        print(mTimeRange.getBudgetLabel());
                       });
                   },
                   trailing: Icon(
@@ -357,6 +359,7 @@ class _AddBudgetState extends State<AddBudget> {
                               setState(() {
                                 // Change the time ahihi
                                 mTimeRange = resultAmount;
+                                print(mTimeRange.getBudgetLabel());
                               });
                           },
                           readOnly: true,
