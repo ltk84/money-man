@@ -803,16 +803,14 @@ class _TransactionScreen extends State<TransactionScreen>
           title: Column(children: [
             Text(_wallet.name,
                 style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
-            Text(
-                MoneyFormatter(amount: _wallet.amount)
-                        .output
-                        .withoutFractionDigits +
-                    ' ' +
-                    currencySymbol,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold)),
+            MoneySymbolFormatter(
+              text: _wallet.amount,
+              currencyId: _wallet.currencyID,
+              textStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold),
+            )
           ]),
           bottom: TabBar(
             unselectedLabelColor: Colors.grey[500],
