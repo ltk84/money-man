@@ -39,33 +39,33 @@ class BarChartScreenState extends State<BarChartScreen> {
     rawBarGroups.clear();
     timeRangeList.clear();
     DateTimeRange value = DateTimeRange(start: beginDate, end: endDate);
-    if (value.duration >= Duration(days: 6)) {
-      List<dynamic> calculationList = [];
-      var x = (value.duration.inDays / 6).round();
-      var firstDate = beginDate.subtract(Duration(days: 1));
-      for (int i = 0; i < 6; i++) {
-        firstDate = firstDate.add(Duration(days: 1));
-        var secondDate = (i != 5) ? firstDate.add(Duration(days: x)) : endDate;
+    int dayRange = (value.duration >= Duration(days: 6)) ? 6
+        : (value.duration.inDays == 0) ? 1 : value.duration.inDays;
+    List<dynamic> calculationList = [];
+    var x = (value.duration.inDays / dayRange).round();
+    var firstDate = beginDate.subtract(Duration(days: 1));
+    for (int i = 0; i < dayRange; i++) {
+      firstDate = firstDate.add(Duration(days: 1));
+      var secondDate = (i != dayRange - 1) ? firstDate.add(Duration(days: x)) : endDate;
 
-        var calculation =
-            calculateByTimeRange(firstDate, secondDate, transactionList);
-        calculationList.add(calculation);
-        double temp = calculation.first > calculation.last
-            ? calculation.first
-            : calculation.last;
-        if (temp > _maximumAmount) _maximumAmount = temp;
-        timeRangeList
-            .add(firstDate.day.toString() + "-" + secondDate.day.toString());
-        firstDate = firstDate.add(Duration(days: x));
-      }
-      if (!calculationList.isEmpty) {
-        for (int i = 0; i < calculationList.length; i++) {
-          var barGroup = makeGroupData(
-              i,
-              (calculationList[i].first * 19) / _maximumAmount.round(),
-              (calculationList[i].last * 19) / _maximumAmount.round());
-          rawBarGroups.add(barGroup);
-        }
+      var calculation =
+          calculateByTimeRange(firstDate, secondDate, transactionList);
+      calculationList.add(calculation);
+      double temp = calculation.first > calculation.last
+          ? calculation.first
+          : calculation.last;
+      if (temp > _maximumAmount) _maximumAmount = temp;
+      timeRangeList
+          .add(firstDate.day.toString() + "-" + secondDate.day.toString());
+      firstDate = firstDate.add(Duration(days: x));
+    }
+    if (!calculationList.isEmpty) {
+      for (int i = 0; i < calculationList.length; i++) {
+        var barGroup = makeGroupData(
+            i,
+            (calculationList[i].first * 19) / _maximumAmount.round(),
+            (calculationList[i].last * 19) / _maximumAmount.round());
+        rawBarGroups.add(barGroup);
       }
     }
   }
@@ -201,7 +201,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                             fontSize: 13,
                             fontFamily: 'Montserrat',
                           ),
-                          margin: 5,
+                          margin: 10,
                           getTitles: (double value) {
                             return timeRangeList[value.toInt()];
                           },
@@ -214,7 +214,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                             fontSize: 13,
                             fontFamily: 'Montserrat',
                           ),
-                          margin: 5,
+                          margin: 10,
                           reservedSize: 50,
                           getTitles: (value) {
                             if (value == 0) {

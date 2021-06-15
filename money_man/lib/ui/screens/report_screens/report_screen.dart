@@ -111,9 +111,9 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
     return DefaultTabController(
       length: 300,
       child: Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: backgroundColor,
           appBar: new AppBar(
-            backgroundColor: Colors.black,
+            backgroundColor: backgroundColor,
             centerTitle: true,
             elevation: 0,
             flexibleSpace: ClipRect(
@@ -162,7 +162,6 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
               onTap: () async {
                 final result = await showCupertinoModalBottomSheet(
                     isDismissible: true,
-                    backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) => TimeRangeSelection(
                         dateDescription: dateDescript,
@@ -184,6 +183,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                       Text(
                         dateDescript,
                         style: TextStyle(
+                          fontFamily: fontFamily,
+                          fontWeight: FontWeight.w600,
                           color: Colors.white,
                           fontSize: 14.0,
                         ),
@@ -193,13 +194,14 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             " - " +
                             DateFormat('dd/MM/yyyy').format(endDate),
                         style: TextStyle(
-                            color: Colors.white,
+                            fontFamily: fontFamily,
+                            color: Colors.white.withOpacity(0.7),
                             fontSize: 12.0,
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w400),
                       ),
                     ],
                   ),
-                  Icon(Icons.arrow_drop_down, color: Colors.white),
+                  Icon(Icons.arrow_drop_down, color: foregroundColor),
                 ],
               ),
             ),
@@ -288,10 +290,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                         element.date.compareTo(endDate) <= 0)
                     .toList();
                 return Container(
-                  color: Colors.black,
+                  color: backgroundColor,
                   child: ListView(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(),
+                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 15),
@@ -315,19 +317,19 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     Text(
                                       'Opening balance',
                                       style: TextStyle(
-                                        color: Colors.grey[500],
+                                        color: foregroundColor.withOpacity(0.7),
                                         fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15,
                                       ),
                                     ),
                                     Text(
                                       openingBalance.toString(),
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: foregroundColor,
                                         fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 24,
                                         height: 1.5,
                                       ),
                                     ),
@@ -340,19 +342,19 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     Text(
                                       'Closing balance',
                                       style: TextStyle(
-                                        color: Colors.grey[500],
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                        color: foregroundColor.withOpacity(0.7),
+                                        fontFamily: fontFamily,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15,
                                       ),
                                     ),
                                     Text(
                                       closingBalance.toString(),
                                       style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
+                                        color: foregroundColor,
+                                        fontFamily: fontFamily,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 24,
                                         height: 1.5,
                                       ),
                                     ),
@@ -385,18 +387,21 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                 children: <Widget>[
                                   Text('Net Income',
                                       style: TextStyle(
-                                        color: Colors.grey[500],
+                                        color: foregroundColor.withOpacity(0.7),
                                         fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 18,
                                       )),
                                   Text(
                                       (closingBalance - openingBalance)
                                           .toString(),
                                       style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 22,
+                                        color: (closingBalance - openingBalance) > 0 ? Color(0xFF49CF2B)
+                                            : (closingBalance - openingBalance) == 0 ? foregroundColor : expenseColor,
+                                        fontFamily: fontFamily,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 26,
+                                        height: 1.5,
                                       )),
                                 ],
                               ),
@@ -439,10 +444,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       Text(
                                         'Income',
                                         style: TextStyle(
-                                          color: Colors.grey[500],
+                                          color: foregroundColor.withOpacity(0.7),
                                           fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16,
                                         ),
                                         textAlign: TextAlign.start,
                                       ),
@@ -450,9 +455,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         income.toString(),
                                         style: TextStyle(
                                           color: Colors.blueAccent,
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 18,
+                                          fontFamily: fontFamily,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 24,
+                                          height: 1.5,
                                         ),
                                         textAlign: TextAlign.start,
                                       ),
@@ -499,10 +505,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     Text(
                                       'Expense',
                                       style: TextStyle(
-                                        color: Colors.grey[500],
+                                        color: foregroundColor.withOpacity(0.7),
                                         fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
                                       ),
                                       textAlign: TextAlign.start,
                                     ),
@@ -510,9 +516,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       expense.toString(),
                                       style: TextStyle(
                                         color: Colors.redAccent,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 18,
+                                        fontFamily: fontFamily,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 24,
+                                        height: 1.5,
                                       ),
                                       textAlign: TextAlign.start,
                                     ),
