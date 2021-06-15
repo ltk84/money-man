@@ -9,6 +9,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screens/category_for_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/current_applied_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/select_time_range.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
@@ -114,7 +115,7 @@ class _AddBudgetState extends State<EditBudget> {
                         isDismissible: true,
                         backgroundColor: Colors.transparent,
                         context: context,
-                        builder: (context) => CategoriesTransactionScreen());
+                        builder: (context) => CategoriesBudgetScreen());
                     if (selectCate != null) {
                       setState(() {
                         this.cate = selectCate;
@@ -158,7 +159,7 @@ class _AddBudgetState extends State<EditBudget> {
                                     backgroundColor: Colors.transparent,
                                     context: context,
                                     builder: (context) =>
-                                        CategoriesTransactionScreen());
+                                        CategoriesBudgetScreen());
                             if (selectCate != null) {
                               setState(() {
                                 this.cate = selectCate;
