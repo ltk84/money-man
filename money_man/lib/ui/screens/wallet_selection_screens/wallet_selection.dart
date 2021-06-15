@@ -8,6 +8,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/edit_wallet_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class WalletSelectionScreen extends StatefulWidget {
@@ -163,7 +164,6 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
           stream: _firestore.walletStream,
           builder: (context, snapshot) {
             final listWallet = snapshot.data ?? [];
-            listWallet.removeWhere((element) => element.id == 'Total');
             print('stream ' + listWallet.length.toString());
             return ListView.builder(
                 physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -193,14 +193,19 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 listWallet[index].name,
                                 style: tsMain,
                               ),
-                              subtitle: Text(
-                                listWallet[index].amount.toString() +
-                                    ' ' +
-                                    CurrencyService()
-                                        .findByCode(
-                                            listWallet[index].currencyID)
-                                        .symbol,
-                                style: tsChild,
+                              // subtitle: Text(
+                              //   listWallet[index].amount.toString() +
+                              //       ' ' +
+                              //       CurrencyService()
+                              //           .findByCode(
+                              //               listWallet[index].currencyID)
+                              //           .symbol,
+                              //   style: tsChild,
+                              // ),
+                              subtitle: MoneySymbolFormatter(
+                                text: listWallet[index].amount,
+                                currencyId: listWallet[index].currencyID,
+                                textStyle: tsChild,
                               ),
                               trailing: Icon(Icons.check_rounded, color: primaryColor),
                             ),
@@ -245,14 +250,10 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 listWallet[index].name,
                                 style: tsMain,
                               ),
-                              subtitle: Text(
-                                listWallet[index].amount.toString() +
-                                    ' ' +
-                                    CurrencyService()
-                                        .findByCode(
-                                            listWallet[index].currencyID)
-                                        .symbol,
-                                style: tsChild,
+                              subtitle: MoneySymbolFormatter(
+                                text: listWallet[index].amount,
+                                currencyId: listWallet[index].currencyID,
+                                textStyle: tsChild,
                               ),
                             ),
                           ),

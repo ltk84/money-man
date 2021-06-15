@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/constaints.dart';
@@ -220,9 +221,14 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           try {
             UserCredential res =
                 await auth.currentUser.linkWithCredential(credential);
+            return res;
           } on FirebaseAuthException catch (e) {
             // TODO
             print(e.code);
+            return null;
+          } on PlatformException catch (err) {
+            // Handle err
+            print(err.code);
             return null;
           }
         }

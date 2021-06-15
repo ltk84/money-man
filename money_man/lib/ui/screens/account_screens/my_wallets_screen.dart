@@ -8,6 +8,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/edit_wallet_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class MyWalletScreen extends StatefulWidget {
@@ -222,9 +223,15 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              subtitle: Text(
-                                listWallet[index].amount.toString(),
-                                style: TextStyle(
+                              // subtitle: Text(
+                              //   listWallet[index].amount.toString(),
+                              //   style: TextStyle(
+                              //     color: foregroundColor,
+                              //     fontFamily: fontFamily,
+                              subtitle: MoneySymbolFormatter(
+                                text: listWallet[index].amount,
+                                currencyId: listWallet[index].currencyID,
+                                textStyle: TextStyle(
                                   color: foregroundColor,
                                   fontFamily: fontFamily,
                                   fontSize: 14.0,

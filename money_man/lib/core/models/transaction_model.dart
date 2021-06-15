@@ -4,6 +4,7 @@ import './category_model.dart';
 class MyTransaction {
   String id;
   double amount;
+  double extraAmountInfo;
   DateTime date;
   String note;
   String currencyID;
@@ -24,6 +25,7 @@ class MyTransaction {
     this.eventID,
     this.billID,
     this.contact,
+    this.extraAmountInfo,
   });
 
   factory MyTransaction.fromMap(Map<String, dynamic> data) {
@@ -37,9 +39,10 @@ class MyTransaction {
         category: MyCategory.fromMap(data['category']),
         note: data['note'],
         budgetID: data['budgetID'],
-        eventID: data['eventID'],
+        eventID: data['eventID'] ?? '',
         billID: data['billID'],
-        contact: data['contact']);
+        contact: data['contact'],
+        extraAmountInfo: data['extraAmountInfo']);
   }
 
   Map<String, dynamic> toMap() {
@@ -51,9 +54,10 @@ class MyTransaction {
       'category': category.toMap(),
       'note': note ?? "",
       'budgetID': budgetID,
-      'eventID': eventID,
+      'eventID': eventID ?? '',
       'billID': billID,
       'contact': contact,
+      'extraAmountInfo': extraAmountInfo,
     };
   }
 }

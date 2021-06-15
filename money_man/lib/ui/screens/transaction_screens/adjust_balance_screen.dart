@@ -8,6 +8,7 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AdjustBalanceScreen extends StatefulWidget {
@@ -23,6 +24,7 @@ class AdjustBalanceScreen extends StatefulWidget {
 
 class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
   double adjustAmount;
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -36,18 +38,18 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
         backgroundColor: backgroundColor1,
         actions: [
           TextButton(
-              onPressed: () async {
-                if (adjustAmount != null)
-                  await _firestore.adjustBalance(widget.wallet, adjustAmount);
-                Navigator.pop(context);
-              },
-              child: Text('Save',
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                    color: successColor,
-                  )),
+            onPressed: () async {
+              if (adjustAmount != null)
+                await _firestore.adjustBalance(widget.wallet, adjustAmount);
+              Navigator.pop(context);
+            },
+            child: Text('Save',
+                style: TextStyle(
+                  fontFamily: fontFamily,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                  color: successColor,
+                )),
           )
         ],
       ),
@@ -84,13 +86,13 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
                   size: 30.0,
                 ),
                 title: Text(
-                    widget.wallet.name,
-                    style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: foregroundColor,
-                    ),
+                  widget.wallet.name,
+                  style: TextStyle(
+                    fontFamily: fontFamily,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: foregroundColor,
+                  ),
                 ),
                 trailing: Tooltip(
                   showDuration: Duration(milliseconds: 500),
@@ -101,7 +103,9 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
                   message: 'Please change your wallet outside to adjust another wallet balance.',
                   decoration: BoxDecoration(
                     color: foregroundColor.withOpacity(0.92),
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5), bottomLeft: Radius.circular(5)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5),
+                        bottomLeft: Radius.circular(5)),
                   ),
                   textStyle: TextStyle(
                     fontFamily: fontFamily,
@@ -119,7 +123,7 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
             SizedBox(height: 15),
             Container(
               decoration: BoxDecoration(
-                  //color: Color(0xff268b79),
+                //color: Color(0xff268b79),
                   color: primaryColor.withOpacity(0.87),
                   borderRadius: BorderRadius.circular(10)),
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -141,13 +145,10 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
                   color: foregroundColor,
                   size: 30,
                 ),
-                title: Text(
-                  MoneyFormatter(
-                      amount:
-                      adjustAmount ?? widget.wallet.amount)
-                      .output
-                      .withoutFractionDigits,
-                  style: TextStyle(
+                title: MoneySymbolFormatter(
+                  text: adjustAmount ?? widget.wallet.amount,
+                  currencyId: widget.wallet.currencyID,
+                  textStyle: TextStyle(
                     fontFamily: fontFamily,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,

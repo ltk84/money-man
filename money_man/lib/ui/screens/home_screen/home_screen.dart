@@ -18,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 0;
 
   void _onItemTap(int index, Wallet wallet) {
     if (_selectedIndex != index) {

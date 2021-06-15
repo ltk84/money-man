@@ -225,6 +225,24 @@ class FirebaseFireStoreService {
 
   // TRANSACTION START//
 
+  // get list of transaction with criteria
+  Future<List<MyTransaction>> getListOfTransactionWithCriteria(
+      String criteria, String walletId) async {
+    List<MyTransaction> list = [];
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactions')
+        .where('category.name', isEqualTo: criteria)
+        .get()
+        .then((value) {
+      print('get complete with criteria: $criteria');
+      value.docs.map((e) => list.add(MyTransaction.fromMap(e.data()))).toList();
+    }).catchError((error) => print(error));
+    return list;
+  }
+
   // add transaction
   Future<MyTransaction> addTransaction(
       Wallet wallet, MyTransaction transaction) async {
@@ -244,10 +262,10 @@ class FirebaseFireStoreService {
     else {
       if (transaction.category.name == 'Debt') {
         wallet.amount += transaction.amount;
-        transaction.note += ' from someone';
+        // transaction.note += ' from someone';
       } else if (transaction.category.name == 'Loan') {
         wallet.amount -= transaction.amount;
-        transaction.note += ' to someone';
+        // transaction.note += ' to someone';
       } else if (transaction.category.name == 'Repayment') {
         wallet.amount -= transaction.amount;
       } else {
@@ -338,23 +356,23 @@ class FirebaseFireStoreService {
     else
       wallet.amount -= transaction.amount;
 
-    if(transaction.eventID != "")
-      {
-        final event = await getEventByID(transaction.eventID, wallet);
-        Event _event = event;
-        if (transaction.category.type == 'expense')
-          _event.spent += transaction.amount;
-        else
-          _event.spent -= transaction.amount;
-        _event.transactionIdList.removeWhere((element) => element == transaction.id);
-        await updateEvent(_event, wallet);
-      }
+    if (transaction.eventID != "") {
+      final event = await getEventByID(transaction.eventID, wallet);
+      Event _event = event;
+      if (transaction.category.type == 'expense')
+        _event.spent += transaction.amount;
+      else
+        _event.spent -= transaction.amount;
+      _event.transactionIdList
+          .removeWhere((element) => element == transaction.id);
+      await updateEvent(_event, wallet);
+    }
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
   }
 
   // update transaction
-  Future updateTransaction(MyTransaction transaction, Wallet wallet ,  Event event) async {
+  Future updateTransaction(MyTransaction transaction, Wallet wallet) async {
     // Lấy reference đến collection transactions
     CollectionReference transactionRef = users
         .doc(uid)
@@ -393,10 +411,10 @@ class FirebaseFireStoreService {
     else {
       if (transaction.category.name == 'Debt') {
         wallet.amount += transaction.amount;
-        transaction.note += ' from someone';
+        // transaction.note += ' from someone';
       } else if (transaction.category.name == 'Loan') {
         wallet.amount -= transaction.amount;
-        transaction.note += ' to someone';
+        // transaction.note += ' to someone';
       } else if (transaction.category.name == 'Repayment') {
         wallet.amount -= transaction.amount;
       } else {
@@ -405,7 +423,7 @@ class FirebaseFireStoreService {
     }
 
     //lấy event cũ
-    if(oldTransaction.eventID != "") {
+    if (oldTransaction.eventID != "") {
       Event oldEvent;
       CollectionReference eventRef = users
           .doc(uid)
@@ -413,9 +431,7 @@ class FirebaseFireStoreService {
           .doc(wallet.id)
           .collection('events');
 
-      await eventRef
-          .doc(transaction.eventID)
-          .get().then((value) {
+      await eventRef.doc(transaction.eventID).get().then((value) {
         oldEvent = Event.fromMap(value.data());
       });
       //Tính toán lại spent cho event cũ
@@ -423,29 +439,26 @@ class FirebaseFireStoreService {
         oldEvent.spent += oldTransaction.amount;
       else
         oldEvent.spent -= oldTransaction.amount;
-      if(event.id != "")
-        transaction.eventID = event.id;
-      else
-        transaction.eventID = "";
 
       //Loại bỏ transaction khỏi event cũ
-      oldEvent.transactionIdList.removeWhere(
-              (element) => element == oldTransaction.id);
+      oldEvent.transactionIdList
+          .removeWhere((element) => element == oldTransaction.id);
 
       //update cho event cũ
       await updateEvent(oldEvent, wallet);
 
       //update cho event mới
-      if(event.id == oldEvent.id)
+      if (transaction.eventID == oldEvent.id)
         await updateEventAmountAndTransList(oldEvent, wallet, transaction);
-      else if(event.id != "")
-        await updateEventAmountAndTransList(event, wallet, transaction);
-    }
-    else if (transaction.eventID != "" && oldTransaction.eventID == "")
-      {
-        transaction.eventID = event.id;
+      else if (transaction.eventID != "") {
+        Event event = await getEventByID(transaction.eventID, wallet);
         await updateEventAmountAndTransList(event, wallet, transaction);
       }
+    } else if (transaction.eventID != "" && oldTransaction.eventID == "") {
+      Event event = await getEventByID(transaction.eventID, wallet);
+      await updateEventAmountAndTransList(event, wallet, transaction);
+    }
+
     // update transaction
     await transactionRef.doc(transaction.id).update(transaction.toMap());
 
@@ -459,8 +472,9 @@ class FirebaseFireStoreService {
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
   }
-  Future updateTransactionAfterDeletingEvent(MyTransaction transaction, Wallet wallet )
-  async {
+
+  Future updateTransactionAfterDeletingEvent(
+      MyTransaction transaction, Wallet wallet) async {
     CollectionReference transactionRef = users
         .doc(uid)
         .collection('wallets')
@@ -470,8 +484,9 @@ class FirebaseFireStoreService {
     // Lấy transaction cũ
     await transactionRef.doc(transaction.id).update(transaction.toMap());
   }
+
   // Query transaction by category
-  Future<List<MyTransaction>> queryTransationByCategory(
+  Future<List<MyTransaction>> queryTransationByCategoryOrAmount(
       String searchPattern, Wallet wallet) async {
     double number = double.tryParse(searchPattern);
     List<MyTransaction> listTrans = [];
@@ -927,7 +942,7 @@ class FirebaseFireStoreService {
             (int.parse(recurringTrans.repeatOption.extraTypeInfo.toString()) -
                     1)
                 .toString();
-        if (recurringTrans.repeatOption.extraTypeInfo == 0) {
+        if (int.parse(recurringTrans.repeatOption.extraTypeInfo) <= 0) {
           recurringTrans.isFinished = true;
         }
       } else if (recurringTrans.repeatOption.type == 'until') {
@@ -1003,6 +1018,7 @@ class FirebaseFireStoreService {
   // thực hiện add transaction của recurring transaction ngay lập tức (tương tự trên)
   Future executeInstantRecurringTransaction(
       RecurringTransaction recurringTransaction, Wallet wallet) async {
+    if (recurringTransaction.isFinished == true) return -1;
     List<String> transactionIdList = await addTransactionOfRecurringTransaction(
         [recurringTransaction], wallet);
 

@@ -10,6 +10,7 @@ import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/categories_screens/categories_recurring_transaction_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
@@ -17,6 +18,7 @@ import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class AddRecurringTransactionScreen extends StatefulWidget {
   final Wallet wallet;
@@ -37,6 +39,7 @@ class _AddRecurringTransactionScreenState
   String note;
   Wallet _wallet;
   RepeatOption repeatOption;
+  String repeatDescription;
 
   var dateUtility;
   DateTime now =
@@ -56,11 +59,15 @@ class _AddRecurringTransactionScreenState
         extraTypeInfo: null);
     dateUtility = new DateUtil();
     note = '';
+    repeatDescription = updateRepeatDescription();
+    print('init');
   }
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    repeatDescription = updateRepeatDescription();
+
     return Scaffold(
         backgroundColor: Color(0xFF111111),
         extendBodyBehindAppBar: true,
@@ -163,11 +170,13 @@ class _AddRecurringTransactionScreenState
                       behavior: HitTestBehavior.translucent,
                       onTap: () async {
                         final selectCate = await showCupertinoModalBottomSheet(
-                            isDismissible: true,
+                            // isDismissible: true,
                             backgroundColor: Colors.grey[900],
                             context: context,
                             builder: (context) =>
-                                CategoriesTransactionScreen());
+                                CategoriesRecurringTransactionScreen(
+                                  walletId: widget.wallet.id,
+                                ));
                         if (selectCate != null) {
                           setState(() {
                             this.category = selectCate;
@@ -279,7 +288,7 @@ class _AddRecurringTransactionScreenState
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Text(
-                  'Repeat ${repeatOption.frequency} from ${repeatOption.beginDateTime}',
+                  repeatDescription ?? 'Select repeat option',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 13.0,
@@ -289,6 +298,25 @@ class _AddRecurringTransactionScreenState
                 ))
           ],
         ));
+  }
+
+  String updateRepeatDescription() {
+    String frequency = repeatOption.frequency == 'daily'
+        ? 'day'
+        : repeatOption.frequency
+            .substring(0, repeatOption.frequency.indexOf('ly'));
+    String beginDateTime =
+        DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime);
+    String extraFeq = repeatOption.rangeAmount.toString();
+    String type = repeatOption.type;
+    String extra = repeatOption.type == 'until'
+        ? DateFormat('dd/MM/yyyy').format(repeatOption.extraTypeInfo)
+        : '${repeatOption.extraTypeInfo} time';
+
+    if (type == 'forever') {
+      return 'Repeat every $extraFeq $frequency from $beginDateTime forever';
+    }
+    return 'Repeat every $extraFeq $frequency from $beginDateTime $type $extra';
   }
 
   Widget buildAmountInput({String display}) {

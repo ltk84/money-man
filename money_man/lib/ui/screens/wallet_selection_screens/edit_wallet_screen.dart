@@ -9,6 +9,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class EditWalletScreen extends StatefulWidget {
@@ -247,15 +248,25 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     dense: true,
                     leading: Icon(Icons.account_balance,
                         size: 30.0, color: Colors.white24),
-                    title: Text(
-                        adjustAmount != null
-                            ? convertMoneyType(adjustAmount)
-                            : convertMoneyType(widget.wallet.amount),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.0)),
+                    title: adjustAmount != null
+                        ? MoneySymbolFormatter(
+                            text: adjustAmount,
+                            currencyId: widget.wallet.currencyID,
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0),
+                          )
+                        : MoneySymbolFormatter(
+                            text: widget.wallet.amount,
+                            currencyId: widget.wallet.currencyID,
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0),
+                          ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Colors.white),
                   )

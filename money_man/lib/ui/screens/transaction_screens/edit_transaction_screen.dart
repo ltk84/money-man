@@ -40,10 +40,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
   String contact;
   Event _event;
   bool pickEvent = false;
-  
+
   @override
   void initState() {
-    _event = widget.event;
     super.initState();
     pickDate = widget.transaction.date;
     currencySymbol =
@@ -51,6 +50,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
     amount = widget.transaction.amount;
     note = widget.transaction.note;
     contact = widget.transaction.contact;
+    _event = widget.event;
   }
 
   @override
@@ -95,18 +95,17 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               onPressed: () async {
                 FocusScope.of(context).requestFocus(FocusNode());
                 MyTransaction _transaction = MyTransaction(
-                    id: widget.transaction.id,
-                    amount: amount,
-                    date: pickDate,
-                    currencyID: widget.transaction.currencyID,
-                    category: widget.transaction.category,
-                    note: note,
-                    contact: contact,
-                    eventID: widget.transaction.eventID,
+                  id: widget.transaction.id,
+                  amount: amount,
+                  date: pickDate,
+                  currencyID: widget.transaction.currencyID,
+                  category: widget.transaction.category,
+                  note: note,
+                  contact: contact,
+                  eventID: _event.id,
                 );
 
-                await _firestore.updateTransaction(
-                    _transaction, widget.wallet , _event);
+                await _firestore.updateTransaction(_transaction, widget.wallet);
                 Navigator.pop(context, _transaction);
               },
               child: const Text(
@@ -396,155 +395,103 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 },
               ),
             ),
-            (widget.transaction.eventID != "")
-            ?ListTile(
-              dense: true,
-              onTap: () async {
-                var res = await showCupertinoModalBottomSheet(
-                    isDismissible: true,
-                    backgroundColor: Colors.grey[900],
-                    context: context,
-                    builder: (context) =>
-                        SelectEventScreen(
-                            wallet: widget.wallet)
-                );
-                if (res != null)
-                  setState(() {
-                    _event = res;
-                  });
-              },
-              leading: _event == null
-                  ? Icon(Icons.event, size: 28.0, color: Colors.white54,)
-                  : SuperIcon(iconPath: _event.iconPath, size: 28.0),
-              title: TextFormField(
-                readOnly: true,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600),
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    hintStyle: TextStyle(
-                      color: _event == null
-                          ? Colors.grey[600]
-                          : Colors.white,
-                      fontFamily: 'Montserrat',
-                      fontSize: 16.0,
-                      fontWeight: _event == null
-                          ? FontWeight.w500
-                          : FontWeight.w600,
-                    ),
-                    hintText: _event == null
-                        ? 'Select event'
-                        : _event.name),
-                onTap: () async {
-                  var res = await showCupertinoModalBottomSheet(
-                      isDismissible: true,
-                      backgroundColor: Colors.grey[900],
-                      context: context,
-                      builder: (context) =>
-                          SelectEventScreen(
-                              wallet: widget.wallet)
-                  );
-                  if (res != null)
-                    setState(() {
-                      _event = res;
-                      widget.event = _event;
-                    });
-                },
-              ),
-              trailing: Icon(Icons.chevron_right, color: Colors.white54),
-            ):
-                Column(
-                  children: <Widget>[
-                    Visibility(
-                      visible: !pickEvent,
-                      child: TextButton(
-                        onPressed: () {
+            (_event.id != "")
+                ? ListTile(
+                    dense: true,
+                    onTap: () async {
+                      var res = await showCupertinoModalBottomSheet(
+                          isDismissible: true,
+                          backgroundColor: Colors.grey[900],
+                          context: context,
+                          builder: (context) =>
+                              SelectEventScreen(wallet: widget.wallet));
+                      if (res != null)
+                        setState(() {
+                          _event = res;
+                        });
+                    },
+                    leading: _event == null
+                        ? Icon(
+                            Icons.event,
+                            size: 28.0,
+                            color: Colors.white54,
+                          )
+                        : SuperIcon(iconPath: _event.iconPath, size: 28.0),
+                    title: TextFormField(
+                      readOnly: true,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600),
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          hintStyle: TextStyle(
+                            color: _event == null
+                                ? Colors.grey[600]
+                                : Colors.white,
+                            fontFamily: 'Montserrat',
+                            fontSize: 16.0,
+                            fontWeight: _event == null
+                                ? FontWeight.w500
+                                : FontWeight.w600,
+                          ),
+                          hintText:
+                              _event == null ? 'Select event' : _event.name),
+                      onTap: () async {
+                        var res = await showCupertinoModalBottomSheet(
+                            isDismissible: true,
+                            backgroundColor: Colors.grey[900],
+                            context: context,
+                            builder: (context) =>
+                                SelectEventScreen(wallet: widget.wallet));
+                        if (res != null)
                           setState(() {
-                            pickEvent = true;
+                            _event = res;
                           });
-                        },
-                        child: Text(
-                          'More',
-                          style: TextStyle(color: Color(0xff36D1B5)),
-                        ),
-                        style: TextButton.styleFrom(
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                      ),
+                      },
                     ),
-                    Visibility(
-                      visible: !pickEvent,
-                      child: ListTile(
-                        dense: true,
-                        leading: Icon(Icons.account_balance_outlined,
-                            color: Colors.white54, size: 28.0),
-                        title: TextFormField(
-                          onTap: () async {
-                            final PhoneContact phoneContact =
-                                await FlutterContactPicker.pickPhoneContact();
-                            print(phoneContact.fullName);
+                    trailing: Icon(Icons.chevron_right, color: Colors.white54),
+                  )
+                : Column(
+                    children: <Widget>[
+                      Visibility(
+                        visible: !pickEvent,
+                        child: TextButton(
+                          onPressed: () {
                             setState(() {
-                              contact = phoneContact.fullName;
+                              pickEvent = true;
                             });
                           },
-                          readOnly: true,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              hintStyle: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500),
-                              hintText: contact ?? 'With'),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Montserrat',
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w600),
+                          child: Text(
+                            'More',
+                            style: TextStyle(color: Color(0xff36D1B5)),
+                          ),
+                          style: TextButton.styleFrom(
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                         ),
-                        trailing: Icon(Icons.chevron_right, color: Colors.white54),
                       ),
-                    ),
-                    Visibility(
-                        visible: pickEvent,
-                        child:ListTile(
+                      Visibility(
+                        visible: !pickEvent,
+                        child: ListTile(
                           dense: true,
-                          onTap: () async {
-                            var res = await showCupertinoModalBottomSheet(
-                                isDismissible: true,
-                                backgroundColor: Colors.grey[900],
-                                context: context,
-                                builder: (context) =>
-                                    SelectEventScreen(
-                                        wallet: widget.wallet)
-                            );
-                            if (res != null)
-                              setState(() {
-                                _event = res;
-                                widget.transaction.eventID = _event.id;
-                              });
-                          },
-                          leading: _event.id == 'id'
-                              ? Icon(Icons.event, size: 28.0, color: Colors.white54,)
-                              : SuperIcon(iconPath: _event.iconPath, size: 28.0),
+                          leading: Icon(Icons.account_balance_outlined,
+                              color: Colors.white54, size: 28.0),
                           title: TextFormField(
+                            onTap: () async {
+                              final PhoneContact phoneContact =
+                                  await FlutterContactPicker.pickPhoneContact();
+                              print(phoneContact.fullName);
+                              setState(() {
+                                contact = phoneContact.fullName;
+                              });
+                            },
                             readOnly: true,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600),
+                            autocorrect: false,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 focusedBorder: InputBorder.none,
@@ -552,39 +499,97 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                 errorBorder: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                                 hintStyle: TextStyle(
-                                  color: _event == null
-                                      ? Colors.grey[600]
-                                      : Colors.white,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 16.0,
-                                  fontWeight: _event.id == 'id'
-                                      ? FontWeight.w500
-                                      : FontWeight.w600,
-                                ),
-                                hintText: _event.id == 'id'
-                                    ? 'Select event'
-                                    : _event.name),
+                                    color: Colors.grey[600],
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500),
+                                hintText: contact ??
+                                        widget.transaction.category.name ==
+                                            'Debt'
+                                    ? 'Lender'
+                                    : widget.transaction.category.name == 'Loan'
+                                        ? 'Borrower'
+                                        : 'With'),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          trailing:
+                              Icon(Icons.chevron_right, color: Colors.white54),
+                        ),
+                      ),
+                      Visibility(
+                          visible: pickEvent,
+                          child: ListTile(
+                            dense: true,
                             onTap: () async {
                               var res = await showCupertinoModalBottomSheet(
                                   isDismissible: true,
                                   backgroundColor: Colors.grey[900],
                                   context: context,
                                   builder: (context) =>
-                                      SelectEventScreen(
-                                          wallet: widget.wallet)
-                              );
+                                      SelectEventScreen(wallet: widget.wallet));
                               if (res != null)
                                 setState(() {
                                   _event = res;
-                                  widget.transaction.eventID = _event.id;
+                                  // widget.transaction.eventID = _event.id;
                                 });
                             },
-                          ),
-                          trailing: Icon(Icons.chevron_right, color: Colors.white54),
-                        )
-                    )
-                  ],
-                )
+                            leading: _event.id == 'id'
+                                ? Icon(
+                                    Icons.event,
+                                    size: 28.0,
+                                    color: Colors.white54,
+                                  )
+                                : SuperIcon(
+                                    iconPath: _event.iconPath, size: 28.0),
+                            title: TextFormField(
+                              readOnly: true,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600),
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                    color: _event == null
+                                        ? Colors.grey[600]
+                                        : Colors.white,
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 16.0,
+                                    fontWeight: _event.id == 'id'
+                                        ? FontWeight.w500
+                                        : FontWeight.w600,
+                                  ),
+                                  hintText: _event.id == 'id'
+                                      ? 'Select event'
+                                      : _event.name),
+                              onTap: () async {
+                                var res = await showCupertinoModalBottomSheet(
+                                    isDismissible: true,
+                                    backgroundColor: Colors.grey[900],
+                                    context: context,
+                                    builder: (context) => SelectEventScreen(
+                                        wallet: widget.wallet));
+                                if (res != null)
+                                  setState(() {
+                                    _event = res;
+                                    // widget.transaction.eventID = _event.id;
+                                  });
+                              },
+                            ),
+                            trailing: Icon(Icons.chevron_right,
+                                color: Colors.white54),
+                          ))
+                    ],
+                  )
           ],
         ),
       ),

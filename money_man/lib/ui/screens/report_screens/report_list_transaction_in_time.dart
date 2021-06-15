@@ -7,6 +7,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -95,23 +96,19 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     super.didUpdateWidget(oldWidget);
   }
 
-  bool CompareDate(DateTime a, DateTime b)
-  {
-    if( a.year < b.year)
-      return true;
-    if(a.year == b.year && a.month < b.month)
-      return true;
-    if(a.year == b.year && a.month == b.month && a.day <= b.day)
-      return true;
+  bool CompareDate(DateTime a, DateTime b) {
+    if (a.year < b.year) return true;
+    if (a.year == b.year && a.month < b.month) return true;
+    if (a.year == b.year && a.month == b.month && a.day <= b.day) return true;
     return false;
   }
+
   void filterData(List<MyTransaction> transactionList, DateTime beginDate,
       DateTime endDate) {
     transactionList = transactionList
         .where((element) =>
-        CompareDate(element.date, endDate) &&
-        CompareDate(beginDate, element.date)
-        )
+            CompareDate(element.date, endDate) &&
+            CompareDate(beginDate, element.date))
         .toList();
     transactionList.sort((a, b) => b.date.compareTo(a.date));
     transactionList.forEach((element) {
@@ -122,8 +119,8 @@ class _ReportListTransaction extends State<ReportListTransaction> {
       final b = _transactionList
           .where((element) => element.date.compareTo(date) == 0);
       b.forEach((element) {
-        element.category.type == "income"?
-            total += element.amount
+        element.category.type == "income"
+            ? total += element.amount
             : total -= element.amount;
       });
       transactionListSorted.add(b.toList());
@@ -133,15 +130,14 @@ class _ReportListTransaction extends State<ReportListTransaction> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: new AppBar(
         backgroundColor: Colors.black,
-        centerTitle: true,
-        elevation: 0,
-        title: Text('Transaction List'),
-      ),
-      body:  buildDisplayTransactionByDate(transactionListSorted, total)
-    );
+        appBar: new AppBar(
+          backgroundColor: Colors.black,
+          centerTitle: true,
+          elevation: 0,
+          title: Text('Transaction List'),
+        ),
+        body: buildDisplayTransactionByDate(transactionListSorted, total));
   }
 
   Container buildDisplayTransactionByDate(
@@ -181,95 +177,92 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder(
         stream: _firestore.transactionStream(widget.currentWallet, 50),
-        builder: (context,snapshot)
-    {
-      _totalMoney = 0;
-      transactionListSorted.forEach((element) {
-        element.forEach((e) {
-          if(e.category.type == "income")
-            {
-              _totalMoney += e.amount;
-            }
-          else
-            _totalMoney -= e.amount;
-        });
-      });
-      return StickyHeader(
-        header: SizedBox(height: 0),
-        content: Container(
-            decoration: BoxDecoration(
-                color: Colors.grey[900],
-                border: Border(
-                    bottom: BorderSide(
+        builder: (context, snapshot) {
+          _totalMoney = 0;
+          transactionListSorted.forEach((element) {
+            element.forEach((e) {
+              if (e.category.type == "income") {
+                _totalMoney += e.amount;
+              } else
+                _totalMoney -= e.amount;
+            });
+          });
+          return StickyHeader(
+            header: SizedBox(height: 0),
+            content: Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey[900],
+                    border: Border(
+                        bottom: BorderSide(
                       color: Colors.black,
                       width: 1.0,
                     ))),
-            padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
-            child: Column(children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('Overview',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          )),
-                      SizedBox(
-                        width: 10,
-                        height: 10,
-                      ),
-                      Divider(
-                        color: Colors.black,
-                        thickness: 1.0,
-                        height: 10,
-                      ),
-                      ColoredBox(color: Colors.black87)
-                    ]),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(2, 2, 2, 15),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(_totalMoney >= 0 ? 'Income' : 'Outcome',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontFamily: 'Montserrat',
-                          )),
-                      Text('$_totalMoney đ',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Montserrat',
-                          )),
-                    ]),
-              ),
-            ])),
-      );
-    }
-    );
+                padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
+                child: Column(children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text('Overview',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                              )),
+                          SizedBox(
+                            width: 10,
+                            height: 10,
+                          ),
+                          Divider(
+                            color: Colors.black,
+                            thickness: 1.0,
+                            height: 10,
+                          ),
+                          ColoredBox(color: Colors.black87)
+                        ]),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(2, 2, 2, 15),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(_totalMoney >= 0 ? 'Income' : 'Outcome',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontFamily: 'Montserrat',
+                              )),
+                          MoneySymbolFormatter(
+                              text: _totalMoney,
+                              currencyId: widget.currentWallet.currencyID,
+                              textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Montserrat',
+                              )),
+                        ]),
+                  ),
+                ])),
+          );
+        });
   }
 
   Widget buildBottomViewByDate(List<List<MyTransaction>> transListSortByDate,
       int xIndex, double totalAmountInDay) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<Object>(
-      stream: _firestore.transactionStream(widget.currentWallet, 50),
-        builder: (context,snapshot)
-        {
+        stream: _firestore.transactionStream(widget.currentWallet, 50),
+        builder: (context, snapshot) {
           totalAmountInDay = 0;
           transListSortByDate[xIndex].forEach((element) {
-            element.category.type == 'income' ?
-                totalAmountInDay += element.amount :
-                totalAmountInDay -= element.amount;
+            element.category.type == 'income'
+                ? totalAmountInDay += element.amount
+                : totalAmountInDay -= element.amount;
           });
-          return  Container(
+          return Container(
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
             decoration: BoxDecoration(
                 color: Colors.grey[900],
@@ -293,26 +286,31 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                       child: Text(
                           DateFormat("dd")
                               .format(transListSortByDate[xIndex][0].date),
-                          style: TextStyle(fontSize: 30.0, color: Colors.white)),
+                          style:
+                              TextStyle(fontSize: 30.0, color: Colors.white)),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
                       child: Text(
                           DateFormat("EEEE")
-                              .format(transListSortByDate[xIndex][0].date)
-                              .toString() +
+                                  .format(transListSortByDate[xIndex][0].date)
+                                  .toString() +
                               '\n' +
                               DateFormat("MMMM yyyy")
                                   .format(transListSortByDate[xIndex][0].date)
                                   .toString(),
                           // 'hello',
-                          style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
+                          style: TextStyle(
+                              fontSize: 12.0, color: Colors.grey[500])),
                     ),
                     Expanded(
-                      child: Text(totalAmountInDay.toString(),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white)),
+                      child: MoneySymbolFormatter(
+                        text: totalAmountInDay,
+                        currencyId: widget.currentWallet.currencyID,
+                        textAlign: TextAlign.end,
+                        textStyle: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
@@ -324,12 +322,12 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   itemBuilder: (context, yIndex) {
                     return GestureDetector(
                       onTap: () async {
-
-                         Navigator.push(
+                        Navigator.push(
                             context,
                             PageTransition(
                                 child: TransactionDetail(
-                                  transaction: transListSortByDate[xIndex][yIndex],
+                                  transaction: transListSortByDate[xIndex]
+                                      [yIndex],
                                   wallet: widget.currentWallet,
                                 ),
                                 type: PageTransitionType.rightToLeft));
@@ -349,26 +347,31 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
                               child: Text(
-                                  transListSortByDate[xIndex][yIndex].category.name,
+                                  transListSortByDate[xIndex][yIndex]
+                                      .category
+                                      .name,
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white)),
                             ),
                             Expanded(
-                              child: Text(
-                                  transListSortByDate[xIndex][yIndex]
-                                      .amount
-                                      .toString(),
+                              child: MoneySymbolFormatter(
+                                      text: transListSortByDate[xIndex][yIndex]
+                                      .amount,
+                                      currencyId: widget.currentWallet.currencyID,
                                   textAlign: TextAlign.end,
-                                  style: TextStyle(
+
+                                      textStyle: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: transListSortByDate[xIndex][yIndex]
-                                          .category
-                                          .type ==
-                                          'income'
+                                                  .category
+                                                  .type ==
+                                              'income'
                                           ? Colors.green
-                                          : Colors.red[600])),
+                                          : Colors.red[600])
+                                    ),
+                             
                             ),
                           ],
                         ),
@@ -377,8 +380,6 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   }),
             ),
           );
-
-        }
-    );
+        });
   }
 }
