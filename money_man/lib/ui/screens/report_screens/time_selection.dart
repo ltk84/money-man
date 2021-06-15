@@ -72,9 +72,8 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black45,
+        backgroundColor: Colors.grey[900],
         appBar: AppBar(
-          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
           backgroundColor: Colors.grey[900],
@@ -88,22 +87,7 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w600,
                   fontSize: 15.0)),
-          leading: TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Close',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                backgroundColor: Colors.transparent,
-              )),
+          leading: CloseButton(),
         ),
         body: ListView.separated(
           itemCount: listInfo.length,

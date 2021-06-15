@@ -30,7 +30,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
     return Container(
       color: Colors.transparent,
       child: Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.grey[900],
           appBar: AppBar(
             centerTitle: true,
             elevation: 0,
@@ -79,7 +79,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
             ],
           ),
           body: Container(
-            color: Colors.black26,
+            color: backgroundColor1,
             child: Column(
               children: [
                 SizedBox(

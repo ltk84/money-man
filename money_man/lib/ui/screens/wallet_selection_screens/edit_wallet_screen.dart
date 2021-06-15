@@ -79,7 +79,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
           ],
         ),
         body: Container(
-            color: Colors.black26,
+            color: backgroundColor1,
             child: Form(
               key: _formKey,
               child: buildInput(),
@@ -259,61 +259,6 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Colors.white),
                   )
-                  /*Padding(
-                                                    padding: const EdgeInsets.only(left: 8.0, bottom: 8),
-                                                    child: Row(
-                                                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-                                                        IconButton(
-                                                          onPressed: () {},
-                                                          icon: Icon(
-                                                            Icons.account_balance_outlined,
-                                                            color: Color(0xff8f8f8f),
-                                                            size: 30,
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Container(
-                                                            padding: EdgeInsets.only(left: 15, right: 50),
-                                                            width: 250,
-                                                            child: TextFormField(
-                                                              keyboardType: TextInputType.number,
-                                                              style: TextStyle(
-                                                                color: Colors.white,
-                                                                decoration: TextDecoration.none,
-                                                              ),
-                                                              decoration: InputDecoration(
-                                                                  errorBorder: UnderlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(color: Colors.red, width: 1),
-                                                                  ),
-                                                                  enabledBorder: UnderlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: Colors.white60, width: 1),
-                                                                  ),
-                                                                  focusedBorder: UnderlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: Colors.white60, width: 3),
-                                                                  ),
-                                                                  labelText: 'Initial balance',
-                                                                  labelStyle: TextStyle(color: Colors.white60)),
-                                                              onChanged: (value) {
-                                                                var val = double.tryParse(value);
-                                                                if (val == null) widget.wallet.amount = 0;
-                                                                widget.wallet.amount = val;
-                                                              },
-                                                              validator: (value) {
-                                                                return (value == null ||
-                                                                        double.tryParse(value) == null)
-                                                                    ? 'This field must be a number'
-                                                                    : null;
-                                                              },
-                                                            ),
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),*/
                 ],
               ),
             ),

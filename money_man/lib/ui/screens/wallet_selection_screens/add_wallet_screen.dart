@@ -74,7 +74,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
           ],
         ),
         body: Container(
-            color: Colors.black26,
+            color: backgroundColor1,
             child: Form(
               key: _formKey,
               child: buildInput(),
