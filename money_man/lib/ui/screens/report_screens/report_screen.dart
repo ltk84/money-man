@@ -396,7 +396,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       (closingBalance - openingBalance)
                                           .toString(),
                                       style: TextStyle(
-                                        color: (closingBalance - openingBalance) > 0 ? Color(0xFF49CF2B)
+                                        color: (closingBalance - openingBalance) > 0 ? incomeColor
                                             : (closingBalance - openingBalance) == 0 ? foregroundColor : expenseColor,
                                         fontFamily: fontFamily,
                                         fontWeight: FontWeight.w600,

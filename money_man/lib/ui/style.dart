@@ -70,6 +70,6 @@ Color fbButtonColor = Color(0xFF2c84d4);
 Color primaryColor = Color(0xff2FB49C);
 Color errorColor = Colors.red[700];
 Color expenseColor = Colors.red[600];
-Color incomeColor = Color(0xFF49CF2B);
+Color incomeColor = Color(0xFF76F676);
 Color runningColor = Color(0xFF51f08d);
 Color successColor = Color(0xFF4FCC5C); // Nut Save

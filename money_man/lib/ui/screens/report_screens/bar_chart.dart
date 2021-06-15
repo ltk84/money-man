@@ -1,7 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:money_man/core/models/transaction_model.dart';
+import 'package:money_man/ui/style.dart';
 
 class BarChartScreen extends StatefulWidget {
   final List<MyTransaction> currentList;
@@ -259,6 +261,235 @@ class BarChartScreenState extends State<BarChartScreen> {
               const SizedBox(
                 height: 12,
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: width*2,
+                            width: width,
+                            decoration: BoxDecoration(
+                              color: leftBarColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                              'Total income',
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14.0,
+                                color: foregroundColor.withOpacity(0.54),
+                              )
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Container(
+                            height: width*2,
+                            width: width,
+                            decoration: BoxDecoration(
+                              color: rightBarColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                              'Total expense',
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0,
+                              color: foregroundColor.withOpacity(0.54),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 80),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 6),
+                            height: 14,
+                            width: 2,
+                            color: foregroundColor,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                              'Amount',
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0,
+                              color: foregroundColor.withOpacity(0.54),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Container(
+                            height: 2,
+                            width: 14,
+                            color: foregroundColor,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                              'Time range (day)',
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0,
+                              color: foregroundColor.withOpacity(0.54),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              )
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.center,
+              //       children: [
+              //         Container(
+              //           height: width*2,
+              //           width: width,
+              //           decoration: BoxDecoration(
+              //             color: leftBarColor,
+              //             borderRadius: BorderRadius.circular(10),
+              //           ),
+              //         ),
+              //         SizedBox(height: 10),
+              //         Container(
+              //           height: 14,
+              //           width: 2,
+              //           color: foregroundColor,
+              //         ),
+              //       ],
+              //     ),
+              //     SizedBox(width: 10),
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text('Total income'),
+              //         SizedBox(height: 10),
+              //         Text('Amount'),
+              //       ],
+              //     ),
+              //     SizedBox(width: 80),
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.center,
+              //       children: [
+              //         Container(
+              //           height: width*2,
+              //           width: width,
+              //           decoration: BoxDecoration(
+              //             color: rightBarColor,
+              //             borderRadius: BorderRadius.circular(10),
+              //           ),
+              //         ),
+              //         SizedBox(height: 10),
+              //         Container(
+              //           height: 2,
+              //           width: 14,
+              //           color: foregroundColor,
+              //         ),
+              //       ],
+              //     ),
+              //     SizedBox(width: 10),
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text('Total expense'),
+              //         SizedBox(height: 10),
+              //         Text('Time range (day)'),
+              //       ],
+              //     ),
+              //     // Column(
+              //     //   crossAxisAlignment: CrossAxisAlignment.start,
+              //     //   children: [
+              //     //     Row(
+              //     //       mainAxisAlignment: MainAxisAlignment.center,
+              //     //       children: [
+              //     //         Container(
+              //     //           height: width*2,
+              //     //           width: width,
+              //     //           decoration: BoxDecoration(
+              //     //             color: leftBarColor,
+              //     //             borderRadius: BorderRadius.circular(10),
+              //     //           ),
+              //     //         ),
+              //     //         SizedBox(width: 10,),
+              //     //         Text('Total income'),
+              //     //       ],
+              //     //     ),
+              //     //     Row(
+              //     //       mainAxisAlignment: MainAxisAlignment.center,
+              //     //       children: [
+              //     //         Container(
+              //     //           height: width*2,
+              //     //           width: width,
+              //     //           color: foregroundColor,
+              //     //         ),
+              //     //         SizedBox(width: 10,),
+              //     //         Text('Amount'),
+              //     //       ],
+              //     //     )
+              //     //   ],
+              //     // ),
+              //     // SizedBox(width: 80,),
+              //     // Column(
+              //     //   crossAxisAlignment: CrossAxisAlignment.start,
+              //     //   children: [
+              //     //     Row(
+              //     //       mainAxisAlignment: MainAxisAlignment.center,
+              //     //       children: [
+              //     //         Container(
+              //     //           height: width*2,
+              //     //           width: width,
+              //     //           decoration: BoxDecoration(
+              //     //             color: rightBarColor,
+              //     //             borderRadius: BorderRadius.circular(10),
+              //     //           ),
+              //     //         ),
+              //     //         SizedBox(width: 10,),
+              //     //         Text('Total expense'),
+              //     //       ],
+              //     //     ),
+              //     //     Row(
+              //     //       mainAxisAlignment: MainAxisAlignment.center,
+              //     //       children: [
+              //     //         Container(
+              //     //           height: width*2,
+              //     //           width: width,
+              //     //           color: foregroundColor,
+              //     //         ),
+              //     //         SizedBox(width: 10,),
+              //     //         Text('Time range (day)'),
+              //     //       ],
+              //     //     )
+              //     //   ],
+              //     // ),
+              //   ],
+              // ),
             ],
           ),
         ),
