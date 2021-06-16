@@ -47,6 +47,9 @@ class _AddBudgetState extends State<EditBudget> {
   Widget build(BuildContext context) {
     _budget = this.widget.budget;
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    if (mTimeRange == null)
+      mTimeRange = new BudgetTimeRange(
+          beginDay: _budget.beginDate, endDay: _budget.endDate);
     if (mTimeRange.getBudgetLabel() == 'Custom') _budget.isRepeat = false;
 
     return Theme(

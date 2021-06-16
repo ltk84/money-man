@@ -12,6 +12,7 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/widget/line
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_transaction.dart';
 
 class BudgetDetailScreen extends StatefulWidget {
   const BudgetDetailScreen({Key key, this.budget, this.wallet})
@@ -101,6 +102,34 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white),
               onPressed: () async {
+                String res = await showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Delete Budget'),
+                    content: const Text('Do you want to delete this budget?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('No'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('yes'),
+                      ),
+                    ],
+                  ),
+                );
+                print(res);
+                if (res == 'OK') {
+                  await _firestore.deleteBudget(
+                      widget.budget.walletId, widget.budget.id);
+                  Navigator.pop(context);
+                }
+              })
+
+          /*IconButton(
+              icon: Icon(Icons.delete, color: Colors.white),
+              onPressed: () async {
                 //TODO: Thuc hien xoa budget
                 String result = await _showAcceptionDialog();
                 print(result);
@@ -111,7 +140,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       widget.budget.walletId, widget.budget.id);
                   Navigator.pop(context);
                 }
-              })
+              })*/
         ],
         backgroundColor: Color(0xff333333),
       ),
@@ -440,13 +469,14 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               margin: EdgeInsets.only(top: 10, bottom: 20),
               alignment: Alignment.center,
               child: TextButton(
-                  onPressed: () {
-                    showCupertinoModalBottomSheet(
+                  onPressed: () async {
+                    await showCupertinoModalBottomSheet(
                         context: context,
-                        builder: (context) => SearchTransactionScreen(
+                        builder: (context) => BudgetTransactionScreen(
                               wallet: widget.wallet,
-                              muserSearch: widget.budget.category.name,
+                              budget: widget.budget,
                             ));
+                    setState(() {});
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -464,19 +494,6 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Future<String> _showAcceptionDialog() async {
-    return showDialog<String>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
-      builder: (BuildContext context) {
-        return CustomAcceptAlert(
-          content: 'Do you want to delete this budget?',
-        );
-      },
     );
   }
 }
