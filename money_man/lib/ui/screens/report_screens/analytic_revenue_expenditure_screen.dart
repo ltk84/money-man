@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
 import 'package:money_man/ui/screens/report_screens/bar_chart_information_screen.dart';
+import 'package:money_man/ui/screens/report_screens/share_report/utils.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
+import 'package:money_man/ui/screens/report_screens/share_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/category_model.dart';
@@ -37,13 +39,10 @@ class _AnalyticRevenueAndExpenditureScreen
     extends State<AnalyticRevenueAndExpenditureScreen>
     with TickerProviderStateMixin {
   GlobalKey key1;
-  GlobalKey key2;
-  GlobalKey key3;
   Uint8List bytes1;
-  Uint8List bytes2;
-  Uint8List bytes3;
 
   final double fontSizeText = 29.7;
+
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
@@ -52,6 +51,7 @@ class _AnalyticRevenueAndExpenditureScreen
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
+
   _scrollListener() {
     if (_controller.offset > 0) {
       setState(() {
@@ -87,11 +87,11 @@ class _AnalyticRevenueAndExpenditureScreen
     super.initState();
     _wallet = widget.currentWallet == null
         ? Wallet(
-            id: 'id',
-            name: 'defaultName',
-            amount: 0,
-            currencyID: 'USD',
-            iconID: 'a')
+        id: 'id',
+        name: 'defaultName',
+        amount: 0,
+        currencyID: 'USD',
+        iconID: 'a')
         : widget.currentWallet;
   }
 
@@ -116,50 +116,74 @@ class _AnalyticRevenueAndExpenditureScreen
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-            leading: MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Hero(
-                tag: 'alo',
-                child: Icon(Icons.arrow_back_ios, color: foregroundColor),
-              ),
+          leading: MaterialButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Hero(
+              tag: 'alo',
+              child: Icon(Icons.arrow_back_ios, color: foregroundColor),
             ),
-            centerTitle: true,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            flexibleSpace: ClipRect(
-              child: AnimatedOpacity(
-                opacity: reachAppBar == 1 ? 1 : 0,
-                duration: Duration(milliseconds: 0),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                      sigmaX: reachTop == 1 ? 25 : 500,
-                      sigmaY: 25,
-                      tileMode: TileMode.values[0]),
-                  child: AnimatedContainer(
-                    duration: Duration(
-                        milliseconds:
-                        reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                    color: Colors.grey[reachAppBar == 1
-                        ? (reachTop == 1 ? 800 : 850)
-                        : 900]
-                        .withOpacity(0.2),
-                  ),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          flexibleSpace: ClipRect(
+            child: AnimatedOpacity(
+              opacity: reachAppBar == 1 ? 1 : 0,
+              duration: Duration(milliseconds: 0),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                    sigmaX: reachTop == 1 ? 25 : 500,
+                    sigmaY: 25,
+                    tileMode: TileMode.values[0]),
+                child: AnimatedContainer(
+                  duration: Duration(
+                      milliseconds:
+                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  color: Colors.grey[reachAppBar == 1
+                      ? (reachTop == 1 ? 800 : 850)
+                      : 900]
+                      .withOpacity(0.2),
                 ),
               ),
             ),
-            title: AnimatedOpacity(
-                opacity: reachTop == 1 ? 1 : 0,
-                duration: Duration(milliseconds: 100),
-                child: Text('Net Income',
-                    style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: fontFamily,
-                      fontSize: 17.0,
-                      fontWeight: FontWeight.w600,
-                    ))
-            )
+          ),
+          title: AnimatedOpacity(
+              opacity: reachTop == 1 ? 1 : 0,
+              duration: Duration(milliseconds: 100),
+              child: Text('Net Income',
+                  style: TextStyle(
+                    color: foregroundColor,
+                    fontFamily: fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                  ))
+          ),
+          actions: <Widget>[
+            Hero(
+              tag: 'shareButton',
+              child: MaterialButton(
+                child: const Icon(Icons.ios_share, color: Colors.white),
+                onPressed: () async {
+                  final bytes1 = await Utils.capture(key1);
+
+                  await setState(() {
+                    this.bytes1 = bytes1;
+                  });
+                  showCupertinoModalBottomSheet(
+                      isDismissible: true,
+                      backgroundColor: Colors.grey[900],
+                      context: context,
+                      builder: (context) =>
+                          ShareScreen(
+                              bytes1: this.bytes1,
+                              bytes2: null,
+                              bytes3: null));
+                },
+              ),
+            ),
+          ],
         ),
         body: StreamBuilder<Object>(
             stream: _firestore.transactionStream(_wallet, 'full'),
@@ -200,63 +224,75 @@ class _AnalyticRevenueAndExpenditureScreen
               });
               _transactionList = _transactionList
                   .where((element) =>
-                      element.date.compareTo(beginDate) >= 0 &&
-                      element.date.compareTo(endDate) <= 0)
+              element.date.compareTo(beginDate) >= 0 &&
+                  element.date.compareTo(endDate) <= 0)
                   .toList();
-              return Container(
-                color: backgroundColor,
-                child: ListView(
-                  controller: _controller,
-                  physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  children: <Widget>[
-                    Container(
-                        padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
-                        color: backgroundColor,
-                      child: Hero(
-                        tag: 'netIncomeChart',
-                        child: Column(
-                              children: <Widget>[
-                                Text('Net Income',
-                                    style: TextStyle(
-                                      color: foregroundColor.withOpacity(0.7),
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                    )
+              return WidgetToImage(
+                  builder: (key) {
+                    this.key1 = key;
+
+                    return Container(
+                      color: backgroundColor,
+                      child: ListView(
+                        controller: _controller,
+                        physics: BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
+                        children: <Widget>[
+                          Container(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                              color: backgroundColor,
+                              child: Hero(
+                                tag: 'netIncomeChart',
+                                child: Column(
+                                  children: <Widget>[
+                                    Text('Net Income',
+                                        style: TextStyle(
+                                          color: foregroundColor.withOpacity(
+                                              0.7),
+                                          fontFamily: 'Montserrat',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16,
+                                        )
+                                    ),
+                                    MoneySymbolFormatter(
+                                        text: closingBalance - openingBalance,
+                                        currencyId: _wallet.currencyID,
+                                        textStyle: TextStyle(
+                                          color: (closingBalance -
+                                              openingBalance) > 0 ? incomeColor
+                                              : (closingBalance -
+                                              openingBalance) == 0
+                                              ? foregroundColor
+                                              : expenseColor,
+                                          fontFamily: fontFamily,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 26,
+                                          height: 1.5,
+                                        )),
+                                    Container(
+                                      width: 450,
+                                      height: 200,
+                                      child: BarChartScreen(
+                                          currentList: _transactionList,
+                                          beginDate: beginDate,
+                                          endDate: endDate),
+                                    ),
+                                  ],
                                 ),
-                                MoneySymbolFormatter(
-                                    text: closingBalance - openingBalance,
-                                    currencyId: _wallet.currencyID,
-                                    textStyle: TextStyle(
-                                      color: (closingBalance - openingBalance) > 0 ? incomeColor
-                                          : (closingBalance - openingBalance) == 0 ? foregroundColor : expenseColor,
-                                      fontFamily: fontFamily,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 26,
-                                      height: 1.5,
-                                    )),
-                                Container(
-                                  width: 450,
-                                  height: 200,
-                                  child: BarChartScreen(
-                                      currentList: _transactionList,
-                                      beginDate: beginDate,
-                                      endDate: endDate),
-                                ),
-                              ],
+                              )
+                          ),
+                          Container(
+                            child: BarChartInformation(
+                              currentList: _transactionList,
+                              beginDate: beginDate,
+                              endDate: endDate,
+                              currentWallet: widget.currentWallet,
                             ),
-                      )
-                    ),
-                    Container(
-                      child: BarChartInformation(
-                        currentList: _transactionList,
-                        beginDate: beginDate,
-                        endDate: endDate,
-                        currentWallet: widget.currentWallet,
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
+                    );
+                  }
               );
             }));
   }

@@ -209,27 +209,30 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
               ),
             ),
             actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.ios_share, color: Colors.white),
-                onPressed: () async {
-                  final bytes1 = await Utils.capture(key1);
-                  final bytes2 = await Utils.capture(key2);
-                  final bytes3 = await Utils.capture(key3);
+              Hero(
+                tag: 'shareButton',
+                child: MaterialButton(
+                  child: const Icon(Icons.ios_share, color: Colors.white),
+                  onPressed: () async {
+                    final bytes1 = await Utils.capture(key1);
+                    final bytes2 = await Utils.capture(key2);
+                    final bytes3 = await Utils.capture(key3);
 
-                  await setState(() {
-                    this.bytes1 = bytes1;
-                    this.bytes2 = bytes2;
-                    this.bytes3 = bytes3;
-                  });
-                  showCupertinoModalBottomSheet(
-                      isDismissible: true,
-                      backgroundColor: Colors.grey[900],
-                      context: context,
-                      builder: (context) => ShareScreen(
-                          bytes1: this.bytes1,
-                          bytes2: this.bytes2,
-                          bytes3: this.bytes3));
-                },
+                    await setState(() {
+                      this.bytes1 = bytes1;
+                      this.bytes2 = bytes2;
+                      this.bytes3 = bytes3;
+                    });
+                    showCupertinoModalBottomSheet(
+                        isDismissible: true,
+                        backgroundColor: Colors.grey[900],
+                        context: context,
+                        builder: (context) => ShareScreen(
+                            bytes1: this.bytes1,
+                            bytes2: this.bytes2,
+                            bytes3: this.bytes3));
+                  },
+                ),
               ),
             ],
           ),
