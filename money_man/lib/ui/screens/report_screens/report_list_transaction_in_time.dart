@@ -7,10 +7,12 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
+import 'package:intl/intl.dart';
 
 class ReportListTransaction extends StatefulWidget {
   final DateTime beginDate;
@@ -80,13 +82,35 @@ class _ReportListTransaction extends State<ReportListTransaction> {
 
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    String dateDescription = DateFormat('dd/MM/yyyy').format(_beginDate) + " - " + DateFormat('dd/MM/yyyy').format(_endDate);
+
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: backgroundColor,
         appBar: new AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: backgroundColor,
           centerTitle: true,
           elevation: 0,
-          title: Text('Transaction List'),
+          leading: MaterialButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Hero(
+              tag: 'alo',
+              child: Icon(Icons.arrow_back_ios, color: foregroundColor),
+            ),
+          ),
+          title: Hero(
+            tag: _beginDate.day.toString() + '-' + _endDate.day.toString(),
+            child: Text(
+                dateDescription,
+                style: TextStyle(
+                  fontFamily: fontFamily,
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w600,
+                  color: foregroundColor,
+                )
+            ),
+          ),
         ),
         body: StreamBuilder<Object>(
           stream: _firestore.transactionStream(widget.currentWallet, 'full'),
@@ -123,9 +147,9 @@ class _ReportListTransaction extends State<ReportListTransaction> {
   Container buildDisplayTransactionByDate(
       List<List<MyTransaction>> transactionListSortByDate, double total) {
     return Container(
-      color: Colors.black,
+      color: backgroundColor,
       child: ListView.builder(
-          physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           //primary: false,
           shrinkWrap: true,
           // itemCount: TRANSACTION_DATA.length + 1,
@@ -155,72 +179,101 @@ class _ReportListTransaction extends State<ReportListTransaction> {
 
   Widget buildHeader(List<List<MyTransaction>> transListSortByDate, double total) {
           _totalMoney = 0;
+          double totalExpense = 0;
+          double totalIncome = 0;
           transListSortByDate.forEach((element) {
             element.forEach((e) {
               if (e.category.type == "income") {
-                _totalMoney += e.amount;
+                //_totalMoney += e.amount;
+                totalIncome += e.amount;
               } else
-                _totalMoney -= e.amount;
+                //_totalMoney -= e.amount;
+                totalExpense += e.amount;
             });
           });
+          _totalMoney = totalIncome + totalExpense;
+
           return StickyHeader(
             header: SizedBox(height: 0),
             content: Container(
                 decoration: BoxDecoration(
-                    color: Colors.grey[900],
+                    color: boxBackgroundColor,
                     border: Border(
                         bottom: BorderSide(
-                      color: Colors.black,
+                      color: backgroundColor,
                       width: 1.0,
                     ))),
-                padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
-                child: Column(children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text('Overview',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                              )),
-                          SizedBox(
-                            width: 10,
-                            height: 10,
-                          ),
-                          Divider(
-                            color: Colors.black,
-                            thickness: 1.0,
-                            height: 10,
-                          ),
-                          ColoredBox(color: Colors.black87)
-                        ]),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(2, 2, 2, 15),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(_totalMoney >= 0 ? 'Income' : 'Outcome',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontFamily: 'Montserrat',
-                              )),
-                          MoneySymbolFormatter(
-                              text: _totalMoney,
-                              currencyId: widget.currentWallet.currencyID,
-                              textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Montserrat',
-                              )),
-                        ]),
-                  ),
+                padding: EdgeInsets.fromLTRB(15, 15, 10, 15),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Overview',
+                          style: TextStyle(
+                            color: foregroundColor,
+                            fontFamily: fontFamily,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          )),
+                      SizedBox(height: 5,),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('Income',
+                                style: TextStyle(
+                                  color: foregroundColor.withOpacity(0.54),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: fontFamily,
+                                )),
+                            MoneySymbolFormatter(
+                                text: totalIncome,
+                                currencyId: widget.currentWallet.currencyID,
+                                textStyle: TextStyle(
+                                  color: incomeColor2,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Montserrat',
+                                )),
+                          ]),
+                      SizedBox(height: 2,),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('Expense',
+                                style: TextStyle(
+                                  color: foregroundColor.withOpacity(0.54),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: fontFamily,
+                                )),
+                            MoneySymbolFormatter(
+                                text: totalExpense,
+                                currencyId: widget.currentWallet.currencyID,
+                                textStyle: TextStyle(
+                                  color: expenseColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: fontFamily,
+                                )),
+                          ]),
+                      Divider(
+                        thickness: 1,
+                        color: foregroundColor.withOpacity(0.12),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            MoneySymbolFormatter(
+                                text: _totalMoney,
+                                currencyId: widget.currentWallet.currencyID,
+                                textStyle: TextStyle(
+                                  color: foregroundColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: fontFamily,
+                                )),
+                          ]),
                 ])),
           );
   }
@@ -258,7 +311,13 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                           DateFormat("dd")
                               .format(transListSortByDate[xIndex][0].date),
                           style:
-                              TextStyle(fontSize: 30.0, color: Colors.white)),
+                              TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 30.0,
+                                  color: foregroundColor
+                              )
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -272,7 +331,12 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                                   .toString(),
                           // 'hello',
                           style: TextStyle(
-                              fontSize: 12.0, color: Colors.grey[500])),
+                              fontFamily: fontFamily,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.0,
+                              color: foregroundColor.withOpacity(0.54)
+                          )
+                      ),
                     ),
                     Expanded(
                       child: MoneySymbolFormatter(
@@ -280,7 +344,11 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                         currencyId: widget.currentWallet.currencyID,
                         textAlign: TextAlign.end,
                         textStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
+                            fontFamily: fontFamily,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14.0,
+                            color: foregroundColor,
+                        ),
                       ),
                     ),
                   ],
@@ -305,6 +373,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                         setState(() {});
                       },
                       child: Container(
+                        color: Colors.transparent,
                         padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                         child: Row(
                           children: <Widget>[
@@ -323,9 +392,12 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                                       .category
                                       .name,
                                   style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
+                                    fontFamily: fontFamily,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14.0,
+                                    color: foregroundColor,
+                                  )
+                              ),
                             ),
                             Expanded(
                               child: MoneySymbolFormatter(
@@ -335,13 +407,15 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                                   textAlign: TextAlign.end,
 
                                       textStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                          fontFamily: fontFamily,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14.0,
                                       color: transListSortByDate[xIndex][yIndex]
                                                   .category
                                                   .type ==
                                               'income'
-                                          ? Colors.green
-                                          : Colors.red[600])
+                                          ? incomeColor2
+                                          : expenseColor)
                                     ),
                              
                             ),

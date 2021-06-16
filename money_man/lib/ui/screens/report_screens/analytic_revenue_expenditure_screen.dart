@@ -116,7 +116,15 @@ class _AnalyticRevenueAndExpenditureScreen
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-            leading: BackButton(),
+            leading: MaterialButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Hero(
+                tag: 'alo',
+                child: Icon(Icons.arrow_back_ios, color: foregroundColor),
+              ),
+            ),
             centerTitle: true,
             backgroundColor: Colors.transparent,
             elevation: 0,

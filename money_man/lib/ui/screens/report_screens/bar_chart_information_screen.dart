@@ -7,6 +7,7 @@ import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
 import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_time.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
+import 'package:page_transition/page_transition.dart';
 
 class BarChartInformation extends StatefulWidget {
   final List<MyTransaction> currentList;
@@ -80,21 +81,24 @@ class _BarChartInformation extends State<BarChartInformation> {
             onTap: () {
               Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (_) => ReportListTransaction(
-                            beginDate: fisrtDayList[index],
-                            endDate: secondDayList[index],
-                            totalMoney: calculationList[index].first -
-                                calculationList[index].last,
-                            currentWallet: widget.currentWallet,
-                          )));
+                  PageTransition(
+                      childCurrent: this.widget,
+                      child: ReportListTransaction(
+                        beginDate: fisrtDayList[index],
+                        endDate: secondDayList[index],
+                        totalMoney: calculationList[index].first -
+                            calculationList[index].last,
+                        currentWallet: widget.currentWallet,
+                      ),
+                      type: PageTransitionType.rightToLeft));
             },
             child: Column(
               children: [
                 if (index != 0)
                   Divider(
                     color: foregroundColor.withOpacity(0.12),
-                    thickness: 0.5,
+                    thickness: 1,
+                    height: 25,
                   ),
                 Container(
                   color: Colors.transparent, // Khắc phục lỗi không ấn được ở giữa Row khi dùng space between và gesture detector.
@@ -106,12 +110,15 @@ class _BarChartInformation extends State<BarChartInformation> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(timeRangeList[index],
-                                style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    color: foregroundColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500)),
+                            Hero(
+                              tag: timeRangeList[index],
+                              child: Text(timeRangeList[index],
+                                  style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      color: foregroundColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500)),
+                            ),
                             SizedBox(height: 5),
                             Padding(
                               padding: const EdgeInsets.only(right: 15.0),
@@ -138,8 +145,8 @@ class _BarChartInformation extends State<BarChartInformation> {
                             currencyId: widget.currentWallet.currencyID,
                             textStyle: TextStyle(
                                 //fontFamily: fontFamily,
-                                color: Colors.blueAccent,
-                                fontSize: 16,
+                                color: incomeColor2,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w500),
                           ),
                           SizedBox(height: 8),
@@ -152,7 +159,7 @@ class _BarChartInformation extends State<BarChartInformation> {
                             textStyle: TextStyle(
                                 //fontFamily: fontFamily,
                                 color: expenseColor,
-                                fontSize: 16,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w500),
                           ),
                           SizedBox(height: 8),
@@ -168,7 +175,7 @@ class _BarChartInformation extends State<BarChartInformation> {
                               textStyle: TextStyle(
                                   //fontFamily: fontFamily,
                                   color: foregroundColor,
-                                  fontSize: 16,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w500))
                         ],
                       )
