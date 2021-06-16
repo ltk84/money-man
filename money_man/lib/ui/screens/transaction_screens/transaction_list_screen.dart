@@ -13,18 +13,17 @@ import 'package:intl/intl.dart';
 
 class TransactionListScreen extends StatefulWidget {
   final Wallet wallet;
+  final String transactionId;
   final String muserSearch;
 
   const TransactionListScreen(
-      {Key key, @required this.wallet, this.muserSearch})
+      {Key key, @required this.wallet, this.muserSearch, this.transactionId})
       : super(key: key);
   @override
   _TransactionListScreenState createState() => _TransactionListScreenState();
 }
 
 class _TransactionListScreenState extends State<TransactionListScreen> {
-  // pattern mà user search
-  String searchPattern;
   // biến control việc loading
   bool isLoading = false;
   // List danh sách transaction được fliter theo ngày order giảm dần theo thời gian
@@ -37,112 +36,62 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
   double total = 0;
 
   @override
-  Widget build(BuildContext context) {
-    if (widget.muserSearch != null) {
-      setState(() {
-        searchPattern = widget.muserSearch;
-      });
-    }
+  void initState() {
+    super.initState();
+    setUp();
+  }
+
+  void setUp() async {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+
+    // Lấy danh sách transaction dựa trên searchPattern
+    List<MyTransaction> _transactionList = await _firestore
+        .searchTransactionInDebtLoan(widget.transactionId, widget.wallet.id);
+
+    // danh sách các date mà _transactionList có
+    List<DateTime> listDateOfTrans = [];
+
+    // thực hiện sort theo thứ tự thời gian giảm dần
+    _transactionList.sort((a, b) => b.date.compareTo(a.date));
+    // Lấy các ngày có trong _transactionList ra cho vào listDateOfTrans
+    // tính toán tổng đầu vào, đàu ra, hiệu
+    _transactionList.forEach((element) {
+      if (!listDateOfTrans.contains(element.date))
+        listDateOfTrans.add(element.date);
+      if (element.category.type == 'expense')
+        totalOutCome += element.amount;
+      else
+        totalInCome += element.amount;
+    });
+    total = totalInCome - totalOutCome;
+
+    // Tạo thành list trans filter theo thời gian
+    transactionListSortByDate.clear();
+    listDateOfTrans.forEach((date) {
+      final b = _transactionList
+          .where((element) => element.date.compareTo(date) == 0);
+      transactionListSortByDate.add(b.toList());
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF111111),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.grey[900],
         leading: CloseButton(),
-        // leading: IconButton(
-        //   icon: Icon(Icons.close),
-        //   onPressed: () => Navigator.pop(context),
-        // ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Icon(Icons.settings),
-          )
-        ],
+        title: Text('Transaction list'),
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        //     child: Icon(Icons.settings),
+        //   )
+        // ],
       ),
       body: Column(
         children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
-            decoration: BoxDecoration(
-              color: Colors.grey[900].withOpacity(0.8),
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            ),
-            child: TextFormField(
-              initialValue: searchPattern,
-              onChanged: (value) => searchPattern = value,
-              onEditingComplete: () async {
-                // làm bàn phím down
-                FocusScope.of(context).unfocus();
-                // control cho loading screen xuất hiện
-                setState(() {
-                  isLoading = true;
-                });
-
-                // Lấy danh sách transaction dựa trên searchPattern
-                List<MyTransaction> _transactionList =
-                    await _firestore.queryTransationByCategoryOrAmount(
-                        searchPattern, widget.wallet);
-
-                // danh sách các date mà _transactionList có
-                List<DateTime> listDateOfTrans = [];
-
-                // thực hiện sort theo thứ tự thời gian giảm dần
-                _transactionList.sort((a, b) => b.date.compareTo(a.date));
-                // Lấy các ngày có trong _transactionList ra cho vào listDateOfTrans
-                // tính toán tổng đầu vào, đàu ra, hiệu
-                _transactionList.forEach((element) {
-                  if (!listDateOfTrans.contains(element.date))
-                    listDateOfTrans.add(element.date);
-                  if (element.category.type == 'expense')
-                    totalOutCome += element.amount;
-                  else
-                    totalInCome += element.amount;
-                });
-                total = totalInCome - totalOutCome;
-
-                // Tạo thành list trans filter theo thời gian
-                transactionListSortByDate.clear();
-                listDateOfTrans.forEach((date) {
-                  final b = _transactionList
-                      .where((element) => element.date.compareTo(date) == 0);
-                  transactionListSortByDate.add(b.toList());
-                });
-
-                // control loading screen mất => hiện kết quả truy ván ra
-                setState(() {
-                  isLoading = false;
-                });
-              },
-              style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white),
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  prefixIconConstraints: BoxConstraints(
-                    minHeight: 15,
-                    minWidth: 40,
-                    maxHeight: 15,
-                    maxWidth: 40,
-                  ),
-                  isDense: true,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-                  prefixIcon: Icon(Icons.search, color: Colors.white38),
-                  hintText: 'Search by #tag, category, etc',
-                  hintStyle: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white24)),
-            ),
-          ),
           Container(
             child: transactionListSortByDate.length == 0
                 ? Text(

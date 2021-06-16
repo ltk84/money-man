@@ -817,6 +817,36 @@ class FirebaseFireStoreService {
 
   // RECURRING TRANSACTION START //
 
+  // search transaction in debt & loan
+  Future<List<MyTransaction>> searchTransactionInDebtLoan(
+      String transactionId, String walletId) async {
+    List<String> listTransId;
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactionDebtLoan')
+        .doc(transactionId)
+        .get()
+        .then((value) {
+      listTransId = value.data().values;
+    });
+
+    List<MyTransaction> listTrans = [];
+    listTransId.forEach((e) async {
+      await users
+          .doc(uid)
+          .collection('wallets')
+          .doc(walletId)
+          .collection('transactions')
+          .doc(e)
+          .get()
+          .then((value) => listTrans.add(MyTransaction.fromMap(value.data())));
+    });
+
+    return listTrans;
+  }
+
   // add recurring transaction
   Future addRecurringTransaction(
       RecurringTransaction reTrans, Wallet wallet) async {
