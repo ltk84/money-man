@@ -404,7 +404,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                           backgroundColor: Colors.grey[900],
                           context: context,
                           builder: (context) =>
-                              SelectEventScreen(wallet: widget.wallet));
+                              SelectEventScreen(
+                                  wallet: widget.wallet,
+                                timeTransaction: pickDate,
+                              ));
                       if (res != null)
                         setState(() {
                           _event = res;
@@ -448,7 +451,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                             backgroundColor: Colors.grey[900],
                             context: context,
                             builder: (context) =>
-                                SelectEventScreen(wallet: widget.wallet));
+                                SelectEventScreen(
+                                    wallet: widget.wallet,
+                                  timeTransaction: pickDate,
+                                ));
                         if (res != null)
                           setState(() {
                             _event = res;
@@ -530,7 +536,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                   backgroundColor: Colors.grey[900],
                                   context: context,
                                   builder: (context) =>
-                                      SelectEventScreen(wallet: widget.wallet));
+                                      SelectEventScreen(
+                                          wallet: widget.wallet,
+                                        timeTransaction: pickDate,
+                                      ));
                               if (res != null)
                                 setState(() {
                                   _event = res;
@@ -577,7 +586,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                     backgroundColor: Colors.grey[900],
                                     context: context,
                                     builder: (context) => SelectEventScreen(
-                                        wallet: widget.wallet));
+                                        wallet: widget.wallet,
+                                      timeTransaction: pickDate,
+                                    ));
                                 if (res != null)
                                   setState(() {
                                     _event = res;

@@ -5,6 +5,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:intl/src/intl/date_format.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 import 'event_detail.dart';
@@ -166,14 +167,16 @@ class _AppliedEvent extends State<AppliedEvent>
                                           color: Colors.white),
                                       textAlign: TextAlign.start,
                                     ),
-                                    Text( appliedEvent[index].spent.toString(),
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          fontSize: 19,
-                                          fontWeight: FontWeight.w800,
-                                          color: Colors.white
-                                      ),
-                                    )
+                                    MoneySymbolFormatter(
+                                        text: appliedEvent[index].spent,
+                                        currencyId: _wallet.currencyID,
+                                        textStyle: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Montserrat',
+                                        )
+                                    ),
                                   ],
                                 ),
                               ),
