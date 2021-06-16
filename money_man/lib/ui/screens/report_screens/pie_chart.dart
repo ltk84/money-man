@@ -82,11 +82,11 @@ class PieChartScreenState extends State<PieChartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: _isShowPercent ? 1.6 : 1,
-      child: Column(
-        children: [
-          Stack(children: [
+    return Column(
+      children: [
+        Transform.scale(
+          scale: _isShowPercent ? 1.6 : 1,
+          child: Stack(children: [
             AspectRatio(
               aspectRatio: 1.3,
               child: Container(
@@ -144,25 +144,70 @@ class PieChartScreenState extends State<PieChartScreen> {
               ),
             ),
           ]),
-          Row(
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: _isShowPercent ? 50 : 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(width: 10),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
                     _categoryList.length,
                         (index) =>
-                        Indicator(
-                          color: colors[index],
-                          text: _categoryList[index].name,
-                          isSquare: true,
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 2),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 14,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle, // BoxShape.circle,
+                                  color: colors[index],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                _categoryList[index].name,
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.0,
+                                  color: colors[index],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                   )
               ),
+              if (_isShowPercent)
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: List.generate(
+                      _categoryList.length,
+                          (index) =>
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: 2),
+                                child: Text(
+                                  ((_info[index] / _total) * 100).round().toString() + '%',
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14.0,
+                                    color: colors[index],
+                                  ),
+                                ),
+                              )
+                    )
+                ),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -242,8 +287,7 @@ class _Badge extends StatelessWidget {
   final double size;
   final Color borderColor;
 
-  const _Badge(
-    this.svgAsset, {
+  const _Badge(this.svgAsset, {
     Key key,
     @required this.size,
     @required this.borderColor,

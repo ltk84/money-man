@@ -454,7 +454,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                           'Income',
                                           style: TextStyle(
                                             color: foregroundColor.withOpacity(0.7),
-                                            fontFamily: 'Montserrat',
+                                            fontFamily: fontFamily,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16,
                                           ),

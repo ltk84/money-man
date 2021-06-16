@@ -7,6 +7,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart_information_screen.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -111,7 +112,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
               color: Colors.black,
               child: ListView(
                 controller: _controller,
-                physics: BouncingScrollPhysics(),
+                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
@@ -134,21 +135,28 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                           Column(
                             children: <Widget>[
                               Text(_content,
-                                  style: TextStyle(
-                                    color: Colors.grey[300],
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 30,
-                                  )),
+                                style: TextStyle(
+                                  color: foregroundColor.withOpacity(0.7),
+                                  fontFamily: fontFamily,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                ),
+                              ),
                               MoneySymbolFormatter(
-                                  text: _total,
-                                  currencyId: widget.currentWallet.currencyID,
-                                  textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 22,
-                                  )),
+                                text: _total,
+                                currencyId: widget.currentWallet.currencyID,
+                                textStyle: TextStyle(
+                                  color: _content == 'Income'
+                                      ? incomeColor2
+                                      : expenseColor
+                                  ,
+                                  fontFamily: fontFamily,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 24,
+                                  height: 1.5,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
                             ],
                           ),
                           PieChartScreen(

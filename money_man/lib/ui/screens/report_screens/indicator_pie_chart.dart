@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class Indicator extends StatelessWidget {
   final Color color;
   final String text;
+  final String value;
   final bool isSquare;
+  final bool isShowPercent;
   final double size;
   final TextStyle style;
 
@@ -11,7 +13,9 @@ class Indicator extends StatelessWidget {
     Key key,
     @required this.color,
     @required this.text,
+    this.value = '',
     @required this.isSquare,
+    this.isShowPercent = false,
     this.size = 14,
     this.style = const TextStyle(
       fontFamily: 'Montserrat',
@@ -24,24 +28,34 @@ class Indicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 2),
+      padding: EdgeInsets.symmetric(vertical: 2, horizontal: isShowPercent ? 60 : 0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
-              color: color,
-            ),
+          Row(
+            children: [
+              Container(
+                width: size,
+                height: size,
+                decoration: BoxDecoration(
+                  shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
+                  color: color,
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                text,
+                style: style,
+              )
+            ],
           ),
-          const SizedBox(
-            width: 5,
-          ),
-          Text(
-            text,
-            style: style,
-          )
+          if(isShowPercent)
+            Text(
+              value,
+              style: style,
+            )
         ],
       ),
     );
