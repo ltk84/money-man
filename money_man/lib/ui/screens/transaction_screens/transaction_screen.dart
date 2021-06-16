@@ -90,13 +90,13 @@ class _TransactionScreen extends State<TransactionScreen>
   }
 
   void scrollListener() {
-    if (listScrollController.offset >=
-            listScrollController.position.maxScrollExtent &&
-        !listScrollController.position.outOfRange) {
-      setState(() {
-        _limit += _limitIncrement;
-      });
-    }
+    // if (listScrollController.offset >=
+    //         listScrollController.position.maxScrollExtent &&
+    //     !listScrollController.position.outOfRange) {
+    //   setState(() {
+    //     _limit += _limitIncrement;
+    //   });
+    // }
   }
 
   void _handleSelectTimeRange(int selected) {
