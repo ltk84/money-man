@@ -158,7 +158,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
           physics: BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
           //primary: false,
-          shrinkWrap: true,
+          //shrinkWrap: true,
           // itemCount: TRANSACTION_DATA.length + 1,
           itemCount: transactionListSortByDate.length,
           itemBuilder: (context, xIndex) {

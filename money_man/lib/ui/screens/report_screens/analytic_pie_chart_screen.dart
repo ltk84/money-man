@@ -1,13 +1,20 @@
+import 'dart:math';
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart.dart';
 import 'package:money_man/ui/screens/report_screens/pie_chart_information_screen.dart';
+import 'package:money_man/ui/screens/report_screens/share_report/utils.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
+import 'package:money_man/ui/screens/report_screens/share_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/expandable_widget.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +47,9 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
   List<MyCategory> _categoryList;
   String _content;
   GlobalKey key1;
+  Uint8List bytes1;
+  bool expandDetail;
+
   final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
@@ -76,6 +86,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     _controller = ScrollController();
     _color = widget.color;
     _controller.addListener(_scrollListener);
+    expandDetail = false;
   }
 
   @override
@@ -104,6 +115,30 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
           backgroundColor: Colors.black,
           centerTitle: true,
           elevation: 0,
+          actions: <Widget>[
+            Hero(
+              tag: 'shareButton',
+              child: MaterialButton(
+                child: const Icon(Icons.ios_share, color: Colors.white),
+                onPressed: () async {
+                  final bytes1 = await Utils.capture(key1);
+
+                  await setState(() {
+                    this.bytes1 = bytes1;
+                  });
+                  showCupertinoModalBottomSheet(
+                      isDismissible: true,
+                      backgroundColor: Colors.grey[900],
+                      context: context,
+                      builder: (context) =>
+                          ShareScreen(
+                              bytes1: this.bytes1,
+                              bytes2: null,
+                              bytes3: null));
+                },
+              ),
+            ),
+          ],
         ),
         body: StreamBuilder<Object>(
           stream: _firestore.transactionStream(widget.currentWallet, 50),
@@ -115,18 +150,8 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                 physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 children: <Widget>[
                   Container(
+                    color: Colors.black,
                     padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        border: Border(
-                            bottom: BorderSide(
-                              color: Colors.grey[900],
-                              width: 1.0,
-                            ),
-                            top: BorderSide(
-                              color: Colors.grey[900],
-                              width: 1.0,
-                            ))),
                     child: WidgetToImage(
                       builder: (key) {
                         this.key1 = key;
@@ -164,7 +189,55 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                               currentList: _transactionList,
                               categoryList: _categoryList,
                               total: _total),
-                          Container(
+                          SizedBox(height: 20,),
+                          GestureDetector(
+                            onTap: () async {
+                              await setState(() {
+                                expandDetail = !expandDetail;
+                                print(_controller.position.maxScrollExtent.toString());
+                              });
+                              if (expandDetail)
+                                _controller.animateTo(
+                                  _categoryList.length.toDouble()*67.4 - 193.2 + .05494505494505,
+                                  curve: Curves.fastOutSlowIn,
+                                  duration: const Duration(milliseconds: 500),
+                                );
+                                //_controller.jumpTo(100);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: boxBackgroundColor,
+                                  border: Border(
+                                      top: BorderSide(
+                                        color: foregroundColor.withOpacity(0.12),
+                                        width: 1,
+                                      ),
+                                      bottom: BorderSide(
+                                        color: foregroundColor.withOpacity(0.12),
+                                        width: 1,
+                                      )
+                                  )
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'View amount',
+                                    style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.0,
+                                      color: foregroundColor,
+                                    )
+                                  ),
+                                  Icon(Icons.arrow_drop_down, color: foregroundColor.withOpacity(0.54)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          ExpandableWidget(
+                            expand: expandDetail,
                             child: PieChartInformationScreen(
                               currentList: _transactionList,
                               categoryList: _categoryList,

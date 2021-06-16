@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
@@ -6,6 +7,7 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_time.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -37,12 +39,14 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
   List<MyCategory> _listCategoryReport = [];
 
   final double fontSizeText = 30;
+
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
+
   _scrollListener() {
     if (_controller.offset > 0) {
       setState(() {
@@ -75,8 +79,8 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
     return false;
   }
 
-  void generateData(
-      List<MyCategory> categoryList, List<MyTransaction> transactionList) {
+  void generateData(List<MyCategory> categoryList,
+      List<MyTransaction> transactionList) {
     categoryList.forEach((element) {
       if (!isContained(element, _listCategoryReport)) {
         _listCategoryReport.add(element);
@@ -88,8 +92,9 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
   }
 
   int b = 0;
-  double calculateByCategory(
-      MyCategory category, List<MyTransaction> transactionList) {
+
+  double calculateByCategory(MyCategory category,
+      List<MyTransaction> transactionList) {
     double sum = 0;
     DateTime _endDate;
     transactionList.forEach((element) {
@@ -140,87 +145,98 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
         stream: _firestore.transactionStream(widget.currentWallet, 50),
         builder: (context, snapshot) {
           return Container(
-            width: 450,
-            height: _height,
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-              color: Colors.black,
-              width: 1.0,
-            ))),
-            padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
-            child: ListView.builder(
-              controller: _controller,
-              itemCount: _listCategoryReport.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => ReportListTransaction(
-                                  endDate: _listTransactionOfEachCatecory[index]
-                                          [0]
-                                      .date,
-                                  beginDate: _listTransactionOfEachCatecory[
-                                              index][
-                                          _listTransactionOfEachCatecory[index]
-                                                  .length -
-                                              1]
-                                      .date,
-                                  totalMoney:
-                                      _listTransactionOfEachCatecory[index][0]
-                                                  .category
-                                                  .type ==
-                                              'expense'
-                                          ? -_info[index]
-                                          : _info[index],
-                                  currentWallet: widget.currentWallet,
-                                )));
-                  },
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 6, 0),
-                              child: SuperIcon(
-                                iconPath: _listCategoryReport[index].iconID,
-                                size: 35,
-                              )),
-                          Expanded(
-                            child: Text(_listCategoryReport[index].name,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                          Column(
-                            children: <Widget>[
-                              MoneySymbolFormatter(
-                                  digit: _listCategoryReport[index].type ==
-                                          'expense'
-                                      ? '-'
-                                      : '+',
-                                  text: _info[index],
-                                  currencyId: widget.currentWallet.currencyID,
-                                  textStyle: TextStyle(
-                                      color: _color,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          )
-                        ],
-                      ),
-                      Container(
-                        height: 25,
+              decoration: BoxDecoration(
+                  color: boxBackgroundColor,
+                  border: Border(
+                      bottom: BorderSide(
+                        color: foregroundColor.withOpacity(0.12),
+                        width: 1,
                       )
-                    ],
-                  ),
-                );
-              },
-            ),
+                  )
+              ),
+              padding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5),
+              child: _listCategoryReport.length > 0 ? Column(
+                children: List.generate(
+                    _listCategoryReport.length,
+                        (index) =>
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        ReportListTransaction(
+                                          endDate: _listTransactionOfEachCatecory[index]
+                                          [0]
+                                              .date,
+                                          beginDate: _listTransactionOfEachCatecory[
+                                          index][
+                                          _listTransactionOfEachCatecory[index]
+                                              .length -
+                                              1]
+                                              .date,
+                                          totalMoney:
+                                          _listTransactionOfEachCatecory[index][0]
+                                              .category
+                                              .type ==
+                                              'expense'
+                                              ? -_info[index]
+                                              : _info[index],
+                                          currentWallet: widget.currentWallet,
+                                        )));
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                SuperIcon(
+                                  iconPath: _listCategoryReport[index].iconID,
+                                  size: 30,
+                                ),
+                                SizedBox(width: 15,),
+                                Expanded(
+                                  child: Text(_listCategoryReport[index].name,
+                                      style: TextStyle(
+                                        fontFamily: fontFamily,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 15.0,
+                                        color: foregroundColor,
+                                      )
+                                  ),
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    MoneySymbolFormatter(
+                                        text: _info[index],
+                                        currencyId: widget.currentWallet
+                                            .currencyID,
+                                        textStyle: TextStyle(
+                                            fontFamily: fontFamily,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 15.0,
+                                            color: _color)
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                ),
+              ) : Container(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'No transaction',
+                    style: TextStyle(
+                      fontFamily: fontFamily,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w500,
+                      color: foregroundColor.withOpacity(0.24),
+                    ),
+                  )
+              )
           );
         });
   }

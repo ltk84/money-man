@@ -303,8 +303,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
                             border: Border(
                                 bottom: BorderSide(
                                   color: foregroundColor.withOpacity(0.24),
@@ -485,7 +485,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                         widget.currentWallet,
                                                     total: income,
                                                     content: 'Income',
-                                                    color: Colors.green[600],
+                                                    color: incomeColor2,
                                                   );
                                                 });
                                           },
@@ -547,7 +547,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                       _expenseCategoryList,
                                                   total: expense,
                                                   content: 'Expense',
-                                                  color: Colors.red,
+                                                  color: expenseColor,
                                                   currentWallet:
                                                       widget.currentWallet,
                                                 );
