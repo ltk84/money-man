@@ -141,10 +141,10 @@ class _BarChartInformation extends State<BarChartInformation> {
                             text: (calculationList[index].first == 0)
                                 ? 0.0
                                 : calculationList[index].first,
-                            digit: (calculationList[index].first == 0) ? '' : '+',
+                            //digit: (calculationList[index].first == 0) ? '' : '+',
                             currencyId: widget.currentWallet.currencyID,
                             textStyle: TextStyle(
-                                //fontFamily: fontFamily,
+                                fontFamily: fontFamily,
                                 color: incomeColor2,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500),
@@ -154,10 +154,10 @@ class _BarChartInformation extends State<BarChartInformation> {
                             text: (calculationList[index].last == 0)
                                 ? 0.0
                                 : calculationList[index].last,
-                            digit: (calculationList[index].last == 0) ? '' : '-',
+                            //digit: (calculationList[index].last == 0) ? '' : '-',
                             currencyId: widget.currentWallet.currencyID,
                             textStyle: TextStyle(
-                                //fontFamily: fontFamily,
+                                fontFamily: fontFamily,
                                 color: expenseColor,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500),
@@ -173,7 +173,7 @@ class _BarChartInformation extends State<BarChartInformation> {
                                   calculationList[index].last),
                               currencyId: widget.currentWallet.currencyID,
                               textStyle: TextStyle(
-                                  //fontFamily: fontFamily,
+                                  fontFamily: fontFamily,
                                   color: foregroundColor,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500))

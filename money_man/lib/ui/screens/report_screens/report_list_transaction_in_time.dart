@@ -32,12 +32,14 @@ class ReportListTransaction extends StatefulWidget {
 
 class _ReportListTransaction extends State<ReportListTransaction> {
   final double fontSizeText = 30;
+
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
+
   _scrollListener() {
     if (_controller.offset > 0) {
       setState(() {
@@ -58,11 +60,13 @@ class _ReportListTransaction extends State<ReportListTransaction> {
       });
     }
   }
+
   // sort theo date giảm dần
   DateTime _beginDate;
   DateTime _endDate;
   double total;
   double _totalMoney;
+
   @override
   void initState() {
     super.initState();
@@ -82,7 +86,8 @@ class _ReportListTransaction extends State<ReportListTransaction> {
 
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    String dateDescription = DateFormat('dd/MM/yyyy').format(_beginDate) + " - " + DateFormat('dd/MM/yyyy').format(_endDate);
+    String dateDescription = DateFormat('dd/MM/yyyy').format(_beginDate) +
+        " - " + DateFormat('dd/MM/yyyy').format(_endDate);
 
     return Scaffold(
         backgroundColor: backgroundColor,
@@ -113,34 +118,35 @@ class _ReportListTransaction extends State<ReportListTransaction> {
           ),
         ),
         body: StreamBuilder<Object>(
-          stream: _firestore.transactionStream(widget.currentWallet, 'full'),
-          builder: (context, snapshot) {
-            List<MyTransaction> transactionList = snapshot.data ?? [];
-            List<List<MyTransaction>> transactionListSorted = [];
-            List<DateTime> dateInChoosenTime = [];
-            transactionList = transactionList
-                .where((element) =>
-            CompareDate(element.date, _endDate) &&
-                CompareDate(_beginDate, element.date))
-                .toList();
-            transactionList.sort((a, b) => b.date.compareTo(a.date));
-            transactionList.forEach((element) {
-              if (!dateInChoosenTime.contains(element.date))
-                dateInChoosenTime.add(element.date);
-            });
-            dateInChoosenTime.forEach((date) {
-              final b = transactionList
-                  .where((element) => element.date.compareTo(date) == 0);
-              b.forEach((element) {
-                element.category.type == "income"
-                    ? total += element.amount
-                    : total -= element.amount;
+            stream: _firestore.transactionStream(widget.currentWallet, 'full'),
+            builder: (context, snapshot) {
+              List<MyTransaction> transactionList = snapshot.data ?? [];
+              List<List<MyTransaction>> transactionListSorted = [];
+              List<DateTime> dateInChoosenTime = [];
+              transactionList = transactionList
+                  .where((element) =>
+              CompareDate(element.date, _endDate) &&
+                  CompareDate(_beginDate, element.date))
+                  .toList();
+              transactionList.sort((a, b) => b.date.compareTo(a.date));
+              transactionList.forEach((element) {
+                if (!dateInChoosenTime.contains(element.date))
+                  dateInChoosenTime.add(element.date);
               });
-              transactionListSorted.add(b.toList());
-            });
+              dateInChoosenTime.forEach((date) {
+                final b = transactionList
+                    .where((element) => element.date.compareTo(date) == 0);
+                b.forEach((element) {
+                  element.category.type == "income"
+                      ? total += element.amount
+                      : total -= element.amount;
+                });
+                transactionListSorted.add(b.toList());
+              });
 
-            return buildDisplayTransactionByDate(transactionListSorted, total);
-          }
+              return buildDisplayTransactionByDate(
+                  transactionListSorted, total);
+            }
         ));
   }
 
@@ -149,7 +155,8 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     return Container(
       color: backgroundColor,
       child: ListView.builder(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics: BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
           //primary: false,
           shrinkWrap: true,
           // itemCount: TRANSACTION_DATA.length + 1,
@@ -165,266 +172,276 @@ class _ReportListTransaction extends State<ReportListTransaction> {
 
             return xIndex == 0
                 ? Column(
-                    children: [
-                      buildHeader(transactionListSortByDate, total),
-                      buildBottomViewByDate(
-                          transactionListSortByDate, xIndex, totalAmountInDay)
-                    ],
-                  )
+              children: [
+                buildHeader(transactionListSortByDate, total),
+                buildBottomViewByDate(
+                    transactionListSortByDate, xIndex, totalAmountInDay)
+              ],
+            )
                 : buildBottomViewByDate(
-                    transactionListSortByDate, xIndex, totalAmountInDay);
+                transactionListSortByDate, xIndex, totalAmountInDay);
           }),
     );
   }
 
-  Widget buildHeader(List<List<MyTransaction>> transListSortByDate, double total) {
-          _totalMoney = 0;
-          double totalExpense = 0;
-          double totalIncome = 0;
-          transListSortByDate.forEach((element) {
-            element.forEach((e) {
-              if (e.category.type == "income") {
-                //_totalMoney += e.amount;
-                totalIncome += e.amount;
-              } else
-                //_totalMoney -= e.amount;
-                totalExpense += e.amount;
-            });
-          });
-          _totalMoney = totalIncome - totalExpense;
+  Widget buildHeader(List<List<MyTransaction>> transListSortByDate,
+      double total) {
+    _totalMoney = 0;
+    double totalExpense = 0;
+    double totalIncome = 0;
+    transListSortByDate.forEach((element) {
+      element.forEach((e) {
+        if (e.category.type == "income") {
+          //_totalMoney += e.amount;
+          totalIncome += e.amount;
+        } else
+          //_totalMoney -= e.amount;
+          totalExpense += e.amount;
+      });
+    });
+    _totalMoney = totalIncome - totalExpense;
 
-          return StickyHeader(
-            header: SizedBox(height: 0),
-            content: Container(
-                decoration: BoxDecoration(
-                    color: boxBackgroundColor,
-                    border: Border(
-                        bottom: BorderSide(
-                      color: backgroundColor,
-                      width: 1.0,
-                    ))),
-                padding: EdgeInsets.fromLTRB(15, 15, 10, 15),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return StickyHeader(
+      header: SizedBox(height: 0),
+      content: Container(
+          decoration: BoxDecoration(
+              color: boxBackgroundColor,
+              border: Border(
+                  bottom: BorderSide(
+                    color: backgroundColor,
+                    width: 1.0,
+                  ))),
+          padding: EdgeInsets.fromLTRB(15, 15, 10, 15),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('Overview',
+                    style: TextStyle(
+                      color: foregroundColor,
+                      fontFamily: fontFamily,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    )),
+                SizedBox(height: 5,),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('Overview',
+                      Text('Income',
                           style: TextStyle(
-                            color: foregroundColor,
+                            color: foregroundColor.withOpacity(0.54),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
                             fontFamily: fontFamily,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
                           )),
-                      SizedBox(height: 5,),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('Income',
-                                style: TextStyle(
-                                  color: foregroundColor.withOpacity(0.54),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: fontFamily,
-                                )),
-                            MoneySymbolFormatter(
-                                text: totalIncome,
-                                currencyId: widget.currentWallet.currencyID,
-                                textStyle: TextStyle(
-                                  color: incomeColor2,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Montserrat',
-                                )),
-                          ]),
-                      SizedBox(height: 2,),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('Expense',
-                                style: TextStyle(
-                                  color: foregroundColor.withOpacity(0.54),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: fontFamily,
-                                )),
-                            MoneySymbolFormatter(
-                                text: totalExpense,
-                                currencyId: widget.currentWallet.currencyID,
-                                textStyle: TextStyle(
-                                  color: expenseColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: fontFamily,
-                                )),
-                          ]),
-                      Divider(
-                        thickness: 1,
-                        color: foregroundColor.withOpacity(0.12),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            MoneySymbolFormatter(
-                                text: _totalMoney,
-                                currencyId: widget.currentWallet.currencyID,
-                                textStyle: TextStyle(
-                                  color: foregroundColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: fontFamily,
-                                )),
-                          ]),
-                ])),
-          );
+                      MoneySymbolFormatter(
+                          text: totalIncome,
+                          currencyId: widget.currentWallet.currencyID,
+                          textStyle: TextStyle(
+                            color: incomeColor2,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: fontFamily,
+                          )),
+                    ]),
+                SizedBox(height: 2,),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('Expense',
+                          style: TextStyle(
+                            color: foregroundColor.withOpacity(0.54),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: fontFamily,
+                          )),
+                      MoneySymbolFormatter(
+                          text: totalExpense,
+                          currencyId: widget.currentWallet.currencyID,
+                          textStyle: TextStyle(
+                            color: expenseColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: fontFamily,
+                          )),
+                    ]),
+                Divider(
+                  //height: 20,
+                  thickness: 1,
+                  color: foregroundColor.withOpacity(0.12),
+                ),
+                Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      MoneySymbolFormatter(
+                          digit: _totalMoney >=
+                              0
+                              ? '+'
+                              : '',
+                          text: _totalMoney,
+                          currencyId: widget.currentWallet.currencyID,
+                          textStyle: TextStyle(
+                            color: foregroundColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: fontFamily,
+                          )),
+                    ]),
+              ])),
+    );
   }
 
   Widget buildBottomViewByDate(List<List<MyTransaction>> transListSortByDate,
       int xIndex, double totalAmountInDay) {
-          totalAmountInDay = 0;
-          transListSortByDate[xIndex].forEach((element) {
-            element.category.type == 'income'
-                ? totalAmountInDay += element.amount
-                : totalAmountInDay -= element.amount;
-          });
-          return Container(
-            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-            decoration: BoxDecoration(
-                color: Colors.grey[900],
-                border: Border(
-                    bottom: BorderSide(
-                      color: Colors.black,
-                      width: 1.0,
-                    ),
-                    top: BorderSide(
-                      color: Colors.black,
-                      width: 1.0,
-                    ))),
-            child: StickyHeader(
-              header: Container(
-                color: Colors.grey[900],
-                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                      child: Text(
-                          DateFormat("dd")
-                              .format(transListSortByDate[xIndex][0].date),
-                          style:
-                              TextStyle(
-                                  fontFamily: fontFamily,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 30.0,
-                                  color: foregroundColor
-                              )
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
-                      child: Text(
-                          DateFormat("EEEE")
-                                  .format(transListSortByDate[xIndex][0].date)
-                                  .toString() +
-                              '\n' +
-                              DateFormat("MMMM yyyy")
-                                  .format(transListSortByDate[xIndex][0].date)
-                                  .toString(),
-                          // 'hello',
-                          style: TextStyle(
-                              fontFamily: fontFamily,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12.0,
-                              color: foregroundColor.withOpacity(0.54)
-                          )
-                      ),
-                    ),
-                    Expanded(
-                      child: MoneySymbolFormatter(
-                        text: totalAmountInDay,
-                        currencyId: widget.currentWallet.currencyID,
-                        textAlign: TextAlign.end,
-                        textStyle: TextStyle(
-                            fontFamily: fontFamily,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14.0,
-                            color: foregroundColor,
-                        ),
-                      ),
-                    ),
-                  ],
+    totalAmountInDay = 0;
+    transListSortByDate[xIndex].forEach((element) {
+      element.category.type == 'income'
+          ? totalAmountInDay += element.amount
+          : totalAmountInDay -= element.amount;
+    });
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+      decoration: BoxDecoration(
+          color: Colors.grey[900],
+          border: Border(
+              bottom: BorderSide(
+                color: Colors.black,
+                width: 1.0,
+              ),
+              top: BorderSide(
+                color: Colors.black,
+                width: 1.0,
+              ))),
+      child: StickyHeader(
+        header: Container(
+          color: Colors.grey[900],
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                child: Text(
+                    DateFormat("dd")
+                        .format(transListSortByDate[xIndex][0].date),
+                    style:
+                    TextStyle(
+                        fontFamily: fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 30.0,
+                        color: foregroundColor
+                    )
                 ),
               ),
-              content: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: transListSortByDate[xIndex].length,
-                  itemBuilder: (context, yIndex) {
-                    return GestureDetector(
-                      onTap: () async {
-                        await Navigator.push(
-                            context,
-                            PageTransition(
-                                child: TransactionDetail(
-                                  transaction: transListSortByDate[xIndex]
-                                      [yIndex],
-                                  wallet: widget.currentWallet,
-                                ),
-                                type: PageTransitionType.rightToLeft));
-                        setState(() {});
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                                padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                child: SuperIcon(
-                                  iconPath: transListSortByDate[xIndex][yIndex]
-                                      .category
-                                      .iconID,
-                                  size: 30,
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
-                              child: Text(
-                                  transListSortByDate[xIndex][yIndex]
-                                      .category
-                                      .name,
-                                  style: TextStyle(
-                                    fontFamily: fontFamily,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14.0,
-                                    color: foregroundColor,
-                                  )
-                              ),
-                            ),
-                            Expanded(
-                              child: MoneySymbolFormatter(
-                                      text: transListSortByDate[xIndex][yIndex]
-                                      .amount,
-                                      currencyId: widget.currentWallet.currencyID,
-                                  textAlign: TextAlign.end,
-
-                                      textStyle: TextStyle(
-                                          fontFamily: fontFamily,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14.0,
-                                      color: transListSortByDate[xIndex][yIndex]
-                                                  .category
-                                                  .type ==
-                                              'income'
-                                          ? incomeColor2
-                                          : expenseColor)
-                                    ),
-                             
-                            ),
-                          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
+                child: Text(
+                    DateFormat("EEEE")
+                        .format(transListSortByDate[xIndex][0].date)
+                        .toString() +
+                        '\n' +
+                        DateFormat("MMMM yyyy")
+                            .format(transListSortByDate[xIndex][0].date)
+                            .toString(),
+                    // 'hello',
+                    style: TextStyle(
+                        fontFamily: fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.0,
+                        color: foregroundColor.withOpacity(0.54)
+                    )
+                ),
+              ),
+              Expanded(
+                child: MoneySymbolFormatter(
+                  digit: _totalMoney >=
+                      0
+                      ? '+'
+                      : '',
+                  text: totalAmountInDay,
+                  currencyId: widget.currentWallet.currencyID,
+                  textAlign: TextAlign.end,
+                  textStyle: TextStyle(
+                    fontFamily: fontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.0,
+                    color: foregroundColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        content: ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: transListSortByDate[xIndex].length,
+            itemBuilder: (context, yIndex) {
+              return GestureDetector(
+                onTap: () async {
+                  await Navigator.push(
+                      context,
+                      PageTransition(
+                          child: TransactionDetail(
+                            transaction: transListSortByDate[xIndex]
+                            [yIndex],
+                            wallet: widget.currentWallet,
+                          ),
+                          type: PageTransitionType.rightToLeft));
+                  setState(() {});
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                          child: SuperIcon(
+                            iconPath: transListSortByDate[xIndex][yIndex]
+                                .category
+                                .iconID,
+                            size: 30,
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
+                        child: Text(
+                            transListSortByDate[xIndex][yIndex]
+                                .category
+                                .name,
+                            style: TextStyle(
+                              fontFamily: fontFamily,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14.0,
+                              color: foregroundColor,
+                            )
                         ),
                       ),
-                    );
-                  }),
-            ),
-          );
+                      Expanded(
+                        child: MoneySymbolFormatter(
+                            text: transListSortByDate[xIndex][yIndex]
+                                .amount,
+                            currencyId: widget.currentWallet.currencyID,
+                            textAlign: TextAlign.end,
+
+                            textStyle: TextStyle(
+                                fontFamily: fontFamily,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.0,
+                                color: transListSortByDate[xIndex][yIndex]
+                                    .category
+                                    .type ==
+                                    'income'
+                                    ? incomeColor2
+                                    : expenseColor)
+                        ),
+
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+      ),
+    );
   }
 }
