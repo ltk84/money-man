@@ -14,7 +14,6 @@ import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_categor
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -32,10 +31,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.black,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.grey[900].withOpacity(0.2),
           elevation: 0.0,
           leading: Hero(
             tag: 'billToDetail_backBtn',
@@ -45,7 +44,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 },
                 child: Icon(
                   Icons.arrow_back_outlined,
-                  color: foregroundColor,
+                  color: Colors.white,
                 )),
           ),
           title: GestureDetector(
@@ -63,13 +62,13 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                     tag: 'billToDetail_title',
                     child: Text('Bills',
                         style: TextStyle(
-                          fontFamily: fontFamily,
+                          fontFamily: 'Montserrat',
                           fontSize: 17.0,
                           fontWeight: FontWeight.w600,
-                          color: foregroundColor,
+                          color: Colors.white,
                         )),
                   ),
-                  Icon(Icons.arrow_drop_down, color: foregroundColorDark)
+                  Icon(Icons.arrow_drop_down, color: Colors.grey)
                 ],
               ),
             ),
@@ -80,14 +79,14 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               duration: Duration(milliseconds: 0),
               child: BackdropFilter(
                 filter: ImageFilter.blur(
-                    sigmaX: 25,
-                    sigmaY: 25,
-                    tileMode: TileMode.values[0]),
+                    sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
                 child: AnimatedContainer(
-                  duration: Duration(
-                      milliseconds: 100),
-                  color: Colors.grey[900].withOpacity(0.2),
-                ),
+                    duration: Duration(milliseconds: 1),
+                    //child: Container(
+                    //color: Colors.transparent,
+                    color: Colors.transparent
+                    //),
+                    ),
               ),
             ),
           ),
@@ -105,10 +104,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 },
                 child: Text('Add',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: 'Montserrat',
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor,
+                      color: Colors.white,
                     )),
               ),
             ),
@@ -123,7 +122,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       iconPath: widget.currentWallet.iconID,
                       size: 25.0,
                     ),
-                    Icon(Icons.arrow_drop_down, color: foregroundColorDark)
+                    Icon(Icons.arrow_drop_down, color: Colors.grey)
                   ],
                 ),
               ),
@@ -169,10 +168,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 child: Text(
                   'There are no bills to pay',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: foregroundColor.withOpacity(0.54),
+                    color: Colors.white54,
                   ),
                 )
             );
@@ -225,10 +224,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
           margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
           child: Text(title,
               style: TextStyle(
-                fontFamily: fontFamily,
+                fontFamily: 'Montserrat',
                 fontSize: 14.0,
                 fontWeight: FontWeight.w500,
-                color: foregroundColor.withOpacity(0.7),
+                color: Colors.white70,
               )),
         ),
         ListView.builder(
@@ -280,14 +279,14 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
       child: Container(
         padding: EdgeInsets.fromLTRB(20, 14, 20, 8),
         decoration: BoxDecoration(
-            color: boxBackgroundColor2,
+            color: Color(0xFF1c1c1c),
             border: Border(
                 top: BorderSide(
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Colors.white12,
                   width: 0.5,
                 ),
                 bottom: BorderSide(
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Colors.white12,
                   width: 0.5,
                 ))),
         child: Row(
@@ -303,25 +302,25 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               children: [
                 Text(info['bill'].category.name,
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: 'Montserrat',
                       fontSize: 14.0,
                       fontWeight: FontWeight.w600,
-                      color: foregroundColor,
+                      color: Colors.white,
                     )),
                 Text('Due day is $dueDate',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: 'Montserrat',
                       fontSize: 12.0,
                       fontWeight: FontWeight.w400,
-                      color: foregroundColor.withOpacity(0.7),
+                      color: Colors.white70,
                     )),
                 SizedBox(height: 8.0),
                 Text(dueDescription,
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: 'Montserrat',
                       fontSize: 14.0,
                       fontWeight: FontWeight.w600,
-                      color: foregroundColor,
+                      color: Colors.white,
                     )
                 ),
                 TextButton(
@@ -386,7 +385,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       payContent,
                       style: TextStyle(
                         fontSize: 14,
-                        fontFamily: fontFamily,
+                        fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w700,
                       ),
                       textAlign: TextAlign.center),
@@ -404,14 +403,14 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
     return Container(
         padding: EdgeInsets.all(20.0),
         decoration: BoxDecoration(
-            color: boxBackgroundColor2,
+            color: Color(0xFF1c1c1c),
             border: Border(
                 top: BorderSide(
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Colors.white12,
                   width: 0.5,
                 ),
                 bottom: BorderSide(
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Colors.white12,
                   width: 0.5,
                 ))),
         child: Column(
@@ -419,10 +418,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
           children: [
             Text('Remaining Bills',
                 style: TextStyle(
-                  fontFamily: fontFamily,
+                  fontFamily: 'Montserrat',
                   fontSize: 14.0,
                   fontWeight: FontWeight.w600,
-                  color: foregroundColor,
+                  color: Colors.white,
                 )),
             SizedBox(height: 10.0),
             Row(
@@ -430,17 +429,17 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               children: [
                 Text('Overdue',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: 'Montserrat',
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor.withOpacity(0.38),
+                      color: Colors.white38,
                     )),
                 Text(overdue,
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: 'Montserrat',
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor,
+                      color: Colors.white,
                     ))
               ],
             ),
@@ -450,17 +449,17 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               children: [
                 Text('For today',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: 'Montserrat',
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor.withOpacity(0.38),
+                      color: Colors.white38,
                     )),
                 Text(forToday,
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: 'Montserrat',
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor,
+                      color: Colors.white,
                     ))
               ],
             ),
@@ -470,17 +469,17 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               children: [
                 Text('This period',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: 'Montserrat',
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor.withOpacity(0.38),
+                      color: Colors.white38,
                     )),
                 Text(thisPeriod,
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: 'Montserrat',
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor,
+                      color: Colors.white,
                     ))
               ],
             )
@@ -495,7 +494,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
 
     final result = await showCupertinoModalBottomSheet(
         isDismissible: true,
-        backgroundColor: boxBackgroundColor,
+        backgroundColor: Colors.grey[900],
         context: context,
         builder: (context) {
           return Provider(

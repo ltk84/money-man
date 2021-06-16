@@ -5,8 +5,6 @@ import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:intl/intl.dart';
@@ -82,9 +80,8 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                 });
 
                 // Lấy danh sách transaction dựa trên searchPattern
-                List<MyTransaction> _transactionList =
-                    await _firestore.queryTransationByCategoryOrAmount(
-                        searchPattern, widget.wallet);
+                List<MyTransaction> _transactionList = await _firestore
+                    .queryTransationByCategory(searchPattern, widget.wallet);
 
                 // danh sách các date mà _transactionList có
                 List<DateTime> listDateOfTrans = [];
@@ -177,12 +174,48 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
           ),
         ],
       ),
+      // body: Stack(
+      //   children: [
+      //     Container(
+      //       color: Colors.black,
+      //       child: transactionListSortByDate.length == 0
+      //           ? Text(
+      //               'deo co gi ca',
+      //               style: TextStyle(color: Colors.white),
+      //             )
+      //           : ListView.builder(
+      //               physics: BouncingScrollPhysics(),
+      //               shrinkWrap: true,
+      //               itemCount: transactionListSortByDate.length,
+      //               itemBuilder: (context, xIndex) {
+      //                 double totalAmountInDay = 0;
+      //                 transactionListSortByDate[xIndex].forEach((element) {
+      //                   if (element.category.type == 'expense')
+      //                     totalAmountInDay -= element.amount;
+      //                   else
+      //                     totalAmountInDay += element.amount;
+      //                 });
+      //
+      //                 return xIndex == 0
+      //                     ? Column(
+      //                         children: [
+      //                           buildHeader(totalInCome, totalOutCome, total),
+      //                           buildBottom(transactionListSortByDate, xIndex,
+      //                               totalAmountInDay)
+      //                         ],
+      //                       )
+      //                     : buildBottom(transactionListSortByDate, xIndex,
+      //                         totalAmountInDay);
+      //               }),
+      //     ),
+      //     isLoading == true ? LoadingScreen() : Container()
+      //   ],
+      // ),
     );
   }
 
-  Container buildBottom(List<List<MyTransaction>> transListSortByDate,
-      int xIndex, double totalAmountInDay) {
-    print('build bottom by date');
+  Container buildBottom(
+      List<List<MyTransaction>> x, int xIndex, double totalAmountInDay) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
@@ -204,32 +237,28 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                child: Text(
-                    DateFormat("dd")
-                        .format(transListSortByDate[xIndex][0].date),
+                child: Text(DateFormat("dd").format(x[xIndex][0].date),
                     style: TextStyle(fontSize: 30.0, color: Colors.white)),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
                 child: Text(
-                    DateFormat("EEEE")
-                            .format(transListSortByDate[xIndex][0].date)
-                            .toString() +
+                    DateFormat("EEEE").format(x[xIndex][0].date).toString() +
                         '\n' +
                         DateFormat("MMMM yyyy")
-                            .format(transListSortByDate[xIndex][0].date)
+                            .format(x[xIndex][0].date)
                             .toString(),
                     // 'hello',
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
               ),
               Expanded(
-                child: MoneySymbolFormatter(
-                  text: totalAmountInDay,
-                  currencyId: widget.wallet.currencyID,
-                  textAlign: TextAlign.end,
-                  textStyle: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
-                ),
+                child: Text(
+                    MoneyFormatter(amount: totalAmountInDay)
+                        .output
+                        .withoutFractionDigits,
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white)),
               ),
             ],
           ),
@@ -237,18 +266,16 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
         content: ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: transListSortByDate[xIndex].length,
+            itemCount: x[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
                       context,
-                      PageTransition(
-                          child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex][yIndex],
-                            wallet: widget.wallet,
-                          ),
-                          type: PageTransitionType.rightToLeft));
+                      MaterialPageRoute(
+                          builder: (_) => TransactionDetail(
+                              transaction: x[xIndex][yIndex],
+                              wallet: widget.wallet)));
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
@@ -257,68 +284,38 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         child: SuperIcon(
-                          iconPath: transListSortByDate[xIndex][yIndex]
-                              .category
-                              .iconID,
-                          size: 35.0,
+                          iconPath: x[xIndex][yIndex].category.iconID,
+                          size: 30.0,
                         ),
                       ),
                       Padding(
-                          padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
-                          child: (transListSortByDate[xIndex][yIndex].eventID ==
-                                      "" ||
-                                  transListSortByDate[xIndex][yIndex].eventID ==
-                                      null)
-                              ? Text(
-                                  transListSortByDate[xIndex][yIndex]
-                                      .category
-                                      .name,
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white))
-                              : Text(
-                                  transListSortByDate[xIndex][yIndex]
-                                          .category
-                                          .name +
-                                      "\n🌴",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white))),
+                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
+                        child: Text(x[xIndex][yIndex].category.name,
+                            style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ),
                       Expanded(
-                        child: transListSortByDate[xIndex][yIndex]
-                                        .category
-                                        .type ==
-                                    'income' ||
-                                transListSortByDate[xIndex][yIndex]
-                                        .category
-                                        .name ==
-                                    'Debt' ||
-                                transListSortByDate[xIndex][yIndex]
-                                        .category
-                                        .name ==
-                                    'Debt Collection'
-                            ? MoneySymbolFormatter(
-                                text:
-                                    transListSortByDate[xIndex][yIndex].amount,
-                                currencyId: widget.wallet.currencyID,
-                                textAlign: TextAlign.end,
-                                textStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green),
-                                digit: '+',
-                              )
-                            : MoneySymbolFormatter(
-                                text:
-                                    transListSortByDate[xIndex][yIndex].amount,
-                                currencyId: widget.wallet.currencyID,
-                                textAlign: TextAlign.end,
-                                textStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red[600]),
-                                digit: '-',
-                              ),
+                        child: Text(
+                            x[xIndex][yIndex].category.type == 'income'
+                                ? '+' +
+                                    MoneyFormatter(
+                                            amount: x[xIndex][yIndex].amount)
+                                        .output
+                                        .withoutFractionDigits
+                                : '-' +
+                                    MoneyFormatter(
+                                            amount: x[xIndex][yIndex].amount)
+                                        .output
+                                        .withoutFractionDigits,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    x[xIndex][yIndex].category.type == 'income'
+                                        ? Colors.green
+                                        : Colors.red[600])),
                       ),
                     ],
                   ),
@@ -331,7 +328,6 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
 
   StickyHeader buildHeader(
       double totalInCome, double totalOutCome, double total) {
-    print('build header');
     return StickyHeader(
       header: SizedBox(height: 0),
       content: Container(
@@ -349,13 +345,14 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('Inflow', style: TextStyle(color: Colors.grey[500])),
-                  MoneySymbolFormatter(
-                    text: totalInCome,
-                    currencyId: widget.wallet.currencyID,
-                    textStyle: TextStyle(color: Colors.white),
-                    digit: '+',
-                  )
+                  Text('Opening balance',
+                      style: TextStyle(color: Colors.grey[500])),
+                  Text(
+                      '+' +
+                          MoneyFormatter(amount: totalInCome)
+                              .output
+                              .withoutFractionDigits,
+                      style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),
@@ -364,13 +361,14 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Outflow', style: TextStyle(color: Colors.grey[500])),
-                    MoneySymbolFormatter(
-                      text: totalOutCome,
-                      currencyId: widget.wallet.currencyID,
-                      textStyle: TextStyle(color: Colors.white),
-                      digit: '-',
-                    ),
+                    Text('Ending balance',
+                        style: TextStyle(color: Colors.grey[500])),
+                    Text(
+                        '-' +
+                            MoneyFormatter(amount: totalOutCome)
+                                .output
+                                .withoutFractionDigits,
+                        style: TextStyle(color: Colors.white)),
                   ]),
             ),
             Container(
@@ -398,18 +396,18 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                     SizedBox(
                       width: 10,
                     ),
-                    MoneySymbolFormatter(
-                      text: total,
-                      currencyId: widget.wallet.currencyID,
-                      textStyle: TextStyle(color: Colors.white),
-                    ),
+                    Text(
+                        MoneyFormatter(amount: total)
+                            .output
+                            .withoutFractionDigits,
+                        style: TextStyle(color: Colors.white)),
                   ]),
             ),
             TextButton(
               onPressed: () {},
               child: Text(
                 'View report for this period',
-                style: TextStyle(color: Color(0xff36D1B5)),
+                style: TextStyle(color: Colors.yellow[700]),
               ),
               style: TextButton.styleFrom(
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap),

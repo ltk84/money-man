@@ -9,7 +9,6 @@ import 'package:money_man/ui/screens/report_screens/report_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/add_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_screen.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,14 +17,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
 
   void _onItemTap(int index, Wallet wallet) {
     if (_selectedIndex != index) {
       if (index == 2) {
         showCupertinoModalBottomSheet(
             isDismissible: true,
-            backgroundColor: boxBackgroundColor,
+            backgroundColor: Colors.grey[900],
             context: context,
             builder: (context) => AddTransactionScreen(currentWallet: wallet));
       } else
@@ -58,12 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
               return FirstStep();
             } else
               return Scaffold(
-                backgroundColor: foregroundColor.withOpacity(0.38),
+                backgroundColor: Colors.white38,
                 body: _screens.elementAt(_selectedIndex),
                 bottomNavigationBar: BottomAppBar(
                   notchMargin: 5,
                   shape: CircularNotchedRectangle(),
-                  color: backgroundColor,
+                  color: Colors.black,
                   child: BottomNavigationBar(
                       type: BottomNavigationBarType.fixed,
                       elevation: 0,
@@ -77,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         BottomNavigationBarItem(
                           icon: Icon(Icons.analytics_sharp, size: 25.0),
                           label: 'Report',
+                          //backgroundColor: Colors.grey[500],
                         ),
                         BottomNavigationBarItem(
                           icon: Icon(
@@ -94,16 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           label: 'Account',
                         ),
                       ],
-                      selectedLabelStyle: TextStyle(
-                        fontFamily: fontFamily,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      unselectedLabelStyle: TextStyle(
-                        fontFamily: fontFamily,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      selectedItemColor: foregroundColor,
-                      unselectedItemColor: foregroundColor.withOpacity(0.54),
+                      selectedItemColor: Colors.white,
+                      unselectedItemColor: Colors.grey[400],
                       unselectedFontSize: 12.0,
                       selectedFontSize: 12.0,
                       currentIndex: _selectedIndex,
@@ -114,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     _onItemTap(2, wallet);
                   },
-                  backgroundColor: primaryColor,
+                  backgroundColor: Color(0xff2FB49C),
                   elevation: 0,
                 ),
                 floatingActionButtonLocation:

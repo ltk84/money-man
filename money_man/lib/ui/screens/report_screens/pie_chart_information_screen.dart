@@ -6,7 +6,6 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_time.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class PieChartInformationScreen extends StatefulWidget {
@@ -63,7 +62,6 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
       });
     }
   }
-
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   bool isContained(MyCategory currentCategory, List<MyCategory> categoryList) {
     if (categoryList.isEmpty) return false;
@@ -115,7 +113,7 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
-    _height = _listCategoryReport.length.toDouble() * 65;
+    _height = _listCategoryReport.length.toDouble()*65;
   }
 
   @override
@@ -137,17 +135,17 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<Object>(
-        stream: _firestore.transactionStream(widget.currentWallet, 50),
-        builder: (context, snapshot) {
+      stream: _firestore.transactionStream(widget.currentWallet, 50),
+        builder: (context,snapshot){
           return Container(
             width: 450,
             height: _height,
             decoration: BoxDecoration(
                 border: Border(
                     bottom: BorderSide(
-              color: Colors.black,
-              width: 1.0,
-            ))),
+                      color: Colors.black,
+                      width: 1.0,
+                    ))),
             padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
             child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
@@ -160,24 +158,16 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (_) => ReportListTransaction(
-                                  endDate: _listTransactionOfEachCatecory[index]
-                                          [0]
-                                      .date,
-                                  beginDate: _listTransactionOfEachCatecory[
-                                              index][
-                                          _listTransactionOfEachCatecory[index]
-                                                  .length -
-                                              1]
-                                      .date,
-                                  totalMoney:
-                                      _listTransactionOfEachCatecory[index][0]
-                                                  .category
-                                                  .type ==
-                                              'expense'
-                                          ? -_info[index]
-                                          : _info[index],
-                                  currentWallet: widget.currentWallet,
-                                )));
+                              currentList: _listTransactionOfEachCatecory[index],
+                              endDate:
+                              _listTransactionOfEachCatecory[index][0].date,
+                              beginDate: _listTransactionOfEachCatecory[index][
+                              _listTransactionOfEachCatecory[index].length - 1].date,
+                              totalMoney: _listTransactionOfEachCatecory[index][0]
+                                  .category
+                                  .type == 'expense' ? -_info[index] : _info[index],
+                              currentWallet: widget.currentWallet,
+                            )));
                   },
                   child: Column(
                     children: <Widget>[
@@ -199,14 +189,11 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                           ),
                           Column(
                             children: <Widget>[
-                              MoneySymbolFormatter(
-                                  digit: _listCategoryReport[index].type ==
-                                          'expense'
-                                      ? '-'
-                                      : '+',
-                                  text: _info[index],
-                                  currencyId: widget.currentWallet.currencyID,
-                                  textStyle: TextStyle(
+                              Text(
+                                  _listCategoryReport[index].type == 'expense'
+                                      ? '-' + _info[index].toString()
+                                      : '+' + _info[index].toString(),
+                                  style: TextStyle(
                                       color: _color,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold)),
@@ -217,12 +204,15 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                       Container(
                         height: 25,
                       )
+
                     ],
                   ),
                 );
               },
             ),
           );
-        });
+        }
+        );
+
   }
 }

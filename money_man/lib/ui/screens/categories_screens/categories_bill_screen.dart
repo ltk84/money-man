@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesBillScreen extends StatefulWidget {
@@ -54,8 +53,8 @@ class _CategoriesBillScreenState
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Scaffold(
-        backgroundColor: backgroundColor,
-        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.black,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
           leading: MaterialButton(
@@ -64,14 +63,11 @@ class _CategoriesBillScreenState
             },
             child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: foregroundColor),
+                Icon(Icons.arrow_back_ios, color: Colors.white),
                 Hero(
                     tag: 'alo',
                     child: Text('More',
-                        style: TextStyle(
-                            color: foregroundColor,
-                            fontFamily: fontFamily,
-                            fontSize: 17.0))),
+                        style: Theme.of(context).textTheme.headline6)),
               ],
             ),
           ),
@@ -92,9 +88,12 @@ class _CategoriesBillScreenState
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  //child: Container(
+                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
+                  //),
                 ),
               ),
             ),
@@ -106,8 +105,8 @@ class _CategoriesBillScreenState
                   ''
                   'Categories',
                   style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: fontFamily,
+                      color: Colors.white,
+                      fontFamily: 'Montseratt',
                       fontSize: 17.0))),
         ),
         body: StreamBuilder<List<MyCategory>>(
@@ -129,10 +128,7 @@ class _CategoriesBillScreenState
                           iconPath: _selectCateTab[index].iconID,
                           size: 35.0),
                       title: Text(_selectCateTab[index].name,
-                          style: TextStyle(
-                              color: foregroundColor,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: fontFamily)),
+                          style: Theme.of(context).textTheme.subtitle1),
                       onTap: () {
                         Navigator.pop(context, _selectCateTab[index]);
                       },

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:share/share.dart';
@@ -59,11 +58,12 @@ class ShareScreenState extends State<ShareScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: boxBackgroundColor,
+      backgroundColor: Colors.black45,
       appBar: AppBar(
+        leadingWidth: 70.0,
         centerTitle: true,
         elevation: 0,
-        backgroundColor: boxBackgroundColor,
+        backgroundColor: Colors.grey[900],
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20.0),
@@ -71,14 +71,36 @@ class ShareScreenState extends State<ShareScreen> {
         title: Text('Share',
             style: TextStyle(
                 color: Colors.white,
-              fontFamily: 'Montserrat',
-              fontSize: 17.0,
-              fontWeight: FontWeight.w600,)),
-        leading: CloseButton(),
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+                fontSize: 15.0)),
+        leading: TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Close',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+              backgroundColor: Colors.transparent,
+            )),
       ),
+      // body: ListView(
+      //   scrollDirection: Axis.horizontal,
+      //   children: [
+      //     buildImage(reportData1),
+      //     buildImage(reportData2),
+      //     buildImage(reportData3),
+      //   ],
+      // )
       body: Container(
-          color: backgroundColor1,
-          padding: EdgeInsets.symmetric(vertical: 20.0),
+          margin: EdgeInsets.symmetric(vertical: 20.0),
           child: Column(
             children: [
               Container(
@@ -103,9 +125,8 @@ class ShareScreenState extends State<ShareScreen> {
                 ),
               ),
               Container(
-                height: 40,
-                width: double.infinity,
-                margin: EdgeInsets.fromLTRB(40, 50, 40, 10),
+                margin: EdgeInsets.only(top: 50.0, bottom: 10.0),
+                padding: EdgeInsets.symmetric(horizontal: 100.0),
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -135,28 +156,24 @@ class ShareScreenState extends State<ShareScreen> {
                     Share.shareFiles([file.path]);
                   },
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.share),
-                      SizedBox(width: 10,),
-                      Text('SHARE',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: fontFamily,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.5,
-                            wordSpacing: 2.0
-                        ),
+                      Expanded(
+                        child: Text('SHARE',
+                            style: TextStyle(fontSize: 15),
+                            textAlign: TextAlign.center),
+                        flex: 3,
+                      ),
+                      Expanded(
+                        child: Icon(Icons.share),
+                        flex: 1,
                       ),
                     ],
                   ),
                 ),
               ),
               Container(
-                height: 40,
-                width: double.infinity,
-                margin: EdgeInsets.fromLTRB(40, 5, 40, 10),
+                padding: EdgeInsets.symmetric(horizontal: 100.0),
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -210,19 +227,17 @@ class ShareScreenState extends State<ShareScreen> {
                     }
                   },
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.save_alt),
-                      SizedBox(width: 10),
-                      Text('SAVE',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: fontFamily,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.5,
-                              wordSpacing: 2.0
-                          ),
+                      Expanded(
+                        child: Text('SAVE',
+                            style: TextStyle(fontSize: 15),
+                            textAlign: TextAlign.center),
+                        flex: 3,
+                      ),
+                      Expanded(
+                        child: Icon(Icons.save_alt),
+                        flex: 1,
                       ),
                     ],
                   ),

@@ -13,7 +13,6 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/add_budget.
 import 'package:money_man/ui/screens/planning_screens/budget_screens/widget/budget_tile.dart';
 import 'package:money_man/ui/screens/transaction_screens/edit_transaction_screen.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class TransactionDetail extends StatefulWidget {
@@ -161,15 +160,17 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       ),
                     ),
                     Container(
-                        margin: EdgeInsets.only(top: 30),
-                        child: MoneySymbolFormatter(
-                          text: widget.transaction.amount,
-                          currencyId: widget.wallet.currencyID,
-                          textStyle: TextStyle(
-                              color: Colors.red[400],
-                              fontSize: 30,
-                              fontWeight: FontWeight.w200),
-                        )),
+                      margin: EdgeInsets.only(top: 30),
+                      child: Text(
+                        MoneyFormatter(amount: this.widget.transaction.amount)
+                            .output
+                            .withoutFractionDigits,
+                        style: TextStyle(
+                            color: Colors.red[400],
+                            fontSize: 30,
+                            fontWeight: FontWeight.w200),
+                      ),
+                    ),
                   ],
                 ),
               ),

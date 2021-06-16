@@ -6,7 +6,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
@@ -63,7 +62,7 @@ class _AboutScreenState extends State<AboutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.black,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             leadingWidth: 250.0,
@@ -75,19 +74,44 @@ class _AboutScreenState extends State<AboutScreen> {
                 tag: 'alo',
                 child: Row(
                   children: [
-                    Icon(Icons.arrow_back_ios, color: foregroundColor),
-                    Text('More', style: TextStyle(
-                        color: foregroundColor,
-                        fontFamily: fontFamily,
-                        fontSize: 17.0
-                      )
-                    )
+                    Icon(Icons.arrow_back_ios, color: Colors.white),
+                    Text('More', style: Theme.of(context).textTheme.headline6)
+                    // Hero(
+                    //     tag: 'alo',
+                    //     child: Text('More', style: Theme.of(context).textTheme.headline6)
+                    // ),
                   ],
                 ),
               ),
             ),
+            //),
+            //centerTitle: true,
             backgroundColor: Colors.transparent,
             elevation: 0,
+            flexibleSpace: ClipRect(
+              child: AnimatedOpacity(
+                opacity: reachAppBar == 1 ? 1 : 0,
+                duration: Duration(milliseconds: 0),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                      sigmaX: reachTop == 1 ? 25 : 500,
+                      sigmaY: 25,
+                      tileMode: TileMode.values[0]),
+                  child: AnimatedContainer(
+                    duration: Duration(
+                        milliseconds:
+                        reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                    //child: Container(
+                    //color: Colors.transparent,
+                    color: Colors.grey[reachAppBar == 1
+                        ? (reachTop == 1 ? 800 : 850)
+                        : 900]
+                        .withOpacity(0.2),
+                    //),
+                  ),
+                ),
+              ),
+            ),
         ),
         body: ListView(
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -103,8 +127,8 @@ class _AboutScreenState extends State<AboutScreen> {
                 Text(
                   'MONEY MAN',
                   style: TextStyle(
-                    color: foregroundColor,
-                    fontFamily: fontFamily,
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w900,
                     fontSize: 24.0,
                   ),
@@ -116,8 +140,8 @@ class _AboutScreenState extends State<AboutScreen> {
                   child: Text(
                     'Made by a group of sophomores of\nUniversity of Information Technology\nVNU-HCM',
                     style: TextStyle(
-                      color: foregroundColor.withOpacity(0.7),
-                      fontFamily: fontFamily,
+                      color: Colors.white70,
+                      fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w400,
                       fontSize: 16.0,
                     ),
@@ -131,8 +155,8 @@ class _AboutScreenState extends State<AboutScreen> {
                   child: Text(
                     'TEAM MEMBERS',
                     style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: 'fontFamily',
+                      color: Colors.white,
+                      fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w700,
                       fontSize: 26.0,
                     ),
@@ -242,7 +266,7 @@ class InfoCard extends StatelessWidget {
         child: Container(
           width: 300,
           decoration: BoxDecoration(
-            color: boxBackgroundColor,
+            color: Colors.grey[900],
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: Column(
@@ -260,8 +284,8 @@ class InfoCard extends StatelessWidget {
               Text(
                 name,
                 style: TextStyle(
-                  color: foregroundColor,
-                  fontFamily: fontFamily,
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
                   fontSize: 22.0,
                 ),
@@ -271,8 +295,8 @@ class InfoCard extends StatelessWidget {
               Text(
                 quote,
                 style: TextStyle(
-                  color: foregroundColor.withOpacity(0.54),
-                  fontFamily: fontFamily,
+                  color: Colors.white54,
+                  fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w400,
                   fontSize: 14.0,
                 ),
@@ -319,7 +343,7 @@ class InfoCardDetail extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: boxBackgroundColor,
+                color: Colors.grey[900],
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: ListView(
@@ -338,8 +362,8 @@ class InfoCardDetail extends StatelessWidget {
                   Text(
                     name,
                     style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: fontFamily,
+                      color: Colors.white,
+                      fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w700,
                       fontSize: 22.0,
                     ),
@@ -349,8 +373,8 @@ class InfoCardDetail extends StatelessWidget {
                   Text(
                     quote,
                     style: TextStyle(
-                      color: foregroundColor.withOpacity(0.54),
-                      fontFamily: fontFamily,
+                      color: Colors.white54,
+                      fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w400,
                       fontSize: 14.0,
                     ),
@@ -367,14 +391,16 @@ class InfoCardDetail extends StatelessWidget {
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
                               return Colors.white;
-                            return fbButtonColor; // Use the component's default.
+                            return Color(
+                                0xFF2c84d4); // Use the component's default.
                           },
                         ),
                         foregroundColor:
                         MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
-                              return fbButtonColor;
+                              return Color(
+                                  0xFF2c84d4);
                             return Colors.white; // Use the component's default.
                           },
                         ),
@@ -394,7 +420,7 @@ class InfoCardDetail extends StatelessWidget {
                             "Facebook",
                             style: TextStyle(
                                 fontSize: 13,
-                                fontFamily: fontFamily,
+                                fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.5,
                                 wordSpacing: 2.0),
@@ -415,14 +441,16 @@ class InfoCardDetail extends StatelessWidget {
                             if (states.contains(MaterialState.pressed))
                               return Colors
                                   .white;
-                            return igButtonColor; // Use the component's default.
+                            return Color(
+                                0xFFc65072); // Use the component's default.
                           },
                         ),
                         foregroundColor:
                         MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
-                              return igButtonColor;
+                              return Color(
+                                  0xFFc65072);
                             return Colors
                                 .white; // Use the component's default.
                           },
@@ -443,7 +471,7 @@ class InfoCardDetail extends StatelessWidget {
                             "Instagram",
                             style: TextStyle(
                                 fontSize: 13,
-                                fontFamily: fontFamily,
+                                fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.5,
                                 wordSpacing: 2.0),
@@ -462,16 +490,16 @@ class InfoCardDetail extends StatelessWidget {
                         MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
-                              return backgroundColor;
-                            return foregroundColor; // Use the component's default.
+                              return Colors.black;
+                            return Colors.white; // Use the component's default.
                           },
                         ),
                         foregroundColor:
                         MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
-                              return foregroundColor;
-                            return backgroundColor; // Use the component's default.
+                              return Colors.white;
+                            return Colors.black; // Use the component's default.
                           },
                         ),
                       ),
@@ -497,7 +525,7 @@ class InfoCardDetail extends StatelessWidget {
                             "Send Email",
                             style: TextStyle(
                                 fontSize: 13,
-                                fontFamily: fontFamily,
+                                fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.5,
                                 wordSpacing: 2.0),
@@ -521,7 +549,7 @@ class InfoCardDetail extends StatelessWidget {
                 },
                 child: Icon(
                     Icons.close,
-                    color: foregroundColor,
+                    color: Colors.white,
                     size: 28.0,
                 )
               ),

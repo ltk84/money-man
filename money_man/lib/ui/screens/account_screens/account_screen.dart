@@ -6,8 +6,6 @@ import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/account_screens/about_screen.dart';
 import 'package:money_man/ui/screens/account_screens/my_wallets_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_account_screen.dart';
-import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'account_detail_screen.dart';
@@ -16,16 +14,16 @@ import 'help_screens/help_screens.dart';
 class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AcountScreenWidget();
+    return Test();
   }
 }
 
-class AcountScreenWidget extends StatefulWidget {
+class Test extends StatefulWidget {
   @override
-  _AcountScreenWidgetState createState() => _AcountScreenWidgetState();
+  _TestState createState() => _TestState();
 }
 
-class _AcountScreenWidgetState extends State<AcountScreenWidget> {
+class _TestState extends State<Test> {
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
@@ -34,19 +32,18 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
   Text title = Text('More',
       style: TextStyle(
           fontSize: 30,
-          color: foregroundColor,
-          fontFamily: fontFamily,
+          color: Colors.white,
+          fontFamily: 'Montserrat',
           fontWeight: FontWeight.bold));
   Text emptyTitle = Text('',
       style: TextStyle(
           fontSize: 30,
-          color: foregroundColor,
-          fontFamily: fontFamily,
+          color: Colors.white,
+          fontFamily: 'Montserrat',
           fontWeight: FontWeight.bold));
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
-
   _scrollListener() {
     if (_controller.offset > 0) {
       setState(() {
@@ -79,7 +76,7 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
   Widget build(BuildContext context) {
     final _auth = Provider.of<FirebaseAuthService>(context);
     return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.black,
         //extendBodyBehindAppBar: true,
         appBar: AppBar(
           centerTitle: true,
@@ -97,11 +94,11 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                 child: AnimatedContainer(
                   duration: Duration(
                       milliseconds:
-                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                          reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                   //child: Container(
                   //color: Colors.transparent,
                   color: Colors.grey[
-                  reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+                          reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
                   //),
                 ),
@@ -113,19 +110,16 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
               duration: Duration(milliseconds: 100),
               child: Text('More',
                   style: TextStyle(
-                    color: foregroundColor,
-                    fontFamily: fontFamily,
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.w600,
-                  ))),
+                      color: Colors.white,
+                      fontFamily: 'Montseratt',
+                      fontSize: 17.0))),
         ),
         body: StreamBuilder<User>(
             stream: _auth.userStream,
             builder: (context, snapshot) {
               User _user = snapshot.data;
               return ListView(
-                physics: BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
+                physics: BouncingScrollPhysics(),
                 controller: _controller,
                 children: [
                   Padding(
@@ -137,15 +131,15 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                   Container(
                       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                       decoration: BoxDecoration(
-                          color: boxBackgroundColor,
+                          color: Colors.grey[900],
                           border: Border(
                               top: BorderSide(
                                 width: 0.1,
-                                color: foregroundColor.withOpacity(0.12),
+                                color: Colors.white,
                               ),
                               bottom: BorderSide(
                                 width: 0.1,
-                                color: foregroundColor.withOpacity(0.12),
+                                color: Colors.white,
                               ))),
                       child: Column(
                         children: [
@@ -156,15 +150,14 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                               (_user == null)
                                   ? ''
                                   : (_user.displayName != '' &&
-                                  _user.displayName != null)
-                                  ? _user.displayName.substring(0, 1)
-                                  : 'Y',
+                                          _user.displayName != null)
+                                      ? _user.displayName.substring(0, 1)
+                                      : 'Y',
                               style: TextStyle(
-                                  color: primaryColor,
+                                  color: Color(0xff2FB49C),
                                   fontSize: 30.0,
-                                  fontFamily: fontFamily,
-                                  fontWeight: FontWeight.w400
-                              ),
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w400),
                             ),
                           ),
                           SizedBox(
@@ -176,29 +169,29 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                                 (_user == null)
                                     ? ''
                                     : (_user.displayName != '' &&
-                                    _user.displayName != null)
-                                    ? _user.displayName
-                                    : (_user.phoneNumber != null
-                                    ? _user.phoneNumber
-                                    : 'Your name'),
+                                            _user.displayName != null)
+                                        ? _user.displayName
+                                        : (_user.phoneNumber != null
+                                            ? _user.phoneNumber
+                                            : 'Your name'),
                                 style: TextStyle(
-                                    color: foregroundColor,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w600,
-                                    fontFamily: fontFamily,
+                                    fontFamily: 'Montserrat',
                                     fontSize: 15.0)),
                           ),
                           Text(
                               (_user == null)
                                   ? ''
                                   : _user.email == null
-                                  ? 'Your email'
-                                  : (_user.email != ''
-                                  ? _user.email
-                                  : 'Your email'),
+                                      ? 'Your email'
+                                      : (_user.email != ''
+                                          ? _user.email
+                                          : 'Your email'),
                               style: TextStyle(
-                                  color: foregroundColor.withOpacity(0.54),
+                                  color: Colors.grey[400],
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: fontFamily,
+                                  fontFamily: 'Montserrat',
                                   fontSize: 13.0)),
                           SizedBox(
                             height: 20.0,
@@ -206,7 +199,7 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                           Divider(
                             height: 5,
                             thickness: 0.1,
-                            color: foregroundColor,
+                            color: Colors.white,
                           ),
                           ListTile(
                             onTap: () {
@@ -220,35 +213,35 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                             },
                             dense: true,
                             leading: Icon(Icons.person,
-                                color: foregroundColor.withOpacity(0.54), size: 38.0),
+                                color: Colors.white, size: 38.0),
                             title: Text('My Account',
                                 style: TextStyle(
-                                    color: foregroundColor,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w700,
-                                    fontFamily: fontFamily)),
+                                    fontFamily: 'Montserrat')),
                             subtitle: Text('Your infomation',
                                 style: TextStyle(
-                                    color: foregroundColor.withOpacity(0.54),
+                                    color: Colors.grey[400],
                                     fontWeight: FontWeight.w400,
-                                    fontFamily: fontFamily,
+                                    fontFamily: 'Montserrat',
                                     fontSize: 13.0)),
                             trailing: Icon(Icons.chevron_right,
-                                color: foregroundColor.withOpacity(0.54)),
+                                color: Colors.grey[400]),
                           )
                         ],
                       )),
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
                     decoration: BoxDecoration(
-                        color: boxBackgroundColor,
+                        color: Colors.grey[900],
                         border: Border(
                             top: BorderSide(
                               width: 0.1,
-                              color: foregroundColor.withOpacity(0.12),
+                              color: Colors.white,
                             ),
                             bottom: BorderSide(
                               width: 0.1,
-                              color: foregroundColor.withOpacity(0.12),
+                              color: Colors.white,
                             ))),
                     child: Column(
                       children: [
@@ -262,23 +255,22 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                           },
                           dense: true,
                           leading: Icon(Icons.account_balance_wallet_rounded,
-                              color: foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                              color: Colors.grey[400], size: 25.0),
                           title: Text('My Wallets',
                               style: TextStyle(
-                                  color: foregroundColor,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: fontFamily,
+                                  fontFamily: 'Montserrat',
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: foregroundColor.withOpacity(0.54)),
+                              color: Colors.grey[400]),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: foregroundColor,
+                            color: Colors.white,
                           ),
                         ),
                         ListTile(
@@ -291,16 +283,15 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                           },
                           dense: true,
                           leading: Icon(Icons.category,
-                              color: foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                              color: Colors.grey[400], size: 25.0),
                           title: Text('Categories',
                               style: TextStyle(
-                                  color: foregroundColor,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: fontFamily,
+                                  fontFamily: 'Montserrat',
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: foregroundColor.withOpacity(0.54)),
+                              color: Colors.grey[400]),
                         ),
                       ],
                     ),
@@ -308,15 +299,15 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
                     decoration: BoxDecoration(
-                        color: boxBackgroundColor,
+                        color: Colors.grey[900],
                         border: Border(
                             top: BorderSide(
                               width: 0.1,
-                              color: foregroundColor.withOpacity(0.12),
+                              color: Colors.white,
                             ),
                             bottom: BorderSide(
                               width: 0.1,
-                              color: foregroundColor.withOpacity(0.12),
+                              color: Colors.white,
                             ))),
                     child: Column(
                       children: [
@@ -324,23 +315,22 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                           onTap: () {},
                           dense: true,
                           leading: Icon(Icons.explore,
-                              color: foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                              color: Colors.grey[400], size: 25.0),
                           title: Text('Explore',
                               style: TextStyle(
-                                  color: foregroundColor,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: fontFamily,
+                                  fontFamily: 'Montserrat',
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: foregroundColor.withOpacity(0.54)),
+                              color: Colors.grey[400]),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: foregroundColor,
+                            color: Colors.white,
                           ),
                         ),
                         ListTile(
@@ -352,68 +342,65 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                           },
                           dense: true,
                           leading: Icon(Icons.help_outline,
-                              color: foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                              color: Colors.grey[400], size: 25.0),
                           title: Text('Help & Support',
                               style: TextStyle(
-                                  color: foregroundColor,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: fontFamily,
+                                  fontFamily: 'Montserrat',
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: foregroundColor.withOpacity(0.54)),
+                              color: Colors.grey[400]),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: foregroundColor,
+                            color: Colors.white,
                           ),
                         ),
                         ListTile(
                           onTap: () {},
                           dense: true,
                           leading: Icon(Icons.settings,
-                              color: foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                              color: Colors.grey[400], size: 25.0),
                           title: Text('Settings',
                               style: TextStyle(
-                                  color: foregroundColor,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: fontFamily,
+                                  fontFamily: 'Montserrat',
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: foregroundColor.withOpacity(0.54)),
+                              color: Colors.grey[400]),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: foregroundColor,
+                            color: Colors.white,
                           ),
                         ),
                         ListTile(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: AboutScreen(),
-                                    type: PageTransitionType.rightToLeft));
+                              context,
+                              PageTransition(
+                                  child: AboutScreen(),
+                                  type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
                           leading: Icon(Icons.info,
-                              color: foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                              color: Colors.grey[400], size: 25.0),
                           title: Text('About',
                               style: TextStyle(
-                                  color: foregroundColor,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: fontFamily,
+                                  fontFamily: 'Montserrat',
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: foregroundColor.withOpacity(0.54)),
+                              color: Colors.grey[400]),
                         ),
                       ],
                     ),

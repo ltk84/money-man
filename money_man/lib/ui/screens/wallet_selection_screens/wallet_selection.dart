@@ -8,7 +8,6 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/edit_wallet_screen.dart';
 import 'package:money_man/ui/style.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class WalletSelectionScreen extends StatefulWidget {
@@ -31,8 +30,9 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
     return Container(
       color: Colors.transparent,
       child: Scaffold(
-          backgroundColor: Colors.grey[900],
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
+            leadingWidth: 70.0,
             centerTitle: true,
             elevation: 0,
             backgroundColor: Colors.grey[900],
@@ -40,17 +40,28 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0))),
-            leading: CloseButton(
-              onPressed: () {
-                Navigator.of(context).pop(widget.id);
-              }
-            ),
+            leading: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(widget.id);
+                },
+                child: const Text(
+                  'Close',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.transparent,
+                )),
             title: Text('Select Wallet',
                 style: TextStyle(
-                  fontFamily: fontFamily,
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                  color: foregroundColor,)),
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15.0)),
             actions: <Widget>[
               TextButton(
                   onPressed: () async {
@@ -67,37 +78,71 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                         // widget.changeWallet(_firestore.getWalletByID(res));
                       });
                   },
-                  child: Text(
+                  child: const Text(
                     'Edit',
-                      style: TextStyle(
-                        fontFamily: fontFamily,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: foregroundColor,
-                      )
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-              ),
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.transparent,
+                  )),
             ],
           ),
           body: Container(
-            color: backgroundColor1,
+            color: Colors.black26,
             child: Column(
               children: [
+                SizedBox(
+                  height: 40.0,
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[900],
+                      border: Border(
+                          top: BorderSide(
+                            color: Colors.grey[900],
+                            width: 1.0,
+                          ),
+                          bottom: BorderSide(
+                            color: Colors.grey[900],
+                            width: 1.0,
+                          ))),
+                  // child: ListTile(
+                  //   leading: Icon(
+                  //     Icons.all_inclusive_outlined,
+                  //     color: Colors.white,
+                  //   ),
+                  //   title: Text(
+                  //     'Total',
+                  //     style: tsMain,
+                  //   ),
+                  //   subtitle: Text(
+                  //     '(amount)',
+                  //     style: tsChild,
+                  //   ),
+                  //   trailing: Icon(
+                  //     Icons.check,
+                  //     color: Colors.blue,
+                  //   ),
+                  // ),
+                  child: buildDisplayTotalWallet(),
+                ),
                 SizedBox(
                   height: 20.0,
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15.0, 0, 0, 8.0),
+                  padding: const EdgeInsets.fromLTRB(15.0, 0, 0, 5.0),
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: Text(
-                      'My Wallets',
-                      style: TextStyle(
-                        fontFamily: fontFamily,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14.0,
-                        color: foregroundColor.withOpacity(0.38),
-                      ),
+                      'List',
+                      style: tsChild_Sec,
                     ),
                   ),
                 ),
@@ -106,53 +151,102 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                   height: 20,
                 ),
                 Container(
-                    margin: EdgeInsets.symmetric(vertical: 50, horizontal: 40),
-                    height: 40,
+                    height: 33,
                     width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[900],
+                        border: Border(
+                            top: BorderSide(
+                              color: Colors.grey[900],
+                              width: 1.0,
+                            ),
+                            bottom: BorderSide(
+                              color: Colors.grey[900],
+                              width: 1.0,
+                            ))),
                     child: TextButton(
                       onPressed: () async {
                         final res = await showCupertinoModalBottomSheet(
                             backgroundColor: Colors.grey[900],
                             context: context,
                             builder: (context) => AddWalletScreen());
+                        // print('return from add screen ' + res.toString());
                         if (res != null)
                           setState(() {
                             widget.id = res;
+                            // widget.changeWallet(_firestore.getWalletByID(res));
                           });
                       },
-                      child: Text("ADD NEW WALLET",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: fontFamily,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.5,
-                              wordSpacing: 2.0),
-                          textAlign: TextAlign.center),
-                      style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.white;
-                            return Color(
-                                0xFF2FB49C); // Use the component's default.
-                          },
-                        ),
-                        foregroundColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Color(0xFF2FB49C);
-                            return Colors
-                                .white; // Use the component's default.
-                          },
-                        ),
-                      ),
+                      child: Text('Add wallet', style: tsButton_wallet),
+                      //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(success)),
+                    )),
+                Container(
+                    height: 33,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[900],
+                        border: Border(
+                            top: BorderSide(
+                              color: Colors.grey[900],
+                              width: 1.0,
+                            ),
+                            bottom: BorderSide(
+                              color: Colors.grey[900],
+                              width: 1.0,
+                            ))),
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text('Link to services', style: tsButton_wallet),
+                      //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(success)),
                     )),
               ],
             ),
           )),
     );
+  }
+
+  Widget buildDisplayTotalWallet() {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    return widget.id == 'Total'
+        ? ListTile(
+            onTap: () {},
+            leading: SuperIcon(
+              iconPath: 'assets/icons/wallet_4.svg',
+              size: 40.0,
+            ),
+            title: Text(
+              'Total',
+              style: tsMain,
+            ),
+            subtitle: Text(
+              '(amount)',
+              style: tsChild,
+            ),
+            trailing: Icon(
+              Icons.check,
+              color: Colors.blue,
+            ),
+          )
+        : ListTile(
+            onTap: () {
+              setState(() {
+                widget.id = 'Total';
+                _firestore.updateSelectedWallet('Total');
+              });
+            },
+            leading: SuperIcon(
+              iconPath: 'assets/icons/wallet_4.svg',
+              size: 40.0,
+            ),
+            title: Text(
+              'Total',
+              style: tsMain,
+            ),
+            subtitle: Text(
+              '(amount)',
+              style: tsChild,
+            ),
+          );
   }
 
   Widget buildDisplayWallet() {
@@ -164,11 +258,16 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
           stream: _firestore.walletStream,
           builder: (context, snapshot) {
             final listWallet = snapshot.data ?? [];
+            listWallet.removeWhere((element) => element.id == 'Total');
             print('stream ' + listWallet.length.toString());
             return ListView.builder(
-                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 itemCount: listWallet.length,
                 itemBuilder: (context, index) {
+                  // IconData iconData = IconData(
+                  //     int.tryParse(listWallet[index].iconID),
+                  //     fontFamily: 'MaterialIcons');
+                  // print(iconData1.codePoint);
+                  // IconData iconData = Icons.wallet_giftcard;
                   String iconData = listWallet[index].iconID;
 
                   return widget.id == listWallet[index].id
@@ -180,8 +279,12 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             decoration: BoxDecoration(
                                 color: Colors.grey[900],
                                 border: Border(
+                                    top: BorderSide(
+                                      color: Colors.grey[900],
+                                      width: 1.0,
+                                    ),
                                     bottom: BorderSide(
-                                      color: foregroundColorDark.withOpacity(0.12),
+                                      color: Colors.grey[900],
                                       width: 1.0,
                                     ))),
                             child: ListTile(
@@ -193,21 +296,16 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 listWallet[index].name,
                                 style: tsMain,
                               ),
-                              // subtitle: Text(
-                              //   listWallet[index].amount.toString() +
-                              //       ' ' +
-                              //       CurrencyService()
-                              //           .findByCode(
-                              //               listWallet[index].currencyID)
-                              //           .symbol,
-                              //   style: tsChild,
-                              // ),
-                              subtitle: MoneySymbolFormatter(
-                                text: listWallet[index].amount,
-                                currencyId: listWallet[index].currencyID,
-                                textStyle: tsChild,
+                              subtitle: Text(
+                                listWallet[index].amount.toString() +
+                                    ' ' +
+                                    CurrencyService()
+                                        .findByCode(
+                                            listWallet[index].currencyID)
+                                        .symbol,
+                                style: tsChild,
                               ),
-                              trailing: Icon(Icons.check_rounded, color: primaryColor),
+                              trailing: Icon(Icons.check, color: Colors.blue),
                             ),
                           ),
                         )
@@ -225,16 +323,13 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 color: Colors.grey[900],
                                 border: Border(
                                     top: BorderSide(
-                                      color: foregroundColor.withOpacity(0.12),
+                                      color: Colors.grey[900],
                                       width: 1.0,
                                     ),
                                     bottom: BorderSide(
-                                      color: foregroundColorDark.withOpacity(0.12),
+                                      color: Colors.grey[900],
                                       width: 1.0,
-                                    )
-                                )
-                            )
-                            ,
+                                    ))),
                             child: ListTile(
                               onTap: () async {
                                 widget.id = listWallet[index].id;
@@ -250,10 +345,14 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 listWallet[index].name,
                                 style: tsMain,
                               ),
-                              subtitle: MoneySymbolFormatter(
-                                text: listWallet[index].amount,
-                                currencyId: listWallet[index].currencyID,
-                                textStyle: tsChild,
+                              subtitle: Text(
+                                listWallet[index].amount.toString() +
+                                    ' ' +
+                                    CurrencyService()
+                                        .findByCode(
+                                            listWallet[index].currencyID)
+                                        .symbol,
+                                style: tsChild,
                               ),
                             ),
                           ),

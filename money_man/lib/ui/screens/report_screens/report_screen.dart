@@ -15,8 +15,6 @@ import 'package:money_man/ui/screens/report_screens/share_report/utils.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
 import 'package:money_man/ui/screens/report_screens/share_screen.dart';
 import 'package:money_man/ui/screens/report_screens/time_selection.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
-import 'package:page_transition/page_transition.dart';
 import '../../style.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/core/models/transaction_model.dart';
@@ -113,10 +111,9 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
     return DefaultTabController(
       length: 300,
       child: Scaffold(
-          backgroundColor: backgroundColor,
-          extendBodyBehindAppBar: true,
+          backgroundColor: Colors.black,
           appBar: new AppBar(
-            backgroundColor: backgroundColor,
+            backgroundColor: Colors.black,
             centerTitle: true,
             elevation: 0,
             flexibleSpace: ClipRect(
@@ -165,6 +162,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
               onTap: () async {
                 final result = await showCupertinoModalBottomSheet(
                     isDismissible: true,
+                    backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) => TimeRangeSelection(
                         dateDescription: dateDescript,
@@ -186,8 +184,6 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                       Text(
                         dateDescript,
                         style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontWeight: FontWeight.w600,
                           color: Colors.white,
                           fontSize: 14.0,
                         ),
@@ -197,14 +193,13 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             " - " +
                             DateFormat('dd/MM/yyyy').format(endDate),
                         style: TextStyle(
-                            fontFamily: fontFamily,
-                            color: Colors.white.withOpacity(0.7),
+                            color: Colors.white,
                             fontSize: 12.0,
-                            fontWeight: FontWeight.w400),
+                            fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
-                  Icon(Icons.arrow_drop_down, color: foregroundColor),
+                  Icon(Icons.arrow_drop_down, color: Colors.white),
                 ],
               ),
             ),
@@ -293,144 +288,140 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                         element.date.compareTo(endDate) <= 0)
                     .toList();
                 return Container(
-                  color: backgroundColor,
+                  color: Colors.black,
                   child: ListView(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    physics: BouncingScrollPhysics(),
                     children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey[900],
+                                  width: 1.0,
+                                ),
+                                top: BorderSide(
+                                  color: Colors.grey[900],
+                                  width: 1.0,
+                                ))),
+                        child: Column(children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      'Opening balance',
+                                      style: TextStyle(
+                                        color: Colors.grey[500],
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      openingBalance.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      'Closing balance',
+                                      style: TextStyle(
+                                        color: Colors.grey[500],
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      closingBalance.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ]),
+                      ),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                         decoration: BoxDecoration(
                             color: Colors.black,
                             border: Border(
                                 bottom: BorderSide(
-                                  color: foregroundColor.withOpacity(0.24),
+                                  color: Colors.grey[900],
                                   width: 1.0,
                                 ),
                                 top: BorderSide(
-                                  color: foregroundColor.withOpacity(0.24),
+                                  color: Colors.grey[900],
                                   width: 1.0,
-                                )
-                            )
-                        ),
+                                ))),
                         child: WidgetToImage(
                           builder: (key) {
                             this.key1 = key;
 
-                            return Column(
+                            return Column(children: <Widget>[
+                              Column(
                                 children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              'Opening balance',
-                                              style: TextStyle(
-                                                color: foregroundColor.withOpacity(0.7),
-                                                fontFamily: 'Montserrat',
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            MoneySymbolFormatter(
-                                              text: openingBalance,
-                                              currencyId: _wallet.currencyID,
-                                              textStyle: TextStyle(
-                                                color: foregroundColor,
-                                                fontFamily: 'Montserrat',
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 20,
-                                                height: 1.5,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              'Closing balance',
-                                              style: TextStyle(
-                                                color: foregroundColor.withOpacity(0.7),
-                                                fontFamily: fontFamily,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            MoneySymbolFormatter(
-                                              text: closingBalance,
-                                              currencyId: _wallet.currencyID,
-                                              textStyle: TextStyle(
-                                                color: foregroundColor,
-                                                fontFamily: fontFamily,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 20,
-                                                height: 1.5,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Divider(
-                                    color: foregroundColor.withOpacity(0.24),
-                                    thickness: 1.0,
-                                    height: 20,
-                                  ),
-                                  SizedBox(height: 10,),
-                                  Hero(
-                                    tag: 'netIncomeChart',
-                                    child: Column(
-                                      children: [
-                                        Text('Net Income',
-                                            style: TextStyle(
-                                              color: foregroundColor.withOpacity(0.7),
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            )
-                                        ),
-                                        MoneySymbolFormatter(
-                                            text: closingBalance - openingBalance,
-                                            currencyId: _wallet.currencyID,
-                                            textStyle: TextStyle(
-                                              color: (closingBalance - openingBalance) > 0 ? incomeColor
-                                                  : (closingBalance - openingBalance) == 0 ? foregroundColor : expenseColor,
-                                              fontFamily: fontFamily,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 26,
-                                              height: 1.5,
-                                            )),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                PageTransition(
-                                                    childCurrent: this.widget,
-                                                    child: AnalyticRevenueAndExpenditureScreen(
-                                                      currentWallet: _wallet,
-                                                      beginDate: beginDate,
-                                                      endDate: endDate,
-                                                    ),
-                                                    type: PageTransitionType.rightToLeft));
-                                          },
-                                          child: Container(
-                                            width: 450,
-                                            height: 200,
-                                            child: BarChartScreen(
-                                                currentList: _transactionList,
-                                                beginDate: beginDate,
-                                                endDate: endDate),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  Text('Net Income',
+                                      style: TextStyle(
+                                        color: Colors.grey[500],
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w500,
+                                      )),
+                                  Text(
+                                      (closingBalance - openingBalance)
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 22,
+                                      )),
                                 ],
-                            );
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  return showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AnalyticRevenueAndExpenditureScreen(
+                                          currentWallet: _wallet,
+                                          beginDate: beginDate,
+                                          endDate: endDate,
+                                        );
+                                      });
+                                },
+                                child: Container(
+                                  width: 450,
+                                  height: 200,
+                                  child: BarChartScreen(
+                                      currentList: _transactionList,
+                                      beginDate: beginDate,
+                                      endDate: endDate),
+                                ),
+                              ),
+                            ]);
                           },
                         ),
                       ),
@@ -448,22 +439,20 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       Text(
                                         'Income',
                                         style: TextStyle(
-                                          color: foregroundColor.withOpacity(0.7),
+                                          color: Colors.grey[500],
                                           fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
                                         ),
                                         textAlign: TextAlign.start,
                                       ),
-                                      MoneySymbolFormatter(
-                                        text: income,
-                                        currencyId: _wallet.currencyID,
-                                        textStyle: TextStyle(
+                                      Text(
+                                        income.toString(),
+                                        style: TextStyle(
                                           color: Colors.blueAccent,
-                                          fontFamily: fontFamily,
+                                          fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w400,
-                                          fontSize: 24,
-                                          height: 1.5,
+                                          fontSize: 18,
                                         ),
                                         textAlign: TextAlign.start,
                                       ),
@@ -510,22 +499,20 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     Text(
                                       'Expense',
                                       style: TextStyle(
-                                        color: foregroundColor.withOpacity(0.7),
+                                        color: Colors.grey[500],
                                         fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
                                       ),
                                       textAlign: TextAlign.start,
                                     ),
-                                    MoneySymbolFormatter(
-                                      text: expense,
-                                      currencyId: _wallet.currencyID,
-                                      textStyle: TextStyle(
+                                    Text(
+                                      expense.toString(),
+                                      style: TextStyle(
                                         color: Colors.redAccent,
-                                        fontFamily: fontFamily,
+                                        fontFamily: 'Montserrat',
                                         fontWeight: FontWeight.w400,
-                                        fontSize: 24,
-                                        height: 1.5,
+                                        fontSize: 18,
                                       ),
                                       textAlign: TextAlign.start,
                                     ),

@@ -269,22 +269,23 @@ class _FirstStepState extends State<FirstStep> {
                                 onTap: () {
                                   showCurrencyPicker(
                                     theme: CurrencyPickerThemeData(
-                                      backgroundColor: Colors.grey[900],
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
                                       ),
                                       flagSize: 26,
                                       titleTextStyle: TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 17,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.w700),
                                       subtitleTextStyle: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 15,
-                                          color: Colors.white),
-                                      //backgroundColor: Colors.grey[900],
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey[900],
+                                      ),
+                                      backgroundColor: Color(0xFF08997E),
                                     ),
                                     onSelect: (value) {
                                       wallet.currencyID = value.code;
