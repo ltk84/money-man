@@ -151,18 +151,11 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                   )),
                             ],
                           ),
-                          Container(
-                            height: 30,
-                          ),
-                          Container(
-                            width: 200,
-                            height: 200,
-                            child: PieChartScreen(
-                                isShowPercent: true,
-                                currentList: _transactionList,
-                                categoryList: _categoryList,
-                                total: _total),
-                          ),
+                          PieChartScreen(
+                              isShowPercent: true,
+                              currentList: _transactionList,
+                              categoryList: _categoryList,
+                              total: _total),
                           Container(
                             child: PieChartInformationScreen(
                               currentList: _transactionList,

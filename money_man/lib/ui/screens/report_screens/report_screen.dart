@@ -439,17 +439,83 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 15),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: WidgetToImage(
-                                builder: (key) {
-                                  this.key2 = key;
+                        child: IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                child: WidgetToImage(
+                                  builder: (key) {
+                                    this.key2 = key;
 
-                                  return Column(
-                                    children: <Widget>[
+                                    return Column(
+                                      children: <Widget>[
+                                        Text(
+                                          'Income',
+                                          style: TextStyle(
+                                            color: foregroundColor.withOpacity(0.7),
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        MoneySymbolFormatter(
+                                          text: income,
+                                          currencyId: _wallet.currencyID,
+                                          textStyle: TextStyle(
+                                            color: Colors.blueAccent,
+                                            fontFamily: fontFamily,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 24,
+                                            height: 1.5,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            return showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AnalyticPieChartSreen(
+                                                    currentList: _transactionList,
+                                                    categoryList:
+                                                        _incomeCategoryList,
+                                                    currentWallet:
+                                                        widget.currentWallet,
+                                                    total: income,
+                                                    content: 'Income',
+                                                    color: Colors.green[600],
+                                                  );
+                                                });
+                                          },
+                                          child: Container(
+                                            color: Colors.transparent,
+                                            child: PieChartScreen(
+                                                isShowPercent: false,
+                                                currentList: _transactionList,
+                                                categoryList: _incomeCategoryList,
+                                                total: income),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                              VerticalDivider(
+                                color: foregroundColor.withOpacity(0.24),
+                                thickness: 1,
+                              ),
+                              Expanded(
+                                child: WidgetToImage(
+                                  builder: (key) {
+                                    this.key3 = key;
+
+                                    return Column(
+                                        children: <Widget>[
                                       Text(
-                                        'Income',
+                                        'Expense',
                                         style: TextStyle(
                                           color: foregroundColor.withOpacity(0.7),
                                           fontFamily: 'Montserrat',
@@ -459,10 +525,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         textAlign: TextAlign.start,
                                       ),
                                       MoneySymbolFormatter(
-                                        text: income,
+                                        text: expense,
                                         currencyId: _wallet.currencyID,
                                         textStyle: TextStyle(
-                                          color: Colors.blueAccent,
+                                          color: Colors.redAccent,
                                           fontFamily: fontFamily,
                                           fontWeight: FontWeight.w400,
                                           fontSize: 24,
@@ -478,94 +544,30 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                 return AnalyticPieChartSreen(
                                                   currentList: _transactionList,
                                                   categoryList:
-                                                      _incomeCategoryList,
+                                                      _expenseCategoryList,
+                                                  total: expense,
+                                                  content: 'Expense',
+                                                  color: Colors.red,
                                                   currentWallet:
                                                       widget.currentWallet,
-                                                  total: income,
-                                                  content: 'Income',
-                                                  color: Colors.green[600],
                                                 );
                                               });
                                         },
                                         child: Container(
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 25),
-                                          width: 90,
-                                          height: 90,
+                                          color: Colors.transparent,
                                           child: PieChartScreen(
                                               isShowPercent: false,
                                               currentList: _transactionList,
-                                              categoryList: _incomeCategoryList,
-                                              total: income),
+                                              categoryList: _expenseCategoryList,
+                                              total: expense),
                                         ),
                                       ),
-                                    ],
-                                  );
-                                },
+                                    ]);
+                                  },
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: WidgetToImage(
-                                builder: (key) {
-                                  this.key3 = key;
-
-                                  return Column(children: <Widget>[
-                                    Text(
-                                      'Expense',
-                                      style: TextStyle(
-                                        color: foregroundColor.withOpacity(0.7),
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                      ),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    MoneySymbolFormatter(
-                                      text: expense,
-                                      currencyId: _wallet.currencyID,
-                                      textStyle: TextStyle(
-                                        color: Colors.redAccent,
-                                        fontFamily: fontFamily,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 24,
-                                        height: 1.5,
-                                      ),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        return showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AnalyticPieChartSreen(
-                                                currentList: _transactionList,
-                                                categoryList:
-                                                    _expenseCategoryList,
-                                                total: expense,
-                                                content: 'Expense',
-                                                color: Colors.red,
-                                                currentWallet:
-                                                    widget.currentWallet,
-                                              );
-                                            });
-                                      },
-                                      child: Container(
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 25),
-                                        width: 90,
-                                        height: 90,
-                                        child: PieChartScreen(
-                                            isShowPercent: false,
-                                            currentList: _transactionList,
-                                            categoryList: _expenseCategoryList,
-                                            total: expense),
-                                      ),
-                                    ),
-                                  ]);
-                                },
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
