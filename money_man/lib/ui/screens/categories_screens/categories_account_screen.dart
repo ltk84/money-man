@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesScreen extends StatefulWidget {
@@ -32,9 +33,6 @@ class _CategoriesScreenState extends State<CategoriesScreen>
 
   // Tab controller cho tab bar
   TabController _tabController;
-
-  // Text title = Text('My Account', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
-  // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
@@ -77,8 +75,8 @@ class _CategoriesScreenState extends State<CategoriesScreen>
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: Colors.black,
-        //extendBodyBehindAppBar: true,
+        backgroundColor: backgroundColor,
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
           leading: MaterialButton(
@@ -89,12 +87,11 @@ class _CategoriesScreenState extends State<CategoriesScreen>
               tag: 'alo',
               child: Row(
                 children: [
-                  Icon(Icons.arrow_back_ios, color: Colors.white),
-                  Text('More', style: Theme.of(context).textTheme.headline6),
-                  // Hero(
-                  //     tag: 'alo',
-                  //     child: Text('More',
-                  //         style: Theme.of(context).textTheme.headline6)),
+                  Icon(Icons.arrow_back_ios, color: foregroundColor),
+                  Text('More', style: TextStyle(
+                      color: foregroundColor,
+                      fontFamily: fontFamily,
+                      fontSize: 17.0)),
                 ],
               ),
             ),
@@ -116,12 +113,9 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  //child: Container(
-                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
-                  //),
                 ),
               ),
             ),
@@ -133,13 +127,18 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                   ''
                   'Categories',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montserrat',
+                      color: foregroundColor,
+                      fontFamily: fontFamily,
                       fontSize: 17.0))),
           bottom: TabBar(
-            unselectedLabelColor: Colors.grey[500],
-            labelColor: Colors.white,
-            indicatorColor: Colors.yellow[700],
+            labelStyle: TextStyle(
+              fontFamily: fontFamily,
+              fontWeight: FontWeight.w700,
+              fontSize: 13.0,
+            ),
+            unselectedLabelColor: foregroundColor.withOpacity(0.54),
+            labelColor: foregroundColor,
+            indicatorColor: primaryColor,
             physics: NeverScrollableScrollPhysics(),
             isScrollable: true,
             indicatorWeight: 3.0,
@@ -161,7 +160,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                               .toLowerCase())
                       .toList();
                   return ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       controller: _controller,
                       itemCount: _selectCateTab.length,
                       itemBuilder: (context, index) {
@@ -170,7 +169,10 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                               iconPath: _selectCateTab[index].iconID,
                               size: 35.0),
                           title: Text(_selectCateTab[index].name,
-                              style: Theme.of(context).textTheme.subtitle1),
+                              style: TextStyle(
+                                  color: foregroundColor,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: fontFamily)),
                           onTap: () {
                             // _firestore.addCate();
                           },

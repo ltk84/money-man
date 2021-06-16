@@ -5,6 +5,8 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
 import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_time.dart';
+import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 
 class BarChartInformation extends StatefulWidget {
   final List<MyTransaction> currentList;
@@ -23,33 +25,6 @@ class BarChartInformation extends StatefulWidget {
 }
 
 class _BarChartInformation extends State<BarChartInformation> {
-  final double fontSizeText = 30;
-  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
-  int reachTop = 0;
-  int reachAppBar = 0;
-
-  // Phần này để check xem mình đã Scroll tới đâu trong ListView
-  ScrollController _controller = ScrollController();
-  _scrollListener() {
-    if (_controller.offset > 0) {
-      setState(() {
-        reachAppBar = 1;
-      });
-    } else {
-      setState(() {
-        reachAppBar = 0;
-      });
-    }
-    if (_controller.offset >= fontSizeText - 5) {
-      setState(() {
-        reachTop = 1;
-      });
-    } else {
-      setState(() {
-        reachTop = 0;
-      });
-    }
-  }
 
   List<MyTransaction> _transactionList = [];
   DateTime _beginDate;
@@ -59,7 +34,7 @@ class _BarChartInformation extends State<BarChartInformation> {
   List<String> timeRangeList = [];
   List<DateTime> fisrtDayList = [];
   List<DateTime> secondDayList = [];
-  double heigt;
+  double height;
   @override
   void initState() {
     super.initState();
@@ -67,9 +42,7 @@ class _BarChartInformation extends State<BarChartInformation> {
     _beginDate = widget.beginDate;
     _endDate = widget.endDate;
     generateData(_beginDate, _endDate, timeRangeList, _transactionList);
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
-    heigt = timeRangeList.length.toDouble()*70;
+    height = timeRangeList.length.toDouble() * 70;
   }
 
   @override
@@ -78,26 +51,29 @@ class _BarChartInformation extends State<BarChartInformation> {
     _beginDate = widget.beginDate;
     _endDate = widget.endDate;
     generateData(_beginDate, _endDate, timeRangeList, _transactionList);
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
-    heigt = timeRangeList.length.toDouble()*100;
+    height = timeRangeList.length.toDouble() * 100;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 450,
-      height: heigt,
       decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-        color: Colors.black,
-        width: 1.0,
-      ))),
-      padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
+        color: boxBackgroundColor2,
+        border: Border(
+          top: BorderSide(
+            color: foregroundColor.withOpacity(0.12),
+            width: 0.2,
+          ),
+          bottom: BorderSide(
+            color: foregroundColor.withOpacity(0.12),
+            width: 0.2,
+          )
+        )
+      ),
+      padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
       child: ListView.builder(
+        shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        controller: _controller,
         itemCount: timeRangeList.length,
         itemBuilder: (context, index) {
           return GestureDetector(
@@ -106,7 +82,6 @@ class _BarChartInformation extends State<BarChartInformation> {
                   context,
                   MaterialPageRoute(
                       builder: (_) => ReportListTransaction(
-                            currentList: _transactionList,
                             beginDate: fisrtDayList[index],
                             endDate: secondDayList[index],
                             totalMoney: calculationList[index].first -
@@ -115,55 +90,91 @@ class _BarChartInformation extends State<BarChartInformation> {
                           )));
             },
             child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(timeRangeList[index],
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold)),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                            (calculationList[index].first == 0)
-                                ? "0.0"
-                                : "+" + calculationList[index].first.toString(),
-                            style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                        Text(
-                            (calculationList[index].last == 0)
-                                ? "0.0"
-                                : "-" + calculationList[index].last.toString(),
-                            style: TextStyle(
-                                color: Colors.red[600],
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                        Text(
-                            (calculationList[index].first -
-                                        calculationList[index].last) >=
-                                    0
-                                ? "+" +
-                                    (calculationList[index].first -
-                                            calculationList[index].last)
-                                        .toString()
-                                : (calculationList[index].first -
-                                        calculationList[index].last)
-                                    .toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                      ],
-                    )
-                  ],
-                ),
+              children: [
+                if (index != 0)
+                  Divider(
+                    color: foregroundColor.withOpacity(0.12),
+                    thickness: 0.5,
+                  ),
                 Container(
-                  height: 25,
-                )
+                  color: Colors.transparent, // Khắc phục lỗi không ấn được ở giữa Row khi dùng space between và gesture detector.
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Flexible( // Làm cho text chống tràn khi bị quá dài gây ra lỗi render flex.
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(timeRangeList[index],
+                                style: TextStyle(
+                                    fontFamily: fontFamily,
+                                    color: foregroundColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
+                            SizedBox(height: 5),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 15.0),
+                              child: Text(
+                                    'Tap to view transaction list for this period.',
+                                    style: TextStyle(
+                                        fontFamily: fontFamily,
+                                        color: foregroundColor.withOpacity(0.24),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          MoneySymbolFormatter(
+                            text: (calculationList[index].first == 0)
+                                ? 0.0
+                                : calculationList[index].first,
+                            digit: (calculationList[index].first == 0) ? '' : '+',
+                            currencyId: widget.currentWallet.currencyID,
+                            textStyle: TextStyle(
+                                //fontFamily: fontFamily,
+                                color: Colors.blueAccent,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(height: 8),
+                          MoneySymbolFormatter(
+                            text: (calculationList[index].last == 0)
+                                ? 0.0
+                                : calculationList[index].last,
+                            digit: (calculationList[index].last == 0) ? '' : '-',
+                            currencyId: widget.currentWallet.currencyID,
+                            textStyle: TextStyle(
+                                //fontFamily: fontFamily,
+                                color: expenseColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(height: 8),
+                          MoneySymbolFormatter(
+                              digit: (calculationList[index].first -
+                                  calculationList[index].last) >=
+                                  0
+                                  ? '+'
+                                  : '',
+                              text: (calculationList[index].first -
+                                  calculationList[index].last),
+                              currencyId: widget.currentWallet.currencyID,
+                              textStyle: TextStyle(
+                                  //fontFamily: fontFamily,
+                                  color: foregroundColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500))
+                        ],
+                      )
+                    ],
+                  ),
+                ),
               ],
             ),
           );
@@ -177,28 +188,22 @@ class _BarChartInformation extends State<BarChartInformation> {
     timeRangeList.clear();
     calculationList.clear();
     DateTimeRange value = DateTimeRange(start: beginDate, end: endDate);
-    if (value.duration >= Duration(days: 6)) {
-      var x = (value.duration.inDays / 6).round();
-      var firstDate = beginDate.subtract(Duration(days: 1));
-      for (int i = 0; i < 6; i++) {
-        firstDate = firstDate.add(Duration(days: 1));
-        var secondDate = (i != 5) ? firstDate.add(Duration(days: x)) : endDate;
-        var calculation =
-            calculateByTimeRange(firstDate, secondDate, transactionList);
-        if (calculation.first != 0 || calculation.last != 0) {
-          calculationList.add(calculation);
-          timeRangeList.add(firstDate.day.toString() +
-              "/" +
-              firstDate.month.toString() +
-              "-" +
-              secondDate.day.toString() +
-              "/" +
-              secondDate.month.toString());
-          fisrtDayList.add(firstDate);
-          secondDayList.add(secondDate);
-        }
-        firstDate = firstDate.add(Duration(days: x));
+    int dayRange = (value.duration >= Duration(days: 6)) ? 6
+        : (value.duration.inDays == 0) ? 1 : value.duration.inDays;
+    var x = (value.duration.inDays / dayRange).round();
+    var firstDate = beginDate.subtract(Duration(days: 1));
+    for (int i = 0; i < dayRange; i++) {
+      firstDate = firstDate.add(Duration(days: 1));
+      var secondDate = (i != dayRange - 1) ? firstDate.add(Duration(days: x)) : endDate;
+      var calculation =
+          calculateByTimeRange(firstDate, secondDate, transactionList);
+      if (calculation.first != 0 || calculation.last != 0) {
+        calculationList.add(calculation);
+        timeRangeList.add(firstDate.day.toString() + "-" + secondDate.day.toString());
+        fisrtDayList.add(firstDate);
+        secondDayList.add(secondDate);
       }
+      firstDate = firstDate.add(Duration(days: x));
     }
   }
 

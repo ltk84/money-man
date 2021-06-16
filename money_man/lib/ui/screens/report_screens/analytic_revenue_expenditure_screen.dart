@@ -12,6 +12,8 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.d
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 
@@ -41,7 +43,7 @@ class _AnalyticRevenueAndExpenditureScreen
   Uint8List bytes2;
   Uint8List bytes3;
 
-  final double fontSizeText = 30;
+  final double fontSizeText = 29.7;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
@@ -113,10 +115,43 @@ class _AnalyticRevenueAndExpenditureScreen
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Colors.black,
-        appBar: new AppBar(
-          backgroundColor: Colors.black,
-          centerTitle: true,
-          elevation: 0,
+        appBar: AppBar(
+            leading: BackButton(),
+            centerTitle: true,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            flexibleSpace: ClipRect(
+              child: AnimatedOpacity(
+                opacity: reachAppBar == 1 ? 1 : 0,
+                duration: Duration(milliseconds: 0),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                      sigmaX: reachTop == 1 ? 25 : 500,
+                      sigmaY: 25,
+                      tileMode: TileMode.values[0]),
+                  child: AnimatedContainer(
+                    duration: Duration(
+                        milliseconds:
+                        reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                    color: Colors.grey[reachAppBar == 1
+                        ? (reachTop == 1 ? 800 : 850)
+                        : 900]
+                        .withOpacity(0.2),
+                  ),
+                ),
+              ),
+            ),
+            title: AnimatedOpacity(
+                opacity: reachTop == 1 ? 1 : 0,
+                duration: Duration(milliseconds: 100),
+                child: Text('Net Income',
+                    style: TextStyle(
+                      color: foregroundColor,
+                      fontFamily: fontFamily,
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w600,
+                    ))
+            )
         ),
         body: StreamBuilder<Object>(
             stream: _firestore.transactionStream(_wallet, 'full'),
@@ -161,70 +196,57 @@ class _AnalyticRevenueAndExpenditureScreen
                       element.date.compareTo(endDate) <= 0)
                   .toList();
               return Container(
-                color: Colors.black,
+                color: backgroundColor,
                 child: ListView(
                   controller: _controller,
-                  physics: BouncingScrollPhysics(),
+                  physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-                      decoration: BoxDecoration(
-                          color: Colors.black,
-                          border: Border(
-                              bottom: BorderSide(
-                                color: Colors.grey[900],
-                                width: 1.0,
-                              ),
-                              top: BorderSide(
-                                color: Colors.grey[900],
-                                width: 1.0,
-                              ))),
-                      child: WidgetToImage(
-                        builder: (key) {
-                          this.key1 = key;
-
-                          return Column(children: <Widget>[
-                            Column(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                        color: backgroundColor,
+                      child: Hero(
+                        tag: 'netIncomeChart',
+                        child: Column(
                               children: <Widget>[
                                 Text('Net Income',
                                     style: TextStyle(
-                                      color: Colors.grey[500],
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 30,
-                                    )),
-                                Text(
-                                    (closingBalance - openingBalance)
-                                        .toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
+                                      color: foregroundColor.withOpacity(0.7),
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 22,
+                                      fontSize: 16,
+                                    )
+                                ),
+                                MoneySymbolFormatter(
+                                    text: closingBalance - openingBalance,
+                                    currencyId: _wallet.currencyID,
+                                    textStyle: TextStyle(
+                                      color: (closingBalance - openingBalance) > 0 ? incomeColor
+                                          : (closingBalance - openingBalance) == 0 ? foregroundColor : expenseColor,
+                                      fontFamily: fontFamily,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 26,
+                                      height: 1.5,
                                     )),
+                                Container(
+                                  width: 450,
+                                  height: 200,
+                                  child: BarChartScreen(
+                                      currentList: _transactionList,
+                                      beginDate: beginDate,
+                                      endDate: endDate),
+                                ),
                               ],
                             ),
-                            Container(
-                              width: 450,
-                              height: 200,
-                              child: BarChartScreen(
-                                  currentList: _transactionList,
-                                  beginDate: beginDate,
-                                  endDate: endDate),
-                            ),
-                            Container(
-                              child: BarChartInformation(
-                                currentList: _transactionList,
-                                beginDate: beginDate,
-                                endDate: endDate,
-                                currentWallet: widget.currentWallet,
-
-                              ),
-                            )
-                          ]);
-                        },
-                      ),
+                      )
                     ),
+                    Container(
+                      child: BarChartInformation(
+                        currentList: _transactionList,
+                        beginDate: beginDate,
+                        endDate: endDate,
+                        currentWallet: widget.currentWallet,
+                      ),
+                    )
                   ],
                 ),
               );

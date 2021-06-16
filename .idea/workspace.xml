@@ -122,6 +122,15 @@
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
 <<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/money_man/lib/core/models/bill_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/core/models/bill_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bill_general_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bill_general_detail_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bills_main_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/bills_main_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/repeat_option_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/repeat_option_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/transaction_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/planning_screens/bills_screens/transaction_list.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/money_man/lib/ui/style.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/style.dart" afterDir="false" />
+=======
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/money_man/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/android/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/lib/core/models/recurring_transaction_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/core/models/recurring_transaction_model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/lib/core/models/repeat_option_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/core/models/repeat_option_model.dart" afterDir="false" />
@@ -148,6 +157,7 @@
       <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/pie_chart_information_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/pie_chart_information_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/report_list_transaction_in_time.dart" beforeDir="false" afterPath="$PROJECT_DIR$/money_man/lib/ui/screens/report_screens/report_list_transaction_in_time.dart" afterDir="false" />
 >>>>>>> phuc/sprint2
+>>>>>>> integration
     </list>
 =======
     <list default="true" id="be6b8376-195a-43da-8d6b-b30657235f01" name="Default Changelist" comment="" />
@@ -199,14 +209,14 @@
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man\assets" />
-      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Files\UIT_HKII_Nam2\LapTrinhDiDong\Money Man Project\money-man\money_man\lib\ui\screens\categories_screens" />
       <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man\assets" />
       <recent name="D:\Personal\Flutter_Project\MoneyMan\assets" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man\assets" />
+      <recent name="D:\Personal\Flutter_Project\MoneyMan\money_man" />
     </key>
   </component>
   <component name="RunManager">
@@ -277,7 +287,11 @@
     </state>
     <state x="371" y="107" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1280.720@0.0.1280.720" timestamp="1620975808503" />
 <<<<<<< HEAD
+    <state x="121" y="138" width="983" height="610" key="AVDManager" timestamp="1623463395697">
+=======
+<<<<<<< HEAD
     <state x="121" y="138" width="983" height="610" key="AVDManager" timestamp="1623512610472">
+>>>>>>> integration
       <screen x="0" y="0" width="1536" height="824" />
 =======
     <state x="101" y="121" width="819" height="533" key="AVDManager" timestamp="1623398116393">
@@ -287,7 +301,11 @@
     <state x="101" y="121" width="819" height="533" key="AVDManager/0.0.1280.720@0.0.1280.720" timestamp="1623398116393" />
     <state x="176" y="91" width="874" height="568" key="AVDManager/0.0.1366.768@0.0.1366.768" timestamp="1616587589007" />
 <<<<<<< HEAD
+    <state x="121" y="138" width="983" height="610" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1623463395697" />
+=======
+<<<<<<< HEAD
     <state x="121" y="138" width="983" height="610" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1623512610472" />
+>>>>>>> integration
     <state x="356" y="130" key="AndroidProcessChooserDialog" timestamp="1616489546448">
       <screen x="0" y="0" width="1366" height="768" />
 =======
@@ -310,7 +328,11 @@
 <<<<<<< HEAD
     <state x="356" y="151" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1618643935553" />
 <<<<<<< HEAD
+    <state width="1493" height="161" key="GridCell.Tab.0.bottom" timestamp="1623503370297">
+=======
+<<<<<<< HEAD
     <state width="1493" height="161" key="GridCell.Tab.0.bottom" timestamp="1623512809678">
+>>>>>>> integration
       <screen x="0" y="0" width="1536" height="824" />
 =======
     <state x="356" y="151" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1622976469619" />
@@ -324,8 +346,13 @@
     <state width="966" height="115" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1623520331150" />
     <state width="1014" height="189" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
 <<<<<<< HEAD
+    <state width="1493" height="161" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1623503370297" />
+    <state width="1493" height="161" key="GridCell.Tab.0.center" timestamp="1623503370297">
+=======
+<<<<<<< HEAD
     <state width="1493" height="161" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1623512809678" />
     <state width="1493" height="161" key="GridCell.Tab.0.center" timestamp="1623512809678">
+>>>>>>> integration
       <screen x="0" y="0" width="1536" height="824" />
 =======
     <state width="966" height="115" key="GridCell.Tab.0.center" timestamp="1623520331149">
@@ -335,8 +362,13 @@
     <state width="966" height="115" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1623520331149" />
     <state width="1014" height="189" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
 <<<<<<< HEAD
+    <state width="1493" height="161" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1623503370297" />
+    <state width="1493" height="161" key="GridCell.Tab.0.left" timestamp="1623503370297">
+=======
+<<<<<<< HEAD
     <state width="1493" height="161" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1623512809678" />
     <state width="1493" height="161" key="GridCell.Tab.0.left" timestamp="1623512809678">
+>>>>>>> integration
       <screen x="0" y="0" width="1536" height="824" />
 =======
     <state width="966" height="115" key="GridCell.Tab.0.left" timestamp="1623520331149">
@@ -346,8 +378,13 @@
     <state width="966" height="115" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1623520331149" />
     <state width="1014" height="189" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1618980309777" />
 <<<<<<< HEAD
+    <state width="1493" height="161" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1623503370297" />
+    <state width="1493" height="161" key="GridCell.Tab.0.right" timestamp="1623503370297">
+=======
+<<<<<<< HEAD
     <state width="1493" height="161" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1623512809678" />
     <state width="1493" height="161" key="GridCell.Tab.0.right" timestamp="1623512809678">
+>>>>>>> integration
       <screen x="0" y="0" width="1536" height="824" />
 =======
     <state width="966" height="115" key="GridCell.Tab.0.right" timestamp="1623520331149">
@@ -356,7 +393,11 @@
     </state>
     <state width="966" height="115" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1623520331149" />
     <state width="1014" height="189" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1618980309778" />
+<<<<<<< HEAD
+    <state width="1493" height="161" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1623503370297" />
+=======
     <state width="1493" height="161" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1623512809678" />
+>>>>>>> integration
     <state x="36" y="0" key="SettingsEditor" timestamp="1621069438056">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
@@ -374,13 +415,23 @@
     <state x="221" y="44" key="new project wizard" timestamp="1622922404494">
       <screen x="0" y="0" width="1280" height="720" />
     </state>
+<<<<<<< HEAD
+    <state x="221" y="44" key="new project wizard/0.0.1280.720@0.0.1280.720" timestamp="1621872911292" />
+    <state x="217" y="187" key="run.anything.popup" timestamp="1623509254057">
+      <screen x="0" y="0" width="1536" height="824" />
+=======
     <state x="221" y="44" key="new project wizard/0.0.1280.720@0.0.1280.720" timestamp="1622922404494" />
     <state x="181" y="163" key="run.anything.popup" timestamp="1623406004377">
       <screen x="0" y="0" width="1280" height="720" />
+>>>>>>> integration
     </state>
     <state x="181" y="163" key="run.anything.popup/0.0.1280.720@0.0.1280.720" timestamp="1623406004377" />
     <state x="193" y="174" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1616501338867" />
 <<<<<<< HEAD
+    <state x="217" y="187" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1623509254057" />
+=======
+<<<<<<< HEAD
+>>>>>>> integration
     <state x="358" y="16" width="807" height="774" key="search.everywhere.popup" timestamp="1623419073621">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

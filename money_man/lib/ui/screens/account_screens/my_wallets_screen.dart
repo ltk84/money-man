@@ -7,6 +7,8 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/edit_wallet_screen.dart';
+import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class MyWalletScreen extends StatefulWidget {
@@ -20,12 +22,6 @@ class _MyWalletScreenState extends State<MyWalletScreen>
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
-
-  // Tab controller cho tab bar
-  TabController _tabController;
-
-  // Text title = Text('My Account', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
-  // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
@@ -64,8 +60,8 @@ class _MyWalletScreenState extends State<MyWalletScreen>
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: Colors.black,
-        //extendBodyBehindAppBar: true,
+        backgroundColor: backgroundColor,
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
           leading: MaterialButton(
@@ -76,12 +72,12 @@ class _MyWalletScreenState extends State<MyWalletScreen>
               tag: 'alo',
               child: Row(
                 children: [
-                  Icon(Icons.arrow_back_ios, color: Colors.white),
-                  Text('More', style: Theme.of(context).textTheme.headline6),
-                  // Hero(
-                  //     tag: 'alo',
-                  //     child: Text('More',
-                  //         style: Theme.of(context).textTheme.headline6)),
+                  Icon(Icons.arrow_back_ios, color: foregroundColor),
+                  Text('More', style: TextStyle(
+                      color: foregroundColor,
+                      fontFamily: fontFamily,
+                      fontSize: 17.0
+                  )),
                 ],
               ),
             ),
@@ -103,8 +99,6 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  //child: Container(
-                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
@@ -120,25 +114,29 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                   ''
                   'My Wallets',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montserrat',
+                      color: foregroundColor,
+                      fontFamily: fontFamily,
                       fontSize: 17.0))),
           actions: [
             TextButton(
               onPressed: () async {
                 await showCupertinoModalBottomSheet(
-                  backgroundColor: Colors.grey[900],
+                  backgroundColor: boxBackgroundColor,
                   context: context,
                   builder: (context) => AddWalletScreen(),
                 );
                 setState(() {});
               },
-              child: Text('Add', style: Theme.of(context).textTheme.headline6),
+              child: Text('Add', style: TextStyle(
+                  color: foregroundColor,
+                  fontFamily: fontFamily,
+                  fontSize: 17.0
+              )),
             ),
           ],
         ),
         body: Container(
-          color: Colors.black26,
+          color: backgroundColor,
           child: StreamBuilder<List<Wallet>>(
               stream: _firestore.walletStream,
               builder: (context, snapshot) {
@@ -147,7 +145,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                 print('stream ' + listWallet.length.toString());
                 return ListView.builder(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(),
+                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     itemCount: listWallet.length,
                     itemBuilder: (context, index) {
                       String iconData = listWallet[index].iconID;
@@ -160,13 +158,21 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                   //padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
                                   child: reachTop == 0
                                       ? Text('My Wallets',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline4)
+                                          style: TextStyle(
+                                              fontSize: 30,
+                                              color: foregroundColor,
+                                              fontFamily: fontFamily,
+                                              fontWeight: FontWeight.bold
+                                          )
+                                  )
                                       : Text('',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline4),
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          color: foregroundColor,
+                                          fontFamily: fontFamily,
+                                          fontWeight: FontWeight.bold
+                                      )
+                                  ),
                                 )
                               : Container(),
                           index == 0
@@ -175,9 +181,9 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                   child: Text(
                                     'Included in Total',
                                     style: TextStyle(
-                                        color: Colors.white70,
+                                        color: foregroundColor.withOpacity(0.7),
                                         fontSize: 18,
-                                        fontFamily: 'Montserrat',
+                                        fontFamily: fontFamily,
                                         fontWeight: FontWeight.w400),
                                   ),
                                 )
@@ -185,21 +191,21 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                           Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                                color: Colors.grey[900],
+                                color: boxBackgroundColor,
                                 border: Border(
                                     top: BorderSide(
-                                      color: Colors.white12,
+                                      color: foregroundColor.withOpacity(0.12),
                                       width: 0.5,
                                     ),
                                     bottom: BorderSide(
-                                      color: Colors.white12,
+                                      color: foregroundColor.withOpacity(0.12),
                                       width: 0.5,
                                     ))),
                             child: ListTile(
                               contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 0),
                               onTap: () async {
                                 await showCupertinoModalBottomSheet(
-                                  backgroundColor: Colors.grey[900],
+                                  backgroundColor: boxBackgroundColor,
                                   context: context,
                                   builder: (context) => EditWalletScreen(
                                       wallet: listWallet[index]),
@@ -211,17 +217,23 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                               title: Text(
                                 listWallet[index].name,
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Montserrat',
+                                  color: foregroundColor,
+                                  fontFamily: fontFamily,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              subtitle: Text(
-                                listWallet[index].amount.toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Montserrat',
+                              // subtitle: Text(
+                              //   listWallet[index].amount.toString(),
+                              //   style: TextStyle(
+                              //     color: foregroundColor,
+                              //     fontFamily: fontFamily,
+                              subtitle: MoneySymbolFormatter(
+                                text: listWallet[index].amount,
+                                currencyId: listWallet[index].currencyID,
+                                textStyle: TextStyle(
+                                  color: foregroundColor,
+                                  fontFamily: fontFamily,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w400,
                                 ),

@@ -16,6 +16,7 @@ import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 
@@ -179,25 +180,25 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    hintStyle: TextStyle(
-                      color: amount == null ? Colors.grey[600] : Colors.white,
-                      fontSize: amount == null ? 22 : 30.0,
-                      fontFamily: 'Montserrat',
-                      fontWeight:
-                          amount == null ? FontWeight.w500 : FontWeight.w600,
-                    ),
-                    hintText: amount == null
-                        ? 'Enter amount'
-                        : currencySymbol +
-                            ' ' +
-                            MoneyFormatter(amount: amount)
-                                .output
-                                .withoutFractionDigits),
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: amount == null ? Colors.grey[600] : Colors.white,
+                    fontSize: amount == null ? 22 : 30.0,
+                    fontFamily: 'Montserrat',
+                    fontWeight:
+                        amount == null ? FontWeight.w500 : FontWeight.w600,
+                  ),
+                  hintText: amount == null
+                      ? 'Enter amount'
+                      : MoneySymbolFormatter(
+                              text: amount,
+                              currencyId: selectedWallet.currencyID)
+                          .formatText,
+                ),
               ),
             ),
             Container(
