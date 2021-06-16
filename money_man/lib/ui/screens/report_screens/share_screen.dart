@@ -86,7 +86,7 @@ class ShareScreenState extends State<ShareScreen> {
                   options: CarouselOptions(
                     scrollPhysics: BouncingScrollPhysics(),
                     autoPlay: false,
-                    aspectRatio: 2.0,
+                    aspectRatio: 1,
                     enlargeCenterPage: true,
                     enableInfiniteScroll: false,
                     onPageChanged: (index, reason) {
@@ -182,7 +182,10 @@ class ShareScreenState extends State<ShareScreen> {
                                 ? reportData2
                                 : reportData3),
                         quality: 100,
-                        name: 'Report_' + (_currentIndex + 1).toString());
+                        name: 'Report_'
+                            + (_currentIndex + 1).toString()
+                            + '_'
+                            + DateTime.now().difference(DateTime(2021)).inSeconds.toString());
                     if (result['isSuccess']) {
                       showDialog<void>(
                         context: context,
