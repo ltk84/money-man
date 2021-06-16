@@ -223,7 +223,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                               return '0';
                             } else if (value == 10) {
                               return (_maximumAmount / 2).round().toString();
-                            } else if (value == 19) {
+                            } else if (value == 20) {
                               return _maximumAmount.round().toString();
                             } else {
                               return '';

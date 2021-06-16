@@ -96,9 +96,9 @@ class ShareScreenState extends State<ShareScreen> {
                     },
                   ),
                   items: [
-                    reportData1 != null ? ImageFromUnit8List(reportData1) : null,
-                    reportData2 != null ? ImageFromUnit8List(reportData2) : null,
-                    reportData3 != null ? ImageFromUnit8List(reportData3) : null,
+                    if (reportData1 != null) ImageFromUnit8List(reportData1),
+                    if (reportData2 != null) ImageFromUnit8List(reportData2),
+                    if (reportData3 != null) ImageFromUnit8List(reportData3),
                   ],
                 ),
               ),
