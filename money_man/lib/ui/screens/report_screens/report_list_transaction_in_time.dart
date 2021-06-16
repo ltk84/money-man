@@ -191,7 +191,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                 totalExpense += e.amount;
             });
           });
-          _totalMoney = totalIncome + totalExpense;
+          _totalMoney = totalIncome - totalExpense;
 
           return StickyHeader(
             header: SizedBox(height: 0),
