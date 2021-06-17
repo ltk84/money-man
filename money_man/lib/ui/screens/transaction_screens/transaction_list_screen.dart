@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -14,10 +15,9 @@ import 'package:intl/intl.dart';
 class TransactionListScreen extends StatefulWidget {
   final Wallet wallet;
   final String transactionId;
-  final String muserSearch;
 
   const TransactionListScreen(
-      {Key key, @required this.wallet, this.muserSearch, this.transactionId})
+      {Key key, @required this.wallet, this.transactionId})
       : super(key: key);
   @override
   _TransactionListScreenState createState() => _TransactionListScreenState();
@@ -38,10 +38,10 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
   @override
   void initState() {
     super.initState();
-    setUp();
+    transactionListSortByDate = setUp();
   }
 
-  void setUp() async {
+  setUp() async {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     // Lấy danh sách transaction dựa trên searchPattern
@@ -66,12 +66,14 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
     total = totalInCome - totalOutCome;
 
     // Tạo thành list trans filter theo thời gian
-    transactionListSortByDate.clear();
+    List<List<MyTransaction>> transactionListSortByDate = [];
     listDateOfTrans.forEach((date) {
       final b = _transactionList
           .where((element) => element.date.compareTo(date) == 0);
       transactionListSortByDate.add(b.toList());
     });
+
+    return transactionListSortByDate;
   }
 
   @override
@@ -83,12 +85,6 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
         backgroundColor: Colors.grey[900],
         leading: CloseButton(),
         title: Text('Transaction list'),
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        //     child: Icon(Icons.settings),
-        //   )
-        // ],
       ),
       body: Column(
         children: [
@@ -188,7 +184,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
             itemCount: transListSortByDate[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Navigator.push(
                       context,
                       PageTransition(
