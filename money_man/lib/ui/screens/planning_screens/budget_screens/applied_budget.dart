@@ -18,6 +18,7 @@ class Applied extends StatelessWidget {
       child: StreamBuilder<List<Budget>>(
           stream: _firestore.budgetStream(wallet.id),
           builder: (context, snapshot) {
+            print('day la ham print goi tu current budget');
             List<Budget> budgets = snapshot.data ?? [];
             budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
             for (int i = 0; i < budgets.length; i++) {
