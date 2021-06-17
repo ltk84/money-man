@@ -19,10 +19,14 @@ import 'package:provider/provider.dart';
 class TransactionDetail extends StatefulWidget {
   final MyTransaction transaction;
   final Wallet wallet;
+  final Event event;
 
-  TransactionDetail(
-      {Key key, @required this.transaction, @required this.wallet})
-      : super(key: key);
+  TransactionDetail({
+    Key key,
+    @required this.transaction,
+    @required this.wallet,
+    @required this.event,
+  }) : super(key: key);
 
   @override
   _TransactionDetailState createState() => _TransactionDetailState();
@@ -37,27 +41,21 @@ class _TransactionDetailState extends State<TransactionDetail> {
   void initState() {
     super.initState();
     _transaction = widget.transaction;
-    getEvent(_transaction.eventID, widget.wallet);
+    event = widget.event;
     isDebtOrLoan = _transaction.category.name == 'Debt' ||
         _transaction.category.name == 'Loan';
   }
 
-  Future<void> getEvent(String id, Wallet wallet) async {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    if (_transaction.eventID != "") {
-      final _event = await _firestore.getEventByID(id, wallet);
-      if (this.mounted) {
-        setState(() {
-          event = _event;
-        });
-      }
-    }
-  }
+  // Future<Event> getEvent(String id, Wallet wallet) async {
+  //   final _firestore = Provider.of<FirebaseFireStoreService>(context);
+
+  //   event = await _firestore.getEventByID(id, wallet);
+  // }
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    getEvent(_transaction.eventID, widget.wallet);
+    // getEvent(_transaction.eventID, widget.wallet);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -267,12 +265,14 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       Expanded(
                           flex: 1,
                           child: SuperIcon(
-                            iconPath: event.iconPath,
+                            iconPath: event != null
+                                ? event.iconPath
+                                : 'assets/images/email.svg',
                             size: 25.0,
                           )),
                       Expanded(
                           flex: 3,
-                          child: Text('Event: ' + event.name,
+                          child: Text(event != null ? event.name : 'Event',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: ' Montserrat',

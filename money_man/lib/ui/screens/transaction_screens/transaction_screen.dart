@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -1184,11 +1185,18 @@ class _TransactionScreen extends State<TransactionScreen>
             itemCount: transListSortByCategory[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  final _firestore = Provider.of<FirebaseFireStoreService>(
+                      context,
+                      listen: false);
+                  Event event = await _firestore.getEventByID(
+                      transListSortByCategory[xIndex][yIndex].eventID,
+                      widget.currentWallet);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (_) => TransactionDetail(
+                                event: event,
                                 transaction: transListSortByCategory[xIndex]
                                     [yIndex],
                                 wallet: widget.currentWallet,
@@ -1349,11 +1357,18 @@ class _TransactionScreen extends State<TransactionScreen>
                   transListSortByDate[xIndex][yIndex].extraAmountInfo;
 
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  final _firestore = Provider.of<FirebaseFireStoreService>(
+                      context,
+                      listen: false);
+                  Event event = await _firestore.getEventByID(
+                      transListSortByDate[xIndex][yIndex].eventID,
+                      widget.currentWallet);
                   Navigator.push(
                       context,
                       PageTransition(
                           child: TransactionDetail(
+                            event: event,
                             transaction: transListSortByDate[xIndex][yIndex],
                             wallet: widget.currentWallet,
                           ),
