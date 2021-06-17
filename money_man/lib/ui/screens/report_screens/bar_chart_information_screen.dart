@@ -57,7 +57,21 @@ class _BarChartInformation extends State<BarChartInformation> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return _transactionList.length == 0
+    ? Container(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        alignment: Alignment.center,
+        child: Text(
+          'No transaction',
+          style: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 15.0,
+            fontWeight: FontWeight.w500,
+            color: foregroundColor.withOpacity(0.24),
+          ),
+        )
+    )
+    : Container(
       decoration: BoxDecoration(
         color: boxBackgroundColor2,
         border: Border(
