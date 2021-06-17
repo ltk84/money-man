@@ -1186,17 +1186,10 @@ class _TransactionScreen extends State<TransactionScreen>
             itemBuilder: (context, yIndex) {
               return GestureDetector(
                 onTap: () async {
-                  final _firestore = Provider.of<FirebaseFireStoreService>(
-                      context,
-                      listen: false);
-                  Event event = await _firestore.getEventByID(
-                      transListSortByCategory[xIndex][yIndex].eventID,
-                      widget.currentWallet);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (_) => TransactionDetail(
-                                event: event,
                                 transaction: transListSortByCategory[xIndex]
                                     [yIndex],
                                 wallet: widget.currentWallet,
@@ -1358,17 +1351,10 @@ class _TransactionScreen extends State<TransactionScreen>
 
               return GestureDetector(
                 onTap: () async {
-                  final _firestore = Provider.of<FirebaseFireStoreService>(
-                      context,
-                      listen: false);
-                  Event event = await _firestore.getEventByID(
-                      transListSortByDate[xIndex][yIndex].eventID,
-                      widget.currentWallet);
                   Navigator.push(
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            event: event,
                             transaction: transListSortByDate[xIndex][yIndex],
                             wallet: widget.currentWallet,
                           ),

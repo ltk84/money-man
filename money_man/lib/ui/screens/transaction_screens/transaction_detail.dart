@@ -19,13 +19,11 @@ import 'package:provider/provider.dart';
 class TransactionDetail extends StatefulWidget {
   final MyTransaction transaction;
   final Wallet wallet;
-  final Event event;
 
   TransactionDetail({
     Key key,
     @required this.transaction,
     @required this.wallet,
-    @required this.event,
   }) : super(key: key);
 
   @override
@@ -41,21 +39,29 @@ class _TransactionDetailState extends State<TransactionDetail> {
   void initState() {
     super.initState();
     _transaction = widget.transaction;
-    event = widget.event;
     isDebtOrLoan = _transaction.category.name == 'Debt' ||
         _transaction.category.name == 'Loan';
+    Future.delayed(Duration.zero, () async {
+      var res = await getEvent(_transaction.eventID, widget.wallet);
+      setState(() {
+        event = res;
+      });
+    });
   }
 
-  // Future<Event> getEvent(String id, Wallet wallet) async {
-  //   final _firestore = Provider.of<FirebaseFireStoreService>(context);
-
-  //   event = await _firestore.getEventByID(id, wallet);
-  // }
+  Future<Event> getEvent(String id, Wallet wallet) async {
+    if (id == '' || id == null) return null;
+    final _firestore =
+        Provider.of<FirebaseFireStoreService>(context, listen: false);
+    var _event = await _firestore.getEventByID(id, wallet);
+    return _event;
+  }
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     // getEvent(_transaction.eventID, widget.wallet);
+    print(event);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -272,7 +278,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           )),
                       Expanded(
                           flex: 3,
-                          child: Text(event != null ? event.name : 'Event',
+                          child: Text(event != null ? event.name : 'a',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: ' Montserrat',
