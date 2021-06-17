@@ -96,10 +96,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               wallet: widget.wallet,
                               event: event,
                             )));
-                if (updatedTrans != null)
+                if (updatedTrans != null) {
+                  var e = await getEvent(updatedTrans.eventID, widget.wallet);
                   setState(() {
                     _transaction = updatedTrans;
+                    event = e;
                   });
+                }
               }),
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white),
