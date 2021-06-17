@@ -287,7 +287,7 @@ class _AnalyticRevenueAndExpenditureScreen
                                   currentList: _transactionList,
                                   beginDate: beginDate,
                                   endDate: endDate,
-                                  currentWallet: widget.currentWallet,
+                                  currentWallet: _wallet,
                                 ),
                               )
                             ],

@@ -66,6 +66,7 @@ class PieChartScreenState extends State<PieChartScreen> {
 
   void generateData(
       List<MyCategory> categoryList, List<MyTransaction> transactionList) {
+    _info.clear();
     categoryList.forEach((element) {
       _info.add(calculateByCategory(element, transactionList));
     });
@@ -75,7 +76,7 @@ class PieChartScreenState extends State<PieChartScreen> {
       MyCategory category, List<MyTransaction> transactionList) {
     double sum = 0;
     transactionList.forEach((element) {
-      if (element.category == category) sum += element.amount;
+      if (element.category.name == category.name) sum += element.amount;
     });
     return sum;
   }

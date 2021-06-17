@@ -73,6 +73,8 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     }
   }
 
+  Wallet _wallet;
+
   @override
   void initState() {
     super.initState();
@@ -85,6 +87,14 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     expandDetail = false;
+    _wallet = widget.currentWallet == null
+        ? Wallet(
+        id: 'id',
+        name: 'defaultName',
+        amount: 0,
+        currencyID: 'USD',
+        iconID: 'a')
+        : widget.currentWallet;
   }
   //
   // @override
@@ -98,11 +108,18 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
   //   _controller.addListener(_scrollListener);
   //   super.didUpdateWidget(oldWidget);
   // }
+  @override
+  void didUpdateWidget(covariant AnalyticPieChartSreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-  // @override
-  // void setState(fn) {
-  //   super.setState(fn);
-  // }
+    _wallet = widget.currentWallet ??
+        Wallet(
+            id: 'id',
+            name: 'defaultName',
+            amount: 100,
+            currencyID: 'a',
+            iconID: 'b');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +197,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
           ],
         ),
         body: StreamBuilder<Object>(
-          stream: _firestore.transactionStream(widget.currentWallet, 'full'),
+          stream: _firestore.transactionStream(_wallet, 'full'),
           builder: (context, snapshot) {
             List<MyTransaction> _transactionList = snapshot.data ?? [];
             List<MyCategory> _categoryList = [];
@@ -235,7 +252,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                               ),
                               MoneySymbolFormatter(
                                 text: total,
-                                currencyId: widget.currentWallet.currencyID,
+                                currencyId: _wallet.currencyID,
                                 textStyle: TextStyle(
                                   color: _color,
                                   fontFamily: fontFamily,
@@ -306,7 +323,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                             child: PieChartInformationScreen(
                               currentList: _transactionList,
                               categoryList: _categoryList,
-                              currentWallet: widget.currentWallet,
+                              currentWallet: _wallet,
                               color: _color,
                             ),
                           )
