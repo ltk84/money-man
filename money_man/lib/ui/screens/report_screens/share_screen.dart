@@ -58,6 +58,8 @@ class ShareScreenState extends State<ShareScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String reportName = 'Report_' + DateTime.now().difference(DateTime(2021)).inSeconds.toString();
+
     return Scaffold(
       backgroundColor: boxBackgroundColor,
       appBar: AppBar(
@@ -127,7 +129,7 @@ class ShareScreenState extends State<ShareScreen> {
                   onPressed: () async {
                     final tempDir = await getTemporaryDirectory();
                     final file =
-                        await new File('${tempDir.path}/image.jpg').create();
+                        await new File('${tempDir.path}/$reportName.jpg').create();
                     var data = (_currentIndex == 0)
                         ? reportData1
                         : ((_currentIndex == 1) ? reportData2 : reportData3);
@@ -182,10 +184,7 @@ class ShareScreenState extends State<ShareScreen> {
                                 ? reportData2
                                 : reportData3),
                         quality: 100,
-                        name: 'Report_'
-                            + (_currentIndex + 1).toString()
-                            + '_'
-                            + DateTime.now().difference(DateTime(2021)).inSeconds.toString());
+                        name: reportName);
                     if (result['isSuccess']) {
                       showDialog<void>(
                         context: context,
