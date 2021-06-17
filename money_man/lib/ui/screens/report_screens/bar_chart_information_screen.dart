@@ -87,6 +87,8 @@ class _BarChartInformation extends State<BarChartInformation> {
                               totalMoney: calculationList[index].first -
                                   calculationList[index].last,
                               currentWallet: widget.currentWallet,
+                              viewByCategory: false,
+                              category: null,
                             ),
                             type: PageTransitionType.rightToLeft));
                   },

@@ -9,6 +9,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_time.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class PieChartInformationScreen extends StatefulWidget {
@@ -163,29 +164,33 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                           onTap: () {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        ReportListTransaction(
-                                          endDate: _listTransactionOfEachCatecory[index]
-                                          [0]
-                                              .date,
-                                          beginDate: _listTransactionOfEachCatecory[
-                                          index][
-                                          _listTransactionOfEachCatecory[index]
-                                              .length -
-                                              1]
-                                              .date,
-                                          totalMoney:
-                                          _listTransactionOfEachCatecory[index][0]
-                                              .category
-                                              .type ==
-                                              'expense'
-                                              ? -_info[index]
-                                              : _info[index],
-                                          currentWallet: widget.currentWallet,
-                                        )));
+                                PageTransition(
+                                    childCurrent: this.widget,
+                                    child: ReportListTransaction(
+                                        endDate: _listTransactionOfEachCatecory[index]
+                                        [0]
+                                            .date,
+                                        beginDate: _listTransactionOfEachCatecory[
+                                        index][
+                                        _listTransactionOfEachCatecory[index]
+                                            .length -
+                                            1]
+                                            .date,
+                                        totalMoney:
+                                        _listTransactionOfEachCatecory[index][0]
+                                            .category
+                                            .type ==
+                                            'expense'
+                                            ? -_info[index]
+                                            : _info[index],
+                                        currentWallet: widget.currentWallet,
+                                        viewByCategory: true,
+                                        category: _listCategoryReport[index]
+                                    ),
+                                    type: PageTransitionType.rightToLeft));
                           },
                           child: Container(
+                            color: Colors.transparent, // Khắc phục lỗi không ấn được ở giữa Row khi dùng space between và gesture detector.
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -196,13 +201,16 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                                 ),
                                 SizedBox(width: 15,),
                                 Expanded(
-                                  child: Text(_listCategoryReport[index].name,
-                                      style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 15.0,
-                                        color: foregroundColor,
-                                      )
+                                  child: Hero(
+                                    tag: _listCategoryReport[index].name,
+                                    child: Text(_listCategoryReport[index].name,
+                                        style: TextStyle(
+                                          fontFamily: fontFamily,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 15.0,
+                                          color: foregroundColor,
+                                        )
+                                    ),
                                   ),
                                 ),
                                 Column(

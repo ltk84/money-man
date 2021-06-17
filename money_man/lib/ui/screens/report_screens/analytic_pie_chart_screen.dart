@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
   Uint8List bytes1;
   bool expandDetail;
 
-  final double fontSizeText = 30;
+  final double fontSizeText = 35;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
@@ -112,9 +113,50 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: new AppBar(
-          backgroundColor: Colors.black,
-          centerTitle: true,
+          leading: MaterialButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Hero(
+              tag: 'alo',
+              child: Icon(Icons.arrow_back_ios, color: foregroundColor),
+            ),
+          ),
+          //centerTitle: true,
+          backgroundColor: Colors.transparent,
           elevation: 0,
+          flexibleSpace: ClipRect(
+            child: AnimatedOpacity(
+              opacity: reachAppBar == 1 ? 1 : 0,
+              duration: Duration(milliseconds: 0),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                    sigmaX: reachTop == 1 ? 25 : 500,
+                    sigmaY: 25,
+                    tileMode: TileMode.values[0]),
+                child: AnimatedContainer(
+                  duration: Duration(
+                      milliseconds:
+                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  color: Colors.grey[reachAppBar == 1
+                      ? (reachTop == 1 ? 800 : 850)
+                      : 900]
+                      .withOpacity(0.2),
+                ),
+              ),
+            ),
+          ),
+          // title: AnimatedOpacity(
+          //     opacity: reachTop == 1 ? 1 : 0,
+          //     duration: Duration(milliseconds: 100),
+          //     child: Text(_content,
+          //         style: TextStyle(
+          //           color: foregroundColor,
+          //           fontFamily: fontFamily,
+          //           fontSize: 17.0,
+          //           fontWeight: FontWeight.w600,
+          //         ))
+          // ),
           actions: <Widget>[
             Hero(
               tag: 'shareButton',
@@ -182,13 +224,13 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                 ),
                                 textAlign: TextAlign.start,
                               ),
+                              PieChartScreen(
+                                  isShowPercent: true,
+                                  currentList: _transactionList,
+                                  categoryList: _categoryList,
+                                  total: _total),
                             ],
                           ),
-                          PieChartScreen(
-                              isShowPercent: true,
-                              currentList: _transactionList,
-                              categoryList: _categoryList,
-                              total: _total),
                           SizedBox(height: 20,),
                           GestureDetector(
                             onTap: () async {

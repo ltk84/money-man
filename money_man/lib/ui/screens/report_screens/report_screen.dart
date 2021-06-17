@@ -448,7 +448,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                   builder: (key) {
                                     this.key2 = key;
 
-                                    return Column(
+                                    return  Column(
                                       children: <Widget>[
                                         Text(
                                           'Income',
@@ -474,20 +474,21 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            return showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AnalyticPieChartSreen(
-                                                    currentList: _transactionList,
-                                                    categoryList:
-                                                        _incomeCategoryList,
-                                                    currentWallet:
-                                                        widget.currentWallet,
-                                                    total: income,
-                                                    content: 'Income',
-                                                    color: incomeColor2,
-                                                  );
-                                                });
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    childCurrent: this.widget,
+                                                    child: AnalyticPieChartSreen(
+                                                      currentList: _transactionList,
+                                                      categoryList:
+                                                      _incomeCategoryList,
+                                                      currentWallet:
+                                                      widget.currentWallet,
+                                                      total: income,
+                                                      content: 'Income',
+                                                      color: incomeColor2,
+                                                    ),
+                                                    type: PageTransitionType.rightToLeft));
                                           },
                                           child: Container(
                                             color: Colors.transparent,
@@ -538,20 +539,21 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          return showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AnalyticPieChartSreen(
-                                                  currentList: _transactionList,
-                                                  categoryList:
-                                                      _expenseCategoryList,
-                                                  total: expense,
-                                                  content: 'Expense',
-                                                  color: expenseColor,
-                                                  currentWallet:
-                                                      widget.currentWallet,
-                                                );
-                                              });
+                                          Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  childCurrent: this.widget,
+                                                  child: AnalyticPieChartSreen(
+                                                    currentList: _transactionList,
+                                                    categoryList:
+                                                    _expenseCategoryList,
+                                                    total: expense,
+                                                    content: 'Expense',
+                                                    color: expenseColor,
+                                                    currentWallet:
+                                                    widget.currentWallet,
+                                                  ),
+                                                  type: PageTransitionType.rightToLeft));
                                         },
                                         child: Container(
                                           color: Colors.transparent,
