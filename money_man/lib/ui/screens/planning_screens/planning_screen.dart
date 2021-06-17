@@ -117,7 +117,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                   ))),
         ),
         body: ListView(
-          physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           controller: _controller,
           children: [
             Center(
