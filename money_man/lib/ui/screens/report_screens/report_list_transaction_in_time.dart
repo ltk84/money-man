@@ -234,7 +234,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
       double total) {
     print('build function');
     return Container(
-      color: Colors.black,
+      color: backgroundColor,
       child: ListView.builder(
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           itemCount: transactionListSortByCategory.length,
@@ -379,19 +379,19 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ),
               top: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: Colors.grey[900],
+          color: boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -529,19 +529,19 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ),
               top: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: Colors.grey[900],
+          color: boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -616,7 +616,12 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                             DateFormat("dd").format(
                                 transListSortByCategory[xIndex][yIndex].date),
                             style:
-                            TextStyle(fontSize: 30.0, color: Colors.white)),
+                            TextStyle(
+                                fontFamily: fontFamily,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 30.0,
+                                color: foregroundColor
+                            )),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
