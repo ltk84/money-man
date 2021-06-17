@@ -142,54 +142,54 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                                           TextStyle(color: Colors.white)),
                                     ],
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                Text('End date: ' +
-                                    DateFormat('EEEE, dd-MM-yyyy').format(
-                                        appliedEvent[index].endDate),
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.white54),
-                                  textAlign: TextAlign.start,
                                 ),
-                                Text(''),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                Text('Spent: ',
-                                  style: TextStyle(
-                                      fontSize: 19.0,
-                                      color: Colors.white),
-                                  textAlign: TextAlign.start,
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      Text('End date: ' +
+                                          DateFormat('EEEE, dd-MM-yyyy').format(
+                                              appliedEvent[index].endDate),
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: Colors.white54),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Text(''),
+                                    ],
+                                  ),
                                 ),
-                                MoneySymbolFormatter(
-                                    text: appliedEvent[index].spent,
-                                    currencyId: _wallet.currencyID,
-                                    textStyle: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Montserrat',
+                                Container(
+                                    margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text('Spent: ',
+                                          style: TextStyle(
+                                              fontSize: 19.0,
+                                              color: Colors.white),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        MoneySymbolFormatter(
+                                            text: appliedEvent[index].spent,
+                                            currencyId: _wallet.currencyID,
+                                            textStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Montserrat',
+                                            )
+                                        ),
+                                      ],
                                     )
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
+                              ]
+                            )
+                          )
+                        ]
                         )
                     )
                 );

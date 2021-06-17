@@ -138,58 +138,60 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                                       ],
                                     ),
                                   ),
-                                  Text('',
-                                      style: TextStyle(color: Colors.white)),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
-                              child: Row(
-                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                mainAxisSize : MainAxisSize.max,
-                                children: <Widget>[
-                                  Text('End date: ' + DateFormat('EEEE, dd-MM-yyyy').format(currentlyEvent[index].endDate),
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.white54),
-                                    textAlign: TextAlign.start,
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                                    child: Row(
+                                      mainAxisSize : MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text('End date: ' + DateFormat('EEEE, dd-MM-yyyy').format(currentlyEvent[index].endDate),
+                                          style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.white54),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        Text((currentlyEvent[index].isFinished)?' (Out of date)':'',
+                                          style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.red),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Text((currentlyEvent[index].isFinished)?' (Out of date)':'',
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.red),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                mainAxisSize : MainAxisSize.max,
-                                children: <Widget>[
-                                  Text('Spent: ',
-                                    style: TextStyle(
-                                        fontSize: 19.0,
-                                        color: Colors.white),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  MoneySymbolFormatter(
-                                      text: currentlyEvent[index].spent,
-                                      currencyId: _wallet.currencyID,
-                                      textStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'Montserrat',
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisSize : MainAxisSize.max,
+                                        children: <Widget>[
+                                          Text('Spent: ',
+                                            style: TextStyle(
+                                                fontSize: 19.0,
+                                                color: Colors.white),
+                                            textAlign: TextAlign.start,
+                                          ),
+                                          MoneySymbolFormatter(
+                                              text: currentlyEvent[index].spent,
+                                              currencyId: _wallet.currencyID,
+                                              textStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Montserrat',
+                                              )
+                                          ),
+                                        ],
                                       )
                                   ),
-                                ],
-                              )),
-                        ])));
-              });
+                                ]
+                              )
+                          )
+                        ]
+                        )
+                    )
+                );
+              }
+              );
         },
       ),
     );
