@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 
-import './wallet_model.dart';
-
 class Event {
   String id;
   String name;
@@ -11,7 +9,7 @@ class Event {
   DateTime endDate;
   String walletId;
   bool isFinished;
-  List<String> transactionIdList ;
+  List<String> transactionIdList;
   double spent;
   bool finishedByHand;
   bool autofinish;
@@ -39,8 +37,8 @@ class Event {
       'isFinished': isFinished,
       'transactionIdList': transactionIdList,
       'spent': spent,
-      'finishedByHand' : finishedByHand,
-      'autofinish' : autofinish
+      'finishedByHand': finishedByHand,
+      'autofinish': autofinish
     };
   }
 
@@ -57,7 +55,7 @@ class Event {
       transactionIdList: List<String>.from(data['transactionIdList']),
       spent: data['spent'],
       finishedByHand: data['finishedByHand'],
-      autofinish : data['autofinish'],
+      autofinish: data['autofinish'],
     );
   }
 }

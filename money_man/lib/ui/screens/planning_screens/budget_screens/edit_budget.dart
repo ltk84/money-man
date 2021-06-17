@@ -114,7 +114,9 @@ class _AddBudgetState extends State<EditBudget> {
                         isDismissible: true,
                         backgroundColor: Colors.transparent,
                         context: context,
-                        builder: (context) => CategoriesTransactionScreen());
+                        builder: (context) => CategoriesTransactionScreen(
+                              walletId: widget.wallet.id,
+                            ));
                     if (selectCate != null) {
                       setState(() {
                         this.cate = selectCate;
@@ -158,7 +160,8 @@ class _AddBudgetState extends State<EditBudget> {
                                     backgroundColor: Colors.transparent,
                                     context: context,
                                     builder: (context) =>
-                                        CategoriesTransactionScreen());
+                                        CategoriesTransactionScreen(
+                                            walletId: widget.wallet.id));
                             if (selectCate != null) {
                               setState(() {
                                 this.cate = selectCate;
