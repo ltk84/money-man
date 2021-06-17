@@ -594,21 +594,16 @@ class _ReportListTransaction extends State<ReportListTransaction> {
             itemBuilder: (context, yIndex) {
               return GestureDetector(
                 onTap: () async {
-                  final _firestore = Provider.of<FirebaseFireStoreService>(
+                  await Navigator.push(
                       context,
-                      listen: false);
-                  Event event = await _firestore.getEventByID(
-                      transListSortByCategory[xIndex][yIndex].eventID,
-                      widget.currentWallet);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => TransactionDetail(
-                            event: event,
+                      PageTransition(
+                          child: TransactionDetail(
                             transaction: transListSortByCategory[xIndex]
                             [yIndex],
                             wallet: widget.currentWallet,
-                          )));
+                          ),
+                          type: PageTransitionType.rightToLeft));
+                  setState(() {});
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),

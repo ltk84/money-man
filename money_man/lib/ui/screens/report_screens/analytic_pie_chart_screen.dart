@@ -20,36 +20,32 @@ import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AnalyticPieChartSreen extends StatefulWidget {
-  List<MyTransaction> currentList;
-  List<MyCategory> categoryList;
   final Wallet currentWallet;
-  String content;
-  Color color;
-  double total;
+  final String type;
+  final DateTime endDate;
+  final DateTime beginDate;
 
   AnalyticPieChartSreen(
       {Key key,
-      @required this.currentList,
-      @required this.categoryList,
-      @required this.total,
-      @required this.content,
-      @required this.color,
-      this.currentWallet})
+      @required this.currentWallet,
+      @required this.type,
+      @required this.beginDate,
+      @required this.endDate})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _AnalyticPieChartSreen();
 }
 
 class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
-  double _total;
-  int touchedIndex = -1;
-  Color _color;
-  List<MyTransaction> _transactionList;
-  List<MyCategory> _categoryList;
   String _content;
+  Color _color;
+
+  int touchedIndex = -1;
   GlobalKey key1;
   Uint8List bytes1;
   bool expandDetail;
+  DateTime beginDate;
+  DateTime endDate;
 
   final double fontSizeText = 35;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
@@ -80,32 +76,33 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
   @override
   void initState() {
     super.initState();
-    _transactionList = widget.currentList;
-    _categoryList = widget.categoryList;
-    _total = widget.total;
-    _content = widget.content;
+    beginDate = widget.beginDate;
+    endDate = widget.endDate;
+
+    _content = widget.type == 'expense' ? 'Expense' : 'Income';
+    _color = widget.type == 'expense' ? expenseColor : incomeColor2;
+
     _controller = ScrollController();
-    _color = widget.color;
     _controller.addListener(_scrollListener);
     expandDetail = false;
   }
+  //
+  // @override
+  // void didUpdateWidget(covariant AnalyticPieChartSreen oldWidget) {
+  //   //_transactionList = widget.currentList ?? [];
+  //   //_categoryList = widget.categoryList ?? [];
+  //   _total = widget.total;
+  //   _content = widget.content;
+  //   _controller = ScrollController();
+  //   _color = widget.color;
+  //   _controller.addListener(_scrollListener);
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
-  @override
-  void didUpdateWidget(covariant AnalyticPieChartSreen oldWidget) {
-    _transactionList = widget.currentList ?? [];
-    _categoryList = widget.categoryList ?? [];
-    _total = widget.total;
-    _content = widget.content;
-    _controller = ScrollController();
-    _color = widget.color;
-    _controller.addListener(_scrollListener);
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void setState(fn) {
-    super.setState(fn);
-  }
+  // @override
+  // void setState(fn) {
+  //   super.setState(fn);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -183,8 +180,35 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
           ],
         ),
         body: StreamBuilder<Object>(
-          stream: _firestore.transactionStream(widget.currentWallet, 50),
+          stream: _firestore.transactionStream(widget.currentWallet, 'full'),
           builder: (context, snapshot) {
+            List<MyTransaction> _transactionList = snapshot.data ?? [];
+            List<MyCategory> _categoryList = [];
+
+            double total = 0;
+
+            _transactionList.forEach((element) {
+              if (element.date.compareTo(endDate) <= 0) {
+                if (element.category.type == widget.type) {
+                  if (element.date.compareTo(beginDate) >= 0) {
+                    total += element.amount;
+                    if (!_categoryList.any((categoryElement) {
+                      if (categoryElement.name == element.category.name)
+                        return true;
+                      else
+                        return false;
+                    })) {
+                      _categoryList.add(element.category);
+                    }
+                  }
+                }
+              }
+            });
+            _transactionList = _transactionList
+                .where((element) =>
+            element.date.compareTo(beginDate) >= 0 &&
+                element.date.compareTo(endDate) <= 0)
+                .toList();
             return Container(
               color: Colors.black,
               child: ListView(
@@ -210,13 +234,10 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                 ),
                               ),
                               MoneySymbolFormatter(
-                                text: _total,
+                                text: total,
                                 currencyId: widget.currentWallet.currencyID,
                                 textStyle: TextStyle(
-                                  color: _content == 'Income'
-                                      ? incomeColor2
-                                      : expenseColor
-                                  ,
+                                  color: _color,
                                   fontFamily: fontFamily,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 24,
@@ -228,7 +249,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                   isShowPercent: true,
                                   currentList: _transactionList,
                                   categoryList: _categoryList,
-                                  total: _total),
+                                  total: total),
                             ],
                           ),
                           SizedBox(height: 20,),

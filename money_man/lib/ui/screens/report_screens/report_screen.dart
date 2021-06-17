@@ -479,14 +479,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                 PageTransition(
                                                     childCurrent: this.widget,
                                                     child: AnalyticPieChartSreen(
-                                                      currentList: _transactionList,
-                                                      categoryList:
-                                                      _incomeCategoryList,
-                                                      currentWallet:
-                                                      widget.currentWallet,
-                                                      total: income,
-                                                      content: 'Income',
-                                                      color: incomeColor2,
+                                                      currentWallet: _wallet,
+                                                      type: 'income',
+                                                      beginDate: beginDate,
+                                                      endDate: endDate,
                                                     ),
                                                     type: PageTransitionType.rightToLeft));
                                           },
@@ -544,14 +540,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                               PageTransition(
                                                   childCurrent: this.widget,
                                                   child: AnalyticPieChartSreen(
-                                                    currentList: _transactionList,
-                                                    categoryList:
-                                                    _expenseCategoryList,
-                                                    total: expense,
-                                                    content: 'Expense',
-                                                    color: expenseColor,
-                                                    currentWallet:
-                                                    widget.currentWallet,
+                                                    currentWallet: _wallet,
+                                                    type: 'expense',
+                                                    beginDate: beginDate,
+                                                    endDate: endDate,
                                                   ),
                                                   type: PageTransitionType.rightToLeft));
                                         },
