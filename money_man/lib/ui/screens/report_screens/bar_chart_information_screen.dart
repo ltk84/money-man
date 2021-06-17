@@ -72,121 +72,119 @@ class _BarChartInformation extends State<BarChartInformation> {
         )
       ),
       padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: timeRangeList.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      childCurrent: this.widget,
-                      child: ReportListTransaction(
-                        beginDate: fisrtDayList[index],
-                        endDate: secondDayList[index],
-                        totalMoney: calculationList[index].first -
-                            calculationList[index].last,
-                        currentWallet: widget.currentWallet,
-                      ),
-                      type: PageTransitionType.rightToLeft));
-            },
-            child: Column(
-              children: [
-                if (index != 0)
-                  Divider(
-                    color: foregroundColor.withOpacity(0.12),
-                    thickness: 1,
-                    height: 25,
-                  ),
-                Container(
-                  color: Colors.transparent, // Khắc phục lỗi không ấn được ở giữa Row khi dùng space between và gesture detector.
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Flexible( // Làm cho text chống tràn khi bị quá dài gây ra lỗi render flex.
-                        child: Column(
+      child: Column(
+        children: List.generate(
+            timeRangeList.length,
+                (index) => GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            childCurrent: this.widget,
+                            child: ReportListTransaction(
+                              beginDate: fisrtDayList[index],
+                              endDate: secondDayList[index],
+                              totalMoney: calculationList[index].first -
+                                  calculationList[index].last,
+                              currentWallet: widget.currentWallet,
+                            ),
+                            type: PageTransitionType.rightToLeft));
+                  },
+                  child: Column(
+                    children: [
+                      if (index != 0)
+                        Divider(
+                          color: foregroundColor.withOpacity(0.12),
+                          thickness: 1,
+                          height: 25,
+                        ),
+                      Container(
+                        color: Colors.transparent, // Khắc phục lỗi không ấn được ở giữa Row khi dùng space between và gesture detector.
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Hero(
-                              tag: timeRangeList[index],
-                              child: Text(timeRangeList[index],
-                                  style: TextStyle(
+                          children: <Widget>[
+                            Flexible( // Làm cho text chống tràn khi bị quá dài gây ra lỗi render flex.
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Hero(
+                                    tag: timeRangeList[index],
+                                    child: Text(timeRangeList[index],
+                                        style: TextStyle(
+                                            fontFamily: fontFamily,
+                                            color: foregroundColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500)),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 15.0),
+                                    child: Text(
+                                      'Tap to view transaction list for this period.',
+                                      style: TextStyle(
+                                          fontFamily: fontFamily,
+                                          color: foregroundColor.withOpacity(0.24),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                MoneySymbolFormatter(
+                                  text: (calculationList[index].first == 0)
+                                      ? 0.0
+                                      : calculationList[index].first,
+                                  //digit: (calculationList[index].first == 0) ? '' : '+',
+                                  currencyId: widget.currentWallet.currencyID,
+                                  textStyle: TextStyle(
                                       fontFamily: fontFamily,
-                                      color: foregroundColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500)),
-                            ),
-                            SizedBox(height: 5),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 15.0),
-                              child: Text(
-                                    'Tap to view transaction list for this period.',
-                                    style: TextStyle(
-                                        fontFamily: fontFamily,
-                                        color: foregroundColor.withOpacity(0.24),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400),
+                                      color: incomeColor2,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500),
                                 ),
-                            ),
+                                SizedBox(height: 8),
+                                MoneySymbolFormatter(
+                                  text: (calculationList[index].last == 0)
+                                      ? 0.0
+                                      : calculationList[index].last,
+                                  //digit: (calculationList[index].last == 0) ? '' : '-',
+                                  currencyId: widget.currentWallet.currencyID,
+                                  textStyle: TextStyle(
+                                      fontFamily: fontFamily,
+                                      color: expenseColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(height: 8),
+                                MoneySymbolFormatter(
+                                    digit: (calculationList[index].first -
+                                        calculationList[index].last) >=
+                                        0
+                                        ? '+'
+                                        : '',
+                                    text: (calculationList[index].first -
+                                        calculationList[index].last),
+                                    currencyId: widget.currentWallet.currencyID,
+                                    textStyle: TextStyle(
+                                        fontFamily: fontFamily,
+                                        color: foregroundColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500))
+                              ],
+                            )
                           ],
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          MoneySymbolFormatter(
-                            text: (calculationList[index].first == 0)
-                                ? 0.0
-                                : calculationList[index].first,
-                            //digit: (calculationList[index].first == 0) ? '' : '+',
-                            currencyId: widget.currentWallet.currencyID,
-                            textStyle: TextStyle(
-                                fontFamily: fontFamily,
-                                color: incomeColor2,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(height: 8),
-                          MoneySymbolFormatter(
-                            text: (calculationList[index].last == 0)
-                                ? 0.0
-                                : calculationList[index].last,
-                            //digit: (calculationList[index].last == 0) ? '' : '-',
-                            currencyId: widget.currentWallet.currencyID,
-                            textStyle: TextStyle(
-                                fontFamily: fontFamily,
-                                color: expenseColor,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(height: 8),
-                          MoneySymbolFormatter(
-                              digit: (calculationList[index].first -
-                                  calculationList[index].last) >=
-                                  0
-                                  ? '+'
-                                  : '',
-                              text: (calculationList[index].first -
-                                  calculationList[index].last),
-                              currencyId: widget.currentWallet.currencyID,
-                              textStyle: TextStyle(
-                                  fontFamily: fontFamily,
-                                  color: foregroundColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500))
-                        ],
-                      )
                     ],
                   ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                )
+        )
+      )
     );
   }
 

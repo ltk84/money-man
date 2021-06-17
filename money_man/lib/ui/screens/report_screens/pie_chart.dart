@@ -164,7 +164,7 @@ class PieChartScreenState extends State<PieChartScreen> {
                                 height: 14,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.rectangle, // BoxShape.circle,
-                                  color: colors[index],
+                                  color: index < colors.length ? colors[index] : Colors.grey,
                                 ),
                               ),
                               const SizedBox(
@@ -176,7 +176,7 @@ class PieChartScreenState extends State<PieChartScreen> {
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14.0,
-                                  color: colors[index],
+                                  color: index < colors.length ? colors[index] : Colors.grey,
                                 ),
                               )
                             ],
@@ -198,7 +198,7 @@ class PieChartScreenState extends State<PieChartScreen> {
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14.0,
-                                    color: colors[index],
+                                    color: index < colors.length ? colors[index] : Colors.grey,
                                   ),
                                 ),
                               )

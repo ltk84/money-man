@@ -227,72 +227,75 @@ class _AnalyticRevenueAndExpenditureScreen
               element.date.compareTo(beginDate) >= 0 &&
                   element.date.compareTo(endDate) <= 0)
                   .toList();
-              return WidgetToImage(
-                  builder: (key) {
-                    this.key1 = key;
-
-                    return Container(
-                      color: backgroundColor,
-                      child: ListView(
-                        controller: _controller,
-                        physics: BouncingScrollPhysics(
-                            parent: AlwaysScrollableScrollPhysics()),
-                        children: <Widget>[
-                          Container(
-                              padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
-                              color: backgroundColor,
-                              child: Hero(
-                                tag: 'netIncomeChart',
-                                child: Column(
-                                  children: <Widget>[
-                                    Text('Net Income',
-                                        style: TextStyle(
-                                          color: foregroundColor.withOpacity(
-                                              0.7),
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 16,
-                                        )
+              return Container(
+                color: backgroundColor,
+                child: ListView(
+                  controller: _controller,
+                  physics: BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  children: <Widget>[
+                    WidgetToImage(
+                        builder: (key) {
+                          this.key1 = key;
+                          return Column(
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                                  color: backgroundColor,
+                                  child: Hero(
+                                    tag: 'netIncomeChart',
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text('Net Income',
+                                            style: TextStyle(
+                                              color: foregroundColor.withOpacity(
+                                                  0.7),
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16,
+                                            )
+                                        ),
+                                        MoneySymbolFormatter(
+                                            text: closingBalance - openingBalance,
+                                            currencyId: _wallet.currencyID,
+                                            textStyle: TextStyle(
+                                              color: (closingBalance -
+                                                  openingBalance) > 0 ? incomeColor
+                                                  : (closingBalance -
+                                                  openingBalance) == 0
+                                                  ? foregroundColor
+                                                  : expenseColor,
+                                              fontFamily: fontFamily,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 26,
+                                              height: 1.5,
+                                            )),
+                                        Container(
+                                          width: 450,
+                                          height: 200,
+                                          child: BarChartScreen(
+                                              currentList: _transactionList,
+                                              beginDate: beginDate,
+                                              endDate: endDate),
+                                        ),
+                                      ],
                                     ),
-                                    MoneySymbolFormatter(
-                                        text: closingBalance - openingBalance,
-                                        currencyId: _wallet.currencyID,
-                                        textStyle: TextStyle(
-                                          color: (closingBalance -
-                                              openingBalance) > 0 ? incomeColor
-                                              : (closingBalance -
-                                              openingBalance) == 0
-                                              ? foregroundColor
-                                              : expenseColor,
-                                          fontFamily: fontFamily,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 26,
-                                          height: 1.5,
-                                        )),
-                                    Container(
-                                      width: 450,
-                                      height: 200,
-                                      child: BarChartScreen(
-                                          currentList: _transactionList,
-                                          beginDate: beginDate,
-                                          endDate: endDate),
-                                    ),
-                                  ],
+                                  )
+                              ),
+                              Container(
+                                child: BarChartInformation(
+                                  currentList: _transactionList,
+                                  beginDate: beginDate,
+                                  endDate: endDate,
+                                  currentWallet: widget.currentWallet,
                                 ),
                               )
-                          ),
-                          Container(
-                            child: BarChartInformation(
-                              currentList: _transactionList,
-                              beginDate: beginDate,
-                              endDate: endDate,
-                              currentWallet: widget.currentWallet,
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  }
+                            ],
+                          );
+                        }
+                    )
+                  ],
+                ),
               );
             }));
   }
