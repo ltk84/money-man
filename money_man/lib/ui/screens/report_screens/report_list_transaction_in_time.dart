@@ -606,6 +606,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   setState(() {});
                 },
                 child: Container(
+                  color: Colors.transparent,
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                   child: Row(
                     children: <Widget>[
