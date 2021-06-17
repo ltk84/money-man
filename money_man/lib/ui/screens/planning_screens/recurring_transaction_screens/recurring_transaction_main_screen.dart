@@ -10,6 +10,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/add_recurring_transaction_sceen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_detail_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -108,43 +109,61 @@ class _RecurringTransactionMainScreenState
             ),
           ],
         ),
-        body: ListView(
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          children: [
-            buildListRecurringTransactionList(context),
-          ],
-        ));
+        body: buildListRecurringTransactionList(context),
+    );
   }
 
   Widget buildListRecurringTransactionList(context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-          child: Text('All',
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 14.0,
-                fontWeight: FontWeight.w500,
-                color: Colors.white70,
-              )),
-        ),
-        StreamBuilder<List<RecurringTransaction>>(
-            stream: _firestore.recurringTransactionStream(widget.wallet.id),
-            builder: (context, snapshot) {
-              List<RecurringTransaction> reTransList = snapshot.data ?? [];
-              if (reTransList.length == 0) return Container();
-              return ListView.builder(
+    return StreamBuilder<List<RecurringTransaction>>(
+        stream: _firestore.recurringTransactionStream(widget.wallet.id),
+        builder: (context, snapshot) {
+          List<RecurringTransaction> reTransList = snapshot.data ?? [];
+          if (reTransList.length == 0) return Container(
+              color: backgroundColor,
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.hourglass_empty,
+                    color: foregroundColor.withOpacity(0.12),
+                    size: 100,
+                  ),
+                  SizedBox(height: 10,),
+                  Text(
+                    'There are no recurring transactions',
+                    style: TextStyle(
+                      fontFamily: fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      color: foregroundColor.withOpacity(0.24),
+                    ),
+                  ),
+                ],
+              )
+          );
+          return ListView(
+            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                child: Text('All',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white70,
+                    )),
+              ),
+              ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: reTransList.length,
                   itemBuilder: (context, index) =>
-                      buildRecurringTransactionCard(reTransList[index]));
-            }),
-      ],
-    );
+                      buildRecurringTransactionCard(reTransList[index])),
+            ],
+          );
+        });
   }
 
   Widget buildRecurringTransactionCard(RecurringTransaction reTrans) {

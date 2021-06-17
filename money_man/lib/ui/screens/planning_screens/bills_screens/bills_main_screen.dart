@@ -165,15 +165,26 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
           });
           if (overDueBills.length == 0 && todayBills.length == 0 && thisPeriodBills.length == 0) {
             return Container(
+                color: backgroundColor,
                 alignment: Alignment.center,
-                child: Text(
-                  'There are no bills to pay',
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                    color: foregroundColor.withOpacity(0.54),
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.hourglass_empty,
+                      color: foregroundColor.withOpacity(0.12),
+                      size: 100,
+                    ),
+                    SizedBox(height: 10,),
+                    Text(
+                      'There are no bills to pay',
+                      style: TextStyle(
+                        fontFamily: fontFamily,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        color: foregroundColor.withOpacity(0.24),
+                      ),
+                    ),
+                  ],
                 )
             );
           } else {

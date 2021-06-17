@@ -1044,11 +1044,37 @@ class _TransactionScreen extends State<TransactionScreen>
               return TabBarView(
                 controller: _tabController,
                 children: myTabs.map((tab) {
-                  return viewByCategory == true
-                      ? buildDisplayTransactionByCategory(transactionListSorted,
-                          totalInCome, totalOutCome, total)
-                      : buildDisplayTransactionByDate(transactionListSorted,
-                          totalInCome, totalOutCome, total);
+                  if (transactionListSorted.length > 0) {
+                    return viewByCategory == true
+                        ? buildDisplayTransactionByCategory(transactionListSorted,
+                        totalInCome, totalOutCome, total)
+                        : buildDisplayTransactionByDate(transactionListSorted,
+                        totalInCome, totalOutCome, total);
+                  } else {
+                    return Container(
+                        color: backgroundColor,
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.hourglass_empty,
+                              color: foregroundColor.withOpacity(0.12),
+                              size: 100,
+                            ),
+                            SizedBox(height: 10,),
+                            Text(
+                              'There are no transactions',
+                              style: TextStyle(
+                                fontFamily: fontFamily,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w500,
+                                color: foregroundColor.withOpacity(0.24),
+                              ),
+                            ),
+                          ],
+                        )
+                    );
+                  }
                 }).toList(),
               );
             }));
