@@ -5,6 +5,7 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/report_screens/bar_chart.dart';
 import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_time.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 
 class BarChartInformation extends StatefulWidget {
   final List<MyTransaction> currentList;
@@ -69,7 +70,7 @@ class _BarChartInformation extends State<BarChartInformation> {
     generateData(_beginDate, _endDate, timeRangeList, _transactionList);
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
-    heigt = timeRangeList.length.toDouble()*70;
+    heigt = timeRangeList.length.toDouble() * 70;
   }
 
   @override
@@ -80,7 +81,7 @@ class _BarChartInformation extends State<BarChartInformation> {
     generateData(_beginDate, _endDate, timeRangeList, _transactionList);
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
-    heigt = timeRangeList.length.toDouble()*100;
+    heigt = timeRangeList.length.toDouble() * 100;
   }
 
   @override
@@ -126,37 +127,41 @@ class _BarChartInformation extends State<BarChartInformation> {
                             fontWeight: FontWeight.bold)),
                     Column(
                       children: <Widget>[
-                        Text(
-                            (calculationList[index].first == 0)
-                                ? "0.0"
-                                : "+" + calculationList[index].first.toString(),
-                            style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                        Text(
-                            (calculationList[index].last == 0)
-                                ? "0.0"
-                                : "-" + calculationList[index].last.toString(),
-                            style: TextStyle(
-                                color: Colors.red[600],
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                        Text(
-                            (calculationList[index].first -
+                        MoneySymbolFormatter(
+                          text: (calculationList[index].first == 0)
+                              ? 0.0
+                              : calculationList[index].first,
+                          digit: (calculationList[index].first == 0) ? '' : '+',
+                          currencyId: widget.currentWallet.currencyID,
+                          textStyle: TextStyle(
+                              color: Colors.green,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        MoneySymbolFormatter(
+                          text: (calculationList[index].last == 0)
+                              ? 0.0
+                              : calculationList[index].last,
+                          digit: (calculationList[index].last == 0) ? '' : '-',
+                          currencyId: widget.currentWallet.currencyID,
+                          textStyle: TextStyle(
+                              color: Colors.red[600],
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        MoneySymbolFormatter(
+                            digit: (calculationList[index].first -
                                         calculationList[index].last) >=
                                     0
-                                ? "+" +
-                                    (calculationList[index].first -
-                                            calculationList[index].last)
-                                        .toString()
-                                : (calculationList[index].first -
-                                        calculationList[index].last)
-                                    .toString(),
-                            style: TextStyle(
+                                ? '+'
+                                : '',
+                            text: (calculationList[index].first -
+                                calculationList[index].last),
+                            currencyId: widget.currentWallet.currencyID,
+                            textStyle: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.bold))
                       ],
                     )
                   ],

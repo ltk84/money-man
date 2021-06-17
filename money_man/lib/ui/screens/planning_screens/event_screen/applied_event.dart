@@ -80,10 +80,11 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                       Navigator.push(
                           context,
                           PageTransition(
+                              type: PageTransitionType.leftToRight,
                               child: EventDetailScreen(
-                            currentEvent: appliedEvent[index],
-                            eventWallet: _wallet,
-                          )));
+                                currentEvent: appliedEvent[index],
+                                eventWallet: _wallet,
+                              )));
                     },
                     child: Container(
                         decoration: BoxDecoration(

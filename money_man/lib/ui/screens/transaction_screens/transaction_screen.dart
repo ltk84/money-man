@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -13,6 +14,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -89,13 +91,13 @@ class _TransactionScreen extends State<TransactionScreen>
   }
 
   void scrollListener() {
-    if (listScrollController.offset >=
-            listScrollController.position.maxScrollExtent &&
-        !listScrollController.position.outOfRange) {
-      setState(() {
-        _limit += _limitIncrement;
-      });
-    }
+    // if (listScrollController.offset >=
+    //         listScrollController.position.maxScrollExtent &&
+    //     !listScrollController.position.outOfRange) {
+    //   setState(() {
+    //     _limit += _limitIncrement;
+    //   });
+    // }
   }
 
   void _handleSelectTimeRange(int selected) {
@@ -802,16 +804,14 @@ class _TransactionScreen extends State<TransactionScreen>
           title: Column(children: [
             Text(_wallet.name,
                 style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
-            Text(
-                MoneyFormatter(amount: _wallet.amount)
-                        .output
-                        .withoutFractionDigits +
-                    ' ' +
-                    currencySymbol,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold)),
+            MoneySymbolFormatter(
+              text: _wallet.amount,
+              currencyId: _wallet.currencyID,
+              textStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold),
+            )
           ]),
           bottom: TabBar(
             unselectedLabelColor: Colors.grey[500],
@@ -1168,10 +1168,13 @@ class _TransactionScreen extends State<TransactionScreen>
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString() + ' $currencySymbol',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white)),
+                child: MoneySymbolFormatter(
+                  text: totalAmountInDay,
+                  currencyId: _wallet.currencyID,
+                  textAlign: TextAlign.end,
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -1182,11 +1185,18 @@ class _TransactionScreen extends State<TransactionScreen>
             itemCount: transListSortByCategory[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  final _firestore = Provider.of<FirebaseFireStoreService>(
+                      context,
+                      listen: false);
+                  Event event = await _firestore.getEventByID(
+                      transListSortByCategory[xIndex][yIndex].eventID,
+                      widget.currentWallet);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (_) => TransactionDetail(
+                                event: event,
                                 transaction: transListSortByCategory[xIndex]
                                     [yIndex],
                                 wallet: widget.currentWallet,
@@ -1215,39 +1225,38 @@ class _TransactionScreen extends State<TransactionScreen>
                                 color: Colors.white)),
                       ),
                       Expanded(
-                        child: Text(
-                            transListSortByCategory[xIndex][yIndex].category.type == 'income' ||
-                                    transListSortByCategory[xIndex][yIndex].category.name ==
-                                        'Debt' ||
-                                    transListSortByCategory[xIndex][yIndex].category.name ==
-                                        'Deft Collection'
-                                ? '+' +
-                                    transListSortByCategory[xIndex][yIndex]
-                                        .amount
-                                        .toString() +
-                                    ' $currencySymbol'
-                                : '-' +
-                                    transListSortByCategory[xIndex][yIndex]
-                                        .amount
-                                        .toString() +
-                                    ' $currencySymbol',
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: transListSortByCategory[xIndex][yIndex]
-                                                .category
-                                                .type ==
-                                            'income' ||
-                                        transListSortByCategory[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Debt' ||
-                                        transListSortByCategory[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Deft Collection'
-                                    ? Colors.green
-                                    : Colors.red[600])),
+                        child: transListSortByCategory[xIndex][yIndex]
+                                        .category
+                                        .type ==
+                                    'income' ||
+                                transListSortByCategory[xIndex][yIndex]
+                                        .category
+                                        .name ==
+                                    'Debt' ||
+                                transListSortByCategory[xIndex][yIndex]
+                                        .category
+                                        .name ==
+                                    'Debt Collection'
+                            ? MoneySymbolFormatter(
+                                text: transListSortByCategory[xIndex][yIndex]
+                                    .amount,
+                                currencyId: _wallet.currencyID,
+                                textAlign: TextAlign.end,
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green),
+                                digit: '+',
+                              )
+                            : MoneySymbolFormatter(
+                                text: transListSortByCategory[xIndex][yIndex]
+                                    .amount,
+                                currencyId: _wallet.currencyID,
+                                textAlign: TextAlign.end,
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red[600]),
+                                digit: '-',
+                              ),
                       ),
                     ],
                   ),
@@ -1301,10 +1310,13 @@ class _TransactionScreen extends State<TransactionScreen>
                     style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString() + ' $currencySymbol',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white)),
+                child: MoneySymbolFormatter(
+                  text: totalAmountInDay,
+                  currencyId: _wallet.currencyID,
+                  textAlign: TextAlign.end,
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -1314,12 +1326,49 @@ class _TransactionScreen extends State<TransactionScreen>
             shrinkWrap: true,
             itemCount: transListSortByDate[xIndex].length,
             itemBuilder: (context, yIndex) {
+              String _eventIcon =
+                  (transListSortByDate[xIndex][yIndex].eventID == "" ||
+                          transListSortByDate[xIndex][yIndex].eventID == null)
+                      ? ''
+                      : '🌴';
+              String _note = transListSortByDate[xIndex][yIndex].note;
+              String _contact =
+                  transListSortByDate[xIndex][yIndex].contact ?? 'someone';
+              String _subTitle;
+              if (transListSortByDate[xIndex][yIndex].category.name == 'Debt') {
+                _subTitle = '$_eventIcon$_note from $_contact';
+              } else if (transListSortByDate[xIndex][yIndex].category.name ==
+                  'Loan') {
+                _subTitle = '$_eventIcon$_note to $_contact';
+              } else {
+                _subTitle = '$_eventIcon$_note';
+              }
+
+              String _digit =
+                  transListSortByDate[xIndex][yIndex].category.type ==
+                              'income' ||
+                          transListSortByDate[xIndex][yIndex].category.name ==
+                              'Debt' ||
+                          transListSortByDate[xIndex][yIndex].category.name ==
+                              'Debt Collection'
+                      ? '+'
+                      : '-';
+              double extraAmount =
+                  transListSortByDate[xIndex][yIndex].extraAmountInfo;
+
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  final _firestore = Provider.of<FirebaseFireStoreService>(
+                      context,
+                      listen: false);
+                  Event event = await _firestore.getEventByID(
+                      transListSortByDate[xIndex][yIndex].eventID,
+                      widget.currentWallet);
                   Navigator.push(
                       context,
                       PageTransition(
                           child: TransactionDetail(
+                            event: event,
                             transaction: transListSortByDate[xIndex][yIndex],
                             wallet: widget.currentWallet,
                           ),
@@ -1340,59 +1389,53 @@ class _TransactionScreen extends State<TransactionScreen>
                       ),
                       Padding(
                           padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
-                          child: (transListSortByDate[xIndex][yIndex].eventID ==
-                                      "" ||
-                                  transListSortByDate[xIndex][yIndex].eventID ==
-                                      null)
-                              ? Text(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
                                   transListSortByDate[xIndex][yIndex]
                                       .category
                                       .name,
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white))
-                              : Text(
-                                  transListSortByDate[xIndex][yIndex]
-                                          .category
-                                          .name +
-                                      "\n🌴",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white))),
+                                      color: Colors.white)),
+                              Text(
+                                _subTitle,
+                                style: TextStyle(
+                                    fontSize: 12.0, color: Colors.grey[500]),
+                              ),
+                            ],
+                          )),
                       Expanded(
-                        child: Text(
-                            transListSortByDate[xIndex][yIndex].category.type ==
-                                        'income' ||
-                                    transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .name ==
-                                        'Debt' ||
-                                    transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .name ==
-                                        'Deft Collection'
-                                ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()} $currencySymbol"
-                                : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()} $currencySymbol",
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          MoneySymbolFormatter(
+                            text: transListSortByDate[xIndex][yIndex].amount,
+                            currencyId: _wallet.currencyID,
                             textAlign: TextAlign.end,
-                            style: TextStyle(
+                            textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .type ==
-                                            'income' ||
-                                        transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Debt' ||
-                                        transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Deft Collection'
+                                color: _digit == '+'
                                     ? Colors.green
-                                    : Colors.red[600])),
-                      ),
+                                    : Colors.red[600]),
+                            digit: _digit,
+                          ),
+                          if (extraAmount != null)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                if (extraAmount != 0)
+                                  MoneySymbolFormatter(
+                                      text: extraAmount,
+                                      currencyId: _wallet.currencyID),
+                                if (extraAmount != 0) Text(' left'),
+                                if (extraAmount == 0) Text('Received')
+                              ],
+                            ),
+                        ],
+                      )),
                     ],
                   ),
                 ),
@@ -1423,8 +1466,12 @@ class _TransactionScreen extends State<TransactionScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text('Inflow', style: TextStyle(color: Colors.grey[500])),
-                  Text('+$totalInCome $currencySymbol',
-                      style: TextStyle(color: Colors.white)),
+                  MoneySymbolFormatter(
+                    text: totalInCome,
+                    currencyId: _wallet.currencyID,
+                    textStyle: TextStyle(color: Colors.white),
+                    digit: '+',
+                  )
                 ],
               ),
             ),
@@ -1434,8 +1481,12 @@ class _TransactionScreen extends State<TransactionScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text('Outflow', style: TextStyle(color: Colors.grey[500])),
-                    Text('-$totalOutCome $currencySymbol',
-                        style: TextStyle(color: Colors.white)),
+                    MoneySymbolFormatter(
+                      text: totalOutCome,
+                      currencyId: _wallet.currencyID,
+                      textStyle: TextStyle(color: Colors.white),
+                      digit: '-',
+                    ),
                   ]),
             ),
             Container(
@@ -1463,8 +1514,11 @@ class _TransactionScreen extends State<TransactionScreen>
                     SizedBox(
                       width: 10,
                     ),
-                    Text('$total $currencySymbol',
-                        style: TextStyle(color: Colors.white)),
+                    MoneySymbolFormatter(
+                      text: total,
+                      currencyId: _wallet.currencyID,
+                      textStyle: TextStyle(color: Colors.white),
+                    ),
                   ]),
             ),
             TextButton(

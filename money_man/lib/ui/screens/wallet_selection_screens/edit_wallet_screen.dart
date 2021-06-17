@@ -8,6 +8,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class EditWalletScreen extends StatefulWidget {
@@ -255,73 +256,28 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     dense: true,
                     leading: Icon(Icons.account_balance,
                         size: 30.0, color: Colors.white24),
-                    title: Text(
-                        adjustAmount != null
-                            ? convertMoneyType(adjustAmount)
-                            : convertMoneyType(widget.wallet.amount),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.0)),
+                    title: adjustAmount != null
+                        ? MoneySymbolFormatter(
+                            text: adjustAmount,
+                            currencyId: widget.wallet.currencyID,
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0),
+                          )
+                        : MoneySymbolFormatter(
+                            text: widget.wallet.amount,
+                            currencyId: widget.wallet.currencyID,
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0),
+                          ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Colors.white),
                   )
-                  /*Padding(
-                                                    padding: const EdgeInsets.only(left: 8.0, bottom: 8),
-                                                    child: Row(
-                                                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-                                                        IconButton(
-                                                          onPressed: () {},
-                                                          icon: Icon(
-                                                            Icons.account_balance_outlined,
-                                                            color: Color(0xff8f8f8f),
-                                                            size: 30,
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Container(
-                                                            padding: EdgeInsets.only(left: 15, right: 50),
-                                                            width: 250,
-                                                            child: TextFormField(
-                                                              keyboardType: TextInputType.number,
-                                                              style: TextStyle(
-                                                                color: Colors.white,
-                                                                decoration: TextDecoration.none,
-                                                              ),
-                                                              decoration: InputDecoration(
-                                                                  errorBorder: UnderlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(color: Colors.red, width: 1),
-                                                                  ),
-                                                                  enabledBorder: UnderlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: Colors.white60, width: 1),
-                                                                  ),
-                                                                  focusedBorder: UnderlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: Colors.white60, width: 3),
-                                                                  ),
-                                                                  labelText: 'Initial balance',
-                                                                  labelStyle: TextStyle(color: Colors.white60)),
-                                                              onChanged: (value) {
-                                                                var val = double.tryParse(value);
-                                                                if (val == null) widget.wallet.amount = 0;
-                                                                widget.wallet.amount = val;
-                                                              },
-                                                              validator: (value) {
-                                                                return (value == null ||
-                                                                        double.tryParse(value) == null)
-                                                                    ? 'This field must be a number'
-                                                                    : null;
-                                                              },
-                                                            ),
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),*/
                 ],
               ),
             ),

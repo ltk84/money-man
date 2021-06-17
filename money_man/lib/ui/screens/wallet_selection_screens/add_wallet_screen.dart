@@ -12,6 +12,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AddWalletScreen extends StatefulWidget {
@@ -262,33 +263,28 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 10),
                     onTap: () async {
-                      // final resultAmount = await Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (_) => EnterAmountScreen()
-                      //     )
-                      // );
                       final resultAmount = await showCupertinoModalBottomSheet(
                           context: context,
                           builder: (context) => EnterAmountScreen());
                       if (resultAmount != null)
                         setState(() {
-                          print(resultAmount);
                           wallet.amount = double.parse(resultAmount);
                         });
                     },
                     dense: true,
                     leading: Icon(Icons.account_balance,
                         size: 30.0, color: Colors.white24),
-                    title: Text(
-                        wallet.amount == null
-                            ? 'Enter initial balance'
-                            : convertMoneyType(wallet.amount),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.0)),
+                    title: wallet.amount == null
+                        ? Text('Enter wallet amount')
+                        : MoneySymbolFormatter(
+                            text: wallet.amount,
+                            currencyId: wallet.currencyID,
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0),
+                          ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Colors.white),
                   )
