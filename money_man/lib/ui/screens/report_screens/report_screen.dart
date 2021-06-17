@@ -320,119 +320,122 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                           builder: (key) {
                             this.key1 = key;
 
-                            return Column(
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              'Opening balance',
-                                              style: TextStyle(
-                                                color: foregroundColor.withOpacity(0.7),
-                                                fontFamily: 'Montserrat',
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 15,
+                            return Container(
+                              color: backgroundColor, // để lúc export ra không bị transparent.
+                              child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                'Opening balance',
+                                                style: TextStyle(
+                                                  color: foregroundColor.withOpacity(0.7),
+                                                  fontFamily: 'Montserrat',
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 15,
+                                                ),
                                               ),
-                                            ),
-                                            MoneySymbolFormatter(
-                                              text: openingBalance,
-                                              currencyId: _wallet.currencyID,
-                                              textStyle: TextStyle(
-                                                color: foregroundColor,
-                                                fontFamily: 'Montserrat',
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 20,
-                                                height: 1.5,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              'Closing balance',
-                                              style: TextStyle(
-                                                color: foregroundColor.withOpacity(0.7),
-                                                fontFamily: fontFamily,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            MoneySymbolFormatter(
-                                              text: closingBalance,
-                                              currencyId: _wallet.currencyID,
-                                              textStyle: TextStyle(
-                                                color: foregroundColor,
-                                                fontFamily: fontFamily,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 20,
-                                                height: 1.5,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Divider(
-                                    color: foregroundColor.withOpacity(0.24),
-                                    thickness: 1.0,
-                                    height: 20,
-                                  ),
-                                  SizedBox(height: 10,),
-                                  Hero(
-                                    tag: 'netIncomeChart',
-                                    child: Column(
-                                      children: [
-                                        Text('Net Income',
-                                            style: TextStyle(
-                                              color: foregroundColor.withOpacity(0.7),
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            )
-                                        ),
-                                        MoneySymbolFormatter(
-                                            text: closingBalance - openingBalance,
-                                            currencyId: _wallet.currencyID,
-                                            textStyle: TextStyle(
-                                              color: (closingBalance - openingBalance) > 0 ? incomeColor
-                                                  : (closingBalance - openingBalance) == 0 ? foregroundColor : expenseColor,
-                                              fontFamily: fontFamily,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 26,
-                                              height: 1.5,
-                                            )),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                PageTransition(
-                                                    childCurrent: this.widget,
-                                                    child: AnalyticRevenueAndExpenditureScreen(
-                                                      currentWallet: _wallet,
-                                                      beginDate: beginDate,
-                                                      endDate: endDate,
-                                                    ),
-                                                    type: PageTransitionType.rightToLeft));
-                                          },
-                                          child: Container(
-                                            width: 450,
-                                            height: 200,
-                                            child: BarChartScreen(
-                                                currentList: _transactionList,
-                                                beginDate: beginDate,
-                                                endDate: endDate),
+                                              MoneySymbolFormatter(
+                                                text: openingBalance,
+                                                currencyId: _wallet.currencyID,
+                                                textStyle: TextStyle(
+                                                  color: foregroundColor,
+                                                  fontFamily: 'Montserrat',
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 20,
+                                                  height: 1.5,
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ),
+                                        Expanded(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                'Closing balance',
+                                                style: TextStyle(
+                                                  color: foregroundColor.withOpacity(0.7),
+                                                  fontFamily: fontFamily,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              MoneySymbolFormatter(
+                                                text: closingBalance,
+                                                currencyId: _wallet.currencyID,
+                                                textStyle: TextStyle(
+                                                  color: foregroundColor,
+                                                  fontFamily: fontFamily,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 20,
+                                                  height: 1.5,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
                                       ],
                                     ),
-                                  ),
-                                ],
+                                    Divider(
+                                      color: foregroundColor.withOpacity(0.24),
+                                      thickness: 1.0,
+                                      height: 20,
+                                    ),
+                                    SizedBox(height: 10,),
+                                    Hero(
+                                      tag: 'netIncomeChart',
+                                      child: Column(
+                                        children: [
+                                          Text('Net Income',
+                                              style: TextStyle(
+                                                color: foregroundColor.withOpacity(0.7),
+                                                fontFamily: 'Montserrat',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16,
+                                              )
+                                          ),
+                                          MoneySymbolFormatter(
+                                              text: closingBalance - openingBalance,
+                                              currencyId: _wallet.currencyID,
+                                              textStyle: TextStyle(
+                                                color: (closingBalance - openingBalance) > 0 ? incomeColor
+                                                    : (closingBalance - openingBalance) == 0 ? foregroundColor : expenseColor,
+                                                fontFamily: fontFamily,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 26,
+                                                height: 1.5,
+                                              )),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      childCurrent: this.widget,
+                                                      child: AnalyticRevenueAndExpenditureScreen(
+                                                        currentWallet: _wallet,
+                                                        beginDate: beginDate,
+                                                        endDate: endDate,
+                                                      ),
+                                                      type: PageTransitionType.rightToLeft));
+                                            },
+                                            child: Container(
+                                              width: 450,
+                                              height: 200,
+                                              child: BarChartScreen(
+                                                  currentList: _transactionList,
+                                                  beginDate: beginDate,
+                                                  endDate: endDate),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                              ),
                             );
                           },
                         ),
@@ -448,23 +451,89 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                   builder: (key) {
                                     this.key2 = key;
 
-                                    return  Column(
-                                      children: <Widget>[
+                                    return  Container(
+                                      color: backgroundColor, // để lúc export ra không bị transparent.
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            'Income',
+                                            style: TextStyle(
+                                              color: foregroundColor.withOpacity(0.7),
+                                              fontFamily: fontFamily,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16,
+                                            ),
+                                            textAlign: TextAlign.start,
+                                          ),
+                                          MoneySymbolFormatter(
+                                            text: income,
+                                            currencyId: _wallet.currencyID,
+                                            textStyle: TextStyle(
+                                              color: Colors.blueAccent,
+                                              fontFamily: fontFamily,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 24,
+                                              height: 1.5,
+                                            ),
+                                            textAlign: TextAlign.start,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      childCurrent: this.widget,
+                                                      child: AnalyticPieChartSreen(
+                                                        currentWallet: _wallet,
+                                                        type: 'income',
+                                                        beginDate: beginDate,
+                                                        endDate: endDate,
+                                                      ),
+                                                      type: PageTransitionType.rightToLeft));
+                                            },
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              child: PieChartScreen(
+                                                  isShowPercent: false,
+                                                  currentList: _transactionList,
+                                                  categoryList: _incomeCategoryList,
+                                                  total: income),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              VerticalDivider(
+                                color: foregroundColor.withOpacity(0.24),
+                                thickness: 1,
+                              ),
+                              Expanded(
+                                child: WidgetToImage(
+                                  builder: (key) {
+                                    this.key3 = key;
+
+                                    return Container(
+                                      color: backgroundColor, // để lúc export ra không bị transparent.
+                                      child: Column(
+                                          children: <Widget>[
                                         Text(
-                                          'Income',
+                                          'Expense',
                                           style: TextStyle(
                                             color: foregroundColor.withOpacity(0.7),
-                                            fontFamily: fontFamily,
+                                            fontFamily: 'Montserrat',
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16,
                                           ),
                                           textAlign: TextAlign.start,
                                         ),
                                         MoneySymbolFormatter(
-                                          text: income,
+                                          text: expense,
                                           currencyId: _wallet.currencyID,
                                           textStyle: TextStyle(
-                                            color: Colors.blueAccent,
+                                            color: Colors.redAccent,
                                             fontFamily: fontFamily,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 24,
@@ -480,7 +549,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                     childCurrent: this.widget,
                                                     child: AnalyticPieChartSreen(
                                                       currentWallet: _wallet,
-                                                      type: 'income',
+                                                      type: 'expense',
                                                       beginDate: beginDate,
                                                       endDate: endDate,
                                                     ),
@@ -491,72 +560,12 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             child: PieChartScreen(
                                                 isShowPercent: false,
                                                 currentList: _transactionList,
-                                                categoryList: _incomeCategoryList,
-                                                total: income),
+                                                categoryList: _expenseCategoryList,
+                                                total: expense),
                                           ),
                                         ),
-                                      ],
+                                      ]),
                                     );
-                                  },
-                                ),
-                              ),
-                              VerticalDivider(
-                                color: foregroundColor.withOpacity(0.24),
-                                thickness: 1,
-                              ),
-                              Expanded(
-                                child: WidgetToImage(
-                                  builder: (key) {
-                                    this.key3 = key;
-
-                                    return Column(
-                                        children: <Widget>[
-                                      Text(
-                                        'Expense',
-                                        style: TextStyle(
-                                          color: foregroundColor.withOpacity(0.7),
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 16,
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      MoneySymbolFormatter(
-                                        text: expense,
-                                        currencyId: _wallet.currencyID,
-                                        textStyle: TextStyle(
-                                          color: Colors.redAccent,
-                                          fontFamily: fontFamily,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 24,
-                                          height: 1.5,
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                  childCurrent: this.widget,
-                                                  child: AnalyticPieChartSreen(
-                                                    currentWallet: _wallet,
-                                                    type: 'expense',
-                                                    beginDate: beginDate,
-                                                    endDate: endDate,
-                                                  ),
-                                                  type: PageTransitionType.rightToLeft));
-                                        },
-                                        child: Container(
-                                          color: Colors.transparent,
-                                          child: PieChartScreen(
-                                              isShowPercent: false,
-                                              currentList: _transactionList,
-                                              categoryList: _expenseCategoryList,
-                                              total: expense),
-                                        ),
-                                      ),
-                                    ]);
                                   },
                                 ),
                               ),

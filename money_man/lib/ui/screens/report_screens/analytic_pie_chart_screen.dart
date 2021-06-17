@@ -239,95 +239,98 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                       builder: (key) {
                         this.key1 = key;
 
-                        return Column(children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Text(_content,
-                                style: TextStyle(
-                                  color: foregroundColor.withOpacity(0.7),
-                                  fontFamily: fontFamily,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              MoneySymbolFormatter(
-                                text: total,
-                                currencyId: _wallet.currencyID,
-                                textStyle: TextStyle(
-                                  color: _color,
-                                  fontFamily: fontFamily,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 24,
-                                  height: 1.5,
-                                ),
-                                textAlign: TextAlign.start,
-                              ),
-                              PieChartScreen(
-                                  isShowPercent: true,
-                                  currentList: _transactionList,
-                                  categoryList: _categoryList,
-                                  total: total),
-                            ],
-                          ),
-                          SizedBox(height: 20,),
-                          GestureDetector(
-                            onTap: () async {
-                              await setState(() {
-                                expandDetail = !expandDetail;
-                                print(_controller.position.maxScrollExtent.toString());
-                              });
-                              if (expandDetail)
-                                _controller.animateTo(
-                                  _categoryList.length == 0
-                                    ? 0
-                                    : _categoryList.length.toDouble()*67.4 - 193.2 + .05494505494505,
-                                  curve: Curves.fastOutSlowIn,
-                                  duration: const Duration(milliseconds: 500),
-                                );
-                                //_controller.jumpTo(100);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: boxBackgroundColor,
-                                  border: Border(
-                                      top: BorderSide(
-                                        color: foregroundColor.withOpacity(0.12),
-                                        width: 1,
-                                      ),
-                                      bottom: BorderSide(
-                                        color: foregroundColor.withOpacity(0.12),
-                                        width: 1,
-                                      )
-                                  )
-                              ),
-                              padding: EdgeInsets.symmetric(vertical: 5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'View amount',
-                                    style: TextStyle(
-                                      fontFamily: fontFamily,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16.0,
-                                      color: foregroundColor,
-                                    )
+                        return Container(
+                          color: backgroundColor, // để lúc export ra không bị transparent.
+                          child: Column(children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                Text(_content,
+                                  style: TextStyle(
+                                    color: foregroundColor.withOpacity(0.7),
+                                    fontFamily: fontFamily,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
                                   ),
-                                  Icon(Icons.arrow_drop_down, color: foregroundColor.withOpacity(0.54)),
-                                ],
+                                ),
+                                MoneySymbolFormatter(
+                                  text: total,
+                                  currencyId: _wallet.currencyID,
+                                  textStyle: TextStyle(
+                                    color: _color,
+                                    fontFamily: fontFamily,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 24,
+                                    height: 1.5,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
+                                PieChartScreen(
+                                    isShowPercent: true,
+                                    currentList: _transactionList,
+                                    categoryList: _categoryList,
+                                    total: total),
+                              ],
+                            ),
+                            SizedBox(height: 20,),
+                            GestureDetector(
+                              onTap: () async {
+                                await setState(() {
+                                  expandDetail = !expandDetail;
+                                  print(_controller.position.maxScrollExtent.toString());
+                                });
+                                if (expandDetail)
+                                  _controller.animateTo(
+                                    _categoryList.length == 0
+                                      ? 0
+                                      : _categoryList.length.toDouble()*67.4 - 193.2 + .05494505494505,
+                                    curve: Curves.fastOutSlowIn,
+                                    duration: const Duration(milliseconds: 500),
+                                  );
+                                  //_controller.jumpTo(100);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: boxBackgroundColor,
+                                    border: Border(
+                                        top: BorderSide(
+                                          color: foregroundColor.withOpacity(0.12),
+                                          width: 1,
+                                        ),
+                                        bottom: BorderSide(
+                                          color: foregroundColor.withOpacity(0.12),
+                                          width: 1,
+                                        )
+                                    )
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 5),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'View amount',
+                                      style: TextStyle(
+                                        fontFamily: fontFamily,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16.0,
+                                        color: foregroundColor,
+                                      )
+                                    ),
+                                    Icon(Icons.arrow_drop_down, color: foregroundColor.withOpacity(0.54)),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          ExpandableWidget(
-                            expand: expandDetail,
-                            child: PieChartInformationScreen(
-                              currentList: _transactionList,
-                              categoryList: _categoryList,
-                              currentWallet: _wallet,
-                              color: _color,
-                            ),
-                          )
-                        ]);
+                            ExpandableWidget(
+                              expand: expandDetail,
+                              child: PieChartInformationScreen(
+                                currentList: _transactionList,
+                                categoryList: _categoryList,
+                                currentWallet: _wallet,
+                                color: _color,
+                              ),
+                            )
+                          ]),
+                        );
                       },
                     ),
                   ),
