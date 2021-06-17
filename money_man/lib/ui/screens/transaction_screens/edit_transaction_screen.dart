@@ -251,6 +251,13 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     if (date != null) {
                       setState(() {
                         pickDate = date;
+                        if(_event != null)
+                        {
+                          if(pickDate.year > _event.endDate.year ||
+                              (pickDate.year == _event.endDate.year && pickDate.month > _event.endDate.month)||
+                              (pickDate.year == _event.endDate.year && pickDate.month == _event.endDate.month && pickDate.day > _event.endDate.day))
+                            _event = null;
+                        }
                       });
                     }
                   },

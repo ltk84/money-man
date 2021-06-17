@@ -354,6 +354,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     if (date != null) {
                       setState(() {
                         pickDate = date;
+                        if(event != null)
+                          {
+                            if(pickDate.year > event.endDate.year ||
+                                (pickDate.year == event.endDate.year && pickDate.month > event.endDate.month)||
+                                (pickDate.year == event.endDate.year && pickDate.month == event.endDate.month && pickDate.day > event.endDate.day))
+                              event = null;
+                          }
                       });
                     }
                   },
@@ -425,6 +432,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     currencySymbol = CurrencyService()
                         .findByCode(selectedWallet.currencyID)
                         .symbol;
+                    event = null;
                   });
               },
               leading: selectedWallet == null
