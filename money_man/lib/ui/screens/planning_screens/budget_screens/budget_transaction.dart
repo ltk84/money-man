@@ -34,8 +34,11 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
           double total = 0;
           List<MyTransaction> listTransaction = snapshot.data ?? [];
           for (int i = 0; i < listTransaction.length; i++) {
-            if (listTransaction[i].date.isBefore(widget.budget.beginDate) ||
-                listTransaction[i].date.isAfter(widget.budget.endDate)) {
+            if (listTransaction[i].date.compareTo(widget.budget.beginDate) <
+                    0 ||
+                listTransaction[i].date.compareTo(
+                        widget.budget.endDate.add(Duration(days: 1))) >=
+                    0) {
               listTransaction.removeAt(i);
               i--;
             }
