@@ -262,9 +262,11 @@ class FirebaseFireStoreService {
     else {
       if (transaction.category.name == 'Debt') {
         wallet.amount += transaction.amount;
+        transaction.extraAmountInfo = transaction.amount;
         // transaction.note += ' from someone';
       } else if (transaction.category.name == 'Loan') {
         wallet.amount -= transaction.amount;
+        transaction.extraAmountInfo = transaction.amount;
         // transaction.note += ' to someone';
       } else if (transaction.category.name == 'Repayment') {
         wallet.amount -= transaction.amount;
@@ -819,6 +821,36 @@ class FirebaseFireStoreService {
 
   // RECURRING TRANSACTION START //
 
+  // search transaction in debt & loan
+  Future<List<MyTransaction>> searchTransactionInDebtLoan(
+      String transactionId, String walletId) async {
+    List<String> listTransId;
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactionDebtLoan')
+        .doc(transactionId)
+        .get()
+        .then((value) {
+      listTransId = value.data().values;
+    });
+
+    List<MyTransaction> listTrans = [];
+    listTransId.forEach((e) async {
+      await users
+          .doc(uid)
+          .collection('wallets')
+          .doc(walletId)
+          .collection('transactions')
+          .doc(e)
+          .get()
+          .then((value) => listTrans.add(MyTransaction.fromMap(value.data())));
+    });
+
+    return listTrans;
+  }
+
   // add recurring transaction
   Future addRecurringTransaction(
       RecurringTransaction reTrans, Wallet wallet) async {
@@ -877,6 +909,7 @@ class FirebaseFireStoreService {
   List<RecurringTransaction> _recurringTransactionFromSnapshot(
       QuerySnapshot snapshot) {
     return snapshot.docs.map((e) {
+      print(e.data());
       return RecurringTransaction.fromMap(e.data());
     }).toList();
   }

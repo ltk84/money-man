@@ -11,8 +11,7 @@ class SelectEventScreen extends StatefulWidget {
   final DateTime timeTransaction;
   SelectEventScreen({Key key, this.wallet, this.event ,this.timeTransaction}) : super(key: key);
   @override
-  _SelectEventScreen createState() =>
-      _SelectEventScreen();
+  _SelectEventScreen createState() => _SelectEventScreen();
 }
 
 class _SelectEventScreen extends State<SelectEventScreen> {
@@ -58,7 +57,7 @@ class _SelectEventScreen extends State<SelectEventScreen> {
                 topRight: Radius.circular(20.0))),
         leading: TextButton(
             onPressed: () {
-              Navigator.of(context).pop(_wallet);
+              Navigator.of(context).pop();
             },
             child: const Text(
               'Back',
@@ -120,7 +119,7 @@ class _SelectEventScreen extends State<SelectEventScreen> {
                                 Navigator.pop(context, listEvent[index]);
                               },
                               leading:
-                              SuperIcon(iconPath: iconData, size: 35.0),
+                                  SuperIcon(iconPath: iconData, size: 35.0),
                               title: Text(
                                 listEvent[index].name,
                                 style: TextStyle(
@@ -140,7 +139,7 @@ class _SelectEventScreen extends State<SelectEventScreen> {
                                 ),
                               ),
                               trailing: (_wallet != null &&
-                                  _wallet.name == listEvent[index].name)
+                                      _wallet.name == listEvent[index].name)
                                   ? Icon(Icons.check, color: Colors.blue)
                                   : null,
                             ),

@@ -17,6 +17,7 @@ class CurrentlyAppliedEvent extends StatefulWidget {
     return _CurrentlyAppliedEvent();
   }
 }
+
 class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
     with TickerProviderStateMixin {
   Wallet _wallet;
@@ -31,6 +32,7 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
             iconID: 'assets/icons/wallet_2.svg');
     super.initState();
   }
+
   @override
   void didUpdateWidget(covariant CurrentlyAppliedEvent oldWidget) {
     _wallet = widget.wallet ??
@@ -42,6 +44,7 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
             iconID: 'assets/icons/wallet_2.svg');
     super.didUpdateWidget(oldWidget);
   }
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -71,63 +74,69 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
           }
           );
           return ListView.builder(
-            physics: ScrollPhysics(),
-            itemCount: currentlyEvent.length,
-              itemBuilder: (context,index)
-              {
+              physics: ScrollPhysics(),
+              itemCount: currentlyEvent.length,
+              itemBuilder: (context, index) {
                 return GestureDetector(
                     onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          child: EventDetailScreen(
-                            currentEvent: currentlyEvent[index],
-                            eventWallet: _wallet,
-                          )
-                          )
-                  );
-                },
-                    child:Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        border: Border(
-                            bottom: BorderSide(
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.leftToRight,
+                              child: EventDetailScreen(
+                                currentEvent: currentlyEvent[index],
+                                eventWallet: _wallet,
+                              )));
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey[900],
+                            border: Border(
+                                bottom: BorderSide(
                               color: Colors.black,
                               width: 1.0,
                             ))),
-                    padding: EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 0),
-                    child: Row(children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                        child: SuperIcon(
-                          iconPath: currentlyEvent[index].iconPath,
-                          size: 45,
-                        ),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width - 80,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[900],
-                              border: Border(
-                                  bottom: BorderSide(
+                        padding: EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 0),
+                        child: Row(children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                            child: SuperIcon(
+                              iconPath: currentlyEvent[index].iconPath,
+                              size: 45,
+                            ),
+                          ),
+                          Container(
+                              width: MediaQuery.of(context).size.width - 80,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[900],
+                                  border: Border(
+                                      bottom: BorderSide(
                                     color: Colors.black,
                                     width: 1.0,
                                   ))),
-                          padding: EdgeInsets.fromLTRB(6.0, 6.0, 0.0, 10),
-                        child:Column(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              padding: EdgeInsets.fromLTRB(6.0, 6.0, 0.0, 10),
+                              child: Column(
                                 children: <Widget>[
-                                  Text(currentlyEvent[index].name ,
-                                    style: TextStyle(
-                                      fontSize: 22.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w800,
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          currentlyEvent[index].name,
+                                          style: TextStyle(
+                                            fontSize: 22.0,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        Text('',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                      ],
                                     ),
-                                    textAlign: TextAlign.start,
                                   ),
                                   Text('',
                                       style: TextStyle(color: Colors.white)),
@@ -178,17 +187,9 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                                       )
                                   ),
                                 ],
-                              ),
-                            ),
-                          ],
-                        )
-                      ),
-                    ]
-                    )
-                )
-                );
-              }
-          );
+                              )),
+                        ])));
+              });
         },
       ),
     );

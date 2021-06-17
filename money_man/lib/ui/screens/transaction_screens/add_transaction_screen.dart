@@ -110,13 +110,25 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         category: cate,
                         contact: contact,
                         eventID: event == null ? '' : event.id);
-                    // }
+
+                    if (extraTransaction != null) {
+                      if (trans.amount > extraTransaction.extraAmountInfo) {
+                        await _showAlertDialog(
+                            'Inputted amount must be <= unpaid amount. Unpaid amount is ${extraTransaction.extraAmountInfo}');
+                        return;
+                      }
+                      extraTransaction.extraAmountInfo -= trans.amount;
+                      await _firestore.updateTransaction(
+                          extraTransaction, selectedWallet);
+                    }
+
                     await _firestore.addTransaction(selectedWallet, trans);
 
                     if (event != null) {
                       await _firestore.updateEventAmountAndTransList(
                           event, selectedWallet, trans);
                     }
+
                     Navigator.pop(context);
                   }
                 },
@@ -217,11 +229,23 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     backgroundColor: Colors.transparent,
                     context: context,
                     builder: (context) => CategoriesTransactionScreen(
-                          walletId: widget.currentWallet.id,
+                          walletId: selectedWallet.id,
                         ));
                 if (selectCate != null) {
-                  if (selectCate.length == 2) {
-                    print('alo');
+                  if (selectCate is List && selectCate.length == 2) {
+                    MyCategory category = selectCate[0];
+                    setState(() {
+                      this.cate = category;
+                      if (cate.type == 'debt & loan') {
+                        if (cate.name == 'Debt') {
+                          hintTextConact = 'Lender';
+                        } else if (cate.name == 'Loan') {
+                          hintTextConact = 'Borrower';
+                        }
+                      }
+                      extraTransaction = selectCate[1];
+                      this.contact = extraTransaction.contact;
+                    });
                   } else {
                     setState(() {
                       this.cate = selectCate;
@@ -251,7 +275,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       backgroundColor: Colors.grey[900],
                       context: context,
                       builder: (context) => CategoriesTransactionScreen(
-                            walletId: widget.currentWallet.id,
+                            walletId: selectedWallet.id,
                           ));
                   if (selectCate != null) {
                     if (selectCate is List && selectCate.length == 2) {

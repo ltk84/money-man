@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class SelectOtherSourceScreen extends StatelessWidget {
@@ -92,7 +93,7 @@ class OtherSourceListView extends StatelessWidget {
                     trailing: Column(
                       children: [
                         Text(trans.amount.toString()),
-                        Text(trans.amount.toString() + ' left')
+                        Text(trans.extraAmountInfo.toString() + ' left')
                       ],
                     ),
                   );

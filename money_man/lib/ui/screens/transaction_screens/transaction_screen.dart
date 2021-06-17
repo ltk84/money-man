@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -13,6 +14,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -89,13 +91,13 @@ class _TransactionScreen extends State<TransactionScreen>
   }
 
   void scrollListener() {
-    if (listScrollController.offset >=
-            listScrollController.position.maxScrollExtent &&
-        !listScrollController.position.outOfRange) {
-      setState(() {
-        _limit += _limitIncrement;
-      });
-    }
+    // if (listScrollController.offset >=
+    //         listScrollController.position.maxScrollExtent &&
+    //     !listScrollController.position.outOfRange) {
+    //   setState(() {
+    //     _limit += _limitIncrement;
+    //   });
+    // }
   }
 
   void _handleSelectTimeRange(int selected) {
@@ -1182,7 +1184,7 @@ class _TransactionScreen extends State<TransactionScreen>
             itemCount: transListSortByCategory[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -1314,8 +1316,38 @@ class _TransactionScreen extends State<TransactionScreen>
             shrinkWrap: true,
             itemCount: transListSortByDate[xIndex].length,
             itemBuilder: (context, yIndex) {
+              String _eventIcon =
+                  (transListSortByDate[xIndex][yIndex].eventID == "" ||
+                          transListSortByDate[xIndex][yIndex].eventID == null)
+                      ? ''
+                      : '🌴';
+              String _note = transListSortByDate[xIndex][yIndex].note;
+              String _contact =
+                  transListSortByDate[xIndex][yIndex].contact ?? 'someone';
+              String _subTitle;
+              if (transListSortByDate[xIndex][yIndex].category.name == 'Debt') {
+                _subTitle = '$_eventIcon$_note from $_contact';
+              } else if (transListSortByDate[xIndex][yIndex].category.name ==
+                  'Loan') {
+                _subTitle = '$_eventIcon$_note to $_contact';
+              } else {
+                _subTitle = '$_eventIcon$_note';
+              }
+
+              String _digit =
+                  transListSortByDate[xIndex][yIndex].category.type ==
+                              'income' ||
+                          transListSortByDate[xIndex][yIndex].category.name ==
+                              'Debt' ||
+                          transListSortByDate[xIndex][yIndex].category.name ==
+                              'Debt Collection'
+                      ? '+'
+                      : '-';
+              double extraAmount =
+                  transListSortByDate[xIndex][yIndex].extraAmountInfo;
+
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Navigator.push(
                       context,
                       PageTransition(
@@ -1340,59 +1372,53 @@ class _TransactionScreen extends State<TransactionScreen>
                       ),
                       Padding(
                           padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
-                          child: (transListSortByDate[xIndex][yIndex].eventID ==
-                                      "" ||
-                                  transListSortByDate[xIndex][yIndex].eventID ==
-                                      null)
-                              ? Text(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
                                   transListSortByDate[xIndex][yIndex]
                                       .category
                                       .name,
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white))
-                              : Text(
-                                  transListSortByDate[xIndex][yIndex]
-                                          .category
-                                          .name +
-                                      "\n🌴",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white))),
+                                      color: Colors.white)),
+                              Text(
+                                _subTitle,
+                                style: TextStyle(
+                                    fontSize: 12.0, color: Colors.grey[500]),
+                              ),
+                            ],
+                          )),
                       Expanded(
-                        child: Text(
-                            transListSortByDate[xIndex][yIndex].category.type ==
-                                        'income' ||
-                                    transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .name ==
-                                        'Debt' ||
-                                    transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .name ==
-                                        'Deft Collection'
-                                ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()} $currencySymbol"
-                                : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()} $currencySymbol",
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          MoneySymbolFormatter(
+                            text: transListSortByDate[xIndex][yIndex].amount,
+                            currencyId: _wallet.currencyID,
                             textAlign: TextAlign.end,
-                            style: TextStyle(
+                            textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .type ==
-                                            'income' ||
-                                        transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Debt' ||
-                                        transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Deft Collection'
+                                color: _digit == '+'
                                     ? Colors.green
-                                    : Colors.red[600])),
-                      ),
+                                    : Colors.red[600]),
+                            digit: _digit,
+                          ),
+                          if (extraAmount != null)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                if (extraAmount != 0)
+                                  MoneySymbolFormatter(
+                                      text: extraAmount,
+                                      currencyId: _wallet.currencyID),
+                                if (extraAmount != 0) Text(' left'),
+                                if (extraAmount == 0) Text('Received')
+                              ],
+                            ),
+                        ],
+                      )),
                     ],
                   ),
                 ),

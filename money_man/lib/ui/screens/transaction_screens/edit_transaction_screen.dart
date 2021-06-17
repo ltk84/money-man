@@ -102,7 +102,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   category: widget.transaction.category,
                   note: note,
                   contact: contact,
-                  eventID: _event.id,
+                  eventID: _event == null ? '' : _event.id,
                 );
 
                 await _firestore.updateTransaction(_transaction, widget.wallet);
@@ -395,7 +395,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 },
               ),
             ),
-            (_event.id != "")
+            (_event != null)
                 ? ListTile(
                     dense: true,
                     onTap: () async {
@@ -509,13 +509,14 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                     fontFamily: 'Montserrat',
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.w500),
-                                hintText: contact ??
-                                        widget.transaction.category.name ==
-                                            'Debt'
-                                    ? 'Lender'
-                                    : widget.transaction.category.name == 'Loan'
-                                        ? 'Borrower'
-                                        : 'With'),
+                                hintText: contact == null
+                                    ? widget.transaction.category.name == 'Debt'
+                                        ? 'Lender'
+                                        : widget.transaction.category.name ==
+                                                'Loan'
+                                            ? 'Borrower'
+                                            : 'With'
+                                    : contact),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Montserrat',
@@ -546,7 +547,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                   // widget.transaction.eventID = _event.id;
                                 });
                             },
-                            leading: _event.id == 'id'
+                            leading: _event == null
                                 ? Icon(
                                     Icons.event,
                                     size: 28.0,
@@ -573,11 +574,11 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                         : Colors.white,
                                     fontFamily: 'Montserrat',
                                     fontSize: 16.0,
-                                    fontWeight: _event.id == 'id'
+                                    fontWeight: _event == null
                                         ? FontWeight.w500
                                         : FontWeight.w600,
                                   ),
-                                  hintText: _event.id == 'id'
+                                  hintText: _event == null
                                       ? 'Select event'
                                       : _event.name),
                               onTap: () async {
