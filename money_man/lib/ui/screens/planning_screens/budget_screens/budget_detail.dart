@@ -58,17 +58,11 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    bool isStart;
     DateTime today = DateTime.now();
     // todayRate là biến biểu thị tỉ lệ thời gian hiện tại trong khoảng thời gian của budget. nếu >1 đã kết thúc, <0 chưa bắt đầu
     var todayRate = today.difference(widget.budget.beginDate).inDays /
         widget.budget.endDate.difference(widget.budget.beginDate).inDays;
     var todayTarget = widget.budget.spent / widget.budget.amount;
-    if (today.isBefore(widget.budget.beginDate))
-      isStart = false;
-    else
-      isStart = true;
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -470,12 +464,14 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               alignment: Alignment.center,
               child: TextButton(
                   onPressed: () async {
-                    await showCupertinoModalBottomSheet(
-                        context: context,
-                        builder: (context) => BudgetTransactionScreen(
-                              wallet: widget.wallet,
-                              budget: widget.budget,
-                            ));
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BudgetTransactionScreen(
+                                  wallet: widget.wallet,
+                                  budget: widget.budget,
+                                )));
+                    await _firestore.updateBudget(widget.budget, widget.wallet);
                     setState(() {});
                   },
                   child: Container(

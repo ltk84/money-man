@@ -32,32 +32,7 @@ class ListTransactionBudget extends StatefulWidget {
 
 class _ListTransactionBudget extends State<ListTransactionBudget> {
   final double fontSizeText = 30;
-  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
-  int reachTop = 0;
-  int reachAppBar = 0;
-
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
-  ScrollController _controller = ScrollController();
-  _scrollListener() {
-    if (_controller.offset > 0) {
-      setState(() {
-        reachAppBar = 1;
-      });
-    } else {
-      setState(() {
-        reachAppBar = 0;
-      });
-    }
-    if (_controller.offset >= fontSizeText - 5) {
-      setState(() {
-        reachTop = 1;
-      });
-    } else {
-      setState(() {
-        reachTop = 0;
-      });
-    }
-  }
 
   // list các list transaction đã lọc
   List<List<MyTransaction>> transactionListSorted = [];
@@ -76,8 +51,6 @@ class _ListTransactionBudget extends State<ListTransactionBudget> {
     _endDate = widget.endDate;
     total = 0;
     _totalMoney = widget.totalMoney;
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
     filterData(_transactionList, _beginDate, _endDate);
   }
 
@@ -86,10 +59,8 @@ class _ListTransactionBudget extends State<ListTransactionBudget> {
     _transactionList = widget.currentList ?? [];
     _beginDate = widget.beginDate;
     _endDate = widget.endDate;
-    _controller = ScrollController();
     _totalMoney = widget.totalMoney;
     total = 0;
-    _controller.addListener(_scrollListener);
   }
 
   void filterData(List<MyTransaction> transactionList, DateTime beginDate,
@@ -117,12 +88,15 @@ class _ListTransactionBudget extends State<ListTransactionBudget> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xff1a1a1a),
       appBar: new AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xff333333),
         centerTitle: true,
         elevation: 0,
-        title: Text('Transaction List'),
+        title: Text(
+          'Transaction List',
+          style: TextStyle(fontFamily: 'Montserrat'),
+        ),
       ),
       body: buildDisplayTransactionByDate(transactionListSorted, _totalMoney),
     );
@@ -131,7 +105,7 @@ class _ListTransactionBudget extends State<ListTransactionBudget> {
   Container buildDisplayTransactionByDate(
       List<List<MyTransaction>> transactionListSortByDate, double total) {
     return Container(
-      color: Colors.black,
+      color: Color(0xff1a1a1a),
       child: ListView.builder(
           physics: BouncingScrollPhysics(),
           //primary: false,
@@ -169,7 +143,7 @@ class _ListTransactionBudget extends State<ListTransactionBudget> {
               color: Colors.grey[900],
               border: Border(
                   bottom: BorderSide(
-                color: Colors.black,
+                color: Color(0xff1a1a1a),
                 width: 1.0,
               ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
@@ -191,7 +165,7 @@ class _ListTransactionBudget extends State<ListTransactionBudget> {
                       height: 10,
                     ),
                     Divider(
-                      color: Colors.black,
+                      color: Color(0xff1a1a1a),
                       thickness: 1.0,
                       height: 10,
                     ),
@@ -235,7 +209,7 @@ class _ListTransactionBudget extends State<ListTransactionBudget> {
                       width: 1.0,
                     ),
                     top: BorderSide(
-                      color: Colors.black,
+                      color: Color(0xff1a1a1a),
                       width: 1.0,
                     ))),
             child: StickyHeader(

@@ -1361,9 +1361,14 @@ class _TransactionScreen extends State<TransactionScreen>
                   final _firestore = Provider.of<FirebaseFireStoreService>(
                       context,
                       listen: false);
-                  Event event = await _firestore.getEventByID(
-                      transListSortByDate[xIndex][yIndex].eventID,
-                      widget.currentWallet);
+                  Event event;
+                  if (transListSortByDate[xIndex][yIndex].eventID != '' &&
+                      transListSortByDate[xIndex][yIndex].eventID != null) {
+                    event = await _firestore.getEventByID(
+                        transListSortByDate[xIndex][yIndex].eventID,
+                        widget.currentWallet);
+                  } else
+                    event = null;
                   Navigator.push(
                       context,
                       PageTransition(

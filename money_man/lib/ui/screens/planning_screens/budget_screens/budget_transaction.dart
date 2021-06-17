@@ -56,18 +56,23 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
           return (listTransaction.length == 0)
               ? Scaffold(
                   backgroundColor: Colors.black,
-                  appBar: new AppBar(
-                    backgroundColor: Colors.black,
+                  appBar: AppBar(
+                    backgroundColor: Color(0xff333333),
                     centerTitle: true,
                     elevation: 0,
-                    title: Text('Transaction List'),
+                    title: Text(
+                      'Transaction List',
+                      style: TextStyle(fontFamily: 'Montserrat'),
+                    ),
                   ),
                   body: Container(
+                    color: Color(0xff1a1a1a),
                     alignment: Alignment.center,
                     child: Text(
                       'No transaction',
                       style: TextStyle(
                         fontSize: 45,
+                        fontFamily: 'Montserrat',
                         color: Colors.white54,
                       ),
                     ),
