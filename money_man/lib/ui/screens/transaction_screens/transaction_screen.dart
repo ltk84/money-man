@@ -1351,20 +1351,6 @@ class _TransactionScreen extends State<TransactionScreen>
 
               return GestureDetector(
                 onTap: () async {
-<<<<<<< HEAD
-                  final _firestore = Provider.of<FirebaseFireStoreService>(
-                      context,
-                      listen: false);
-                  Event event;
-                  if (transListSortByDate[xIndex][yIndex].eventID != '' &&
-                      transListSortByDate[xIndex][yIndex].eventID != null) {
-                    event = await _firestore.getEventByID(
-                        transListSortByDate[xIndex][yIndex].eventID,
-                        widget.currentWallet);
-                  } else
-                    event = null;
-=======
->>>>>>> tung/feature-debt-loan
                   Navigator.push(
                       context,
                       PageTransition(

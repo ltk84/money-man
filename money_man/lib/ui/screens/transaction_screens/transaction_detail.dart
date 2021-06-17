@@ -106,7 +106,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
               onPressed: () async {
                 //TODO: Thuc hien xoa transaction
 
-                await showDialog(
+                String result = await showDialog(
                     context: context,
                     barrierDismissible: false,
                     builder: (_) {
@@ -122,21 +122,23 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         actions: [
                           FlatButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.pop(context, 'No');
                               },
                               child: Text('No')),
                           FlatButton(
-                              onPressed: () async {
-                                await _firestore.deleteTransaction(
-                                    _transaction, widget.wallet);
-                                Navigator.pop(context);
+                              onPressed: () {
+                                Navigator.pop(context, 'Yes');
                                 // chưa có animation để back ra transaction screen
-                                Navigator.pop(context);
                               },
                               child: Text('Yes'))
                         ],
                       );
                     });
+                if (result == 'Yes') {
+                  await _firestore.deleteTransaction(
+                      _transaction, widget.wallet);
+                  Navigator.pop(context);
+                }
               })
         ],
         backgroundColor: Color(0xff333333),
