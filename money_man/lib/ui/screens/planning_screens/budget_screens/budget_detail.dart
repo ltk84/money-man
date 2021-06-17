@@ -11,6 +11,7 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/edit_budget
 import 'package:money_man/ui/screens/planning_screens/budget_screens/widget/line_chart_progress.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_transaction.dart';
 
@@ -162,8 +163,9 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 30),
-                      child: Text(
+                        margin: EdgeInsets.only(top: 30),
+                        child:
+                            /*Text(
                         MoneyFormatter(amount: this.widget.budget.amount)
                             .output
                             .withoutFractionDigits,
@@ -171,8 +173,15 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                             color: Colors.white,
                             fontSize: 30,
                             fontWeight: FontWeight.w200),
-                      ),
-                    ),
+                      ),*/
+                            MoneySymbolFormatter(
+                          text: widget.budget.amount,
+                          currencyId: widget.wallet.currencyID,
+                          textStyle: TextStyle(
+                              color: Colors.red[400],
+                              fontSize: 30,
+                              fontWeight: FontWeight.w200),
+                        )),
                     Container(
                       margin: EdgeInsets.only(top: 20),
                       padding: EdgeInsets.only(right: 10),
@@ -193,12 +202,10 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 2),
-                                    Text(
-                                      MoneyFormatter(
-                                              amount: this.widget.budget.spent)
-                                          .output
-                                          .withoutFractionDigits,
-                                      style: TextStyle(
+                                    MoneySymbolFormatter(
+                                      text: widget.budget.spent,
+                                      currencyId: widget.wallet.currencyID,
+                                      textStyle: TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600),
@@ -218,20 +225,18 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 2),
-                                    Text(
-                                      MoneyFormatter(
-                                              amount: todayTarget > 1
-                                                  ? this.widget.budget.spent -
-                                                      this.widget.budget.amount
-                                                  : this.widget.budget.amount -
-                                                      this.widget.budget.spent)
-                                          .output
-                                          .withoutFractionDigits,
-                                      style: TextStyle(
+                                    MoneySymbolFormatter(
+                                      text: todayTarget > 1
+                                          ? this.widget.budget.spent -
+                                              this.widget.budget.amount
+                                          : this.widget.budget.amount -
+                                              this.widget.budget.spent,
+                                      currencyId: widget.wallet.currencyID,
+                                      textStyle: TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600),
-                                    )
+                                    ),
                                   ],
                                 ),
                               )
@@ -362,16 +367,15 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                         SizedBox(
                           height: 2,
                         ),
-                        Text(
-                          MoneyFormatter(
-                                  amount: widget.budget.amount /
-                                      (widget.budget.endDate)
-                                          .difference(widget.budget.beginDate)
-                                          .inDays)
-                              .output
-                              .withoutFractionDigits,
-                          style: TextStyle(color: Colors.white, fontSize: 15),
-                        )
+                        MoneySymbolFormatter(
+                          text: widget.budget.amount /
+                              (widget.budget.endDate)
+                                  .difference(widget.budget.beginDate)
+                                  .inDays,
+                          currencyId: widget.wallet.currencyID,
+                          textStyle:
+                              TextStyle(color: Colors.white, fontSize: 15),
+                        ),
                       ],
                     ),
                     Column(
@@ -386,16 +390,15 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                         SizedBox(
                           height: 2,
                         ),
-                        Text(
-                          MoneyFormatter(
-                                  amount: widget.budget.spent /
-                                      (today)
-                                          .difference(widget.budget.beginDate)
-                                          .inDays)
-                              .output
-                              .withoutFractionDigits,
-                          style: TextStyle(color: Colors.white, fontSize: 15),
-                        )
+                        MoneySymbolFormatter(
+                          text: widget.budget.spent /
+                              (today)
+                                  .difference(widget.budget.beginDate)
+                                  .inDays,
+                          currencyId: widget.wallet.currencyID,
+                          textStyle:
+                              TextStyle(color: Colors.white, fontSize: 15),
+                        ),
                       ],
                     )
                   ]),
@@ -414,19 +417,15 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                             fontWeight: FontWeight.w400,
                             fontSize: 13),
                       ),
-                      Text(
-                        MoneyFormatter(
-                                amount: widget.budget.spent /
-                                    (today)
-                                        .difference(widget.budget.beginDate)
-                                        .inDays *
-                                    (widget.budget.endDate)
-                                        .difference(widget.budget.beginDate)
-                                        .inDays)
-                            .output
-                            .withoutFractionDigits,
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      )
+                      MoneySymbolFormatter(
+                        text: widget.budget.spent /
+                            (today).difference(widget.budget.beginDate).inDays *
+                            (widget.budget.endDate)
+                                .difference(widget.budget.beginDate)
+                                .inDays,
+                        currencyId: widget.wallet.currencyID,
+                        textStyle: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
                     ],
                   )
                 ],

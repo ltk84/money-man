@@ -5,6 +5,7 @@ import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -144,11 +145,15 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                               fontSize: 12.0, color: Colors.grey[500])),
                     ),
                     Expanded(
-                      child: Text(totalAmountInDay.toString(),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        child: MoneySymbolFormatter(
+                          text: totalAmountInDay,
+                          currencyId: widget.wallet.currencyID,
+                          textStyle: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -159,7 +164,7 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                   itemCount: transListSortByDate[xIndex].length,
                   itemBuilder: (context, yIndex) {
                     return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         /*Navigator.push(
                             context,
                             PageTransition(
@@ -170,7 +175,7 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                                 ),
                                 type: PageTransitionType.rightToLeft));
                         setState(() {});*/
-                        Navigator.push(
+                        var res = await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (_) => TransactionDetail(
@@ -178,6 +183,7 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                                           [yIndex],
                                       wallet: widget.wallet,
                                     )));
+                        setState(() {});
                       },
                       child: Container(
                         padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
@@ -203,19 +209,22 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                                       color: Colors.white)),
                             ),
                             Expanded(
-                              child: Text(
-                                  transListSortByDate[xIndex][yIndex]
-                                      .amount
-                                      .toString(),
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
+                              child: Container(
+                                alignment: Alignment.centerRight,
+                                child: MoneySymbolFormatter(
+                                  text: transListSortByDate[xIndex][yIndex]
+                                      .amount,
+                                  currencyId: widget.wallet.currencyID,
+                                  textStyle: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: transListSortByDate[xIndex][yIndex]
                                                   .category
                                                   .type ==
                                               'income'
                                           ? Colors.green
-                                          : Colors.red[600])),
+                                          : Colors.red[600]),
+                                ),
+                              ),
                             ),
                           ],
                         ),

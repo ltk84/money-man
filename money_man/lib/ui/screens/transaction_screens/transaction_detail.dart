@@ -122,12 +122,15 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         actions: [
                           FlatButton(
                               onPressed: () {
-                                Navigator.pop(context, 'No');
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop('No');
                               },
                               child: Text('No')),
                           FlatButton(
                               onPressed: () {
-                                Navigator.pop(context, 'Yes');
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop('Yes');
+
                                 // chưa có animation để back ra transaction screen
                               },
                               child: Text('Yes'))
