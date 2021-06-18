@@ -8,6 +8,7 @@ import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -65,7 +66,8 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
           )
         ],
       ),
-      body: Column(
+      body: ListView(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         children: [
           Container(
             margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
@@ -150,11 +152,17 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
           Container(
             child: transactionListSortByDate.length == 0
                 ? Text(
-                    'Nothing',
-                    style: TextStyle(color: Colors.white),
+                    'No transaction',
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.24),
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16.0,
+                    ),
+                    textAlign: TextAlign.center,
                   )
                 : ListView.builder(
-                    physics: BouncingScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: transactionListSortByDate.length,
                     itemBuilder: (context, xIndex) {
@@ -254,6 +262,7 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                           type: PageTransitionType.rightToLeft));
                 },
                 child: Container(
+                  color: Colors.transparent,
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                   child: Row(
                     children: <Widget>[

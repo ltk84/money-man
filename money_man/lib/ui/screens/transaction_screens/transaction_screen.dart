@@ -862,6 +862,8 @@ class _TransactionScreen extends State<TransactionScreen>
                 onSelected: (value) {
                   if (value == 'Search for transaction') {
                     showCupertinoModalBottomSheet(
+                      isDismissible: false,
+                      enableDrag: false,
                         context: context,
                         builder: (context) =>
                             SearchTransactionScreen(wallet: _wallet));
