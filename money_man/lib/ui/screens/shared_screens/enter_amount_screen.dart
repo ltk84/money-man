@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -65,16 +66,16 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
           'Calculate your amount',
           style: TextStyle(
             fontFamily: Style.fontFamily,
-            color: Style.foregroundColor,
+            color: Style.calculatorForegroundColor,
             fontWeight: FontWeight.w600,
             fontSize: 18.0,
           ),
         ),
         centerTitle: true,
-        backgroundColor: Color(0xff22252e),
+        backgroundColor: Style.calculatorPrimaryColor,
         elevation: 0,
       ),
-      backgroundColor: Color(0xff22252e),
+      backgroundColor: Style.calculatorPrimaryColor,
       body: ListView(
         physics: NeverScrollableScrollPhysics(),
         reverse: true,
@@ -92,7 +93,11 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                           alignment: Alignment.centerRight,
                           child: Text(
                             userInputFormat,
-                            style: TextStyle(fontSize: 25, color: Colors.white),
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Style.calculatorForegroundColor,
+                                fontFamily: Style.fontFamily,
+                            ),
                           ),
                         ),
                         Container(
@@ -101,9 +106,10 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                           child: Text(
                             answerFormat,
                             style: TextStyle(
+                                fontFamily: Style.fontFamily,
                                 fontSize: 40,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                                color: Style.calculatorForegroundColor,
+                                fontWeight: FontWeight.w700),
                           ),
                         )
                       ]),
@@ -114,7 +120,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                     padding: EdgeInsets.fromLTRB(28, 20, 20, 40),
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                        color: Color(0xff292d36),
+                        color: Style.calculatorBoxBackgroundColor,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(40),
                             topRight: Radius.circular(40))),
@@ -128,59 +134,59 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                                 children: [
                                   KeyOfCalc(
                                     0,
-                                    Color(0xffdbdddd),
-                                    Color(0xffb34048),
+                                    Style.calculatorForegroundColor2,
+                                    Style.calculatorCancelButtonColor,
                                   ),
                                   KeyOfCalc(
-                                      4, Color(0xffdbdddd), Color(0xff282c35)),
+                                      4, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
                                   KeyOfCalc(
-                                      8, Color(0xffdbdddd), Color(0xff282c35)),
+                                      8, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
                                   KeyOfCalc(
-                                      12, Color(0xffdbdddd), Color(0xff282c35)),
+                                      12, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
                                   KeyOfCalc(
-                                      16, Color(0xffdbdddd), Color(0xff282c35)),
+                                      16, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
                                 ],
                               ),
                               Column(
                                 children: [
                                   KeyOfCalc(
-                                      1, Color(0xffdbdddd), Color(0xff444b59)),
+                                      1, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
                                   KeyOfCalc(
-                                      5, Color(0xffdbdddd), Color(0xff282c35)),
+                                      5, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
                                   KeyOfCalc(
-                                      9, Color(0xffdbdddd), Color(0xff282c35)),
+                                      9, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
                                   KeyOfCalc(
-                                      13, Color(0xffdbdddd), Color(0xff282c35)),
+                                      13, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
                                   KeyOfCalc(
-                                      17, Color(0xffdbdddd), Color(0xff444b59)),
+                                      17, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
                                 ],
                               ),
                               Column(
                                 children: [
                                   KeyOfCalc(
-                                      2, Color(0xffdbdddd), Color(0xff444b59)),
+                                      2, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
                                   KeyOfCalc(
-                                      6, Color(0xffdbdddd), Color(0xff282c35)),
+                                      6, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
                                   KeyOfCalc(
-                                      10, Color(0xffdbdddd), Color(0xff282c35)),
+                                      10, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
                                   KeyOfCalc(
-                                      14, Color(0xffdbdddd), Color(0xff282c35)),
+                                      14, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
                                   KeyOfCalc(
-                                      18, Color(0xffdbdddd), Color(0xff444b59)),
+                                      18, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
                                 ],
                               ),
                               Column(
                                 children: [
                                   KeyOfCalc(
-                                      3, Color(0xffdbdddd), Color(0xff444b59)),
+                                      3, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
                                   KeyOfCalc(
-                                      7, Color(0xffdbdddd), Color(0xff444b59)),
+                                      7, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
                                   KeyOfCalc(
-                                      11, Color(0xffdbdddd), Color(0xff444b59)),
+                                      11, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
                                   KeyOfCalc(
                                       isEnd ? 19 : 15,
-                                      Color(0xffdbdddd),
-                                      isEnd ? Color(0xFF4FCC5C) : Color(0xff25b197), //Color(0xff22a115) : Color(0xff25b197),
+                                      Style.calculatorForegroundColor2,
+                                      isEnd ? Style.calculatorCompleteButtonColor : Style.calculatorCalculateButtonColor, //Color(0xff22a115) : Color(0xff25b197),
                                       2),
                                   //KeyOfCalc(19, Color(0xffdbdddd)),
                                 ],
@@ -343,6 +349,8 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
           child: Text(
             buttons[index],
             style: TextStyle(
+              fontFamily: Style.calculatorFontFamily,
+              fontWeight: FontWeight.w500,
               color: txtcolor, //Color(0xffdbdddd),
               fontSize: 25,
             ),

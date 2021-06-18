@@ -112,6 +112,17 @@ class Style {
   static Color runningColor = Color(0xFF51f08d);
   static Color successColor = Color(0xFF4FCC5C); // Nut Save
 
+  static String calculatorFontFamily = 'Montserrat';
+  static Color calculatorPrimaryColor = Color(0xff22252e);
+  static Color calculatorForegroundColor = Colors.white;
+  static Color calculatorForegroundColor2 = Color(0xffdbdddd);
+  static Color calculatorCancelButtonColor = Color(0xffb34048);
+  static Color calculatorNumberButtonColor = Color(0xff282c35);
+  static Color calculatorFunctionButtonColor = Color(0xff444b59);
+  static Color calculatorCompleteButtonColor = Color(0xFF4FCC5C);
+  static Color calculatorCalculateButtonColor = Color(0xff25b197);
+  static Color calculatorBoxBackgroundColor = Color(0xff292d36);
+
   // static Color backgroundColor = Colors.white;
   // static Color backgroundColor1 = Color(0xFFEEEEEE);
   // static Color foregroundColor = Colors.black;
