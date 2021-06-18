@@ -110,4 +110,21 @@ class Style {
   static Color incomeColor2 = Colors.blueAccent;
   static Color runningColor = Color(0xFF51f08d);
   static Color successColor = Color(0xFF4FCC5C); // Nut Save
+
+  // static Color backgroundColor = Colors.white;
+  // static Color backgroundColor1 = Color(0xFFEEEEEE);
+  // static Color foregroundColor = Colors.black;
+  // static Color foregroundColorDark = Color(0x70666666);
+  // static Color boxBackgroundColor = Colors.grey[100];
+  // static Color boxBackgroundColor2 = Color(0xFFE3E3E3);
+  // static Color primaryColor = Color(0xff2FB49C);
+  //
+  // static Color igButtonColor = Color(0xFFc65072);
+  // static Color fbButtonColor = Color(0xFF2c84d4);
+  // static Color errorColor = Colors.red[700];
+  // static Color expenseColor = Colors.red[600];
+  // static Color incomeColor = Color(0xFF76F676);
+  // static Color incomeColor2 = Colors.blueAccent;
+  // static Color runningColor = Color(0xFF51f08d);
+  // static Color successColor = Color(0xFF4FCC5C); // Nut Save
 }

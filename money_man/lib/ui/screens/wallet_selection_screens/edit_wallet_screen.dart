@@ -39,11 +39,11 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
     // iconData = Wallet.getIconDataByIconID(widget.wallet.iconID);
 
     return Scaffold(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.grey[900],
+          backgroundColor: Style.boxBackgroundColor,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.0),
@@ -96,7 +96,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              color: Colors.grey[900],
+              color: Style.boxBackgroundColor,
               margin: EdgeInsets.symmetric(vertical: 35.0, horizontal: 0.0),
               child: Column(
                 children: [
@@ -126,7 +126,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                 iconPath: iconData,
                                 size: 45.0,
                               ),
-                              Icon(Icons.arrow_drop_down, color: Colors.grey),
+                              Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54)),
                             ],
                           ),
                         ),
@@ -141,30 +141,30 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             initialValue: widget.wallet.name,
                             keyboardType: TextInputType.name,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                               decoration: TextDecoration.none,
                             ),
                             decoration: InputDecoration(
                                 errorBorder: UnderlineInputBorder(
                                   borderSide:
-                                      BorderSide(color: Colors.red, width: 1),
+                                      BorderSide(color: Style.errorColor, width: 1),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors.white60, width: 1),
+                                      color: Style.foregroundColor.withOpacity(0.6), width: 1),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors.white60, width: 3),
+                                      color: Style.foregroundColor.withOpacity(0.6), width: 3),
                                 ),
                                 // border: UnderlineInputBorder(
                                 //   borderSide:
-                                //       BorderSide(color: Colors.white60, width: 3),
+                                //       BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 3),
                                 // ),
                                 labelText: 'Name',
                                 labelStyle: TextStyle(
-                                    color: Colors.white60, fontSize: 15)),
+                                    color: Style.foregroundColor.withOpacity(0.6), fontSize: 15)),
                             onChanged: (value) => widget.wallet.name = value,
                             validator: (value) {
                               if (value == null || value.length == 0)
@@ -181,29 +181,29 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                   SizedBox(height: 20,),
                   Divider(
                     thickness: 0.05,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 0),
                     onTap: () {
                       showCurrencyPicker(
                         theme: CurrencyPickerThemeData(
-                          backgroundColor: Colors.grey[900],
+                          backgroundColor: Style.boxBackgroundColor,
                           shape: RoundedRectangleBorder(
                             borderRadius:
                             BorderRadius.all(Radius.circular(20.0)),
                           ),
                           flagSize: 26,
                           titleTextStyle: TextStyle(
-                              fontFamily: 'Montserrat',
+                              fontFamily: Style.fontFamily,
                               fontSize: 17,
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontWeight: FontWeight.w700),
                           subtitleTextStyle: TextStyle(
-                              fontFamily: 'Montserrat',
+                              fontFamily: Style.fontFamily,
                               fontSize: 15,
-                              color: Colors.white),
-                          //backgroundColor: Colors.grey[900],
+                              color: Style.foregroundColor),
+                          //backgroundColor: Style.boxBackgroundColor,
                         ),
                         onSelect: (value) {
                           widget.wallet.currencyID = value.code;
@@ -219,19 +219,19 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.monetization_on,
-                        size: 30.0, color: Colors.white24),
+                        size: 30.0, color: Style.foregroundColor.withOpacity(0.24)),
                     title: Text(currencyName,
                         style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w600,
                             fontSize: 16.0)),
                     trailing: Icon(Icons.chevron_right,
-                        size: 20.0, color: Colors.white),
+                        size: 20.0, color: Style.foregroundColor),
                   ),
                   Divider(
                     thickness: 0.05,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 10),
@@ -249,14 +249,14 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.account_balance,
-                        size: 30.0, color: Colors.white24),
+                        size: 30.0, color: Style.foregroundColor.withOpacity(0.24)),
                     title: adjustAmount != null
                         ? MoneySymbolFormatter(
                             text: adjustAmount,
                             currencyId: widget.wallet.currencyID,
                             textStyle: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
+                                color: Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16.0),
                           )
@@ -264,13 +264,13 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             text: widget.wallet.amount,
                             currencyId: widget.wallet.currencyID,
                             textStyle: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
+                                color: Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16.0),
                           ),
                     trailing: Icon(Icons.chevron_right,
-                        size: 20.0, color: Colors.white),
+                        size: 20.0, color: Style.foregroundColor),
                   )
                 ],
               ),

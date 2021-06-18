@@ -30,11 +30,11 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
     return Container(
       color: Colors.transparent,
       child: Scaffold(
-          backgroundColor: Colors.grey[900],
+          backgroundColor: Style.boxBackgroundColor,
           appBar: AppBar(
             centerTitle: true,
             elevation: 0,
-            backgroundColor: Colors.grey[900],
+            backgroundColor: Style.boxBackgroundColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20.0),
@@ -56,7 +56,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                     Wallet wallet = await _firestore.getWalletByID(widget.id);
                     var res = '';
                     res = await showCupertinoModalBottomSheet(
-                      backgroundColor: Colors.grey[900],
+                      backgroundColor: Style.boxBackgroundColor,
                       context: context,
                       builder: (context) => EditWalletScreen(wallet: wallet),
                     );
@@ -111,7 +111,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                     child: TextButton(
                       onPressed: () async {
                         final res = await showCupertinoModalBottomSheet(
-                            backgroundColor: Colors.grey[900],
+                            backgroundColor: Style.boxBackgroundColor,
                             context: context,
                             builder: (context) => AddWalletScreen());
                         if (res != null)
@@ -177,7 +177,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                             width: double.infinity,
                             decoration: BoxDecoration(
-                                color: Colors.grey[900],
+                                color: Style.boxBackgroundColor,
                                 border: Border(
                                     bottom: BorderSide(
                                       color: Style.foregroundColorDark.withOpacity(0.12),
@@ -221,7 +221,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                             width: double.infinity,
                             decoration: BoxDecoration(
-                                color: Colors.grey[900],
+                                color: Style.boxBackgroundColor,
                                 border: Border(
                                     top: BorderSide(
                                       color: Style.foregroundColor.withOpacity(0.12),

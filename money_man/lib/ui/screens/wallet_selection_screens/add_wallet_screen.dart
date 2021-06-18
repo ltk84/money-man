@@ -87,7 +87,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(content: content);
       },
@@ -122,7 +122,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              color: Colors.grey[900],
+              color: Style.boxBackgroundColor,
               margin: EdgeInsets.symmetric(vertical: 35.0, horizontal: 0.0),
               child: Column(
                 children: [
@@ -152,7 +152,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                                 iconPath: wallet.iconID,
                                 size: 45.0,
                               ),
-                              Icon(Icons.arrow_drop_down, color: Colors.grey),
+                              Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54)),
                             ],
                           ),
                         ),
@@ -167,25 +167,25 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             keyboardType: TextInputType.name,
                             style: TextStyle(
                               fontSize: 20,
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               decoration: TextDecoration.none,
                             ),
                             decoration: InputDecoration(
                               errorBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Colors.red, width: 1),
+                                    BorderSide(color: Style.errorColor, width: 1),
                               ),
                               enabledBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Colors.white60, width: 1),
+                                    BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 1),
                               ),
                               focusedBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Colors.white60, width: 3),
+                                    BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 3),
                               ),
                               labelText: 'Name',
                               labelStyle: TextStyle(
-                                  color: Colors.white60, fontSize: 15),
+                                  color: Style.foregroundColor.withOpacity(0.6), fontSize: 15),
                             ),
                             onChanged: (value) => wallet.name = value,
                             validator: (value) {
@@ -203,14 +203,14 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                   SizedBox(height: 20,),
                   Divider(
                     thickness: 0.05,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 0),
                     onTap: () {
                       showCurrencyPicker(
                         theme: CurrencyPickerThemeData(
-                          backgroundColor: Colors.grey[900],
+                          backgroundColor: Style.boxBackgroundColor,
                           shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0)),
@@ -219,13 +219,13 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           titleTextStyle: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontSize: 17,
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontWeight: FontWeight.w700),
                           subtitleTextStyle: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontSize: 15,
-                              color: Colors.white),
-                          //backgroundColor: Colors.grey[900],
+                              color: Style.foregroundColor),
+                          //backgroundColor: Style.boxBackgroundColor,
                         ),
                         onSelect: (value) {
                           wallet.currencyID = value.code;
@@ -241,19 +241,19 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.monetization_on,
-                        size: 30.0, color: Colors.white24),
+                        size: 30.0, color: Style.foregroundColor.withOpacity(0.24)),
                     title: Text(currencyName,
                         style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w600,
                             fontSize: 16.0)),
                     trailing: Icon(Icons.chevron_right,
-                        size: 20.0, color: Colors.white),
+                        size: 20.0, color: Style.foregroundColor),
                   ),
                   Divider(
                     thickness: 0.05,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 10),
@@ -269,75 +269,24 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.account_balance,
-                        size: 30.0, color: Colors.white24),
+                        size: 30.0, color: Style.foregroundColor.withOpacity(0.24)),
                     title: wallet.amount == null
                         ? Text('Enter wallet amount')
                         : MoneySymbolFormatter(
                             text: wallet.amount,
                             currencyId: wallet.currencyID,
                             textStyle: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
+                                color: Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16.0),
                           ),
                     trailing: Icon(Icons.chevron_right,
-                        size: 20.0, color: Colors.white),
+                        size: 20.0, color: Style.foregroundColor),
                   )
-                  /*Padding(
-                    padding: const EdgeInsets.only(left: 8.0, bottom: 8),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Icon(
-                            Icons.account_balance_outlined,
-                            color: Color(0xff8f8f8f),
-                            size: 30,
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.only(left: 15, right: 50),
-                            width: 250,
-                            child: TextFormField(
-                              onTap: () {
-                                print('print');
-                              },
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                color: Colors.white,
-                                decoration: TextDecoration.none,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),*/
                 ],
               ),
             ),
-            // GestureDetector(
-            //   onTap: () {
-            //     // Xử lý sự kiện click ở đây.
-            //   },
-            //   child: Container(
-            //     padding: EdgeInsets.symmetric(vertical: 10.0),
-            //     alignment: Alignment.center,
-            //     width: double.infinity,
-            //     color: Colors.grey[900],
-            //     child: Text(
-            //       'Link to service',
-            //       style: TextStyle(
-            //           color: Colors.green,
-            //           fontSize: 15,
-            //           fontWeight: FontWeight.w500,
-            //           fontFamily: 'Montserrat'),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ],
