@@ -149,7 +149,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     amount = double.parse(resultAmount);
                   });
               },
-              leading: Icon(Icons.money_rounded, color: Colors.white54, size: 45.0),
+              leading: Icon(Icons.money_rounded, color: Style.foregroundColor.withOpacity(0.54), size: 45.0),
               title: TextFormField(
                 readOnly: true,
                 onTap: () async {
@@ -174,9 +174,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                      color: amount == null ? Colors.grey[600] : Colors.white,
+                      color: amount == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                       fontSize: amount == null ? 22 : 30.0,
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontWeight:
                           amount == null ? FontWeight.w500 : FontWeight.w600,
                     ),
@@ -191,7 +191,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
               child: Divider(
-                color: Colors.white24,
+                color: Style.foregroundColor.withOpacity(0.24),
                 height: 1,
                 thickness: 0.2,
               ),
@@ -205,9 +205,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 onTap: () {},
                 readOnly: true,
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                     fontSize: 16.0,
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
                     border: InputBorder.none,
@@ -217,10 +217,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
                         color: widget.transaction.category.name == null
-                            ? Colors.grey[600]
-                            : Colors.white,
+                            ? Style.foregroundColor.withOpacity(0.24)
+                            : Style.foregroundColor,
                         fontSize: 16.0,
-                        fontFamily: 'Montserrat',
+                        fontFamily: Style.fontFamily,
                         fontWeight: widget.transaction.category.name == null
                             ? FontWeight.w500
                             : FontWeight.w600),
@@ -228,12 +228,12 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         ? 'Select category'
                         : widget.transaction.category.name),
               ),
-              trailing: Icon(Icons.lock, color: Colors.white54),
+              trailing: Icon(Icons.lock, color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
               child: Divider(
-                color: Colors.white24,
+                color: Style.foregroundColor.withOpacity(0.24),
                 height: 1,
                 thickness: 0.2,
               ),
@@ -249,8 +249,8 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               title: TextFormField(
                 readOnly: true,
                 style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
@@ -261,9 +261,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
                       color: widget.wallet == null
-                          ? Colors.grey[600]
-                          : Colors.white,
-                      fontFamily: 'Montserrat',
+                          ? Style.foregroundColor.withOpacity(0.24)
+                          : Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: widget.wallet == null
                           ? FontWeight.w500
@@ -274,12 +274,12 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         : widget.wallet.name),
                 onTap: () {},
               ),
-              trailing: Icon(Icons.lock, color: Colors.white54),
+              trailing: Icon(Icons.lock, color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
               child: Divider(
-                color: Colors.white24,
+                color: Style.foregroundColor.withOpacity(0.24),
                 height: 1,
                 thickness: 0.2,
               ),
@@ -287,7 +287,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             ListTile(
               dense: true,
               leading:
-              Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
+              Icon(Icons.calendar_today, color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
               title: TextFormField(
                 onTap: () async {
                   DatePicker.showDatePicker(context,
@@ -301,16 +301,16 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
-                        cancelStyle: TextStyle(color: Colors.white),
-                        doneStyle: TextStyle(color: Colors.white),
-                        itemStyle: TextStyle(color: Colors.white),
-                        backgroundColor: Colors.grey[900],
+                        cancelStyle: TextStyle(color: Style.foregroundColor),
+                        doneStyle: TextStyle(color: Style.foregroundColor),
+                        itemStyle: TextStyle(color: Style.foregroundColor),
+                        backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
                 readOnly: true,
                 style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
@@ -320,8 +320,8 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                      color: pickDate == null ? Colors.grey[600] : Colors.white,
-                      fontFamily: 'Montserrat',
+                      color: pickDate == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight:
                       pickDate == null ? FontWeight.w500 : FontWeight.w600,
@@ -345,19 +345,19 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         : DateFormat('EEEE, dd-MM-yyyy')
                         .format(pickDate)),
               ),
-              trailing: Icon(Icons.chevron_right, color: Colors.white54),
+              trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
               child: Divider(
-                color: Colors.white24,
+                color: Style.foregroundColor.withOpacity(0.24),
                 height: 1,
                 thickness: 0.2,
               ),
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.note, color: Colors.white54, size: 28.0),
+              leading: Icon(Icons.note, color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
               title: TextFormField(
                 readOnly: true,
                 decoration: InputDecoration(
@@ -367,8 +367,8 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color: note == '' || note == null ? Colors.grey[600] : Colors.white,
-                        fontFamily: 'Montserrat',
+                        color: note == '' || note == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                        fontFamily: Style.fontFamily,
                         fontSize: 16.0,
                         fontWeight: note == '' || note == null
                             ? FontWeight.w500
@@ -376,14 +376,14 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     ),
                     hintText: note == '' || note == null ? 'Write note' : note),
                 style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
                 onTap: () async {
                   final noteContent = await showCupertinoModalBottomSheet(
                       isDismissible: true,
-                      backgroundColor: Colors.grey[900],
+                      backgroundColor: Style.boxBackgroundColor,
                       context: context,
                       builder: (context) => NoteScreen(
                         content: note,
@@ -397,7 +397,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   }
                 },
               ),
-              trailing: Icon(Icons.chevron_right, color: Colors.white54),
+              trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
             ),
             (_event != null)
                 ? Column(
@@ -405,7 +405,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     Container(
                       margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                       child: Divider(
-                        color: Colors.white24,
+                        color: Style.foregroundColor.withOpacity(0.24),
                         height: 1,
                         thickness: 0.2,
                       ),
@@ -415,7 +415,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         onTap: () async {
                           var res = await showCupertinoModalBottomSheet(
                               isDismissible: true,
-                              backgroundColor: Colors.grey[900],
+                              backgroundColor: Style.boxBackgroundColor,
                               context: context,
                               builder: (context) =>
                                   SelectEventScreen(wallet: widget.wallet));
@@ -428,14 +428,14 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                             ? Icon(
                                 Icons.event,
                                 size: 28.0,
-                                color: Colors.white54,
+                                color: Style.foregroundColor.withOpacity(0.54),
                               )
                             : SuperIcon(iconPath: _event.iconPath, size: 28.0),
                         title: TextFormField(
                           readOnly: true,
                           style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Montserrat',
+                              color: Style.foregroundColor,
+                              fontFamily: Style.fontFamily,
                               fontSize: 16.0,
                               fontWeight: FontWeight.w600),
                           decoration: InputDecoration(
@@ -446,9 +446,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                               disabledBorder: InputBorder.none,
                               hintStyle: TextStyle(
                                 color: _event == null
-                                    ? Colors.grey[600]
-                                    : Colors.white,
-                                fontFamily: 'Montserrat',
+                                    ? Style.foregroundColor.withOpacity(0.24)
+                                    : Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: _event == null
                                     ? FontWeight.w500
@@ -459,7 +459,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                           onTap: () async {
                             var res = await showCupertinoModalBottomSheet(
                                 isDismissible: true,
-                                backgroundColor: Colors.grey[900],
+                                backgroundColor: Style.boxBackgroundColor,
                                 context: context,
                                 builder: (context) =>
                                     SelectEventScreen(wallet: widget.wallet));
@@ -469,7 +469,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                               });
                           },
                         ),
-                        trailing: Icon(Icons.chevron_right, color: Colors.white54),
+                        trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
                       ),
                   ],
                 )
@@ -478,7 +478,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       Container(
                         margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                         child: Divider(
-                          color: Colors.white24,
+                          color: Style.foregroundColor.withOpacity(0.24),
                           height: 1,
                           thickness: 0.2,
                         ),
@@ -507,7 +507,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         child: ListTile(
                           dense: true,
                           leading: Icon(Icons.person,
-                              color: Colors.white54, size: 28.0),
+                              color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
                           title: TextFormField(
                             onTap: () async {
                               final PhoneContact phoneContact =
@@ -526,8 +526,8 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                 errorBorder: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                                 hintStyle: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontFamily: 'Montserrat',
+                                    color: Style.foregroundColor.withOpacity(0.24),
+                                    fontFamily: Style.fontFamily,
                                     fontSize: 16.0,
                                     fontWeight: contact == null
                                         ? FontWeight.w500
@@ -542,13 +542,13 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                             : 'With'
                                     : contact),
                             style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
+                                color: Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w600),
                           ),
                           trailing:
-                              Icon(Icons.chevron_right, color: Colors.white54),
+                              Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                       ),
                       Visibility(
@@ -556,7 +556,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         child: Container(
                           margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                           child: Divider(
-                            color: Colors.white24,
+                            color: Style.foregroundColor.withOpacity(0.24),
                             height: 1,
                             thickness: 0.2,
                           ),
@@ -569,7 +569,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                             onTap: () async {
                               var res = await showCupertinoModalBottomSheet(
                                   isDismissible: true,
-                                  backgroundColor: Colors.grey[900],
+                                  backgroundColor: Style.boxBackgroundColor,
                                   context: context,
                                   builder: (context) =>
                                       SelectEventScreen(wallet: widget.wallet));
@@ -583,15 +583,15 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                 ? Icon(
                                     Icons.event,
                                     size: 28.0,
-                                    color: Colors.white54,
+                                    color: Style.foregroundColor.withOpacity(0.54),
                                   )
                                 : SuperIcon(
                                     iconPath: _event.iconPath, size: 28.0),
                             title: TextFormField(
                               readOnly: true,
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Montserrat',
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600),
                               decoration: InputDecoration(
@@ -602,9 +602,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                   disabledBorder: InputBorder.none,
                                   hintStyle: TextStyle(
                                     color: _event == null
-                                        ? Colors.grey[600]
-                                        : Colors.white,
-                                    fontFamily: 'Montserrat',
+                                        ? Style.foregroundColor.withOpacity(0.24)
+                                        : Style.foregroundColor,
+                                    fontFamily: Style.fontFamily,
                                     fontSize: 16.0,
                                     fontWeight: _event == null
                                         ? FontWeight.w500
@@ -616,7 +616,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                               onTap: () async {
                                 var res = await showCupertinoModalBottomSheet(
                                     isDismissible: true,
-                                    backgroundColor: Colors.grey[900],
+                                    backgroundColor: Style.boxBackgroundColor,
                                     context: context,
                                     builder: (context) => SelectEventScreen(
                                         wallet: widget.wallet));
@@ -628,7 +628,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                               },
                             ),
                             trailing: Icon(Icons.chevron_right,
-                                color: Colors.white54),
+                                color: Style.foregroundColor.withOpacity(0.54)),
                           ))
                     ],
                   )

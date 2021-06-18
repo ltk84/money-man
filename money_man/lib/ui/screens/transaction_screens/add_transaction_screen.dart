@@ -158,7 +158,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     amount = double.parse(resultAmount);
                   });
               },
-              leading: Icon(Icons.money_rounded, color: Colors.white54, size: 45.0),
+              leading: Icon(Icons.money_rounded, color: Style.foregroundColor.withOpacity(0.54), size: 45.0),
               title: TextFormField(
                 readOnly: true,
                 onTap: () async {
@@ -184,9 +184,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   hintStyle: TextStyle(
-                    color: amount == null ? Colors.grey[600] : Colors.white,
+                    color: amount == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                     fontSize: amount == null ? 22 : 30.0,
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontWeight:
                         amount == null ? FontWeight.w500 : FontWeight.w600,
                   ),
@@ -202,7 +202,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
               child: Divider(
-                color: Colors.white24,
+                color: Style.foregroundColor.withOpacity(0.24),
                 height: 1,
                 thickness: 0.2,
               ),
@@ -249,7 +249,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               },
               leading: cate == null
                   ? Icon(Icons.question_answer,
-                      color: Colors.white54, size: 28.0)
+                      color: Style.foregroundColor.withOpacity(0.54), size: 28.0)
                   : SuperIcon(
                       iconPath: cate.iconID,
                       size: 28.0,
@@ -259,7 +259,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 onTap: () async {
                   final selectCate = await showCupertinoModalBottomSheet(
                       isDismissible: true,
-                      backgroundColor: Colors.grey[900],
+                      backgroundColor: Style.boxBackgroundColor,
                       context: context,
                       builder: (context) => CategoriesTransactionScreen(
                             walletId: selectedWallet.id,
@@ -295,9 +295,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 },
                 readOnly: true,
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                     fontSize: 16.0,
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
                     border: InputBorder.none,
@@ -307,21 +307,21 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
                         color:
-                            this.cate == null ? Colors.grey[600] : Colors.white,
+                            this.cate == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                         fontSize: 16.0,
-                        fontFamily: 'Montserrat',
+                        fontFamily: Style.fontFamily,
                         fontWeight: this.cate == null
                             ? FontWeight.w500
                             : FontWeight.w600),
                     hintText:
                         this.cate == null ? 'Select category' : this.cate.name),
               ),
-              trailing: Icon(Icons.chevron_right, color: Colors.white54),
+              trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
               child: Divider(
-                color: Colors.white24,
+                color: Style.foregroundColor.withOpacity(0.24),
                 height: 1,
                 thickness: 0.2,
               ),
@@ -331,7 +331,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               onTap: () async {
                 var res = await showCupertinoModalBottomSheet(
                     isDismissible: true,
-                    backgroundColor: Colors.grey[900],
+                    backgroundColor: Style.boxBackgroundColor,
                     context: context,
                     builder: (context) =>
                         SelectWalletAccountScreen(wallet: selectedWallet));
@@ -349,8 +349,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               title: TextFormField(
                 readOnly: true,
                 style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
@@ -361,9 +361,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
                       color: selectedWallet == null
-                          ? Colors.grey[600]
-                          : Colors.white,
-                      fontFamily: 'Montserrat',
+                          ? Style.foregroundColor.withOpacity(0.24)
+                          : Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: selectedWallet == null
                           ? FontWeight.w500
@@ -375,7 +375,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 onTap: () async {
                   var res = await showCupertinoModalBottomSheet(
                       isDismissible: true,
-                      backgroundColor: Colors.grey[900],
+                      backgroundColor: Style.boxBackgroundColor,
                       context: context,
                       builder: (context) =>
                           SelectWalletAccountScreen(wallet: selectedWallet));
@@ -389,19 +389,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     });
                 },
               ),
-              trailing: Icon(Icons.chevron_right, color: Colors.white54),
+              trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
               child: Divider(
-                color: Colors.white24,
+                color: Style.foregroundColor.withOpacity(0.24),
                 height: 1,
                 thickness: 0.2,
               ),
             ),ListTile(
               dense: true,
               leading:
-              Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
+              Icon(Icons.calendar_today, color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
               title: TextFormField(
                 onTap: () async {
                   DatePicker.showDatePicker(context,
@@ -418,16 +418,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
-                        cancelStyle: TextStyle(color: Colors.white),
-                        doneStyle: TextStyle(color: Colors.white),
-                        itemStyle: TextStyle(color: Colors.white),
-                        backgroundColor: Colors.grey[900],
+                        cancelStyle: TextStyle(color: Style.foregroundColor),
+                        doneStyle: TextStyle(color: Style.foregroundColor),
+                        itemStyle: TextStyle(color: Style.foregroundColor),
+                        backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
                 readOnly: true,
                 style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
@@ -437,8 +437,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                      color: pickDate == null ? Colors.grey[600] : Colors.white,
-                      fontFamily: 'Montserrat',
+                      color: pickDate == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight:
                       pickDate == null ? FontWeight.w500 : FontWeight.w600,
@@ -459,24 +459,24 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         : DateFormat('EEEE, dd-MM-yyyy')
                         .format(pickDate)),
               ),
-              trailing: Icon(Icons.chevron_right, color: Colors.white54),
+              trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
               child: Divider(
-                color: Colors.white24,
+                color: Style.foregroundColor.withOpacity(0.24),
                 height: 1,
                 thickness: 0.2,
               ),
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.note, color: Colors.white54, size: 28.0),
+              leading: Icon(Icons.note, color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
               title: TextFormField(
                 onTap: () async {
                   final noteContent = await showCupertinoModalBottomSheet(
                       isDismissible: true,
-                      backgroundColor: Colors.grey[900],
+                      backgroundColor: Style.boxBackgroundColor,
                       context: context,
                       builder: (context) => NoteScreen(
                         content: note ?? '',
@@ -497,8 +497,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color: note == '' || note == null ? Colors.grey[600] : Colors.white,
-                        fontFamily: 'Montserrat',
+                        color: note == '' || note == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                        fontFamily: Style.fontFamily,
                         fontSize: 16.0,
                         fontWeight: note == '' || note == null
                             ? FontWeight.w500
@@ -506,17 +506,17 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     ),
                     hintText: note == '' || note == null ? 'Write note' : note),
                 style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
               ),
-              trailing: Icon(Icons.chevron_right, color: Colors.white54),
+              trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
               child: Divider(
-                color: Colors.white24,
+                color: Style.foregroundColor.withOpacity(0.24),
                 height: 1,
                 thickness: 0.2,
               ),
@@ -545,7 +545,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               child: ListTile(
                 dense: true,
                 leading: Icon(Icons.person,
-                    color: Colors.white54, size: 28.0),
+                    color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
                 title: TextFormField(
                   onTap: () async {
                     final PhoneContact phoneContact =
@@ -566,8 +566,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       errorBorder: InputBorder.none,
                       disabledBorder: InputBorder.none,
                       hintStyle: TextStyle(
-                          color: Colors.grey[600],
-                          fontFamily: 'Montserrat',
+                          color: Style.foregroundColor.withOpacity(0.24),
+                          fontFamily: Style.fontFamily,
                           fontSize: 16.0,
                           fontWeight: contact == null
                               ? FontWeight.w500
@@ -575,12 +575,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       ),
                       hintText: contact ?? hintTextConact),
                   style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montserrat',
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600),
                 ),
-                trailing: Icon(Icons.chevron_right, color: Colors.white54),
+                trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
               ),
             ),
             Visibility(
@@ -588,7 +588,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               child: Container(
                 margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
                 child: Divider(
-                  color: Colors.white24,
+                  color: Style.foregroundColor.withOpacity(0.24),
                   height: 1,
                   thickness: 0.2,
                 ),
@@ -601,7 +601,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   onTap: () async {
                     var res = await showCupertinoModalBottomSheet(
                         isDismissible: true,
-                        backgroundColor: Colors.grey[900],
+                        backgroundColor: Style.boxBackgroundColor,
                         context: context,
                         builder: (context) =>
                             SelectEventScreen(wallet: selectedWallet));
@@ -614,14 +614,14 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       ? Icon(
                           Icons.event,
                           size: 28.0,
-                          color: Colors.white54,
+                          color: Style.foregroundColor.withOpacity(0.54),
                         )
                       : SuperIcon(iconPath: event.iconPath, size: 28.0),
                   title: TextFormField(
                     readOnly: true,
                     style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montserrat',
+                        color: Style.foregroundColor,
+                        fontFamily: Style.fontFamily,
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600),
                     decoration: InputDecoration(
@@ -632,8 +632,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         disabledBorder: InputBorder.none,
                         hintStyle: TextStyle(
                           color:
-                              event == null ? Colors.grey[600] : Colors.white,
-                          fontFamily: 'Montserrat',
+                              event == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
                           fontSize: 16.0,
                           fontWeight:
                               event == null ? FontWeight.w500 : FontWeight.w600,
@@ -642,7 +642,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     onTap: () async {
                       var res = await showCupertinoModalBottomSheet(
                           isDismissible: true,
-                          backgroundColor: Colors.grey[900],
+                          backgroundColor: Style.boxBackgroundColor,
                           context: context,
                           builder: (context) =>
                               SelectEventScreen(wallet: selectedWallet));
@@ -652,7 +652,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         });
                     },
                   ),
-                  trailing: Icon(Icons.chevron_right, color: Colors.white54),
+                  trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
                 ))
           ]),
         ));
@@ -662,7 +662,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(content: content);
       },

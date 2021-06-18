@@ -103,7 +103,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
   void _handleSelectTimeRange(int selected) {
     showMenu(
-      color: Colors.white,
+      color: Style.foregroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10.0),
@@ -121,8 +121,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Day",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -134,8 +134,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Week",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -147,8 +147,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Month",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -160,8 +160,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Quarter",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -173,8 +173,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Year",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -186,8 +186,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "All",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -199,8 +199,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Custom",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -781,7 +781,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Style.backgroundColor,
           centerTitle: true,
           elevation: 0,
           leadingWidth: 70,
@@ -797,27 +797,43 @@ class _TransactionScreen extends State<TransactionScreen>
                     iconPath: _wallet.iconID,
                     size: 25.0,
                   ),
-                  Icon(Icons.arrow_drop_down, color: Colors.grey)
+                  Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54))
                 ],
               ),
             ),
           ),
           title: Column(children: [
             Text(_wallet.name,
-                style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
+                style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w500,
+                    color: Style.foregroundColor.withOpacity(0.54),
+                    fontSize: 10.0)
+            ),
             MoneySymbolFormatter(
               text: _wallet.amount,
               currencyId: _wallet.currencyID,
               textStyle: TextStyle(
-                  color: Colors.white,
+                  fontFamily: Style.fontFamily,
+                  color: Style.foregroundColor,
                   fontSize: 15.0,
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.w700),
             )
           ]),
           bottom: TabBar(
-            unselectedLabelColor: Colors.grey[500],
-            labelColor: Colors.white,
-            indicatorColor: Color(0xff2FB49C),
+            labelStyle: TextStyle(
+              fontFamily: Style.fontFamily,
+              fontWeight: FontWeight.w700,
+              fontSize: 13.0,
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontFamily: Style.fontFamily,
+              fontWeight: FontWeight.w700,
+              fontSize: 13.0,
+            ),
+            unselectedLabelColor: Style.foregroundColor.withOpacity(0.54),
+            labelColor: Style.foregroundColor,
+            indicatorColor: Style.middlePrimaryColor,
             physics: AlwaysScrollableScrollPhysics(),
             isScrollable: true,
             indicatorWeight: 3.0,
@@ -826,15 +842,15 @@ class _TransactionScreen extends State<TransactionScreen>
           ),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.notifications, color: Colors.grey),
+              icon: Icon(Icons.notifications, color: Style.foregroundColor.withOpacity(0.54)),
               tooltip: 'Notify',
               onPressed: () {},
             ),
             PopupMenuButton(
                 padding: EdgeInsets.all(10.0),
-                //icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                //icon: Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
                 offset: Offset.fromDirection(40, 40),
-                color: Colors.white,
+                color: Style.foregroundColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10.0),
@@ -869,13 +885,13 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'Select time range',
                         child: Row(
                           children: [
-                            Icon(Icons.calendar_today, color: Colors.black),
+                            Icon(Icons.calendar_today, color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Select time range',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -886,15 +902,15 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'change display',
                         child: Row(
                           children: [
-                            Icon(Icons.remove_red_eye, color: Colors.black),
+                            Icon(Icons.remove_red_eye, color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               viewByCategory
                                   ? 'View by transaction'
                                   : 'View by category',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -906,13 +922,13 @@ class _TransactionScreen extends State<TransactionScreen>
                         child: Row(
                           children: [
                             Icon(Icons.account_balance_wallet,
-                                color: Colors.black),
+                                color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Adjust Balance',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -923,13 +939,13 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'Transfer money',
                         child: Row(
                           children: [
-                            Icon(Icons.attach_money, color: Colors.black),
+                            Icon(Icons.attach_money, color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Transfer money',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -940,13 +956,13 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'Search for transaction',
                         child: Row(
                           children: [
-                            Icon(Icons.search, color: Colors.black),
+                            Icon(Icons.search, color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Search for transaction',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -957,13 +973,13 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'Synchronize',
                         child: Row(
                           children: [
-                            Icon(Icons.sync, color: Colors.black),
+                            Icon(Icons.sync, color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Synchronize',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -1619,10 +1635,13 @@ class _TransactionScreen extends State<TransactionScreen>
               onPressed: () {},
               child: Text(
                 'View report for this period',
-                style: TextStyle(color: Color(0xff36D1B5)),
+                style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w600,
+                    color: Style.highlightPrimaryColor
+                ),
               ),
-              style: TextButton.styleFrom(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap),
             )
           ])),
     );
@@ -1634,7 +1653,7 @@ class _TransactionScreen extends State<TransactionScreen>
     final result = await showCupertinoModalBottomSheet(
         enableDrag: false,
         isDismissible: true,
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.boxBackgroundColor,
         context: context,
         builder: (context) {
           return Provider(
