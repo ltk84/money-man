@@ -3,10 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
+
+import '../../style.dart';
 
 class AccountDetail extends StatefulWidget {
   User user;
@@ -74,10 +75,10 @@ class _AccountDetailState extends State<AccountDetail> {
                 tag: 'alo',
                 child: Row(
                   children: [
-                    Icon(Icons.arrow_back_ios, color: foregroundColor),
+                    Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
                     Text('More', style: TextStyle(
-                        color: foregroundColor,
-                        fontFamily: fontFamily,
+                        color: Style.foregroundColor,
+                        fontFamily: Style.fontFamily,
                         fontSize: 17.0
                     )
                     )
@@ -118,8 +119,8 @@ class _AccountDetailState extends State<AccountDetail> {
                 duration: Duration(milliseconds: 100),
                 child: Text('My Account',
                     style: TextStyle(
-                        color: foregroundColor,
-                        fontFamily: fontFamily,
+                        color: Style.foregroundColor,
+                        fontFamily: Style.fontFamily,
                         fontSize: 17.0,
                         fontWeight: FontWeight.w600,
                     ))
@@ -135,29 +136,29 @@ class _AccountDetailState extends State<AccountDetail> {
                   ? Text('My Account',
                       style: TextStyle(
                           fontSize: 30,
-                          color: foregroundColor,
-                          fontFamily: fontFamily,
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.bold
                       ))
                   : Text('', style: TextStyle(
                   fontSize: 30,
-                  color: foregroundColor,
-                  fontFamily: fontFamily,
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
                   fontWeight: FontWeight.bold
               )),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
               decoration: BoxDecoration(
-                  color: boxBackgroundColor,
+                  color: Style.boxBackgroundColor,
                   border: Border(
                       top: BorderSide(
                         width: 0.1,
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                       ),
                       bottom: BorderSide(
                         width: 0.1,
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                       ))),
               child: Column(
                 children: [
@@ -172,9 +173,9 @@ class _AccountDetailState extends State<AccountDetail> {
                                 ? _user.displayName.substring(0, 1)
                                 : 'Y',
                       style: TextStyle(
-                          color: primaryColor,
+                          color: Style.primaryColor,
                           fontSize: 30.0,
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w400
                       ),
                     ),
@@ -191,9 +192,9 @@ class _AccountDetailState extends State<AccountDetail> {
                                 ? _user.phoneNumber
                                 : 'Your name'),
                         style: TextStyle(
-                            color: foregroundColor,
+                            color: Style.foregroundColor,
                             fontWeight: FontWeight.w600,
-                            fontFamily: fontFamily,
+                            fontFamily: Style.fontFamily,
                             fontSize: 15.0
                         )),
                   ),
@@ -202,9 +203,9 @@ class _AccountDetailState extends State<AccountDetail> {
                           ? 'Your email'
                           : (_user.email != '' ? _user.email : 'Your email'),
                       style: TextStyle(
-                          color: foregroundColor.withOpacity(0.54),
+                          color: Style.foregroundColor.withOpacity(0.54),
                           fontWeight: FontWeight.w400,
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontSize: 13.0
                       )),
                   SizedBox(
@@ -213,7 +214,7 @@ class _AccountDetailState extends State<AccountDetail> {
                   Divider(
                     height: 5,
                     thickness: 0.1,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   ),
                   ListTile(
                     onTap: () {
@@ -226,9 +227,9 @@ class _AccountDetailState extends State<AccountDetail> {
                     title: Text(
                       'Change password',
                       style: TextStyle(
-                          color: foregroundColor,
+                          color: Style.foregroundColor,
                           fontWeight: FontWeight.w600,
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontSize: 15.0
                       ),
                       textAlign: TextAlign.center,
@@ -240,15 +241,15 @@ class _AccountDetailState extends State<AccountDetail> {
             Container(
               margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
               decoration: BoxDecoration(
-                  color: boxBackgroundColor,
+                  color: Style.boxBackgroundColor,
                   border: Border(
                       top: BorderSide(
                         width: 0.1,
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                       ),
                       bottom: BorderSide(
                         width: 0.1,
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                       ))),
               child: Column(
                 children: [
@@ -261,9 +262,9 @@ class _AccountDetailState extends State<AccountDetail> {
                     title: Text(
                       'Sign out',
                       style: TextStyle(
-                          color: foregroundColor,
+                          color: Style.foregroundColor,
                           fontWeight: FontWeight.w600,
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontSize: 15.0
                       ),
                       textAlign: TextAlign.center,

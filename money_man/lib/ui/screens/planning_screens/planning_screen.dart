@@ -80,7 +80,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           centerTitle: true,
@@ -111,8 +111,8 @@ class _PlanningScreenState extends State<PlanningScreen> {
               duration: Duration(milliseconds: 100),
               child: Text('Planning',
                   style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: fontFamily,
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 17.0
                   ))),
         ),
@@ -129,14 +129,14 @@ class _PlanningScreenState extends State<PlanningScreen> {
                         child: Text('Planning',
                             style: TextStyle(
                                 fontSize: 30,
-                                color: foregroundColor,
-                                fontFamily: fontFamily,
+                                color: Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.bold
                             )))
                     : Text('', style: TextStyle(
                     fontSize: 30,
-                    color: foregroundColor,
-                    fontFamily: fontFamily,
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.bold
                 )),
               ),
@@ -145,7 +145,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
               margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
               //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
               decoration: BoxDecoration(
-                color: boxBackgroundColor,
+                color: Style.boxBackgroundColor,
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
@@ -159,15 +159,15 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
                       children: [
-                        Icon(Icons.all_inbox, color: foregroundColor, size: 40.0),
+                        Icon(Icons.all_inbox, color: Style.foregroundColor, size: 40.0),
                         SizedBox(
                           height: 5.0,
                         ),
                         Text('BUDGET',
                             style: TextStyle(
-                                color: foregroundColor,
+                                color: Style.foregroundColor,
                                 fontWeight: FontWeight.w600,
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 15.0
                             )),
                       ],
@@ -178,7 +178,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
               margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
               //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
               decoration: BoxDecoration(
-                color: boxBackgroundColor,
+                color: Style.boxBackgroundColor,
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
@@ -199,15 +199,15 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     child: Column(
                       children: [
                         Icon(Icons.sticky_note_2_outlined,
-                            color: foregroundColor, size: 40.0),
+                            color: Style.foregroundColor, size: 40.0),
                         SizedBox(
                           height: 5.0,
                         ),
                         Text('BILLS',
                             style: TextStyle(
-                                color: foregroundColor,
+                                color: Style.foregroundColor,
                                 fontWeight: FontWeight.w600,
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 15.0
                             )),
                       ],
@@ -218,7 +218,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
               margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
               //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
               decoration: BoxDecoration(
-                color: boxBackgroundColor,
+                color: Style.boxBackgroundColor,
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
@@ -232,15 +232,15 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
                       children: [
-                        Icon(Icons.event, color: foregroundColor, size: 40.0),
+                        Icon(Icons.event, color: Style.foregroundColor, size: 40.0),
                         SizedBox(
                           height: 5.0,
                         ),
                         Text('EVENTS',
                             style: TextStyle(
-                                color: foregroundColor,
+                                color: Style.foregroundColor,
                                 fontWeight: FontWeight.w600,
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 15.0)),
                       ],
                     ),
@@ -250,7 +250,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
               margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
               //padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               decoration: BoxDecoration(
-                color: boxBackgroundColor,
+                color: Style.boxBackgroundColor,
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
@@ -267,15 +267,15 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
                       children: [
-                        Icon(Icons.event, color: foregroundColor, size: 40.0),
+                        Icon(Icons.event, color: Style.foregroundColor, size: 40.0),
                         SizedBox(
                           height: 5.0,
                         ),
                         Text('RECURRING',
                             style: TextStyle(
-                                color: foregroundColor,
+                                color: Style.foregroundColor,
                                 fontWeight: FontWeight.w600,
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 15.0)),
                       ],
                     ),

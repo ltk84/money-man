@@ -1052,23 +1052,23 @@ class _TransactionScreen extends State<TransactionScreen>
                         totalInCome, totalOutCome, total);
                   } else {
                     return Container(
-                        color: backgroundColor,
+                        color: Style.backgroundColor,
                         alignment: Alignment.center,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.hourglass_empty,
-                              color: foregroundColor.withOpacity(0.12),
+                              color: Style.foregroundColor.withOpacity(0.12),
                               size: 100,
                             ),
                             SizedBox(height: 10,),
                             Text(
                               'There are no transactions',
                               style: TextStyle(
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
-                                color: foregroundColor.withOpacity(0.24),
+                                color: Style.foregroundColor.withOpacity(0.24),
                               ),
                             ),
                           ],
@@ -1087,7 +1087,7 @@ class _TransactionScreen extends State<TransactionScreen>
       double total) {
     print('build function');
     return Container(
-      color: backgroundColor,
+      color: Style.backgroundColor,
       child: ListView.builder(
           controller: listScrollController,
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -1123,7 +1123,7 @@ class _TransactionScreen extends State<TransactionScreen>
       double total) {
     print('build function');
     return Container(
-      color: backgroundColor,
+      color: Style.backgroundColor,
       child: ListView.builder(
           controller: listScrollController,
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -1161,19 +1161,19 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: foregroundColor.withOpacity(0.12),
+                color: Style.foregroundColor.withOpacity(0.12),
                 width: 0.5,
               ),
               top: BorderSide(
-                color: foregroundColor.withOpacity(0.12),
+                color: Style.foregroundColor.withOpacity(0.12),
                 width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -1193,10 +1193,10 @@ class _TransactionScreen extends State<TransactionScreen>
                         ' transactions',
                     // 'hello',
                     style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.0,
-                        color: foregroundColor.withOpacity(0.54)
+                        color: Style.foregroundColor.withOpacity(0.54)
                     )),
               ),
               Expanded(
@@ -1209,10 +1209,10 @@ class _TransactionScreen extends State<TransactionScreen>
                   currencyId: _wallet.currencyID,
                   textAlign: TextAlign.end,
                   textStyle: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w700,
                     fontSize: 14.0,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   ),
                 ),
               ),
@@ -1249,10 +1249,10 @@ class _TransactionScreen extends State<TransactionScreen>
                                 transListSortByCategory[xIndex][yIndex].date),
                             style:
                             TextStyle(
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 30.0,
-                                color: foregroundColor
+                                color: Style.foregroundColor
                             )),
                       ),
                       Padding(
@@ -1261,10 +1261,10 @@ class _TransactionScreen extends State<TransactionScreen>
                             DateFormat("MMMM yyyy, EEEE").format(
                                 transListSortByCategory[xIndex][yIndex].date),
                             style: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w700,
                               fontSize: 14.0,
-                              color: foregroundColor,
+                              color: Style.foregroundColor,
                             )),
                       ),
                       Expanded(
@@ -1286,10 +1286,10 @@ class _TransactionScreen extends State<TransactionScreen>
                                 currencyId: _wallet.currencyID,
                                 textAlign: TextAlign.end,
                                 textStyle: TextStyle(
-                                    fontFamily: fontFamily,
+                                    fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14.0,
-                                    color: incomeColor2),
+                                    color: Style.incomeColor2),
                                 //digit: '+',
                               )
                             : MoneySymbolFormatter(
@@ -1298,10 +1298,10 @@ class _TransactionScreen extends State<TransactionScreen>
                                 currencyId: _wallet.currencyID,
                                 textAlign: TextAlign.end,
                                 textStyle: TextStyle(
-                                    fontFamily: fontFamily,
+                                    fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14.0,
-                                    color: expenseColor),
+                                    color: Style.expenseColor),
                                 //digit: '-',
                               ),
                       ),
@@ -1320,19 +1320,19 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: foregroundColor.withOpacity(0.12),
+                color: Style.foregroundColor.withOpacity(0.12),
                 width: 0.5,
               ),
               top: BorderSide(
-                color: foregroundColor.withOpacity(0.12),
+                color: Style.foregroundColor.withOpacity(0.12),
                 width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -1342,10 +1342,10 @@ class _TransactionScreen extends State<TransactionScreen>
                     DateFormat("dd")
                         .format(transListSortByDate[xIndex][0].date),
                     style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 30.0,
-                        color: foregroundColor
+                        color: Style.foregroundColor
                     )),
               ),
               Padding(
@@ -1360,10 +1360,10 @@ class _TransactionScreen extends State<TransactionScreen>
                             .toString(),
                     // 'hello',
                     style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.0,
-                        color: foregroundColor.withOpacity(0.54)
+                        color: Style.foregroundColor.withOpacity(0.54)
                     )),
               ),
               Expanded(
@@ -1376,10 +1376,10 @@ class _TransactionScreen extends State<TransactionScreen>
                   currencyId: _wallet.currencyID,
                   textAlign: TextAlign.end,
                   textStyle: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w700,
                     fontSize: 14.0,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   ),
                 ),
               ),
@@ -1456,18 +1456,18 @@ class _TransactionScreen extends State<TransactionScreen>
                                       .category
                                       .name,
                                   style: TextStyle(
-                                    fontFamily: fontFamily,
+                                    fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 14.0,
-                                    color: foregroundColor,
+                                    color: Style.foregroundColor,
                                   )),
                               Text(
                                 _subTitle,
                                 style: TextStyle(
-                                  fontFamily: fontFamily,
+                                  fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 12.0,
-                                  color: foregroundColor.withOpacity(0.54),
+                                  color: Style.foregroundColor.withOpacity(0.54),
                                 ),
                               ),
                             ],
@@ -1481,12 +1481,12 @@ class _TransactionScreen extends State<TransactionScreen>
                             currencyId: _wallet.currencyID,
                             textAlign: TextAlign.end,
                             textStyle: TextStyle(
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14.0,
                                 color: _digit == '+'
-                                    ? incomeColor2
-                                    : expenseColor),
+                                    ? Style.incomeColor2
+                                    : Style.expenseColor),
                             //digit: _digit,
                           ),
                           if (extraAmount != null)
@@ -1496,8 +1496,8 @@ class _TransactionScreen extends State<TransactionScreen>
                                 if (extraAmount != 0)
                                   MoneySymbolFormatter(
                                       textStyle: TextStyle(
-                                        color: foregroundColor,
-                                        fontFamily: fontFamily,
+                                        color: Style.foregroundColor,
+                                        fontFamily: Style.fontFamily,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 12.0,
                                       ),
@@ -1525,10 +1525,10 @@ class _TransactionScreen extends State<TransactionScreen>
       header: SizedBox(height: 0),
       content: Container(
           decoration: BoxDecoration(
-              color: boxBackgroundColor,
+              color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                    color: backgroundColor,
+                    color: Style.backgroundColor,
                     width: 1.0,
                   ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
@@ -1540,20 +1540,20 @@ class _TransactionScreen extends State<TransactionScreen>
                 children: <Widget>[
                   Text('Inflow',
                       style: TextStyle(
-                        color: foregroundColor.withOpacity(0.54),
+                        color: Style.foregroundColor.withOpacity(0.54),
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                       )
                   ),
                   MoneySymbolFormatter(
                     text: totalInCome,
                     currencyId: _wallet.currencyID,
                     textStyle: TextStyle(
-                      color: foregroundColor,
+                      color: Style.foregroundColor,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                     ),
                     digit: '+',
                   )
@@ -1567,20 +1567,20 @@ class _TransactionScreen extends State<TransactionScreen>
                   children: <Widget>[
                     Text('Outflow',
                         style: TextStyle(
-                          color: foregroundColor.withOpacity(0.54),
+                          color: Style.foregroundColor.withOpacity(0.54),
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                         )
                     ),
                     MoneySymbolFormatter(
                       text: totalOutCome,
                       currencyId: _wallet.currencyID,
                       textStyle: TextStyle(
-                        color: foregroundColor,
+                        color: Style.foregroundColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                       ),
                       digit: '-',
                     ),
@@ -1589,7 +1589,7 @@ class _TransactionScreen extends State<TransactionScreen>
             Divider(
               //height: 20,
               thickness: 1,
-              color: foregroundColor.withOpacity(0.12),
+              color: Style.foregroundColor.withOpacity(0.12),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
@@ -1607,10 +1607,10 @@ class _TransactionScreen extends State<TransactionScreen>
                       text: total,
                       currencyId: _wallet.currencyID,
                       textStyle: TextStyle(
-                        color: foregroundColor,
+                        color: Style.foregroundColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                       ),
                     ),
                   ]),

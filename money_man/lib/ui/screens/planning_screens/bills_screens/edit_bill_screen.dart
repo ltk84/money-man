@@ -10,11 +10,9 @@ import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_bill_screen.dart';
-import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
-import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
@@ -61,18 +59,18 @@ class _EditBillScreenState extends State<EditBillScreen> {
       builder: (context, snapshot) {
         List<Bill> listBills = snapshot.data ?? [];
         return Scaffold(
-            backgroundColor: backgroundColor1,
+            backgroundColor: Style.backgroundColor1,
             extendBodyBehindAppBar: true,
             appBar: AppBar(
-              backgroundColor: boxBackgroundColor2,
+              backgroundColor: Style.boxBackgroundColor2,
               elevation: 0.0,
               leading: CloseButton(),
               title: Text('Edit Bill',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 17.0,
                     fontWeight: FontWeight.w600,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   )),
               centerTitle: true,
               actions: [
@@ -102,10 +100,10 @@ class _EditBillScreenState extends State<EditBillScreen> {
                   },
                   child: Text('Save',
                       style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
-                        color: successColor,
+                        color: Style.successColor,
                       )),
                 ),
               ],
@@ -117,14 +115,14 @@ class _EditBillScreenState extends State<EditBillScreen> {
                 Container(
                     margin: EdgeInsets.only(top: 30.0),
                     decoration: BoxDecoration(
-                        color: boxBackgroundColor,
+                        color: Style.boxBackgroundColor,
                         border: Border(
                             top: BorderSide(
-                              color: foregroundColor.withOpacity(0.12),
+                              color: Style.foregroundColor.withOpacity(0.12),
                               width: 0.5,
                             ),
                             bottom: BorderSide(
-                              color: foregroundColor.withOpacity(0.12),
+                              color: Style.foregroundColor.withOpacity(0.12),
                               width: 0.5,
                             ))),
                     child: Column(children: [
@@ -149,7 +147,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
                       Container(
                         margin: EdgeInsets.only(left: 70),
                         child: Divider(
-                          color: foregroundColor.withOpacity(0.12),
+                          color: Style.foregroundColor.withOpacity(0.12),
                           thickness: 1,
                         ),
                       ),
@@ -160,7 +158,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
                           onTap: () async {
                             final selectCate = await showCupertinoModalBottomSheet(
                                 isDismissible: true,
-                                backgroundColor: boxBackgroundColor,
+                                backgroundColor: Style.boxBackgroundColor,
                                 context: context,
                                 builder: (context) => CategoriesBillScreen());
                             if (selectCate != null) {
@@ -179,7 +177,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
                       Container(
                         margin: EdgeInsets.only(left: 70, top: 8),
                         child: Divider(
-                          color: foregroundColor.withOpacity(0.12),
+                          color: Style.foregroundColor.withOpacity(0.12),
                           thickness: 1,
                         ),
                         height: 2,
@@ -208,7 +206,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
                       Container(
                         margin: EdgeInsets.only(left: 70),
                         child: Divider(
-                          color: foregroundColor.withOpacity(0.12),
+                          color: Style.foregroundColor.withOpacity(0.12),
                           thickness: 1,
                         ),
                         height: 2,
@@ -224,14 +222,14 @@ class _EditBillScreenState extends State<EditBillScreen> {
                 Container(
                     margin: EdgeInsets.only(top: 30.0),
                     decoration: BoxDecoration(
-                        color: boxBackgroundColor,
+                        color: Style.boxBackgroundColor,
                         border: Border(
                             top: BorderSide(
-                              color: foregroundColor.withOpacity(0.12),
+                              color: Style.foregroundColor.withOpacity(0.12),
                               width: 0.5,
                             ),
                             bottom: BorderSide(
-                              color: foregroundColor.withOpacity(0.12),
+                              color: Style.foregroundColor.withOpacity(0.12),
                               width: 0.5,
                             ))),
                     child: GestureDetector(
@@ -240,7 +238,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
                           var res = await showCupertinoModalBottomSheet(
                               enableDrag: false,
                               isDismissible: false,
-                              backgroundColor: boxBackgroundColor,
+                              backgroundColor: Style.boxBackgroundColor,
                               context: context,
                               builder: (context) => RepeatOptionScreen(
                                 repeatOption: repeatOption,
@@ -261,10 +259,10 @@ class _EditBillScreenState extends State<EditBillScreen> {
                           '${repeatOption.rangeAmount == 1 ? '' : 's'} '
                           'from ${DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime)}',
                       style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontSize: 13.0,
                         fontWeight: FontWeight.w500,
-                        color: foregroundColor.withOpacity(0.6),
+                        color: Style.foregroundColor.withOpacity(0.6),
                       ),
                     ))
               ],
@@ -286,24 +284,24 @@ class _EditBillScreenState extends State<EditBillScreen> {
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
                   child: Icon(Icons.attach_money,
-                      color: foregroundColor.withOpacity(0.7), size: 40.0)),
+                      color: Style.foregroundColor.withOpacity(0.7), size: 40.0)),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Amount',
                       style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontSize: 12.0,
                         fontWeight: FontWeight.w500,
-                        color: foregroundColor.withOpacity(0.6),
+                        color: Style.foregroundColor.withOpacity(0.6),
                       )),
                   SizedBox(height: 5.0),
                   Text(display ?? 'Enter amount',
                       style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
-                        color: display == null ? foregroundColor.withOpacity(0.24) : foregroundColor,
+                        color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                       )),
                 ],
               ),
@@ -311,7 +309,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
           ),
           Icon(
             Icons.chevron_right,
-            color: foregroundColor.withOpacity(0.54),
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -336,16 +334,16 @@ class _EditBillScreenState extends State<EditBillScreen> {
                   )),
               Text(display ?? 'Select category',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? foregroundColor.withOpacity(0.24) : foregroundColor,
+                    color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: foregroundColor.withOpacity(0.54),
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -364,19 +362,19 @@ class _EditBillScreenState extends State<EditBillScreen> {
             children: [
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
-                  child: Icon(Icons.notes, color: foregroundColor.withOpacity(0.7), size: 24.0)),
+                  child: Icon(Icons.notes, color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
               Text(display ?? 'Note',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? foregroundColor.withOpacity(0.24) : foregroundColor,
+                    color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: foregroundColor.withOpacity(0.54),
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -401,16 +399,16 @@ class _EditBillScreenState extends State<EditBillScreen> {
                   )),
               Text(display ?? 'Select wallet',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? foregroundColor.withOpacity(0.24) : foregroundColor,
+                    color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: foregroundColor.withOpacity(0.54),
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -430,19 +428,19 @@ class _EditBillScreenState extends State<EditBillScreen> {
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
                   child: Icon(Icons.calendar_today,
-                      color: foregroundColor.withOpacity(0.7), size: 24.0)),
+                      color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
               Text('Repeat Options',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: foregroundColor.withOpacity(0.54),
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -453,7 +451,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: backgroundColor.withOpacity(0.54),
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(content: content);
       },

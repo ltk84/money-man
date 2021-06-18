@@ -52,11 +52,11 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
         : 'Choose end date';
 
     return Scaffold(
-        backgroundColor: boxBackgroundColor,
+        backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: boxBackgroundColor,
+          backgroundColor: Style.boxBackgroundColor,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.0),
@@ -99,7 +99,7 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
         ),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          color: backgroundColor1,
+          color: Style.backgroundColor1,
           child: ListView(
             children: [
               Padding(
@@ -107,10 +107,10 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                 child: Text(
                   'Begin date',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
-                    color: foregroundColor.withOpacity(0.54),
+                    color: Style.foregroundColor.withOpacity(0.54),
                   )
                 ),
               ),
@@ -171,10 +171,10 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                 child: Text(
                     'End date',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: foregroundColor.withOpacity(0.54),
+                      color: Style.foregroundColor.withOpacity(0.54),
                     )
                 ),
               ),

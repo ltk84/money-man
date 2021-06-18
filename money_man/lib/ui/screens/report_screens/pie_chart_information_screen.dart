@@ -29,14 +29,12 @@ class PieChartInformationScreen extends StatefulWidget {
 }
 
 class _PieChartInformationScreen extends State<PieChartInformationScreen> {
-  double _total;
   int touchedIndex = -1;
   List<MyTransaction> _transactionList;
   List<List<MyTransaction>> _listTransactionOfEachCatecory = [];
   List<MyCategory> _categoryList;
   List<double> _info = [];
   Color _color;
-  double _height;
   List<MyCategory> _listCategoryReport = [];
 
   final double fontSizeText = 30;
@@ -97,7 +95,6 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
   double calculateByCategory(MyCategory category,
       List<MyTransaction> transactionList) {
     double sum = 0;
-    DateTime _endDate;
     transactionList.forEach((element) {
       if (element.category.name == category.name) {
         sum += element.amount;
@@ -121,7 +118,6 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
-    _height = _listCategoryReport.length.toDouble() * 65;
   }
 
   @override
@@ -147,10 +143,10 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
         builder: (context, snapshot) {
           return Container(
               decoration: BoxDecoration(
-                  color: boxBackgroundColor,
+                  color: Style.boxBackgroundColor,
                   border: Border(
                       bottom: BorderSide(
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                         width: 1,
                       )
                   )
@@ -205,10 +201,10 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                                     tag: _listCategoryReport[index].name,
                                     child: Text(_listCategoryReport[index].name,
                                         style: TextStyle(
-                                          fontFamily: fontFamily,
+                                          fontFamily: Style.fontFamily,
                                           fontWeight: FontWeight.w700,
                                           fontSize: 15.0,
-                                          color: foregroundColor,
+                                          color: Style.foregroundColor,
                                         )
                                     ),
                                   ),
@@ -220,7 +216,7 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                                         currencyId: widget.currentWallet
                                             .currencyID,
                                         textStyle: TextStyle(
-                                            fontFamily: fontFamily,
+                                            fontFamily: Style.fontFamily,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 15.0,
                                             color: _color)
@@ -238,10 +234,10 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                   child: Text(
                     'No transaction',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontSize: 15.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor.withOpacity(0.24),
+                      color: Style.foregroundColor.withOpacity(0.24),
                     ),
                   )
               )

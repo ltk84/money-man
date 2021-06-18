@@ -64,23 +64,23 @@ class _BarChartInformation extends State<BarChartInformation> {
         child: Text(
           'No transaction',
           style: TextStyle(
-            fontFamily: fontFamily,
+            fontFamily: Style.fontFamily,
             fontSize: 15.0,
             fontWeight: FontWeight.w500,
-            color: foregroundColor.withOpacity(0.24),
+            color: Style.foregroundColor.withOpacity(0.24),
           ),
         )
     )
     : Container(
       decoration: BoxDecoration(
-        color: boxBackgroundColor2,
+        color: Style.boxBackgroundColor2,
         border: Border(
           top: BorderSide(
-            color: foregroundColor.withOpacity(0.12),
+            color: Style.foregroundColor.withOpacity(0.12),
             width: 0.2,
           ),
           bottom: BorderSide(
-            color: foregroundColor.withOpacity(0.12),
+            color: Style.foregroundColor.withOpacity(0.12),
             width: 0.2,
           )
         )
@@ -110,7 +110,7 @@ class _BarChartInformation extends State<BarChartInformation> {
                     children: [
                       if (index != 0)
                         Divider(
-                          color: foregroundColor.withOpacity(0.12),
+                          color: Style.foregroundColor.withOpacity(0.12),
                           thickness: 1,
                           height: 25,
                         ),
@@ -128,8 +128,8 @@ class _BarChartInformation extends State<BarChartInformation> {
                                     tag: timeRangeList[index],
                                     child: Text(timeRangeList[index],
                                         style: TextStyle(
-                                            fontFamily: fontFamily,
-                                            color: foregroundColor,
+                                            fontFamily: Style.fontFamily,
+                                            color: Style.foregroundColor,
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500)),
                                   ),
@@ -139,8 +139,8 @@ class _BarChartInformation extends State<BarChartInformation> {
                                     child: Text(
                                       'Tap to view transaction list for this period.',
                                       style: TextStyle(
-                                          fontFamily: fontFamily,
-                                          color: foregroundColor.withOpacity(0.24),
+                                          fontFamily: Style.fontFamily,
+                                          color: Style.foregroundColor.withOpacity(0.24),
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400),
                                     ),
@@ -158,8 +158,8 @@ class _BarChartInformation extends State<BarChartInformation> {
                                   //digit: (calculationList[index].first == 0) ? '' : '+',
                                   currencyId: widget.currentWallet.currencyID,
                                   textStyle: TextStyle(
-                                      fontFamily: fontFamily,
-                                      color: incomeColor2,
+                                      fontFamily: Style.fontFamily,
+                                      color: Style.incomeColor2,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w500),
                                 ),
@@ -171,8 +171,8 @@ class _BarChartInformation extends State<BarChartInformation> {
                                   //digit: (calculationList[index].last == 0) ? '' : '-',
                                   currencyId: widget.currentWallet.currencyID,
                                   textStyle: TextStyle(
-                                      fontFamily: fontFamily,
-                                      color: expenseColor,
+                                      fontFamily: Style.fontFamily,
+                                      color: Style.expenseColor,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w500),
                                 ),
@@ -187,8 +187,8 @@ class _BarChartInformation extends State<BarChartInformation> {
                                         calculationList[index].last),
                                     currencyId: widget.currentWallet.currencyID,
                                     textStyle: TextStyle(
-                                        fontFamily: fontFamily,
-                                        color: foregroundColor,
+                                        fontFamily: Style.fontFamily,
+                                        color: Style.foregroundColor,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500))
                               ],

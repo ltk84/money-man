@@ -122,7 +122,7 @@ class _AnalyticRevenueAndExpenditureScreen
             },
             child: Hero(
               tag: 'alo',
-              child: Icon(Icons.arrow_back_ios, color: foregroundColor),
+              child: Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
             ),
           ),
           centerTitle: true,
@@ -154,8 +154,8 @@ class _AnalyticRevenueAndExpenditureScreen
               duration: Duration(milliseconds: 100),
               child: Text('Net Income',
                   style: TextStyle(
-                    color: foregroundColor,
-                    fontFamily: fontFamily,
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 17.0,
                     fontWeight: FontWeight.w600,
                   ))
@@ -228,7 +228,7 @@ class _AnalyticRevenueAndExpenditureScreen
                   element.date.compareTo(endDate) <= 0)
                   .toList();
               return Container(
-                color: backgroundColor,
+                color: Style.backgroundColor,
                 child: ListView(
                   controller: _controller,
                   physics: BouncingScrollPhysics(
@@ -241,14 +241,14 @@ class _AnalyticRevenueAndExpenditureScreen
                             children: [
                               Container(
                                   padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
-                                  color: backgroundColor,
+                                  color: Style.backgroundColor,
                                   child: Hero(
                                     tag: 'netIncomeChart',
                                     child: Column(
                                       children: <Widget>[
                                         Text('Net Income',
                                             style: TextStyle(
-                                              color: foregroundColor.withOpacity(
+                                              color: Style.foregroundColor.withOpacity(
                                                   0.7),
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.w400,
@@ -260,12 +260,12 @@ class _AnalyticRevenueAndExpenditureScreen
                                             currencyId: _wallet.currencyID,
                                             textStyle: TextStyle(
                                               color: (closingBalance -
-                                                  openingBalance) > 0 ? incomeColor
+                                                  openingBalance) > 0 ? Style.incomeColor
                                                   : (closingBalance -
                                                   openingBalance) == 0
-                                                  ? foregroundColor
-                                                  : expenseColor,
-                                              fontFamily: fontFamily,
+                                                  ? Style.foregroundColor
+                                                  : Style.expenseColor,
+                                              fontFamily: Style.fontFamily,
                                               fontWeight: FontWeight.w400,
                                               fontSize: 26,
                                               height: 1.5,

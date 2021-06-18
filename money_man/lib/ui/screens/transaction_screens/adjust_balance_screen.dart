@@ -32,12 +32,12 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
     var iconData = widget.wallet.iconID;
 
     return Scaffold(
-      backgroundColor: backgroundColor1,
+      backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
         elevation: 0,
         leadingWidth: 70,
         leading: CloseButton(),
-        backgroundColor: backgroundColor1,
+        backgroundColor: Style.backgroundColor1,
         actions: [
           TextButton(
             onPressed: () async {
@@ -47,17 +47,17 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
             },
             child: Text('Save',
                 style: TextStyle(
-                  fontFamily: fontFamily,
+                  fontFamily: Style.fontFamily,
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600,
-                  color: successColor,
+                  color: Style.successColor,
                 )),
           )
         ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
-        color: backgroundColor1,
+        color: Style.backgroundColor1,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -67,10 +67,10 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
             Text(
               'ADJUST BALANCE',
               style: TextStyle(
-                fontFamily: fontFamily,
+                fontFamily: Style.fontFamily,
                 fontWeight: FontWeight.w800,
                 fontSize: 20.0,
-                color: foregroundColor,
+                color: Style.foregroundColor,
               ),
               textAlign: TextAlign.center,
             ),
@@ -79,7 +79,7 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
             ),
             Container(
               decoration: BoxDecoration(
-                  color: boxBackgroundColor,
+                  color: Style.boxBackgroundColor,
                   borderRadius: BorderRadius.circular(10)),
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: ListTile(
@@ -90,10 +90,10 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
                 title: Text(
                   widget.wallet.name,
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   ),
                 ),
                 trailing: Tooltip(
@@ -104,20 +104,20 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
                   //preferBelow: false,
                   message: 'Please change your wallet outside to adjust another wallet balance.',
                   decoration: BoxDecoration(
-                    color: foregroundColor.withOpacity(0.92),
+                    color: Style.foregroundColor.withOpacity(0.92),
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(5),
                         topRight: Radius.circular(5),
                         bottomLeft: Radius.circular(5)),
                   ),
                   textStyle: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w500,
-                    color: backgroundColor1.withOpacity(0.87),
+                    color: Style.backgroundColor1.withOpacity(0.87),
                     fontSize: 14.0,
                   ),
                   child: Icon(
                     Icons.lock,
-                    color: foregroundColor.withOpacity(0.54),
+                    color: Style.foregroundColor.withOpacity(0.54),
                   ),
                 ),
               ),
@@ -126,7 +126,7 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
             Container(
               decoration: BoxDecoration(
                 //color: Color(0xff268b79),
-                  color: primaryColor.withOpacity(0.87),
+                  color: Style.primaryColor.withOpacity(0.87),
                   borderRadius: BorderRadius.circular(10)),
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: ListTile(
@@ -151,22 +151,22 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
                 },
                 leading: Icon(
                   Icons.keyboard_rounded,
-                  color: foregroundColor,
+                  color: Style.foregroundColor,
                   size: 30,
                 ),
                 title: MoneySymbolFormatter(
                   text: adjustAmount ?? widget.wallet.amount,
                   currencyId: widget.wallet.currencyID,
                   textStyle: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   ),
                 ),
                 trailing: Icon(
                   Icons.chevron_right,
-                  color: foregroundColor,
+                  color: Style.foregroundColor,
                 ),
               ),
             ),

@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -60,7 +59,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
@@ -72,10 +71,10 @@ class _MyWalletScreenState extends State<MyWalletScreen>
               tag: 'alo',
               child: Row(
                 children: [
-                  Icon(Icons.arrow_back_ios, color: foregroundColor),
+                  Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
                   Text('More', style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: fontFamily,
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 17.0
                   )),
                 ],
@@ -114,29 +113,29 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                   ''
                   'My Wallets',
                   style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: fontFamily,
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 17.0))),
           actions: [
             TextButton(
               onPressed: () async {
                 await showCupertinoModalBottomSheet(
-                  backgroundColor: boxBackgroundColor,
+                  backgroundColor: Style.boxBackgroundColor,
                   context: context,
                   builder: (context) => AddWalletScreen(),
                 );
                 setState(() {});
               },
               child: Text('Add', style: TextStyle(
-                  color: foregroundColor,
-                  fontFamily: fontFamily,
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
                   fontSize: 17.0
               )),
             ),
           ],
         ),
         body: Container(
-          color: backgroundColor,
+          color: Style.backgroundColor,
           child: StreamBuilder<List<Wallet>>(
               stream: _firestore.walletStream,
               builder: (context, snapshot) {
@@ -160,16 +159,16 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                       ? Text('My Wallets',
                                           style: TextStyle(
                                               fontSize: 30,
-                                              color: foregroundColor,
-                                              fontFamily: fontFamily,
+                                              color: Style.foregroundColor,
+                                              fontFamily: Style.fontFamily,
                                               fontWeight: FontWeight.bold
                                           )
                                   )
                                       : Text('',
                                       style: TextStyle(
                                           fontSize: 30,
-                                          color: foregroundColor,
-                                          fontFamily: fontFamily,
+                                          color: Style.foregroundColor,
+                                          fontFamily: Style.fontFamily,
                                           fontWeight: FontWeight.bold
                                       )
                                   ),
@@ -181,9 +180,9 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                   child: Text(
                                     'Included in Total',
                                     style: TextStyle(
-                                        color: foregroundColor.withOpacity(0.7),
+                                        color: Style.foregroundColor.withOpacity(0.7),
                                         fontSize: 18,
-                                        fontFamily: fontFamily,
+                                        fontFamily: Style.fontFamily,
                                         fontWeight: FontWeight.w400),
                                   ),
                                 )
@@ -191,21 +190,21 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                           Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                                color: boxBackgroundColor,
+                                color: Style.boxBackgroundColor,
                                 border: Border(
                                     top: BorderSide(
-                                      color: foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor.withOpacity(0.12),
                                       width: 0.5,
                                     ),
                                     bottom: BorderSide(
-                                      color: foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor.withOpacity(0.12),
                                       width: 0.5,
                                     ))),
                             child: ListTile(
                               contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 0),
                               onTap: () async {
                                 await showCupertinoModalBottomSheet(
-                                  backgroundColor: boxBackgroundColor,
+                                  backgroundColor: Style.boxBackgroundColor,
                                   context: context,
                                   builder: (context) => EditWalletScreen(
                                       wallet: listWallet[index]),
@@ -217,8 +216,8 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                               title: Text(
                                 listWallet[index].name,
                                 style: TextStyle(
-                                  color: foregroundColor,
-                                  fontFamily: fontFamily,
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -232,8 +231,8 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                 text: listWallet[index].amount,
                                 currencyId: listWallet[index].currencyID,
                                 textStyle: TextStyle(
-                                  color: foregroundColor,
-                                  fontFamily: fontFamily,
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w400,
                                 ),

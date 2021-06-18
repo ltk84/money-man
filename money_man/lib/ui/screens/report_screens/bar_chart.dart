@@ -281,10 +281,10 @@ class BarChartScreenState extends State<BarChartScreen> {
                           Text(
                               'Total income',
                               style: TextStyle(
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14.0,
-                                color: foregroundColor.withOpacity(0.54),
+                                color: Style.foregroundColor.withOpacity(0.54),
                               )
                           ),
                         ],
@@ -304,10 +304,10 @@ class BarChartScreenState extends State<BarChartScreen> {
                           Text(
                               'Total expense',
                             style: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
                               fontSize: 14.0,
-                              color: foregroundColor.withOpacity(0.54),
+                              color: Style.foregroundColor.withOpacity(0.54),
                             ),
                           ),
                         ],
@@ -324,16 +324,16 @@ class BarChartScreenState extends State<BarChartScreen> {
                             margin: EdgeInsets.symmetric(horizontal: 6),
                             height: 14,
                             width: 2,
-                            color: foregroundColor,
+                            color: Style.foregroundColor,
                           ),
                           SizedBox(width: 10),
                           Text(
                               'Amount',
                             style: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
                               fontSize: 14.0,
-                              color: foregroundColor.withOpacity(0.54),
+                              color: Style.foregroundColor.withOpacity(0.54),
                             ),
                           ),
                         ],
@@ -344,16 +344,16 @@ class BarChartScreenState extends State<BarChartScreen> {
                           Container(
                             height: 2,
                             width: 14,
-                            color: foregroundColor,
+                            color: Style.foregroundColor,
                           ),
                           SizedBox(width: 10),
                           Text(
                               'Time range (day)',
                             style: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
                               fontSize: 14.0,
-                              color: foregroundColor.withOpacity(0.54),
+                              color: Style.foregroundColor.withOpacity(0.54),
                             ),
                           ),
                         ],

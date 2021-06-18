@@ -26,7 +26,7 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor1,
+      backgroundColor: Style.backgroundColor1,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           myController.clear();
@@ -34,22 +34,22 @@ class _NoteScreenState extends State<NoteScreen> {
         },
         child: Icon(
             Icons.delete_forever_rounded,
-          color: foregroundColor
+          color: Style.foregroundColor
         ),
         elevation: 0,
-        backgroundColor: primaryColor,
+        backgroundColor: Style.primaryColor,
       ),
       appBar: AppBar(
         leading: CloseButton(),
         elevation: 0,
         centerTitle: true,
-        backgroundColor: boxBackgroundColor,
+        backgroundColor: Style.boxBackgroundColor,
         title: Text('Note',
             style: TextStyle(
-              fontFamily: fontFamily,
+              fontFamily: Style.fontFamily,
               fontSize: 17.0,
               fontWeight: FontWeight.w600,
-              color: foregroundColor,)),
+              color: Style.foregroundColor,)),
         actions: [
           TextButton(
               onPressed: () {
@@ -60,7 +60,7 @@ class _NoteScreenState extends State<NoteScreen> {
                 'Save',
                 style: TextStyle(
                     color: Colors.white,
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600
                 ),
@@ -68,7 +68,7 @@ class _NoteScreenState extends State<NoteScreen> {
         ],
       ),
       body: Container(
-        color: backgroundColor1,
+        color: Style.backgroundColor1,
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: Form(
           key: _formKey,
@@ -81,8 +81,8 @@ class _NoteScreenState extends State<NoteScreen> {
               },
               cursorColor: Color(0xFF2FB49C),
               style: TextStyle(
-                  fontFamily: fontFamily,
-                  color: foregroundColor,
+                  fontFamily: Style.fontFamily,
+                  color: Style.foregroundColor,
                   fontSize: 16,
                   fontWeight: FontWeight.w400),
               maxLines: 100,

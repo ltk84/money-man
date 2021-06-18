@@ -1,4 +1,3 @@
-import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -47,10 +46,10 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
             ),
             title: Text('Select Wallet',
                 style: TextStyle(
-                  fontFamily: fontFamily,
+                  fontFamily: Style.fontFamily,
                   fontSize: 17.0,
                   fontWeight: FontWeight.w600,
-                  color: foregroundColor,)),
+                  color: Style.foregroundColor,)),
             actions: <Widget>[
               TextButton(
                   onPressed: () async {
@@ -70,17 +69,17 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                   child: Text(
                     'Edit',
                       style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
-                        color: foregroundColor,
+                        color: Style.foregroundColor,
                       )
                   ),
               ),
             ],
           ),
           body: Container(
-            color: backgroundColor1,
+            color: Style.backgroundColor1,
             child: Column(
               children: [
                 SizedBox(
@@ -93,10 +92,10 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                     child: Text(
                       'My Wallets',
                       style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 14.0,
-                        color: foregroundColor.withOpacity(0.38),
+                        color: Style.foregroundColor.withOpacity(0.38),
                       ),
                     ),
                   ),
@@ -123,7 +122,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                       child: Text("ADD NEW WALLET",
                           style: TextStyle(
                               fontSize: 14,
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 0.5,
                               wordSpacing: 2.0),
@@ -181,7 +180,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 color: Colors.grey[900],
                                 border: Border(
                                     bottom: BorderSide(
-                                      color: foregroundColorDark.withOpacity(0.12),
+                                      color: Style.foregroundColorDark.withOpacity(0.12),
                                       width: 1.0,
                                     ))),
                             child: ListTile(
@@ -207,7 +206,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 currencyId: listWallet[index].currencyID,
                                 textStyle: tsChild,
                               ),
-                              trailing: Icon(Icons.check_rounded, color: primaryColor),
+                              trailing: Icon(Icons.check_rounded, color: Style.primaryColor),
                             ),
                           ),
                         )
@@ -225,11 +224,11 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 color: Colors.grey[900],
                                 border: Border(
                                     top: BorderSide(
-                                      color: foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor.withOpacity(0.12),
                                       width: 1.0,
                                     ),
                                     bottom: BorderSide(
-                                      color: foregroundColorDark.withOpacity(0.12),
+                                      color: Style.foregroundColorDark.withOpacity(0.12),
                                       width: 1.0,
                                     )
                                 )

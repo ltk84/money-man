@@ -61,11 +61,11 @@ class ShareScreenState extends State<ShareScreen> {
     String reportName = 'Report_' + DateTime.now().difference(DateTime(2021)).inSeconds.toString();
 
     return Scaffold(
-      backgroundColor: boxBackgroundColor,
+      backgroundColor: Style.boxBackgroundColor,
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: boxBackgroundColor,
+        backgroundColor: Style.boxBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20.0),
@@ -79,7 +79,7 @@ class ShareScreenState extends State<ShareScreen> {
         leading: CloseButton(),
       ),
       body: Container(
-          color: backgroundColor1,
+          color: Style.backgroundColor1,
           padding: EdgeInsets.symmetric(vertical: 20.0),
           child: Column(
             children: [
@@ -145,7 +145,7 @@ class ShareScreenState extends State<ShareScreen> {
                       Text('SHARE',
                         style: TextStyle(
                             fontSize: 14,
-                            fontFamily: fontFamily,
+                            fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.5,
                             wordSpacing: 2.0
@@ -220,7 +220,7 @@ class ShareScreenState extends State<ShareScreen> {
                       Text('SAVE',
                           style: TextStyle(
                               fontSize: 14,
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 0.5,
                               wordSpacing: 2.0

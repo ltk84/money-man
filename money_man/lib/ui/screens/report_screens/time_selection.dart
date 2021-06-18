@@ -73,11 +73,11 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: boxBackgroundColor,
+        backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: boxBackgroundColor,
+          backgroundColor: Style.boxBackgroundColor,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.0),
@@ -92,7 +92,7 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
           leading: CloseButton(),
         ),
         body: Container(
-          color: backgroundColor1,
+          color: Style.backgroundColor1,
           child: ListView.separated(
             itemCount: listInfo.length,
             separatorBuilder: (BuildContext context, int index) => Divider(),
@@ -151,7 +151,7 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
                       color: Colors.grey[500],
                     )),
                 trailing: _dateDescription == listInfo[index].description
-                    ? Icon(Icons.check_rounded, color: primaryColor)
+                    ? Icon(Icons.check_rounded, color: Style.primaryColor)
                     : null,
               );
             },

@@ -64,8 +64,8 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
         title: Text(
           'Calculate your amount',
           style: TextStyle(
-            fontFamily: fontFamily,
-            color: foregroundColor,
+            fontFamily: Style.fontFamily,
+            color: Style.foregroundColor,
             fontWeight: FontWeight.w600,
             fontSize: 18.0,
           ),

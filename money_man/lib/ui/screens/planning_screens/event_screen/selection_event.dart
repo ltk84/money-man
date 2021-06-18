@@ -33,21 +33,21 @@ class _SelectEventScreen extends State<SelectEventScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: backgroundColor1,
+      backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: boxBackgroundColor,
+        backgroundColor: Style.boxBackgroundColor,
         leading: CloseButton(),
         title: Text('Select Event',
             style: TextStyle(
-              fontFamily: fontFamily,
+              fontFamily: Style.fontFamily,
               fontSize: 17.0,
               fontWeight: FontWeight.w600,
-              color: foregroundColor,)),
+              color: Style.foregroundColor,)),
       ),
       body: Container(
-        color: backgroundColor1,
+        color: Style.backgroundColor1,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

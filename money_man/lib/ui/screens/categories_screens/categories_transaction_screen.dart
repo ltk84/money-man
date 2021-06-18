@@ -83,7 +83,7 @@ class _CategoriesTransactionScreenState
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
@@ -93,13 +93,13 @@ class _CategoriesTransactionScreenState
             },
             child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: foregroundColor),
+                Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
                 Hero(
                     tag: 'alo',
                     child: Text('More',
                         style: TextStyle(
-                            color: foregroundColor,
-                            fontFamily: fontFamily,
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
                             fontSize: 17.0))),
               ],
             ),
@@ -135,18 +135,18 @@ class _CategoriesTransactionScreenState
                   ''
                   'Categories',
                   style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: fontFamily,
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 17.0))),
           bottom: TabBar(
             labelStyle: TextStyle(
-              fontFamily: fontFamily,
+              fontFamily: Style.fontFamily,
               fontWeight: FontWeight.w700,
               fontSize: 13.0,
             ),
-            unselectedLabelColor: foregroundColor.withOpacity(0.54),
-            labelColor: foregroundColor,
-            indicatorColor: primaryColor,
+            unselectedLabelColor: Style.foregroundColor.withOpacity(0.54),
+            labelColor: Style.foregroundColor,
+            indicatorColor: Style.primaryColor,
             physics: NeverScrollableScrollPhysics(),
             isScrollable: true,
             indicatorWeight: 3.0,
@@ -185,9 +185,9 @@ class _CategoriesTransactionScreenState
                           // onTap: () {
                           //   Navigator.pop(context, _selectCateTab[index]);
                               style: TextStyle(
-                                  color: foregroundColor,
+                                  color: Style.foregroundColor,
                                   fontWeight: FontWeight.w700,
-                                  fontFamily: fontFamily)),
+                                  fontFamily: Style.fontFamily)),
                           onTap: () async {
                             if (_selectCateTab[index].name == 'Repayment') {
                               var result = await showCupertinoModalBottomSheet(

@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/category_model.dart';
-import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -14,7 +13,6 @@ import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
-import 'package:intl/intl.dart';
 
 class ReportListTransaction extends StatefulWidget {
   final DateTime beginDate;
@@ -103,9 +101,9 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     String categoryDescription = _category != null ? _category.name : '';
 
     return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Style.backgroundColor,
         appBar: new AppBar(
-          backgroundColor: backgroundColor,
+          backgroundColor: Style.backgroundColor,
           centerTitle: true,
           elevation: 0,
           leading: MaterialButton(
@@ -114,7 +112,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
             },
             child: Hero(
               tag: 'alo',
-              child: Icon(Icons.arrow_back_ios, color: foregroundColor),
+              child: Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
             ),
           ),
           title: Hero(
@@ -126,10 +124,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                     ? categoryDescription
                     : dateDescription,
                 style: TextStyle(
-                  fontFamily: fontFamily,
+                  fontFamily: Style.fontFamily,
                   fontSize: 17.0,
                   fontWeight: FontWeight.w600,
-                  color: foregroundColor,
+                  color: Style.foregroundColor,
                 )
             ),
           ),
@@ -198,7 +196,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
   Container buildDisplayTransactionByDate(
       List<List<MyTransaction>> transactionListSortByDate, double total) {
     return Container(
-      color: backgroundColor,
+      color: Style.backgroundColor,
       child: ListView.builder(
           physics: BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
@@ -234,7 +232,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
       double total) {
     print('build function');
     return Container(
-      color: backgroundColor,
+      color: Style.backgroundColor,
       child: ListView.builder(
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           itemCount: transactionListSortByCategory.length,
@@ -282,10 +280,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
       header: SizedBox(height: 0),
       content: Container(
           decoration: BoxDecoration(
-              color: boxBackgroundColor,
+              color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                    color: backgroundColor,
+                    color: Style.backgroundColor,
                     width: 1.0,
                   ))),
           padding: EdgeInsets.fromLTRB(15, 15, 10, 15),
@@ -294,8 +292,8 @@ class _ReportListTransaction extends State<ReportListTransaction> {
               children: <Widget>[
                 Text('Overview',
                     style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: fontFamily,
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     )),
@@ -305,19 +303,19 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                     children: <Widget>[
                       Text('Income',
                           style: TextStyle(
-                            color: foregroundColor.withOpacity(0.54),
+                            color: Style.foregroundColor.withOpacity(0.54),
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            fontFamily: fontFamily,
+                            fontFamily: Style.fontFamily,
                           )),
                       MoneySymbolFormatter(
                           text: totalIncome,
                           currencyId: widget.currentWallet.currencyID,
                           textStyle: TextStyle(
-                            color: incomeColor2,
+                            color: Style.incomeColor2,
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            fontFamily: fontFamily,
+                            fontFamily: Style.fontFamily,
                           )),
                     ]),
                 SizedBox(height: 2,),
@@ -326,25 +324,25 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                     children: <Widget>[
                       Text('Expense',
                           style: TextStyle(
-                            color: foregroundColor.withOpacity(0.54),
+                            color: Style.foregroundColor.withOpacity(0.54),
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            fontFamily: fontFamily,
+                            fontFamily: Style.fontFamily,
                           )),
                       MoneySymbolFormatter(
                           text: totalExpense,
                           currencyId: widget.currentWallet.currencyID,
                           textStyle: TextStyle(
-                            color: expenseColor,
+                            color: Style.expenseColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            fontFamily: fontFamily,
+                            fontFamily: Style.fontFamily,
                           )),
                     ]),
                 if (!_viewByCategory) Divider(
                   //height: 20,
                   thickness: 1,
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Style.foregroundColor.withOpacity(0.12),
                 ),
                 if (!_viewByCategory) Row(
                     mainAxisSize: MainAxisSize.max,
@@ -358,10 +356,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                           text: _totalMoney,
                           currencyId: widget.currentWallet.currencyID,
                           textStyle: TextStyle(
-                            color: foregroundColor,
+                            color: Style.foregroundColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            fontFamily: fontFamily,
+                            fontFamily: Style.fontFamily,
                           )),
                     ]),
               ])),
@@ -379,19 +377,19 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: foregroundColor.withOpacity(0.12),
+                color: Style.foregroundColor.withOpacity(0.12),
                 width: 0.5,
               ),
               top: BorderSide(
-                color: foregroundColor.withOpacity(0.12),
+                color: Style.foregroundColor.withOpacity(0.12),
                 width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -402,10 +400,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                         .format(transListSortByDate[xIndex][0].date),
                     style:
                     TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 30.0,
-                        color: foregroundColor
+                        color: Style.foregroundColor
                     )
                 ),
               ),
@@ -421,10 +419,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                             .toString(),
                     // 'hello',
                     style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.0,
-                        color: foregroundColor.withOpacity(0.54)
+                        color: Style.foregroundColor.withOpacity(0.54)
                     )
                 ),
               ),
@@ -438,10 +436,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   currencyId: widget.currentWallet.currencyID,
                   textAlign: TextAlign.end,
                   textStyle: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w700,
                     fontSize: 14.0,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   ),
                 ),
               ),
@@ -486,10 +484,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                                 .category
                                 .name,
                             style: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w700,
                               fontSize: 14.0,
-                              color: foregroundColor,
+                              color: Style.foregroundColor,
                             )
                         ),
                       ),
@@ -501,15 +499,15 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                             textAlign: TextAlign.end,
 
                             textStyle: TextStyle(
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14.0,
                                 color: transListSortByDate[xIndex][yIndex]
                                     .category
                                     .type ==
                                     'income'
-                                    ? incomeColor2
-                                    : expenseColor)
+                                    ? Style.incomeColor2
+                                    : Style.expenseColor)
                         ),
 
                       ),
@@ -529,19 +527,19 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: foregroundColor.withOpacity(0.12),
+                color: Style.foregroundColor.withOpacity(0.12),
                 width: 0.5,
               ),
               top: BorderSide(
-                color: foregroundColor.withOpacity(0.12),
+                color: Style.foregroundColor.withOpacity(0.12),
                 width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -561,10 +559,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                         ' transactions',
                     // 'hello',
                     style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.0,
-                        color: foregroundColor.withOpacity(0.54)
+                        color: Style.foregroundColor.withOpacity(0.54)
                     )),
               ),
               Expanded(
@@ -577,10 +575,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   currencyId: widget.currentWallet.currencyID,
                   textAlign: TextAlign.end,
                   textStyle: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w700,
                     fontSize: 14.0,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                 ),
               ),
               ),
@@ -617,10 +615,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                                 transListSortByCategory[xIndex][yIndex].date),
                             style:
                             TextStyle(
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 30.0,
-                                color: foregroundColor
+                                color: Style.foregroundColor
                             )),
                       ),
                       Padding(
@@ -629,10 +627,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                             DateFormat("MMMM yyyy, EEEE").format(
                                 transListSortByCategory[xIndex][yIndex].date),
                             style: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w700,
                               fontSize: 14.0,
-                              color: foregroundColor,
+                              color: Style.foregroundColor,
                             )),
                       ),
                       Expanded(
@@ -654,10 +652,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                           currencyId: widget.currentWallet.currencyID,
                           textAlign: TextAlign.end,
                           textStyle: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w500,
                               fontSize: 14.0,
-                              color: incomeColor2),
+                              color: Style.incomeColor2),
                         )
                             : MoneySymbolFormatter(
                           text: transListSortByCategory[xIndex][yIndex]
@@ -665,10 +663,10 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                           currencyId: widget.currentWallet.currencyID,
                           textAlign: TextAlign.end,
                           textStyle: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w500,
                               fontSize: 14.0,
-                              color: expenseColor),
+                              color: Style.expenseColor),
                         ),
                       ),
                     ],

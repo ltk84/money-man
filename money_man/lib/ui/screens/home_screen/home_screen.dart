@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (index == 2) {
         showCupertinoModalBottomSheet(
             isDismissible: true,
-            backgroundColor: boxBackgroundColor,
+            backgroundColor: Style.boxBackgroundColor,
             context: context,
             builder: (context) => AddTransactionScreen(currentWallet: wallet));
       } else
@@ -58,12 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
               return FirstStep();
             } else
               return Scaffold(
-                backgroundColor: foregroundColor.withOpacity(0.38),
+                backgroundColor: Style.foregroundColor.withOpacity(0.38),
                 body: _screens.elementAt(_selectedIndex),
                 bottomNavigationBar: BottomAppBar(
                   notchMargin: 5,
                   shape: CircularNotchedRectangle(),
-                  color: backgroundColor,
+                  color: Style.backgroundColor,
                   child: BottomNavigationBar(
                       type: BottomNavigationBarType.fixed,
                       elevation: 0,
@@ -96,15 +96,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                       selectedLabelStyle: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w600,
                       ),
                       unselectedLabelStyle: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w600,
                       ),
-                      selectedItemColor: foregroundColor,
-                      unselectedItemColor: foregroundColor.withOpacity(0.54),
+                      selectedItemColor: Style.foregroundColor,
+                      unselectedItemColor: Style.foregroundColor.withOpacity(0.54),
                       unselectedFontSize: 12.0,
                       selectedFontSize: 12.0,
                       currentIndex: _selectedIndex,
@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     _onItemTap(2, wallet);
                   },
-                  backgroundColor: primaryColor,
+                  backgroundColor: Style.primaryColor,
                   elevation: 0,
                 ),
                 floatingActionButtonLocation:

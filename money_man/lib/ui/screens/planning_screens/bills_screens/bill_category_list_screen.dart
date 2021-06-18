@@ -7,13 +7,10 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/add_bill_sceen.dart';
-import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_general_detail_screen.dart';
 import 'package:money_man/ui/style.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:currency_picker/currency_picker.dart';
-import 'package:intl/intl.dart';
 
 class BillCategoryList extends StatefulWidget {
   Wallet currentWallet;
@@ -29,9 +26,9 @@ class _BillCategoryListState extends State<BillCategoryList> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: backgroundColor1,
+      backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
-          backgroundColor: backgroundColor1,
+          backgroundColor: Style.backgroundColor1,
           elevation: 0.0,
           leading: CloseButton(),
           actions: [
@@ -47,10 +44,10 @@ class _BillCategoryListState extends State<BillCategoryList> {
                 },
                 child: Text('Add',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor,
+                      color: Style.foregroundColor,
                     )),
               ),
           ],
@@ -73,10 +70,10 @@ class _BillCategoryListState extends State<BillCategoryList> {
                 child: Text(
                   'No bill',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: foregroundColor.withOpacity(0.54),
+                    color: Style.foregroundColor.withOpacity(0.54),
                   ),
                 )
             );
@@ -88,10 +85,10 @@ class _BillCategoryListState extends State<BillCategoryList> {
                   margin: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: Text('All Bills',
                       style: TextStyle(
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontSize: 14.0,
                         fontWeight: FontWeight.w500,
-                        color: foregroundColor.withOpacity(0.7),
+                        color: Style.foregroundColor.withOpacity(0.7),
                       )
                   ),
                 ),
@@ -122,14 +119,14 @@ class _BillCategoryListState extends State<BillCategoryList> {
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-            color: boxBackgroundColor2,
+            color: Style.boxBackgroundColor2,
             border: Border(
                 top: BorderSide(
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ),
                 bottom: BorderSide(
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ))),
         child: Row(
@@ -148,17 +145,17 @@ class _BillCategoryListState extends State<BillCategoryList> {
                   children: [
                     Text(bill.category.name,
                         style: TextStyle(
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,
-                          color: foregroundColor,
+                          color: Style.foregroundColor,
                         )),
                     Text(currencySymbol + ' ' + bill.amount.toString(),
                         style: TextStyle(
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w400,
-                          color: foregroundColor,
+                          color: Style.foregroundColor,
                         )),
                   ],
                 )
@@ -166,10 +163,10 @@ class _BillCategoryListState extends State<BillCategoryList> {
             ),
             Text(bill.isFinished ? 'Finished' : 'Running',
                 style: TextStyle(
-                  fontFamily: fontFamily,
+                  fontFamily: Style.fontFamily,
                   fontSize: 15.0,
                   fontWeight: FontWeight.w600,
-                  color: bill.isFinished ? foregroundColor.withOpacity(0.38) : runningColor,
+                  color: bill.isFinished ? Style.foregroundColor.withOpacity(0.38) : Style.runningColor,
                 )),
           ],
         ),

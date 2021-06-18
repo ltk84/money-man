@@ -50,10 +50,10 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                   topRight: Radius.circular(20.0))),
           title: Text('Edit Wallet',
               style: TextStyle(
-                fontFamily: fontFamily,
+                fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: foregroundColor,)),
+                color: Style.foregroundColor,)),
           leading: CloseButton(),
           actions: <Widget>[
             TextButton(
@@ -71,17 +71,17 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 },
                 child: Text('Save',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600,
-                      color: foregroundColor,
+                      color: Style.foregroundColor,
                     )
                 ),
             ),
           ],
         ),
         body: Container(
-            color: backgroundColor1,
+            color: Style.backgroundColor1,
             child: Form(
               key: _formKey,
               child: buildInput(),
@@ -296,7 +296,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                   child: Text("DELETE THIS WALLET",
                       style: TextStyle(
                           fontSize: 14,
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
                           wordSpacing: 2.0),

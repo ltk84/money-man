@@ -37,21 +37,21 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: boxBackgroundColor,
+        backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: boxBackgroundColor,
+          backgroundColor: Style.boxBackgroundColor,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.0),
                   topRight: Radius.circular(20.0))),
           title: Text('Add Wallet',
               style: TextStyle(
-                fontFamily: fontFamily,
+                fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: foregroundColor,)),
+                color: Style.foregroundColor,)),
           leading: CloseButton(),
           actions: <Widget>[
             TextButton(
@@ -66,17 +66,17 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                 },
                 child: Text('Done',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600,
-                      color: (wallet.name == '' || wallet.name == null) ? foregroundColor.withOpacity(0.24) : foregroundColor,
+                      color: (wallet.name == '' || wallet.name == null) ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                     )
                 ),
             ),
           ],
         ),
         body: Container(
-            color: backgroundColor1,
+            color: Style.backgroundColor1,
             child: Form(
               key: _formKey,
               child: buildInput(),
@@ -217,12 +217,12 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           ),
                           flagSize: 26,
                           titleTextStyle: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontSize: 17,
                               color: Colors.white,
                               fontWeight: FontWeight.w700),
                           subtitleTextStyle: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontSize: 15,
                               color: Colors.white),
                           //backgroundColor: Colors.grey[900],

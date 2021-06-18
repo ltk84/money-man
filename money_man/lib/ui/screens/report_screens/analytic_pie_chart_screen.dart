@@ -82,7 +82,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     endDate = widget.endDate;
 
     _content = widget.type == 'expense' ? 'Expense' : 'Income';
-    _color = widget.type == 'expense' ? expenseColor : incomeColor2;
+    _color = widget.type == 'expense' ? Style.expenseColor : Style.incomeColor2;
 
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
@@ -133,7 +133,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
             },
             child: Hero(
               tag: 'alo',
-              child: Icon(Icons.arrow_back_ios, color: foregroundColor),
+              child: Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
             ),
           ),
           //centerTitle: true,
@@ -240,14 +240,14 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                         this.key1 = key;
 
                         return Container(
-                          color: backgroundColor, // để lúc export ra không bị transparent.
+                          color: Style.backgroundColor, // để lúc export ra không bị transparent.
                           child: Column(children: <Widget>[
                             Column(
                               children: <Widget>[
                                 Text(_content,
                                   style: TextStyle(
-                                    color: foregroundColor.withOpacity(0.7),
-                                    fontFamily: fontFamily,
+                                    color: Style.foregroundColor.withOpacity(0.7),
+                                    fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16,
                                   ),
@@ -257,7 +257,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                   currencyId: _wallet.currencyID,
                                   textStyle: TextStyle(
                                     color: _color,
-                                    fontFamily: fontFamily,
+                                    fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 24,
                                     height: 1.5,
@@ -290,14 +290,14 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: boxBackgroundColor,
+                                    color: Style.boxBackgroundColor,
                                     border: Border(
                                         top: BorderSide(
-                                          color: foregroundColor.withOpacity(0.12),
+                                          color: Style.foregroundColor.withOpacity(0.12),
                                           width: 1,
                                         ),
                                         bottom: BorderSide(
-                                          color: foregroundColor.withOpacity(0.12),
+                                          color: Style.foregroundColor.withOpacity(0.12),
                                           width: 1,
                                         )
                                     )
@@ -309,13 +309,13 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                     Text(
                                       'View amount',
                                       style: TextStyle(
-                                        fontFamily: fontFamily,
+                                        fontFamily: Style.fontFamily,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 16.0,
-                                        color: foregroundColor,
+                                        color: Style.foregroundColor,
                                       )
                                     ),
-                                    Icon(Icons.arrow_drop_down, color: foregroundColor.withOpacity(0.54)),
+                                    Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54)),
                                   ],
                                 ),
                               ),

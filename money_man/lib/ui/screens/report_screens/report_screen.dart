@@ -113,10 +113,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
     return DefaultTabController(
       length: 300,
       child: Scaffold(
-          backgroundColor: backgroundColor,
+          backgroundColor: Style.backgroundColor,
           extendBodyBehindAppBar: true,
           appBar: new AppBar(
-            backgroundColor: backgroundColor,
+            backgroundColor: Style.backgroundColor,
             centerTitle: true,
             elevation: 0,
             flexibleSpace: ClipRect(
@@ -186,7 +186,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                       Text(
                         dateDescript,
                         style: TextStyle(
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                           fontSize: 14.0,
@@ -197,14 +197,14 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             " - " +
                             DateFormat('dd/MM/yyyy').format(endDate),
                         style: TextStyle(
-                            fontFamily: fontFamily,
+                            fontFamily: Style.fontFamily,
                             color: Colors.white.withOpacity(0.7),
                             fontSize: 12.0,
                             fontWeight: FontWeight.w400),
                       ),
                     ],
                   ),
-                  Icon(Icons.arrow_drop_down, color: foregroundColor),
+                  Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
                 ],
               ),
             ),
@@ -296,7 +296,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                         element.date.compareTo(endDate) <= 0)
                     .toList();
                 return Container(
-                  color: backgroundColor,
+                  color: Style.backgroundColor,
                   child: ListView(
                     controller: _controller,
                     physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -307,11 +307,11 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                               color: Colors.black,
                             border: Border(
                                 bottom: BorderSide(
-                                  color: foregroundColor.withOpacity(0.24),
+                                  color: Style.foregroundColor.withOpacity(0.24),
                                   width: 1.0,
                                 ),
                                 top: BorderSide(
-                                  color: foregroundColor.withOpacity(0.24),
+                                  color: Style.foregroundColor.withOpacity(0.24),
                                   width: 1.0,
                                 )
                             )
@@ -321,7 +321,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             this.key1 = key;
 
                             return Container(
-                              color: backgroundColor, // để lúc export ra không bị transparent.
+                              color: Style.backgroundColor, // để lúc export ra không bị transparent.
                               child: Column(
                                   children: <Widget>[
                                     Row(
@@ -332,7 +332,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                               Text(
                                                 'Opening balance',
                                                 style: TextStyle(
-                                                  color: foregroundColor.withOpacity(0.7),
+                                                  color: Style.foregroundColor.withOpacity(0.7),
                                                   fontFamily: 'Montserrat',
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 15,
@@ -342,7 +342,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                 text: openingBalance,
                                                 currencyId: _wallet.currencyID,
                                                 textStyle: TextStyle(
-                                                  color: foregroundColor,
+                                                  color: Style.foregroundColor,
                                                   fontFamily: 'Montserrat',
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 20,
@@ -358,8 +358,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                               Text(
                                                 'Closing balance',
                                                 style: TextStyle(
-                                                  color: foregroundColor.withOpacity(0.7),
-                                                  fontFamily: fontFamily,
+                                                  color: Style.foregroundColor.withOpacity(0.7),
+                                                  fontFamily: Style.fontFamily,
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 15,
                                                 ),
@@ -368,8 +368,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                 text: closingBalance,
                                                 currencyId: _wallet.currencyID,
                                                 textStyle: TextStyle(
-                                                  color: foregroundColor,
-                                                  fontFamily: fontFamily,
+                                                  color: Style.foregroundColor,
+                                                  fontFamily: Style.fontFamily,
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 20,
                                                   height: 1.5,
@@ -381,7 +381,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       ],
                                     ),
                                     Divider(
-                                      color: foregroundColor.withOpacity(0.24),
+                                      color: Style.foregroundColor.withOpacity(0.24),
                                       thickness: 1.0,
                                       height: 20,
                                     ),
@@ -392,7 +392,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         children: [
                                           Text('Net Income',
                                               style: TextStyle(
-                                                color: foregroundColor.withOpacity(0.7),
+                                                color: Style.foregroundColor.withOpacity(0.7),
                                                 fontFamily: 'Montserrat',
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 16,
@@ -402,9 +402,9 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                               text: closingBalance - openingBalance,
                                               currencyId: _wallet.currencyID,
                                               textStyle: TextStyle(
-                                                color: (closingBalance - openingBalance) > 0 ? incomeColor
-                                                    : (closingBalance - openingBalance) == 0 ? foregroundColor : expenseColor,
-                                                fontFamily: fontFamily,
+                                                color: (closingBalance - openingBalance) > 0 ? Style.incomeColor
+                                                    : (closingBalance - openingBalance) == 0 ? Style.foregroundColor : Style.expenseColor,
+                                                fontFamily: Style.fontFamily,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 26,
                                                 height: 1.5,
@@ -452,14 +452,14 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     this.key2 = key;
 
                                     return  Container(
-                                      color: backgroundColor, // để lúc export ra không bị transparent.
+                                      color: Style.backgroundColor, // để lúc export ra không bị transparent.
                                       child: Column(
                                         children: <Widget>[
                                           Text(
                                             'Income',
                                             style: TextStyle(
-                                              color: foregroundColor.withOpacity(0.7),
-                                              fontFamily: fontFamily,
+                                              color: Style.foregroundColor.withOpacity(0.7),
+                                              fontFamily: Style.fontFamily,
                                               fontWeight: FontWeight.w400,
                                               fontSize: 16,
                                             ),
@@ -470,7 +470,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             currencyId: _wallet.currencyID,
                                             textStyle: TextStyle(
                                               color: Colors.blueAccent,
-                                              fontFamily: fontFamily,
+                                              fontFamily: Style.fontFamily,
                                               fontWeight: FontWeight.w400,
                                               fontSize: 24,
                                               height: 1.5,
@@ -507,7 +507,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                 ),
                               ),
                               VerticalDivider(
-                                color: foregroundColor.withOpacity(0.24),
+                                color: Style.foregroundColor.withOpacity(0.24),
                                 thickness: 1,
                               ),
                               Expanded(
@@ -516,13 +516,13 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     this.key3 = key;
 
                                     return Container(
-                                      color: backgroundColor, // để lúc export ra không bị transparent.
+                                      color: Style.backgroundColor, // để lúc export ra không bị transparent.
                                       child: Column(
                                           children: <Widget>[
                                         Text(
                                           'Expense',
                                           style: TextStyle(
-                                            color: foregroundColor.withOpacity(0.7),
+                                            color: Style.foregroundColor.withOpacity(0.7),
                                             fontFamily: 'Montserrat',
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16,
@@ -534,7 +534,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                           currencyId: _wallet.currencyID,
                                           textStyle: TextStyle(
                                             color: Colors.redAccent,
-                                            fontFamily: fontFamily,
+                                            fontFamily: Style.fontFamily,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 24,
                                             height: 1.5,

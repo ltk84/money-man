@@ -61,17 +61,17 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     print('add build');
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: backgroundColor1,
+        backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: boxBackgroundColor,
+          backgroundColor: Style.boxBackgroundColor,
           title: Text('Add Transaction',
               style: TextStyle(
-                fontFamily: fontFamily,
+                fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: foregroundColor,)),
+                color: Style.foregroundColor,)),
           leading: CloseButton(),
           actions: [
             TextButton(
@@ -121,9 +121,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   'Done',
                   style: TextStyle(
                     color: (selectedWallet == null || amount == null || cate == null)
-                        ? foregroundColor.withOpacity(0.24)
-                        : foregroundColor,
-                    fontFamily: fontFamily,
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
                   ),
@@ -134,14 +134,14 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         body: Container(
           margin: EdgeInsets.symmetric(vertical: 35.0),
           decoration: BoxDecoration(
-              color: boxBackgroundColor,
+              color: Style.boxBackgroundColor,
               border: Border(
                   top: BorderSide(
-                    color: foregroundColor.withOpacity(0.12),
+                    color: Style.foregroundColor.withOpacity(0.12),
                     width: 0.5,
                   ),
                   bottom: BorderSide(
-                    color: foregroundColor.withOpacity(0.12),
+                    color: Style.foregroundColor.withOpacity(0.12),
                     width: 0.5,
                   ))),
           child: ListView(shrinkWrap: true, children: [
@@ -173,9 +173,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 },
                 // onChanged: (value) => amount = double.tryParse(value),
                 style: TextStyle(
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                     fontSize: 30.0,
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -532,8 +532,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 child: Text(
                   'More',
                   style: TextStyle(
-                      color: primaryColor,
-                    fontFamily: fontFamily,
+                      color: Style.primaryColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
                   ),

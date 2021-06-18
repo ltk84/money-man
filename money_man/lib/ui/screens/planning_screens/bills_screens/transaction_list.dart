@@ -40,15 +40,17 @@ class BillTransactionListState extends State<BillTransactionList> {
 
   @override
   void didUpdateWidget(covariant BillTransactionList oldWidget) {
+    super.didUpdateWidget(oldWidget);
     _transactionListID = widget.transactionListID ?? [];
   }
+
 
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Style.backgroundColor,
       appBar: new AppBar(
-        backgroundColor: boxBackgroundColor.withOpacity(0.2),
+        backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
         elevation: 0.0,
         leading: Hero(
           tag: 'billToDetail_backBtn',
@@ -58,17 +60,17 @@ class BillTransactionListState extends State<BillTransactionList> {
               },
               child: Icon(
                 Icons.arrow_back_outlined,
-                color: foregroundColor,
+                color: Style.foregroundColor,
               )),
         ),
         title: Hero(
           tag: 'billToDetail_title',
           child: Text('Transaction List',
               style: TextStyle(
-                fontFamily: fontFamily,
+                fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: foregroundColor,
+                color: Style.foregroundColor,
               )),
         ),
         centerTitle: true,
@@ -120,10 +122,10 @@ class BillTransactionListState extends State<BillTransactionList> {
                 child: Text(
                   'No transaction',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: foregroundColor.withOpacity(0.54),
+                    color: Style.foregroundColor.withOpacity(0.54),
                   ),
                 )
               );
@@ -139,7 +141,7 @@ class BillTransactionListState extends State<BillTransactionList> {
       List<List<MyTransaction>> transactionListSortByDate, double total) {
     return Container(
       height: double.infinity,
-      color: backgroundColor,
+      color: Style.backgroundColor,
       child: ListView.builder(
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           //primary: false,
@@ -174,10 +176,10 @@ class BillTransactionListState extends State<BillTransactionList> {
       header: SizedBox(height: 0),
       content: Container(
           decoration: BoxDecoration(
-              color: boxBackgroundColor,
+              color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                    color: backgroundColor,
+                    color: Style.backgroundColor,
                     width: 1.0,
                   ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
@@ -189,8 +191,8 @@ class BillTransactionListState extends State<BillTransactionList> {
                   children: <Widget>[
                     Text('Overview',
                         style: TextStyle(
-                          color: foregroundColor,
-                          fontFamily: fontFamily,
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
                         )),
@@ -199,11 +201,11 @@ class BillTransactionListState extends State<BillTransactionList> {
                       height: 10,
                     ),
                     Divider(
-                      color: backgroundColor,
+                      color: Style.backgroundColor,
                       thickness: 1.0,
                       height: 10,
                     ),
-                    ColoredBox(color: backgroundColor.withOpacity(0.87))
+                    ColoredBox(color: Style.backgroundColor.withOpacity(0.87))
                   ]),
             ),
             Container(
@@ -213,17 +215,17 @@ class BillTransactionListState extends State<BillTransactionList> {
                   children: <Widget>[
                     Text('Expense',
                         style: TextStyle(
-                          color: foregroundColor,
+                          color: Style.foregroundColor,
                           fontSize: 15,
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                         )
                     ),
                     Text('$currencySymbol $total',
                         style: TextStyle(
-                          color: foregroundColor,
+                          color: Style.foregroundColor,
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                         )),
                   ]),
             ),
@@ -236,19 +238,19 @@ class BillTransactionListState extends State<BillTransactionList> {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: backgroundColor,
+                color: Style.backgroundColor,
                 width: 1.0,
               ),
               top: BorderSide(
-                color: backgroundColor,
+                color: Style.backgroundColor,
                 width: 1.0,
               ))),
       child: StickyHeader(
         header: Container(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -257,7 +259,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                 child: Text(
                     DateFormat("dd")
                         .format(transListSortByDate[xIndex][0].date),
-                    style: TextStyle(fontSize: 30.0, color: foregroundColor)),
+                    style: TextStyle(fontSize: 30.0, color: Style.foregroundColor)),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -270,7 +272,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                             .format(transListSortByDate[xIndex][0].date)
                             .toString(),
                     // 'hello',
-                    style: TextStyle(fontSize: 12.0, color: foregroundColor.withOpacity(0.54))),
+                    style: TextStyle(fontSize: 12.0, color: Style.foregroundColor.withOpacity(0.54))),
               ),
               Expanded(
                 child: Text(
@@ -279,7 +281,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                     totalAmountInDay.toString(),
                     textAlign: TextAlign.end,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: foregroundColor)),
+                        fontWeight: FontWeight.bold, color: Style.foregroundColor)),
               ),
             ],
           ),
@@ -320,7 +322,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                             style: TextStyle(
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.bold,
-                                color: foregroundColor)),
+                                color: Style.foregroundColor)),
                       ),
                       Expanded(
                         child: Text(
@@ -336,8 +338,8 @@ class BillTransactionListState extends State<BillTransactionList> {
                                     .category
                                     .type ==
                                     'income'
-                                    ? incomeColor
-                                    : expenseColor)),
+                                    ? Style.incomeColor
+                                    : Style.expenseColor)),
                       ),
                     ],
                   ),

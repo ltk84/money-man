@@ -120,23 +120,23 @@ class _RecurringTransactionMainScreenState
         builder: (context, snapshot) {
           List<RecurringTransaction> reTransList = snapshot.data ?? [];
           if (reTransList.length == 0) return Container(
-              color: backgroundColor,
+              color: Style.backgroundColor,
               alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.hourglass_empty,
-                    color: foregroundColor.withOpacity(0.12),
+                    color: Style.foregroundColor.withOpacity(0.12),
                     size: 100,
                   ),
                   SizedBox(height: 10,),
                   Text(
                     'There are no recurring transactions',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor.withOpacity(0.24),
+                      color: Style.foregroundColor.withOpacity(0.24),
                     ),
                   ),
                 ],

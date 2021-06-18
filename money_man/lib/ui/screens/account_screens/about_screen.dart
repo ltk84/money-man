@@ -63,7 +63,7 @@ class _AboutScreenState extends State<AboutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             leadingWidth: 250.0,
@@ -75,10 +75,10 @@ class _AboutScreenState extends State<AboutScreen> {
                 tag: 'alo',
                 child: Row(
                   children: [
-                    Icon(Icons.arrow_back_ios, color: foregroundColor),
+                    Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
                     Text('More', style: TextStyle(
-                        color: foregroundColor,
-                        fontFamily: fontFamily,
+                        color: Style.foregroundColor,
+                        fontFamily: Style.fontFamily,
                         fontSize: 17.0
                       )
                     )
@@ -103,8 +103,8 @@ class _AboutScreenState extends State<AboutScreen> {
                 Text(
                   'MONEY MAN',
                   style: TextStyle(
-                    color: foregroundColor,
-                    fontFamily: fontFamily,
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w900,
                     fontSize: 24.0,
                   ),
@@ -116,8 +116,8 @@ class _AboutScreenState extends State<AboutScreen> {
                   child: Text(
                     'Made by a group of sophomores of\nUniversity of Information Technology\nVNU-HCM',
                     style: TextStyle(
-                      color: foregroundColor.withOpacity(0.7),
-                      fontFamily: fontFamily,
+                      color: Style.foregroundColor.withOpacity(0.7),
+                      fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w400,
                       fontSize: 16.0,
                     ),
@@ -131,7 +131,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   child: Text(
                     'TEAM MEMBERS',
                     style: TextStyle(
-                      color: foregroundColor,
+                      color: Style.foregroundColor,
                       fontFamily: 'fontFamily',
                       fontWeight: FontWeight.w700,
                       fontSize: 26.0,
@@ -242,7 +242,7 @@ class InfoCard extends StatelessWidget {
         child: Container(
           width: 300,
           decoration: BoxDecoration(
-            color: boxBackgroundColor,
+            color: Style.boxBackgroundColor,
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: Column(
@@ -260,8 +260,8 @@ class InfoCard extends StatelessWidget {
               Text(
                 name,
                 style: TextStyle(
-                  color: foregroundColor,
-                  fontFamily: fontFamily,
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
                   fontWeight: FontWeight.w700,
                   fontSize: 22.0,
                 ),
@@ -271,8 +271,8 @@ class InfoCard extends StatelessWidget {
               Text(
                 quote,
                 style: TextStyle(
-                  color: foregroundColor.withOpacity(0.54),
-                  fontFamily: fontFamily,
+                  color: Style.foregroundColor.withOpacity(0.54),
+                  fontFamily: Style.fontFamily,
                   fontWeight: FontWeight.w400,
                   fontSize: 14.0,
                 ),
@@ -319,7 +319,7 @@ class InfoCardDetail extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: boxBackgroundColor,
+                color: Style.boxBackgroundColor,
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: ListView(
@@ -338,8 +338,8 @@ class InfoCardDetail extends StatelessWidget {
                   Text(
                     name,
                     style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: fontFamily,
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w700,
                       fontSize: 22.0,
                     ),
@@ -349,8 +349,8 @@ class InfoCardDetail extends StatelessWidget {
                   Text(
                     quote,
                     style: TextStyle(
-                      color: foregroundColor.withOpacity(0.54),
-                      fontFamily: fontFamily,
+                      color: Style.foregroundColor.withOpacity(0.54),
+                      fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w400,
                       fontSize: 14.0,
                     ),
@@ -367,14 +367,14 @@ class InfoCardDetail extends StatelessWidget {
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
                               return Colors.white;
-                            return fbButtonColor; // Use the component's default.
+                            return Style.fbButtonColor; // Use the component's default.
                           },
                         ),
                         foregroundColor:
                         MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
-                              return fbButtonColor;
+                              return Style.fbButtonColor;
                             return Colors.white; // Use the component's default.
                           },
                         ),
@@ -394,7 +394,7 @@ class InfoCardDetail extends StatelessWidget {
                             "Facebook",
                             style: TextStyle(
                                 fontSize: 13,
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.5,
                                 wordSpacing: 2.0),
@@ -415,14 +415,14 @@ class InfoCardDetail extends StatelessWidget {
                             if (states.contains(MaterialState.pressed))
                               return Colors
                                   .white;
-                            return igButtonColor; // Use the component's default.
+                            return Style.igButtonColor; // Use the component's default.
                           },
                         ),
                         foregroundColor:
                         MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
-                              return igButtonColor;
+                              return Style.igButtonColor;
                             return Colors
                                 .white; // Use the component's default.
                           },
@@ -443,7 +443,7 @@ class InfoCardDetail extends StatelessWidget {
                             "Instagram",
                             style: TextStyle(
                                 fontSize: 13,
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.5,
                                 wordSpacing: 2.0),
@@ -462,16 +462,16 @@ class InfoCardDetail extends StatelessWidget {
                         MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
-                              return backgroundColor;
-                            return foregroundColor; // Use the component's default.
+                              return Style.backgroundColor;
+                            return Style.foregroundColor; // Use the component's default.
                           },
                         ),
                         foregroundColor:
                         MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
-                              return foregroundColor;
-                            return backgroundColor; // Use the component's default.
+                              return Style.foregroundColor;
+                            return Style.backgroundColor; // Use the component's default.
                           },
                         ),
                       ),
@@ -488,16 +488,21 @@ class InfoCardDetail extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SuperIcon(
-                            iconPath: 'assets/images/email_2.svg',
-                            size: 18,
+                          // SuperIcon(
+                          //   iconPath: 'assets/images/email_2.svg',
+                          //   size: 18,
+                          // ),
+                          Icon(
+                              Icons.email_rounded,
+                              size: 18,
+                              color: Style.backgroundColor,
                           ),
                           SizedBox(width: 10.0,),
                           Text(
                             "Send Email",
                             style: TextStyle(
                                 fontSize: 13,
-                                fontFamily: fontFamily,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.5,
                                 wordSpacing: 2.0),
@@ -521,7 +526,7 @@ class InfoCardDetail extends StatelessWidget {
                 },
                 child: Icon(
                     Icons.close,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                     size: 28.0,
                 )
               ),
