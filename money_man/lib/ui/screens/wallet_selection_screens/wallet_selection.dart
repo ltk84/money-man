@@ -174,7 +174,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                       ? GestureDetector(
                           onTap: () {},
                           child: Container(
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
                             width: double.infinity,
                             decoration: BoxDecoration(
                                 color: Style.boxBackgroundColor,
@@ -190,21 +190,22 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                               ),
                               title: Text(
                                 listWallet[index].name,
-                                style: tsMain,
+                                style: TextStyle(
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                              // subtitle: Text(
-                              //   listWallet[index].amount.toString() +
-                              //       ' ' +
-                              //       CurrencyService()
-                              //           .findByCode(
-                              //               listWallet[index].currencyID)
-                              //           .symbol,
-                              //   style: tsChild,
-                              // ),
                               subtitle: MoneySymbolFormatter(
                                 text: listWallet[index].amount,
                                 currencyId: listWallet[index].currencyID,
-                                textStyle: tsChild,
+                                textStyle: TextStyle(
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                               trailing: Icon(Icons.check_rounded, color: Style.primaryColor),
                             ),
@@ -218,7 +219,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             // });
                           },
                           child: Container(
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
                             width: double.infinity,
                             decoration: BoxDecoration(
                                 color: Style.boxBackgroundColor,
@@ -247,12 +248,22 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                               ),
                               title: Text(
                                 listWallet[index].name,
-                                style: tsMain,
+                                style: TextStyle(
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                               subtitle: MoneySymbolFormatter(
                                 text: listWallet[index].amount,
                                 currencyId: listWallet[index].currencyID,
-                                textStyle: tsChild,
+                                textStyle: TextStyle(
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),
