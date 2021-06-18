@@ -3,6 +3,7 @@ import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
 class SelectEventScreen extends StatefulWidget {
@@ -32,44 +33,25 @@ class _SelectEventScreen extends State<SelectEventScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: backgroundColor1,
       appBar: AppBar(
-        leadingWidth: 70.0,
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.grey[900],
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0))),
-        leading: TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              'Back',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            style: TextButton.styleFrom(
-              primary: Colors.white,
-              backgroundColor: Colors.transparent,
-            )),
+        backgroundColor: boxBackgroundColor,
+        leading: CloseButton(),
         title: Text('Select Event',
             style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w600,
-                fontSize: 15.0)),
+              fontFamily: fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
+              color: foregroundColor,)),
       ),
       body: Container(
-        color: Colors.black26,
+        color: backgroundColor1,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 30,),
             Expanded(
               child: StreamBuilder<List<Event>>(
                   stream: _firestore.eventStream(_wallet.id),

@@ -75,121 +75,127 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
         elevation: 0,
       ),
       backgroundColor: Color(0xff22252e),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Container(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 30),
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        userInputFormat,
-                        style: TextStyle(fontSize: 25, color: Colors.white),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(30),
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        answerFormat,
-                        style: TextStyle(
-                            fontSize: 40,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  ]),
-            ),
-            Center(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.6,
-                padding: EdgeInsets.fromLTRB(28, 20, 20, 40),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    color: Color(0xff292d36),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40))),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Column(
-                            children: [
-                              KeyOfCalc(
-                                0,
-                                Color(0xffdbdddd),
-                                Color(0xffb34048),
-                              ),
-                              KeyOfCalc(
-                                  4, Color(0xffdbdddd), Color(0xff282c35)),
-                              KeyOfCalc(
-                                  8, Color(0xffdbdddd), Color(0xff282c35)),
-                              KeyOfCalc(
-                                  12, Color(0xffdbdddd), Color(0xff282c35)),
-                              KeyOfCalc(
-                                  16, Color(0xffdbdddd), Color(0xff282c35)),
-                            ],
+      body: ListView(
+        physics: NeverScrollableScrollPhysics(),
+        reverse: true,
+        children: [
+          Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            userInputFormat,
+                            style: TextStyle(fontSize: 25, color: Colors.white),
                           ),
-                          Column(
-                            children: [
-                              KeyOfCalc(
-                                  1, Color(0xffdbdddd), Color(0xff444b59)),
-                              KeyOfCalc(
-                                  5, Color(0xffdbdddd), Color(0xff282c35)),
-                              KeyOfCalc(
-                                  9, Color(0xffdbdddd), Color(0xff282c35)),
-                              KeyOfCalc(
-                                  13, Color(0xffdbdddd), Color(0xff282c35)),
-                              KeyOfCalc(
-                                  17, Color(0xffdbdddd), Color(0xff444b59)),
-                            ],
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(30),
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            answerFormat,
+                            style: TextStyle(
+                                fontSize: 40,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
-                          Column(
-                            children: [
-                              KeyOfCalc(
-                                  2, Color(0xffdbdddd), Color(0xff444b59)),
-                              KeyOfCalc(
-                                  6, Color(0xffdbdddd), Color(0xff282c35)),
-                              KeyOfCalc(
-                                  10, Color(0xffdbdddd), Color(0xff282c35)),
-                              KeyOfCalc(
-                                  14, Color(0xffdbdddd), Color(0xff282c35)),
-                              KeyOfCalc(
-                                  18, Color(0xffdbdddd), Color(0xff444b59)),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              KeyOfCalc(
-                                  3, Color(0xffdbdddd), Color(0xff444b59)),
-                              KeyOfCalc(
-                                  7, Color(0xffdbdddd), Color(0xff444b59)),
-                              KeyOfCalc(
-                                  11, Color(0xffdbdddd), Color(0xff444b59)),
-                              KeyOfCalc(
-                                  isEnd ? 19 : 15,
-                                  Color(0xffdbdddd),
-                                  isEnd ? Color(0xFF4FCC5C) : Color(0xff25b197), //Color(0xff22a115) : Color(0xff25b197),
-                                  2),
-                              //KeyOfCalc(19, Color(0xffdbdddd)),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                        )
+                      ]),
                 ),
-              ),
-            )
-          ],
-        ),
+                Center(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    padding: EdgeInsets.fromLTRB(28, 20, 20, 40),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: Color(0xff292d36),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40))),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  KeyOfCalc(
+                                    0,
+                                    Color(0xffdbdddd),
+                                    Color(0xffb34048),
+                                  ),
+                                  KeyOfCalc(
+                                      4, Color(0xffdbdddd), Color(0xff282c35)),
+                                  KeyOfCalc(
+                                      8, Color(0xffdbdddd), Color(0xff282c35)),
+                                  KeyOfCalc(
+                                      12, Color(0xffdbdddd), Color(0xff282c35)),
+                                  KeyOfCalc(
+                                      16, Color(0xffdbdddd), Color(0xff282c35)),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  KeyOfCalc(
+                                      1, Color(0xffdbdddd), Color(0xff444b59)),
+                                  KeyOfCalc(
+                                      5, Color(0xffdbdddd), Color(0xff282c35)),
+                                  KeyOfCalc(
+                                      9, Color(0xffdbdddd), Color(0xff282c35)),
+                                  KeyOfCalc(
+                                      13, Color(0xffdbdddd), Color(0xff282c35)),
+                                  KeyOfCalc(
+                                      17, Color(0xffdbdddd), Color(0xff444b59)),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  KeyOfCalc(
+                                      2, Color(0xffdbdddd), Color(0xff444b59)),
+                                  KeyOfCalc(
+                                      6, Color(0xffdbdddd), Color(0xff282c35)),
+                                  KeyOfCalc(
+                                      10, Color(0xffdbdddd), Color(0xff282c35)),
+                                  KeyOfCalc(
+                                      14, Color(0xffdbdddd), Color(0xff282c35)),
+                                  KeyOfCalc(
+                                      18, Color(0xffdbdddd), Color(0xff444b59)),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  KeyOfCalc(
+                                      3, Color(0xffdbdddd), Color(0xff444b59)),
+                                  KeyOfCalc(
+                                      7, Color(0xffdbdddd), Color(0xff444b59)),
+                                  KeyOfCalc(
+                                      11, Color(0xffdbdddd), Color(0xff444b59)),
+                                  KeyOfCalc(
+                                      isEnd ? 19 : 15,
+                                      Color(0xffdbdddd),
+                                      isEnd ? Color(0xFF4FCC5C) : Color(0xff25b197), //Color(0xff22a115) : Color(0xff25b197),
+                                      2),
+                                  //KeyOfCalc(19, Color(0xffdbdddd)),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

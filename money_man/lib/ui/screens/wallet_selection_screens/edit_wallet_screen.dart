@@ -29,6 +29,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
   String currencyName = 'Currency';
   String iconData = 'assets/icons/wallet_2.svg';
   double adjustAmount;
+  FocusNode focusNode = new FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +136,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                           padding: EdgeInsets.only(right: 50),
                           width: 250,
                           child: TextFormField(
+                            focusNode: focusNode,
                             autocorrect: false,
                             initialValue: widget.wallet.name,
                             keyboardType: TextInputType.name,
@@ -234,10 +236,10 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 10),
                     onTap: () async {
-                      final resultAmount = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => EnterAmountScreen()));
+                      focusNode.unfocus();
+                      final resultAmount = await showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => EnterAmountScreen());
                       if (resultAmount != null)
                         setState(() {
                           print(resultAmount);

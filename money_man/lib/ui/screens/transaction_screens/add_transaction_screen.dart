@@ -149,15 +149,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               contentPadding: EdgeInsets.fromLTRB(10, 0, 20, 0),
               minVerticalPadding: 10.0,
               onTap: () async {
-                final resultAmount = await Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                final resultAmount = await showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (context) => EnterAmountScreen());
                 if (resultAmount != null)
                   setState(() {
                     print(resultAmount);
                     amount = double.parse(resultAmount);
                   });
               },
-              leading: Icon(Icons.money, color: Colors.white54, size: 45.0),
+              leading: Icon(Icons.money_rounded, color: Colors.white54, size: 45.0),
               title: TextFormField(
                 readOnly: true,
                 onTap: () async {
@@ -172,9 +173,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 },
                 // onChanged: (value) => amount = double.tryParse(value),
                 style: TextStyle(
-                    color: Colors.white,
+                    color: foregroundColor,
                     fontSize: 30.0,
-                    fontFamily: 'Montserrat',
+                    fontFamily: fontFamily,
                     fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -327,77 +328,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
             ListTile(
               dense: true,
-              leading:
-                  Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
-              title: TextFormField(
-                onTap: () async {
-                  DatePicker.showDatePicker(context,
-                      currentTime: pickDate == null
-                          ? DateTime(DateTime.now().year, DateTime.now().month,
-                              DateTime.now().day)
-                          : pickDate,
-                      showTitleActions: true, onConfirm: (date) {
-                    if (date != null) {
-                      setState(() {
-                        pickDate = date;
-                      });
-                    }
-                  },
-                      locale: LocaleType.en,
-                      theme: DatePickerTheme(
-                        cancelStyle: TextStyle(color: Colors.white),
-                        doneStyle: TextStyle(color: Colors.white),
-                        itemStyle: TextStyle(color: Colors.white),
-                        backgroundColor: Colors.grey[900],
-                      ));
-                },
-                readOnly: true,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600),
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    hintStyle: TextStyle(
-                      color: pickDate == null ? Colors.grey[600] : Colors.white,
-                      fontFamily: 'Montserrat',
-                      fontSize: 16.0,
-                      fontWeight:
-                          pickDate == null ? FontWeight.w500 : FontWeight.w600,
-                    ),
-                    hintText: pickDate ==
-                            DateTime.parse(
-                                DateFormat("yyyy-MM-dd").format(DateTime.now()))
-                        ? 'Today'
-                        : pickDate ==
-                                DateTime.parse(DateFormat("yyyy-MM-dd").format(
-                                    DateTime.now().add(Duration(days: 1))))
-                            ? 'Tomorrow'
-                            : pickDate ==
-                                    DateTime.parse(DateFormat("yyyy-MM-dd")
-                                        .format(DateTime.now()
-                                            .subtract(Duration(days: 1))))
-                                ? 'Yesterday'
-                                : DateFormat('EEEE, dd-MM-yyyy')
-                                    .format(pickDate)),
-              ),
-              trailing: Icon(Icons.chevron_right, color: Colors.white54),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-              child: Divider(
-                color: Colors.white24,
-                height: 1,
-                thickness: 0.2,
-              ),
-            ),
-            ListTile(
-              dense: true,
               onTap: () async {
                 var res = await showCupertinoModalBottomSheet(
                     isDismissible: true,
@@ -468,18 +398,89 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 height: 1,
                 thickness: 0.2,
               ),
+            ),ListTile(
+              dense: true,
+              leading:
+              Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
+              title: TextFormField(
+                onTap: () async {
+                  DatePicker.showDatePicker(context,
+                      currentTime: pickDate == null
+                          ? DateTime(DateTime.now().year, DateTime.now().month,
+                          DateTime.now().day)
+                          : pickDate,
+                      showTitleActions: true, onConfirm: (date) {
+                        if (date != null) {
+                          setState(() {
+                            pickDate = date;
+                          });
+                        }
+                      },
+                      locale: LocaleType.en,
+                      theme: DatePickerTheme(
+                        cancelStyle: TextStyle(color: Colors.white),
+                        doneStyle: TextStyle(color: Colors.white),
+                        itemStyle: TextStyle(color: Colors.white),
+                        backgroundColor: Colors.grey[900],
+                      ));
+                },
+                readOnly: true,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    hintStyle: TextStyle(
+                      color: pickDate == null ? Colors.grey[600] : Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight:
+                      pickDate == null ? FontWeight.w500 : FontWeight.w600,
+                    ),
+                    hintText: pickDate ==
+                        DateTime.parse(
+                            DateFormat("yyyy-MM-dd").format(DateTime.now()))
+                        ? 'Today'
+                        : pickDate ==
+                        DateTime.parse(DateFormat("yyyy-MM-dd").format(
+                            DateTime.now().add(Duration(days: 1))))
+                        ? 'Tomorrow'
+                        : pickDate ==
+                        DateTime.parse(DateFormat("yyyy-MM-dd")
+                            .format(DateTime.now()
+                            .subtract(Duration(days: 1))))
+                        ? 'Yesterday'
+                        : DateFormat('EEEE, dd-MM-yyyy')
+                        .format(pickDate)),
+              ),
+              trailing: Icon(Icons.chevron_right, color: Colors.white54),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+              child: Divider(
+                color: Colors.white24,
+                height: 1,
+                thickness: 0.2,
+              ),
             ),
             ListTile(
               dense: true,
               leading: Icon(Icons.note, color: Colors.white54, size: 28.0),
               title: TextFormField(
                 onTap: () async {
-                  final noteContent = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => NoteScreen(
-                                content: note ?? '',
-                              )));
+                  final noteContent = await showCupertinoModalBottomSheet(
+                      isDismissible: true,
+                      backgroundColor: Colors.grey[900],
+                      context: context,
+                      builder: (context) => NoteScreen(
+                        content: note ?? '',
+                      ));
                   print(noteContent);
                   if (noteContent != null) {
                     setState(() {
@@ -496,48 +497,14 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color: Colors.white,
+                        color: note == '' || note == null ? Colors.grey[600] : Colors.white,
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: note == '' || note == null
+                            ? FontWeight.w500
+                            : FontWeight.w600
+                    ),
                     hintText: note == '' || note == null ? 'Write note' : note),
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600),
-              ),
-              trailing: Icon(Icons.chevron_right, color: Colors.white54),
-            ),
-            ListTile(
-              dense: true,
-              leading: Icon(Icons.account_balance_outlined,
-                  color: Colors.white54, size: 28.0),
-              title: TextFormField(
-                onTap: () async {
-                  final PhoneContact phoneContact =
-                      await FlutterContactPicker.pickPhoneContact();
-                  if (phoneContact != null) {
-                    print(phoneContact.fullName);
-                    setState(() {
-                      contact = phoneContact.fullName;
-                    });
-                  }
-                },
-                readOnly: true,
-                autocorrect: false,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    hintStyle: TextStyle(
-                        color: Colors.grey[600],
-                        fontFamily: 'Montserrat',
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w500),
-                    hintText: contact ?? hintTextConact),
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',
@@ -564,10 +531,67 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 },
                 child: Text(
                   'More',
-                  style: TextStyle(color: Color(0xff36D1B5)),
+                  style: TextStyle(
+                      color: primaryColor,
+                    fontFamily: fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                style: TextButton.styleFrom(
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+              ),
+            ),
+            Visibility(
+              visible: pickEvent,
+              child: ListTile(
+                dense: true,
+                leading: Icon(Icons.person,
+                    color: Colors.white54, size: 28.0),
+                title: TextFormField(
+                  onTap: () async {
+                    final PhoneContact phoneContact =
+                    await FlutterContactPicker.pickPhoneContact();
+                    if (phoneContact != null) {
+                      print(phoneContact.fullName);
+                      setState(() {
+                        contact = phoneContact.fullName;
+                      });
+                    }
+                  },
+                  readOnly: true,
+                  autocorrect: false,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      hintStyle: TextStyle(
+                          color: Colors.grey[600],
+                          fontFamily: 'Montserrat',
+                          fontSize: 16.0,
+                          fontWeight: contact == null
+                              ? FontWeight.w500
+                              : FontWeight.w600
+                      ),
+                      hintText: contact ?? hintTextConact),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
+                ),
+                trailing: Icon(Icons.chevron_right, color: Colors.white54),
+              ),
+            ),
+            Visibility(
+              visible: pickEvent,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                child: Divider(
+                  color: Colors.white24,
+                  height: 1,
+                  thickness: 0.2,
+                ),
               ),
             ),
             Visibility(

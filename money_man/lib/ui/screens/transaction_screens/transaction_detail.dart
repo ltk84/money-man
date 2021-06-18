@@ -88,14 +88,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 color: Colors.white,
               ),
               onPressed: () async {
-                final updatedTrans = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => EditTransactionScreen(
-                              transaction: _transaction,
-                              wallet: widget.wallet,
-                              event: event,
-                            )));
+                final updatedTrans = await showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (context) => EditTransactionScreen(
+                      transaction: _transaction,
+                      wallet: widget.wallet,
+                      event: event,
+                    ));
                 if (updatedTrans != null)
                   setState(() {
                     _transaction = updatedTrans;
@@ -143,7 +142,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
       ),
       body: Container(
         color: Color(0xff1a1a1a),
-        child: Column(
+        child: ListView(
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             ListTile(
               leading: Container(

@@ -24,6 +24,7 @@ class AddWalletScreen extends StatefulWidget {
 class _AddWalletScreenState extends State<AddWalletScreen> {
   static var _formKey = GlobalKey<FormState>();
   String currencyName = 'Viet Nam Dong';
+  FocusNode focusNode = new FocusNode();
 
   Wallet wallet = Wallet(
       id: '0',
@@ -161,6 +162,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           padding: EdgeInsets.only(right: 50),
                           width: 250,
                           child: TextFormField(
+                            focusNode: focusNode,
                             autocorrect: false,
                             keyboardType: TextInputType.name,
                             style: TextStyle(
@@ -256,6 +258,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 10),
                     onTap: () async {
+                      focusNode.unfocus();
                       final resultAmount = await showCupertinoModalBottomSheet(
                           context: context,
                           builder: (context) => EnterAmountScreen());
