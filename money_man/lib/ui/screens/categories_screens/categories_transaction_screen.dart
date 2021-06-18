@@ -178,12 +178,6 @@ class _CategoriesTransactionScreenState
                               iconPath: _selectCateTab[index].iconID,
                               size: 35.0),
                           title: Text(_selectCateTab[index].name,
-                          //     style: TextStyle(
-                          //         color: foregroundColor,
-                          //         fontWeight: FontWeight.w700,
-                          //         fontFamily: fontFamily)),
-                          // onTap: () {
-                          //   Navigator.pop(context, _selectCateTab[index]);
                               style: TextStyle(
                                   color: Style.foregroundColor,
                                   fontWeight: FontWeight.w700,
@@ -192,7 +186,7 @@ class _CategoriesTransactionScreenState
                             if (_selectCateTab[index].name == 'Repayment') {
                               var result = await showCupertinoModalBottomSheet(
                                   isDismissible: true,
-                                  backgroundColor: Colors.grey[900],
+                                  backgroundColor: Style.boxBackgroundColor,
                                   context: context,
                                   builder: (context) => SelectOtherSourceScreen(
                                       title: 'Select payment source',
@@ -206,7 +200,7 @@ class _CategoriesTransactionScreenState
                             } else if (_selectCateTab[index].name ==
                                 'Debt Collection') {
                               var result = await showCupertinoModalBottomSheet(
-                                  backgroundColor: Colors.grey[900],
+                                  backgroundColor: Style.boxBackgroundColor,
                                   context: context,
                                   builder: (context) => SelectOtherSourceScreen(
                                       title: 'Select debt collection source',

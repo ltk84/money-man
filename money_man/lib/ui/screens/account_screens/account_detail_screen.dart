@@ -63,7 +63,7 @@ class _AccountDetailState extends State<AccountDetail> {
   Widget build(BuildContext context) {
     User _user = widget.user;
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             leadingWidth: 250.0,
@@ -163,7 +163,7 @@ class _AccountDetailState extends State<AccountDetail> {
               child: Column(
                 children: [
                   CircleAvatar(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Style.foregroundColor,
                     radius: 30.0,
                     child: Text(
                         (_user == null)

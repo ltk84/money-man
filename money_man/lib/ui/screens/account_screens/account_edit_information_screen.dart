@@ -153,7 +153,7 @@ class _AccountInformation extends State<AccountInformation> {
                       height: 150,
                       width: 150,
                       decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                      BoxDecoration(shape: BoxShape.circle, color: Style.foregroundColor),
                       child: Text(
                         username == null || username.length == 0
                             ? 'M'

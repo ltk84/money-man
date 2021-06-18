@@ -132,7 +132,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     'TEAM MEMBERS',
                     style: TextStyle(
                       color: Style.foregroundColor,
-                      fontFamily: 'fontFamily',
+                      fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w700,
                       fontSize: 26.0,
                     ),

@@ -149,7 +149,7 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                       child: Column(
                         children: [
                           CircleAvatar(
-                            backgroundColor: Colors.white,
+                            backgroundColor: Style.foregroundColor,
                             radius: 30.0,
                             child: Text(
                               (_user == null)
