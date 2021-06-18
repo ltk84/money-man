@@ -78,16 +78,12 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.boxBackgroundColor,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0))),
           title: Text('Select Time Range',
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: Style.foregroundColor,
               )),
           leading: CloseButton(),
         ),
@@ -109,7 +105,7 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
                   if (listInfo[index].description == 'Custom') {
                     final result = await showCupertinoModalBottomSheet(
                         isDismissible: true,
-                        backgroundColor: Colors.grey[900],
+                        backgroundColor: Style.boxBackgroundColor,
                         context: context,
                         builder: (context) => CustomTimeRange(
                             beginDate:
@@ -138,17 +134,17 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
                 },
                 title: Text(listInfo[index].description,
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: Style.foregroundColor,
                     )),
                 subtitle: Text(beginDate + " - " + endDate,
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Colors.grey[500],
+                      color: Style.foregroundColor.withOpacity(0.54),
                     )),
                 trailing: _dateDescription == listInfo[index].description
                     ? Icon(Icons.check_rounded, color: Style.primaryColor)

@@ -114,7 +114,7 @@ class _AnalyticRevenueAndExpenditureScreen
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Style.backgroundColor,
         appBar: AppBar(
           leading: MaterialButton(
             onPressed: () {
@@ -164,7 +164,7 @@ class _AnalyticRevenueAndExpenditureScreen
             Hero(
               tag: 'shareButton',
               child: MaterialButton(
-                child: const Icon(Icons.ios_share, color: Colors.white),
+                child: Icon(Icons.ios_share, color: Style.foregroundColor),
                 onPressed: () async {
                   final bytes1 = await Utils.capture(key1);
 
@@ -173,7 +173,7 @@ class _AnalyticRevenueAndExpenditureScreen
                   });
                   showCupertinoModalBottomSheet(
                       isDismissible: true,
-                      backgroundColor: Colors.grey[900],
+                      backgroundColor: Style.boxBackgroundColor,
                       context: context,
                       builder: (context) =>
                           ShareScreen(
@@ -250,7 +250,7 @@ class _AnalyticRevenueAndExpenditureScreen
                                             style: TextStyle(
                                               color: Style.foregroundColor.withOpacity(
                                                   0.7),
-                                              fontFamily: 'Montserrat',
+                                              fontFamily: Style.fontFamily,
                                               fontWeight: FontWeight.w400,
                                               fontSize: 16,
                                             )

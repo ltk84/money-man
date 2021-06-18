@@ -16,8 +16,8 @@ class BarChartScreen extends StatefulWidget {
 }
 
 class BarChartScreenState extends State<BarChartScreen> {
-  final Color leftBarColor = const Color(0xff53fdd7);
-  final Color rightBarColor = const Color(0xffff5182);
+  final Color leftBarColor = Style.incomeBarColor;
+  final Color rightBarColor = Style.expenseBarColor;
   final double width = 7;
 
   List<BarChartGroupData> rawBarGroups = [];
@@ -130,7 +130,7 @@ class BarChartScreenState extends State<BarChartScreen> {
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         //color: const Color(0xff2c4260),
-        color: Colors.black,
+        color: Style.backgroundColor,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -146,7 +146,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                       maxY: 20,
                       barTouchData: BarTouchData(
                           touchTooltipData: BarTouchTooltipData(
-                            tooltipBgColor: Colors.grey,
+                            tooltipBgColor: Style.foregroundColor.withOpacity(0.54),
                             getTooltipItem: (_a, _b, _c, _d) => null,
                           ),
                           touchCallback: (response) {
@@ -197,11 +197,11 @@ class BarChartScreenState extends State<BarChartScreen> {
                         show: true,
                         bottomTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (value) => const TextStyle(
-                            color: Colors.white,
+                          getTextStyles: (value) => TextStyle(
+                            color: Style.foregroundColor,
                             fontWeight: FontWeight.w500,
                             fontSize: 13,
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                           ),
                           margin: 10,
                           getTitles: (double value) {
@@ -210,11 +210,11 @@ class BarChartScreenState extends State<BarChartScreen> {
                         ),
                         leftTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (value) => const TextStyle(
-                            color: Colors.white,
+                          getTextStyles: (value) => TextStyle(
+                            color: Style.foregroundColor,
                             fontWeight: FontWeight.w500,
                             fontSize: 13,
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                           ),
                           margin: 10,
                           reservedSize: 50,
@@ -235,7 +235,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                         show: true,
                         checkToShowHorizontalLine: (value) => value % 2 == 0,
                         getDrawingHorizontalLine: (value) => FlLine(
-                          color: Colors.white24,
+                          color: Style.foregroundColor.withOpacity(0.24),
                           strokeWidth: 1,
                         ),
                         drawHorizontalLine: true,
@@ -244,11 +244,11 @@ class BarChartScreenState extends State<BarChartScreen> {
                         show: true,
                         border: Border(
                           top: BorderSide(
-                            color: Colors.white24,
+                            color: Style.foregroundColor.withOpacity(0.24),
                             width: 1,
                           ),
                           bottom: BorderSide(
-                            color: Colors.white24,
+                            color: Style.foregroundColor.withOpacity(0.24),
                             width: 1,
                           ),
                         ),

@@ -156,7 +156,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                       iconPath: _wallet.iconID,
                       size: 25.0,
                     ),
-                    Icon(Icons.arrow_drop_down, color: Colors.grey),
+                    Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54)),
                   ],
                 ),
               ),
@@ -188,7 +188,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                         style: TextStyle(
                           fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                           fontSize: 14.0,
                         ),
                       ),
@@ -198,7 +198,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             DateFormat('dd/MM/yyyy').format(endDate),
                         style: TextStyle(
                             fontFamily: Style.fontFamily,
-                            color: Colors.white.withOpacity(0.7),
+                            color: Style.foregroundColor.withOpacity(0.7),
                             fontSize: 12.0,
                             fontWeight: FontWeight.w400),
                       ),
@@ -212,7 +212,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
               Hero(
                 tag: 'shareButton',
                 child: MaterialButton(
-                  child: const Icon(Icons.ios_share, color: Colors.white),
+                  child: Icon(Icons.ios_share, color: Style.foregroundColor),
                   onPressed: () async {
                     final bytes1 = await Utils.capture(key1);
                     final bytes2 = await Utils.capture(key2);
@@ -225,7 +225,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                     });
                     showCupertinoModalBottomSheet(
                         isDismissible: true,
-                        backgroundColor: Colors.grey[900],
+                        backgroundColor: Style.boxBackgroundColor,
                         context: context,
                         builder: (context) => ShareScreen(
                             bytes1: this.bytes1,
@@ -304,7 +304,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                           decoration: BoxDecoration(
-                              color: Colors.black,
+                              color: Style.backgroundColor,
                             border: Border(
                                 bottom: BorderSide(
                                   color: Style.foregroundColor.withOpacity(0.24),
@@ -333,7 +333,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                 'Opening balance',
                                                 style: TextStyle(
                                                   color: Style.foregroundColor.withOpacity(0.7),
-                                                  fontFamily: 'Montserrat',
+                                                  fontFamily: Style.fontFamily,
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 15,
                                                 ),
@@ -343,7 +343,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                 currencyId: _wallet.currencyID,
                                                 textStyle: TextStyle(
                                                   color: Style.foregroundColor,
-                                                  fontFamily: 'Montserrat',
+                                                  fontFamily: Style.fontFamily,
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 20,
                                                   height: 1.5,
@@ -393,7 +393,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                           Text('Net Income',
                                               style: TextStyle(
                                                 color: Style.foregroundColor.withOpacity(0.7),
-                                                fontFamily: 'Montserrat',
+                                                fontFamily: Style.fontFamily,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 16,
                                               )
@@ -469,7 +469,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             text: income,
                                             currencyId: _wallet.currencyID,
                                             textStyle: TextStyle(
-                                              color: Colors.blueAccent,
+                                              color: Style.incomeColor2,
                                               fontFamily: Style.fontFamily,
                                               fontWeight: FontWeight.w400,
                                               fontSize: 24,
@@ -523,7 +523,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                           'Expense',
                                           style: TextStyle(
                                             color: Style.foregroundColor.withOpacity(0.7),
-                                            fontFamily: 'Montserrat',
+                                            fontFamily: Style.fontFamily,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16,
                                           ),
@@ -533,7 +533,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                           text: expense,
                                           currencyId: _wallet.currencyID,
                                           textStyle: TextStyle(
-                                            color: Colors.redAccent,
+                                            color: Style.expenseColor,
                                             fontFamily: Style.fontFamily,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 24,
@@ -585,7 +585,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
 
     final result = await showCupertinoModalBottomSheet(
         isDismissible: true,
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.boxBackgroundColor,
         context: context,
         builder: (context) {
           return Provider(

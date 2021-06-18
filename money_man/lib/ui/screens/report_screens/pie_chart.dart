@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/ui/screens/report_screens/indicator_pie_chart.dart';
+import 'package:money_man/ui/style.dart';
 
 /// Icons by svgrepo.com (https://www.svgrepo.com/collection/job-and-professions-3/)
 class PieChartScreen extends StatefulWidget {
@@ -26,16 +27,7 @@ class PieChartScreen extends StatefulWidget {
 }
 
 class PieChartScreenState extends State<PieChartScreen> {
-  List<Color> colors = [
-    Color(0xFF678f8f).withOpacity(0.5),
-    Color(0xFF23cc9c),
-    Color(0xFF2981d9),
-    Color(0xFFe3b82b),
-    Color(0xFFe68429),
-    Color(0xFFcf3f1f),
-    Color(0xFFbf137a),
-    Color(0xFF621bbf),
-  ];
+  List<Color> colors = Style.pieChartCategoryColors;
   double _total;
   int touchedIndex = -1;
   bool _isShowPercent;
@@ -165,7 +157,7 @@ class PieChartScreenState extends State<PieChartScreen> {
                                 height: 14,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.rectangle, // BoxShape.circle,
-                                  color: index < colors.length ? colors[index] : Colors.grey,
+                                  color: index < colors.length ? colors[index] : Style.pieChartExtendedCategoryColor,
                                 ),
                               ),
                               const SizedBox(
@@ -174,10 +166,10 @@ class PieChartScreenState extends State<PieChartScreen> {
                               Text(
                                 _categoryList[index].name,
                                 style: TextStyle(
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14.0,
-                                  color: index < colors.length ? colors[index] : Colors.grey,
+                                  color: index < colors.length ? colors[index] : Style.pieChartExtendedCategoryColor,
                                 ),
                               )
                             ],
@@ -196,10 +188,10 @@ class PieChartScreenState extends State<PieChartScreen> {
                                 child: Text(
                                   ((_info[index] / _total) * 100).round().toString() + '%',
                                   style: TextStyle(
-                                    fontFamily: 'Montserrat',
+                                    fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14.0,
-                                    color: index < colors.length ? colors[index] : Colors.grey,
+                                    color: index < colors.length ? colors[index] : Style.pieChartExtendedCategoryColor,
                                   ),
                                 ),
                               )
@@ -224,28 +216,28 @@ class PieChartScreenState extends State<PieChartScreen> {
             var value = ((_info[i] / _total) * 100).round();
 
             return PieChartSectionData(
-              color: i < colors.length ? colors[i] : Colors.grey,
+              color: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
               value: value.toDouble(),
               showTitle: _isShowPercent,
               title: value.toString() + '%',
               titlePositionPercentageOffset: isTouched ? 2.3 : 2.20,
               radius: radius,
               titleStyle: TextStyle(
-                  color: i < colors.length ? colors[i] : Colors.grey,
+                  color: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
                   fontSize: fontTitleSize,
                   fontWeight: FontWeight.w500,
-                  fontFamily: 'Montserrat'),
+                  fontFamily: Style.fontFamily),
               badgeWidget: _Badge(
                 _categoryList[i].iconID, // category icon.
                 size: widgetSize,
-                borderColor: i < colors.length ? colors[i] : Colors.grey,
+                borderColor: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
               ),
               badgePositionPercentageOffset: .98,
             );
           })
         : List.generate(1, (i) {
             return PieChartSectionData(
-              color: Colors.grey[900],
+              color: Style.boxBackgroundColor,
               value: 100,
               showTitle: false,
               radius: 15.0,
@@ -266,7 +258,7 @@ class PieChartScreenState extends State<PieChartScreen> {
             return PieChartSectionData(
               color: i < colors.length
                   ? colors[i].withOpacity(0.4)
-                  : Colors.grey.withOpacity(0.4),
+                  : Style.pieChartExtendedCategoryColor.withOpacity(0.4),
               value: value.toDouble(),
               showTitle: false,
               radius: radius,
@@ -274,7 +266,7 @@ class PieChartScreenState extends State<PieChartScreen> {
           })
         : List.generate(1, (i) {
             return PieChartSectionData(
-              color: Colors.grey[900],
+              color: Style.boxBackgroundColor,
               value: 100,
               showTitle: false,
               radius: 15.0,
@@ -301,7 +293,7 @@ class _Badge extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Style.foregroundColor,
         shape: BoxShape.circle,
         border: Border.all(
           color: borderColor,
@@ -309,7 +301,7 @@ class _Badge extends StatelessWidget {
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withOpacity(.5),
+            color: Style.backgroundColor.withOpacity(.5),
             offset: const Offset(3, 3),
             blurRadius: 3,
           ),

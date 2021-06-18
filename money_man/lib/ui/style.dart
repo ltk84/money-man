@@ -123,6 +123,21 @@ class Style {
   static Color calculatorCalculateButtonColor = Color(0xff25b197);
   static Color calculatorBoxBackgroundColor = Color(0xff292d36);
 
+  static List<Color> pieChartCategoryColors = [
+    Color(0xFF678f8f).withOpacity(0.5),
+    Color(0xFF23cc9c),
+    Color(0xFF2981d9),
+    Color(0xFFe3b82b),
+    Color(0xFFe68429),
+    Color(0xFFcf3f1f),
+    Color(0xFFbf137a),
+    Color(0xFF621bbf),
+  ];
+  static Color pieChartExtendedCategoryColor = Colors.grey;
+
+  static Color incomeBarColor = Color(0xff53fdd7);
+  static Color expenseBarColor = Color(0xffff5182);
+
   // static Color backgroundColor = Colors.white;
   // static Color backgroundColor1 = Color(0xFFEEEEEE);
   // static Color foregroundColor = Colors.black;

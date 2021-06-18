@@ -125,7 +125,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Style.backgroundColor,
         appBar: new AppBar(
           leading: MaterialButton(
             onPressed: () {
@@ -175,7 +175,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
             Hero(
               tag: 'shareButton',
               child: MaterialButton(
-                child: const Icon(Icons.ios_share, color: Colors.white),
+                child: Icon(Icons.ios_share, color: Style.foregroundColor),
                 onPressed: () async {
                   final bytes1 = await Utils.capture(key1);
 
@@ -184,7 +184,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                   });
                   showCupertinoModalBottomSheet(
                       isDismissible: true,
-                      backgroundColor: Colors.grey[900],
+                      backgroundColor: Style.boxBackgroundColor,
                       context: context,
                       builder: (context) =>
                           ShareScreen(
@@ -227,13 +227,13 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                 element.date.compareTo(endDate) <= 0)
                 .toList();
             return Container(
-              color: Colors.black,
+              color: Style.backgroundColor,
               child: ListView(
                 controller: _controller,
                 physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 children: <Widget>[
                   Container(
-                    color: Colors.black,
+                    color: Style.backgroundColor,
                     padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                     child: WidgetToImage(
                       builder: (key) {

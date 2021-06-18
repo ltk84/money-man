@@ -72,8 +72,8 @@ class ShareScreenState extends State<ShareScreen> {
                 topRight: Radius.circular(20.0))),
         title: Text('Share',
             style: TextStyle(
-                color: Colors.white,
-              fontFamily: 'Montserrat',
+                color: Style.foregroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 17.0,
               fontWeight: FontWeight.w600,)),
         leading: CloseButton(),
@@ -189,7 +189,7 @@ class ShareScreenState extends State<ShareScreen> {
                       showDialog<void>(
                         context: context,
                         barrierDismissible: false, // user must tap button!
-                        barrierColor: Colors.black54,
+                        barrierColor: Style.backgroundColor.withOpacity(0.54),
                         builder: (BuildContext context) {
                           return CustomAlert(
                             iconPath: "assets/images/success.svg",
@@ -202,7 +202,7 @@ class ShareScreenState extends State<ShareScreen> {
                       showDialog<void>(
                         context: context,
                         barrierDismissible: false, // user must tap button!
-                        barrierColor: Colors.black54,
+                        barrierColor: Style.backgroundColor.withOpacity(0.54),
                         builder: (BuildContext context) {
                           return CustomAlert(
                               iconPath: "assets/images/error.svg",

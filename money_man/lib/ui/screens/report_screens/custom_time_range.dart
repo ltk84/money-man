@@ -63,10 +63,10 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                   topRight: Radius.circular(20.0))),
           title: Text('Custom',
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: Style.foregroundColor,
               )),
           leading: CloseButton(),
           actions: [
@@ -89,9 +89,9 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                   'Done',
                   style: TextStyle(
                       color: (realBeginDate == null || realEndDate == null)
-                          ? Colors.white24
-                          : Colors.white,
-                      fontFamily: 'Montserrat',
+                          ? Style.foregroundColor.withOpacity(0.24)
+                          : Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600,),
                 ))
@@ -135,35 +135,35 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white
+                            color: Style.foregroundColor
                         ),
                         doneStyle: TextStyle(
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white
+                            color: Style.foregroundColor
                         ),
                         itemStyle: TextStyle(
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                             fontSize: 20.0,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white
+                            color: Style.foregroundColor
                         ),
-                        backgroundColor: Colors.grey[900],
+                        backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
                 tileColor: Colors.transparent,
                 title: Text(_beginDate,
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: _beginDate != 'Choose begin date' ? Colors.white : Colors.white24,
+                      color: _beginDate != 'Choose begin date' ? Style.foregroundColor : Style.foregroundColor.withOpacity(0.24),
                     )),
-                trailing: Icon(Icons.chevron_right, color: Colors.grey[500]),
+                trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
               ),
               SizedBox(height: 10,),
               Padding(
@@ -199,35 +199,35 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white
+                            color: Style.foregroundColor
                         ),
                         doneStyle: TextStyle(
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white
+                            color: Style.foregroundColor
                         ),
                         itemStyle: TextStyle(
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                             fontSize: 20.0,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white
+                            color: Style.foregroundColor
                         ),
-                        backgroundColor: Colors.grey[900],
+                        backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
                 tileColor: Colors.transparent,
                 title: Text(_endDate,
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: _endDate != 'Choose end date' ? Colors.white : Colors.white24,
+                      color: _endDate != 'Choose end date' ? Style.foregroundColor : Style.foregroundColor.withOpacity(0.24),
                     )),
-                trailing: Icon(Icons.chevron_right, color: Colors.grey[500]),
+                trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
               ),
             ],
           ),
@@ -238,7 +238,7 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(
             content: "End date can't be before begin date,\nplease try again.");
