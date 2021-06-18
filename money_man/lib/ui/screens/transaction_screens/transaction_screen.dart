@@ -1228,12 +1228,14 @@ class _TransactionScreen extends State<TransactionScreen>
                 onTap: () async {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (_) => TransactionDetail(
-                                transaction: transListSortByCategory[xIndex]
-                                    [yIndex],
-                                wallet: widget.currentWallet,
-                              )));
+                      PageTransition(
+                          childCurrent: this.widget,
+                          child: TransactionDetail(
+                            transaction: transListSortByCategory[xIndex]
+                            [yIndex],
+                            wallet: widget.currentWallet,
+                          ),
+                          type: PageTransitionType.rightToLeft));
                 },
                 child: Container(
                   color: Colors.transparent,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:money_man/ui/style.dart';
 
 class EnterAmountScreen extends StatefulWidget {
   @override
@@ -44,18 +45,33 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: Color(0xff444b59)),
-          child: Text(
-            'Calculate your amount!',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        leading: CloseButton(),
+        // title: Container(
+        //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        //   decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(20),
+        //       color: Color(0xff444b59)),
+        //   child: Text(
+        //     'Calculate your amount',
+        //     style: TextStyle(
+        //       fontFamily: fontFamily,
+        //       color: foregroundColor,
+        //       fontWeight: FontWeight.w600,
+        //       fontSize: 18.0,
+        //     ),
+        //   ),
+        // ),
+        title: Text(
+          'Calculate your amount',
+          style: TextStyle(
+            fontFamily: fontFamily,
+            color: foregroundColor,
+            fontWeight: FontWeight.w600,
+            fontSize: 18.0,
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color(0xff22252e),
         elevation: 0,
       ),
       backgroundColor: Color(0xff22252e),
@@ -160,7 +176,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                               KeyOfCalc(
                                   isEnd ? 19 : 15,
                                   Color(0xffdbdddd),
-                                  isEnd ? Color(0xff22a115) : Color(0xff25b197),
+                                  isEnd ? Color(0xFF4FCC5C) : Color(0xff25b197), //Color(0xff22a115) : Color(0xff25b197),
                                   2),
                               //KeyOfCalc(19, Color(0xffdbdddd)),
                             ],

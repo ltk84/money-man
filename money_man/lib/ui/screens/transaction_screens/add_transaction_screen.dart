@@ -15,6 +15,7 @@ import 'package:money_man/ui/screens/planning_screens/event_screen/selection_eve
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
@@ -60,47 +61,30 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     print('add build');
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: Colors.black26,
+        backgroundColor: backgroundColor1,
         appBar: AppBar(
-          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.grey[900],
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0))),
+          backgroundColor: boxBackgroundColor,
           title: Text('Add Transaction',
               style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15.0)),
-          leading: TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                backgroundColor: Colors.transparent,
-              )),
+                fontFamily: fontFamily,
+                fontSize: 17.0,
+                fontWeight: FontWeight.w600,
+                color: foregroundColor,)),
+          leading: CloseButton(),
           actions: [
             TextButton(
                 onPressed: () async {
                   if (selectedWallet == null) {
-                    _showAlertDialog('Please pick your wallet!');
+                    return;
+                    //_showAlertDialog('Please pick your wallet!');
                   } else if (amount == null) {
-                    _showAlertDialog('Please enter amount!');
+                    return;
+                    //_showAlertDialog('Please enter amount!');
                   } else if (cate == null) {
-                    _showAlertDialog('Please pick category');
+                    return;
+                    //_showAlertDialog('Please pick category');
                   } else {
                     MyTransaction trans = MyTransaction(
                         id: 'id',
@@ -133,31 +117,31 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text(
-                  'Save',
+                child: Text(
+                  'Done',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Montserrat',
+                    color: (selectedWallet == null || amount == null || cate == null)
+                        ? foregroundColor.withOpacity(0.24)
+                        : foregroundColor,
+                    fontFamily: fontFamily,
+                    fontSize: 16.0,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.transparent,
-                )),
+            ),
           ],
         ),
         body: Container(
           margin: EdgeInsets.symmetric(vertical: 35.0),
           decoration: BoxDecoration(
-              color: Colors.grey[900],
+              color: boxBackgroundColor,
               border: Border(
                   top: BorderSide(
-                    color: Colors.white12,
+                    color: foregroundColor.withOpacity(0.12),
                     width: 0.5,
                   ),
                   bottom: BorderSide(
-                    color: Colors.white12,
+                    color: foregroundColor.withOpacity(0.12),
                     width: 0.5,
                   ))),
           child: ListView(shrinkWrap: true, children: [
@@ -177,8 +161,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               title: TextFormField(
                 readOnly: true,
                 onTap: () async {
-                  final resultAmount = await Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                  final resultAmount = await showCupertinoModalBottomSheet(
+                      context: context,
+                      builder: (context) => EnterAmountScreen());
                   if (resultAmount != null)
                     setState(() {
                       print(resultAmount);

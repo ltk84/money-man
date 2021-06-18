@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/IconPicker/icons.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -31,6 +32,7 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
     var iconData = widget.wallet.iconID;
 
     return Scaffold(
+      backgroundColor: backgroundColor1,
       appBar: AppBar(
         elevation: 0,
         leadingWidth: 70,
@@ -128,17 +130,24 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
                   borderRadius: BorderRadius.circular(10)),
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: ListTile(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => EnterAmountScreen()))
-                      .then((value) {
-                    if (value != null)
-                      setState(() {
-                        adjustAmount = double.parse(value);
-                      });
-                  });
+                onTap: () async {
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (_) => EnterAmountScreen()))
+                  //     .then((value) {
+                  //   if (value != null)
+                  //     setState(() {
+                  //       adjustAmount = double.parse(value);
+                  //     });
+                  // });
+                  final resultAmount = await showCupertinoModalBottomSheet(
+                      context: context,
+                      builder: (context) => EnterAmountScreen());
+                  if (resultAmount != null)
+                    setState(() {
+                      adjustAmount = double.parse(resultAmount);
+                    });
                 },
                 leading: Icon(
                   Icons.keyboard_rounded,
