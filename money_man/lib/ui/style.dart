@@ -101,7 +101,6 @@ class Style {
   static Color boxBackgroundColor = Colors.grey[900];
   static Color boxBackgroundColor2 = Color(0xFF1c1c1c);
   static Color primaryColor = Color(0xff2FB49C);
-  static Color middlePrimaryColor = Color(0xff2FB49C);
   static Color highlightPrimaryColor = Color(0xff36D1B5);
 
   static Color igButtonColor = Color(0xFFc65072);

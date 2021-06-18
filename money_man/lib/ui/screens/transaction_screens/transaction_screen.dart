@@ -833,7 +833,7 @@ class _TransactionScreen extends State<TransactionScreen>
             ),
             unselectedLabelColor: Style.foregroundColor.withOpacity(0.54),
             labelColor: Style.foregroundColor,
-            indicatorColor: Style.middlePrimaryColor,
+            indicatorColor: Style.primaryColor,
             physics: AlwaysScrollableScrollPhysics(),
             isScrollable: true,
             indicatorWeight: 3.0,

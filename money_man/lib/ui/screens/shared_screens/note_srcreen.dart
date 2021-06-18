@@ -59,7 +59,7 @@ class _NoteScreenState extends State<NoteScreen> {
               child: Text(
                 'Save',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                     fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600
@@ -79,7 +79,7 @@ class _NoteScreenState extends State<NoteScreen> {
               onSaved: (String val) {
                 myController.text = val;
               },
-              cursorColor: Color(0xFF2FB49C),
+              cursorColor: Style.primaryColor,
               style: TextStyle(
                   fontFamily: Style.fontFamily,
                   color: Style.foregroundColor,

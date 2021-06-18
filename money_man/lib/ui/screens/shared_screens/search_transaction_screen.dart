@@ -50,15 +50,11 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
     }
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: Color(0xFF111111),
+      backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.boxBackgroundColor,
         leading: CloseButton(),
-        // leading: IconButton(
-        //   icon: Icon(Icons.close),
-        //   onPressed: () => Navigator.pop(context),
-        // ),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -72,7 +68,7 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
           Container(
             margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
             decoration: BoxDecoration(
-              color: Colors.grey[900].withOpacity(0.8),
+              color: Style.boxBackgroundColor.withOpacity(0.8),
               borderRadius: BorderRadius.all(Radius.circular(15.0)),
             ),
             child: TextFormField(
@@ -122,10 +118,10 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                 });
               },
               style: TextStyle(
-                  fontFamily: 'Montserrat',
+                  fontFamily: Style.fontFamily,
                   fontSize: 15.0,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white),
+                  color: Style.foregroundColor),
               decoration: InputDecoration(
                   border: InputBorder.none,
                   focusedBorder: InputBorder.none,
@@ -140,13 +136,13 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                   ),
                   isDense: true,
                   contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-                  prefixIcon: Icon(Icons.search, color: Colors.white38),
+                  prefixIcon: Icon(Icons.search, color: Style.foregroundColor.withOpacity(0.38)),
                   hintText: 'Search by #tag, category, etc',
                   hintStyle: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 15.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white24)),
+                      color: Style.foregroundColor.withOpacity(0.24))),
             ),
           ),
           Container(
@@ -154,7 +150,7 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                 ? Text(
                     'No transaction',
                     style: TextStyle(
-                        color: Colors.white.withOpacity(0.24),
+                        color: Style.foregroundColor.withOpacity(0.24),
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 16.0,
@@ -197,19 +193,19 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ),
               top: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: Colors.grey[900],
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -218,7 +214,12 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                 child: Text(
                     DateFormat("dd")
                         .format(transListSortByDate[xIndex][0].date),
-                    style: TextStyle(fontSize: 30.0, color: Colors.white)),
+                    style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 30.0,
+                        color: Style.foregroundColor
+                    )),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -231,15 +232,28 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                             .format(transListSortByDate[xIndex][0].date)
                             .toString(),
                     // 'hello',
-                    style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
+                    style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.0,
+                        color: Style.foregroundColor.withOpacity(0.54)
+                    )),
               ),
               Expanded(
                 child: MoneySymbolFormatter(
+                  digit: totalAmountInDay >=
+                      0
+                      ? '+'
+                      : '',
                   text: totalAmountInDay,
                   currencyId: widget.wallet.currencyID,
                   textAlign: TextAlign.end,
                   textStyle: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.0,
+                    color: Style.foregroundColor,
+                  ),
                 ),
               ),
             ],
@@ -286,18 +300,22 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                                       .category
                                       .name,
                                   style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white))
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14.0,
+                                    color: Style.foregroundColor,
+                                  ))
                               : Text(
                                   transListSortByDate[xIndex][yIndex]
                                           .category
                                           .name +
                                       "\n🌴",
                                   style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white))),
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14.0,
+                                    color: Style.foregroundColor,
+                                  ))),
                       Expanded(
                         child: transListSortByDate[xIndex][yIndex]
                                         .category
@@ -317,9 +335,11 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                                 currencyId: widget.wallet.currencyID,
                                 textAlign: TextAlign.end,
                                 textStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green),
-                                digit: '+',
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14.0,
+                                    color: Style.incomeColor2),
+                                //digit: '+',
                               )
                             : MoneySymbolFormatter(
                                 text:
@@ -327,9 +347,11 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                                 currencyId: widget.wallet.currencyID,
                                 textAlign: TextAlign.end,
                                 textStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red[600]),
-                                digit: '-',
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14.0,
+                                    color: Style.expenseColor),
+                                //digit: '-',
                               ),
                       ),
                     ],
@@ -348,24 +370,36 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
       header: SizedBox(height: 0),
       content: Container(
           decoration: BoxDecoration(
-              color: Colors.grey[900],
+              color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                color: Colors.black,
-                width: 1.0,
-              ))),
-          padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
+                    color: Style.foregroundColor.withOpacity(0.12),
+                    width: 0.5,
+                  ))),
+          padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
           child: Column(children: <Widget>[
             Container(
               margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('Inflow', style: TextStyle(color: Colors.grey[500])),
+                  Text('Inflow',
+                      style: TextStyle(
+                        color: Style.foregroundColor.withOpacity(0.54),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: Style.fontFamily,
+                      )
+                  ),
                   MoneySymbolFormatter(
                     text: totalInCome,
                     currencyId: widget.wallet.currencyID,
-                    textStyle: TextStyle(color: Colors.white),
+                    textStyle: TextStyle(
+                      color: Style.foregroundColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: Style.fontFamily,
+                    ),
                     digit: '+',
                   )
                 ],
@@ -376,31 +410,31 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Outflow', style: TextStyle(color: Colors.grey[500])),
+                    Text('Outflow',
+                        style: TextStyle(
+                          color: Style.foregroundColor.withOpacity(0.54),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: Style.fontFamily,
+                        )
+                    ),
                     MoneySymbolFormatter(
                       text: totalOutCome,
                       currencyId: widget.wallet.currencyID,
-                      textStyle: TextStyle(color: Colors.white),
+                      textStyle: TextStyle(
+                        color: Style.foregroundColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: Style.fontFamily,
+                      ),
                       digit: '-',
                     ),
                   ]),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    SizedBox(
-                      width: 10,
-                      height: 10,
-                    ),
-                    Divider(
-                      color: Colors.black,
-                      thickness: 1.0,
-                      height: 10,
-                    ),
-                    ColoredBox(color: Colors.black87)
-                  ]),
+            Divider(
+              //height: 20,
+              thickness: 1,
+              color: Style.foregroundColor.withOpacity(0.12),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
@@ -411,21 +445,21 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                       width: 10,
                     ),
                     MoneySymbolFormatter(
+                      digit: total >=
+                          0
+                          ? '+'
+                          : '',
                       text: total,
                       currencyId: widget.wallet.currencyID,
-                      textStyle: TextStyle(color: Colors.white),
+                      textStyle: TextStyle(
+                        color: Style.foregroundColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: Style.fontFamily,
+                      ),
                     ),
                   ]),
             ),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                'View report for this period',
-                style: TextStyle(color: Color(0xff36D1B5)),
-              ),
-              style: TextButton.styleFrom(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-            )
           ])),
     );
   }
