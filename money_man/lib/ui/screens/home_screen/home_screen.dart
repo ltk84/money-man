@@ -81,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         BottomNavigationBarItem(
                           icon: Icon(
                             Icons.add_circle,
+                            color: Colors.transparent,
                             size: 0.0,
                           ),
                           label: '',
