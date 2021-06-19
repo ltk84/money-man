@@ -1428,7 +1428,7 @@ class _TransactionScreen extends State<TransactionScreen>
                 _subTitle = '$_eventIcon to '; //$_contact';
               } else {
                 //_subTitle = '$_eventIcon$_note';
-                _subTitle = '$_eventIcon';
+                _subTitle = '$_eventIcon ';
               }
 
               String _digit =
@@ -1483,6 +1483,7 @@ class _TransactionScreen extends State<TransactionScreen>
                                     fontSize: 14.0,
                                     color: Style.foregroundColor,
                                   )),
+                              //if (_note != null && _note != '')
                               Text(
                                 _note,
                                 style: TextStyle(
@@ -1524,6 +1525,10 @@ class _TransactionScreen extends State<TransactionScreen>
                                       color: Style.foregroundColor.withOpacity(0.54),
                                     ),
                                   ),
+                                  if (
+                                    transListSortByDate[xIndex][yIndex].category.name == 'Debt'
+                                    || transListSortByDate[xIndex][yIndex].category.name == 'Loan'
+                                  )
                                   TextSpan(
                                     text: _contact,
                                     style: TextStyle(

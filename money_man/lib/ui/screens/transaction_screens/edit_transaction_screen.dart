@@ -136,7 +136,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               Navigator.pop(context, _transaction);
             },
             child: Text(
-              'Done',
+              'Save',
               style: TextStyle(
                 color:
                 (
