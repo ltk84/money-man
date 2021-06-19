@@ -67,7 +67,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
           ),
           title: Hero(
             tag: 'billToDetail_title',
-            child: Text('Bills',
+            child: Text('Bill',
                 style: TextStyle(
                   fontFamily: Style.fontFamily,
                   fontSize: 17.0,

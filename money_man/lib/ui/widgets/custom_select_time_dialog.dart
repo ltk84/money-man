@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:money_man/ui/style.dart';
 
 import 'custom_alert.dart';
 
@@ -49,7 +50,7 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
           padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0,10.0),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
-            color: Colors.grey[900],
+            color: Style.boxBackgroundColor,
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Column(
@@ -60,10 +61,10 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
               Text(
                   'Select time range',
                 style: TextStyle(
-                  fontFamily: 'Montserrat',
+                  fontFamily: Style.fontFamily,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Style.foregroundColor,
                 )
               ),
               SizedBox(height: 20.0),
@@ -73,10 +74,10 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                     Text(
                         'From',
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Colors.white70,
+                          color: Style.foregroundColor.withOpacity(0.7),
                         )
                     ),
                     SizedBox(
@@ -91,17 +92,17 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                           border: Border(
                             bottom: BorderSide(
                               width: 1,
-                              color: Colors.white38,
+                              color: Style.foregroundColor.withOpacity(0.38),
                             )
                           )
                         ),
                         child: Text(
                             beginDisplay ?? 'Choose date',
                             style: TextStyle(
-                              fontFamily: 'Montserrat',
+                              fontFamily: Style.fontFamily,
                               fontSize: 16,
                               fontWeight: beginDisplay == null ? FontWeight.w400 : FontWeight.w600,
-                              color: beginDisplay == null ? Colors.white12: Colors.white,
+                              color: beginDisplay == null ? Style.foregroundColor.withOpacity(0.12): Style.foregroundColor,
                             ),
                           textAlign: TextAlign.center,
                         ),
@@ -141,10 +142,10 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                         },
                             locale: LocaleType.en,
                             theme: DatePickerTheme(
-                              cancelStyle: TextStyle(color: Colors.white),
-                              doneStyle: TextStyle(color: Colors.white),
-                              itemStyle: TextStyle(color: Colors.white),
-                              backgroundColor: Colors.grey[900],
+                              cancelStyle: TextStyle(color: Style.foregroundColor),
+                              doneStyle: TextStyle(color: Style.foregroundColor),
+                              itemStyle: TextStyle(color: Style.foregroundColor),
+                              backgroundColor: Style.boxBackgroundColor,
                             ));
                       },
                     ),
@@ -154,10 +155,10 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                     Text(
                         'To',
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Colors.white70,
+                          color: Style.foregroundColor.withOpacity(0.7),
                         )
                     ),
                     SizedBox(
@@ -172,17 +173,17 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                             border: Border(
                                 bottom: BorderSide(
                                   width: 1,
-                                  color: Colors.white38,
+                                  color: Style.foregroundColor.withOpacity(0.38),
                                 )
                             )
                         ),
                         child: Text(
                             endDisplay ?? 'Choose date',
                             style: TextStyle(
-                              fontFamily: 'Montserrat',
+                              fontFamily: Style.fontFamily,
                               fontSize: 16,
                               fontWeight: endDisplay == null ? FontWeight.w400 : FontWeight.w600,
-                              color: endDisplay == null ? Colors.white12: Colors.white,
+                              color: endDisplay == null ? Style.foregroundColor.withOpacity(0.12): Style.foregroundColor,
                             ),
                           textAlign: TextAlign.center,
                         ),
@@ -222,10 +223,10 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                         },
                             locale: LocaleType.en,
                             theme: DatePickerTheme(
-                              cancelStyle: TextStyle(color: Colors.white),
-                              doneStyle: TextStyle(color: Colors.white),
-                              itemStyle: TextStyle(color: Colors.white),
-                              backgroundColor: Colors.grey[900],
+                              cancelStyle: TextStyle(color: Style.foregroundColor),
+                              doneStyle: TextStyle(color: Style.foregroundColor),
+                              itemStyle: TextStyle(color: Style.foregroundColor),
+                              backgroundColor: Style.boxBackgroundColor,
                             ));
                       },
                     ),
@@ -245,10 +246,10 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                       child: Text(
                           'CANCEL',
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF2FB49C),
+                          color: Style.primaryColor,
                         )
                       )
                   ),
@@ -268,12 +269,12 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                       child: Text(
                           'DONE',
                           style: TextStyle(
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                             fontSize: 14.0,
                             fontWeight: FontWeight.w600,
                             color: (beginDate == null || endDate == null)
-                                ? Color(0xFF2FB49C).withOpacity(0.4)
-                                : Color(0xFF2FB49C),
+                                ? Style.primaryColor.withOpacity(0.4)
+                                : Style.primaryColor,
                           )
                       )
                   ),
@@ -290,7 +291,7 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(content: content);
       },

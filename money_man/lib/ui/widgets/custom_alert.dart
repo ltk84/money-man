@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:money_man/ui/style.dart';
 
 class CustomAlert extends StatefulWidget {
   final iconPath;
@@ -41,7 +42,7 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
     return ScaleTransition(
       scale: scaleAnimation,
       child: Dialog(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.boxBackgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
@@ -65,20 +66,20 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
                       SizedBox(height: 15.0),
                       Text(widget.title,
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 5.0),
                       Text(widget.content,
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -92,7 +93,7 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
                         border: Border(
                             top: BorderSide(
                               width: 1,
-                              color: Colors.white12,
+                              color: Style.foregroundColor.withOpacity(0.12),
                             )
                         )
                     ),
@@ -103,10 +104,10 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
                         },
                         child: Text('Close',
                           style: TextStyle(
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: Style.foregroundColor,
                           ),
                           textAlign: TextAlign.center,
                         )
