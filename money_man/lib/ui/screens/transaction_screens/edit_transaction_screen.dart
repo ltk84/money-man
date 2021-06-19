@@ -14,6 +14,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/selection_event.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
 class EditTransactionScreen extends StatefulWidget {
@@ -40,6 +41,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
   String contact;
   Event _event;
   bool pickEvent = false;
+  bool isDebtLoan;
 
   @override
   void initState() {
@@ -51,6 +53,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
     note = widget.transaction.note;
     contact = widget.transaction.contact;
     _event = widget.event;
+    isDebtLoan = widget.transaction.category.type == 'debt & loan';
   }
 
   @override
@@ -103,7 +106,35 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   note: note,
                   contact: contact,
                   eventID: _event == null ? '' : _event.id,
+                  extraAmountInfo: widget.transaction.extraAmountInfo == null
+                      ? null
+                      : amount -
+                          (widget.transaction.amount -
+                              widget.transaction.extraAmountInfo),
                 );
+
+                if (_transaction.category.name == 'Repayment' ||
+                    _transaction.category.name == 'Debt Collection') {
+                  var res = await _firestore.updateDebtLoanTransationAfterEdit(
+                      widget.transaction, _transaction, widget.wallet);
+                  if (res == null) {
+                    await _showAlertDialog(
+                        'Inputted amount must be <= unpaid amount');
+                    return;
+                  }
+                }
+
+                if (_transaction.category.name == 'Debt' ||
+                    _transaction.category.name == 'Loan') {
+                  // print(_transaction);
+                  if (_transaction.amount <
+                      (widget.transaction.amount -
+                          widget.transaction.extraAmountInfo)) {
+                    await _showAlertDialog(
+                        'Transaction amount must be <= paided amount');
+                    return;
+                  }
+                }
 
                 await _firestore.updateTransaction(_transaction, widget.wallet);
                 Navigator.pop(context, _transaction);
@@ -475,52 +506,55 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                         ),
                       ),
-                      Visibility(
-                        visible: !pickEvent,
-                        child: ListTile(
-                          dense: true,
-                          leading: Icon(Icons.account_balance_outlined,
-                              color: Colors.white54, size: 28.0),
-                          title: TextFormField(
-                            onTap: () async {
-                              final PhoneContact phoneContact =
-                                  await FlutterContactPicker.pickPhoneContact();
-                              print(phoneContact.fullName);
-                              setState(() {
-                                contact = phoneContact.fullName;
-                              });
-                            },
-                            readOnly: true,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                hintStyle: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w500),
-                                hintText: contact == null
-                                    ? widget.transaction.category.name == 'Debt'
-                                        ? 'Lender'
-                                        : widget.transaction.category.name ==
-                                                'Loan'
-                                            ? 'Borrower'
-                                            : 'With'
-                                    : contact),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600),
+                      if (isDebtLoan == false)
+                        Visibility(
+                          visible: !pickEvent,
+                          child: ListTile(
+                            dense: true,
+                            leading: Icon(Icons.account_balance_outlined,
+                                color: Colors.white54, size: 28.0),
+                            title: TextFormField(
+                              onTap: () async {
+                                final PhoneContact phoneContact =
+                                    await FlutterContactPicker
+                                        .pickPhoneContact();
+                                if (phoneContact != null)
+                                  setState(() {
+                                    contact = phoneContact.fullName;
+                                  });
+                              },
+                              readOnly: true,
+                              autocorrect: false,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w500),
+                                  hintText: contact == null
+                                      ? widget.transaction.category.name ==
+                                              'Debt'
+                                          ? 'Lender'
+                                          : widget.transaction.category.name ==
+                                                  'Loan'
+                                              ? 'Borrower'
+                                              : 'With'
+                                      : contact),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            trailing: Icon(Icons.chevron_right,
+                                color: Colors.white54),
                           ),
-                          trailing:
-                              Icon(Icons.chevron_right, color: Colors.white54),
                         ),
-                      ),
                       Visibility(
                           visible: pickEvent,
                           child: ListTile(
@@ -594,6 +628,17 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
     );
   }
 }

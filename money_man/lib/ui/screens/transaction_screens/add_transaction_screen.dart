@@ -112,18 +112,18 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         contact: contact,
                         eventID: event == null ? '' : event.id);
 
+                    MyTransaction newTransaction =
+                        await _firestore.addTransaction(selectedWallet, trans);
+
                     if (extraTransaction != null) {
                       if (trans.amount > extraTransaction.extraAmountInfo) {
                         await _showAlertDialog(
                             'Inputted amount must be <= unpaid amount. Unpaid amount is ${extraTransaction.extraAmountInfo}');
                         return;
                       }
-                      extraTransaction.extraAmountInfo -= trans.amount;
-                      await _firestore.updateTransaction(
-                          extraTransaction, selectedWallet);
+                      _firestore.updateDebtLoanTransationAfterAdd(
+                          extraTransaction, newTransaction, selectedWallet);
                     }
-
-                    await _firestore.addTransaction(selectedWallet, trans);
 
                     if (event != null) {
                       await _firestore.updateEventAmountAndTransList(

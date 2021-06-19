@@ -16,8 +16,7 @@ class TransactionListScreen extends StatefulWidget {
   final Wallet wallet;
   final String transactionId;
 
-  const TransactionListScreen(
-      {Key key, @required this.wallet, this.transactionId})
+  TransactionListScreen({Key key, @required this.wallet, this.transactionId})
       : super(key: key);
   @override
   _TransactionListScreenState createState() => _TransactionListScreenState();
@@ -29,28 +28,41 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
   // List danh sách transaction được fliter theo ngày order giảm dần theo thời gian
   List<List<MyTransaction>> transactionListSortByDate = [];
   // tổng đầu vào của các transaction trả về
-  double totalInCome = 0;
+  double totalInCome;
   // tổng đầu ra của các transaction trả về
-  double totalOutCome = 0;
+  double totalOutCome;
   // hiệu của đầu vào vs đầu ra
-  double total = 0;
+  double total;
 
   @override
   void initState() {
     super.initState();
-    transactionListSortByDate = setUp();
+    Future.delayed(Duration.zero, () async {
+      var list = await setUp();
+      setState(() {
+        transactionListSortByDate = list;
+      });
+    });
   }
 
-  setUp() async {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+  Future<List<List<MyTransaction>>> setUp() async {
+    total = 0;
+    totalInCome = 0;
+    totalOutCome = 0;
+    final _firestore =
+        Provider.of<FirebaseFireStoreService>(context, listen: false);
 
     // Lấy danh sách transaction dựa trên searchPattern
     List<MyTransaction> _transactionList = await _firestore
         .searchTransactionInDebtLoan(widget.transactionId, widget.wallet.id);
 
+    if (_transactionList.isEmpty) return [];
+    print(_transactionList.length);
+
     // danh sách các date mà _transactionList có
     List<DateTime> listDateOfTrans = [];
 
+    // if (_transactionList.length > 1)
     // thực hiện sort theo thứ tự thời gian giảm dần
     _transactionList.sort((a, b) => b.date.compareTo(a.date));
     // Lấy các ngày có trong _transactionList ra cho vào listDateOfTrans
@@ -78,12 +90,19 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       backgroundColor: Color(0xFF111111),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.grey[900],
-        leading: CloseButton(),
+        leading: CloseButton(
+          onPressed: () async {
+            MyTransaction newTransIfChange = await _firestore
+                .getTransactionByID(widget.transactionId, widget.wallet.id);
+            Navigator.pop(context, newTransIfChange);
+          },
+        ),
         title: Text('Transaction list'),
       ),
       body: Column(
@@ -185,7 +204,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
             itemBuilder: (context, yIndex) {
               return GestureDetector(
                 onTap: () async {
-                  Navigator.push(
+                  await Navigator.push(
                       context,
                       PageTransition(
                           child: TransactionDetail(
@@ -193,6 +212,11 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
                             wallet: widget.wallet,
                           ),
                           type: PageTransitionType.rightToLeft));
+
+                  var newList = await setUp();
+                  setState(() {
+                    transactionListSortByDate = newList;
+                  });
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),

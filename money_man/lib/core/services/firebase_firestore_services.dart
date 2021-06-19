@@ -225,6 +225,215 @@ class FirebaseFireStoreService {
 
   // TRANSACTION START//
 
+  // get transaction by id
+  Future getTransactionByID(String id, String walletId) async {
+    MyTransaction transaction;
+
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactions')
+        .doc(id)
+        .get()
+        .then((value) => transaction = MyTransaction.fromMap(value.data()));
+
+    return transaction;
+  }
+
+  // update debt loan transaction after add
+  Future updateDebtLoanTransationAfterAdd(MyTransaction debtLoanTransaction,
+      MyTransaction addedTransaction, Wallet wallet) async {
+    debtLoanTransaction.extraAmountInfo -= addedTransaction.amount;
+    await updateTransaction(debtLoanTransaction, wallet);
+
+    await addTransactionIdIntoTransListOfDebtLoan(
+        debtLoanTransaction.id, addedTransaction.id, wallet.id);
+  }
+
+  // update debt loan transaction after edit
+  Future updateDebtLoanTransationAfterEdit(MyTransaction oldTransaction,
+      MyTransaction editedTransaction, Wallet wallet) async {
+    String debtLoanTransactionId;
+    MyTransaction debtLoanTransaction;
+
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactionIdDebtLoan')
+        .where('transactionIdList', arrayContainsAny: [editedTransaction.id])
+        .get()
+        .then((value) => {
+              if (value.docs.isNotEmpty)
+                debtLoanTransactionId = value.docs.first.id
+            });
+
+    if (debtLoanTransactionId == null) return;
+
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions')
+        .doc(debtLoanTransactionId)
+        .get()
+        .then((value) =>
+            {debtLoanTransaction = MyTransaction.fromMap(value.data())});
+
+    if (debtLoanTransaction == null) return;
+
+    if (debtLoanTransaction.amount < editedTransaction.amount) return;
+
+    debtLoanTransaction.extraAmountInfo += oldTransaction.amount;
+    debtLoanTransaction.extraAmountInfo -= editedTransaction.amount;
+    await updateTransaction(debtLoanTransaction, wallet);
+
+    return 1;
+  }
+
+  // update debt loan transaction after delete
+  Future updateDebtLoanTransationAfterDelete(
+      MyTransaction deletedTransaction, Wallet wallet) async {
+    String debtLoanTransactionId;
+    MyTransaction debtLoanTransaction;
+
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactionIdDebtLoan')
+        .where('transactionIdList', arrayContainsAny: [deletedTransaction.id])
+        .get()
+        .then((value) => {
+              if (value.docs.isNotEmpty)
+                debtLoanTransactionId = value.docs.first.id
+            });
+
+    if (debtLoanTransactionId == null) return;
+
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions')
+        .doc(debtLoanTransactionId)
+        .get()
+        .then((value) =>
+            {debtLoanTransaction = MyTransaction.fromMap(value.data())});
+
+    if (debtLoanTransaction == null) return;
+
+    debtLoanTransaction.extraAmountInfo += deletedTransaction.amount;
+    await updateTransaction(debtLoanTransaction, wallet);
+
+    await deleteTransactionIdFromTransactionListOfDebtLoan(
+        debtLoanTransaction.id, deletedTransaction.id, wallet.id);
+  }
+
+  // search transaction in debt & loan
+  Future<List<MyTransaction>> searchTransactionInDebtLoan(
+      String transactionId, String walletId) async {
+    List<dynamic> transactionIdList = [];
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactionIdDebtLoan')
+        .doc(transactionId)
+        .get()
+        .then((value) => {
+              if (value.exists)
+                {transactionIdList = value.data().entries.first.value}
+            });
+    print(transactionIdList);
+
+    List<MyTransaction> transactionList = [];
+    if (transactionIdList.isNotEmpty) {
+      for (int i = 0; i < transactionIdList.length; i++) {
+        await users
+            .doc(uid)
+            .collection('wallets')
+            .doc(walletId)
+            .collection('transactions')
+            .doc(transactionIdList[i])
+            .get()
+            .then((value) => {
+                  if (value.exists)
+                    transactionList.add(MyTransaction.fromMap(value.data())),
+                });
+      }
+    }
+
+    // return listTrans;
+    return transactionList;
+  }
+
+  Future deleteTransactionIdFromTransactionListOfDebtLoan(
+      String transactionIdDebtLoan,
+      String transactionId,
+      String walletId) async {
+    List<dynamic> transactionIdList = [];
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactionIdDebtLoan')
+        .doc(transactionIdDebtLoan)
+        .get()
+        .then((value) => {
+              if (value.exists)
+                {transactionIdList = value.data()['transactionIdList']}
+            });
+    print(transactionIdList);
+
+    transactionIdList.remove(transactionId);
+
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactionIdDebtLoan')
+        .doc(transactionIdDebtLoan)
+        .set({'transactionIdList': FieldValue.arrayUnion(transactionIdList)})
+        .then((value) => print('remove transaction into id list sucess'))
+        .catchError((error) => print(error));
+
+    print(transactionIdList);
+  }
+
+  // add transaction id into sepcial list for debt loan transaction
+  Future addTransactionIdIntoTransListOfDebtLoan(String transactionIdDebtLoan,
+      String transactionId, String walletId) async {
+    List<dynamic> transactionIdList = [];
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactionIdDebtLoan')
+        .doc(transactionIdDebtLoan)
+        .get()
+        .then((value) => {
+              if (value.exists)
+                {transactionIdList = value.data()['transactionIdList']}
+            });
+    print(transactionIdList);
+
+    transactionIdList.add(transactionId);
+
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactionIdDebtLoan')
+        .doc(transactionIdDebtLoan)
+        .set({'transactionIdList': FieldValue.arrayUnion(transactionIdList)})
+        .then((value) => print('add transaction into id list sucess'))
+        .catchError((error) => print(error));
+
+    print(transactionIdList);
+  }
+
   // get list of transaction with criteria
   Future<List<MyTransaction>> getListOfTransactionWithCriteria(
       String criteria, String walletId) async {
@@ -816,36 +1025,6 @@ class FirebaseFireStoreService {
   // BILL END //
 
   // RECURRING TRANSACTION START //
-
-  // search transaction in debt & loan
-  Future<List<MyTransaction>> searchTransactionInDebtLoan(
-      String transactionId, String walletId) async {
-    List<String> listTransId;
-    await users
-        .doc(uid)
-        .collection('wallets')
-        .doc(walletId)
-        .collection('transactionDebtLoan')
-        .doc(transactionId)
-        .get()
-        .then((value) {
-      listTransId = value.data().values;
-    });
-
-    List<MyTransaction> listTrans = [];
-    listTransId.forEach((e) async {
-      await users
-          .doc(uid)
-          .collection('wallets')
-          .doc(walletId)
-          .collection('transactions')
-          .doc(e)
-          .get()
-          .then((value) => listTrans.add(MyTransaction.fromMap(value.data())));
-    });
-
-    return listTrans;
-  }
 
   // add recurring transaction
   Future addRecurringTransaction(
