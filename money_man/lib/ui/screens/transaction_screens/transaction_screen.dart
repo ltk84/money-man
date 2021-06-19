@@ -847,6 +847,7 @@ class _TransactionScreen extends State<TransactionScreen>
               onPressed: () {},
             ),
             PopupMenuButton(
+                icon: Icon(Icons.more_vert_rounded, color: Style.foregroundColor.withOpacity(0.54)),
                 padding: EdgeInsets.all(10.0),
                 //icon: Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
                 offset: Offset.fromDirection(40, 40),
