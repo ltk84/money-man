@@ -10,6 +10,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -156,7 +157,7 @@ class BillTransactionListState extends State<BillTransactionList> {
       child: ListView.builder(
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           //primary: false,
-          shrinkWrap: true,
+          //shrinkWrap: true,
           // itemCount: TRANSACTION_DATA.length + 1,
           itemCount: transactionListSortByDate.length,
           itemBuilder: (context, xIndex) {
@@ -204,8 +205,8 @@ class BillTransactionListState extends State<BillTransactionList> {
                         style: TextStyle(
                           color: Style.foregroundColor,
                           fontFamily: Style.fontFamily,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         )),
                     SizedBox(
                       width: 10,
@@ -226,18 +227,23 @@ class BillTransactionListState extends State<BillTransactionList> {
                   children: <Widget>[
                     Text('Expense',
                         style: TextStyle(
-                          color: Style.foregroundColor,
-                          fontSize: 15,
+                          color: Style.foregroundColor.withOpacity(0.54),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
                           fontFamily: Style.fontFamily,
                         )
                     ),
-                    Text('$currencySymbol $total',
-                        style: TextStyle(
-                          color: Style.foregroundColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: Style.fontFamily,
-                        )),
+                    MoneySymbolFormatter(
+                      text: total,
+                      currencyId: widget.currentWallet.currencyID,
+                      textStyle: TextStyle(
+                        color: Style.foregroundColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: Style.fontFamily,
+                      ),
+                      digit: '-',
+                    )
                   ]),
             ),
           ])),
@@ -252,12 +258,12 @@ class BillTransactionListState extends State<BillTransactionList> {
           color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Style.backgroundColor,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ),
               top: BorderSide(
-                color: Style.backgroundColor,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
@@ -270,7 +276,12 @@ class BillTransactionListState extends State<BillTransactionList> {
                 child: Text(
                     DateFormat("dd")
                         .format(transListSortByDate[xIndex][0].date),
-                    style: TextStyle(fontSize: 30.0, color: Style.foregroundColor)),
+                    style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 30.0,
+                        color: Style.foregroundColor
+                    )),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -283,16 +294,28 @@ class BillTransactionListState extends State<BillTransactionList> {
                             .format(transListSortByDate[xIndex][0].date)
                             .toString(),
                     // 'hello',
-                    style: TextStyle(fontSize: 12.0, color: Style.foregroundColor.withOpacity(0.54))),
+                    style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.0,
+                        color: Style.foregroundColor.withOpacity(0.54))),
               ),
               Expanded(
-                child: Text(
-                    currencySymbol
-                    + ' ' +
-                    totalAmountInDay.toString(),
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Style.foregroundColor)),
+                child: MoneySymbolFormatter(
+                  digit: totalAmountInDay >=
+                      0
+                      ? '+'
+                      : '',
+                  text: totalAmountInDay,
+                  currencyId: widget.currentWallet.currencyID,
+                  textAlign: TextAlign.end,
+                  textStyle: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.0,
+                    color: Style.foregroundColor,
+                  ),
+                ),
               ),
             ],
           ),
@@ -315,6 +338,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                   setState(() { });
                 },
                 child: Container(
+                  color: Colors.transparent,
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                   child: Row(
                     children: <Widget>[
@@ -329,28 +353,28 @@ class BillTransactionListState extends State<BillTransactionList> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
                         child: Text(
-                            transListSortByDate[xIndex][yIndex].category.name,
+                            transListSortByDate[xIndex][yIndex]
+                                .category
+                                .name,
                             style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                color: Style.foregroundColor)),
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14.0,
+                              color: Style.foregroundColor,
+                            )),
                       ),
                       Expanded(
-                        child: Text(
-                            currencySymbol
-                                + ' ' +
-                            transListSortByDate[xIndex][yIndex]
-                                .amount
-                                .toString(),
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: transListSortByDate[xIndex][yIndex]
-                                    .category
-                                    .type ==
-                                    'income'
-                                    ? Style.incomeColor
-                                    : Style.expenseColor)),
+                        child: MoneySymbolFormatter(
+                          text: transListSortByDate[xIndex][yIndex].amount,
+                          currencyId: widget.currentWallet.currencyID,
+                          textAlign: TextAlign.end,
+                          textStyle: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Style.expenseColor),
+                          //digit: _digit,
+                        ),
                       ),
                     ],
                   ),
