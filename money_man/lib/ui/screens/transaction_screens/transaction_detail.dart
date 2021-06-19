@@ -11,7 +11,9 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/add_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/widget/budget_tile.dart';
+import 'package:money_man/ui/screens/transaction_screens/cash_back_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/edit_transaction_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/transaction_list_screen.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +36,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
   bool isDebtOrLoan;
   Event event;
   MyTransaction _transaction;
+  int count = 0;
 
   @override
   void initState() {
@@ -60,8 +63,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    // getEvent(_transaction.eventID, widget.wallet);
-    print(event);
+    print('build detail');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -95,10 +97,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       wallet: widget.wallet,
                       event: event,
                     ));
-                if (updatedTrans != null)
+                if (updatedTrans != null) {
+                  var e = await getEvent(updatedTrans.eventID, widget.wallet);
                   setState(() {
                     _transaction = updatedTrans;
+                    event = e;
                   });
+                }
               }),
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white),
@@ -126,6 +131,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               child: Text('No')),
                           FlatButton(
                               onPressed: () async {
+                                if (_transaction.category.name == 'Repayment' ||
+                                    _transaction.category.name ==
+                                        'Debt Collection') {
+                                  _firestore
+                                      .updateDebtLoanTransationAfterDelete(
+                                          _transaction, widget.wallet);
+                                }
                                 await _firestore.deleteTransaction(
                                     _transaction, widget.wallet);
                                 Navigator.pop(context);
@@ -260,8 +272,19 @@ class _TransactionDetailState extends State<TransactionDetail> {
                             fontSize: 16.0))),
               ],
             ),
+
             isDebtOrLoan
-                ? DebtLoanSection(transaction: _transaction)
+                ? DebtLoanSection(
+                    count: count,
+                    refesh: (transaction) {
+                      setState(() {
+                        if (transaction != null) _transaction = transaction;
+                        // _transaction = widget.transaction;
+                      });
+                    },
+                    transaction: _transaction,
+                    wallet: widget.wallet,
+                  )
                 : Container(),
             SizedBox(height: 10),
             (_transaction.eventID != "" && _transaction.eventID != null)
@@ -429,10 +452,16 @@ class _TransactionDetailState extends State<TransactionDetail> {
 }
 
 class DebtLoanSection extends StatelessWidget {
+  final int count;
+  final Wallet wallet;
   final MyTransaction transaction;
+  final Function refesh;
   const DebtLoanSection({
     Key key,
     @required this.transaction,
+    @required this.wallet,
+    @required this.refesh,
+    @required this.count,
   }) : super(key: key);
 
   @override
@@ -466,7 +495,7 @@ class DebtLoanSection extends StatelessWidget {
                 backgroundColor: Color(0xff161616),
                 valueColor: AlwaysStoppedAnimation<Color>(
                     (transaction.amount - transaction.extraAmountInfo) /
-                                (transaction.amount) ==
+                                (transaction.amount) >=
                             1
                         ? Color(0xFF2FB49C)
                         : Colors.yellow),
@@ -480,7 +509,16 @@ class DebtLoanSection extends StatelessWidget {
             children: [
               if (transaction.extraAmountInfo != 0)
                 OutlineButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => CashBackScreen(
+                                  transaction: transaction, wallet: wallet)));
+                      print('alo');
+                      refesh(null);
+                      print(transaction.extraAmountInfo);
+                    },
                     child: Text(
                       'Cash back',
                       style: TextStyle(
@@ -490,7 +528,16 @@ class DebtLoanSection extends StatelessWidget {
                           fontSize: 16.0),
                     )),
               OutlineButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    MyTransaction trans = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => TransactionListScreen(
+                                transactionId: transaction.id,
+                                wallet: wallet)));
+
+                    refesh(trans);
+                  },
                   child: Text(
                     'Transaction List',
                     style: TextStyle(
