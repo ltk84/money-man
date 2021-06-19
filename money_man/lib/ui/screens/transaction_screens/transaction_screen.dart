@@ -1420,12 +1420,15 @@ class _TransactionScreen extends State<TransactionScreen>
                   transListSortByDate[xIndex][yIndex].contact ?? 'someone';
               String _subTitle;
               if (transListSortByDate[xIndex][yIndex].category.name == 'Debt') {
-                _subTitle = '$_eventIcon$_note from $_contact';
+                //_subTitle = '$_eventIcon$_note from $_contact';
+                _subTitle = '$_eventIcon from '; //$_contact';
               } else if (transListSortByDate[xIndex][yIndex].category.name ==
                   'Loan') {
-                _subTitle = '$_eventIcon$_note to $_contact';
+                //_subTitle = '$_eventIcon$_note to $_contact';
+                _subTitle = '$_eventIcon to '; //$_contact';
               } else {
-                _subTitle = '$_eventIcon$_note';
+                //_subTitle = '$_eventIcon$_note';
+                _subTitle = '$_eventIcon';
               }
 
               String _digit =
@@ -1481,7 +1484,7 @@ class _TransactionScreen extends State<TransactionScreen>
                                     color: Style.foregroundColor,
                                   )),
                               Text(
-                                _subTitle,
+                                _note,
                                 style: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w500,
@@ -1508,24 +1511,49 @@ class _TransactionScreen extends State<TransactionScreen>
                                     : Style.expenseColor),
                             //digit: _digit,
                           ),
-                          if (extraAmount != null)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                if (extraAmount != 0)
-                                  MoneySymbolFormatter(
-                                      textStyle: TextStyle(
-                                        color: Style.foregroundColor,
-                                        fontFamily: Style.fontFamily,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0,
-                                      ),
-                                      text: extraAmount,
-                                      currencyId: _wallet.currencyID),
-                                if (extraAmount != 0) Text(' left'),
-                                if (extraAmount == 0) Text('Received')
-                              ],
+                          if (_subTitle != null && _subTitle != '')
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: _subTitle,
+                                    style: TextStyle(
+                                      fontFamily: Style.fontFamily,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.0,
+                                      color: Style.foregroundColor.withOpacity(0.54),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: _contact,
+                                    style: TextStyle(
+                                      fontFamily: Style.fontFamily,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.0,
+                                      color: Style.foregroundColor,
+                                    ),
+                                  )
+                                ]
+                              )
                             ),
+                          // if (extraAmount != null)
+                          //   Row(
+                          //     mainAxisAlignment: MainAxisAlignment.end,
+                          //     children: [
+                          //       if (extraAmount != 0)
+                          //         MoneySymbolFormatter(
+                          //             textStyle: TextStyle(
+                          //               color: Style.foregroundColor,
+                          //               fontFamily: Style.fontFamily,
+                          //               fontWeight: FontWeight.w500,
+                          //               fontSize: 12.0,
+                          //             ),
+                          //             text: extraAmount,
+                          //             currencyId: _wallet.currencyID),
+                          //       if (extraAmount != 0) Text(' left'),
+                          //       if (extraAmount == 0) Text('Received')
+                          //     ],
+                          //   ),
                         ],
                       )),
                     ],
