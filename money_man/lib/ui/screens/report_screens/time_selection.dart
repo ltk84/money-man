@@ -85,7 +85,9 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
                 fontWeight: FontWeight.w600,
                 color: Style.foregroundColor,
               )),
-          leading: CloseButton(),
+          leading: CloseButton(
+            color: Style.foregroundColor,
+          ),
         ),
         body: Container(
           color: Style.backgroundColor1,

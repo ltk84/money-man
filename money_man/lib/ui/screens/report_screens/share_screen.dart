@@ -76,7 +76,9 @@ class ShareScreenState extends State<ShareScreen> {
               fontFamily: Style.fontFamily,
               fontSize: 17.0,
               fontWeight: FontWeight.w600,)),
-        leading: CloseButton(),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
       ),
       body: Container(
           color: Style.backgroundColor1,

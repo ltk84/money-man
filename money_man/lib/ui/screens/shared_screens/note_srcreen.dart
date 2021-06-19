@@ -40,7 +40,9 @@ class _NoteScreenState extends State<NoteScreen> {
         backgroundColor: Style.primaryColor,
       ),
       appBar: AppBar(
-        leading: CloseButton(),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
         elevation: 0,
         centerTitle: true,
         backgroundColor: Style.boxBackgroundColor,

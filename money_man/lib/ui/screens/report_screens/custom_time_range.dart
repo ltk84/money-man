@@ -68,7 +68,9 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                 fontWeight: FontWeight.w600,
                 color: Style.foregroundColor,
               )),
-          leading: CloseButton(),
+          leading: CloseButton(
+            color: Style.foregroundColor,
+          ),
           actions: [
             TextButton(
                 onPressed: (realBeginDate == null || realEndDate == null)

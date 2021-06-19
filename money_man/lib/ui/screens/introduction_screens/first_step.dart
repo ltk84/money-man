@@ -206,7 +206,7 @@ class _FirstStepState extends State<FirstStep> {
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                               ),
-                              style: TextStyle(color: black)),
+                              style: TextStyle(color: Colors.black)),
                         ),
                         SizedBox(
                           height: 10,
@@ -260,7 +260,7 @@ class _FirstStepState extends State<FirstStep> {
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                   ),
-                                  style: TextStyle(color: black),
+                                  style: TextStyle(color: Colors.black),
                                 ),
                                 // decoration: BoxDecoration(
                                 //     color: Colors.white,
@@ -308,7 +308,7 @@ class _FirstStepState extends State<FirstStep> {
                                   child: Text(
                                     currencyName,
                                     style: TextStyle(
-                                        color: white,
+                                        color: Colors.white,
                                         fontSize: 13,
                                         fontWeight: FontWeight.bold),
                                     textAlign: TextAlign.center,

@@ -113,9 +113,11 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                   ''
                   'My Wallets',
                   style: TextStyle(
-                      color: Style.foregroundColor,
-                      fontFamily: Style.fontFamily,
-                      fontSize: 17.0))),
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                  ))),
           actions: [
             TextButton(
               onPressed: () async {

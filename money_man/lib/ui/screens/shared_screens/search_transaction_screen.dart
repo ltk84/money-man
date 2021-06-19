@@ -54,7 +54,9 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Style.boxBackgroundColor,
-        leading: CloseButton(),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),

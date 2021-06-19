@@ -40,6 +40,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0))),
             leading: CloseButton(
+              color: Style.foregroundColor,
               onPressed: () {
                 Navigator.of(context).pop(widget.id);
               }

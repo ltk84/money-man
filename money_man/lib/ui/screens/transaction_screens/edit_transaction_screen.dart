@@ -71,7 +71,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               fontSize: 17.0,
               fontWeight: FontWeight.w600,
               color: Style.foregroundColor,)),
-        leading: CloseButton(),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
         actions: [
           TextButton(
               onPressed: () async {

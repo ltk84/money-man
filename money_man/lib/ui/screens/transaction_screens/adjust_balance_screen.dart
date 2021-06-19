@@ -36,7 +36,9 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
       appBar: AppBar(
         elevation: 0,
         leadingWidth: 70,
-        leading: CloseButton(),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
         backgroundColor: Style.backgroundColor1,
         actions: [
           TextButton(

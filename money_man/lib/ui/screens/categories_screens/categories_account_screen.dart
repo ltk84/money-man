@@ -127,9 +127,11 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                   ''
                   'Categories',
                   style: TextStyle(
-                      color: Style.foregroundColor,
-                      fontFamily: Style.fontFamily,
-                      fontSize: 17.0))),
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                  ))),
           bottom: TabBar(
             labelStyle: TextStyle(
               fontFamily: Style.fontFamily,

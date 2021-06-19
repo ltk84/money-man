@@ -46,7 +46,9 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: CloseButton(),
+        leading: CloseButton(
+          color: Style.calculatorForegroundColor,
+        ),
         // title: Container(
         //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         //   decoration: BoxDecoration(
