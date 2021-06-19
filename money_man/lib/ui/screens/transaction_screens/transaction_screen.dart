@@ -797,7 +797,8 @@ class _TransactionScreen extends State<TransactionScreen>
                     iconPath: _wallet.iconID,
                     size: 25.0,
                   ),
-                  Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54))
+                  Icon(Icons.arrow_drop_down,
+                      color: Style.foregroundColor.withOpacity(0.54))
                 ],
               ),
             ),
@@ -808,8 +809,7 @@ class _TransactionScreen extends State<TransactionScreen>
                     fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w500,
                     color: Style.foregroundColor.withOpacity(0.54),
-                    fontSize: 10.0)
-            ),
+                    fontSize: 10.0)),
             MoneySymbolFormatter(
               text: _wallet.amount,
               currencyId: _wallet.currencyID,
@@ -842,12 +842,14 @@ class _TransactionScreen extends State<TransactionScreen>
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.notifications, color: Style.foregroundColor.withOpacity(0.54)),
+              icon: Icon(Icons.notifications,
+                  color: Style.foregroundColor.withOpacity(0.54)),
               tooltip: 'Notify',
               onPressed: () {},
             ),
             PopupMenuButton(
-                icon: Icon(Icons.more_vert_rounded, color: Style.foregroundColor.withOpacity(0.54)),
+                icon: Icon(Icons.more_vert_rounded,
+                    color: Style.foregroundColor.withOpacity(0.54)),
                 padding: EdgeInsets.all(10.0),
                 //icon: Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
                 offset: Offset.fromDirection(40, 40),
@@ -863,8 +865,8 @@ class _TransactionScreen extends State<TransactionScreen>
                 onSelected: (value) {
                   if (value == 'Search for transaction') {
                     showCupertinoModalBottomSheet(
-                      isDismissible: false,
-                      enableDrag: false,
+                        isDismissible: false,
+                        enableDrag: false,
                         context: context,
                         builder: (context) =>
                             SearchTransactionScreen(wallet: _wallet));
@@ -888,7 +890,8 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'Select time range',
                         child: Row(
                           children: [
-                            Icon(Icons.calendar_today, color: Style.backgroundColor),
+                            Icon(Icons.calendar_today,
+                                color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Select time range',
@@ -905,7 +908,8 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'change display',
                         child: Row(
                           children: [
-                            Icon(Icons.remove_red_eye, color: Style.backgroundColor),
+                            Icon(Icons.remove_red_eye,
+                                color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               viewByCategory
@@ -942,7 +946,8 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'Transfer money',
                         child: Row(
                           children: [
-                            Icon(Icons.attach_money, color: Style.backgroundColor),
+                            Icon(Icons.attach_money,
+                                color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Transfer money',
@@ -1065,10 +1070,13 @@ class _TransactionScreen extends State<TransactionScreen>
                 children: myTabs.map((tab) {
                   if (transactionListSorted.length > 0) {
                     return viewByCategory == true
-                        ? buildDisplayTransactionByCategory(transactionListSorted,
-                        totalInCome, totalOutCome, total)
+                        ? buildDisplayTransactionByCategory(
+                            transactionListSorted,
+                            totalInCome,
+                            totalOutCome,
+                            total)
                         : buildDisplayTransactionByDate(transactionListSorted,
-                        totalInCome, totalOutCome, total);
+                            totalInCome, totalOutCome, total);
                   } else {
                     return Container(
                         color: Style.backgroundColor,
@@ -1076,11 +1084,14 @@ class _TransactionScreen extends State<TransactionScreen>
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.hourglass_empty,
+                            Icon(
+                              Icons.hourglass_empty,
                               color: Style.foregroundColor.withOpacity(0.12),
                               size: 100,
                             ),
-                            SizedBox(height: 10,),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Text(
                               'There are no transactions',
                               style: TextStyle(
@@ -1091,8 +1102,7 @@ class _TransactionScreen extends State<TransactionScreen>
                               ),
                             ),
                           ],
-                        )
-                    );
+                        ));
                   }
                 }).toList(),
               );
@@ -1109,15 +1119,18 @@ class _TransactionScreen extends State<TransactionScreen>
       color: Style.backgroundColor,
       child: ListView.builder(
           controller: listScrollController,
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           //shrinkWrap: true,
           itemCount: transactionListSortByCategory.length,
           itemBuilder: (context, xIndex) {
             double totalAmountInDay = 0;
             transactionListSortByCategory[xIndex].forEach((element) {
-              if (element.category.type == 'expense')
+              if (element.category.type == 'expense' ||
+                  element.category.name == 'Repayment' ||
+                  element.category.name == 'Loan') {
                 totalAmountInDay -= element.amount;
-              else
+              } else
                 totalAmountInDay += element.amount;
             });
 
@@ -1145,7 +1158,8 @@ class _TransactionScreen extends State<TransactionScreen>
       color: Style.backgroundColor,
       child: ListView.builder(
           controller: listScrollController,
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           //primary: false,
           //shrinkWrap: true,
           // itemCount: TRANSACTION_DATA.length + 1,
@@ -1153,7 +1167,9 @@ class _TransactionScreen extends State<TransactionScreen>
           itemBuilder: (context, xIndex) {
             double totalAmountInDay = 0;
             transactionListSortByDate[xIndex].forEach((element) {
-              if (element.category.type == 'expense')
+              if (element.category.type == 'expense' ||
+                  element.category.name == 'Repayment' ||
+                  element.category.name == 'Loan')
                 totalAmountInDay -= element.amount;
               else
                 totalAmountInDay += element.amount;
@@ -1215,15 +1231,11 @@ class _TransactionScreen extends State<TransactionScreen>
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.0,
-                        color: Style.foregroundColor.withOpacity(0.54)
-                    )),
+                        color: Style.foregroundColor.withOpacity(0.54))),
               ),
               Expanded(
                 child: MoneySymbolFormatter(
-                  digit: totalAmountInDay >=
-                      0
-                      ? '+'
-                      : '',
+                  digit: totalAmountInDay >= 0 ? '+' : '',
                   text: totalAmountInDay,
                   currencyId: _wallet.currencyID,
                   textAlign: TextAlign.end,
@@ -1251,7 +1263,7 @@ class _TransactionScreen extends State<TransactionScreen>
                           childCurrent: this.widget,
                           child: TransactionDetail(
                             transaction: transListSortByCategory[xIndex]
-                            [yIndex],
+                                [yIndex],
                             wallet: widget.currentWallet,
                           ),
                           type: PageTransitionType.rightToLeft));
@@ -1266,13 +1278,11 @@ class _TransactionScreen extends State<TransactionScreen>
                         child: Text(
                             DateFormat("dd").format(
                                 transListSortByCategory[xIndex][yIndex].date),
-                            style:
-                            TextStyle(
+                            style: TextStyle(
                                 fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 30.0,
-                                color: Style.foregroundColor
-                            )),
+                                color: Style.foregroundColor)),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
@@ -1364,8 +1374,7 @@ class _TransactionScreen extends State<TransactionScreen>
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 30.0,
-                        color: Style.foregroundColor
-                    )),
+                        color: Style.foregroundColor)),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -1382,15 +1391,11 @@ class _TransactionScreen extends State<TransactionScreen>
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.0,
-                        color: Style.foregroundColor.withOpacity(0.54)
-                    )),
+                        color: Style.foregroundColor.withOpacity(0.54))),
               ),
               Expanded(
                 child: MoneySymbolFormatter(
-                  digit: totalAmountInDay >=
-                      0
-                      ? '+'
-                      : '',
+                  digit: totalAmountInDay >= 0 ? '+' : '',
                   text: totalAmountInDay,
                   currencyId: _wallet.currencyID,
                   textAlign: TextAlign.end,
@@ -1486,7 +1491,8 @@ class _TransactionScreen extends State<TransactionScreen>
                                   fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 12.0,
-                                  color: Style.foregroundColor.withOpacity(0.54),
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54),
                                 ),
                               ),
                             ],
@@ -1547,9 +1553,9 @@ class _TransactionScreen extends State<TransactionScreen>
               color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                    color: Style.backgroundColor,
-                    width: 1.0,
-                  ))),
+                color: Style.backgroundColor,
+                width: 1.0,
+              ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
           child: Column(children: <Widget>[
             Container(
@@ -1563,8 +1569,7 @@ class _TransactionScreen extends State<TransactionScreen>
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontFamily: Style.fontFamily,
-                      )
-                  ),
+                      )),
                   MoneySymbolFormatter(
                     text: totalInCome,
                     currencyId: _wallet.currencyID,
@@ -1590,8 +1595,7 @@ class _TransactionScreen extends State<TransactionScreen>
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           fontFamily: Style.fontFamily,
-                        )
-                    ),
+                        )),
                     MoneySymbolFormatter(
                       text: totalOutCome,
                       currencyId: _wallet.currencyID,
@@ -1619,10 +1623,7 @@ class _TransactionScreen extends State<TransactionScreen>
                       width: 10,
                     ),
                     MoneySymbolFormatter(
-                      digit: total >=
-                          0
-                          ? '+'
-                          : '',
+                      digit: total >= 0 ? '+' : '',
                       text: total,
                       currencyId: _wallet.currencyID,
                       textStyle: TextStyle(
@@ -1642,8 +1643,7 @@ class _TransactionScreen extends State<TransactionScreen>
                     fontFamily: Style.fontFamily,
                     fontSize: 14.0,
                     fontWeight: FontWeight.w600,
-                    color: Style.highlightPrimaryColor
-                ),
+                    color: Style.highlightPrimaryColor),
               ),
             )
           ])),

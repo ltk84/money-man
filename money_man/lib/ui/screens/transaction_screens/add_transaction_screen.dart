@@ -71,65 +71,74 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: Style.foregroundColor,)),
+                color: Style.foregroundColor,
+              )),
           leading: CloseButton(
             color: Style.foregroundColor,
           ),
           actions: [
             TextButton(
-                onPressed: () async {
-                  if (selectedWallet == null) {
-                    return;
-                    //_showAlertDialog('Please pick your wallet!');
-                  } else if (amount == null) {
-                    return;
-                    //_showAlertDialog('Please enter amount!');
-                  } else if (cate == null) {
-                    return;
-                    //_showAlertDialog('Please pick category');
-                  } else {
-                    MyTransaction trans = MyTransaction(
-                        id: 'id',
-                        amount: amount,
-                        note: note,
-                        date: pickDate,
-                        currencyID: selectedWallet.currencyID,
-                        category: cate,
-                        contact: contact,
-                        eventID: event == null ? '' : event.id);
+              onPressed: () async {
+                if (selectedWallet == null) {
+                  return;
+                  //_showAlertDialog('Please pick your wallet!');
+                } else if (amount == null) {
+                  return;
+                  //_showAlertDialog('Please enter amount!');
+                } else if (cate == null) {
+                  return;
+                  //_showAlertDialog('Please pick category');
+                } else {
+                  MyTransaction trans = MyTransaction(
+                      id: 'id',
+                      amount: amount,
+                      note: note == null
+                          ? note
+                          : contact == null
+                              ? note + 'someone'
+                              : note + contact,
+                      date: pickDate,
+                      currencyID: selectedWallet.currencyID,
+                      category: cate,
+                      contact: contact,
+                      eventID: event == null ? '' : event.id);
 
+                  if (extraTransaction != null) {
+                    if (trans.amount > extraTransaction.extraAmountInfo) {
+                      await _showAlertDialog(
+                          'Inputted amount must be <= unpaid amount. Unpaid amount is ${extraTransaction.extraAmountInfo}');
+                      return;
+                    }
                     MyTransaction newTransaction =
                         await _firestore.addTransaction(selectedWallet, trans);
 
-                    if (extraTransaction != null) {
-                      if (trans.amount > extraTransaction.extraAmountInfo) {
-                        await _showAlertDialog(
-                            'Inputted amount must be <= unpaid amount. Unpaid amount is ${extraTransaction.extraAmountInfo}');
-                        return;
-                      }
-                      _firestore.updateDebtLoanTransationAfterAdd(
-                          extraTransaction, newTransaction, selectedWallet);
-                    }
-
-                    if (event != null) {
-                      await _firestore.updateEventAmountAndTransList(
-                          event, selectedWallet, trans);
-                    }
-
-                    Navigator.pop(context);
+                    _firestore.updateDebtLoanTransationAfterAdd(
+                        extraTransaction, newTransaction, selectedWallet);
+                  } else {
+                    MyTransaction newTransaction =
+                        await _firestore.addTransaction(selectedWallet, trans);
                   }
-                },
-                child: Text(
-                  'Done',
-                  style: TextStyle(
-                    color: (selectedWallet == null || amount == null || cate == null)
-                        ? Style.foregroundColor.withOpacity(0.24)
-                        : Style.foregroundColor,
-                    fontFamily: Style.fontFamily,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                  ),
+
+                  if (event != null) {
+                    await _firestore.updateEventAmountAndTransList(
+                        event, selectedWallet, trans);
+                  }
+
+                  Navigator.pop(context);
+                }
+              },
+              child: Text(
+                'Done',
+                style: TextStyle(
+                  color:
+                      (selectedWallet == null || amount == null || cate == null)
+                          ? Style.foregroundColor.withOpacity(0.24)
+                          : Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
                 ),
+              ),
             ),
           ],
         ),
@@ -160,7 +169,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     amount = double.parse(resultAmount);
                   });
               },
-              leading: Icon(Icons.money_rounded, color: Style.foregroundColor.withOpacity(0.54), size: 45.0),
+              leading: Icon(Icons.money_rounded,
+                  color: Style.foregroundColor.withOpacity(0.54), size: 45.0),
               title: TextFormField(
                 readOnly: true,
                 onTap: () async {
@@ -186,7 +196,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   hintStyle: TextStyle(
-                    color: amount == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                    color: amount == null
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
                     fontSize: amount == null ? 22 : 30.0,
                     fontFamily: Style.fontFamily,
                     fontWeight:
@@ -223,6 +235,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 if (selectCate != null) {
                   if (selectCate is List && selectCate.length == 2) {
                     MyCategory category = selectCate[0];
+                    extraTransaction = selectCate[1];
+                    bool isDebt = extraTransaction.category.name == 'Debt';
+
                     setState(() {
                       this.cate = category;
                       if (cate.type == 'debt & loan') {
@@ -232,8 +247,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           hintTextConact = 'Borrower';
                         }
                       }
-                      extraTransaction = selectCate[1];
                       this.contact = extraTransaction.contact;
+
+                      note =
+                          isDebt ? 'Debt paid to ' : 'Payment received from ';
                     });
                   } else {
                     setState(() {
@@ -251,7 +268,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               },
               leading: cate == null
                   ? Icon(Icons.question_answer,
-                      color: Style.foregroundColor.withOpacity(0.54), size: 28.0)
+                      color: Style.foregroundColor.withOpacity(0.54),
+                      size: 28.0)
                   : SuperIcon(
                       iconPath: cate.iconID,
                       size: 28.0,
@@ -269,6 +287,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   if (selectCate != null) {
                     if (selectCate is List && selectCate.length == 2) {
                       MyCategory category = selectCate[0];
+                      extraTransaction = selectCate[1];
+                      bool isDebt = extraTransaction.category.name == 'Debt';
+
                       setState(() {
                         this.cate = category;
                         if (cate.type == 'debt & loan') {
@@ -278,8 +299,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                             hintTextConact = 'Borrower';
                           }
                         }
-                        extraTransaction = selectCate[1];
                         this.contact = extraTransaction.contact;
+
+                        note =
+                            isDebt ? 'Debt paid to ' : 'Payment received from ';
                       });
                     } else {
                       setState(() {
@@ -308,8 +331,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color:
-                            this.cate == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                        color: this.cate == null
+                            ? Style.foregroundColor.withOpacity(0.24)
+                            : Style.foregroundColor,
                         fontSize: 16.0,
                         fontFamily: Style.fontFamily,
                         fontWeight: this.cate == null
@@ -318,7 +342,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     hintText:
                         this.cate == null ? 'Select category' : this.cate.name),
               ),
-              trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
+              trailing: Icon(Icons.chevron_right,
+                  color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
@@ -391,7 +416,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     });
                 },
               ),
-              trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
+              trailing: Icon(Icons.chevron_right,
+                  color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
@@ -400,24 +426,25 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 height: 1,
                 thickness: 0.2,
               ),
-            ),ListTile(
+            ),
+            ListTile(
               dense: true,
-              leading:
-              Icon(Icons.calendar_today, color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+              leading: Icon(Icons.calendar_today,
+                  color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
               title: TextFormField(
                 onTap: () async {
                   DatePicker.showDatePicker(context,
                       currentTime: pickDate == null
                           ? DateTime(DateTime.now().year, DateTime.now().month,
-                          DateTime.now().day)
+                              DateTime.now().day)
                           : pickDate,
                       showTitleActions: true, onConfirm: (date) {
-                        if (date != null) {
-                          setState(() {
-                            pickDate = date;
-                          });
-                        }
-                      },
+                    if (date != null) {
+                      setState(() {
+                        pickDate = date;
+                      });
+                    }
+                  },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(color: Style.foregroundColor),
@@ -439,29 +466,32 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                      color: pickDate == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                      color: pickDate == null
+                          ? Style.foregroundColor.withOpacity(0.24)
+                          : Style.foregroundColor,
                       fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight:
-                      pickDate == null ? FontWeight.w500 : FontWeight.w600,
+                          pickDate == null ? FontWeight.w500 : FontWeight.w600,
                     ),
                     hintText: pickDate ==
-                        DateTime.parse(
-                            DateFormat("yyyy-MM-dd").format(DateTime.now()))
+                            DateTime.parse(
+                                DateFormat("yyyy-MM-dd").format(DateTime.now()))
                         ? 'Today'
                         : pickDate ==
-                        DateTime.parse(DateFormat("yyyy-MM-dd").format(
-                            DateTime.now().add(Duration(days: 1))))
-                        ? 'Tomorrow'
-                        : pickDate ==
-                        DateTime.parse(DateFormat("yyyy-MM-dd")
-                            .format(DateTime.now()
-                            .subtract(Duration(days: 1))))
-                        ? 'Yesterday'
-                        : DateFormat('EEEE, dd-MM-yyyy')
-                        .format(pickDate)),
+                                DateTime.parse(DateFormat("yyyy-MM-dd").format(
+                                    DateTime.now().add(Duration(days: 1))))
+                            ? 'Tomorrow'
+                            : pickDate ==
+                                    DateTime.parse(DateFormat("yyyy-MM-dd")
+                                        .format(DateTime.now()
+                                            .subtract(Duration(days: 1))))
+                                ? 'Yesterday'
+                                : DateFormat('EEEE, dd-MM-yyyy')
+                                    .format(pickDate)),
               ),
-              trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
+              trailing: Icon(Icons.chevron_right,
+                  color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
@@ -473,7 +503,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.note, color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+              leading: Icon(Icons.note,
+                  color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
               title: TextFormField(
                 onTap: () async {
                   final noteContent = await showCupertinoModalBottomSheet(
@@ -481,8 +512,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       backgroundColor: Style.boxBackgroundColor,
                       context: context,
                       builder: (context) => NoteScreen(
-                        content: note ?? '',
-                      ));
+                            content: note ?? '',
+                          ));
                   print(noteContent);
                   if (noteContent != null) {
                     setState(() {
@@ -499,21 +530,27 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color: note == '' || note == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                        color: note == '' || note == null
+                            ? Style.foregroundColor.withOpacity(0.24)
+                            : Style.foregroundColor,
                         fontFamily: Style.fontFamily,
                         fontSize: 16.0,
                         fontWeight: note == '' || note == null
                             ? FontWeight.w500
-                            : FontWeight.w600
-                    ),
-                    hintText: note == '' || note == null ? 'Write note' : note),
+                            : FontWeight.w600),
+                    hintText: note == '' || note == null
+                        ? 'Write note'
+                        : contact == null
+                            ? note + 'someone'
+                            : note + contact),
                 style: TextStyle(
                     color: Style.foregroundColor,
                     fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600),
               ),
-              trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
+              trailing: Icon(Icons.chevron_right,
+                  color: Style.foregroundColor.withOpacity(0.54)),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
@@ -534,7 +571,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 child: Text(
                   'More',
                   style: TextStyle(
-                      color: Style.primaryColor,
+                    color: Style.primaryColor,
                     fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
@@ -551,7 +588,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 title: TextFormField(
                   onTap: () async {
                     final PhoneContact phoneContact =
-                    await FlutterContactPicker.pickPhoneContact();
+                        await FlutterContactPicker.pickPhoneContact();
                     if (phoneContact != null) {
                       print(phoneContact.fullName);
                       setState(() {
@@ -573,8 +610,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           fontSize: 16.0,
                           fontWeight: contact == null
                               ? FontWeight.w500
-                              : FontWeight.w600
-                      ),
+                              : FontWeight.w600),
                       hintText: contact ?? hintTextConact),
                   style: TextStyle(
                       color: Style.foregroundColor,
@@ -582,7 +618,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600),
                 ),
-                trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
+                trailing: Icon(Icons.chevron_right,
+                    color: Style.foregroundColor.withOpacity(0.54)),
               ),
             ),
             Visibility(
@@ -633,8 +670,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintStyle: TextStyle(
-                          color:
-                              event == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                          color: event == null
+                              ? Style.foregroundColor.withOpacity(0.24)
+                              : Style.foregroundColor,
                           fontFamily: Style.fontFamily,
                           fontSize: 16.0,
                           fontWeight:
@@ -654,7 +692,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         });
                     },
                   ),
-                  trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
+                  trailing: Icon(Icons.chevron_right,
+                      color: Style.foregroundColor.withOpacity(0.54)),
                 ))
           ]),
         ));
