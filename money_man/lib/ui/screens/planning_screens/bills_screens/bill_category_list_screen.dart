@@ -30,7 +30,7 @@ class _BillCategoryListState extends State<BillCategoryList> {
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
-          backgroundColor: Style.backgroundColor1,
+          backgroundColor: Style.boxBackgroundColor2,
           elevation: 0.0,
           leading: CloseButton(),
           actions: [
@@ -68,15 +68,26 @@ class _BillCategoryListState extends State<BillCategoryList> {
           List<Bill> listBills = snapshot.data ?? [];
           if (listBills.length == 0) {
             return Container(
+                color: Style.backgroundColor,
                 alignment: Alignment.center,
-                child: Text(
-                  'No bill',
-                  style: TextStyle(
-                    fontFamily: Style.fontFamily,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                    color: Style.foregroundColor.withOpacity(0.54),
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.hourglass_empty,
+                      color: Style.foregroundColor.withOpacity(0.12),
+                      size: 100,
+                    ),
+                    SizedBox(height: 10,),
+                    Text(
+                      'No bill',
+                      style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        color: Style.foregroundColor.withOpacity(0.24),
+                      ),
+                    ),
+                  ],
                 )
             );
           } else {

@@ -59,7 +59,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                 Navigator.of(context).pop();
               },
               child: Icon(
-                Icons.arrow_back_outlined,
+                Icons.arrow_back_ios_rounded,
                 color: Style.foregroundColor,
               )),
         ),
@@ -118,16 +118,27 @@ class BillTransactionListState extends State<BillTransactionList> {
 
           if (transactionListSorted.length == 0) {
               return Container(
-                alignment: Alignment.center,
-                child: Text(
-                  'No transaction',
-                  style: TextStyle(
-                    fontFamily: Style.fontFamily,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                    color: Style.foregroundColor.withOpacity(0.54),
-                  ),
-                )
+                  color: Style.backgroundColor,
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.hourglass_empty,
+                        color: Style.foregroundColor.withOpacity(0.12),
+                        size: 100,
+                      ),
+                      SizedBox(height: 10,),
+                      Text(
+                        'No transaction',
+                        style: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                          color: Style.foregroundColor.withOpacity(0.24),
+                        ),
+                      ),
+                    ],
+                  )
               );
           } else {
             return buildDisplayTransactionByDate(transactionListSorted, total);
