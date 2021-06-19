@@ -420,9 +420,24 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
-                        cancelStyle: TextStyle(color: Style.foregroundColor),
-                        doneStyle: TextStyle(color: Style.foregroundColor),
-                        itemStyle: TextStyle(color: Style.foregroundColor),
+                        cancelStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
+                        doneStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
+                        itemStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
                         backgroundColor: Style.boxBackgroundColor,
                       ));
                 },

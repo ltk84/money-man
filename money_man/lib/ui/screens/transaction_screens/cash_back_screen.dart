@@ -12,6 +12,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
@@ -215,10 +216,25 @@ class _CashBackScreenState extends State<CashBackScreen> {
                 },
                     locale: LocaleType.en,
                     theme: DatePickerTheme(
-                      cancelStyle: TextStyle(color: Colors.white),
-                      doneStyle: TextStyle(color: Colors.white),
-                      itemStyle: TextStyle(color: Colors.white),
-                      backgroundColor: Colors.grey[900],
+                      cancelStyle: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor
+                      ),
+                      doneStyle: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor
+                      ),
+                      itemStyle: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor
+                      ),
+                      backgroundColor: Style.boxBackgroundColor,
                     ));
               },
               readOnly: true,
