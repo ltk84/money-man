@@ -16,7 +16,9 @@ import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -38,6 +40,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
   String note;
   RepeatOption repeatOption;
   List<DateTime> dueDates;
+  String repeatDescription;
 
   DateTime now =
   DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -55,11 +58,14 @@ class _AddBillScreenState extends State<AddBillScreen> {
         beginDateTime: now,
         type: 'forever',
         extraTypeInfo: null);
+    repeatDescription = updateRepeatDescription();
   }
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    repeatDescription = updateRepeatDescription();
+
     return StreamBuilder<Object>(
       stream: _firestore.billStream(selectedWallet.id),
       builder: (context, snapshot) {
@@ -139,8 +145,9 @@ class _AddBillScreenState extends State<AddBillScreen> {
                       GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () async {
-                            final resultAmount = await Navigator.push(context,
-                                MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                            final resultAmount = await showCupertinoModalBottomSheet(
+                                context: context,
+                                builder: (context) => EnterAmountScreen());
                             if (resultAmount != null)
                               setState(() {
                                 print(resultAmount);
@@ -148,7 +155,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                               });
                           },
                           child: buildAmountInput(
-                              display: this.amount == null ? null : (currencySymbol + ' ' + this.amount.toString())
+                            amount: amount,
                           )
                       ),
 
@@ -196,12 +203,13 @@ class _AddBillScreenState extends State<AddBillScreen> {
                       GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () async {
-                            final noteContent = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => NoteScreen(
-                                      content: note ?? '',
-                                    )));
+                            final noteContent = await showCupertinoModalBottomSheet(
+                                isDismissible: true,
+                                backgroundColor: Style.boxBackgroundColor,
+                                context: context,
+                                builder: (context) => NoteScreen(
+                                  content: note ?? '',
+                                ));
 
                             if (noteContent != null) {
                               setState(() {
@@ -283,9 +291,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                     child: Text(
-                      'Repeat every ${repeatOption.rangeAmount} ${repeatOption.extraAmountInfo}'
-                          '${repeatOption.rangeAmount == 1 ? '' : 's'} '
-                          'from ${DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime)}',
+                      repeatDescription ?? 'Select repeat option',
                       style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 13.0,
@@ -299,7 +305,26 @@ class _AddBillScreenState extends State<AddBillScreen> {
     );
   }
 
-  Widget buildAmountInput({String display}) {
+  String updateRepeatDescription() {
+    String frequency = repeatOption.frequency == 'daily'
+        ? 'day'
+        : repeatOption.frequency
+        .substring(0, repeatOption.frequency.indexOf('ly'));
+    String beginDateTime =
+    DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime);
+    String extraFeq = repeatOption.rangeAmount.toString();
+    String type = repeatOption.type;
+    String extra = repeatOption.type == 'until'
+        ? DateFormat('dd/MM/yyyy').format(repeatOption.extraTypeInfo)
+        : '${repeatOption.extraTypeInfo} time(s)';
+
+    if (type == 'forever') {
+      return 'Repeat every $extraFeq $frequency from $beginDateTime forever';
+    }
+    return 'Repeat every $extraFeq $frequency from $beginDateTime $type $extra';
+  }
+
+  Widget buildAmountInput({double amount}) {
     return Container(
       color: Colors.transparent,
       padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
@@ -324,13 +349,24 @@ class _AddBillScreenState extends State<AddBillScreen> {
                         color: Colors.white60,
                       )),
                   SizedBox(height: 5.0),
-                  Text(display ?? 'Enter amount',
+                  (amount == null)
+                      ? Text('Enter amount',
                       style: TextStyle(
-                        fontFamily: 'Montserrat',
+                        fontFamily: Style.fontFamily,
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
-                        color: display == null ? Colors.white24 : Colors.white,
-                      )),
+                        color: Style.foregroundColor.withOpacity(0.24),
+                      ))
+                      : MoneySymbolFormatter(
+                    text: amount,
+                    currencyId: selectedWallet.currencyID,
+                    textStyle: TextStyle(
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
                 ],
               ),
             ],

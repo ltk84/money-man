@@ -11,6 +11,7 @@ import 'package:money_man/ui/screens/planning_screens/recurring_transaction_scre
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_detail_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -43,10 +44,11 @@ class _RecurringTransactionMainScreenState
                   Navigator.of(context).pop();
                 },
                 child: Icon(
-                  Icons.arrow_back_outlined,
+                  Icons.arrow_back_ios_rounded,
                   color: Colors.white,
                 )),
           ),
+          centerTitle: true,
           title: Hero(
             tag: 'billToDetail_title',
             child: Text('Recurring transactions',
@@ -180,7 +182,7 @@ class _RecurringTransactionMainScreenState
                 type: PageTransitionType.rightToLeft));
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(20, 14, 20, 8),
+        padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
         decoration: BoxDecoration(
             color: Color(0xFF1c1c1c),
             border: Border(
@@ -193,40 +195,64 @@ class _RecurringTransactionMainScreenState
                   width: 0.5,
                 ))),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SuperIcon(
-              iconPath: reTrans.category.iconID,
-              size: 38.0,
-            ),
-            SizedBox(width: 20.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(reTrans.category.name,
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    )),
-                SizedBox(height: 20.0),
-                Text('Next occurence:',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    )),
-                Text(DateFormat('EEEE, dd-MM-yyyy')
-                    .format(reTrans.repeatOption.beginDateTime))
+                SuperIcon(
+                  iconPath: reTrans.category.iconID,
+                  size: 40.0,
+                ),
+                SizedBox(width: 20.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(reTrans.category.name,
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        )),
+                    if (reTrans.note != null && reTrans.note != '')
+                    Text(reTrans.note,
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white.withOpacity(0.54),
+                        )),
+                    SizedBox(height: 2,),
+                    Text('Next occurrence:',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 13.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        )),
+                    Text(DateFormat('EEEE, dd-MM-yyyy')
+                        .format(reTrans.repeatOption.beginDateTime),
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 13.0,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white.withOpacity(0.7),
+                        )
+                    )
+                  ],
+                ),
               ],
             ),
-            // chỗ này chưa biết xử lý sao
-            SizedBox(
-              width: 80,
-            ),
-            Text(reTrans.amount.toString())
+            MoneySymbolFormatter(
+              text: reTrans.amount,
+              currencyId: widget.wallet.currencyID,
+              textStyle: TextStyle(
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 17.0),
+            )
           ],
         ),
       ),

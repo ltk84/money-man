@@ -10,6 +10,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/transaction_list.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -60,7 +61,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                   Navigator.of(context).pop();
                 },
                 child: Icon(
-                  Icons.arrow_back_outlined,
+                  Icons.arrow_back_ios_rounded,
                   color: Style.foregroundColor,
                 )),
           ),
@@ -151,8 +152,16 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                         thickness: 1,
                       ),
                     ),
-                    buildInfoAmount(display: currencySymbol + ' ' + _bill.amount.toString()),
+                    buildInfoAmount(amount: _bill.amount),
                     // Divider ngăn cách giữa các input field.
+                    Container(
+                      margin: EdgeInsets.only(left: 70),
+                      child: Divider(
+                        color: Style.foregroundColor.withOpacity(0.12),
+                        thickness: 1,
+                      ),
+                    ),
+                    buildNote(display: _bill.note),
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
@@ -304,7 +313,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
         ));
   }
 
-  Widget buildInfoAmount({String display}) {
+  Widget buildInfoAmount({double amount}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
@@ -325,13 +334,16 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                     color: Style.foregroundColor.withOpacity(0.6),
                   )),
               SizedBox(height: 5.0),
-              Text(display ?? 'Enter amount',
-                  style: TextStyle(
-                    fontFamily: Style.fontFamily,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                    color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
-                  )),
+              MoneySymbolFormatter(
+                text: amount,
+                currencyId: widget.wallet.currencyID,
+                textStyle: TextStyle(
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              )
             ],
           ),
         ],
@@ -357,6 +369,27 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                 fontSize: 20.0,
                 fontWeight: FontWeight.w500,
                 color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget buildNote ({String display}) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 23.0),
+              child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
+          Text(display == null || display == '' ? 'Note' : display,
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 16.0,
+                fontWeight: FontWeight.w500,
+                color: display == null || display == '' ? Colors.white24 : Colors.white,
               )),
         ],
       ),

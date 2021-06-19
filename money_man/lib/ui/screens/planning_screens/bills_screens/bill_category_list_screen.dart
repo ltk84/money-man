@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/bill_model.dart';
@@ -9,6 +10,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/add_bill_sceen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_general_detail_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:currency_picker/currency_picker.dart';
 
@@ -150,13 +152,27 @@ class _BillCategoryListState extends State<BillCategoryList> {
                           fontWeight: FontWeight.w600,
                           color: Style.foregroundColor,
                         )),
-                    Text(currencySymbol + ' ' + bill.amount.toString(),
-                        style: TextStyle(
-                          fontFamily: Style.fontFamily,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w400,
-                          color: Style.foregroundColor,
-                        )),
+                    if (bill.note != null && bill.note != '')
+                      Text(
+                          bill.note,
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13.0,
+                            color: Style.foregroundColor.withOpacity(0.54),
+                          )
+                      ),
+                    SizedBox(height: 2,),
+                    MoneySymbolFormatter(
+                      text: bill.amount,
+                      currencyId: widget.currentWallet.currencyID,
+                      textStyle: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w400,
+                        color: Style.foregroundColor,
+                      ),
+                    ),
                   ],
                 )
               ],

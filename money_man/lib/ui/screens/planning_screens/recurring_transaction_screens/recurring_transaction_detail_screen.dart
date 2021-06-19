@@ -7,7 +7,9 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/edit_recurring_transaction_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -51,7 +53,7 @@ class _RecurringTransactionDetailScreenState
                   Navigator.of(context).pop();
                 },
                 child: Icon(
-                  Icons.arrow_back_outlined,
+                  Icons.arrow_back_ios_rounded,
                   color: Colors.white,
                 )),
           ),
@@ -146,9 +148,16 @@ class _RecurringTransactionDetailScreenState
                       ),
                     ),
                     buildInfoAmount(
-                        display:
-                            '\$ ' + _recurringTransaction.amount.toString()),
+                        amount: _recurringTransaction.amount),
                     // Divider ngăn cách giữa các input field.
+                    Container(
+                      margin: EdgeInsets.only(left: 70),
+                      child: Divider(
+                        color: Colors.white12,
+                        thickness: 1,
+                      ),
+                    ),
+                    buildNote(display: _recurringTransaction.note),
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
@@ -269,7 +278,7 @@ class _RecurringTransactionDetailScreenState
         ));
   }
 
-  Widget buildInfoAmount({String display}) {
+  Widget buildInfoAmount({double amount}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
@@ -290,13 +299,16 @@ class _RecurringTransactionDetailScreenState
                     color: Colors.white60,
                   )),
               SizedBox(height: 5.0),
-              Text(display ?? 'Enter amount',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
+              MoneySymbolFormatter(
+                text: amount,
+                currencyId: widget.wallet.currencyID,
+                textStyle: TextStyle(
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Colors.white24 : Colors.white,
-                  )),
+                ),
+              )
             ],
           ),
         ],
@@ -322,6 +334,27 @@ class _RecurringTransactionDetailScreenState
                 fontSize: 20.0,
                 fontWeight: FontWeight.w500,
                 color: display == null ? Colors.white24 : Colors.white,
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget buildNote ({String display}) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 23.0),
+              child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
+          Text(display == null || display == '' ? 'Note' : display,
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 16.0,
+                fontWeight: FontWeight.w500,
+                color: display == null || display == '' ? Colors.white24 : Colors.white,
               )),
         ],
       ),
@@ -365,13 +398,30 @@ class _RecurringTransactionDetailScreenState
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Next occurence: $nextDate',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  )),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: 'Next occurrence: ',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        )
+                    ),
+                    TextSpan(
+                        text: nextDate,
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.primaryColor,
+                        )
+                    ),
+                  ]
+                )
+              ),
               Text(type,
                   style: TextStyle(
                     fontFamily: 'Montserrat',

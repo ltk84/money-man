@@ -16,7 +16,9 @@ import 'package:money_man/ui/screens/planning_screens/recurring_transaction_scre
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -140,10 +142,9 @@ class _AddRecurringTransactionScreenState
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async {
-                      final resultAmount = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => EnterAmountScreen()));
+                      final resultAmount = await showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => EnterAmountScreen());
                       if (resultAmount != null)
                         setState(() {
                           print(resultAmount);
@@ -151,9 +152,7 @@ class _AddRecurringTransactionScreenState
                         });
                     },
                     child: buildAmountInput(
-                        display: this.amount == null
-                            ? null
-                            : this.amount.toString()),
+                        amount: amount),
                   ),
 
                   // Divider ngăn cách giữa các input field.
@@ -204,12 +203,13 @@ class _AddRecurringTransactionScreenState
                   GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () async {
-                        final noteContent = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => NoteScreen(
-                                      content: note ?? '',
-                                    )));
+                        final noteContent = await showCupertinoModalBottomSheet(
+                            isDismissible: true,
+                            backgroundColor: Style.boxBackgroundColor,
+                            context: context,
+                            builder: (context) => NoteScreen(
+                              content: note ?? '',
+                            ));
 
                         if (noteContent != null) {
                           setState(() {
@@ -311,7 +311,7 @@ class _AddRecurringTransactionScreenState
     String type = repeatOption.type;
     String extra = repeatOption.type == 'until'
         ? DateFormat('dd/MM/yyyy').format(repeatOption.extraTypeInfo)
-        : '${repeatOption.extraTypeInfo} time';
+        : '${repeatOption.extraTypeInfo} time(s)';
 
     if (type == 'forever') {
       return 'Repeat every $extraFeq $frequency from $beginDateTime forever';
@@ -319,7 +319,7 @@ class _AddRecurringTransactionScreenState
     return 'Repeat every $extraFeq $frequency from $beginDateTime $type $extra';
   }
 
-  Widget buildAmountInput({String display}) {
+  Widget buildAmountInput({double amount}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
@@ -343,13 +343,24 @@ class _AddRecurringTransactionScreenState
                         color: Colors.white60,
                       )),
                   SizedBox(height: 5.0),
-                  Text(display ?? 'Enter amount',
+                  (amount == null)
+                      ? Text('Enter amount',
                       style: TextStyle(
-                        fontFamily: 'Montserrat',
+                        fontFamily: Style.fontFamily,
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
-                        color: display == null ? Colors.white24 : Colors.white,
-                      )),
+                        color: Style.foregroundColor.withOpacity(0.24),
+                      ))
+                      : MoneySymbolFormatter(
+                    text: amount,
+                    currencyId: _wallet.currencyID,
+                    textStyle: TextStyle(
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
                 ],
               ),
             ],
