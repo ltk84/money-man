@@ -241,6 +241,18 @@ class FirebaseFireStoreService {
     return transaction;
   }
 
+  // detele instance inside collection transactionIdList
+  Future deleteInstanceInTransactionIdList(
+      String transactionId, String walletId) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactionIdDebtLoan')
+        .doc(transactionId)
+        .delete();
+  }
+
   // update debt loan transaction after add
   Future updateDebtLoanTransationAfterAdd(MyTransaction debtLoanTransaction,
       MyTransaction addedTransaction, Wallet wallet) async {

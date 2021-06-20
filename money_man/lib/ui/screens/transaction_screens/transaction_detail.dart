@@ -93,10 +93,10 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 final updatedTrans = await showCupertinoModalBottomSheet(
                     context: context,
                     builder: (context) => EditTransactionScreen(
-                      transaction: _transaction,
-                      wallet: widget.wallet,
-                      event: event,
-                    ));
+                          transaction: _transaction,
+                          wallet: widget.wallet,
+                          event: event,
+                        ));
                 if (updatedTrans != null) {
                   var e = await getEvent(updatedTrans.eventID, widget.wallet);
                   setState(() {
@@ -134,9 +134,15 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                 if (_transaction.category.name == 'Repayment' ||
                                     _transaction.category.name ==
                                         'Debt Collection') {
-                                  _firestore
+                                  await _firestore
                                       .updateDebtLoanTransationAfterDelete(
                                           _transaction, widget.wallet);
+                                }
+                                if (_transaction.category.name == 'Debt' ||
+                                    _transaction.category.name == 'Loan') {
+                                  await _firestore
+                                      .deleteInstanceInTransactionIdList(
+                                          _transaction.id, widget.wallet.id);
                                 }
                                 await _firestore.deleteTransaction(
                                     _transaction, widget.wallet);
@@ -155,7 +161,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
       body: Container(
         color: Color(0xff1a1a1a),
         child: ListView(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             ListTile(
               leading: Container(
