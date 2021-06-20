@@ -652,8 +652,11 @@ class FirebaseFireStoreService {
           if (!listTrans.contains(trans)) listTrans.add(trans);
         });
         for (int i = 0; i < listTrans.length; i++)
-          if (listTrans[i].date.isBefore(budget.endDate) &&
-              budget.beginDate.isBefore(listTrans[i].date))
+          if (listTrans[i]
+                      .date
+                      .compareTo(budget.endDate.add(Duration(days: 1))) <
+                  0 &&
+              listTrans[i].date.compareTo(budget.beginDate) >= 0)
             spent += listTrans[i].amount;
       }
     });
@@ -680,8 +683,11 @@ class FirebaseFireStoreService {
           if (!listTrans.contains(trans)) listTrans.add(trans);
         });
         for (int i = 0; i < listTrans.length; i++)
-          if (listTrans[i].date.isBefore(dateTime.add(Duration(days: 1))) &&
-              budget.beginDate.isBefore(listTrans[i].date))
+          //listTrans[i].date.isBefore(dateTime.add(Duration(days: 1))) &&
+          //budget.beginDate.isBefore(listTrans[i].date)
+          if (listTrans[i].date.compareTo(dateTime.add(Duration(days: 1))) <
+                  0 &&
+              listTrans[i].date.compareTo(budget.beginDate) >= 0)
             spent += listTrans[i].amount;
       }
     });

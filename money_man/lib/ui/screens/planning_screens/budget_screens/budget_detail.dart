@@ -11,7 +11,9 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/edit_budget
 import 'package:money_man/ui/screens/planning_screens/budget_screens/widget/line_chart_progress.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_transaction.dart';
 
 class BudgetDetailScreen extends StatefulWidget {
   const BudgetDetailScreen({Key key, this.budget, this.wallet})
@@ -57,17 +59,12 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    bool isStart;
     DateTime today = DateTime.now();
+    today = DateTime(today.year, today.month, today.day);
     // todayRate là biến biểu thị tỉ lệ thời gian hiện tại trong khoảng thời gian của budget. nếu >1 đã kết thúc, <0 chưa bắt đầu
-    var todayRate = today.difference(widget.budget.beginDate).inDays /
-        widget.budget.endDate.difference(widget.budget.beginDate).inDays;
+    var todayRate = today.difference(widget.budget.beginDate).inHours /
+        widget.budget.endDate.difference(widget.budget.beginDate).inHours;
     var todayTarget = widget.budget.spent / widget.budget.amount;
-    if (today.isBefore(widget.budget.beginDate))
-      isStart = false;
-    else
-      isStart = true;
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -95,10 +92,38 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                         budget: widget.budget,
                         wallet: widget.wallet,
                       ));
-              if (result != null) Navigator.pop(context);
+              setState(() {});
             },
           ),
           IconButton(
+              icon: Icon(Icons.delete, color: Colors.white),
+              onPressed: () async {
+                String res = await showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Delete Budget'),
+                    content: const Text('Do you want to delete this budget?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('No'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('yes'),
+                      ),
+                    ],
+                  ),
+                );
+                print(res);
+                if (res == 'OK') {
+                  await _firestore.deleteBudget(
+                      widget.budget.walletId, widget.budget.id);
+                  Navigator.pop(context);
+                }
+              })
+
+          /*IconButton(
               icon: Icon(Icons.delete, color: Colors.white),
               onPressed: () async {
                 //TODO: Thuc hien xoa budget
@@ -111,7 +136,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       widget.budget.walletId, widget.budget.id);
                   Navigator.pop(context);
                 }
-              })
+              })*/
         ],
         backgroundColor: Color(0xff333333),
       ),
@@ -139,8 +164,9 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 30),
-                      child: Text(
+                        margin: EdgeInsets.only(top: 30),
+                        child:
+                            /*Text(
                         MoneyFormatter(amount: this.widget.budget.amount)
                             .output
                             .withoutFractionDigits,
@@ -148,8 +174,15 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                             color: Colors.white,
                             fontSize: 30,
                             fontWeight: FontWeight.w200),
-                      ),
-                    ),
+                      ),*/
+                            MoneySymbolFormatter(
+                          text: widget.budget.amount,
+                          currencyId: widget.wallet.currencyID,
+                          textStyle: TextStyle(
+                              color: Colors.red[400],
+                              fontSize: 30,
+                              fontWeight: FontWeight.w200),
+                        )),
                     Container(
                       margin: EdgeInsets.only(top: 20),
                       padding: EdgeInsets.only(right: 10),
@@ -170,12 +203,10 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 2),
-                                    Text(
-                                      MoneyFormatter(
-                                              amount: this.widget.budget.spent)
-                                          .output
-                                          .withoutFractionDigits,
-                                      style: TextStyle(
+                                    MoneySymbolFormatter(
+                                      text: widget.budget.spent,
+                                      currencyId: widget.wallet.currencyID,
+                                      textStyle: TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600),
@@ -195,20 +226,18 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 2),
-                                    Text(
-                                      MoneyFormatter(
-                                              amount: todayTarget > 1
-                                                  ? this.widget.budget.spent -
-                                                      this.widget.budget.amount
-                                                  : this.widget.budget.amount -
-                                                      this.widget.budget.spent)
-                                          .output
-                                          .withoutFractionDigits,
-                                      style: TextStyle(
+                                    MoneySymbolFormatter(
+                                      text: todayTarget > 1
+                                          ? this.widget.budget.spent -
+                                              this.widget.budget.amount
+                                          : this.widget.budget.amount -
+                                              this.widget.budget.spent,
+                                      currencyId: widget.wallet.currencyID,
+                                      textStyle: TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600),
-                                    )
+                                    ),
                                   ],
                                 ),
                               )
@@ -339,16 +368,15 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                         SizedBox(
                           height: 2,
                         ),
-                        Text(
-                          MoneyFormatter(
-                                  amount: widget.budget.amount /
-                                      (widget.budget.endDate)
-                                          .difference(widget.budget.beginDate)
-                                          .inDays)
-                              .output
-                              .withoutFractionDigits,
-                          style: TextStyle(color: Colors.white, fontSize: 15),
-                        )
+                        MoneySymbolFormatter(
+                          text: widget.budget.amount /
+                              (widget.budget.endDate)
+                                  .difference(widget.budget.beginDate)
+                                  .inDays,
+                          currencyId: widget.wallet.currencyID,
+                          textStyle:
+                              TextStyle(color: Colors.white, fontSize: 15),
+                        ),
                       ],
                     ),
                     Column(
@@ -363,16 +391,15 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                         SizedBox(
                           height: 2,
                         ),
-                        Text(
-                          MoneyFormatter(
-                                  amount: widget.budget.spent /
-                                      (today)
-                                          .difference(widget.budget.beginDate)
-                                          .inDays)
-                              .output
-                              .withoutFractionDigits,
-                          style: TextStyle(color: Colors.white, fontSize: 15),
-                        )
+                        MoneySymbolFormatter(
+                          text: widget.budget.spent /
+                              (today)
+                                  .difference(widget.budget.beginDate)
+                                  .inDays,
+                          currencyId: widget.wallet.currencyID,
+                          textStyle:
+                              TextStyle(color: Colors.white, fontSize: 15),
+                        ),
                       ],
                     )
                   ]),
@@ -391,19 +418,15 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                             fontWeight: FontWeight.w400,
                             fontSize: 13),
                       ),
-                      Text(
-                        MoneyFormatter(
-                                amount: widget.budget.spent /
-                                    (today)
-                                        .difference(widget.budget.beginDate)
-                                        .inDays *
-                                    (widget.budget.endDate)
-                                        .difference(widget.budget.beginDate)
-                                        .inDays)
-                            .output
-                            .withoutFractionDigits,
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      )
+                      MoneySymbolFormatter(
+                        text: widget.budget.spent /
+                            (today).difference(widget.budget.beginDate).inDays *
+                            (widget.budget.endDate)
+                                .difference(widget.budget.beginDate)
+                                .inDays,
+                        currencyId: widget.wallet.currencyID,
+                        textStyle: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
                     ],
                   )
                 ],
@@ -440,13 +463,16 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               margin: EdgeInsets.only(top: 10, bottom: 20),
               alignment: Alignment.center,
               child: TextButton(
-                  onPressed: () {
-                    showCupertinoModalBottomSheet(
-                        context: context,
-                        builder: (context) => SearchTransactionScreen(
-                              wallet: widget.wallet,
-                              muserSearch: widget.budget.category.name,
-                            ));
+                  onPressed: () async {
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BudgetTransactionScreen(
+                                  wallet: widget.wallet,
+                                  budget: widget.budget,
+                                )));
+                    await _firestore.updateBudget(widget.budget, widget.wallet);
+                    setState(() {});
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -464,19 +490,6 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Future<String> _showAcceptionDialog() async {
-    return showDialog<String>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
-      builder: (BuildContext context) {
-        return CustomAcceptAlert(
-          content: 'Do you want to delete this budget?',
-        );
-      },
     );
   }
 }

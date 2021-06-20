@@ -114,6 +114,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
 
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
+    today = DateTime(today.year, today.month, today.day);
     return Theme(
       data: ThemeData(fontFamily: 'Montserrat'),
       child: Scaffold(

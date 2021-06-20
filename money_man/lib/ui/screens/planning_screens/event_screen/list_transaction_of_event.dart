@@ -10,15 +10,19 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:money_man/ui/screens/planning_screens/event_screen/list_transaction_event.dart';
+
 class EventListTransactionScreen extends StatefulWidget {
   Event currentEvent;
   Wallet eventWallet;
-  EventListTransactionScreen({Key key, this.currentEvent, this.eventWallet}) : super(key: key);
+  EventListTransactionScreen({Key key, this.currentEvent, this.eventWallet})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _EventListTransactionScreen();
   }
 }
+
 class _EventListTransactionScreen extends State<EventListTransactionScreen>
     with TickerProviderStateMixin {
   Event _currentEvent;
@@ -31,12 +35,14 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
     _eventWallet = widget.eventWallet;
     super.initState();
   }
+
   @override
   void didUpdateWidget(covariant EventListTransactionScreen oldWidget) {
     _currentEvent = widget.currentEvent;
     _eventWallet = widget.eventWallet;
     super.didUpdateWidget(oldWidget);
   }
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -44,21 +50,20 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
         stream: _firestore.transactionStream(_eventWallet, 'full'),
         builder: (context,snapshot) {
           double total = 0;
-          List<MyTransaction> listTransaction = snapshot.data??[];
+          List<MyTransaction> listTransaction = snapshot.data ?? [];
           List<MyTransaction> listTransactionOfEventByDate = [];
           List<List<MyTransaction>> transactionListSorted = [];
           List<DateTime> dateInChoosenTime = [];
 
           listTransaction.forEach((element) {
-            if(element.eventID != null)
-              if(element.eventID == _currentEvent.id)
-              {
-                listTransactionOfEventByDate.add(element);
-                if(element.category.type == 'income')
-                  total += element.amount;
-                else
-                  total -= element.amount;
-              }
+            if (element.eventID != null) if (element.eventID ==
+                _currentEvent.id) {
+              listTransactionOfEventByDate.add(element);
+              if (element.category.type == 'income')
+                total += element.amount;
+              else
+                total -= element.amount;
+            }
           });
           listTransactionOfEventByDate.sort((a, b) => b.date.compareTo(a.date));
 
