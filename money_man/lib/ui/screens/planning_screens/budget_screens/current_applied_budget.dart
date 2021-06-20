@@ -49,7 +49,7 @@ class CurrentlyApplied extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        'There are no recurring transactions',
+                        'There are no running budgets',
                         style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontSize: 16.0,

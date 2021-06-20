@@ -149,7 +149,7 @@ class _BudgetScreenState extends State<BudgetScreen>
             ),
             body: Container(
               color: Color(0xff1a1a1a),
-              padding: EdgeInsets.only(top: 15),
+              //padding: EdgeInsets.only(top: 15),
               child: StreamBuilder<Object>(
                   stream: _firestore.currentWallet,
                   builder: (context, snapshot) {
