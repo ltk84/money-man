@@ -308,12 +308,12 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             border: Border(
                                 bottom: BorderSide(
                                   color: Style.foregroundColor.withOpacity(0.24),
-                                  width: 1.0,
+                                  width: 0.5,
                                 ),
-                                top: BorderSide(
-                                  color: Style.foregroundColor.withOpacity(0.24),
-                                  width: 1.0,
-                                )
+                                // top: BorderSide(
+                                //   color: Style.foregroundColor.withOpacity(0.12),
+                                //   width: 1.0,
+                                // )
                             )
                         ),
                         child: WidgetToImage(
@@ -381,8 +381,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                       ],
                                     ),
                                     Divider(
-                                      color: Style.foregroundColor.withOpacity(0.24),
-                                      thickness: 1.0,
+                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      thickness: 1,
                                       height: 20,
                                     ),
                                     SizedBox(height: 10,),
@@ -507,7 +507,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                 ),
                               ),
                               VerticalDivider(
-                                color: Style.foregroundColor.withOpacity(0.24),
+                                color: Style.foregroundColor.withOpacity(0.12),
                                 thickness: 1,
                               ),
                               Expanded(
