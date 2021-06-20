@@ -26,7 +26,7 @@ class SelectOtherSourceScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
-        backgroundColor: Style.boxBackgroundColor2,
+        backgroundColor: Style.boxBackgroundColor,
         elevation: 0,
         leading: CloseButton(
           color: Style.foregroundColor,
@@ -51,24 +51,24 @@ class SelectOtherSourceScreen extends StatelessWidget {
           criteria: criteria,
           wallet: wallet,
         ),
-        // SizedBox(
-        //   height: 30,
-        // ),
-        // ListTile(
-        //   leading: Icon(
-        //       Icons.money,
-        //       color: Style.foregroundColor.withOpacity(0.54),
-        //   ),
-        //   title: Text(
-        //     titleAtEnd,
-        //     style: TextStyle(
-        //         color: Colors.black
-        //     ),
-        //   ),
-        //   trailing: Icon(
-        //       Icons.chevron_right
-        //   ),
-        // )
+        SizedBox(
+          height: 30,
+        ),
+        ListTile(
+          leading: Icon(
+              Icons.money,
+              color: Style.foregroundColor.withOpacity(0.54),
+          ),
+          title: Text(
+            titleAtEnd,
+            style: TextStyle(
+                color: Colors.black
+            ),
+          ),
+          trailing: Icon(
+              Icons.chevron_right
+          ),
+        )
       ]),
     );
   }
@@ -115,7 +115,7 @@ class OtherSourceListView extends StatelessWidget {
                         )
                     ),
                     child: ListTile(
-                      tileColor: Style.boxBackgroundColor2,
+                      tileColor: Style.boxBackgroundColor,
                       minVerticalPadding: 20,
                       minLeadingWidth: 50,
                       onTap: () {
