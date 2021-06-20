@@ -59,7 +59,7 @@ class MyBudgetTile extends StatelessWidget {
           ),
           width: MediaQuery.of(context).size.width,
           //height: 140,
-          margin: EdgeInsets.only(bottom: 15, left: 15, right: 15),
+          margin: EdgeInsets.only(bottom: 15),
           padding: EdgeInsets.only(bottom: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

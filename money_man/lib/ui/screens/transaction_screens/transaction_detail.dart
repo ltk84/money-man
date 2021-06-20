@@ -18,6 +18,7 @@ import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class TransactionDetail extends StatefulWidget {
   final MyTransaction transaction;
@@ -158,7 +159,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           'Delete this transaction?',
                           style: TextStyle(
                             color: Colors.red,
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -195,8 +196,10 @@ class _TransactionDetailState extends State<TransactionDetail> {
         child: ListView(
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
+            SizedBox(height: 30,),
             Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+              color: Style.boxBackgroundColor2,
               child: Column(
                 children: [
                   ListTile(
@@ -215,7 +218,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                             style: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                             ),
                           ),
@@ -228,7 +231,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                   fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 14.0,
-                                  color: Colors.white.withOpacity(0.54),
+                                  color: Style.foregroundColor.withOpacity(0.54),
                                 ),
                               ),
                             ),
@@ -260,18 +263,25 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           size: 35.0),
                     ),
                     title: Text(
-                      _transaction.date.toString(),
+                      //_transaction.date.toString(),
+                      DateFormat('EEEE, dd MMMM yyyy').format(_transaction.date),
                       style: TextStyle(
                         fontFamily: Style.fontFamily,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18.0,
-                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.0,
+                        color: Style.foregroundColor,
                       ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 92),
+                    child: Divider(
+                      color: Style.foregroundColor.withOpacity(0.12),
+                      thickness: 0.5,
                     ),
                   ),
                   ListTile(
                     dense: true,
-                    isThreeLine: true,
                     minLeadingWidth: 60,
                     leading: Container(
                       padding: const EdgeInsets.only(left: 12),
@@ -293,85 +303,114 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       '${widget.wallet.name}',
                       style: TextStyle(
                         fontFamily: Style.fontFamily,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18.0,
-                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.0,
+                        color: Style.foregroundColor,
                       ),
                     ),
                   ),
                   if (_transaction.eventID != "" && _transaction.eventID != null)
-                    ListTile(
-                      dense: true,
-                      isThreeLine: true,
-                      minLeadingWidth: 60,
-                      leading: Container(
-                        padding: const EdgeInsets.only(left: 12),
-                        child: SuperIcon(
-                          iconPath: event != null
-                              ? event.iconPath
-                              : 'assets/images/email.svg',
-                          size: 32.0,
+                    Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 92),
+                          child: Divider(
+                            color: Style.foregroundColor.withOpacity(0.12),
+                            thickness: 0.5,
+                          ),
                         ),
-                      ),
-                      title: Text(
-                          'Event',
-                          style: TextStyle(
-                            fontFamily: Style.fontFamily,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12.0,
-                            color: Style.foregroundColor.withOpacity(0.54),
-                          )
-                      ),
-                      subtitle: Text(event != null ? event.name : 'a',
-                        style: TextStyle(
-                          fontFamily: Style.fontFamily,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),),
+                        ListTile(
+                          dense: true,
+                          minLeadingWidth: 60,
+                          leading: Container(
+                            padding: const EdgeInsets.only(left: 12),
+                            child: SuperIcon(
+                              iconPath: event != null
+                                  ? event.iconPath
+                                  : 'assets/images/email.svg',
+                              size: 32.0,
+                            ),
+                          ),
+                          title: Text(
+                              'Event',
+                              style: TextStyle(
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12.0,
+                                color: Style.foregroundColor.withOpacity(0.54),
+                              )
+                          ),
+                          subtitle: Text(event != null ? event.name : 'a',
+                            style: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.0,
+                              color: Style.foregroundColor,
+                            ),),
+                        ),
+                      ],
                     ),
                   if (isDebtOrLoan)
-                    ListTile(
-                      minLeadingWidth: 60,
-                      leading: Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Icon(Icons.person,
-                            color: Style.foregroundColor.withOpacity(0.54),
-                            size: 38.0),
-                      ),
-                      title: Text(
-                          _transaction.contact == null
-                              ? 'With someone'
-                              : 'With ${_transaction.contact}',
-                          style: TextStyle(
-                            fontFamily: Style.fontFamily,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.0,
-                            color: Colors.white,
-                          ),),
-                    ),
-                  if (isDebtOrLoan)
-                    DebtLoanSection(
-                      count: count,
-                      refesh: (transaction) {
-                        setState(() {
-                          if (transaction != null) _transaction = transaction;
-                          // _transaction = widget.transaction;
-                        });
-                      },
-                      transaction: _transaction,
-                      wallet: widget.wallet,
+                    Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 92),
+                          child: Divider(
+                            color: Style.foregroundColor.withOpacity(0.12),
+                            thickness: 0.5,
+                          ),
+                        ),
+                        ListTile(
+                          dense: true,
+                          minLeadingWidth: 60,
+                          leading: Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Icon(Icons.person,
+                                color: Style.foregroundColor.withOpacity(0.54),
+                                size: 38.0),
+                          ),
+                          title: Text(
+                              _transaction.contact == null
+                                  ? 'With someone'
+                                  : 'With ${_transaction.contact}',
+                              style: TextStyle(
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0,
+                                color: Style.foregroundColor,
+                              ),),
+                        ),
+                        Container(
+                          //padding: EdgeInsets.only(left: 92),
+                          child: Divider(
+                            color: Style.foregroundColor.withOpacity(0.12),
+                            thickness: 0.5,
+                          ),
+                        ),
+                        DebtLoanSection(
+                          count: count,
+                          refesh: (transaction) {
+                            setState(() {
+                              if (transaction != null) _transaction = transaction;
+                              // _transaction = widget.transaction;
+                            });
+                          },
+                          transaction: _transaction,
+                          wallet: widget.wallet,
+                        ),
+                      ],
                     ),
                 ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Divider(
-                color: Colors.white12,
-                thickness: 1,
-              ),
-            ),
+            SizedBox(height: 10,),
+            // Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 20),
+            //   child: Divider(
+            //     color: Colors.white24,
+            //     thickness: 1,
+            //   ),
+            // ),
             // Này là để hiện budget đã có hoặc tùy chọn thêm budget
             StreamBuilder<List<Budget>>(
                 stream: _firestore.budgetTransactionStream(
@@ -388,28 +427,32 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            padding: EdgeInsets.only(top: 25, bottom: 15),
+                            padding: EdgeInsets.only(top: 15, bottom: 10),
                             child: Text('Budget',
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Style.foregroundColor,
                                     fontSize: 25,
-                                    fontFamily: 'Montserrat',
+                                    fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w500)),
                           ),
                           Text(
                             'This transaction is not within a budget, but it should be within a budget so you can better manage your finances.',
-                            style:
-                                TextStyle(color: Colors.white70, fontSize: 15),
+                            style: TextStyle(
+                              color: Style.foregroundColor.withOpacity(0.7),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: Style.fontFamily,
+                            ),
                           ),
                           SizedBox(
-                            height: 40,
+                            height: 25,
                           ),
                           Center(
                             child: GestureDetector(
                               onTap: () async {
                                 await showCupertinoModalBottomSheet(
                                     isDismissible: true,
-                                    backgroundColor: Colors.grey[900],
+                                    backgroundColor: Style.boxBackgroundColor,
                                     context: context,
                                     builder: (context) => AddBudget(
                                           wallet: widget.wallet,
@@ -419,22 +462,30 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
-                                width: 300,
+                                margin: EdgeInsets.symmetric(horizontal: 15),
+                                //width: 300,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                     border:
-                                        Border.all(color: Color(0xFF2FB49C)),
-                                    borderRadius: BorderRadius.circular(5)),
+                                        Border.all(
+                                            color: Style.primaryColor,
+                                            width: 1.5,
+                                        ),
+                                    borderRadius: BorderRadius.circular(12)),
                                 child: Text(
-                                  "ADD BUDGET FOR THIS TRANSACTION",
+                                  "Add budget for this transaction",
                                   style: TextStyle(
-                                      color: Color(0xFF2FB49C),
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
+                                      color: Style.primaryColor,
+                                      fontSize: 16,
+                                      fontFamily: Style.fontFamily,
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ),
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            height: 45,
+                          ),
                         ],
                       ),
                     );
@@ -454,50 +505,48 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         ),
                     ],
                   );*/
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 15, top: 20, bottom: 10),
-                        child: Text('Budget',
-                            style: TextStyle(
-                                color: Style.foregroundColor,
-                                fontSize: 25,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: Style.fontFamily,
-                            )
+                  return Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(top: 15, bottom: 10),
+                          child: Text('Budget',
+                              style: TextStyle(
+                                  color: Style.foregroundColor,
+                                  fontSize: 25,
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w500)),
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(
+                        Text(
                           'This transaction belongs to the following budget(s)',
                           style: TextStyle(
-                            color: Style.foregroundColor,
-                            fontSize: 16,
+                            color: Style.foregroundColor.withOpacity(0.7),
+                            fontSize: 15,
                             fontWeight: FontWeight.w400,
                             fontFamily: Style.fontFamily,
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 14,
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height - 450,
-                        child: ListView.builder(
-                          itemCount: budgets == null ? 0 : budgets.length,
-                          itemBuilder: (context, index) => Column(
-                            children: [
-                              MyBudgetTile(
-                                budget: budgets[index],
-                                wallet: widget.wallet,
-                              )
-                            ],
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height - 450,
+                          child: ListView.builder(
+                            itemCount: budgets == null ? 0 : budgets.length,
+                            itemBuilder: (context, index) => Column(
+                              children: [
+                                MyBudgetTile(
+                                  budget: budgets[index],
+                                  wallet: widget.wallet,
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 })
           ],
@@ -523,45 +572,98 @@ class DebtLoanSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Paid'),
-              Text('Left'),
+              Text(
+                  'Paid',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w400,
+                    color: Style.foregroundColor.withOpacity(0.54),
+                    fontSize: 12.0,
+                  )
+              ),
+              Text(
+                  'Left',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w400,
+                    color: Style.foregroundColor.withOpacity(0.54),
+                    fontSize: 12.0,
+                  )
+              ),
             ],
           ),
+          SizedBox(height: 2,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text((transaction.amount - transaction.extraAmountInfo)
-                  .toString()),
-              Text(transaction.extraAmountInfo.toString())
+              MoneySymbolFormatter(
+                  text: transaction.amount - transaction.extraAmountInfo,
+                  currencyId: wallet.currencyID,
+                  textStyle: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w600,
+                    color: Style.foregroundColor,
+                    fontSize: 14.0,
+                  ),
+              ),
+              MoneySymbolFormatter(
+                text: transaction.extraAmountInfo,
+                currencyId: wallet.currencyID,
+                textStyle: TextStyle(
+                  fontFamily: Style.fontFamily,
+                  fontWeight: FontWeight.w600,
+                  color: Style.foregroundColor,
+                  fontSize: 14.0,
+                ),
+              ),
             ],
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 10,),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(
-              backgroundColor: Color(0xff161616),
+              backgroundColor: Style.foregroundColor,
               valueColor: AlwaysStoppedAnimation<Color>(
                   (transaction.amount - transaction.extraAmountInfo) /
                       (transaction.amount) >=
                       1
-                      ? Color(0xFF2FB49C)
-                      : Colors.yellow),
+                      ? Style.successColor
+                      : Style.warningColor),
               minHeight: 3,
               value: (transaction.amount - transaction.extraAmountInfo) /
                   (transaction.amount),
             ),
           ),
+          SizedBox(height: 15,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (transaction.extraAmountInfo != 0)
-                OutlineButton(
+                TextButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Style.successColor.withOpacity(0.7);
+                          return Style.successColor; // Use the component's default.
+                        },
+                      ),
+                      foregroundColor:
+                      MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Colors.white.withOpacity(0.7);
+                          return Colors.white; // Use the component's default.
+                        },
+                      ),
+                    ),
                     onPressed: () async {
                       await Navigator.push(
                           context,
@@ -573,14 +675,33 @@ class DebtLoanSection extends StatelessWidget {
                       print(transaction.extraAmountInfo);
                     },
                     child: Text(
-                      'Cash back',
+                      'CASH BACK',
                       style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: ' Montserrat',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0),
+                          fontSize: 13,
+                          fontFamily: Style.fontFamily,
+                          fontWeight: FontWeight.w700,
+                      ),
                     )),
-              OutlineButton(
+              SizedBox(width: 15,),
+              TextButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                    MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.white.withOpacity(0.87);
+                        return Colors.white; // Use the component's default.
+                      },
+                    ),
+                    foregroundColor:
+                    MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Style.successColor.withOpacity(0.87);
+                        return Style.successColor; // Use the component's default.
+                      },
+                    ),
+                  ),
                   onPressed: () async {
                     MyTransaction trans = await Navigator.push(
                         context,
@@ -594,10 +715,10 @@ class DebtLoanSection extends StatelessWidget {
                   child: Text(
                     'Transaction List',
                     style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: ' Montserrat',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0),
+                      fontSize: 13,
+                      fontFamily: Style.fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ))
             ],
           )

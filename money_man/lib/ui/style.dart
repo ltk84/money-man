@@ -15,11 +15,12 @@ class Style {
   static Color igButtonColor = Color(0xFFc65072);
   static Color fbButtonColor = Color(0xFF2c84d4);
   static Color errorColor = Colors.red[700];
+  static Color warningColor = Colors.yellow[600];
   static Color expenseColor = Colors.red[600];
   static Color incomeColor = Color(0xFF76F676);
   static Color incomeColor2 = Colors.blueAccent;
   static Color runningColor = Color(0xFF51f08d);
-  static Color successColor = Color(0xFF4FCC5C); // Nut Save
+  static Color successColor = Color(0xFF4FCC5C);// Nut Save
 
   static String calculatorFontFamily = 'Montserrat';
   static Color calculatorPrimaryColor = Color(0xff22252e);
