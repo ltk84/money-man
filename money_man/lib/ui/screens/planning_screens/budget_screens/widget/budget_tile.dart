@@ -27,7 +27,8 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
     var todayTarget = widget.budget.spent / widget.budget.amount;
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     _firestore.updateBudget(widget.budget, widget.wallet);
-    if (widget.budget.isRepeat && widget.budget.endDate.isBefore(today)) {
+    if (widget.budget.isRepeat &&
+        widget.budget.endDate.add(Duration(days: 1)).isBefore(today)) {
       Budget newBudget = new Budget(
           id: 'id',
           category: widget.budget.category,
@@ -39,8 +40,12 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
           endDate: widget.budget.endDate
               .add(widget.budget.endDate.difference(widget.budget.beginDate)),
           isRepeat: widget.budget.isRepeat);
+      Budget temp = widget.budget;
+      temp.isRepeat = false;
+      _firestore.updateBudget(temp, widget.wallet);
       _firestore.addBudget(newBudget, widget.wallet);
     }
+
     widget.budget.label = getBudgetLabel(widget.budget);
 
     return Center(

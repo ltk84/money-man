@@ -22,7 +22,8 @@ class Applied extends StatelessWidget {
             List<Budget> budgets = snapshot.data ?? [];
             budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
             for (int i = 0; i < budgets.length; i++) {
-              if (DateTime.now().isBefore(budgets[i].endDate)) {
+              if (DateTime.now()
+                  .isBefore(budgets[i].endDate.add(Duration(days: 1)))) {
                 budgets.removeAt(i);
                 i--;
               }

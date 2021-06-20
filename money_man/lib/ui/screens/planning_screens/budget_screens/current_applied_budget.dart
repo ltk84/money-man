@@ -25,7 +25,10 @@ class CurrentlyApplied extends StatelessWidget {
             List<Budget> budgets = snapshot.data ?? [];
             budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
             for (int i = 0; i < budgets.length; i++) {
-              if (budgets[i].endDate.isBefore(DateTime.now())) {
+              if (budgets[i]
+                  .endDate
+                  .add(Duration(days: 1))
+                  .isBefore(DateTime.now())) {
                 budgets.removeAt(i);
                 i--;
               }
@@ -34,7 +37,6 @@ class CurrentlyApplied extends StatelessWidget {
               itemCount: budgets == null ? 0 : budgets.length,
               itemBuilder: (context, index) => Column(
                 children: [
-                  //MyTimeRange(),
                   MyBudgetTile(
                     budget: budgets[index],
                     wallet: wallet,
