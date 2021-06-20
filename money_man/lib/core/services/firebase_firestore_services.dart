@@ -574,10 +574,28 @@ class FirebaseFireStoreService {
       print(error);
     });
 
+    // if (transaction.category.type == 'expense')
+    //   wallet.amount += transaction.amount;
+    // else
+    //   wallet.amount -= transaction.amount;
+
+    // Update amount của wallet
     if (transaction.category.type == 'expense')
       wallet.amount += transaction.amount;
-    else
+    else if (transaction.category.type == 'income')
       wallet.amount -= transaction.amount;
+    else {
+      if (transaction.category.name == 'Debt') {
+        wallet.amount -= transaction.amount;
+      } else if (transaction.category.name == 'Loan') {
+        wallet.amount += transaction.amount;
+        // transaction.note += ' to someone';
+      } else if (transaction.category.name == 'Repayment') {
+        wallet.amount += transaction.amount;
+      } else {
+        wallet.amount -= transaction.amount;
+      }
+    }
 
     if (transaction.eventID != "") {
       final event = await getEventByID(transaction.eventID, wallet);

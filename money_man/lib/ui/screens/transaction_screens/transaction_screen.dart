@@ -1030,7 +1030,9 @@ class _TransactionScreen extends State<TransactionScreen>
                   if (!categoryInChoosenTime.contains(element.category.name))
                     categoryInChoosenTime.add(element.category.name);
                   // tính toán đầu vào, đầu ra
-                  if (element.category.type == 'expense')
+                  if (element.category.type == 'expense' ||
+                      element.category.name == 'Repayment' ||
+                      element.category.name == 'Loan')
                     totalOutCome += element.amount;
                   else
                     totalInCome += element.amount;
@@ -1050,7 +1052,9 @@ class _TransactionScreen extends State<TransactionScreen>
                 _transactionList.forEach((element) {
                   if (!dateInChoosenTime.contains(element.date))
                     dateInChoosenTime.add(element.date);
-                  if (element.category.type == 'expense')
+                  if (element.category.type == 'expense' ||
+                      element.category.name == 'Repayment' ||
+                      element.category.name == 'Loan')
                     totalOutCome += element.amount;
                   else
                     totalInCome += element.amount;
