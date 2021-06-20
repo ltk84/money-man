@@ -7,6 +7,7 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_main_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/event_home.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 
 class PlanningScreen extends StatefulWidget {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -548,11 +549,11 @@ AlertDialog alert(context, title, mess) {
   return AlertDialog(
     title: Text(
       title,
-      style: TextStyle(color: black, fontWeight: FontWeight.w700),
+      style: TextStyle(color: Style.backgroundColor, fontWeight: FontWeight.w700),
     ),
     content: Text(
       mess,
-      style: TextStyle(color: black, fontWeight: FontWeight.w500),
+      style: TextStyle(color: Style.backgroundColor, fontWeight: FontWeight.w500),
     ),
     actions: [
       FlatButton(

@@ -731,7 +731,7 @@ class FirebaseFireStoreService {
   }
 
   // Query transaction by category
-  Future<List<MyTransaction>> queryTransationByCategory(
+  Future<List<MyTransaction>> queryTransactionByCategoryOrAmount(
       String searchPattern, Wallet wallet) async {
     double number = double.tryParse(searchPattern);
     List<MyTransaction> listTrans = [];

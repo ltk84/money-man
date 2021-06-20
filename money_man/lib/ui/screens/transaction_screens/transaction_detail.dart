@@ -159,34 +159,22 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           'Delete this transaction?',
                           style: TextStyle(
                             color: Colors.red,
-                            fontFamily: Style.fontFamily,
+                            fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         actions: [
                           FlatButton(
                               onPressed: () {
-                                Navigator.of(context, rootNavigator: true).pop('dialog');
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop('No');
                               },
                               child: Text('No')),
                           FlatButton(
-                              onPressed: () async {
-                                if (_transaction.category.name == 'Repayment' ||
-                                    _transaction.category.name ==
-                                        'Debt Collection') {
-                                  await _firestore
-                                      .updateDebtLoanTransationAfterDelete(
-                                          _transaction, widget.wallet);
-                                }
-                                if (_transaction.category.name == 'Debt' ||
-                                    _transaction.category.name == 'Loan') {
-                                  await _firestore
-                                      .deleteInstanceInTransactionIdList(
-                                          _transaction.id, widget.wallet.id);
-                                }
-                                await _firestore.deleteTransaction(
-                                    _transaction, widget.wallet);
-                                Navigator.of(context, rootNavigator: true).pop('dialog');
+                              onPressed: () {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop('Yes');
+
                                 // chưa có animation để back ra transaction screen
                               },
                               child: Text('Yes'))
@@ -262,9 +250,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
                             text: _transaction.amount,
                             currencyId: widget.wallet.currencyID,
                             textStyle: TextStyle(
+                                fontFamily: Style.fontFamily,
                                 color: _colorAmount,
                                 fontSize: 28,
-                                fontWeight: FontWeight.w500),
+                                fontWeight: FontWeight.w500
+                            ),
                           )
                         ],
                       ),

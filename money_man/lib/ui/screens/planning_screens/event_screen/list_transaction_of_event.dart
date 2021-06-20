@@ -10,7 +10,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-import 'package:money_man/ui/screens/planning_screens/event_screen/list_transaction_event.dart';
 
 class EventListTransactionScreen extends StatefulWidget {
   Event currentEvent;
@@ -295,6 +294,7 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                   setState(() {});
                 },
                 child: Container(
+                  color: Colors.transparent,
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                   child: Row(
                     children: <Widget>[

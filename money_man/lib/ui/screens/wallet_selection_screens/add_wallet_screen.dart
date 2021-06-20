@@ -10,8 +10,10 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AddWalletScreen extends StatefulWidget {
@@ -159,20 +161,20 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             ],
                           ),
                         ),
-                        onPressed: () async {
-                          // TODO: Chọn icon cho ví
-                          var data = await showCupertinoModalBottomSheet(
-                            context: context,
-                            builder: (context) => IconPicker(),
-                          );
-                          if (data != null) {
-                            setState(() {
-                              wallet.iconID = data;
-                            });
-                          }
-                        },
-                        iconSize: 70,
-                        color: Color(0xff8f8f8f),
+                        // onPressed: () async {
+                        //   // TODO: Chọn icon cho ví
+                        //   var data = await showCupertinoModalBottomSheet(
+                        //     context: context,
+                        //     builder: (context) => IconPicker(),
+                        //   );
+                        //   if (data != null) {
+                        //     setState(() {
+                        //       wallet.iconID = data;
+                        //     });
+                        //   }
+                        // },
+                        // iconSize: 70,
+                        // color: Color(0xff8f8f8f),
                       ),
                       Expanded(
                         child: Container(

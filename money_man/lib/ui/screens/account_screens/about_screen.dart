@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../style.dart';
+
 class AboutScreen extends StatefulWidget {
   AboutScreen({
     Key key,

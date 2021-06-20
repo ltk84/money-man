@@ -7,7 +7,9 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class EditWalletScreen extends StatefulWidget {
@@ -134,21 +136,21 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             ],
                           ),
                         ),
-                        onPressed: () async {
-                          // TODO: Chọn icon cho ví
-                          var data = await showCupertinoModalBottomSheet(
-                            context: context,
-                            builder: (context) => IconPicker(),
-                          );
-                          if (data != null) {
-                            widget.wallet.iconID = data;
-                            setState(() {
-                              iconData = data;
-                            });
-                          }
-                        },
-                        iconSize: 70,
-                        color: Color(0xff8f8f8f),
+                        // onPressed: () async {
+                        //   // TODO: Chọn icon cho ví
+                        //   var data = await showCupertinoModalBottomSheet(
+                        //     context: context,
+                        //     builder: (context) => IconPicker(),
+                        //   );
+                        //   if (data != null) {
+                        //     widget.wallet.iconID = data;
+                        //     setState(() {
+                        //       iconData = data;
+                        //     });
+                        //   }
+                        // },
+                        // iconSize: 70,
+                        // color: Color(0xff8f8f8f),
                       ),
                       Expanded(
                         child: Container(
@@ -342,7 +344,9 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       },
                     ),
                   ),
-                )),
+                )
+              ),
+            ),
           ],
         ),
       ],

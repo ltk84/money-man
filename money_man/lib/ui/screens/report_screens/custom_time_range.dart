@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:money_man/core/models/time_range_info_model.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -230,8 +231,8 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                     )),
                 trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
               ),
-            )
-          ],
+            ],
+          ),
         ));
   }
 

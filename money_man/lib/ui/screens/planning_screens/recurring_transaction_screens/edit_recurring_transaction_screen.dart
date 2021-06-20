@@ -81,14 +81,14 @@ class _EditRecurringTransactionScreenState
             TextButton(
               onPressed: () async {
                 RecurringTransaction _recurringTransaction =
-                    RecurringTransaction(
+                RecurringTransaction(
                   id: widget.recurringTransaction.id,
                   category: category,
                   amount: amount,
                   walletId: widget.wallet.id,
                   note: note,
                   transactionIdList:
-                      widget.recurringTransaction.transactionIdList,
+                  widget.recurringTransaction.transactionIdList,
                   repeatOption: repeatOption,
                   isFinished: false,
                 );
@@ -109,7 +109,7 @@ class _EditRecurringTransactionScreenState
         ),
         body: ListView(
           physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
                 margin: EdgeInsets.only(top: 30.0),
@@ -244,8 +244,8 @@ class _EditRecurringTransactionScreenState
                           backgroundColor: Colors.grey[900],
                           context: context,
                           builder: (context) => RepeatOptionScreen(
-                                repeatOption: repeatOption,
-                              ));
+                            repeatOption: repeatOption,
+                          ));
                       if (res != null)
                         setState(() {
                           repeatOption = res;
@@ -258,15 +258,15 @@ class _EditRecurringTransactionScreenState
                           } else if (repeatOption.frequency == 'monthly') {
                             DateTime beginDate = repeatOption.beginDateTime;
                             int days = dateUtility.daysInMonth(
-                                    beginDate.month, beginDate.year) *
+                                beginDate.month, beginDate.year) *
                                 repeatOption.rangeAmount;
                             nextDate = beginDate.add(Duration(days: days));
                           } else {
                             DateTime beginDate = repeatOption.beginDateTime;
                             int days =
                                 (dateUtility.leapYear(beginDate.year) == true
-                                        ? 365
-                                        : 366) *
+                                    ? 365
+                                    : 366) *
                                     repeatOption.rangeAmount;
                             print(days);
                             nextDate = beginDate.add(Duration(days: days));
@@ -294,9 +294,9 @@ class _EditRecurringTransactionScreenState
     String frequency = repeatOption.frequency == 'daily'
         ? 'day'
         : repeatOption.frequency
-            .substring(0, repeatOption.frequency.indexOf('ly'));
+        .substring(0, repeatOption.frequency.indexOf('ly'));
     String beginDateTime =
-        DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime);
+    DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime);
     String extraFeq = repeatOption.rangeAmount.toString();
     String type = repeatOption.type;
     String extra = repeatOption.type == 'until'
@@ -334,14 +334,14 @@ class _EditRecurringTransactionScreenState
                       )),
                   SizedBox(height: 5.0),
                   (amount == null)
-                  ? Text('Enter amount',
+                      ? Text('Enter amount',
                       style: TextStyle(
                         fontFamily: Style.fontFamily,
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
                         color: Style.foregroundColor.withOpacity(0.24),
                       ))
-                  : MoneySymbolFormatter(
+                      : MoneySymbolFormatter(
                     text: amount,
                     currencyId: widget.wallet.currencyID,
                     textStyle: TextStyle(

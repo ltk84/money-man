@@ -34,7 +34,7 @@ class _SelectEventScreen extends State<SelectEventScreen> {
   }
   bool CompareDate(DateTime a, DateTime b)
   {
-    if( a.year < b.year)
+    if(a.year < b.year)
       return true;
     if(a.year == b.year && a.month < b.month)
       return true;

@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:money_man/core/models/transaction_model.dart';
+import 'package:money_man/ui/style.dart';
 
 class BarChartScreen extends StatefulWidget {
   final List<MyTransaction> currentList;

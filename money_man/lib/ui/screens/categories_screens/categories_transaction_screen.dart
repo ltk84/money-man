@@ -6,6 +6,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/select_other_source.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesTransactionScreen extends StatefulWidget {

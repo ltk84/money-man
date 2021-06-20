@@ -7,6 +7,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/edit_wallet_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class WalletSelectionScreen extends StatefulWidget {
@@ -67,7 +68,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                         // widget.changeWallet(_firestore.getWalletByID(res));
                       });
                   },
-                  child: const Text(
+                  child: Text(
                     'Edit',
                       style: TextStyle(
                         fontFamily: Style.fontFamily,
@@ -120,8 +121,8 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                   //     Icons.check,
                   //     color: Colors.blue,
                   //   ),
-                  // ),
-                  child: buildDisplayTotalWallet(),
+                  // // ),
+                  // child: buildDisplayTotalWallet(),
                 ),
                 SizedBox(
                   height: 20.0,
@@ -207,49 +208,49 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
     );
   }
 
-  Widget buildDisplayTotalWallet() {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    return widget.id == 'Total'
-        ? ListTile(
-            onTap: () {},
-            leading: SuperIcon(
-              iconPath: 'assets/icons/wallet_4.svg',
-              size: 40.0,
-            ),
-            title: Text(
-              'Total',
-              style: tsMain,
-            ),
-            subtitle: Text(
-              '(amount)',
-              style: tsChild,
-            ),
-            trailing: Icon(
-              Icons.check,
-              color: Colors.blue,
-            ),
-          )
-        : ListTile(
-            onTap: () {
-              setState(() {
-                widget.id = 'Total';
-                _firestore.updateSelectedWallet('Total');
-              });
-            },
-            leading: SuperIcon(
-              iconPath: 'assets/icons/wallet_4.svg',
-              size: 40.0,
-            ),
-            title: Text(
-              'Total',
-              style: tsMain,
-            ),
-            subtitle: Text(
-              '(amount)',
-              style: tsChild,
-            ),
-          );
-  }
+  // Widget buildDisplayTotalWallet() {
+  //   final _firestore = Provider.of<FirebaseFireStoreService>(context);
+  //   return widget.id == 'Total'
+  //       ? ListTile(
+  //           onTap: () {},
+  //           leading: SuperIcon(
+  //             iconPath: 'assets/icons/wallet_4.svg',
+  //             size: 40.0,
+  //           ),
+  //           title: Text(
+  //             'Total',
+  //             style: tsMain,
+  //           ),
+  //           subtitle: Text(
+  //             '(amount)',
+  //             style: tsChild,
+  //           ),
+  //           trailing: Icon(
+  //             Icons.check,
+  //             color: Colors.blue,
+  //           ),
+  //         )
+  //       : ListTile(
+  //           onTap: () {
+  //             setState(() {
+  //               widget.id = 'Total';
+  //               _firestore.updateSelectedWallet('Total');
+  //             });
+  //           },
+  //           leading: SuperIcon(
+  //             iconPath: 'assets/icons/wallet_4.svg',
+  //             size: 40.0,
+  //           ),
+  //           title: Text(
+  //             'Total',
+  //             style: tsMain,
+  //           ),
+  //           subtitle: Text(
+  //             '(amount)',
+  //             style: tsChild,
+  //           ),
+  //         );
+  // }
 
   Widget buildDisplayWallet() {
     print('wallet select inside build + ${widget.id}');
