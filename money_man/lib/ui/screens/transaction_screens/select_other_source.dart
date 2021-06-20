@@ -39,6 +39,9 @@ class SelectOtherSourceScreen extends StatelessWidget {
           height: 30,
         ),
         ListTile(
+          onTap: () {
+            Navigator.pop(context, 0);
+          },
           leading: Icon(Icons.money),
           title: Text(
             titleAtEnd,

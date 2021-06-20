@@ -269,7 +269,7 @@ class FirebaseFireStoreService {
                 debtLoanTransactionId = value.docs.first.id
             });
 
-    if (debtLoanTransactionId == null) return;
+    if (debtLoanTransactionId == null) return 1;
 
     await users
         .doc(uid)
@@ -281,7 +281,7 @@ class FirebaseFireStoreService {
         .then((value) =>
             {debtLoanTransaction = MyTransaction.fromMap(value.data())});
 
-    if (debtLoanTransaction == null) return;
+    if (debtLoanTransaction == null) return 1;
 
     if (debtLoanTransaction.amount < editedTransaction.amount) return;
 
