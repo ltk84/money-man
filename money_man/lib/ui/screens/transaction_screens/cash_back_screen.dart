@@ -50,7 +50,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
     amount = extraTransaction.extraAmountInfo;
     contact = extraTransaction.contact;
     isDebt = extraTransaction.category.name == 'Debt';
-    note = isDebt ? 'Debt paid to ' : 'Payment received  from ';
+    note = isDebt ? 'Debt paid to ' : 'Payment received from ';
     pickDate = DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
     selectedWallet = widget.wallet;
     currencySymbol =

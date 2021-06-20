@@ -552,19 +552,22 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 ),
                 Visibility(
                   visible: !pickEvent,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        pickEvent = true;
-                      });
-                    },
-                    child: Text(
-                      'More',
-                      style: TextStyle(
-                        color: Style.primaryColor,
-                        fontFamily: Style.fontFamily,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
+                  child: Container(
+                    width: double.maxFinite,
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          pickEvent = true;
+                        });
+                      },
+                      child: Text(
+                        'More',
+                        style: TextStyle(
+                          color: Style.primaryColor,
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
