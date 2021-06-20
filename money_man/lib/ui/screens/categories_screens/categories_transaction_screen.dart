@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/screens/transaction_screens/select_other_source.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesTransactionScreen extends StatefulWidget {
-  final String walletId;
+  final Wallet wallet;
 
-  const CategoriesTransactionScreen({Key key, @required this.walletId})
+  const CategoriesTransactionScreen({Key key, @required this.wallet})
       : super(key: key);
 
   @override
@@ -192,7 +193,7 @@ class _CategoriesTransactionScreenState
                                       title: 'Select payment source',
                                       titleAtEnd: 'Tap to pay off other debt',
                                       criteria: 'Debt',
-                                      walletId: widget.walletId));
+                                      wallet: widget.wallet));
                               if (result != null) {
                                 Navigator.pop(
                                     context, [_selectCateTab[index], result]);
@@ -207,7 +208,7 @@ class _CategoriesTransactionScreenState
                                       titleAtEnd:
                                           'Tap to receive other debt collection',
                                       criteria: 'Loan',
-                                      walletId: widget.walletId));
+                                      wallet: widget.wallet));
                               if (result != null) {
                                 Navigator.pop(
                                     context, [_selectCateTab[index], result]);

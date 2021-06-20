@@ -232,7 +232,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     backgroundColor: Colors.transparent,
                     context: context,
                     builder: (context) => CategoriesTransactionScreen(
-                          walletId: selectedWallet.id,
+                          wallet: selectedWallet,
                         ));
                 if (selectCate != null) {
                   if (selectCate is List && selectCate.length == 2) {
@@ -284,7 +284,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       backgroundColor: Style.boxBackgroundColor,
                       context: context,
                       builder: (context) => CategoriesTransactionScreen(
-                            walletId: selectedWallet.id,
+                            wallet: selectedWallet,
                           ));
                   if (selectCate != null) {
                     if (selectCate is List && selectCate.length == 2) {

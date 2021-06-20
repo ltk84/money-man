@@ -133,7 +133,7 @@ class _AddBudgetState extends State<AddBudget> {
                         backgroundColor: Colors.transparent,
                         context: context,
                         builder: (context) => CategoriesTransactionScreen(
-                              walletId: widget.wallet.id,
+                              wallet: widget.wallet,
                             ));
                     if (selectCate != null) {
                       setState(() {
@@ -178,7 +178,7 @@ class _AddBudgetState extends State<AddBudget> {
                                     context: context,
                                     builder: (context) =>
                                         CategoriesTransactionScreen(
-                                            walletId: widget.wallet.id));
+                                            wallet: widget.wallet));
                             if (selectCate != null) {
                               setState(() {
                                 this.cate = selectCate;
