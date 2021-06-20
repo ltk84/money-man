@@ -115,7 +115,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     widget.transaction, _transaction, widget.wallet);
                 if (res == null) {
                   await _showAlertDialog(
-                      'Inputted amount must be <= unpaid amount');
+                      'The amount must be less than or equal to unpaid amount');
                   return;
                 }
               }
@@ -127,7 +127,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     (widget.transaction.amount -
                         widget.transaction.extraAmountInfo)) {
                   await _showAlertDialog(
-                      'Transaction amount must be <= paided amount');
+                      'Transaction amount must be less than or equal to paid amount');
                   return;
                 }
               }

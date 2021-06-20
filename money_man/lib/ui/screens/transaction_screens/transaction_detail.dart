@@ -579,7 +579,7 @@ class DebtLoanSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                  'Paid',
+                  transaction.category.name == 'Debt' ? 'Paid' : 'Received',
                   style: TextStyle(
                     fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w400,
@@ -642,47 +642,8 @@ class DebtLoanSection extends StatelessWidget {
           ),
           SizedBox(height: 15,),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (transaction.extraAmountInfo != 0)
-                TextButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed))
-                            return Style.successColor.withOpacity(0.7);
-                          return Style.successColor; // Use the component's default.
-                        },
-                      ),
-                      foregroundColor:
-                      MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed))
-                            return Colors.white.withOpacity(0.7);
-                          return Colors.white; // Use the component's default.
-                        },
-                      ),
-                    ),
-                    onPressed: () async {
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => CashBackScreen(
-                                  transaction: transaction, wallet: wallet)));
-                      print('alo');
-                      refesh(null);
-                      print(transaction.extraAmountInfo);
-                    },
-                    child: Text(
-                      'CASH BACK',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontFamily: Style.fontFamily,
-                          fontWeight: FontWeight.w700,
-                      ),
-                    )),
-              SizedBox(width: 15,),
               TextButton(
                   style: ButtonStyle(
                     backgroundColor:
@@ -719,7 +680,50 @@ class DebtLoanSection extends StatelessWidget {
                       fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w700,
                     ),
-                  ))
+                  )),
+              if (transaction.extraAmountInfo != 0)
+                Row(
+                  children: [
+                    SizedBox(width: 15,),
+                    TextButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                          MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed))
+                                return Style.successColor.withOpacity(0.7);
+                              return Style.successColor; // Use the component's default.
+                            },
+                          ),
+                          foregroundColor:
+                          MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed))
+                                return Colors.white.withOpacity(0.7);
+                              return Colors.white; // Use the component's default.
+                            },
+                          ),
+                        ),
+                        onPressed: () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => CashBackScreen(
+                                      transaction: transaction, wallet: wallet)));
+                          print('alo');
+                          refesh(null);
+                          print(transaction.extraAmountInfo);
+                        },
+                        child: Text(
+                          'Cashback',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w700,
+                          ),
+                        )),
+                  ],
+                ),
             ],
           )
         ],
