@@ -199,7 +199,19 @@ class _TransactionDetailState extends State<TransactionDetail> {
             SizedBox(height: 30,),
             Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
-              color: Style.boxBackgroundColor2,
+              decoration: BoxDecoration(
+                  color: Style.boxBackgroundColor2,
+                border: Border(
+                  top: BorderSide(
+                    width: 0.5,
+                    color: Style.foregroundColor.withOpacity(0.12),
+                  ),
+                  bottom: BorderSide(
+                    width: 0.5,
+                    color: Style.foregroundColor.withOpacity(0.12),
+                  )
+                )
+              ),
               child: Column(
                 children: [
                   ListTile(
@@ -705,11 +717,15 @@ class DebtLoanSection extends StatelessWidget {
                           ),
                         ),
                         onPressed: () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => CashBackScreen(
-                                      transaction: transaction, wallet: wallet)));
+                          // await Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (_) => CashBackScreen(
+                          //             transaction: transaction, wallet: wallet)));
+                          await showCupertinoModalBottomSheet(
+                              context: context,
+                              builder: (context) => CashBackScreen(
+                                  transaction: transaction, wallet: wallet));
                           print('alo');
                           refesh(null);
                           print(transaction.extraAmountInfo);

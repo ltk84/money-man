@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class Style {
   static String fontFamily = 'Montserrat';
 
-  static Color backgroundColor = Colors.black;
+  //static Color backgroundColor = Colors.black;
+  static Color backgroundColor = Color(0xFF111111);
   static Color backgroundColor1 = Color(0xFF111111);
   static Color foregroundColor = Colors.white;
   static Color foregroundColorDark = Color(0x70999999);
