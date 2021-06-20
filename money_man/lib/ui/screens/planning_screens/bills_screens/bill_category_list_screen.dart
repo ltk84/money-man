@@ -11,6 +11,7 @@ import 'package:money_man/ui/screens/planning_screens/bills_screens/add_bill_sce
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_general_detail_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:currency_picker/currency_picker.dart';
 

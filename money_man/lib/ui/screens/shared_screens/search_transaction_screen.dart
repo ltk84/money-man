@@ -85,9 +85,8 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                 });
 
                 // Lấy danh sách transaction dựa trên searchPattern
-                List<MyTransaction> _transactionList =
-                    await _firestore.queryTransationByCategoryOrAmount(
-                        searchPattern, widget.wallet);
+                List<MyTransaction> _transactionList = await _firestore
+                    .queryTransationByCategory(searchPattern, widget.wallet);
 
                 // danh sách các date mà _transactionList có
                 List<DateTime> listDateOfTrans = [];
@@ -186,12 +185,48 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
           ),
         ],
       ),
+      // body: Stack(
+      //   children: [
+      //     Container(
+      //       color: Colors.black,
+      //       child: transactionListSortByDate.length == 0
+      //           ? Text(
+      //               'deo co gi ca',
+      //               style: TextStyle(color: Colors.white),
+      //             )
+      //           : ListView.builder(
+      //               physics: BouncingScrollPhysics(),
+      //               shrinkWrap: true,
+      //               itemCount: transactionListSortByDate.length,
+      //               itemBuilder: (context, xIndex) {
+      //                 double totalAmountInDay = 0;
+      //                 transactionListSortByDate[xIndex].forEach((element) {
+      //                   if (element.category.type == 'expense')
+      //                     totalAmountInDay -= element.amount;
+      //                   else
+      //                     totalAmountInDay += element.amount;
+      //                 });
+      //
+      //                 return xIndex == 0
+      //                     ? Column(
+      //                         children: [
+      //                           buildHeader(totalInCome, totalOutCome, total),
+      //                           buildBottom(transactionListSortByDate, xIndex,
+      //                               totalAmountInDay)
+      //                         ],
+      //                       )
+      //                     : buildBottom(transactionListSortByDate, xIndex,
+      //                         totalAmountInDay);
+      //               }),
+      //     ),
+      //     isLoading == true ? LoadingScreen() : Container()
+      //   ],
+      // ),
     );
   }
 
-  Container buildBottom(List<List<MyTransaction>> transListSortByDate,
-      int xIndex, double totalAmountInDay) {
-    print('build bottom by date');
+  Container buildBottom(
+      List<List<MyTransaction>> x, int xIndex, double totalAmountInDay) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
@@ -226,12 +261,10 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
                 child: Text(
-                    DateFormat("EEEE")
-                            .format(transListSortByDate[xIndex][0].date)
-                            .toString() +
+                    DateFormat("EEEE").format(x[xIndex][0].date).toString() +
                         '\n' +
                         DateFormat("MMMM yyyy")
-                            .format(transListSortByDate[xIndex][0].date)
+                            .format(x[xIndex][0].date)
                             .toString(),
                     // 'hello',
                     style: TextStyle(
@@ -264,18 +297,16 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
         content: ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: transListSortByDate[xIndex].length,
+            itemCount: x[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
                 onTap: () async {
                   Navigator.push(
                       context,
-                      PageTransition(
-                          child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex][yIndex],
-                            wallet: widget.wallet,
-                          ),
-                          type: PageTransitionType.rightToLeft));
+                      MaterialPageRoute(
+                          builder: (_) => TransactionDetail(
+                              transaction: x[xIndex][yIndex],
+                              wallet: widget.wallet)));
                 },
                 child: Container(
                   color: Colors.transparent,
@@ -285,10 +316,8 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         child: SuperIcon(
-                          iconPath: transListSortByDate[xIndex][yIndex]
-                              .category
-                              .iconID,
-                          size: 35.0,
+                          iconPath: x[xIndex][yIndex].category.iconID,
+                          size: 30.0,
                         ),
                       ),
                       Padding(
@@ -367,7 +396,6 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
 
   StickyHeader buildHeader(
       double totalInCome, double totalOutCome, double total) {
-    print('build header');
     return StickyHeader(
       header: SizedBox(height: 0),
       content: Container(

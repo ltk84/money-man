@@ -15,8 +15,6 @@ import 'package:money_man/ui/screens/report_screens/share_report/utils.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
 import 'package:money_man/ui/screens/report_screens/share_screen.dart';
 import 'package:money_man/ui/screens/report_screens/time_selection.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
-import 'package:page_transition/page_transition.dart';
 import '../../style.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/core/models/transaction_model.dart';
@@ -165,6 +163,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
               onTap: () async {
                 final result = await showCupertinoModalBottomSheet(
                     isDismissible: true,
+                    backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) => TimeRangeSelection(
                         dateDescription: dateDescript,
@@ -200,7 +199,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             fontFamily: Style.fontFamily,
                             color: Style.foregroundColor.withOpacity(0.7),
                             fontSize: 12.0,
-                            fontWeight: FontWeight.w400),
+                            fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
@@ -299,8 +298,78 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                   color: Style.backgroundColor,
                   child: ListView(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    physics: BouncingScrollPhysics(),
                     children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey[900],
+                                  width: 1.0,
+                                ),
+                                top: BorderSide(
+                                  color: Colors.grey[900],
+                                  width: 1.0,
+                                ))),
+                        child: Column(children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      'Opening balance',
+                                      style: TextStyle(
+                                        color: Colors.grey[500],
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      openingBalance.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      'Closing balance',
+                                      style: TextStyle(
+                                        color: Colors.grey[500],
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      closingBalance.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ]),
+                      ),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                           decoration: BoxDecoration(

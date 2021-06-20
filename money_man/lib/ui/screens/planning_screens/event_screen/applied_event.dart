@@ -4,6 +4,8 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:intl/src/intl/date_format.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 import 'event_detail.dart';
@@ -63,11 +65,10 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                     element.endDate.day < DateTime.now().day)) {
               element.isFinished = true;
             }
-            if ((!element.isFinished && element.finishedByHand) ||
-                (element.isFinished && element.finishedByHand) ||
-                (!element.finishedByHand &&
-                    element.autofinish &&
-                    element.isFinished)) {
+            if((!element.isFinished && element.finishedByHand)
+            ||(element.isFinished && element.finishedByHand && !element.autofinish)
+                ||(!element.finishedByHand && element.autofinish && element.isFinished))
+            {
               appliedEvent.add(element);
             }
           });
@@ -91,9 +92,9 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                             color: Colors.grey[900],
                             border: Border(
                                 bottom: BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ))),
+                                  color: Colors.black,
+                                  width: 1.0,
+                                ))),
                         padding: EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 0),
                         child: Row(children: <Widget>[
                           Container(
@@ -104,70 +105,96 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                             ),
                           ),
                           Container(
-                              width: MediaQuery.of(context).size.width - 80,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[900],
-                                  border: Border(
-                                      bottom: BorderSide(
-                                    color: Colors.black,
-                                    width: 1.0,
-                                  ))),
-                              padding: EdgeInsets.fromLTRB(6.0, 6.0, 0.0, 10),
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          appliedEvent[index].name,
-                                          style: TextStyle(
-                                            fontSize: 22.0,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                          textAlign: TextAlign.start,
-                                          strutStyle: StrutStyle(
-                                            leading: 1.5,
-                                          ),
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width - 80,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[900],
+                                border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.black,
+                                      width: 1.0,
+                                    ))),
+                            padding: EdgeInsets.fromLTRB(6.0, 6.0, 0.0, 10),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        appliedEvent[index].name,
+                                        style: TextStyle(
+                                          fontSize: 22.0,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w800,
                                         ),
-                                        Text('',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                      ],
-                                    ),
+                                        textAlign: TextAlign.start,
+                                        strutStyle: StrutStyle(
+                                          leading: 1.5,
+                                        ),
+                                      ),
+                                      Text('',
+                                          style:
+                                          TextStyle(color: Colors.white)),
+                                    ],
                                   ),
-                                  Container(
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      Text('End date: ' +
+                                          DateFormat('EEEE, dd-MM-yyyy').format(
+                                              appliedEvent[index].endDate),
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: Colors.white54),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Text(''),
+                                    ],
+                                  ),
+                                ),
+                                Container(
                                     margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       mainAxisSize: MainAxisSize.max,
                                       children: <Widget>[
-                                        Text(
-                                          'Spent: ',
+                                        Text('Spent: ',
                                           style: TextStyle(
                                               fontSize: 19.0,
                                               color: Colors.white),
                                           textAlign: TextAlign.start,
                                         ),
-                                        Text(
-                                          appliedEvent[index].spent.toString(),
-                                          textAlign: TextAlign.end,
-                                          style: TextStyle(
-                                              fontSize: 19,
-                                              fontWeight: FontWeight.w800,
-                                              color: Colors.white),
-                                        )
+                                        MoneySymbolFormatter(
+                                            text: appliedEvent[index].spent,
+                                            currencyId: _wallet.currencyID,
+                                            textStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Montserrat',
+                                            )
+                                        ),
                                       ],
-                                    ),
-                                  ),
-                                ],
-                              )),
-                        ])));
-              });
+                                    )
+                                ),
+                              ]
+                            )
+                          )
+                        ]
+                        )
+                    )
+                );
+              }
+          );
         },
       ),
     );

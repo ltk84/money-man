@@ -10,44 +10,55 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../budget_detail.dart';
 
-class MyBudgetTile extends StatelessWidget {
+class MyBudgetTile extends StatefulWidget {
   const MyBudgetTile({Key key, this.budget, this.wallet}) : super(key: key);
   final Budget budget;
   final Wallet wallet;
 
   @override
+  _MyBudgetTileState createState() => _MyBudgetTileState();
+}
+
+class _MyBudgetTileState extends State<MyBudgetTile> {
+  @override
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
-    var todayRate = today.difference(budget.beginDate).inDays /
-        budget.endDate.difference(budget.beginDate).inDays;
-    var todayTarget = budget.spent / budget.amount;
+    var todayRate = today.difference(widget.budget.beginDate).inDays /
+        widget.budget.endDate.difference(widget.budget.beginDate).inDays;
+    var todayTarget = widget.budget.spent / widget.budget.amount;
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    _firestore.updateBudget(budget, wallet);
-    if (budget.isRepeat && budget.endDate.isBefore(today)) {
+    _firestore.updateBudget(widget.budget, widget.wallet);
+    if (widget.budget.isRepeat &&
+        widget.budget.endDate.add(Duration(days: 1)).isBefore(today)) {
       Budget newBudget = new Budget(
           id: 'id',
-          category: budget.category,
-          amount: budget.amount,
-          spent: budget.spent,
-          walletId: budget.walletId,
-          isFinished: budget.isFinished,
-          beginDate: budget.endDate.add(Duration(days: 1)),
-          endDate:
-              budget.endDate.add(budget.endDate.difference(budget.beginDate)),
-          isRepeat: budget.isRepeat);
-      _firestore.addBudget(newBudget, wallet);
+          category: widget.budget.category,
+          amount: widget.budget.amount,
+          spent: widget.budget.spent,
+          walletId: widget.budget.walletId,
+          isFinished: widget.budget.isFinished,
+          beginDate: widget.budget.endDate.add(Duration(days: 1)),
+          endDate: widget.budget.endDate
+              .add(widget.budget.endDate.difference(widget.budget.beginDate)),
+          isRepeat: widget.budget.isRepeat);
+      Budget temp = widget.budget;
+      temp.isRepeat = false;
+      _firestore.updateBudget(temp, widget.wallet);
+      _firestore.addBudget(newBudget, widget.wallet);
     }
-    budget.label = getBudgetLabel(budget);
+
+    widget.budget.label = getBudgetLabel(widget.budget);
 
     return Center(
       child: GestureDetector(
         onTap: () async {
-          Wallet wallet = await _firestore.getWalletByID(budget.walletId);
+          Wallet wallet =
+              await _firestore.getWalletByID(widget.budget.walletId);
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => BudgetDetailScreen(
-                      budget: this.budget,
+                      budget: this.widget.budget,
                       wallet: wallet,
                     )),
           );
@@ -77,9 +88,9 @@ class MyBudgetTile extends StatelessWidget {
                       children: [
                         Container(
                           child: Text(
-                            budget.label == null
+                            widget.budget.label == null
                                 ? 'Custom '
-                                : '${budget.label} ',
+                                : '${widget.budget.label} ',
                             style: TextStyle(
                                 color: Style.foregroundColor.withOpacity(0.7),
                                 fontSize: 14,
@@ -90,9 +101,9 @@ class MyBudgetTile extends StatelessWidget {
                         ),
                         Container(
                           child: Text(
-                            budget.label != 'Custom'
+                            widget.budget.label != 'Custom'
                                 ? ''
-                                : '${DateFormat('dd/MM/yyyy').format(budget.beginDate) + ' - ' + DateFormat('dd/MM/yyyy').format(budget.endDate)}',
+                                : '${DateFormat('dd/MM/yyyy').format(widget.budget.beginDate) + ' - ' + DateFormat('dd/MM/yyyy').format(widget.budget.endDate)}',
                             style: TextStyle(
                                 color: Style.foregroundColor.withOpacity(0.54),
                                 fontFamily: Style.fontFamily,
@@ -115,12 +126,12 @@ class MyBudgetTile extends StatelessWidget {
                             Container(
                                 padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
                                 child: SuperIcon(
-                                  iconPath: this.budget.category.iconID,
+                                  iconPath: this.widget.budget.category.iconID,
                                   size: 30,
                                 )),
                             Container(
                               child: Text(
-                                this.budget.category.name,
+                                this.widget.budget.category.name,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
@@ -138,7 +149,8 @@ class MyBudgetTile extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                MoneyFormatter(amount: this.budget.amount)
+                                MoneyFormatter(
+                                        amount: this.widget.budget.amount)
                                     .output
                                     .withoutFractionDigits,
                                 style: TextStyle(
@@ -151,14 +163,20 @@ class MyBudgetTile extends StatelessWidget {
                                 todayTarget > 1
                                     ? 'Over spent: ' +
                                         MoneyFormatter(
-                                                amount: this.budget.spent -
-                                                    this.budget.amount)
+                                                amount: this
+                                                        .widget
+                                                        .budget
+                                                        .spent -
+                                                    this.widget.budget.amount)
                                             .output
                                             .withoutFractionDigits
                                     : 'Remain: ' +
                                         MoneyFormatter(
-                                                amount: this.budget.amount -
-                                                    this.budget.spent)
+                                                amount: this
+                                                        .widget
+                                                        .budget
+                                                        .amount -
+                                                    this.widget.budget.spent)
                                             .output
                                             .withoutFractionDigits,
                                 style: TextStyle(
@@ -187,16 +205,19 @@ class MyBudgetTile extends StatelessWidget {
                             ? Colors.orange[700]
                             : Color(0xFF2FB49C)),
                     minHeight: 3,
-                    value: this.budget.spent / this.budget.amount > 1
-                        ? 1
-                        : this.budget.spent / this.budget.amount,
+                    value:
+                        this.widget.budget.spent / this.widget.budget.amount > 1
+                            ? 1
+                            : this.widget.budget.spent /
+                                this.widget.budget.amount,
                   ),
                 ),
               ),
               SizedBox(
                 height: 5,
               ),
-              budget.beginDate.isAfter(today) || today.isAfter(budget.endDate)
+              widget.budget.beginDate.isAfter(today) ||
+                      today.isAfter(widget.budget.endDate)
                   ? Container()
                   : Container(
                       margin: EdgeInsets.only(

@@ -6,7 +6,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
@@ -86,8 +85,34 @@ class _AboutScreenState extends State<AboutScreen> {
                 ),
               ),
             ),
+            //),
+            //centerTitle: true,
             backgroundColor: Colors.transparent,
             elevation: 0,
+            flexibleSpace: ClipRect(
+              child: AnimatedOpacity(
+                opacity: reachAppBar == 1 ? 1 : 0,
+                duration: Duration(milliseconds: 0),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                      sigmaX: reachTop == 1 ? 25 : 500,
+                      sigmaY: 25,
+                      tileMode: TileMode.values[0]),
+                  child: AnimatedContainer(
+                    duration: Duration(
+                        milliseconds:
+                        reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                    //child: Container(
+                    //color: Colors.transparent,
+                    color: Colors.grey[reachAppBar == 1
+                        ? (reachTop == 1 ? 800 : 850)
+                        : 900]
+                        .withOpacity(0.2),
+                    //),
+                  ),
+                ),
+              ),
+            ),
         ),
         body: ListView(
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -110,6 +109,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   width: 2.0,
                                 )
                             ),
+                            // errorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 1.5,
+                            //     )
+                            // ),
+                            // focusedErrorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 2.0,
+                            //     )
+                            // ),
                             errorStyle: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
@@ -220,6 +231,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   width: 2.0,
                                 )
                             ),
+                            // errorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 1.5,
+                            //     )
+                            // ),
+                            // focusedErrorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 2.0,
+                            //     )
+                            // ),
                             errorStyle: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
@@ -302,6 +325,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   width: 2.0,
                                 )
                             ),
+                            // errorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 1.5,
+                            //     )
+                            // ),
+                            // focusedErrorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 2.0,
+                            //     )
+                            // ),
                             errorStyle: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
@@ -419,6 +454,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     // Nếu tất cả đều hợp lệ
                     if (!(inValid1 || invalid2 || invalid3)) {
                       try {
+                        print("dm");
                         await _auth.updatePassword(field2);
                         await showDialog(
                           context: context,
@@ -433,6 +469,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         );
                         Navigator.of(context).pop();
                       } catch (e) {
+                        print('vl');
                         showDialog(
                           context: context,
                           barrierColor: Style.backgroundColor.withOpacity(0.54),
@@ -505,4 +542,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       ),
     );
   }
+}
+
+AlertDialog alert(context, title, mess) {
+  return AlertDialog(
+    title: Text(
+      title,
+      style: TextStyle(color: black, fontWeight: FontWeight.w700),
+    ),
+    content: Text(
+      mess,
+      style: TextStyle(color: black, fontWeight: FontWeight.w500),
+    ),
+    actions: [
+      FlatButton(
+        child: Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    ],
+  );
 }

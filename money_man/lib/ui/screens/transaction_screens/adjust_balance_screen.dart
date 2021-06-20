@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
@@ -8,7 +7,6 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AdjustBalanceScreen extends StatefulWidget {
@@ -24,16 +22,16 @@ class AdjustBalanceScreen extends StatefulWidget {
 
 class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
   double adjustAmount;
-
+  bool invalid = false;
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     var iconData = widget.wallet.iconID;
+    // iconData = Wallet.getIconDataByIconID(widget.wallet.iconID);
 
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
-        elevation: 0,
         leadingWidth: 70,
         leading: CloseButton(
           color: Style.foregroundColor,
@@ -60,7 +58,6 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
         color: Style.backgroundColor1,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               height: 10,

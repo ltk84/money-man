@@ -85,7 +85,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                     sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
                 child: AnimatedContainer(
                     duration: Duration(milliseconds: 1),
+                    //child: Container(
+                    //color: Colors.transparent,
                     color: Colors.transparent
+                  //),
                 ),
               ),
             ),

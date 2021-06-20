@@ -1691,7 +1691,6 @@ class _TransactionScreen extends State<TransactionScreen>
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
     final result = await showCupertinoModalBottomSheet(
-        enableDrag: false,
         isDismissible: true,
         backgroundColor: Style.boxBackgroundColor,
         context: context,

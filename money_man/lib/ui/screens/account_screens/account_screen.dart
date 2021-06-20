@@ -15,16 +15,16 @@ import 'help_screens/help_screens.dart';
 class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AcountScreenWidget();
+    return Test();
   }
 }
 
-class AcountScreenWidget extends StatefulWidget {
+class Test extends StatefulWidget {
   @override
-  _AcountScreenWidgetState createState() => _AcountScreenWidgetState();
+  _TestState createState() => _TestState();
 }
 
-class _AcountScreenWidgetState extends State<AcountScreenWidget> {
+class _TestState extends State<Test> {
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
@@ -45,7 +45,6 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
-
   _scrollListener() {
     if (_controller.offset > 0) {
       setState(() {
@@ -97,11 +96,11 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                 child: AnimatedContainer(
                   duration: Duration(
                       milliseconds:
-                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                          reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                   //child: Container(
                   //color: Colors.transparent,
                   color: Colors.grey[
-                  reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+                          reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
                   //),
                 ),
@@ -124,8 +123,7 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
             builder: (context, snapshot) {
               User _user = snapshot.data;
               return ListView(
-                physics: BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
+                physics: BouncingScrollPhysics(),
                 controller: _controller,
                 children: [
                   Padding(
@@ -156,9 +154,9 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                               (_user == null)
                                   ? ''
                                   : (_user.displayName != '' &&
-                                  _user.displayName != null)
-                                  ? _user.displayName.substring(0, 1)
-                                  : 'Y',
+                                          _user.displayName != null)
+                                      ? _user.displayName.substring(0, 1)
+                                      : 'Y',
                               style: TextStyle(
                                   color: Style.primaryColor,
                                   fontSize: 30.0,
@@ -176,11 +174,11 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                                 (_user == null)
                                     ? ''
                                     : (_user.displayName != '' &&
-                                    _user.displayName != null)
-                                    ? _user.displayName
-                                    : (_user.phoneNumber != null
-                                    ? _user.phoneNumber
-                                    : 'Your name'),
+                                            _user.displayName != null)
+                                        ? _user.displayName
+                                        : (_user.phoneNumber != null
+                                            ? _user.phoneNumber
+                                            : 'Your name'),
                                 style: TextStyle(
                                     color: Style.foregroundColor,
                                     fontWeight: FontWeight.w600,
@@ -191,10 +189,10 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                               (_user == null)
                                   ? ''
                                   : _user.email == null
-                                  ? 'Your email'
-                                  : (_user.email != ''
-                                  ? _user.email
-                                  : 'Your email'),
+                                      ? 'Your email'
+                                      : (_user.email != ''
+                                          ? _user.email
+                                          : 'Your email'),
                               style: TextStyle(
                                   color: Style.foregroundColor.withOpacity(0.54),
                                   fontWeight: FontWeight.w400,
@@ -397,10 +395,10 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
                         ListTile(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: AboutScreen(),
-                                    type: PageTransitionType.rightToLeft));
+                              context,
+                              PageTransition(
+                                  child: AboutScreen(),
+                                  type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
                           leading: Icon(Icons.info,

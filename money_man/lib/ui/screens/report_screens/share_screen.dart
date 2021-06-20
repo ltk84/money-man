@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:share/share.dart';
@@ -63,6 +62,7 @@ class ShareScreenState extends State<ShareScreen> {
     return Scaffold(
       backgroundColor: Style.boxBackgroundColor,
       appBar: AppBar(
+        leadingWidth: 70.0,
         centerTitle: true,
         elevation: 0,
         backgroundColor: Style.boxBackgroundColor,
@@ -80,6 +80,14 @@ class ShareScreenState extends State<ShareScreen> {
           color: Style.foregroundColor,
         ),
       ),
+      // body: ListView(
+      //   scrollDirection: Axis.horizontal,
+      //   children: [
+      //     buildImage(reportData1),
+      //     buildImage(reportData2),
+      //     buildImage(reportData3),
+      //   ],
+      // )
       body: Container(
           color: Style.backgroundColor1,
           padding: EdgeInsets.symmetric(vertical: 20.0),
@@ -107,9 +115,8 @@ class ShareScreenState extends State<ShareScreen> {
                 ),
               ),
               Container(
-                height: 40,
-                width: double.infinity,
-                margin: EdgeInsets.fromLTRB(40, 50, 40, 10),
+                margin: EdgeInsets.only(top: 50.0, bottom: 10.0),
+                padding: EdgeInsets.symmetric(horizontal: 100.0),
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -139,8 +146,7 @@ class ShareScreenState extends State<ShareScreen> {
                     Share.shareFiles([file.path]);
                   },
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.share),
                       SizedBox(width: 10,),
@@ -158,9 +164,7 @@ class ShareScreenState extends State<ShareScreen> {
                 ),
               ),
               Container(
-                height: 40,
-                width: double.infinity,
-                margin: EdgeInsets.fromLTRB(40, 5, 40, 10),
+                padding: EdgeInsets.symmetric(horizontal: 100.0),
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -214,8 +218,7 @@ class ShareScreenState extends State<ShareScreen> {
                     }
                   },
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.save_alt),
                       SizedBox(width: 10),

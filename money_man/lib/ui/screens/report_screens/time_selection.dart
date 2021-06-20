@@ -4,7 +4,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/time_range_info_model.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'custom_time_range.dart';
@@ -75,6 +74,7 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
     return Scaffold(
         backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
+          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.boxBackgroundColor,
@@ -129,6 +129,8 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
                         begin: listInfo[index].begin,
                         end: listInfo[index].end);
                     setState(() {
+                      listInfo.removeLast();
+                      listInfo.add(result);
                       _dateDescription = listInfo[index].description;
                     });
                     Navigator.of(context).pop(result);

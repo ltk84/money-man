@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesBillScreen extends StatefulWidget {
@@ -92,9 +91,12 @@ class _CategoriesBillScreenState
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  //child: Container(
+                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
+                  //),
                 ),
               ),
             ),

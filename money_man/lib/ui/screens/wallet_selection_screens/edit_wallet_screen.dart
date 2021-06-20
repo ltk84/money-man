@@ -7,9 +7,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class EditWalletScreen extends StatefulWidget {
@@ -41,6 +39,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
     return Scaffold(
         backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
+          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.boxBackgroundColor,
@@ -79,7 +78,10 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       color: Style.foregroundColor,
                     )
                 ),
-            ),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.transparent,
+                )),
           ],
         ),
         body: Container(
@@ -132,6 +134,21 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             ],
                           ),
                         ),
+                        onPressed: () async {
+                          // TODO: Chọn icon cho ví
+                          var data = await showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (context) => IconPicker(),
+                          );
+                          if (data != null) {
+                            widget.wallet.iconID = data;
+                            setState(() {
+                              iconData = data;
+                            });
+                          }
+                        },
+                        iconSize: 70,
+                        color: Color(0xff8f8f8f),
                       ),
                       Expanded(
                         child: Container(
@@ -180,7 +197,6 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       )
                     ],
                   ),
-                  SizedBox(height: 20,),
                   Divider(
                     thickness: 0.05,
                     color: Style.foregroundColor,
@@ -193,7 +209,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                           backgroundColor: Style.boxBackgroundColor,
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                           flagSize: 26,
                           titleTextStyle: TextStyle(
@@ -277,9 +293,13 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 ],
               ),
             ),
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 40),
-                height: 40,
+            GestureDetector(
+              onTap: () {
+                // Xử lý sự kiện click ở đây.
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                alignment: Alignment.center,
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () async {

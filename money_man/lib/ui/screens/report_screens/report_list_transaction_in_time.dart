@@ -18,6 +18,7 @@ class ReportListTransaction extends StatefulWidget {
   final DateTime beginDate;
   final DateTime endDate;
   final Wallet currentWallet;
+  final List<MyTransaction> currentList;
   final double totalMoney;
   final bool viewByCategory;
   final MyCategory category;
@@ -85,13 +86,57 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     total = 0;
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+    filterData(_transactionList, _beginDate, _endDate);
   }
 
-  bool CompareDate(DateTime a, DateTime b) {
-    if (a.year < b.year) return true;
-    if (a.year == b.year && a.month < b.month) return true;
-    if (a.year == b.year && a.month == b.month && a.day <= b.day) return true;
+  @override
+  void didUpdateWidget(covariant ReportListTransaction oldWidget) {
+    transactionListSorted = [];
+    dateInChoosenTime = [];
+    categoryInChoosenTime = [];
+    _transactionList = widget.currentList ?? [];
+    _beginDate = widget.beginDate;
+    _endDate = widget.endDate;
+    total = 0;
+    _controller = ScrollController();
+    filterData(_transactionList, _beginDate, _endDate);
+    _controller.addListener(_scrollListener);
+    super.didUpdateWidget(oldWidget);
+  }
+
+  bool CompareDate(DateTime a, DateTime b)
+  {
+    if( a.year < b.year)
+      return true;
+    if(a.year == b.year && a.month < b.month)
+      return true;
+    if(a.year == b.year && a.month == b.month && a.day <= b.day)
+      return true;
     return false;
+  }
+  void filterData(List<MyTransaction> transactionList, DateTime beginDate,
+      DateTime endDate) {
+    transactionList = transactionList
+        .where((element) =>
+        CompareDate(element.date, endDate) &&
+        CompareDate(beginDate, element.date)
+        )
+        .toList();
+    transactionList.sort((a, b) => b.date.compareTo(a.date));
+    transactionList.forEach((element) {
+      if (!dateInChoosenTime.contains(element.date))
+        dateInChoosenTime.add(element.date);
+    });
+    dateInChoosenTime.forEach((date) {
+      final b = _transactionList
+          .where((element) => element.date.compareTo(date) == 0);
+      b.forEach((element) {
+        element.category.type == "income"?
+            total += element.amount
+            : total -= element.amount;
+      });
+      transactionListSorted.add(b.toList());
+    });
   }
 
   Widget build(BuildContext context) {

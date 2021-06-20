@@ -326,6 +326,46 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               ),
             ),
             ListTile(
+              onTap: () async {
+                  DatePicker.showDatePicker(context,
+                      currentTime: pickDate,
+                      showTitleActions: true, onConfirm: (date) {
+                    if (date != null) {
+                      setState(() {
+                        pickDate = date;
+                        if(_event != null)
+                        {
+                          if(pickDate.year > _event.endDate.year ||
+                              (pickDate.year == _event.endDate.year && pickDate.month > _event.endDate.month)||
+                              (pickDate.year == _event.endDate.year && pickDate.month == _event.endDate.month && pickDate.day > _event.endDate.day))
+                            _event = null;
+                        }
+                      });
+                    }
+                  },
+                      locale: LocaleType.en,
+                      theme: DatePickerTheme(
+                        cancelStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
+                        doneStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
+                        itemStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
+                        backgroundColor: Style.boxBackgroundColor,
+                      ));
+                },
               dense: true,
               leading:
               Icon(Icons.calendar_today,
@@ -334,14 +374,20 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 onTap: () async {
                   DatePicker.showDatePicker(context,
                       currentTime: pickDate,
-                      showTitleActions: true,
-                      onConfirm: (date) {
-                        if (date != null) {
-                          setState(() {
-                            pickDate = date;
-                          });
+                      showTitleActions: true, onConfirm: (date) {
+                    if (date != null) {
+                      setState(() {
+                        pickDate = date;
+                        if(_event != null)
+                        {
+                          if(pickDate.year > _event.endDate.year ||
+                              (pickDate.year == _event.endDate.year && pickDate.month > _event.endDate.month)||
+                              (pickDate.year == _event.endDate.year && pickDate.month == _event.endDate.month && pickDate.day > _event.endDate.day))
+                            _event = null;
                         }
-                      },
+                      });
+                    }
+                  },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(
@@ -528,7 +574,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                           backgroundColor: Style.boxBackgroundColor,
                           context: context,
                           builder: (context) =>
-                              SelectEventScreen(wallet: widget.wallet));
+                              SelectEventScreen(
+                                  wallet: widget.wallet,
+                                timeTransaction: pickDate,
+                              ));
                       if (res != null)
                         setState(() {
                           _event = res;
@@ -645,7 +694,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                             backgroundColor: Style.boxBackgroundColor,
                             context: context,
                             builder: (context) =>
-                                SelectEventScreen(wallet: widget.wallet));
+                                SelectEventScreen(
+                                    wallet: widget.wallet,
+                                  timeTransaction: pickDate,
+                                ));
                         if (res != null)
                           setState(() {
                             _event = res;
@@ -716,7 +768,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(content: content);
       },

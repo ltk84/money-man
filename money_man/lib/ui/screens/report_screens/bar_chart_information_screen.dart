@@ -26,6 +26,33 @@ class BarChartInformation extends StatefulWidget {
 }
 
 class _BarChartInformation extends State<BarChartInformation> {
+  final double fontSizeText = 30;
+  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
+  int reachTop = 0;
+  int reachAppBar = 0;
+
+  // Phần này để check xem mình đã Scroll tới đâu trong ListView
+  ScrollController _controller = ScrollController();
+  _scrollListener() {
+    if (_controller.offset > 0) {
+      setState(() {
+        reachAppBar = 1;
+      });
+    } else {
+      setState(() {
+        reachAppBar = 0;
+      });
+    }
+    if (_controller.offset >= fontSizeText - 5) {
+      setState(() {
+        reachTop = 1;
+      });
+    } else {
+      setState(() {
+        reachTop = 0;
+      });
+    }
+  }
 
   List<MyTransaction> _transactionList = [];
   DateTime _beginDate;
@@ -35,7 +62,7 @@ class _BarChartInformation extends State<BarChartInformation> {
   List<String> timeRangeList = [];
   List<DateTime> fisrtDayList = [];
   List<DateTime> secondDayList = [];
-  double height;
+  double heigt;
   @override
   void initState() {
     super.initState();
@@ -43,7 +70,9 @@ class _BarChartInformation extends State<BarChartInformation> {
     _beginDate = widget.beginDate;
     _endDate = widget.endDate;
     generateData(_beginDate, _endDate, timeRangeList, _transactionList);
-    height = timeRangeList.length.toDouble() * 70;
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
+    heigt = timeRangeList.length.toDouble()*70;
   }
 
   @override
@@ -52,7 +81,9 @@ class _BarChartInformation extends State<BarChartInformation> {
     _beginDate = widget.beginDate;
     _endDate = widget.endDate;
     generateData(_beginDate, _endDate, timeRangeList, _transactionList);
-    height = timeRangeList.length.toDouble() * 100;
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
+    heigt = timeRangeList.length.toDouble()*100;
   }
 
   @override
@@ -209,22 +240,28 @@ class _BarChartInformation extends State<BarChartInformation> {
     timeRangeList.clear();
     calculationList.clear();
     DateTimeRange value = DateTimeRange(start: beginDate, end: endDate);
-    int dayRange = (value.duration >= Duration(days: 6)) ? 6
-        : (value.duration.inDays == 0) ? 1 : value.duration.inDays;
-    var x = (value.duration.inDays / dayRange).round();
-    var firstDate = beginDate.subtract(Duration(days: 1));
-    for (int i = 0; i < dayRange; i++) {
-      firstDate = firstDate.add(Duration(days: 1));
-      var secondDate = (i != dayRange - 1) ? firstDate.add(Duration(days: x)) : endDate;
-      var calculation =
-          calculateByTimeRange(firstDate, secondDate, transactionList);
-      if (calculation.first != 0 || calculation.last != 0) {
-        calculationList.add(calculation);
-        timeRangeList.add(firstDate.day.toString() + "-" + secondDate.day.toString());
-        fisrtDayList.add(firstDate);
-        secondDayList.add(secondDate);
+    if (value.duration >= Duration(days: 6)) {
+      var x = (value.duration.inDays / 6).round();
+      var firstDate = beginDate.subtract(Duration(days: 1));
+      for (int i = 0; i < 6; i++) {
+        firstDate = firstDate.add(Duration(days: 1));
+        var secondDate = (i != 5) ? firstDate.add(Duration(days: x)) : endDate;
+        var calculation =
+            calculateByTimeRange(firstDate, secondDate, transactionList);
+        if (calculation.first != 0 || calculation.last != 0) {
+          calculationList.add(calculation);
+          timeRangeList.add(firstDate.day.toString() +
+              "/" +
+              firstDate.month.toString() +
+              "-" +
+              secondDate.day.toString() +
+              "/" +
+              secondDate.month.toString());
+          fisrtDayList.add(firstDate);
+          secondDayList.add(secondDate);
+        }
+        firstDate = firstDate.add(Duration(days: x));
       }
-      firstDate = firstDate.add(Duration(days: x));
     }
   }
 

@@ -10,10 +10,8 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
-import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AddWalletScreen extends StatefulWidget {
@@ -28,7 +26,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
 
   Wallet wallet = Wallet(
       id: '0',
-      name: '',
+      name: 'newWallet',
       amount: 0,
       currencyID: 'VND',
       iconID: 'assets/icons/wallet_2.svg');
@@ -39,6 +37,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
     return Scaffold(
         backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
+          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.boxBackgroundColor,
@@ -58,7 +57,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
           actions: <Widget>[
             TextButton(
                 onPressed: () async {
-                  if (wallet.name == '' || wallet.name == null) return;
                   if (_formKey.currentState.validate()) {
                     FocusScope.of(context).requestFocus(FocusNode());
                     var res = await _firestore.addWallet(this.wallet);
@@ -74,7 +72,10 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                       color: (wallet.name == '' || wallet.name == null) ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                     )
                 ),
-            ),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.transparent,
+                )),
           ],
         ),
         body: Container(
@@ -158,6 +159,20 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             ],
                           ),
                         ),
+                        onPressed: () async {
+                          // TODO: Chọn icon cho ví
+                          var data = await showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (context) => IconPicker(),
+                          );
+                          if (data != null) {
+                            setState(() {
+                              wallet.iconID = data;
+                            });
+                          }
+                        },
+                        iconSize: 70,
+                        color: Color(0xff8f8f8f),
                       ),
                       Expanded(
                         child: Container(
@@ -202,7 +217,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                       )
                     ],
                   ),
-                  SizedBox(height: 20,),
                   Divider(
                     thickness: 0.05,
                     color: Style.foregroundColor,
@@ -266,6 +280,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           builder: (context) => EnterAmountScreen());
                       if (resultAmount != null)
                         setState(() {
+                          print(resultAmount);
                           wallet.amount = double.parse(resultAmount);
                         });
                     },

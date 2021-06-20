@@ -1,9 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:money_man/core/models/transaction_model.dart';
-import 'package:money_man/ui/style.dart';
 
 class BarChartScreen extends StatefulWidget {
   final List<MyTransaction> currentList;
@@ -41,33 +39,33 @@ class BarChartScreenState extends State<BarChartScreen> {
     rawBarGroups.clear();
     timeRangeList.clear();
     DateTimeRange value = DateTimeRange(start: beginDate, end: endDate);
-    int dayRange = (value.duration >= Duration(days: 6)) ? 6
-        : (value.duration.inDays == 0) ? 1 : value.duration.inDays;
-    List<dynamic> calculationList = [];
-    var x = (value.duration.inDays / dayRange).round();
-    var firstDate = beginDate.subtract(Duration(days: 1));
-    for (int i = 0; i < dayRange; i++) {
-      firstDate = firstDate.add(Duration(days: 1));
-      var secondDate = (i != dayRange - 1) ? firstDate.add(Duration(days: x)) : endDate;
+    if (value.duration >= Duration(days: 6)) {
+      List<dynamic> calculationList = [];
+      var x = (value.duration.inDays / 6).round();
+      var firstDate = beginDate.subtract(Duration(days: 1));
+      for (int i = 0; i < 6; i++) {
+        firstDate = firstDate.add(Duration(days: 1));
+        var secondDate = (i != 5) ? firstDate.add(Duration(days: x)) : endDate;
 
-      var calculation =
-          calculateByTimeRange(firstDate, secondDate, transactionList);
-      calculationList.add(calculation);
-      double temp = calculation.first > calculation.last
-          ? calculation.first
-          : calculation.last;
-      if (temp > _maximumAmount) _maximumAmount = temp;
-      timeRangeList
-          .add(firstDate.day.toString() + "-" + secondDate.day.toString());
-      firstDate = firstDate.add(Duration(days: x));
-    }
-    if (!calculationList.isEmpty) {
-      for (int i = 0; i < calculationList.length; i++) {
-        var barGroup = makeGroupData(
-            i,
-            (calculationList[i].first * 19) / _maximumAmount.round(),
-            (calculationList[i].last * 19) / _maximumAmount.round());
-        rawBarGroups.add(barGroup);
+        var calculation =
+            calculateByTimeRange(firstDate, secondDate, transactionList);
+        calculationList.add(calculation);
+        double temp = calculation.first > calculation.last
+            ? calculation.first
+            : calculation.last;
+        if (temp > _maximumAmount) _maximumAmount = temp;
+        timeRangeList
+            .add(firstDate.day.toString() + "-" + secondDate.day.toString());
+        firstDate = firstDate.add(Duration(days: x));
+      }
+      if (!calculationList.isEmpty) {
+        for (int i = 0; i < calculationList.length; i++) {
+          var barGroup = makeGroupData(
+              i,
+              (calculationList[i].first * 19) / _maximumAmount.round(),
+              (calculationList[i].last * 19) / _maximumAmount.round());
+          rawBarGroups.add(barGroup);
+        }
       }
     }
   }
@@ -203,7 +201,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                             fontSize: 13,
                             fontFamily: Style.fontFamily,
                           ),
-                          margin: 10,
+                          margin: 5,
                           getTitles: (double value) {
                             return timeRangeList[value.toInt()];
                           },
@@ -216,7 +214,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                             fontSize: 13,
                             fontFamily: Style.fontFamily,
                           ),
-                          margin: 10,
+                          margin: 5,
                           reservedSize: 50,
                           getTitles: (value) {
                             if (value == 0) {
@@ -362,134 +360,6 @@ class BarChartScreenState extends State<BarChartScreen> {
                   )
                 ],
               )
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       children: [
-              //         Container(
-              //           height: width*2,
-              //           width: width,
-              //           decoration: BoxDecoration(
-              //             color: leftBarColor,
-              //             borderRadius: BorderRadius.circular(10),
-              //           ),
-              //         ),
-              //         SizedBox(height: 10),
-              //         Container(
-              //           height: 14,
-              //           width: 2,
-              //           color: foregroundColor,
-              //         ),
-              //       ],
-              //     ),
-              //     SizedBox(width: 10),
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: [
-              //         Text('Total income'),
-              //         SizedBox(height: 10),
-              //         Text('Amount'),
-              //       ],
-              //     ),
-              //     SizedBox(width: 80),
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       children: [
-              //         Container(
-              //           height: width*2,
-              //           width: width,
-              //           decoration: BoxDecoration(
-              //             color: rightBarColor,
-              //             borderRadius: BorderRadius.circular(10),
-              //           ),
-              //         ),
-              //         SizedBox(height: 10),
-              //         Container(
-              //           height: 2,
-              //           width: 14,
-              //           color: foregroundColor,
-              //         ),
-              //       ],
-              //     ),
-              //     SizedBox(width: 10),
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: [
-              //         Text('Total expense'),
-              //         SizedBox(height: 10),
-              //         Text('Time range (day)'),
-              //       ],
-              //     ),
-              //     // Column(
-              //     //   crossAxisAlignment: CrossAxisAlignment.start,
-              //     //   children: [
-              //     //     Row(
-              //     //       mainAxisAlignment: MainAxisAlignment.center,
-              //     //       children: [
-              //     //         Container(
-              //     //           height: width*2,
-              //     //           width: width,
-              //     //           decoration: BoxDecoration(
-              //     //             color: leftBarColor,
-              //     //             borderRadius: BorderRadius.circular(10),
-              //     //           ),
-              //     //         ),
-              //     //         SizedBox(width: 10,),
-              //     //         Text('Total income'),
-              //     //       ],
-              //     //     ),
-              //     //     Row(
-              //     //       mainAxisAlignment: MainAxisAlignment.center,
-              //     //       children: [
-              //     //         Container(
-              //     //           height: width*2,
-              //     //           width: width,
-              //     //           color: foregroundColor,
-              //     //         ),
-              //     //         SizedBox(width: 10,),
-              //     //         Text('Amount'),
-              //     //       ],
-              //     //     )
-              //     //   ],
-              //     // ),
-              //     // SizedBox(width: 80,),
-              //     // Column(
-              //     //   crossAxisAlignment: CrossAxisAlignment.start,
-              //     //   children: [
-              //     //     Row(
-              //     //       mainAxisAlignment: MainAxisAlignment.center,
-              //     //       children: [
-              //     //         Container(
-              //     //           height: width*2,
-              //     //           width: width,
-              //     //           decoration: BoxDecoration(
-              //     //             color: rightBarColor,
-              //     //             borderRadius: BorderRadius.circular(10),
-              //     //           ),
-              //     //         ),
-              //     //         SizedBox(width: 10,),
-              //     //         Text('Total expense'),
-              //     //       ],
-              //     //     ),
-              //     //     Row(
-              //     //       mainAxisAlignment: MainAxisAlignment.center,
-              //     //       children: [
-              //     //         Container(
-              //     //           height: width*2,
-              //     //           width: width,
-              //     //           color: foregroundColor,
-              //     //         ),
-              //     //         SizedBox(width: 10,),
-              //     //         Text('Time range (day)'),
-              //     //       ],
-              //     //     )
-              //     //   ],
-              //     // ),
-              //   ],
-              // ),
             ],
           ),
         ),

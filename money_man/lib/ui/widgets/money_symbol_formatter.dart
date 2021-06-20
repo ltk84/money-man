@@ -40,10 +40,10 @@ class MoneySymbolFormatter extends StatelessWidget {
     }
     String finalText = onLeft
         ? '$_digit$symbol ' +
-            MoneyFormatter(amount: _text).output.withoutFractionDigits
+        MoneyFormatter(amount: _text).output.withoutFractionDigits
         : _digit +
-            MoneyFormatter(amount: _text).output.withoutFractionDigits +
-            ' $symbol';
+        MoneyFormatter(amount: _text).output.withoutFractionDigits +
+        ' $symbol';
     return finalText;
   }
 }

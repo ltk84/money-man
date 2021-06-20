@@ -338,6 +338,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
               ),
             );
           },
-        ));
+        )
+    );
   }
 }

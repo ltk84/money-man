@@ -3,29 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/select_other_source.dart';
 import 'package:provider/provider.dart';
 
-class CategoriesTransactionScreen extends StatefulWidget {
-  final Wallet wallet;
+class CategoriesBudgetScreen extends StatefulWidget {
+  final String walletId;
 
-  const CategoriesTransactionScreen({Key key, @required this.wallet})
-      : super(key: key);
+  const CategoriesBudgetScreen({Key key, this.walletId}) : super(key: key);
 
   @override
-  _CategoriesTransactionScreenState createState() =>
-      _CategoriesTransactionScreenState();
+  _CategoriesBudgetScreenState createState() => _CategoriesBudgetScreenState();
 }
 
-class _CategoriesTransactionScreenState
-    extends State<CategoriesTransactionScreen> with TickerProviderStateMixin {
+class _CategoriesBudgetScreenState extends State<CategoriesBudgetScreen>
+    with TickerProviderStateMixin {
   // list tab category
   final List<Tab> categoryTypeTab = [
-    Tab(
-      text: 'DEBT & LOAN',
-    ),
     Tab(
       text: 'EXPENSE',
     ),
@@ -72,7 +66,7 @@ class _CategoriesTransactionScreenState
   void initState() {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
-    _tabController = TabController(length: 3, vsync: this, initialIndex: 1);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -84,10 +78,10 @@ class _CategoriesTransactionScreenState
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
-        backgroundColor: Style.backgroundColor,
-        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.black,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
           leading: MaterialButton(
@@ -96,14 +90,11 @@ class _CategoriesTransactionScreenState
             },
             child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+                Icon(Icons.arrow_back_ios, color: Colors.white),
                 Hero(
                     tag: 'alo',
                     child: Text('More',
-                        style: TextStyle(
-                            color: Style.foregroundColor,
-                            fontFamily: Style.fontFamily,
-                            fontSize: 17.0))),
+                        style: Theme.of(context).textTheme.headline6)),
               ],
             ),
           ),
@@ -141,18 +132,13 @@ class _CategoriesTransactionScreenState
                   ''
                   'Categories',
                   style: TextStyle(
-                      color: Style.foregroundColor,
-                      fontFamily: Style.fontFamily,
+                      color: Colors.white,
+                      fontFamily: 'Montseratt',
                       fontSize: 17.0))),
           bottom: TabBar(
-            labelStyle: TextStyle(
-              fontFamily: Style.fontFamily,
-              fontWeight: FontWeight.w700,
-              fontSize: 13.0,
-            ),
-            unselectedLabelColor: Style.foregroundColor.withOpacity(0.54),
-            labelColor: Style.foregroundColor,
-            indicatorColor: Style.primaryColor,
+            unselectedLabelColor: Colors.grey[500],
+            labelColor: Colors.white,
+            indicatorColor: Colors.yellow[700],
             physics: NeverScrollableScrollPhysics(),
             isScrollable: true,
             indicatorWeight: 3.0,
@@ -185,49 +171,11 @@ class _CategoriesTransactionScreenState
                               size: 35.0),
                           title: Text(_selectCateTab[index].name,
                               style: TextStyle(
-                                  color: Style.foregroundColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: Style.fontFamily)),
-                          onTap: () async {
-                            if (_selectCateTab[index].name == 'Repayment') {
-                              var result = await showCupertinoModalBottomSheet(
-                                  isDismissible: true,
-                                  backgroundColor: Style.boxBackgroundColor,
-                                  context: context,
-                                  builder: (context) => SelectOtherSourceScreen(
-                                      title: 'Select payment source',
-                                      titleAtEnd: 'Tap to pay off other debt',
-                                      criteria: 'Debt',
-                                      wallet: widget.wallet));
-                              if (result != null) {
-                                if (result is int) {
-                                  Navigator.pop(context, _selectCateTab[index]);
-                                } else {
-                                  Navigator.pop(
-                                      context, [_selectCateTab[index], result]);
-                                }
-                              }
-                            } else if (_selectCateTab[index].name ==
-                                'Debt Collection') {
-                              var result = await showCupertinoModalBottomSheet(
-                                  backgroundColor: Style.boxBackgroundColor,
-                                  context: context,
-                                  builder: (context) => SelectOtherSourceScreen(
-                                      title: 'Select debt collection source',
-                                      titleAtEnd:
-                                          'Tap to receive other debt collection',
-                                      criteria: 'Loan',
-                                      wallet: widget.wallet));
-                              if (result != null) {
-                                if (result is int) {
-                                  Navigator.pop(context, _selectCateTab[index]);
-                                } else {
-                                  Navigator.pop(
-                                      context, [_selectCateTab[index], result]);
-                                }
-                              }
-                            } else
-                              Navigator.pop(context, _selectCateTab[index]);
+                                  color: Colors.white,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w600)),
+                          onTap: () {
+                            Navigator.pop(context, _selectCateTab[index]);
                           },
                         );
                       });

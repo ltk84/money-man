@@ -5,7 +5,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bills_main_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_main_screen.dart';
-import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/event_home.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -25,6 +25,9 @@ class _PlanningScreenState extends State<PlanningScreen> {
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
+  //
+  // Text title = Text('Planning', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
+  // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
@@ -99,10 +102,13 @@ class _PlanningScreenState extends State<PlanningScreen> {
                 child: AnimatedContainer(
                   duration: Duration(
                       milliseconds:
-                          reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  //child: Container(
+                  //color: Colors.transparent,
                   color: Colors.grey[
                   reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
+                  //),
                 ),
               ),
             ),
@@ -225,9 +231,12 @@ class _PlanningScreenState extends State<PlanningScreen> {
               child: TextButton(
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EventScreen()));
+                      context,
+                      PageTransition(
+                          child: EventScreen(
+                          ),
+                          type: PageTransitionType.rightToLeft),
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),

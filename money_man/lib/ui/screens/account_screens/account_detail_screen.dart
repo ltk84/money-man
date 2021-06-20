@@ -127,7 +127,7 @@ class _AccountDetailState extends State<AccountDetail> {
             )
         ),
         body: ListView(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics: BouncingScrollPhysics(),
           controller: _controller,
           children: [
             Padding(
@@ -218,6 +218,11 @@ class _AccountDetailState extends State<AccountDetail> {
                   ),
                   ListTile(
                     onTap: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (BuildContext context) =>
+                      //             ChangePasswordScreen()));
                       showCupertinoModalBottomSheet(
                           context: context,
                           builder: (context) => ChangePasswordScreen()
@@ -280,3 +285,15 @@ class _AccountDetailState extends State<AccountDetail> {
         ));
   }
 }
+
+// class Test extends StatelessWidget {
+//   Text title = Text('More', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Hero(tag: 'alo', child: title),
+//       )
+//     );
+//   }
+// }

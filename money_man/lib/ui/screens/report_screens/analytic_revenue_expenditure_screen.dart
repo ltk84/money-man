@@ -14,8 +14,6 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.d
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
-import 'package:money_man/ui/style.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 

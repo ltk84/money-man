@@ -150,7 +150,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
               onPressed: () async {
                 //TODO: Thuc hien xoa transaction
 
-                await showDialog(
+                String result = await showDialog(
                     context: context,
                     barrierDismissible: false,
                     builder: (_) {
@@ -166,7 +166,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         actions: [
                           FlatButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.of(context, rootNavigator: true).pop('dialog');
                               },
                               child: Text('No')),
                           FlatButton(
@@ -186,14 +186,18 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                 }
                                 await _firestore.deleteTransaction(
                                     _transaction, widget.wallet);
-                                Navigator.pop(context);
+                                Navigator.of(context, rootNavigator: true).pop('dialog');
                                 // chưa có animation để back ra transaction screen
-                                Navigator.pop(context);
                               },
                               child: Text('Yes'))
                         ],
                       );
                     });
+                if (result == 'Yes') {
+                  await _firestore.deleteTransaction(
+                      _transaction, widget.wallet);
+                  Navigator.pop(context);
+                }
               })
         ],
       ),
@@ -436,7 +440,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     _transaction, widget.wallet.id),
                 builder: (context, snapshot) {
                   List<Budget> budgets = snapshot.data ?? [];
-                  print(budgets.length);
+                  print('Nafy la in tu transaction detail');
 
                   // Nếu không có budgets nào có categories trùng với transaction hiển thị tùy chọn thêm transaction
                   if (budgets.length == 0)

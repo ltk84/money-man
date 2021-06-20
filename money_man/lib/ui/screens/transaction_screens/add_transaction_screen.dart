@@ -17,7 +17,6 @@ import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
-import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 
@@ -370,6 +369,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     currencySymbol = CurrencyService()
                         .findByCode(selectedWallet.currencyID)
                         .symbol;
+                    event = null;
                   });
               },
               leading: selectedWallet == null
@@ -444,6 +444,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     if (date != null) {
                       setState(() {
                         pickDate = date;
+                        if(event != null)
+                          {
+                            if(pickDate.year > event.endDate.year ||
+                                (pickDate.year == event.endDate.year && pickDate.month > event.endDate.month)||
+                                (pickDate.year == event.endDate.year && pickDate.month == event.endDate.month && pickDate.day > event.endDate.day))
+                              event = null;
+                          }
                       });
                     }
                   },
@@ -660,7 +667,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         backgroundColor: Style.boxBackgroundColor,
                         context: context,
                         builder: (context) =>
-                            SelectEventScreen(wallet: selectedWallet));
+                            SelectEventScreen(
+                                wallet: selectedWallet,
+                              timeTransaction: pickDate,
+                            ));
                     if (res != null)
                       setState(() {
                         event = res;
@@ -702,7 +712,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           backgroundColor: Style.boxBackgroundColor,
                           context: context,
                           builder: (context) =>
-                              SelectEventScreen(wallet: selectedWallet));
+                              SelectEventScreen(
+                                  wallet: selectedWallet,
+                                timeTransaction: pickDate,
+                              ));
                       if (res != null)
                         setState(() {
                           event = res;

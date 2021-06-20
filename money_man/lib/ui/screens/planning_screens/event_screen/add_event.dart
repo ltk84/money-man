@@ -46,6 +46,16 @@ class _AddEventState extends State<AddEvent> {
     );
     super.initState();
   }
+  bool CompareDate(DateTime a, DateTime b)
+  {
+    if( a.year < b.year)
+      return true;
+    if(a.year == b.year && a.month < b.month)
+      return true;
+    if(a.year == b.year && a.month == b.month && a.day < b.day)
+      return true;
+    return false;
+  }
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -91,7 +101,11 @@ class _AddEventState extends State<AddEvent> {
                   _showAlertDialog('Please enter name!');
                 } else if (cate == null) {
                   _showAlertDialog('Please pick category');
-                } else {
+                }
+                else if (CompareDate(endDate, DateTime.now())) {
+                  _showAlertDialog('Please select an end date greater than or equal to today ');
+                }
+                else {
                   Event event;
                   event = Event(
                     name: nameEvent,
@@ -168,9 +182,10 @@ class _AddEventState extends State<AddEvent> {
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
+                        padding :  EdgeInsets.fromLTRB(8, 8, 0, 8),
                         icon: SuperIcon(
                           iconPath: cate.iconID,
-                          size: 49.0,
+                          size: 70.0,
                         ),
                         onPressed: () async {
                           var data = await showCupertinoModalBottomSheet(
@@ -183,7 +198,27 @@ class _AddEventState extends State<AddEvent> {
                             });
                           }
                         },
-                        iconSize: 70,
+                        iconSize: 50,
+                        color: Color(0xff8f8f8f),
+                      ),
+                      IconButton(
+                        padding :  EdgeInsets.fromLTRB(0, 8, 8, 8),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 40.0,
+                        ),
+                        onPressed: () async {
+                          var data = await showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (context) => IconPicker(),
+                          );
+                          if (data != null) {
+                            setState(() {
+                              cate.iconID = data;
+                            });
+                          }
+                        },
+                        iconSize: 20,
                         color: Color(0xff8f8f8f),
                       ),
                       Expanded(
@@ -333,7 +368,7 @@ class _AddEventState extends State<AddEvent> {
                             fontWeight: FontWeight.w600,
                             fontSize: 16.0)),
                     trailing: Icon(Icons.lock,
-                        size: 20.0, color: Colors.white),
+                        size: 20.0, color: Colors.white54),
                   ),
                   Divider(
                     thickness: 0.05,

@@ -35,7 +35,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
         backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.grey[900].withOpacity(0.2),
           elevation: 0.0,
           leading: Hero(
             tag: 'billToDetail_backBtn',
@@ -80,14 +80,14 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               duration: Duration(milliseconds: 0),
               child: BackdropFilter(
                 filter: ImageFilter.blur(
-                    sigmaX: 25,
-                    sigmaY: 25,
-                    tileMode: TileMode.values[0]),
+                    sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
                 child: AnimatedContainer(
-                  duration: Duration(
-                      milliseconds: 100),
-                  color: Colors.grey[900].withOpacity(0.2),
-                ),
+                    duration: Duration(milliseconds: 1),
+                    //child: Container(
+                    //color: Colors.transparent,
+                    color: Colors.transparent
+                    //),
+                    ),
               ),
             ),
           ),
