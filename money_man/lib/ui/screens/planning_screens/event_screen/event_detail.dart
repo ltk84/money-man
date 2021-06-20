@@ -37,7 +37,6 @@ class _EventDetailScreen extends State<EventDetailScreen>
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    final _wallet = _firestore.getWalletByID(_currentEvent.walletId);
     return Scaffold(
       backgroundColor: Color(0xff1b1b1b),
       appBar: AppBar(

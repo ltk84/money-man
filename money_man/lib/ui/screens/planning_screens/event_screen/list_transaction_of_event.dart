@@ -71,7 +71,6 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                 .where((element) => element.date.compareTo(date) == 0);
             transactionListSorted.add(b.toList());
           });
-
           return (listTransactionOfEventByDate.length == 0)?
           Scaffold(
               backgroundColor: Colors.black,

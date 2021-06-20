@@ -96,10 +96,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               wallet: widget.wallet,
                               event: event,
                             )));
-                if (updatedTrans != null)
+                if (updatedTrans != null) {
+                  var e = await getEvent(updatedTrans.eventID, widget.wallet);
                   setState(() {
                     _transaction = updatedTrans;
+                    event = e;
                   });
+                }
               }),
           IconButton(
               icon: Icon(Icons.delete, color: Colors.white),
@@ -122,14 +125,14 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         actions: [
                           FlatButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.of(context, rootNavigator: true).pop('dialog');
                               },
                               child: Text('No')),
                           FlatButton(
                               onPressed: () async {
                                 await _firestore.deleteTransaction(
                                     _transaction, widget.wallet);
-                                Navigator.pop(context);
+                                Navigator.of(context, rootNavigator: true).pop('dialog');
                                 // chưa có animation để back ra transaction screen
                                 Navigator.pop(context);
                               },
