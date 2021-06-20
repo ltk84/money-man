@@ -241,6 +241,18 @@ class FirebaseFireStoreService {
     return transaction;
   }
 
+  // detele instance inside collection transactionIdList
+  Future deleteInstanceInTransactionIdList(
+      String transactionId, String walletId) async {
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactionIdDebtLoan')
+        .doc(transactionId)
+        .delete();
+  }
+
   // update debt loan transaction after add
   Future updateDebtLoanTransationAfterAdd(MyTransaction debtLoanTransaction,
       MyTransaction addedTransaction, Wallet wallet) async {
@@ -269,7 +281,7 @@ class FirebaseFireStoreService {
                 debtLoanTransactionId = value.docs.first.id
             });
 
-    if (debtLoanTransactionId == null) return;
+    if (debtLoanTransactionId == null) return 1;
 
     await users
         .doc(uid)
@@ -281,7 +293,7 @@ class FirebaseFireStoreService {
         .then((value) =>
             {debtLoanTransaction = MyTransaction.fromMap(value.data())});
 
-    if (debtLoanTransaction == null) return;
+    if (debtLoanTransaction == null) return 1;
 
     if (debtLoanTransaction.amount < editedTransaction.amount) return;
 
@@ -562,10 +574,28 @@ class FirebaseFireStoreService {
       print(error);
     });
 
+    // if (transaction.category.type == 'expense')
+    //   wallet.amount += transaction.amount;
+    // else
+    //   wallet.amount -= transaction.amount;
+
+    // Update amount của wallet
     if (transaction.category.type == 'expense')
       wallet.amount += transaction.amount;
-    else
+    else if (transaction.category.type == 'income')
       wallet.amount -= transaction.amount;
+    else {
+      if (transaction.category.name == 'Debt') {
+        wallet.amount -= transaction.amount;
+      } else if (transaction.category.name == 'Loan') {
+        wallet.amount += transaction.amount;
+        // transaction.note += ' to someone';
+      } else if (transaction.category.name == 'Repayment') {
+        wallet.amount += transaction.amount;
+      } else {
+        wallet.amount -= transaction.amount;
+      }
+    }
 
     if (transaction.eventID != "") {
       final event = await getEventByID(transaction.eventID, wallet);

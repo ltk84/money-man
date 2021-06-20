@@ -195,8 +195,12 @@ class _CategoriesTransactionScreenState
                                       criteria: 'Debt',
                                       wallet: widget.wallet));
                               if (result != null) {
-                                Navigator.pop(
-                                    context, [_selectCateTab[index], result]);
+                                if (result is int) {
+                                  Navigator.pop(context, _selectCateTab[index]);
+                                } else {
+                                  Navigator.pop(
+                                      context, [_selectCateTab[index], result]);
+                                }
                               }
                             } else if (_selectCateTab[index].name ==
                                 'Debt Collection') {
@@ -210,8 +214,12 @@ class _CategoriesTransactionScreenState
                                       criteria: 'Loan',
                                       wallet: widget.wallet));
                               if (result != null) {
-                                Navigator.pop(
-                                    context, [_selectCateTab[index], result]);
+                                if (result is int) {
+                                  Navigator.pop(context, _selectCateTab[index]);
+                                } else {
+                                  Navigator.pop(
+                                      context, [_selectCateTab[index], result]);
+                                }
                               }
                             } else
                               Navigator.pop(context, _selectCateTab[index]);
