@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
             AccountScreen(),
           ];
 
-          if (snapshot.connectionState == ConnectionState.active) {
+          //if (snapshot.connectionState == ConnectionState.active) {
             if (wallet == null) {
               return FirstStep();
             } else
@@ -122,8 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerDocked,
               );
-          } else
-            return LoadingScreen();
+          //} else
+          //  return LoadingScreen();
         });
     // hello there
   }
