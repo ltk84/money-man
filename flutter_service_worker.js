@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "assets/AssetManifest.json": "9e5c5708378c79896b437c7d4effaa00",
+  "assets/AssetManifest.json": "b1526490ed5a7c0d00300ebf68bbc7b0",
 "assets/assets/fonts/Montserrat-Black.ttf": "27e3649bab7c62fa21b8837c4842e40e",
 "assets/assets/fonts/Montserrat-BlackItalic.ttf": "d9b6ba595b059fc5d48e8f52c30f73b3",
 "assets/assets/fonts/Montserrat-Bold.ttf": "ade91f473255991f410f61857696434b",
@@ -109,17 +109,10 @@ const RESOURCES = {
 "assets/assets/images/money_man.svg": "1e143814463dfc9c001a7d5e6967204e",
 "assets/assets/images/success.svg": "d29f1779664178a55ed87236fd97c302",
 "assets/assets/images/time.svg": "7d60907433a640d0033f155393c295ae",
-"assets/FontManifest.json": "d552170c3c5a91471c70b65731bea1c7",
+"assets/FontManifest.json": "6bcafa64c25655d13f39acdb1c068dde",
 "assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
-"assets/NOTICES": "e8c6a063c8270152fd24597048169e5a",
+"assets/NOTICES": "b0374b26e8d77af08ffa183cd865ed1f",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "6d342eb68f170c97609e9da345464e5e",
-"assets/packages/flutter_iconpicker/fonts/fa-brands-400.ttf": "51d23d1c30deda6f34673e0d5600fd38",
-"assets/packages/flutter_iconpicker/fonts/fa-regular-400.ttf": "d51b09f7b8345b41dd3b2201f653c62b",
-"assets/packages/flutter_iconpicker/fonts/fa-solid-900.ttf": "0ea892e09437fcaa050b2b15c53173b7",
-"assets/packages/flutter_iconpicker/fonts/LineAwesome.ttf": "bcc78af7963d22efd760444145073cd3",
-"assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf": "3241d1d9c15448a4da96df05f3292ffe",
-"assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf": "eaed33dc9678381a55cb5c13edaf241d",
-"assets/packages/font_awesome_flutter/lib/fonts/fa-solid-900.ttf": "ffed6899ceb84c60a1efa51c809a57e4",
 "assets/packages/rflutter_alert/assets/images/2.0x/close.png": "abaa692ee4fa94f76ad099a7a437bd4f",
 "assets/packages/rflutter_alert/assets/images/2.0x/icon_error.png": "2da9704815c606109493d8af19999a65",
 "assets/packages/rflutter_alert/assets/images/2.0x/icon_info.png": "612ea65413e042e3df408a8548cefe71",
@@ -138,9 +131,9 @@ const RESOURCES = {
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
-"index.html": "6cf537787c84dd8a07528e13d8fa121f",
-"/": "6cf537787c84dd8a07528e13d8fa121f",
-"main.dart.js": "0785fc64268c64fcc01de7e390ee3636",
+"index.html": "10f1bd03e03b16700f49eaca3130aebe",
+"/": "10f1bd03e03b16700f49eaca3130aebe",
+"main.dart.js": "cc3e7bbba9c7d7673c5caa5fcafa6ea7",
 "manifest.json": "450b98e8dd5a5818f187265cf0396c94",
 "version.json": "480395351c1d0dfdf75b89a9d92bb12f"
 };
