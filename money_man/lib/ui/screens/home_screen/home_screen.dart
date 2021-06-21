@@ -55,7 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
           //if (snapshot.connectionState == ConnectionState.active) {
             if (wallet == null) {
-              return FirstStep();
+              if (snapshot.connectionState == ConnectionState.active) {
+                return FirstStep();
+              } else {
+                return LoadingScreen();
+              }
             } else
               return Scaffold(
                 backgroundColor: Style.foregroundColor.withOpacity(0.38),
