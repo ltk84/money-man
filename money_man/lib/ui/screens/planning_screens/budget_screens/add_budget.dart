@@ -497,27 +497,25 @@ class _AddBudgetState extends State<AddBudget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        child: Container(
-                          padding: const EdgeInsets.all(1),
-                          margin:
-                              EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 1),
-                              shape: BoxShape.circle,
-                              color: Color(0xff111111)),
-                          child: isRepeat
-                              ? Icon(
-                                  Icons.check,
-                                  size: 17,
-                                  color: Colors.white,
-                                )
-                              : Icon(
-                                  null,
-                                  size: 17,
-                                  color: Colors.black,
-                                ),
-                        ),
+                      Container(
+                        padding: const EdgeInsets.all(1),
+                        margin:
+                            EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white, width: 1),
+                            shape: BoxShape.circle,
+                            color: Color(0xff111111)),
+                        child: isRepeat
+                            ? Icon(
+                                Icons.check,
+                                size: 17,
+                                color: Colors.white,
+                              )
+                            : Icon(
+                                null,
+                                size: 17,
+                                color: Colors.black,
+                              ),
                       ),
                       Container(
                         padding: EdgeInsets.only(bottom: 10),
