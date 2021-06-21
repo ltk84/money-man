@@ -7,6 +7,7 @@ import 'package:money_man/core/models/bill_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/planning_screens/bills_screens/delete_dialog.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/transaction_list.dart';
 import 'package:money_man/ui/style.dart';
@@ -289,8 +290,31 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                   ))),
               child: TextButton(
                 onPressed: () async {
-                  await _firestore.deleteBill(
-                      _bill, widget.wallet);
+                  final type = await showMaterialModalBottomSheet(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                      ),
+                      backgroundColor: Style.boxBackgroundColor2,
+                      context: context,
+                      builder: (context) => DeleteDialog(),
+                  ) ?? 'none';
+                  if (type == 'all') {
+                    await _firestore.deleteBill(
+                        _bill, widget.wallet);
+                  } else if (type == 'only') {
+                    // Xử lý các dueDate. (Thanh toán rồi thì dueDate sẽ được cho vào list due Dates đã thanh toán,
+                    // và xóa khỏi list due Dates chưa thanh toán.
+                    if (_bill.dueDates.contains(widget.dueDate))
+                      _bill.dueDates.remove(widget.dueDate);
+
+                    if (!_bill.paidDueDates.contains(widget.dueDate)) {
+                      _bill.paidDueDates.add(widget.dueDate);
+                    }
+
+                    // Cập nhật thông tin bill lên firestore.
+                    await _firestore.updateBill(
+                        _bill, widget.wallet);
+                  }
                   Navigator.pop(context);
                 },
                 style: ButtonStyle(

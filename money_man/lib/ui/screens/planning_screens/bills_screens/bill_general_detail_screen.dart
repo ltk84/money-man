@@ -303,7 +303,7 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                     },
                   ),
                 ),
-                child: Text("Delete",
+                child: Text("Delete bill for this category",
                     style: TextStyle(
                       fontSize: 14,
                       fontFamily: Style.fontFamily,
