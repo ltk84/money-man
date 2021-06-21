@@ -99,6 +99,16 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                             fontSize: 30),
                       ),
                     ),
+                    SizedBox(height: 10.0),
+                    Text(
+                      'Please check your email!\nAfter verified, please wait for seconds',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w300,
+                          fontSize: 16),
+                        textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               ),
