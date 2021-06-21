@@ -131,18 +131,19 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                             )),
                         controller: _btnController,
                         onPressed: () async {
-                          if (user.email.contains('gmail') == false) {
-                            await user.sendEmailVerification();
-                          } else {
-                            final res = await _handleLinkWithGoogle(user.email);
-                            if (res == null) {
-                              await _showAlertDialog(
-                                  'There is something wrong!');
-                              await user.delete();
-                            }
-                          }
-                          timer2 =
-                              Timer.periodic(Duration(seconds: 3), (timer) {});
+                          // if (user.email.contains('gmail') == false) {
+                          //   await user.sendEmailVerification();
+                          // } else {
+                          //   final res = await _handleLinkWithGoogle(user.email);
+                          //   if (res == null) {
+                          //     await _showAlertDialog(
+                          //         'There is something wrong!');
+                          //     await user.delete();
+                          //   }
+                          // }
+                          // timer2 =
+                          //     Timer.periodic(Duration(seconds: 3), (timer) {});
+                          await user.sendEmailVerification();
 
                           _btnController.success();
                         },
