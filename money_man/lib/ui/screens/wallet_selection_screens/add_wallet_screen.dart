@@ -28,7 +28,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
 
   Wallet wallet = Wallet(
       id: '0',
-      name: 'newWallet',
+      name: '',
       amount: 0,
       currencyID: 'VND',
       iconID: 'assets/icons/wallet_2.svg');
@@ -39,7 +39,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
     return Scaffold(
         backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
-          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.boxBackgroundColor,
@@ -58,26 +57,24 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
           ),
           actions: <Widget>[
             TextButton(
-                onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    var res = await _firestore.addWallet(this.wallet);
-                    await _firestore.updateSelectedWallet(res);
-                    Navigator.of(context).pop(res);
-                  }
-                },
-                child: Text('Done',
-                    style: TextStyle(
-                      fontFamily: Style.fontFamily,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                      color: (wallet.name == '' || wallet.name == null) ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
-                    )
-                ),
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.transparent,
-                )),
+              onPressed: () async {
+                if (wallet.name == '' || wallet.name == null) return;
+                if (_formKey.currentState.validate()) {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  var res = await _firestore.addWallet(this.wallet);
+                  await _firestore.updateSelectedWallet(res);
+                  Navigator.of(context).pop(res);
+                }
+              },
+              child: Text('Done',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: (wallet.name == '' || wallet.name == null) ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                  )
+              ),
+            ),
           ],
         ),
         body: Container(
@@ -161,20 +158,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             ],
                           ),
                         ),
-                        // onPressed: () async {
-                        //   // TODO: Chọn icon cho ví
-                        //   var data = await showCupertinoModalBottomSheet(
-                        //     context: context,
-                        //     builder: (context) => IconPicker(),
-                        //   );
-                        //   if (data != null) {
-                        //     setState(() {
-                        //       wallet.iconID = data;
-                        //     });
-                        //   }
-                        // },
-                        // iconSize: 70,
-                        // color: Color(0xff8f8f8f),
                       ),
                       Expanded(
                         child: Container(
@@ -192,15 +175,15 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             decoration: InputDecoration(
                               errorBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Style.errorColor, width: 1),
+                                BorderSide(color: Style.errorColor, width: 1),
                               ),
                               enabledBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 1),
+                                BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 1),
                               ),
                               focusedBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 3),
+                                BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 3),
                               ),
                               labelText: 'Name',
                               labelStyle: TextStyle(
@@ -219,6 +202,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                       )
                     ],
                   ),
+                  SizedBox(height: 20,),
                   Divider(
                     thickness: 0.05,
                     color: Style.foregroundColor,
@@ -231,7 +215,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           backgroundColor: Style.boxBackgroundColor,
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                            BorderRadius.all(Radius.circular(20.0)),
                           ),
                           flagSize: 26,
                           titleTextStyle: TextStyle(
@@ -282,7 +266,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           builder: (context) => EnterAmountScreen());
                       if (resultAmount != null)
                         setState(() {
-                          print(resultAmount);
                           wallet.amount = double.parse(resultAmount);
                         });
                     },
@@ -292,14 +275,14 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     title: wallet.amount == null
                         ? Text('Enter wallet amount')
                         : MoneySymbolFormatter(
-                            text: wallet.amount,
-                            currencyId: wallet.currencyID,
-                            textStyle: TextStyle(
-                                color: Style.foregroundColor,
-                                fontFamily: Style.fontFamily,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16.0),
-                          ),
+                      text: wallet.amount,
+                      currencyId: wallet.currencyID,
+                      textStyle: TextStyle(
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.0),
+                    ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Style.foregroundColor),
                   )

@@ -41,7 +41,6 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
     return Scaffold(
         backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
-          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.boxBackgroundColor,
@@ -60,30 +59,27 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
           ),
           actions: <Widget>[
             TextButton(
-                onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    if (adjustAmount == null) {
-                      await _firestore.updateWallet(widget.wallet);
-                      await _firestore.updateSelectedWallet(widget.wallet.id);
-                    } else
-                      await _firestore.adjustBalance(
-                          widget.wallet, adjustAmount);
-                    Navigator.pop(context, widget.wallet.id);
-                  }
-                },
-                child: Text('Save',
-                    style: TextStyle(
-                      fontFamily: Style.fontFamily,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                      color: Style.foregroundColor,
-                    )
-                ),
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.transparent,
-                )),
+              onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  if (adjustAmount == null) {
+                    await _firestore.updateWallet(widget.wallet);
+                    await _firestore.updateSelectedWallet(widget.wallet.id);
+                  } else
+                    await _firestore.adjustBalance(
+                        widget.wallet, adjustAmount);
+                  Navigator.pop(context, widget.wallet.id);
+                }
+              },
+              child: Text('Save',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: Style.foregroundColor,
+                  )
+              ),
+            ),
           ],
         ),
         body: Container(
@@ -136,21 +132,6 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             ],
                           ),
                         ),
-                        // onPressed: () async {
-                        //   // TODO: Chọn icon cho ví
-                        //   var data = await showCupertinoModalBottomSheet(
-                        //     context: context,
-                        //     builder: (context) => IconPicker(),
-                        //   );
-                        //   if (data != null) {
-                        //     widget.wallet.iconID = data;
-                        //     setState(() {
-                        //       iconData = data;
-                        //     });
-                        //   }
-                        // },
-                        // iconSize: 70,
-                        // color: Color(0xff8f8f8f),
                       ),
                       Expanded(
                         child: Container(
@@ -169,7 +150,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             decoration: InputDecoration(
                                 errorBorder: UnderlineInputBorder(
                                   borderSide:
-                                      BorderSide(color: Style.errorColor, width: 1),
+                                  BorderSide(color: Style.errorColor, width: 1),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -199,6 +180,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       )
                     ],
                   ),
+                  SizedBox(height: 20,),
                   Divider(
                     thickness: 0.05,
                     color: Style.foregroundColor,
@@ -211,7 +193,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                           backgroundColor: Style.boxBackgroundColor,
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                            BorderRadius.all(Radius.circular(20.0)),
                           ),
                           flagSize: 26,
                           titleTextStyle: TextStyle(
@@ -272,36 +254,32 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                         size: 30.0, color: Style.foregroundColor.withOpacity(0.24)),
                     title: adjustAmount != null
                         ? MoneySymbolFormatter(
-                            text: adjustAmount,
-                            currencyId: widget.wallet.currencyID,
-                            textStyle: TextStyle(
-                                color: Style.foregroundColor,
-                                fontFamily: Style.fontFamily,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16.0),
-                          )
+                      text: adjustAmount,
+                      currencyId: widget.wallet.currencyID,
+                      textStyle: TextStyle(
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.0),
+                    )
                         : MoneySymbolFormatter(
-                            text: widget.wallet.amount,
-                            currencyId: widget.wallet.currencyID,
-                            textStyle: TextStyle(
-                                color: Style.foregroundColor,
-                                fontFamily: Style.fontFamily,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16.0),
-                          ),
+                      text: widget.wallet.amount,
+                      currencyId: widget.wallet.currencyID,
+                      textStyle: TextStyle(
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.0),
+                    ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Style.foregroundColor),
                   )
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                // Xử lý sự kiện click ở đây.
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                alignment: Alignment.center,
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 40),
+                height: 40,
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () async {
@@ -344,9 +322,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       },
                     ),
                   ),
-                )
-              ),
-            ),
+                )),
           ],
         ),
       ],
