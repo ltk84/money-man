@@ -147,8 +147,7 @@ class _RecurringTransactionDetailScreenState
                         thickness: 1,
                       ),
                     ),
-                    buildInfoAmount(
-                        amount: _recurringTransaction.amount),
+                    buildInfoAmount(amount: _recurringTransaction.amount),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -209,7 +208,7 @@ class _RecurringTransactionDetailScreenState
                 onPressed: () async {
                   var result =
                       await _firestore.executeInstantRecurringTransaction(
-                          widget.recurringTransaction, widget.wallet);
+                          _recurringTransaction, widget.wallet);
                   if (result > 0) {
                     await _showAlertDialog(
                         title: 'Congratulation!',
@@ -303,10 +302,10 @@ class _RecurringTransactionDetailScreenState
                 text: amount,
                 currencyId: widget.wallet.currencyID,
                 textStyle: TextStyle(
-                    color: Style.foregroundColor,
-                    fontFamily: Style.fontFamily,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w500,
                 ),
               )
             ],
@@ -340,7 +339,7 @@ class _RecurringTransactionDetailScreenState
     );
   }
 
-  Widget buildNote ({String display}) {
+  Widget buildNote({String display}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
@@ -354,7 +353,9 @@ class _RecurringTransactionDetailScreenState
                 fontFamily: 'Montserrat',
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
-                color: display == null || display == '' ? Colors.white24 : Colors.white,
+                color: display == null || display == ''
+                    ? Colors.white24
+                    : Colors.white,
               )),
         ],
       ),
@@ -399,29 +400,24 @@ class _RecurringTransactionDetailScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                        text: 'Next occurrence: ',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        )
-                    ),
-                    TextSpan(
-                        text: nextDate,
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                          color: Style.primaryColor,
-                        )
-                    ),
-                  ]
-                )
-              ),
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: 'Next occurrence: ',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    )),
+                TextSpan(
+                    text: nextDate,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600,
+                      color: Style.primaryColor,
+                    )),
+              ])),
               Text(type,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
