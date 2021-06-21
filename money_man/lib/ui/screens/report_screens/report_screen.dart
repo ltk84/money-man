@@ -178,34 +178,37 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                   });
                 }
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        dateDescript,
-                        style: TextStyle(
-                          fontFamily: Style.fontFamily,
-                          fontWeight: FontWeight.w600,
-                          color: Style.foregroundColor,
-                          fontSize: 14.0,
-                        ),
-                      ),
-                      Text(
-                        DateFormat('dd/MM/yyyy').format(beginDate) +
-                            " - " +
-                            DateFormat('dd/MM/yyyy').format(endDate),
-                        style: TextStyle(
+              child: Container(
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          dateDescript,
+                          style: TextStyle(
                             fontFamily: Style.fontFamily,
-                            color: Style.foregroundColor.withOpacity(0.7),
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ],
-                  ),
-                  Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
-                ],
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                        Text(
+                          DateFormat('dd/MM/yyyy').format(beginDate) +
+                              " - " +
+                              DateFormat('dd/MM/yyyy').format(endDate),
+                          style: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              color: Style.foregroundColor.withOpacity(0.7),
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                    Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
+                  ],
+                ),
               ),
             ),
             actions: <Widget>[
