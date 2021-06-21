@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
+import 'package:money_man/ui/style.dart';
 
 class IconPicker extends StatefulWidget {
   const IconPicker({Key key}) : super(key: key);
@@ -17,38 +18,21 @@ class _IconPickerState extends State<IconPicker> {
   Widget build(BuildContext context) {
     print("build 1");
     return Scaffold(
-        backgroundColor: Color(0xFF111111),
+        backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
-          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.grey[900],
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0))),
-          leading: TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Back',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                backgroundColor: Colors.transparent,
-              )),
+          backgroundColor: Style.boxBackgroundColor,
+          leading: CloseButton(
+            color: Style.foregroundColor
+          ),
           title: Text('Icon Picker',
               style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16.0)),
+                fontFamily: Style.fontFamily,
+                fontSize: 17.0,
+                fontWeight: FontWeight.w600,
+                color: Style.foregroundColor,
+              )),
         ),
         body: FutureBuilder(
             future: getListIcon(),
@@ -56,7 +40,7 @@ class _IconPickerState extends State<IconPicker> {
               if (snapshot.connectionState == ConnectionState.done) {
                 return Container(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  color: Color(0xFF111111),
+                  color: Style.backgroundColor1,
                   child: GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -78,7 +62,29 @@ class _IconPickerState extends State<IconPicker> {
                       }),
                 );
               } else {
-                return Center(child: Text('Loading'));
+                return Container(
+                    color: Style.backgroundColor,
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.hourglass_empty,
+                          color: Style.foregroundColor.withOpacity(0.12),
+                          size: 100,
+                        ),
+                        SizedBox(height: 10,),
+                        Text(
+                          'Loading',
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
+                            color: Style.foregroundColor.withOpacity(0.24),
+                          ),
+                        ),
+                      ],
+                    )
+                );
               }
             }));
   }

@@ -3,25 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/select_other_source.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
-class CategoriesTransactionScreen extends StatefulWidget {
-  final Wallet wallet;
+class CategoriesRecurringTransactionScreen extends StatefulWidget {
+  final String walletId;
 
-  const CategoriesTransactionScreen({Key key, @required this.wallet})
+  const CategoriesRecurringTransactionScreen({Key key, @required this.walletId})
       : super(key: key);
 
   @override
-  _CategoriesTransactionScreenState createState() =>
-      _CategoriesTransactionScreenState();
+  _CategoriesRecurringTransactionScreenState createState() =>
+      _CategoriesRecurringTransactionScreenState();
 }
 
-class _CategoriesTransactionScreenState
-    extends State<CategoriesTransactionScreen> with TickerProviderStateMixin {
+class _CategoriesRecurringTransactionScreenState
+    extends State<CategoriesRecurringTransactionScreen>
+    with TickerProviderStateMixin {
   // list tab category
   final List<Tab> categoryTypeTab = [
     Tab(
@@ -88,7 +88,7 @@ class _CategoriesTransactionScreenState
       length: 3,
       child: Scaffold(
         backgroundColor: Style.backgroundColor,
-        extendBodyBehindAppBar: true,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
           leading: MaterialButton(
@@ -125,12 +125,9 @@ class _CategoriesTransactionScreenState
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  //child: Container(
-                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
-                  //),
                 ),
               ),
             ),
@@ -190,45 +187,7 @@ class _CategoriesTransactionScreenState
                                   fontWeight: FontWeight.w700,
                                   fontFamily: Style.fontFamily)),
                           onTap: () async {
-                            if (_selectCateTab[index].name == 'Repayment') {
-                              var result = await showCupertinoModalBottomSheet(
-                                  isDismissible: true,
-                                  backgroundColor: Style.boxBackgroundColor,
-                                  context: context,
-                                  builder: (context) => SelectOtherSourceScreen(
-                                      title: 'Select payment source',
-                                      titleAtEnd: 'Tap to pay off other debt',
-                                      criteria: 'Debt',
-                                      wallet: widget.wallet));
-                              if (result != null) {
-                                if (result is int) {
-                                  Navigator.pop(context, _selectCateTab[index]);
-                                } else {
-                                  Navigator.pop(
-                                      context, [_selectCateTab[index], result]);
-                                }
-                              }
-                            } else if (_selectCateTab[index].name ==
-                                'Debt Collection') {
-                              var result = await showCupertinoModalBottomSheet(
-                                  backgroundColor: Style.boxBackgroundColor,
-                                  context: context,
-                                  builder: (context) => SelectOtherSourceScreen(
-                                      title: 'Select debt collection source',
-                                      titleAtEnd:
-                                          'Tap to receive other debt collection',
-                                      criteria: 'Loan',
-                                      wallet: widget.wallet));
-                              if (result != null) {
-                                if (result is int) {
-                                  Navigator.pop(context, _selectCateTab[index]);
-                                } else {
-                                  Navigator.pop(
-                                      context, [_selectCateTab[index], result]);
-                                }
-                              }
-                            } else
-                              Navigator.pop(context, _selectCateTab[index]);
+                            Navigator.pop(context, _selectCateTab[index]);
                           },
                         );
                       });

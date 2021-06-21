@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:share/share.dart';
@@ -57,58 +58,40 @@ class ShareScreenState extends State<ShareScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String reportName = 'Report_' + DateTime.now().difference(DateTime(2021)).inSeconds.toString();
+
     return Scaffold(
-      backgroundColor: Colors.black45,
+      backgroundColor: Style.boxBackgroundColor,
       appBar: AppBar(
-        leadingWidth: 70.0,
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.boxBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20.0),
                 topRight: Radius.circular(20.0))),
         title: Text('Share',
             style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w600,
-                fontSize: 15.0)),
-        leading: TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              'Close',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            style: TextButton.styleFrom(
-              primary: Colors.white,
-              backgroundColor: Colors.transparent,
-            )),
+                color: Style.foregroundColor,
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,)),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
       ),
-      // body: ListView(
-      //   scrollDirection: Axis.horizontal,
-      //   children: [
-      //     buildImage(reportData1),
-      //     buildImage(reportData2),
-      //     buildImage(reportData3),
-      //   ],
-      // )
       body: Container(
-          margin: EdgeInsets.symmetric(vertical: 20.0),
-          child: Column(
+          color: Style.backgroundColor1,
+          padding: EdgeInsets.symmetric(vertical: 20.0),
+          child: ListView(
+            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               Container(
                 child: CarouselSlider(
                   options: CarouselOptions(
                     scrollPhysics: BouncingScrollPhysics(),
                     autoPlay: false,
-                    aspectRatio: 2.0,
+                    aspectRatio: 1.2,
                     enlargeCenterPage: true,
                     enableInfiniteScroll: false,
                     onPageChanged: (index, reason) {
@@ -118,15 +101,16 @@ class ShareScreenState extends State<ShareScreen> {
                     },
                   ),
                   items: [
-                    ImageFromUnit8List(reportData1),
-                    ImageFromUnit8List(reportData2),
-                    ImageFromUnit8List(reportData3),
+                    if (reportData1 != null) ImageFromUnit8List(reportData1),
+                    if (reportData2 != null) ImageFromUnit8List(reportData2),
+                    if (reportData3 != null) ImageFromUnit8List(reportData3),
                   ],
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 50.0, bottom: 10.0),
-                padding: EdgeInsets.symmetric(horizontal: 100.0),
+                height: 40,
+                width: double.infinity,
+                margin: EdgeInsets.fromLTRB(40, 50, 40, 10),
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -148,7 +132,7 @@ class ShareScreenState extends State<ShareScreen> {
                   onPressed: () async {
                     final tempDir = await getTemporaryDirectory();
                     final file =
-                        await new File('${tempDir.path}/image.jpg').create();
+                        await new File('${tempDir.path}/$reportName.jpg').create();
                     var data = (_currentIndex == 0)
                         ? reportData1
                         : ((_currentIndex == 1) ? reportData2 : reportData3);
@@ -156,24 +140,28 @@ class ShareScreenState extends State<ShareScreen> {
                     Share.shareFiles([file.path]);
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text('SHARE',
-                            style: TextStyle(fontSize: 15),
-                            textAlign: TextAlign.center),
-                        flex: 3,
-                      ),
-                      Expanded(
-                        child: Icon(Icons.share),
-                        flex: 1,
+                      Icon(Icons.share),
+                      SizedBox(width: 10,),
+                      Text('SHARE',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.5,
+                            wordSpacing: 2.0
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 100.0),
+                height: 40,
+                width: double.infinity,
+                margin: EdgeInsets.fromLTRB(40, 5, 40, 10),
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -199,12 +187,12 @@ class ShareScreenState extends State<ShareScreen> {
                                 ? reportData2
                                 : reportData3),
                         quality: 100,
-                        name: 'Report_' + (_currentIndex + 1).toString());
+                        name: reportName);
                     if (result['isSuccess']) {
                       showDialog<void>(
                         context: context,
                         barrierDismissible: false, // user must tap button!
-                        barrierColor: Colors.black54,
+                        barrierColor: Style.backgroundColor.withOpacity(0.54),
                         builder: (BuildContext context) {
                           return CustomAlert(
                             iconPath: "assets/images/success.svg",
@@ -217,7 +205,7 @@ class ShareScreenState extends State<ShareScreen> {
                       showDialog<void>(
                         context: context,
                         barrierDismissible: false, // user must tap button!
-                        barrierColor: Colors.black54,
+                        barrierColor: Style.backgroundColor.withOpacity(0.54),
                         builder: (BuildContext context) {
                           return CustomAlert(
                               iconPath: "assets/images/error.svg",
@@ -227,17 +215,19 @@ class ShareScreenState extends State<ShareScreen> {
                     }
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text('SAVE',
-                            style: TextStyle(fontSize: 15),
-                            textAlign: TextAlign.center),
-                        flex: 3,
-                      ),
-                      Expanded(
-                        child: Icon(Icons.save_alt),
-                        flex: 1,
+                      Icon(Icons.save_alt),
+                      SizedBox(width: 10),
+                      Text('SAVE',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5,
+                              wordSpacing: 2.0
+                          ),
                       ),
                     ],
                   ),

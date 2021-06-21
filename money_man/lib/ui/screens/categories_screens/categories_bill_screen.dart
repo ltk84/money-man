@@ -54,7 +54,7 @@ class _CategoriesBillScreenState
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
@@ -64,13 +64,13 @@ class _CategoriesBillScreenState
             },
             child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: foregroundColor),
+                Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
                 Hero(
                     tag: 'alo',
                     child: Text('More',
                         style: TextStyle(
-                            color: foregroundColor,
-                            fontFamily: fontFamily,
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
                             fontSize: 17.0))),
               ],
             ),
@@ -92,9 +92,12 @@ class _CategoriesBillScreenState
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  //child: Container(
+                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
+                  //),
                 ),
               ),
             ),
@@ -106,8 +109,8 @@ class _CategoriesBillScreenState
                   ''
                   'Categories',
                   style: TextStyle(
-                      color: foregroundColor,
-                      fontFamily: fontFamily,
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 17.0))),
         ),
         body: StreamBuilder<List<MyCategory>>(
@@ -130,9 +133,9 @@ class _CategoriesBillScreenState
                           size: 35.0),
                       title: Text(_selectCateTab[index].name,
                           style: TextStyle(
-                              color: foregroundColor,
+                              color: Style.foregroundColor,
                               fontWeight: FontWeight.w700,
-                              fontFamily: fontFamily)),
+                              fontFamily: Style.fontFamily)),
                       onTap: () {
                         Navigator.pop(context, _selectCateTab[index]);
                       },

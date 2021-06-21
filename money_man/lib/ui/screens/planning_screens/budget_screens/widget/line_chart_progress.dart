@@ -8,9 +8,8 @@ import 'package:intl/intl.dart';
 class LineCharts extends StatefulWidget {
   LineCharts({Key key, @required this.budget, this.todayRate, this.todayTaget})
       : super(key: key);
-  final todayRate;
-  final todayTaget;
-
+  final todayRate; // tỉ lệ ngày
+  final todayTaget; // tỉ lệ spent/amoount
   final Budget budget;
 
   @override
@@ -35,10 +34,12 @@ class _LineChartsState extends State<LineCharts> {
   }
 
   double getMaxofY(Budget budget) {
-    if (widget.todayRate > 1) {
+    if (DateTime.now()
+            .compareTo(widget.budget.endDate.add(Duration(days: 1))) >=
+        0) {
       return budget.spent > budget.amount ? budget.spent : budget.amount;
     }
-    if (widget.todayRate < 0) {
+    if (DateTime.now().isBefore(budget.beginDate)) {
       return budget.amount;
     } else {
       return budget.spent / widget.todayRate > budget.amount
@@ -52,6 +53,7 @@ class _LineChartsState extends State<LineCharts> {
       FirebaseFireStoreService _firestore,
       double maxOfY,
       double todayRate) async {
+    // truowngf hop chua bat dau
     if (DateTime.now().isBefore(budget.beginDate))
       return [
         FlSpot(0, 0),
@@ -59,12 +61,25 @@ class _LineChartsState extends State<LineCharts> {
         FlSpot(0, 0),
         FlSpot(0, 0),
       ];
-
+    // truong hop da ket thuc
+    if (DateTime.now()
+            .compareTo(widget.budget.endDate.add(Duration(days: 1))) >=
+        0) {
+      List<FlSpot> mSpot = [];
+      var temp = budget.beginDate;
+      var end = budget.endDate;
+      var difference = end.difference(budget.beginDate).inMinutes / 6;
+      for (double i = 0; i < 7; i++) {
+        temp = temp.add(Duration(minutes: difference.toInt()));
+        var spent = await _firestore.calculateBudgetSpentFromDay(budget, temp);
+        var YAxix = spent / maxOfY * 5;
+        mSpot.add(FlSpot(i, YAxix));
+      }
+      return mSpot;
+    }
     List<FlSpot> mSpot = [];
     var temp = budget.beginDate;
-    var end = budget.endDate.isBefore(DateTime.now())
-        ? budget.endDate
-        : DateTime.now();
+    var end = DateTime.now();
     var difference = end.difference(budget.beginDate).inMinutes / 6;
     for (double i = 0; i < 7; i++) {
       temp = temp.add(Duration(minutes: difference.toInt()));
@@ -73,12 +88,6 @@ class _LineChartsState extends State<LineCharts> {
       mSpot.add(FlSpot(i * todayRate, YAxix));
     }
     return mSpot;
-  }
-
-  List<FlSpot> GetmSpot(List<FlSpot> mSpot1) {
-    mSpot1.add(FlSpot(6,
-        widget.budget.spent / widget.todayRate * 5 / getMaxofY(widget.budget)));
-    return mSpot1;
   }
 
   @override
@@ -104,7 +113,6 @@ class _LineChartsState extends State<LineCharts> {
                 FlSpot(0, 0),
                 FlSpot(0, 0),
               ];
-          //var mSpot2 = GetmSpot(mSpot);
           return Container(
             padding: EdgeInsets.only(left: 15),
             child: SizedBox(
@@ -123,26 +131,7 @@ class _LineChartsState extends State<LineCharts> {
                   lineBarsData: [
                     // Này là để điều chỉnh cái đồ thị
                     LineChartBarData(
-                      spots: 1 == 1
-                          ? mSpot
-                          : widget.todayRate < 0
-                              ? [
-                                  FlSpot(0, 0),
-                                  FlSpot(0, 0),
-                                  FlSpot(0, 0),
-                                  FlSpot(0, 0),
-                                ]
-                              : widget.todayRate > 1
-                                  ? [
-                                      FlSpot(0, 0),
-                                      FlSpot(1, 0),
-                                      FlSpot(2, 0),
-                                      FlSpot(3, 0),
-                                      FlSpot(4, 0),
-                                      FlSpot(5, 0),
-                                      FlSpot(6, 0),
-                                    ]
-                                  : [],
+                      spots: mSpot,
                       isCurved: false,
                       barWidth: 2,
                       colors: [
@@ -164,6 +153,7 @@ class _LineChartsState extends State<LineCharts> {
                         show: false,
                       ),
                     ),
+                    // này để ổn định cho khung đồ thị
                     LineChartBarData(
                       spots: [
                         FlSpot(0, 0),
@@ -196,34 +186,42 @@ class _LineChartsState extends State<LineCharts> {
                         show: false,
                       ),
                     ),
-                    LineChartBarData(
-                      spots: [
-                        mSpot.last,
-                        FlSpot(6,
-                            widget.budget.spent / widget.todayRate * 5 / maxOfY)
-                      ], //mSpot2,
-                      isCurved: false,
-                      barWidth: 2,
-                      colors: [
-                        Color(0xFF2FB49C),
-                      ],
-                      belowBarData: BarAreaData(
-                        show: true,
-                        colors: [Colors.white.withOpacity(0.2)],
-                        cutOffY: cutOffYValue,
-                        applyCutOffY: true,
+                    // Này là phần chấm chấm
+                    if (DateTime.now().compareTo(
+                            widget.budget.endDate.add(Duration(days: 1))) <=
+                        0)
+                      LineChartBarData(
+                        spots: [
+                          mSpot.last,
+                          FlSpot(
+                              6,
+                              widget.budget.spent /
+                                  widget.todayRate *
+                                  5 /
+                                  maxOfY)
+                        ], //mSpot2,
+                        isCurved: false,
+                        barWidth: 2,
+                        colors: [
+                          Color(0xFF2FB49C),
+                        ],
+                        belowBarData: BarAreaData(
+                          show: true,
+                          colors: [Colors.white.withOpacity(0.2)],
+                          cutOffY: cutOffYValue,
+                          applyCutOffY: true,
+                        ),
+                        aboveBarData: BarAreaData(
+                          show: true,
+                          colors: [Colors.red.withOpacity(0.6)],
+                          cutOffY: cutOffYValue,
+                          applyCutOffY: true,
+                        ),
+                        dashArray: [2, 4],
+                        dotData: FlDotData(
+                          show: false,
+                        ),
                       ),
-                      aboveBarData: BarAreaData(
-                        show: true,
-                        colors: [Colors.red.withOpacity(0.6)],
-                        cutOffY: cutOffYValue,
-                        applyCutOffY: true,
-                      ),
-                      dashArray: [2, 4],
-                      dotData: FlDotData(
-                        show: false,
-                      ),
-                    ),
                   ],
                   minY: 0,
                   maxY: 6,

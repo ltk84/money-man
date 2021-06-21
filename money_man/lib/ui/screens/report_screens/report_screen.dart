@@ -15,6 +15,8 @@ import 'package:money_man/ui/screens/report_screens/share_report/utils.dart';
 import 'package:money_man/ui/screens/report_screens/share_report/widget_to_image.dart';
 import 'package:money_man/ui/screens/report_screens/share_screen.dart';
 import 'package:money_man/ui/screens/report_screens/time_selection.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../style.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/core/models/transaction_model.dart';
@@ -111,9 +113,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
     return DefaultTabController(
       length: 300,
       child: Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: Style.backgroundColor,
+          extendBodyBehindAppBar: true,
           appBar: new AppBar(
-            backgroundColor: Colors.black,
+            backgroundColor: Style.backgroundColor,
             centerTitle: true,
             elevation: 0,
             flexibleSpace: ClipRect(
@@ -153,7 +156,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                       iconPath: _wallet.iconID,
                       size: 25.0,
                     ),
-                    Icon(Icons.arrow_drop_down, color: Colors.grey),
+                    Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54)),
                   ],
                 ),
               ),
@@ -162,7 +165,6 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
               onTap: () async {
                 final result = await showCupertinoModalBottomSheet(
                     isDismissible: true,
-                    backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) => TimeRangeSelection(
                         dateDescription: dateDescript,
@@ -176,55 +178,64 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                   });
                 }
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        dateDescript,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.0,
+              child: Container(
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          dateDescript,
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor,
+                            fontSize: 14.0,
+                          ),
                         ),
-                      ),
-                      Text(
-                        DateFormat('dd/MM/yyyy').format(beginDate) +
-                            " - " +
-                            DateFormat('dd/MM/yyyy').format(endDate),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                    ],
-                  ),
-                  Icon(Icons.arrow_drop_down, color: Colors.white),
-                ],
+                        Text(
+                          DateFormat('dd/MM/yyyy').format(beginDate) +
+                              " - " +
+                              DateFormat('dd/MM/yyyy').format(endDate),
+                          style: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              color: Style.foregroundColor.withOpacity(0.7),
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                    Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
+                  ],
+                ),
               ),
             ),
             actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.ios_share, color: Colors.white),
-                onPressed: () async {
-                  final bytes1 = await Utils.capture(key1);
-                  final bytes2 = await Utils.capture(key2);
-                  final bytes3 = await Utils.capture(key3);
+              Hero(
+                tag: 'shareButton',
+                child: MaterialButton(
+                  child: Icon(Icons.ios_share, color: Style.foregroundColor),
+                  onPressed: () async {
+                    final bytes1 = await Utils.capture(key1);
+                    final bytes2 = await Utils.capture(key2);
+                    final bytes3 = await Utils.capture(key3);
 
-                  await setState(() {
-                    this.bytes1 = bytes1;
-                    this.bytes2 = bytes2;
-                    this.bytes3 = bytes3;
-                  });
-                  showCupertinoModalBottomSheet(
-                      isDismissible: true,
-                      backgroundColor: Colors.grey[900],
-                      context: context,
-                      builder: (context) => ShareScreen(
-                          bytes1: this.bytes1,
-                          bytes2: this.bytes2,
-                          bytes3: this.bytes3));
-                },
+                    await setState(() {
+                      this.bytes1 = bytes1;
+                      this.bytes2 = bytes2;
+                      this.bytes3 = bytes3;
+                    });
+                    showCupertinoModalBottomSheet(
+                        isDismissible: true,
+                        backgroundColor: Style.boxBackgroundColor,
+                        context: context,
+                        builder: (context) => ShareScreen(
+                            bytes1: this.bytes1,
+                            bytes2: this.bytes2,
+                            bytes3: this.bytes3));
+                  },
+                ),
               ),
             ],
           ),
@@ -244,7 +255,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                   if (element.date.isBefore(beginDate)) {
                     if (element.category.type == 'expense')
                       openingBalance -= element.amount;
-                    else
+                    else if (element.category.type == 'income')
                       openingBalance += element.amount;
                   }
                   if (element.date.compareTo(endDate) <= 0) {
@@ -264,7 +275,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                         // if (!_expenseCategoryList.contains(element.category))
                         //   _expenseCategoryList.add(element.category);
                       }
-                    } else {
+                    } else if (element.category.type == 'income') {
                       closingBalance += element.amount;
                       if (element.date.compareTo(beginDate) >= 0) {
                         income += element.amount;
@@ -285,271 +296,287 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                 _transactionList = _transactionList
                     .where((element) =>
                         element.date.compareTo(beginDate) >= 0 &&
-                        element.date.compareTo(endDate) <= 0)
+                        element.date.compareTo(endDate) <= 0 && element.category.type != 'debt & loan')
                     .toList();
                 return Container(
-                  color: Colors.black,
+                  color: Style.backgroundColor,
                   child: ListView(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(),
+                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey[900],
-                                  width: 1.0,
-                                ),
-                                top: BorderSide(
-                                  color: Colors.grey[900],
-                                  width: 1.0,
-                                ))),
-                        child: Column(children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Opening balance',
-                                      style: TextStyle(
-                                        color: Colors.grey[500],
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      openingBalance.toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Closing balance',
-                                      style: TextStyle(
-                                        color: Colors.grey[500],
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      closingBalance.toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ]),
-                      ),
-                      Container(
                         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
+                          decoration: BoxDecoration(
+                              color: Style.backgroundColor,
                             border: Border(
                                 bottom: BorderSide(
-                                  color: Colors.grey[900],
-                                  width: 1.0,
+                                  color: Style.foregroundColor.withOpacity(0.24),
+                                  width: 0.5,
                                 ),
-                                top: BorderSide(
-                                  color: Colors.grey[900],
-                                  width: 1.0,
-                                ))),
+                                // top: BorderSide(
+                                //   color: Style.foregroundColor.withOpacity(0.12),
+                                //   width: 1.0,
+                                // )
+                            )
+                        ),
                         child: WidgetToImage(
                           builder: (key) {
                             this.key1 = key;
 
-                            return Column(children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Text('Net Income',
-                                      style: TextStyle(
-                                        color: Colors.grey[500],
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                  Text(
-                                      (closingBalance - openingBalance)
-                                          .toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 22,
-                                      )),
-                                ],
+                            return Container(
+                              color: Style.backgroundColor, // để lúc export ra không bị transparent.
+                              child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                'Opening balance',
+                                                style: TextStyle(
+                                                  color: Style.foregroundColor.withOpacity(0.7),
+                                                  fontFamily: Style.fontFamily,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              MoneySymbolFormatter(
+                                                text: openingBalance,
+                                                currencyId: _wallet.currencyID,
+                                                textStyle: TextStyle(
+                                                  color: Style.foregroundColor,
+                                                  fontFamily: Style.fontFamily,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 20,
+                                                  height: 1.5,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                'Closing balance',
+                                                style: TextStyle(
+                                                  color: Style.foregroundColor.withOpacity(0.7),
+                                                  fontFamily: Style.fontFamily,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              MoneySymbolFormatter(
+                                                text: closingBalance,
+                                                currencyId: _wallet.currencyID,
+                                                textStyle: TextStyle(
+                                                  color: Style.foregroundColor,
+                                                  fontFamily: Style.fontFamily,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 20,
+                                                  height: 1.5,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Divider(
+                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      thickness: 1,
+                                      height: 20,
+                                    ),
+                                    SizedBox(height: 10,),
+                                    Hero(
+                                      tag: 'netIncomeChart',
+                                      child: Material(
+                                        color: Style.backgroundColor,
+                                        child: Column(
+                                          children: [
+                                            Text('Net Income',
+                                                style: TextStyle(
+                                                  color: Style.foregroundColor.withOpacity(0.7),
+                                                  fontFamily: Style.fontFamily,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 16,
+                                                )
+                                            ),
+                                            MoneySymbolFormatter(
+                                                text: closingBalance - openingBalance,
+                                                currencyId: _wallet.currencyID,
+                                                textStyle: TextStyle(
+                                                  color: (closingBalance - openingBalance) > 0 ? Style.incomeColor
+                                                      : (closingBalance - openingBalance) == 0 ? Style.foregroundColor : Style.expenseColor,
+                                                  fontFamily: Style.fontFamily,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 26,
+                                                  height: 1.5,
+                                                )),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    PageTransition(
+                                                        childCurrent: this.widget,
+                                                        child: AnalyticRevenueAndExpenditureScreen(
+                                                          currentWallet: _wallet,
+                                                          beginDate: beginDate,
+                                                          endDate: endDate,
+                                                        ),
+                                                        type: PageTransitionType.rightToLeft));
+                                              },
+                                              child: Container(
+                                                width: 450,
+                                                height: 200,
+                                                child: BarChartScreen(
+                                                    currentList: _transactionList,
+                                                    beginDate: beginDate,
+                                                    endDate: endDate),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  return showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AnalyticRevenueAndExpenditureScreen(
-                                          currentWallet: _wallet,
-                                          beginDate: beginDate,
-                                          endDate: endDate,
-                                        );
-                                      });
-                                },
-                                child: Container(
-                                  width: 450,
-                                  height: 200,
-                                  child: BarChartScreen(
-                                      currentList: _transactionList,
-                                      beginDate: beginDate,
-                                      endDate: endDate),
-                                ),
-                              ),
-                            ]);
+                            );
                           },
                         ),
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 15),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: WidgetToImage(
-                                builder: (key) {
-                                  this.key2 = key;
+                        child: IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                child: WidgetToImage(
+                                  builder: (key) {
+                                    this.key2 = key;
 
-                                  return Column(
-                                    children: <Widget>[
-                                      Text(
-                                        'Income',
-                                        style: TextStyle(
-                                          color: Colors.grey[500],
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      Text(
-                                        income.toString(),
-                                        style: TextStyle(
-                                          color: Colors.blueAccent,
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 18,
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          return showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AnalyticPieChartSreen(
+                                    return  Container(
+                                      color: Style.backgroundColor, // để lúc export ra không bị transparent.
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            'Income',
+                                            style: TextStyle(
+                                              color: Style.foregroundColor.withOpacity(0.7),
+                                              fontFamily: Style.fontFamily,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16,
+                                            ),
+                                            textAlign: TextAlign.start,
+                                          ),
+                                          MoneySymbolFormatter(
+                                            text: income,
+                                            currencyId: _wallet.currencyID,
+                                            textStyle: TextStyle(
+                                              color: Style.incomeColor2,
+                                              fontFamily: Style.fontFamily,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 24,
+                                              height: 1.5,
+                                            ),
+                                            textAlign: TextAlign.start,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      childCurrent: this.widget,
+                                                      child: AnalyticPieChartSreen(
+                                                        currentWallet: _wallet,
+                                                        type: 'income',
+                                                        beginDate: beginDate,
+                                                        endDate: endDate,
+                                                      ),
+                                                      type: PageTransitionType.rightToLeft));
+                                            },
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              child: PieChartScreen(
+                                                  isShowPercent: false,
                                                   currentList: _transactionList,
-                                                  categoryList:
-                                                      _incomeCategoryList,
-                                                  currentWallet:
-                                                      widget.currentWallet,
-                                                  total: income,
-                                                  content: 'Income',
-                                                  color: Colors.green[600],
-                                                );
-                                              });
-                                        },
-                                        child: Container(
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 25),
-                                          width: 90,
-                                          height: 90,
-                                          child: PieChartScreen(
-                                              isShowPercent: false,
-                                              currentList: _transactionList,
-                                              categoryList: _incomeCategoryList,
-                                              total: income),
-                                        ),
+                                                  categoryList: _incomeCategoryList,
+                                                  total: income),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: WidgetToImage(
-                                builder: (key) {
-                                  this.key3 = key;
+                              VerticalDivider(
+                                color: Style.foregroundColor.withOpacity(0.12),
+                                thickness: 1,
+                              ),
+                              Expanded(
+                                child: WidgetToImage(
+                                  builder: (key) {
+                                    this.key3 = key;
 
-                                  return Column(children: <Widget>[
-                                    Text(
-                                      'Expense',
-                                      style: TextStyle(
-                                        color: Colors.grey[500],
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    Text(
-                                      expense.toString(),
-                                      style: TextStyle(
-                                        color: Colors.redAccent,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 18,
-                                      ),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        return showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AnalyticPieChartSreen(
+                                    return Container(
+                                      color: Style.backgroundColor, // để lúc export ra không bị transparent.
+                                      child: Column(
+                                          children: <Widget>[
+                                        Text(
+                                          'Expense',
+                                          style: TextStyle(
+                                            color: Style.foregroundColor.withOpacity(0.7),
+                                            fontFamily: Style.fontFamily,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        MoneySymbolFormatter(
+                                          text: expense,
+                                          currencyId: _wallet.currencyID,
+                                          textStyle: TextStyle(
+                                            color: Style.expenseColor,
+                                            fontFamily: Style.fontFamily,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 24,
+                                            height: 1.5,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    childCurrent: this.widget,
+                                                    child: AnalyticPieChartSreen(
+                                                      currentWallet: _wallet,
+                                                      type: 'expense',
+                                                      beginDate: beginDate,
+                                                      endDate: endDate,
+                                                    ),
+                                                    type: PageTransitionType.rightToLeft));
+                                          },
+                                          child: Container(
+                                            color: Colors.transparent,
+                                            child: PieChartScreen(
+                                                isShowPercent: false,
                                                 currentList: _transactionList,
-                                                categoryList:
-                                                    _expenseCategoryList,
-                                                total: expense,
-                                                content: 'Expense',
-                                                color: Colors.red,
-                                                currentWallet:
-                                                    widget.currentWallet,
-                                              );
-                                            });
-                                      },
-                                      child: Container(
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 25),
-                                        width: 90,
-                                        height: 90,
-                                        child: PieChartScreen(
-                                            isShowPercent: false,
-                                            currentList: _transactionList,
-                                            categoryList: _expenseCategoryList,
-                                            total: expense),
-                                      ),
-                                    ),
-                                  ]);
-                                },
+                                                categoryList: _expenseCategoryList,
+                                                total: expense),
+                                          ),
+                                        ),
+                                      ]),
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -564,7 +591,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
 
     final result = await showCupertinoModalBottomSheet(
         isDismissible: true,
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.boxBackgroundColor,
         context: context,
         builder: (context) {
           return Provider(

@@ -12,10 +12,13 @@ import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/categories_screens/categories_recurring_transaction_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
+import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class EditRecurringTransactionScreen extends StatefulWidget {
@@ -40,7 +43,7 @@ class _EditRecurringTransactionScreenState
   String note;
   RepeatOption repeatOption;
   DateTime nextDate;
-  String repeatContent;
+  String repeatDescription;
 
   var dateUtility = DateUtil();
   @override
@@ -51,16 +54,14 @@ class _EditRecurringTransactionScreenState
     category = widget.recurringTransaction.category;
     note = widget.recurringTransaction.note;
     repeatOption = widget.recurringTransaction.repeatOption;
-    var dateTime = DateFormat('dd-MM-yyyy').format(repeatOption.beginDateTime);
-    var type = repeatOption.type == 'until'
-        ? 'until ${DateFormat('dd-MM-yyyy').format(repeatOption.extraTypeInfo)}'
-        : 'for ${repeatOption.extraTypeInfo} times';
-    repeatContent = 'Repeat ${repeatOption.frequency} from $dateTime $type';
+    repeatDescription = updateRepeatDescription();
   }
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    repeatDescription = updateRepeatDescription();
+
     return Scaffold(
         backgroundColor: Color(0xFF111111),
         extendBodyBehindAppBar: true,
@@ -80,14 +81,14 @@ class _EditRecurringTransactionScreenState
             TextButton(
               onPressed: () async {
                 RecurringTransaction _recurringTransaction =
-                    RecurringTransaction(
+                RecurringTransaction(
                   id: widget.recurringTransaction.id,
                   category: category,
                   amount: amount,
                   walletId: widget.wallet.id,
                   note: note,
                   transactionIdList:
-                      widget.recurringTransaction.transactionIdList,
+                  widget.recurringTransaction.transactionIdList,
                   repeatOption: repeatOption,
                   isFinished: false,
                 );
@@ -108,7 +109,7 @@ class _EditRecurringTransactionScreenState
         ),
         body: ListView(
           physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
                 margin: EdgeInsets.only(top: 30.0),
@@ -128,17 +129,16 @@ class _EditRecurringTransactionScreenState
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async {
-                      final resultAmount = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => EnterAmountScreen()));
+                      final resultAmount = await showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => EnterAmountScreen());
                       if (resultAmount != null)
                         setState(() {
                           print(resultAmount);
                           amount = double.parse(resultAmount);
                         });
                     },
-                    child: buildAmountInput(display: '\$ ' + amount.toString()),
+                    child: buildAmountInput(amount: amount),
                   ),
 
                   // Divider ngăn cách giữa các input field.
@@ -158,7 +158,10 @@ class _EditRecurringTransactionScreenState
                           isDismissible: true,
                           backgroundColor: Colors.grey[900],
                           context: context,
-                          builder: (context) => CategoriesTransactionScreen());
+                          builder: (context) =>
+                              CategoriesRecurringTransactionScreen(
+                                walletId: widget.wallet.id,
+                              ));
                       if (selectCate != null) {
                         setState(() {
                           category = selectCate;
@@ -188,12 +191,13 @@ class _EditRecurringTransactionScreenState
                   GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () async {
-                        final noteContent = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => NoteScreen(
-                                      content: note ?? '',
-                                    )));
+                        final noteContent = await showCupertinoModalBottomSheet(
+                            isDismissible: true,
+                            backgroundColor: Style.boxBackgroundColor,
+                            context: context,
+                            builder: (context) => NoteScreen(
+                              content: note ?? '',
+                            ));
                         print(noteContent);
                         if (noteContent != null) {
                           setState(() {
@@ -240,8 +244,8 @@ class _EditRecurringTransactionScreenState
                           backgroundColor: Colors.grey[900],
                           context: context,
                           builder: (context) => RepeatOptionScreen(
-                                repeatOption: repeatOption,
-                              ));
+                            repeatOption: repeatOption,
+                          ));
                       if (res != null)
                         setState(() {
                           repeatOption = res;
@@ -254,15 +258,15 @@ class _EditRecurringTransactionScreenState
                           } else if (repeatOption.frequency == 'monthly') {
                             DateTime beginDate = repeatOption.beginDateTime;
                             int days = dateUtility.daysInMonth(
-                                    beginDate.month, beginDate.year) *
+                                beginDate.month, beginDate.year) *
                                 repeatOption.rangeAmount;
                             nextDate = beginDate.add(Duration(days: days));
                           } else {
                             DateTime beginDate = repeatOption.beginDateTime;
                             int days =
                                 (dateUtility.leapYear(beginDate.year) == true
-                                        ? 365
-                                        : 366) *
+                                    ? 365
+                                    : 366) *
                                     repeatOption.rangeAmount;
                             print(days);
                             nextDate = beginDate.add(Duration(days: days));
@@ -274,7 +278,7 @@ class _EditRecurringTransactionScreenState
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Text(
-                  repeatContent,
+                  repeatDescription,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 13.0,
@@ -286,7 +290,26 @@ class _EditRecurringTransactionScreenState
         ));
   }
 
-  Widget buildAmountInput({String display}) {
+  String updateRepeatDescription() {
+    String frequency = repeatOption.frequency == 'daily'
+        ? 'day'
+        : repeatOption.frequency
+        .substring(0, repeatOption.frequency.indexOf('ly'));
+    String beginDateTime =
+    DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime);
+    String extraFeq = repeatOption.rangeAmount.toString();
+    String type = repeatOption.type;
+    String extra = repeatOption.type == 'until'
+        ? DateFormat('dd/MM/yyyy').format(repeatOption.extraTypeInfo)
+        : '${repeatOption.extraTypeInfo} time(s)';
+
+    if (type == 'forever') {
+      return 'Repeat every $extraFeq $frequency from $beginDateTime forever';
+    }
+    return 'Repeat every $extraFeq $frequency from $beginDateTime $type $extra';
+  }
+
+  Widget buildAmountInput({double amount}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
@@ -310,13 +333,24 @@ class _EditRecurringTransactionScreenState
                         color: Colors.white60,
                       )),
                   SizedBox(height: 5.0),
-                  Text(display ?? 'Enter amount',
+                  (amount == null)
+                      ? Text('Enter amount',
                       style: TextStyle(
-                        fontFamily: 'Montserrat',
+                        fontFamily: Style.fontFamily,
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
-                        color: display == null ? Colors.white24 : Colors.white,
-                      )),
+                        color: Style.foregroundColor.withOpacity(0.24),
+                      ))
+                      : MoneySymbolFormatter(
+                    text: amount,
+                    currencyId: widget.wallet.currencyID,
+                    textStyle: TextStyle(
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
                 ],
               ),
             ],
@@ -380,7 +414,7 @@ class _EditRecurringTransactionScreenState
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Colors.white24 : Colors.white,
+                    color: display == null || display == '' ? Colors.white24 : Colors.white,
                   )),
             ],
           ),
@@ -418,7 +452,8 @@ class _EditRecurringTransactionScreenState
             ],
           ),
           Icon(
-            Icons.chevron_right,
+            Icons.lock,
+            size: 20,
             color: Colors.white54,
           ),
         ],

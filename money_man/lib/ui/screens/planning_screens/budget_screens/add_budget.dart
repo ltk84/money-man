@@ -9,6 +9,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
+import 'package:money_man/ui/screens/planning_screens/budget_screens/category_for_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/select_time_range.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
@@ -27,6 +28,17 @@ class AddBudget extends StatefulWidget {
 }
 
 class _AddBudgetState extends State<AddBudget> {
+  BudgetTimeRange GetmTimeRangeMonth(DateTime today) {
+    var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
+    var endDayOfMonth =
+        DateTime(today.year, today.month + 1, 1).subtract(Duration(days: 1));
+    return new BudgetTimeRange(
+        beginDay: firstDayOfMonth,
+        endDay: endDayOfMonth,
+        description:
+            DateTime.now().isBefore(today) ? 'Next month' : 'This month');
+  }
+
   bool isRepeat = true;
 
   BudgetTimeRange mTimeRange;
@@ -45,6 +57,9 @@ class _AddBudgetState extends State<AddBudget> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     if (widget.myCategory != null) cate = widget.myCategory;
+    if (selectedWallet == null) selectedWallet = widget.wallet;
+    if (mTimeRange == null) mTimeRange = GetmTimeRangeMonth(DateTime.now());
+    if (mTimeRange.getBudgetLabel() == 'Custom') isRepeat = false;
 
     return Theme(
       data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
@@ -91,10 +106,7 @@ class _AddBudgetState extends State<AddBudget> {
                       endDate: mTimeRange.endDay,
                       isRepeat: isRepeat);
                   await _firestore.addBudget(mBudget, selectedWallet);
-                  await _showAlertDialog(
-                      "Add budget successfully!", 'Congratulations');
-                  String result = "Success";
-                  Navigator.pop(context, result);
+                  Navigator.pop(context);
                 }
               },
               child: Container(
@@ -132,7 +144,7 @@ class _AddBudgetState extends State<AddBudget> {
                         isDismissible: true,
                         backgroundColor: Colors.transparent,
                         context: context,
-                        builder: (context) => CategoriesTransactionScreen());
+                        builder: (context) => CategoriesBudgetScreen());
                     if (selectCate != null) {
                       setState(() {
                         this.cate = selectCate;
@@ -175,7 +187,7 @@ class _AddBudgetState extends State<AddBudget> {
                                     backgroundColor: Colors.transparent,
                                     context: context,
                                     builder: (context) =>
-                                        CategoriesTransactionScreen());
+                                        CategoriesBudgetScreen());
                             if (selectCate != null) {
                               setState(() {
                                 this.cate = selectCate;
@@ -193,7 +205,9 @@ class _AddBudgetState extends State<AddBudget> {
                               hintText:
                                   cate == null ? 'Choose group' : cate.name,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: cate == null
+                                      ? Colors.white54
+                                      : Colors.white,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -269,7 +283,9 @@ class _AddBudgetState extends State<AddBudget> {
                                       .output
                                       .withoutFractionDigits,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: amount == null
+                                      ? Colors.white54
+                                      : Colors.white,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -299,6 +315,7 @@ class _AddBudgetState extends State<AddBudget> {
                       setState(() {
                         // Change the time ahihi
                         mTimeRange = resultAmount;
+                        print(mTimeRange.getBudgetLabel());
                       });
                   },
                   trailing: Icon(
@@ -342,6 +359,7 @@ class _AddBudgetState extends State<AddBudget> {
                               setState(() {
                                 // Change the time ahihi
                                 mTimeRange = resultAmount;
+                                print(mTimeRange.getBudgetLabel());
                               });
                           },
                           readOnly: true,

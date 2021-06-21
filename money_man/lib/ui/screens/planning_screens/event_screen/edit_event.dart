@@ -7,6 +7,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,16 @@ class _EditEventScreen extends State<EditEventScreen>
 
   String nameEvent;
   DateTime formatTransDate;
+  bool CompareDate(DateTime a, DateTime b)
+  {
+    if( a.year < b.year)
+      return true;
+    if(a.year == b.year && a.month < b.month)
+      return true;
+    if(a.year == b.year && a.month == b.month && a.day < b.day)
+      return true;
+    return false;
+  }
   @override
   void initState() {
     _currentEvent = widget.currentEvent;
@@ -82,7 +93,10 @@ class _EditEventScreen extends State<EditEventScreen>
                   _showAlertDialog('Please enter name!');
                 } else if (iconPath == null) {
                   _showAlertDialog('Please pick category');
-                } else {
+                } else if (CompareDate(endDate, DateTime.now())) {
+                  _showAlertDialog('Please select an end date greater than or equal to today ');
+                }
+                else {
                      _currentEvent.name = nameEvent;
                      _currentEvent.endDate = endDate;
                      _currentEvent.iconPath = iconPath;
@@ -224,10 +238,25 @@ class _EditEventScreen extends State<EditEventScreen>
                             },
                             locale: LocaleType.en,
                             theme: DatePickerTheme(
-                              cancelStyle: TextStyle(color: Colors.white),
-                              doneStyle: TextStyle(color: Colors.white),
-                              itemStyle: TextStyle(color: Colors.white),
-                              backgroundColor: Colors.grey[900],
+                              cancelStyle: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Style.foregroundColor
+                              ),
+                              doneStyle: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Style.foregroundColor
+                              ),
+                              itemStyle: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Style.foregroundColor
+                              ),
+                              backgroundColor: Style.boxBackgroundColor,
                             ));
                       },
                       readOnly: true,

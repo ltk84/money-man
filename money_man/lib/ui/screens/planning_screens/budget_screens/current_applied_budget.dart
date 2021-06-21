@@ -25,16 +25,43 @@ class CurrentlyApplied extends StatelessWidget {
             List<Budget> budgets = snapshot.data ?? [];
             budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
             for (int i = 0; i < budgets.length; i++) {
-              if (budgets[i].endDate.isBefore(DateTime.now())) {
+              if (budgets[i]
+                  .endDate
+                  .add(Duration(days: 1))
+                  .isBefore(DateTime.now())) {
                 budgets.removeAt(i);
                 i--;
               }
             }
+            if (budgets.length == 0)
+              return Container(
+                  color: Color(0xff1a1a1a),
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.hourglass_empty,
+                        color: Colors.white54,
+                        size: 100,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'There are no recurring transactions',
+                        style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white),
+                      ),
+                    ],
+                  ));
             return ListView.builder(
               itemCount: budgets == null ? 0 : budgets.length,
               itemBuilder: (context, index) => Column(
                 children: [
-                  //MyTimeRange(),
                   MyBudgetTile(
                     budget: budgets[index],
                     wallet: wallet,

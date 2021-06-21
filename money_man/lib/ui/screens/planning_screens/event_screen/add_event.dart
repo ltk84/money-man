@@ -9,6 +9,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +45,16 @@ class _AddEventState extends State<AddEvent> {
       iconID: 'assets/icons/travel.svg',
     );
     super.initState();
+  }
+  bool CompareDate(DateTime a, DateTime b)
+  {
+    if( a.year < b.year)
+      return true;
+    if(a.year == b.year && a.month < b.month)
+      return true;
+    if(a.year == b.year && a.month == b.month && a.day < b.day)
+      return true;
+    return false;
   }
   @override
   Widget build(BuildContext context) {
@@ -90,7 +101,11 @@ class _AddEventState extends State<AddEvent> {
                   _showAlertDialog('Please enter name!');
                 } else if (cate == null) {
                   _showAlertDialog('Please pick category');
-                } else {
+                }
+                else if (CompareDate(endDate, DateTime.now())) {
+                  _showAlertDialog('Please select an end date greater than or equal to today ');
+                }
+                else {
                   Event event;
                   event = Event(
                     name: nameEvent,
@@ -167,9 +182,10 @@ class _AddEventState extends State<AddEvent> {
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
+                        padding :  EdgeInsets.fromLTRB(8, 8, 0, 8),
                         icon: SuperIcon(
                           iconPath: cate.iconID,
-                          size: 49.0,
+                          size: 70.0,
                         ),
                         onPressed: () async {
                           var data = await showCupertinoModalBottomSheet(
@@ -182,7 +198,27 @@ class _AddEventState extends State<AddEvent> {
                             });
                           }
                         },
-                        iconSize: 70,
+                        iconSize: 50,
+                        color: Color(0xff8f8f8f),
+                      ),
+                      IconButton(
+                        padding :  EdgeInsets.fromLTRB(0, 8, 8, 8),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 40.0,
+                        ),
+                        onPressed: () async {
+                          var data = await showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (context) => IconPicker(),
+                          );
+                          if (data != null) {
+                            setState(() {
+                              cate.iconID = data;
+                            });
+                          }
+                        },
+                        iconSize: 20,
                         color: Color(0xff8f8f8f),
                       ),
                       Expanded(
@@ -252,10 +288,25 @@ class _AddEventState extends State<AddEvent> {
                             },
                             locale: LocaleType.en,
                             theme: DatePickerTheme(
-                              cancelStyle: TextStyle(color: Colors.white),
-                              doneStyle: TextStyle(color: Colors.white),
-                              itemStyle: TextStyle(color: Colors.white),
-                              backgroundColor: Colors.grey[900],
+                              cancelStyle: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Style.foregroundColor
+                              ),
+                              doneStyle: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Style.foregroundColor
+                              ),
+                              itemStyle: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Style.foregroundColor
+                              ),
+                              backgroundColor: Style.boxBackgroundColor,
                             ));
                       },
                       readOnly: true,
@@ -317,7 +368,7 @@ class _AddEventState extends State<AddEvent> {
                             fontWeight: FontWeight.w600,
                             fontSize: 16.0)),
                     trailing: Icon(Icons.lock,
-                        size: 20.0, color: Colors.white),
+                        size: 20.0, color: Colors.white54),
                   ),
                   Divider(
                     thickness: 0.05,

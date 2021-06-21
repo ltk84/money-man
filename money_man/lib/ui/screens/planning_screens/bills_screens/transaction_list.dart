@@ -10,6 +10,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -40,15 +41,17 @@ class BillTransactionListState extends State<BillTransactionList> {
 
   @override
   void didUpdateWidget(covariant BillTransactionList oldWidget) {
+    super.didUpdateWidget(oldWidget);
     _transactionListID = widget.transactionListID ?? [];
   }
+
 
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Style.backgroundColor,
       appBar: new AppBar(
-        backgroundColor: boxBackgroundColor.withOpacity(0.2),
+        backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
         elevation: 0.0,
         leading: Hero(
           tag: 'billToDetail_backBtn',
@@ -57,18 +60,18 @@ class BillTransactionListState extends State<BillTransactionList> {
                 Navigator.of(context).pop();
               },
               child: Icon(
-                Icons.arrow_back_outlined,
-                color: foregroundColor,
+                Icons.arrow_back_ios_rounded,
+                color: Style.foregroundColor,
               )),
         ),
         title: Hero(
           tag: 'billToDetail_title',
           child: Text('Transaction List',
               style: TextStyle(
-                fontFamily: fontFamily,
+                fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: foregroundColor,
+                color: Style.foregroundColor,
               )),
         ),
         centerTitle: true,
@@ -81,7 +84,10 @@ class BillTransactionListState extends State<BillTransactionList> {
                   sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
               child: AnimatedContainer(
                   duration: Duration(milliseconds: 1),
+                  //child: Container(
+                  //color: Colors.transparent,
                   color: Colors.transparent
+                //),
               ),
             ),
           ),
@@ -116,16 +122,27 @@ class BillTransactionListState extends State<BillTransactionList> {
 
           if (transactionListSorted.length == 0) {
               return Container(
-                alignment: Alignment.center,
-                child: Text(
-                  'No transaction',
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                    color: foregroundColor.withOpacity(0.54),
-                  ),
-                )
+                  color: Style.backgroundColor,
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.hourglass_empty,
+                        color: Style.foregroundColor.withOpacity(0.12),
+                        size: 100,
+                      ),
+                      SizedBox(height: 10,),
+                      Text(
+                        'No transaction',
+                        style: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                          color: Style.foregroundColor.withOpacity(0.24),
+                        ),
+                      ),
+                    ],
+                  )
               );
           } else {
             return buildDisplayTransactionByDate(transactionListSorted, total);
@@ -139,11 +156,11 @@ class BillTransactionListState extends State<BillTransactionList> {
       List<List<MyTransaction>> transactionListSortByDate, double total) {
     return Container(
       height: double.infinity,
-      color: backgroundColor,
+      color: Style.backgroundColor,
       child: ListView.builder(
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           //primary: false,
-          shrinkWrap: true,
+          //shrinkWrap: true,
           // itemCount: TRANSACTION_DATA.length + 1,
           itemCount: transactionListSortByDate.length,
           itemBuilder: (context, xIndex) {
@@ -174,10 +191,10 @@ class BillTransactionListState extends State<BillTransactionList> {
       header: SizedBox(height: 0),
       content: Container(
           decoration: BoxDecoration(
-              color: boxBackgroundColor,
+              color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                    color: backgroundColor,
+                    color: Style.backgroundColor,
                     width: 1.0,
                   ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
@@ -189,21 +206,21 @@ class BillTransactionListState extends State<BillTransactionList> {
                   children: <Widget>[
                     Text('Overview',
                         style: TextStyle(
-                          color: foregroundColor,
-                          fontFamily: fontFamily,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         )),
                     SizedBox(
                       width: 10,
                       height: 10,
                     ),
                     Divider(
-                      color: backgroundColor,
+                      color: Style.backgroundColor,
                       thickness: 1.0,
                       height: 10,
                     ),
-                    ColoredBox(color: backgroundColor.withOpacity(0.87))
+                    ColoredBox(color: Style.backgroundColor.withOpacity(0.87))
                   ]),
             ),
             Container(
@@ -213,18 +230,23 @@ class BillTransactionListState extends State<BillTransactionList> {
                   children: <Widget>[
                     Text('Expense',
                         style: TextStyle(
-                          color: foregroundColor,
-                          fontSize: 15,
-                          fontFamily: fontFamily,
+                          color: Style.foregroundColor.withOpacity(0.54),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: Style.fontFamily,
                         )
                     ),
-                    Text('$currencySymbol $total',
-                        style: TextStyle(
-                          color: foregroundColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: fontFamily,
-                        )),
+                    MoneySymbolFormatter(
+                      text: total,
+                      currencyId: widget.currentWallet.currencyID,
+                      textStyle: TextStyle(
+                        color: Style.foregroundColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: Style.fontFamily,
+                      ),
+                      digit: '-',
+                    )
                   ]),
             ),
           ])),
@@ -236,19 +258,19 @@ class BillTransactionListState extends State<BillTransactionList> {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: backgroundColor,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ),
               top: BorderSide(
-                color: backgroundColor,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: boxBackgroundColor,
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -257,7 +279,12 @@ class BillTransactionListState extends State<BillTransactionList> {
                 child: Text(
                     DateFormat("dd")
                         .format(transListSortByDate[xIndex][0].date),
-                    style: TextStyle(fontSize: 30.0, color: foregroundColor)),
+                    style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 30.0,
+                        color: Style.foregroundColor
+                    )),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -270,16 +297,28 @@ class BillTransactionListState extends State<BillTransactionList> {
                             .format(transListSortByDate[xIndex][0].date)
                             .toString(),
                     // 'hello',
-                    style: TextStyle(fontSize: 12.0, color: foregroundColor.withOpacity(0.54))),
+                    style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.0,
+                        color: Style.foregroundColor.withOpacity(0.54))),
               ),
               Expanded(
-                child: Text(
-                    currencySymbol
-                    + ' ' +
-                    totalAmountInDay.toString(),
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: foregroundColor)),
+                child: MoneySymbolFormatter(
+                  digit: totalAmountInDay >=
+                      0
+                      ? '+'
+                      : '',
+                  text: totalAmountInDay,
+                  currencyId: widget.currentWallet.currencyID,
+                  textAlign: TextAlign.end,
+                  textStyle: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.0,
+                    color: Style.foregroundColor,
+                  ),
+                ),
               ),
             ],
           ),
@@ -302,6 +341,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                   setState(() { });
                 },
                 child: Container(
+                  color: Colors.transparent,
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                   child: Row(
                     children: <Widget>[
@@ -316,28 +356,28 @@ class BillTransactionListState extends State<BillTransactionList> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
                         child: Text(
-                            transListSortByDate[xIndex][yIndex].category.name,
+                            transListSortByDate[xIndex][yIndex]
+                                .category
+                                .name,
                             style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                color: foregroundColor)),
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14.0,
+                              color: Style.foregroundColor,
+                            )),
                       ),
                       Expanded(
-                        child: Text(
-                            currencySymbol
-                                + ' ' +
-                            transListSortByDate[xIndex][yIndex]
-                                .amount
-                                .toString(),
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: transListSortByDate[xIndex][yIndex]
-                                    .category
-                                    .type ==
-                                    'income'
-                                    ? incomeColor
-                                    : expenseColor)),
+                        child: MoneySymbolFormatter(
+                          text: transListSortByDate[xIndex][yIndex].amount,
+                          currencyId: widget.currentWallet.currencyID,
+                          textAlign: TextAlign.end,
+                          textStyle: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Style.expenseColor),
+                          //digit: _digit,
+                        ),
                       ),
                     ],
                   ),

@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -6,6 +8,7 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AdjustBalanceScreen extends StatefulWidget {
@@ -21,195 +24,143 @@ class AdjustBalanceScreen extends StatefulWidget {
 
 class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
   double adjustAmount;
-  bool invalid = false;
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     var iconData = widget.wallet.iconID;
-    // iconData = Wallet.getIconDataByIconID(widget.wallet.iconID);
 
     return Scaffold(
+      backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
+        elevation: 0,
         leadingWidth: 70,
-        leading: TextButton(
-            child: Text(
-              'Cancel',
-              style: TextStyle(color: white),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: Color(0xff444444),
-        centerTitle: true,
-        title: Text(
-          'Adjust Balance',
-          style: TextStyle(color: Colors.white),
+        leading: CloseButton(
+          color: Style.foregroundColor,
         ),
+        backgroundColor: Style.backgroundColor1,
         actions: [
           TextButton(
-              onPressed: () async {
-                if (adjustAmount != null)
-                  await _firestore.adjustBalance(widget.wallet, adjustAmount);
-                Navigator.pop(context);
-              },
-              child: Text(
-                'Save',
-                style: TextStyle(color: Colors.white),
-              ))
+            onPressed: () async {
+              if (adjustAmount != null)
+                await _firestore.adjustBalance(widget.wallet, adjustAmount);
+              Navigator.pop(context);
+            },
+            child: Text('Save',
+                style: TextStyle(
+                  fontFamily: Style.fontFamily,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                  color: Style.successColor,
+                )),
+          )
         ],
       ),
       body: Container(
-        color: Color(0xff111111),
+        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+        color: Style.backgroundColor1,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'ADJUST BALANCE',
+              style: TextStyle(
+                fontFamily: Style.fontFamily,
+                fontWeight: FontWeight.w800,
+                fontSize: 20.0,
+                color: Style.foregroundColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
             SizedBox(
               height: 20,
             ),
             Container(
-              child: Column(children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              decoration: BoxDecoration(
+                  color: Style.boxBackgroundColor,
+                  borderRadius: BorderRadius.circular(10)),
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              child: ListTile(
+                leading: SuperIcon(
+                  iconPath: iconData,
+                  size: 30.0,
+                ),
+                title: Text(
+                  widget.wallet.name,
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Style.foregroundColor,
+                  ),
+                ),
+                trailing: Tooltip(
+                  showDuration: Duration(milliseconds: 500),
+                  margin: EdgeInsets.fromLTRB(70, 0, 77, 0),
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  verticalOffset: -72,
+                  //preferBelow: false,
+                  message: 'Please change your wallet outside to adjust another wallet balance.',
                   decoration: BoxDecoration(
-                      color: Color(0xff333333),
-                      borderRadius: BorderRadius.circular(17)),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(
-                          'Wallet name:',
-                          style: TextStyle(
-                              color: Colors.white70,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                      ListTile(
-                        leading: SuperIcon(
-                          iconPath: iconData,
-                          size: 40.0,
-                        ),
-                        title: Theme(
-                          data: Theme.of(context).copyWith(
-                            primaryColor: Colors.white,
-                          ),
-                          child: TextFormField(
-                            readOnly: true,
-                            style: TextStyle(
-                                color: white,
-                                fontSize: 20,
-                                fontFamily: 'Montserrat'),
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                                hintText: widget.wallet.name,
-                                hintStyle: TextStyle(
-                                    color: white,
-                                    fontSize: 20,
-                                    fontFamily: 'Montserrat'),
-                                isDense: true,
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 25)),
-                          ),
-                        ),
-                      ),
-                      /*Container(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                'This field can not empty',
-                                style: TextStyle(color: Colors.red),
-                              ))*/
-                    ],
+                    color: Style.foregroundColor.withOpacity(0.92),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5),
+                        bottomLeft: Radius.circular(5)),
+                  ),
+                  textStyle: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w500,
+                    color: Style.backgroundColor1.withOpacity(0.87),
+                    fontSize: 14.0,
+                  ),
+                  child: Icon(
+                    Icons.lock,
+                    color: Style.foregroundColor.withOpacity(0.54),
                   ),
                 ),
-                /*ListTile(
-                      onTap: () {},
-                      leading: Icon(Icons.wallet_giftcard),
-                      title: Text(
-                        widget.wallet.name,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),*/
-                Divider(
-                  color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 15),
+            Container(
+              decoration: BoxDecoration(
+                //color: Color(0xff268b79),
+                  color: Style.primaryColor.withOpacity(0.87),
+                  borderRadius: BorderRadius.circular(10)),
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              child: ListTile(
+                onTap: () async {
+                  final resultAmount = await showCupertinoModalBottomSheet(
+                      context: context,
+                      builder: (context) => EnterAmountScreen());
+                  if (resultAmount != null)
+                    setState(() {
+                      adjustAmount = double.parse(resultAmount);
+                    });
+                },
+                leading: Icon(
+                  Icons.keyboard_rounded,
+                  color: Style.foregroundColor,
+                  size: 30,
                 ),
-                ListTile(
-                  title: Text(
-                    'Enter current balance of this wallet',
-                    style: TextStyle(color: Colors.white),
+                title: MoneySymbolFormatter(
+                  text: adjustAmount ?? widget.wallet.amount,
+                  currencyId: widget.wallet.currencyID,
+                  textStyle: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Style.foregroundColor,
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Color(0xff268b79),
-                      borderRadius: BorderRadius.circular(17)),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(
-                          'Balance:',
-                          style: TextStyle(
-                              color: Colors.white70,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                      ListTile(
-                        onTap: () {
-                          Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => EnterAmountScreen()))
-                              .then((value) {
-                            if (value != null)
-                              setState(() {
-                                adjustAmount = double.parse(value);
-                              });
-                          });
-                        },
-                        leading: Icon(
-                          Icons.keyboard_rounded,
-                          color: white,
-                          size: 30,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                        title: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 25),
-                          child: Text(
-                              MoneyFormatter(
-                                      amount:
-                                          adjustAmount ?? widget.wallet.amount)
-                                  .output
-                                  .withoutFractionDigits,
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                        trailing: Icon(
-                          Icons.chevron_right,
-                          color: white,
-                        ),
-                      ),
-                      Container(
-                          alignment: Alignment.centerRight,
-                          child: !invalid
-                              ? Container()
-                              : Text(
-                                  'This field can not empty',
-                                  style: TextStyle(color: Colors.red),
-                                ))
-                    ],
-                  ),
-                )
-              ]),
-            )
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Style.foregroundColor,
+                ),
+              ),
+            ),
           ],
         ),
       ),

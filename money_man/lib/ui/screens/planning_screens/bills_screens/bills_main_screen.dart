@@ -12,9 +12,9 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/add_bill_sceen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_category_list_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_detail_screen.dart';
-import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -32,10 +32,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.grey[900].withOpacity(0.2),
           elevation: 0.0,
           leading: Hero(
             tag: 'billToDetail_backBtn',
@@ -44,8 +44,8 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                   Navigator.of(context).pop();
                 },
                 child: Icon(
-                  Icons.arrow_back_outlined,
-                  color: foregroundColor,
+                  Icons.arrow_back_ios_rounded,
+                  color: Style.foregroundColor,
                 )),
           ),
           title: GestureDetector(
@@ -61,15 +61,18 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 children: [
                   Hero(
                     tag: 'billToDetail_title',
-                    child: Text('Bills',
-                        style: TextStyle(
-                          fontFamily: fontFamily,
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.w600,
-                          color: foregroundColor,
-                        )),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text('Bills',
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor,
+                          )),
+                    ),
                   ),
-                  Icon(Icons.arrow_drop_down, color: foregroundColorDark)
+                  Icon(Icons.arrow_drop_down, color: Style.foregroundColorDark)
                 ],
               ),
             ),
@@ -80,14 +83,14 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               duration: Duration(milliseconds: 0),
               child: BackdropFilter(
                 filter: ImageFilter.blur(
-                    sigmaX: 25,
-                    sigmaY: 25,
-                    tileMode: TileMode.values[0]),
+                    sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
                 child: AnimatedContainer(
-                  duration: Duration(
-                      milliseconds: 100),
-                  color: Colors.grey[900].withOpacity(0.2),
-                ),
+                    duration: Duration(milliseconds: 1),
+                    //child: Container(
+                    //color: Colors.transparent,
+                    color: Colors.transparent
+                    //),
+                    ),
               ),
             ),
           ),
@@ -105,10 +108,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 },
                 child: Text('Add',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor,
+                      color: Style.foregroundColor,
                     )),
               ),
             ),
@@ -123,7 +126,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       iconPath: widget.currentWallet.iconID,
                       size: 25.0,
                     ),
-                    Icon(Icons.arrow_drop_down, color: foregroundColorDark)
+                    Icon(Icons.arrow_drop_down, color: Style.foregroundColorDark)
                   ],
                 ),
               ),
@@ -135,7 +138,6 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
   }
 
   Widget buildListBills(context) {
-    String currencySymbol = CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
 
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<List<Bill>>(
@@ -165,15 +167,26 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
           });
           if (overDueBills.length == 0 && todayBills.length == 0 && thisPeriodBills.length == 0) {
             return Container(
+                color: Style.backgroundColor,
                 alignment: Alignment.center,
-                child: Text(
-                  'There are no bills to pay',
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                    color: foregroundColor.withOpacity(0.54),
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.hourglass_empty,
+                      color: Style.foregroundColor.withOpacity(0.12),
+                      size: 100,
+                    ),
+                    SizedBox(height: 10,),
+                    Text(
+                      'There are no bills to pay',
+                      style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        color: Style.foregroundColor.withOpacity(0.24),
+                      ),
+                    ),
+                  ],
                 )
             );
           } else {
@@ -182,15 +195,12 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                   parent: AlwaysScrollableScrollPhysics()),
               children: [
                 buildOverallInfo(
-                    overdue: '$currencySymbol ' + overDueBills.fold(
-                        0, (value, element) => value + element['bill'].amount)
-                        .toString(),
-                    forToday: '$currencySymbol ' + todayBills.fold(
-                        0, (value, element) => value + element['bill'].amount)
-                        .toString(),
-                    thisPeriod: '$currencySymbol ' + thisPeriodBills.fold(
-                        0, (value, element) => value + element['bill'].amount)
-                        .toString()),
+                    overdue: overDueBills.fold(
+                        0, (value, element) => value + element['bill'].amount),
+                    forToday: todayBills.fold(
+                        0, (value, element) => value + element['bill'].amount),
+                    thisPeriod: thisPeriodBills.fold(
+                        0, (value, element) => value + element['bill'].amount)),
                 SizedBox(height: 20.0),
                 buildListDue(_firestore, overDueBills, 0),
                 buildListDue(_firestore, todayBills, 1),
@@ -225,10 +235,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
           margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
           child: Text(title,
               style: TextStyle(
-                fontFamily: fontFamily,
+                fontFamily: Style.fontFamily,
                 fontSize: 14.0,
                 fontWeight: FontWeight.w500,
-                color: foregroundColor.withOpacity(0.7),
+                color: Style.foregroundColor.withOpacity(0.7),
               )),
         ),
         ListView.builder(
@@ -244,8 +254,6 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
   }
 
   Widget buildBillCard(dynamic _firestore, Map info, int dueState) {
-    String currencySymbol = CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
-    String payContent = info['bill'].isFinished ? 'Finished' : 'PAY $currencySymbol ' + info['bill'].amount.toString();
     String dueDate = DateFormat('dd/MM/yyyy').format(info['due']);
     String dueDescription;
 
@@ -278,118 +286,178 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 type: PageTransitionType.rightToLeft));
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(20, 14, 20, 8),
+        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         decoration: BoxDecoration(
-            color: boxBackgroundColor2,
+            color: Style.boxBackgroundColor2,
             border: Border(
                 top: BorderSide(
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ),
                 bottom: BorderSide(
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ))),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SuperIcon(
-              iconPath: info['bill'].category.iconID,
-              size: 38.0,
-            ),
-            SizedBox(width: 20.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                Text(info['bill'].category.name,
-                    style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600,
-                      color: foregroundColor,
-                    )),
-                Text('Due day is $dueDate',
-                    style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w400,
-                      color: foregroundColor.withOpacity(0.7),
-                    )),
-                SizedBox(height: 8.0),
+                SuperIcon(
+                  iconPath: info['bill'].category.iconID,
+                  size: 40.0,
+                ),
+                SizedBox(width: 20.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(info['bill'].category.name,
+                        style: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor,
+                        )),
+                    if (info['bill'].note != null && info['bill'].note != '')
+                      Text(
+                          info['bill'].note,
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12.0,
+                            color: Style.foregroundColor.withOpacity(0.54),
+                          )
+                      ),
+                    SizedBox(height: 2,),
+                    RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: 'Due day is ',
+                                  style: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Style.foregroundColor.withOpacity(0.7),
+                                  )
+                              ),
+                              TextSpan(
+                                  text: dueDate,
+                                  style: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Style.foregroundColor,
+                                  )
+                              ),
+                            ]
+                        )
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
                 Text(dueDescription,
                     style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: 14.0,
+                      fontFamily: Style.fontFamily,
+                      fontSize: 13.0,
                       fontWeight: FontWeight.w600,
-                      color: foregroundColor,
+                      color: Style.foregroundColor,
                     )
                 ),
                 TextButton(
-                  onPressed: () async {
-                    if (!info['bill'].isFinished) {
-                      // Xử lý thêm transaction từ bill.
-                      MyTransaction transFromBill;
-                      transFromBill = MyTransaction(
-                          id: 'id',
-                          amount: info['bill'].amount,
-                          note: info['bill'].note,
-                          date: now,
-                          currencyID: widget.currentWallet.currencyID,
-                          category: info['bill'].category);
-                      await _firestore.addTransaction(widget.currentWallet, transFromBill);
+                    onPressed: () async {
+                      if (!info['bill'].isFinished) {
+                        // Xử lý thêm transaction từ bill.
+                        MyTransaction transFromBill;
+                        transFromBill = MyTransaction(
+                            id: 'id',
+                            amount: info['bill'].amount,
+                            note: info['bill'].note,
+                            date: now,
+                            currencyID: widget.currentWallet.currencyID,
+                            category: info['bill'].category);
+                        await _firestore.addTransaction(widget.currentWallet, transFromBill);
 
-                      // Thêm transaction vào bill.
-                      if (!info['bill'].transactionIdList.contains(transFromBill.id)) {
-                        info['bill'].transactionIdList.add(transFromBill.id);
+                        // Thêm transaction vào bill.
+                        if (!info['bill'].transactionIdList.contains(transFromBill.id)) {
+                          info['bill'].transactionIdList.add(transFromBill.id);
+                        }
+
+                        // Xử lý các dueDate. (Thanh toán rồi thì dueDate sẽ được cho vào list due Dates đã thanh toán,
+                        // và xóa khỏi list due Dates chưa thanh toán.
+                        if (!info['bill'].paidDueDates.contains(info['due'])) {
+                          info['bill'].paidDueDates.add(info['due']);
+                          info['bill'].dueDates.remove(info['due']);
+                        }
+
+                        // Cập nhật thông tin bill lên firestore.
+                        await _firestore.updateBill(
+                            info['bill'], widget.currentWallet);
+
+                        if (this.mounted) {
+                          setState(() { });
+                        } // tránh bị lỗi setState() được call sau khi dispose().
+
                       }
-
-                      // Xử lý các dueDate. (Thanh toán rồi thì dueDate sẽ được cho vào list due Dates đã thanh toán,
-                      // và xóa khỏi list due Dates chưa thanh toán.
-                      if (!info['bill'].paidDueDates.contains(info['due'])) {
-                        info['bill'].paidDueDates.add(info['due']);
-                        info['bill'].dueDates.remove(info['due']);
-                      }
-
-                      // Cập nhật thông tin bill lên firestore.
-                      await _firestore.updateBill(
-                          info['bill'], widget.currentWallet);
-
-                      if (this.mounted) {
-                        setState(() { });
-                      } // tránh bị lỗi setState() được call sau khi dispose().
-
-                    }
-                  },
-                  style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed))
-                          return !info['bill'].isFinished ? Colors.white : Color(0xFFcccccc);
-                        else
-                          return !info['bill'].isFinished ? Color(
-                              0xFF4FCC5C) : Color(0xFFcccccc); // Use the component's default.
-                      },
-                    ),
-                    foregroundColor:
-                    MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed))
-                          return !info['bill'].isFinished ? Color(0xFF4FCC5C) : Color(0xFFA8a8a8);
-                        else
-                          return !info['bill'].isFinished ? Colors
-                              .white : Color(0xFFA8a8a8); // Use the component's default.
-                      },
-                    ),
-                  ),
-                  child: Text(
-                      payContent,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: fontFamily,
-                        fontWeight: FontWeight.w700,
+                    },
+                    style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return !info['bill'].isFinished ? Colors.white : Color(0xFFcccccc);
+                          else
+                            return !info['bill'].isFinished ? Color(
+                                0xFF4FCC5C) : Color(0xFFcccccc); // Use the component's default.
+                        },
                       ),
-                      textAlign: TextAlign.center),
+                      foregroundColor:
+                      MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return !info['bill'].isFinished ? Color(0xFF4FCC5C) : Color(0xFFA8a8a8);
+                          else
+                            return !info['bill'].isFinished ? Colors
+                                .white : Color(0xFFA8a8a8); // Use the component's default.
+                        },
+                      ),
+                    ),
+                    child:
+                    (info['bill'].isFinished)
+                        ? Text(
+                        'Finished',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: Style.fontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.center)
+                        : Wrap(
+                      children: [
+                        Text(
+                          'PAY ',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        MoneySymbolFormatter(
+                          text: info['bill'].amount,
+                          currencyId: widget.currentWallet.currencyID,
+                          textStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        )
+                      ],
+                    )
                 )
               ],
             )
@@ -400,18 +468,18 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
   }
 
   Widget buildOverallInfo(
-      {String overdue, String forToday, String thisPeriod}) {
+      {double overdue, double forToday, double thisPeriod}) {
     return Container(
         padding: EdgeInsets.all(20.0),
         decoration: BoxDecoration(
-            color: boxBackgroundColor2,
+            color: Style.boxBackgroundColor2,
             border: Border(
                 top: BorderSide(
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ),
                 bottom: BorderSide(
-                  color: foregroundColor.withOpacity(0.12),
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ))),
         child: Column(
@@ -419,10 +487,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
           children: [
             Text('Remaining Bills',
                 style: TextStyle(
-                  fontFamily: fontFamily,
+                  fontFamily: Style.fontFamily,
                   fontSize: 14.0,
                   fontWeight: FontWeight.w600,
-                  color: foregroundColor,
+                  color: Style.foregroundColor,
                 )),
             SizedBox(height: 10.0),
             Row(
@@ -430,18 +498,21 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               children: [
                 Text('Overdue',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor.withOpacity(0.38),
+                      color: Style.foregroundColor.withOpacity(0.38),
                     )),
-                Text(overdue,
-                    style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      color: foregroundColor,
-                    ))
+                MoneySymbolFormatter(
+                  text: overdue,
+                  currencyId: widget.currentWallet.currencyID,
+                  textStyle: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                    color: Style.foregroundColor,
+                  )
+                )
               ],
             ),
             SizedBox(height: 10.0),
@@ -450,18 +521,21 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               children: [
                 Text('For today',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor.withOpacity(0.38),
+                      color: Style.foregroundColor.withOpacity(0.38),
                     )),
-                Text(forToday,
-                    style: TextStyle(
-                      fontFamily: fontFamily,
+                MoneySymbolFormatter(
+                    text: forToday,
+                    currencyId: widget.currentWallet.currencyID,
+                    textStyle: TextStyle(
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor,
-                    ))
+                      color: Style.foregroundColor,
+                    )
+                )
               ],
             ),
             SizedBox(height: 10.0),
@@ -470,18 +544,21 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               children: [
                 Text('This period',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor.withOpacity(0.38),
+                      color: Style.foregroundColor.withOpacity(0.38),
                     )),
-                Text(thisPeriod,
-                    style: TextStyle(
-                      fontFamily: fontFamily,
+                MoneySymbolFormatter(
+                    text: thisPeriod,
+                    currencyId: widget.currentWallet.currencyID,
+                    textStyle: TextStyle(
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor,
-                    ))
+                      color: Style.foregroundColor,
+                    )
+                )
               ],
             )
           ],
@@ -495,7 +572,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
 
     final result = await showCupertinoModalBottomSheet(
         isDismissible: true,
-        backgroundColor: boxBackgroundColor,
+        backgroundColor: Style.boxBackgroundColor,
         context: context,
         builder: (context) {
           return Provider(

@@ -10,6 +10,8 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/add_recurring_transaction_sceen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_detail_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
+import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -42,19 +44,23 @@ class _RecurringTransactionMainScreenState
                   Navigator.of(context).pop();
                 },
                 child: Icon(
-                  Icons.arrow_back_outlined,
+                  Icons.arrow_back_ios_rounded,
                   color: Colors.white,
                 )),
           ),
+          centerTitle: true,
           title: Hero(
             tag: 'billToDetail_title',
-            child: Text('Recurring transactions',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                )),
+            child: Material(
+              color: Colors.transparent,
+              child: Text('Recurring transactions',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  )),
+            ),
           ),
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(
@@ -108,43 +114,61 @@ class _RecurringTransactionMainScreenState
             ),
           ],
         ),
-        body: ListView(
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          children: [
-            buildListRecurringTransactionList(context),
-          ],
-        ));
+        body: buildListRecurringTransactionList(context),
+    );
   }
 
   Widget buildListRecurringTransactionList(context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-          child: Text('THIS PERIOD',
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 14.0,
-                fontWeight: FontWeight.w500,
-                color: Colors.white70,
-              )),
-        ),
-        StreamBuilder<List<RecurringTransaction>>(
-            stream: _firestore.recurringTransactionStream(widget.wallet.id),
-            builder: (context, snapshot) {
-              List<RecurringTransaction> reTransList = snapshot.data ?? [];
-              if (reTransList.length == 0) return Container();
-              return ListView.builder(
+    return StreamBuilder<List<RecurringTransaction>>(
+        stream: _firestore.recurringTransactionStream(widget.wallet.id),
+        builder: (context, snapshot) {
+          List<RecurringTransaction> reTransList = snapshot.data ?? [];
+          if (reTransList.length == 0) return Container(
+              color: Style.backgroundColor,
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.hourglass_empty,
+                    color: Style.foregroundColor.withOpacity(0.12),
+                    size: 100,
+                  ),
+                  SizedBox(height: 10,),
+                  Text(
+                    'There are no recurring transactions',
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      color: Style.foregroundColor.withOpacity(0.24),
+                    ),
+                  ),
+                ],
+              )
+          );
+          return ListView(
+            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                child: Text('All',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white70,
+                    )),
+              ),
+              ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: reTransList.length,
                   itemBuilder: (context, index) =>
-                      buildRecurringTransactionCard(reTransList[index]));
-            }),
-      ],
-    );
+                      buildRecurringTransactionCard(reTransList[index])),
+            ],
+          );
+        });
   }
 
   Widget buildRecurringTransactionCard(RecurringTransaction reTrans) {
@@ -161,7 +185,7 @@ class _RecurringTransactionMainScreenState
                 type: PageTransitionType.rightToLeft));
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(20, 14, 20, 8),
+        padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
         decoration: BoxDecoration(
             color: Color(0xFF1c1c1c),
             border: Border(
@@ -174,40 +198,64 @@ class _RecurringTransactionMainScreenState
                   width: 0.5,
                 ))),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SuperIcon(
-              iconPath: reTrans.category.iconID,
-              size: 38.0,
-            ),
-            SizedBox(width: 20.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(reTrans.category.name,
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    )),
-                SizedBox(height: 20.0),
-                Text('Next occurence:',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    )),
-                Text(DateFormat('EEEE, dd-MM-yyyy')
-                    .format(reTrans.repeatOption.beginDateTime))
+                SuperIcon(
+                  iconPath: reTrans.category.iconID,
+                  size: 40.0,
+                ),
+                SizedBox(width: 20.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(reTrans.category.name,
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        )),
+                    if (reTrans.note != null && reTrans.note != '')
+                    Text(reTrans.note,
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white.withOpacity(0.54),
+                        )),
+                    SizedBox(height: 2,),
+                    Text('Next occurrence:',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 13.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        )),
+                    Text(DateFormat('EEEE, dd-MM-yyyy')
+                        .format(reTrans.repeatOption.beginDateTime),
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 13.0,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white.withOpacity(0.7),
+                        )
+                    )
+                  ],
+                ),
               ],
             ),
-            // chỗ này chưa biết xử lý sao
-            SizedBox(
-              width: 80,
-            ),
-            Text(reTrans.amount.toString())
+            MoneySymbolFormatter(
+              text: reTrans.amount,
+              currencyId: widget.wallet.currencyID,
+              textStyle: TextStyle(
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 17.0),
+            )
           ],
         ),
       ),

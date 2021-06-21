@@ -10,6 +10,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/transaction_list.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -48,10 +49,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: boxBackgroundColor.withOpacity(0.2),
+          backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
           elevation: 0.0,
           leading: Hero(
             tag: 'billToDetail_backBtn',
@@ -60,18 +61,18 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                   Navigator.of(context).pop();
                 },
                 child: Icon(
-                  Icons.arrow_back_outlined,
-                  color: foregroundColor,
+                  Icons.close,
+                  color: Style.foregroundColor,
                 )),
           ),
           title: Hero(
             tag: 'billToDetail_title',
             child: Text('Bills',
                 style: TextStyle(
-                  fontFamily: fontFamily,
+                  fontFamily: Style.fontFamily,
                   fontSize: 17.0,
                   fontWeight: FontWeight.w600,
-                  color: foregroundColor,
+                  color: Style.foregroundColor,
                 )),
           ),
           centerTitle: true,
@@ -84,7 +85,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                     sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
                 child: AnimatedContainer(
                     duration: Duration(milliseconds: 1),
+                    //child: Container(
+                    //color: Colors.transparent,
                     color: Colors.transparent
+                  //),
                 ),
               ),
             ),
@@ -110,10 +114,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                 },
                 child: Text('Edit',
                     style: TextStyle(
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: foregroundColor,
+                      color: Style.foregroundColor,
                     )),
               ),
             ),
@@ -127,14 +131,14 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                 margin: EdgeInsets.only(top: 30.0),
                 padding: EdgeInsets.symmetric(vertical: 5.0),
                 decoration: BoxDecoration(
-                    color: boxBackgroundColor2,
+                    color: Style.boxBackgroundColor2,
                     border: Border(
                         top: BorderSide(
-                          color: foregroundColor.withOpacity(0.12),
+                          color: Style.foregroundColor.withOpacity(0.12),
                           width: 0.5,
                         ),
                         bottom: BorderSide(
-                          color: foregroundColor.withOpacity(0.12),
+                          color: Style.foregroundColor.withOpacity(0.12),
                           width: 0.5,
                         ))),
                 child: Column(
@@ -147,16 +151,24 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                         thickness: 1,
                       ),
                     ),
-                    buildInfoAmount(display: currencySymbol + ' ' + _bill.amount.toString()),
+                    buildInfoAmount(amount: _bill.amount),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
+                        thickness: 1,
+                      ),
+                    ),
+                    buildNote(display: _bill.note),
+                    Container(
+                      margin: EdgeInsets.only(left: 70),
+                      child: Divider(
+                        color: Style.foregroundColor.withOpacity(0.12),
                         thickness: 1,
                       ),
                     ),
@@ -165,7 +177,7 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                         thickness: 1,
                       ),
                     ),
@@ -178,14 +190,14 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
             Container(
               margin: EdgeInsets.only(top: 30.0),
               decoration: BoxDecoration(
-                  color: boxBackgroundColor2,
+                  color: Style.boxBackgroundColor2,
                   border: Border(
                       top: BorderSide(
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                         width: 0.5,
                       ),
                       bottom: BorderSide(
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                         width: 0.5,
                       ))),
               child: TextButton(
@@ -212,7 +224,7 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                     Text(_bill.isFinished ? "Mark as running" : "Mark as finished",
                         style: TextStyle(
                           fontSize: 14,
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w700,
                         ),
                         textAlign: TextAlign.center),
@@ -224,10 +236,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
             ),
             Container(
               decoration: BoxDecoration(
-                  color: boxBackgroundColor2,
+                  color: Style.boxBackgroundColor2,
                   border: Border(
                       bottom: BorderSide(
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                         width: 0.5,
                       ))),
               child: TextButton(
@@ -256,7 +268,7 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                     Text("View list Transactions",
                         style: TextStyle(
                           fontSize: 14,
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w700,
                         ),
                         textAlign: TextAlign.center),
@@ -269,10 +281,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
             Container(
               margin: EdgeInsets.only(top: 30.0),
               decoration: BoxDecoration(
-                  color: boxBackgroundColor2,
+                  color: Style.boxBackgroundColor2,
                   border: Border(
                       bottom: BorderSide(
-                        color: foregroundColor.withOpacity(0.12),
+                        color: Style.foregroundColor.withOpacity(0.12),
                         width: 0.5,
                       ))),
               child: TextButton(
@@ -291,10 +303,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                     },
                   ),
                 ),
-                child: Text("Delete",
+                child: Text("Delete bill for this category",
                     style: TextStyle(
                       fontSize: 14,
-                      fontFamily: fontFamily,
+                      fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w700,
                     ),
                     textAlign: TextAlign.center),
@@ -304,7 +316,28 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
         ));
   }
 
-  Widget buildInfoAmount({String display}) {
+  Widget buildNote ({String display}) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 23.0),
+              child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
+          Text(display == null || display == '' ? 'Note' : display,
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 16.0,
+                fontWeight: FontWeight.w500,
+                color: display == null || display == '' ? Colors.white24 : Colors.white,
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget buildInfoAmount({double amount}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
@@ -313,25 +346,28 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
           Container(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
               child:
-              Icon(Icons.attach_money, color: foregroundColor.withOpacity(0.7), size: 40.0)),
+              Icon(Icons.attach_money, color: Style.foregroundColor.withOpacity(0.7), size: 40.0)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Amount',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontSize: 12.0,
                     fontWeight: FontWeight.w500,
-                    color: foregroundColor.withOpacity(0.6),
+                    color: Style.foregroundColor.withOpacity(0.6),
                   )),
               SizedBox(height: 5.0),
-              Text(display ?? 'Enter amount',
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                    color: display == null ? foregroundColor.withOpacity(0.24) : foregroundColor,
-                  )),
+              MoneySymbolFormatter(
+                text: amount,
+                currencyId: widget.wallet.currencyID,
+                textStyle: TextStyle(
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              )
             ],
           ),
         ],
@@ -353,10 +389,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
               )),
           Text(display ?? 'Select category',
               style: TextStyle(
-                fontFamily: fontFamily,
+                fontFamily: Style.fontFamily,
                 fontSize: 20.0,
                 fontWeight: FontWeight.w500,
-                color: display == null ? foregroundColor.withOpacity(0.24) : foregroundColor,
+                color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
               )),
         ],
       ),
@@ -377,10 +413,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
               )),
           Text(display ?? 'Select wallet',
               style: TextStyle(
-                fontFamily: fontFamily,
+                fontFamily: Style.fontFamily,
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
-                color: display == null ? foregroundColor.withOpacity(0.24) : foregroundColor,
+                color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
               )),
         ],
       ),
@@ -405,29 +441,29 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
                   child: Icon(Icons.calendar_today,
-                      color: foregroundColor.withOpacity(0.7), size: 24.0)),
+                      color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Due dates',
                         style: TextStyle(
-                          fontFamily: fontFamily,
+                          fontFamily: Style.fontFamily,
                           fontSize: 12.0,
                           fontWeight: FontWeight.w500,
-                          color: foregroundColor.withOpacity(0.6),
+                          color: Style.foregroundColor.withOpacity(0.6),
                         )),
                     Row(
                       children: [
                         Text(
                             listDueDates.length == 0 ? 'None' : DateFormat('dd/MM/yyyy').format(listDueDates[0]),
                             style: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontSize: 14.0,
                               fontWeight: FontWeight.w600,
-                              color: listDueDates.length == 0 ? foregroundColor.withOpacity(0.24) : foregroundColor,
+                              color: listDueDates.length == 0 ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                             )
                         ),
-                        listDueDates.length < 2 ? Container() : Icon(Icons.arrow_drop_down, color: foregroundColorDark)
+                        listDueDates.length < 2 ? Container() : Icon(Icons.arrow_drop_down, color: Style.foregroundColorDark)
                       ],
                     ),
                     ExpandableWidget(
@@ -439,10 +475,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                               Text(
                                   DateFormat('dd/MM/yyyy').format(listDueDates[i]),
                                   style: TextStyle(
-                                    fontFamily: fontFamily,
+                                    fontFamily: Style.fontFamily,
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w600,
-                                    color: foregroundColor,
+                                    color: Style.foregroundColor,
                                   )
                               ),
                           ],

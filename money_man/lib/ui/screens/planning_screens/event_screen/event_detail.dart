@@ -37,7 +37,6 @@ class _EventDetailScreen extends State<EventDetailScreen>
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    final _wallet = _firestore.getWalletByID(_currentEvent.walletId);
     return Scaffold(
       backgroundColor: Color(0xff1b1b1b),
       appBar: AppBar(
@@ -255,15 +254,22 @@ class _EventDetailScreen extends State<EventDetailScreen>
               child: TextButton(
                 onPressed: () {
                   setState(() {
-                    _currentEvent.finishedByHand == true?
-                    _currentEvent.finishedByHand = false:
-                    _currentEvent.finishedByHand = true;
-                    _currentEvent.autofinish = false;
+                    if(_currentEvent.autofinish && _currentEvent.isFinished)
+                      {
+                        _currentEvent.finishedByHand = false;
+                      }
+                    else{
+                      _currentEvent.finishedByHand == false?
+                      _currentEvent.finishedByHand = true:
+                      _currentEvent.finishedByHand = false;
+                    }
+                    _currentEvent.autofinish =false;
                     _firestore.updateEvent(_currentEvent, _eventWallet);
                   });
                 },
-                child: Text((!_currentEvent.finishedByHand)?
-                  'Mark complete' : 'Mark not complete',
+                child: Text((_currentEvent.finishedByHand ||
+                    (_currentEvent.isFinished && _currentEvent.autofinish))?
+                  'Mark not complete' : 'Mark complete',
                   style: TextStyle(
                     fontSize: 20,
                     fontFamily: 'Montserrat',

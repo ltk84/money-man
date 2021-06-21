@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -14,6 +14,8 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
+import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -90,18 +92,18 @@ class _TransactionScreen extends State<TransactionScreen>
   }
 
   void scrollListener() {
-    if (listScrollController.offset >=
-            listScrollController.position.maxScrollExtent &&
-        !listScrollController.position.outOfRange) {
-      setState(() {
-        _limit += _limitIncrement;
-      });
-    }
+    // if (listScrollController.offset >=
+    //         listScrollController.position.maxScrollExtent &&
+    //     !listScrollController.position.outOfRange) {
+    //   setState(() {
+    //     _limit += _limitIncrement;
+    //   });
+    // }
   }
 
   void _handleSelectTimeRange(int selected) {
     showMenu(
-      color: Colors.white,
+      color: Style.foregroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10.0),
@@ -119,8 +121,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Day",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -132,8 +134,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Week",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -145,8 +147,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Month",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -158,8 +160,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Quarter",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -171,8 +173,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Year",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -184,8 +186,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "All",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -197,8 +199,8 @@ class _TransactionScreen extends State<TransactionScreen>
           child: Text(
             "Custom",
             style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+              color: Style.backgroundColor,
+              fontFamily: Style.fontFamily,
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
             ),
@@ -779,7 +781,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Style.backgroundColor,
           centerTitle: true,
           elevation: 0,
           leadingWidth: 70,
@@ -795,29 +797,43 @@ class _TransactionScreen extends State<TransactionScreen>
                     iconPath: _wallet.iconID,
                     size: 25.0,
                   ),
-                  Icon(Icons.arrow_drop_down, color: Colors.grey)
+                  Icon(Icons.arrow_drop_down,
+                      color: Style.foregroundColor.withOpacity(0.54))
                 ],
               ),
             ),
           ),
           title: Column(children: [
             Text(_wallet.name,
-                style: TextStyle(color: Colors.grey[500], fontSize: 10.0)),
-            Text(
-                MoneyFormatter(amount: _wallet.amount)
-                        .output
-                        .withoutFractionDigits +
-                    ' ' +
-                    currencySymbol,
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold)),
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w500,
+                    color: Style.foregroundColor.withOpacity(0.54),
+                    fontSize: 10.0)),
+            MoneySymbolFormatter(
+              text: _wallet.amount,
+              currencyId: _wallet.currencyID,
+              textStyle: TextStyle(
+                  fontFamily: Style.fontFamily,
+                  color: Style.foregroundColor,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w700),
+            )
           ]),
           bottom: TabBar(
-            unselectedLabelColor: Colors.grey[500],
-            labelColor: Colors.white,
-            indicatorColor: Color(0xff2FB49C),
+            labelStyle: TextStyle(
+              fontFamily: Style.fontFamily,
+              fontWeight: FontWeight.w700,
+              fontSize: 13.0,
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontFamily: Style.fontFamily,
+              fontWeight: FontWeight.w700,
+              fontSize: 13.0,
+            ),
+            unselectedLabelColor: Style.foregroundColor.withOpacity(0.54),
+            labelColor: Style.foregroundColor,
+            indicatorColor: Style.primaryColor,
             physics: AlwaysScrollableScrollPhysics(),
             isScrollable: true,
             indicatorWeight: 3.0,
@@ -826,15 +842,18 @@ class _TransactionScreen extends State<TransactionScreen>
           ),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.notifications, color: Colors.grey),
+              icon: Icon(Icons.notifications,
+                  color: Style.foregroundColor.withOpacity(0.54)),
               tooltip: 'Notify',
               onPressed: () {},
             ),
             PopupMenuButton(
+                icon: Icon(Icons.more_vert_rounded,
+                    color: Style.foregroundColor.withOpacity(0.54)),
                 padding: EdgeInsets.all(10.0),
-                //icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                //icon: Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
                 offset: Offset.fromDirection(40, 40),
-                color: Colors.white,
+                color: Style.foregroundColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10.0),
@@ -846,6 +865,8 @@ class _TransactionScreen extends State<TransactionScreen>
                 onSelected: (value) {
                   if (value == 'Search for transaction') {
                     showCupertinoModalBottomSheet(
+                        isDismissible: false,
+                        enableDrag: false,
                         context: context,
                         builder: (context) =>
                             SearchTransactionScreen(wallet: _wallet));
@@ -869,13 +890,14 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'Select time range',
                         child: Row(
                           children: [
-                            Icon(Icons.calendar_today, color: Colors.black),
+                            Icon(Icons.calendar_today,
+                                color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Select time range',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -886,15 +908,16 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'change display',
                         child: Row(
                           children: [
-                            Icon(Icons.remove_red_eye, color: Colors.black),
+                            Icon(Icons.remove_red_eye,
+                                color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               viewByCategory
                                   ? 'View by transaction'
                                   : 'View by category',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -906,13 +929,13 @@ class _TransactionScreen extends State<TransactionScreen>
                         child: Row(
                           children: [
                             Icon(Icons.account_balance_wallet,
-                                color: Colors.black),
+                                color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Adjust Balance',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -923,13 +946,14 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'Transfer money',
                         child: Row(
                           children: [
-                            Icon(Icons.attach_money, color: Colors.black),
+                            Icon(Icons.attach_money,
+                                color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Transfer money',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -940,13 +964,13 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'Search for transaction',
                         child: Row(
                           children: [
-                            Icon(Icons.search, color: Colors.black),
+                            Icon(Icons.search, color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Search for transaction',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -957,13 +981,13 @@ class _TransactionScreen extends State<TransactionScreen>
                         value: 'Synchronize',
                         child: Row(
                           children: [
-                            Icon(Icons.sync, color: Colors.black),
+                            Icon(Icons.sync, color: Style.backgroundColor),
                             SizedBox(width: 10.0),
                             Text(
                               'Synchronize',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
+                                color: Style.backgroundColor,
+                                fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -1006,7 +1030,9 @@ class _TransactionScreen extends State<TransactionScreen>
                   if (!categoryInChoosenTime.contains(element.category.name))
                     categoryInChoosenTime.add(element.category.name);
                   // tính toán đầu vào, đầu ra
-                  if (element.category.type == 'expense')
+                  if (element.category.type == 'expense' ||
+                      element.category.name == 'Repayment' ||
+                      element.category.name == 'Loan')
                     totalOutCome += element.amount;
                   else
                     totalInCome += element.amount;
@@ -1026,7 +1052,9 @@ class _TransactionScreen extends State<TransactionScreen>
                 _transactionList.forEach((element) {
                   if (!dateInChoosenTime.contains(element.date))
                     dateInChoosenTime.add(element.date);
-                  if (element.category.type == 'expense')
+                  if (element.category.type == 'expense' ||
+                      element.category.name == 'Repayment' ||
+                      element.category.name == 'Loan')
                     totalOutCome += element.amount;
                   else
                     totalInCome += element.amount;
@@ -1044,11 +1072,42 @@ class _TransactionScreen extends State<TransactionScreen>
               return TabBarView(
                 controller: _tabController,
                 children: myTabs.map((tab) {
-                  return viewByCategory == true
-                      ? buildDisplayTransactionByCategory(transactionListSorted,
-                          totalInCome, totalOutCome, total)
-                      : buildDisplayTransactionByDate(transactionListSorted,
-                          totalInCome, totalOutCome, total);
+                  if (transactionListSorted.length > 0) {
+                    return viewByCategory == true
+                        ? buildDisplayTransactionByCategory(
+                            transactionListSorted,
+                            totalInCome,
+                            totalOutCome,
+                            total)
+                        : buildDisplayTransactionByDate(transactionListSorted,
+                            totalInCome, totalOutCome, total);
+                  } else {
+                    return Container(
+                        color: Style.backgroundColor,
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.hourglass_empty,
+                              color: Style.foregroundColor.withOpacity(0.12),
+                              size: 100,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'There are no transactions',
+                              style: TextStyle(
+                                fontFamily: Style.fontFamily,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w500,
+                                color: Style.foregroundColor.withOpacity(0.24),
+                              ),
+                            ),
+                          ],
+                        ));
+                  }
                 }).toList(),
               );
             }));
@@ -1061,18 +1120,21 @@ class _TransactionScreen extends State<TransactionScreen>
       double total) {
     print('build function');
     return Container(
-      color: Colors.black,
+      color: Style.backgroundColor,
       child: ListView.builder(
           controller: listScrollController,
-          physics: BouncingScrollPhysics(),
-          shrinkWrap: true,
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          //shrinkWrap: true,
           itemCount: transactionListSortByCategory.length,
           itemBuilder: (context, xIndex) {
             double totalAmountInDay = 0;
             transactionListSortByCategory[xIndex].forEach((element) {
-              if (element.category.type == 'expense')
+              if (element.category.type == 'expense' ||
+                  element.category.name == 'Repayment' ||
+                  element.category.name == 'Loan') {
                 totalAmountInDay -= element.amount;
-              else
+              } else
                 totalAmountInDay += element.amount;
             });
 
@@ -1097,18 +1159,21 @@ class _TransactionScreen extends State<TransactionScreen>
       double total) {
     print('build function');
     return Container(
-      color: Colors.black,
+      color: Style.backgroundColor,
       child: ListView.builder(
           controller: listScrollController,
-          physics: BouncingScrollPhysics(),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           //primary: false,
-          shrinkWrap: true,
+          //shrinkWrap: true,
           // itemCount: TRANSACTION_DATA.length + 1,
           itemCount: transactionListSortByDate.length,
           itemBuilder: (context, xIndex) {
             double totalAmountInDay = 0;
             transactionListSortByDate[xIndex].forEach((element) {
-              if (element.category.type == 'expense')
+              if (element.category.type == 'expense' ||
+                  element.category.name == 'Repayment' ||
+                  element.category.name == 'Loan')
                 totalAmountInDay -= element.amount;
               else
                 totalAmountInDay += element.amount;
@@ -1135,19 +1200,19 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ),
               top: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: Colors.grey[900],
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -1156,7 +1221,7 @@ class _TransactionScreen extends State<TransactionScreen>
                   child: SuperIcon(
                     iconPath:
                         transListSortByCategory[xIndex][0].category.iconID,
-                    size: 35.0,
+                    size: 30.0,
                   )),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -1166,13 +1231,25 @@ class _TransactionScreen extends State<TransactionScreen>
                         transListSortByCategory[xIndex].length.toString() +
                         ' transactions',
                     // 'hello',
-                    style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
+                    style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.0,
+                        color: Style.foregroundColor.withOpacity(0.54))),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString() + ' $currencySymbol',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white)),
+                child: MoneySymbolFormatter(
+                  digit: totalAmountInDay >= 0 ? '+' : '',
+                  text: totalAmountInDay,
+                  currencyId: _wallet.currencyID,
+                  textAlign: TextAlign.end,
+                  textStyle: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.0,
+                    color: Style.foregroundColor,
+                  ),
+                ),
               ),
             ],
           ),
@@ -1183,17 +1260,20 @@ class _TransactionScreen extends State<TransactionScreen>
             itemCount: transListSortByCategory[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (_) => TransactionDetail(
-                                transaction: transListSortByCategory[xIndex]
-                                    [yIndex],
-                                wallet: widget.currentWallet,
-                              )));
+                      PageTransition(
+                          childCurrent: this.widget,
+                          child: TransactionDetail(
+                            transaction: transListSortByCategory[xIndex]
+                                [yIndex],
+                            wallet: widget.currentWallet,
+                          ),
+                          type: PageTransitionType.rightToLeft));
                 },
                 child: Container(
+                  color: Colors.transparent,
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                   child: Row(
                     children: <Widget>[
@@ -1202,8 +1282,11 @@ class _TransactionScreen extends State<TransactionScreen>
                         child: Text(
                             DateFormat("dd").format(
                                 transListSortByCategory[xIndex][yIndex].date),
-                            style:
-                                TextStyle(fontSize: 30.0, color: Colors.white)),
+                            style: TextStyle(
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 30.0,
+                                color: Style.foregroundColor)),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
@@ -1211,44 +1294,49 @@ class _TransactionScreen extends State<TransactionScreen>
                             DateFormat("MMMM yyyy, EEEE").format(
                                 transListSortByCategory[xIndex][yIndex].date),
                             style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14.0,
+                              color: Style.foregroundColor,
+                            )),
                       ),
                       Expanded(
-                        child: Text(
-                            transListSortByCategory[xIndex][yIndex].category.type == 'income' ||
-                                    transListSortByCategory[xIndex][yIndex].category.name ==
-                                        'Debt' ||
-                                    transListSortByCategory[xIndex][yIndex].category.name ==
-                                        'Deft Collection'
-                                ? '+' +
-                                    transListSortByCategory[xIndex][yIndex]
-                                        .amount
-                                        .toString() +
-                                    ' $currencySymbol'
-                                : '-' +
-                                    transListSortByCategory[xIndex][yIndex]
-                                        .amount
-                                        .toString() +
-                                    ' $currencySymbol',
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: transListSortByCategory[xIndex][yIndex]
-                                                .category
-                                                .type ==
-                                            'income' ||
-                                        transListSortByCategory[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Debt' ||
-                                        transListSortByCategory[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Deft Collection'
-                                    ? Colors.green
-                                    : Colors.red[600])),
+                        child: transListSortByCategory[xIndex][yIndex]
+                                        .category
+                                        .type ==
+                                    'income' ||
+                                transListSortByCategory[xIndex][yIndex]
+                                        .category
+                                        .name ==
+                                    'Debt' ||
+                                transListSortByCategory[xIndex][yIndex]
+                                        .category
+                                        .name ==
+                                    'Debt Collection'
+                            ? MoneySymbolFormatter(
+                                text: transListSortByCategory[xIndex][yIndex]
+                                    .amount,
+                                currencyId: _wallet.currencyID,
+                                textAlign: TextAlign.end,
+                                textStyle: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14.0,
+                                    color: Style.incomeColor2),
+                                //digit: '+',
+                              )
+                            : MoneySymbolFormatter(
+                                text: transListSortByCategory[xIndex][yIndex]
+                                    .amount,
+                                currencyId: _wallet.currencyID,
+                                textAlign: TextAlign.end,
+                                textStyle: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14.0,
+                                    color: Style.expenseColor),
+                                //digit: '-',
+                              ),
                       ),
                     ],
                   ),
@@ -1265,19 +1353,19 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ),
               top: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: Colors.grey[900],
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -1286,7 +1374,11 @@ class _TransactionScreen extends State<TransactionScreen>
                 child: Text(
                     DateFormat("dd")
                         .format(transListSortByDate[xIndex][0].date),
-                    style: TextStyle(fontSize: 30.0, color: Colors.white)),
+                    style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 30.0,
+                        color: Style.foregroundColor)),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -1299,13 +1391,25 @@ class _TransactionScreen extends State<TransactionScreen>
                             .format(transListSortByDate[xIndex][0].date)
                             .toString(),
                     // 'hello',
-                    style: TextStyle(fontSize: 12.0, color: Colors.grey[500])),
+                    style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.0,
+                        color: Style.foregroundColor.withOpacity(0.54))),
               ),
               Expanded(
-                child: Text(totalAmountInDay.toString() + ' $currencySymbol',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white)),
+                child: MoneySymbolFormatter(
+                  digit: totalAmountInDay >= 0 ? '+' : '',
+                  text: totalAmountInDay,
+                  currencyId: _wallet.currencyID,
+                  textAlign: TextAlign.end,
+                  textStyle: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.0,
+                    color: Style.foregroundColor,
+                  ),
+                ),
               ),
             ],
           ),
@@ -1315,8 +1419,41 @@ class _TransactionScreen extends State<TransactionScreen>
             shrinkWrap: true,
             itemCount: transListSortByDate[xIndex].length,
             itemBuilder: (context, yIndex) {
+              String _eventIcon =
+                  (transListSortByDate[xIndex][yIndex].eventID == "" ||
+                          transListSortByDate[xIndex][yIndex].eventID == null)
+                      ? ''
+                      : '🌴';
+              String _note = transListSortByDate[xIndex][yIndex].note;
+              String _contact =
+                  transListSortByDate[xIndex][yIndex].contact ?? 'someone';
+              String _subTitle;
+              if (transListSortByDate[xIndex][yIndex].category.name == 'Debt') {
+                //_subTitle = '$_eventIcon$_note from $_contact';
+                _subTitle = '$_eventIcon from '; //$_contact';
+              } else if (transListSortByDate[xIndex][yIndex].category.name ==
+                  'Loan') {
+                //_subTitle = '$_eventIcon$_note to $_contact';
+                _subTitle = '$_eventIcon to '; //$_contact';
+              } else {
+                //_subTitle = '$_eventIcon$_note';
+                _subTitle = '$_eventIcon ';
+              }
+
+              String _digit =
+                  transListSortByDate[xIndex][yIndex].category.type ==
+                              'income' ||
+                          transListSortByDate[xIndex][yIndex].category.name ==
+                              'Debt' ||
+                          transListSortByDate[xIndex][yIndex].category.name ==
+                              'Debt Collection'
+                      ? '+'
+                      : '-';
+              double extraAmount =
+                  transListSortByDate[xIndex][yIndex].extraAmountInfo;
+
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Navigator.push(
                       context,
                       PageTransition(
@@ -1327,6 +1464,7 @@ class _TransactionScreen extends State<TransactionScreen>
                           type: PageTransitionType.rightToLeft));
                 },
                 child: Container(
+                  color: Colors.transparent,
                   padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
                   child: Row(
                     children: <Widget>[
@@ -1336,56 +1474,103 @@ class _TransactionScreen extends State<TransactionScreen>
                           iconPath: transListSortByDate[xIndex][yIndex]
                               .category
                               .iconID,
-                          size: 35.0,
+                          size: 35,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
-                        child: (transListSortByDate[xIndex][yIndex].eventID == "" || transListSortByDate[xIndex][yIndex].eventID == null)?
-                        Text(
-                            transListSortByDate[xIndex][yIndex].category.name,
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)):
-                        Text(transListSortByDate[xIndex][yIndex].category.name + "\n🌴",
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white))
-                      ),
+                          padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  transListSortByDate[xIndex][yIndex]
+                                      .category
+                                      .name,
+                                  style: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14.0,
+                                    color: Style.foregroundColor,
+                                  )),
+                              //if (_note != null && _note != '')
+                              Text(
+                                _note,
+                                style: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12.0,
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54),
+                                ),
+                              ),
+                            ],
+                          )),
                       Expanded(
-                        child: Text(
-                            transListSortByDate[xIndex][yIndex].category.type ==
-                                        'income' ||
-                                    transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .name ==
-                                        'Debt' ||
-                                    transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .name ==
-                                        'Deft Collection'
-                                ? "${"+" + transListSortByDate[xIndex][yIndex].amount.toString()} $currencySymbol"
-                                : "${"-" + (transListSortByDate[xIndex][yIndex].amount).toString()} $currencySymbol",
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          MoneySymbolFormatter(
+                            text: transListSortByDate[xIndex][yIndex].amount,
+                            currencyId: _wallet.currencyID,
                             textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .type ==
-                                            'income' ||
-                                        transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Debt' ||
-                                        transListSortByDate[xIndex][yIndex]
-                                                .category
-                                                .name ==
-                                            'Deft Collection'
-                                    ? Colors.green
-                                    : Colors.red[600])),
-                      ),
+                            textStyle: TextStyle(
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.0,
+                                color: _digit == '+'
+                                    ? Style.incomeColor2
+                                    : Style.expenseColor),
+                            //digit: _digit,
+                          ),
+                          if (_subTitle != null && _subTitle != '')
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: _subTitle,
+                                    style: TextStyle(
+                                      fontFamily: Style.fontFamily,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.0,
+                                      color: Style.foregroundColor.withOpacity(0.54),
+                                    ),
+                                  ),
+                                  if (
+                                    transListSortByDate[xIndex][yIndex].category.name == 'Debt'
+                                    || transListSortByDate[xIndex][yIndex].category.name == 'Loan'
+                                  )
+                                  TextSpan(
+                                    text: _contact,
+                                    style: TextStyle(
+                                      fontFamily: Style.fontFamily,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.0,
+                                      color: Style.foregroundColor,
+                                    ),
+                                  )
+                                ]
+                              )
+                            ),
+                          // if (extraAmount != null)
+                          //   Row(
+                          //     mainAxisAlignment: MainAxisAlignment.end,
+                          //     children: [
+                          //       if (extraAmount != 0)
+                          //         MoneySymbolFormatter(
+                          //             textStyle: TextStyle(
+                          //               color: Style.foregroundColor,
+                          //               fontFamily: Style.fontFamily,
+                          //               fontWeight: FontWeight.w500,
+                          //               fontSize: 12.0,
+                          //             ),
+                          //             text: extraAmount,
+                          //             currencyId: _wallet.currencyID),
+                          //       if (extraAmount != 0) Text(' left'),
+                          //       if (extraAmount == 0) Text('Received')
+                          //     ],
+                          //   ),
+                        ],
+                      )),
                     ],
                   ),
                 ),
@@ -1402,10 +1587,10 @@ class _TransactionScreen extends State<TransactionScreen>
       header: SizedBox(height: 0),
       content: Container(
           decoration: BoxDecoration(
-              color: Colors.grey[900],
+              color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                color: Colors.black,
+                color: Style.backgroundColor,
                 width: 1.0,
               ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
@@ -1415,9 +1600,24 @@ class _TransactionScreen extends State<TransactionScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('Inflow', style: TextStyle(color: Colors.grey[500])),
-                  Text('+$totalInCome $currencySymbol',
-                      style: TextStyle(color: Colors.white)),
+                  Text('Inflow',
+                      style: TextStyle(
+                        color: Style.foregroundColor.withOpacity(0.54),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: Style.fontFamily,
+                      )),
+                  MoneySymbolFormatter(
+                    text: totalInCome,
+                    currencyId: _wallet.currencyID,
+                    textStyle: TextStyle(
+                      color: Style.foregroundColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: Style.fontFamily,
+                    ),
+                    digit: '+',
+                  )
                 ],
               ),
             ),
@@ -1426,10 +1626,30 @@ class _TransactionScreen extends State<TransactionScreen>
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Outflow', style: TextStyle(color: Colors.grey[500])),
-                    Text('-$totalOutCome $currencySymbol',
-                        style: TextStyle(color: Colors.white)),
+                    Text('Outflow',
+                        style: TextStyle(
+                          color: Style.foregroundColor.withOpacity(0.54),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: Style.fontFamily,
+                        )),
+                    MoneySymbolFormatter(
+                      text: totalOutCome,
+                      currencyId: _wallet.currencyID,
+                      textStyle: TextStyle(
+                        color: Style.foregroundColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: Style.fontFamily,
+                      ),
+                      digit: '-',
+                    ),
                   ]),
+            ),
+            Divider(
+              //height: 20,
+              thickness: 1,
+              color: Style.foregroundColor.withOpacity(0.12),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
@@ -1438,36 +1658,30 @@ class _TransactionScreen extends State<TransactionScreen>
                   children: <Widget>[
                     SizedBox(
                       width: 10,
-                      height: 10,
                     ),
-                    Divider(
-                      color: Colors.black,
-                      thickness: 1.0,
-                      height: 10,
+                    MoneySymbolFormatter(
+                      digit: total >= 0 ? '+' : '',
+                      text: total,
+                      currencyId: _wallet.currencyID,
+                      textStyle: TextStyle(
+                        color: Style.foregroundColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: Style.fontFamily,
+                      ),
                     ),
-                    ColoredBox(color: Colors.black87)
-                  ]),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('$total $currencySymbol',
-                        style: TextStyle(color: Colors.white)),
                   ]),
             ),
             TextButton(
               onPressed: () {},
               child: Text(
                 'View report for this period',
-                style: TextStyle(color: Color(0xff36D1B5)),
+                style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w600,
+                    color: Style.highlightPrimaryColor),
               ),
-              style: TextButton.styleFrom(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap),
             )
           ])),
     );
@@ -1478,7 +1692,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
     final result = await showCupertinoModalBottomSheet(
         isDismissible: true,
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.boxBackgroundColor,
         context: context,
         builder: (context) {
           return Provider(

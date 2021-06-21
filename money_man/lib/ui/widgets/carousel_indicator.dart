@@ -120,6 +120,27 @@ class _IntroductionSlideState extends State<IntroductionSlide> {
               ),
             ],
           )
-        : Center(child: Text('Loading'));
+        : Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.hourglass_empty,
+              color: Colors.white.withOpacity(0.12),
+              size: 100,
+            ),
+            SizedBox(height: 10,),
+            Text(
+              'Loading',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 16.0,
+                fontWeight: FontWeight.w500,
+                color: Colors.white.withOpacity(0.24),
+              ),
+            ),
+          ],
+        )
+    );
   }
 }

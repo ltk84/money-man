@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 
@@ -23,11 +24,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff111111),
+      backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
-        leading: CloseButton(),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
         elevation: 0,
-        backgroundColor: Color(0xff111111),
+        backgroundColor: Style.backgroundColor1,
       ),
       body: ListView(
         children: [
@@ -42,9 +45,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Text(
                   'Forgot Password?',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                     fontSize: 32,
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w800,
                   ),
                   textAlign: TextAlign.center,
@@ -55,10 +58,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Text(
                   'Enter the email address associated \n with your account',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w400,
                     fontSize: 16.0,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -76,10 +79,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     key: _formKey,
                     child: TextFormField(
                       style: TextStyle(
-                        fontFamily: 'Montserrat',
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 16.0,
-                        color: Colors.white,
+                        color: Style.foregroundColor,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty)
@@ -94,41 +97,41 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
                         labelText: 'Email',
                         labelStyle: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w400,
                           fontSize: 16.0,
-                          color: Colors.white70,
+                          color: Style.foregroundColor.withOpacity(0.7),
                         ),
                         errorStyle: TextStyle(
-                            color: Colors.red,
-                            fontFamily: 'Montserrat',
+                            color: Style.errorColor,
+                            fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w500),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
                           borderSide: BorderSide(
-                            color: white,
+                            color: Style.foregroundColor,
                             width: 2.0,
                           ),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide(color: Colors.red, width: 2.0),
+                          borderSide: BorderSide(color: Style.errorColor, width: 2.0),
                         ),
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
                           borderSide: BorderSide(
-                            color: white,
+                            color: Style.foregroundColor,
                             width: 2.0,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide(color: white, width: 2.0),
+                          borderSide: BorderSide(color: Style.foregroundColor, width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
                           borderSide: BorderSide(
-                            color: white,
+                            color: Style.foregroundColor,
                             width: 2.0,
                           ),
                         ),
@@ -144,29 +147,29 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       radius: 10.0,
                       height: 40.0,
                       textStyle: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w800,
                           fontSize: 16.0,
-                          color: white),
+                          color: Style.foregroundColor),
                       iconedButtons: {
                         ButtonState.idle: IconedButton(
                             text: 'Verify',
                             icon: Icon(Icons.verified_user,
-                                color: Colors.white, size: 20.0),
-                            color: Color(0xFF2FB49C)),
+                                color: Style.foregroundColor, size: 20.0),
+                            color: Style.primaryColor),
                         ButtonState.loading: IconedButton(
                             text: 'Loading',
-                            color: Color(0xFF2FB49C).withOpacity(0.1)),
+                            color: Style.primaryColor.withOpacity(0.1)),
                         ButtonState.fail: IconedButton(
                             text: 'Failed',
                             icon: Icon(Icons.cancel,
-                                color: Colors.white, size: 20.0),
-                            color: Colors.red[700]),
+                                color: Style.foregroundColor, size: 20.0),
+                            color: Style.errorColor),
                         ButtonState.success: IconedButton(
                             text: 'Success',
                             icon: Icon(Icons.check_circle,
-                                color: Colors.white, size: 20.0),
-                            color: Colors.green.shade400)
+                                color: Style.foregroundColor, size: 20.0),
+                            color: Style.successColor)
                       },
                       onPressed: onPressedIconWithText,
                       state: stateTextWithIcon),

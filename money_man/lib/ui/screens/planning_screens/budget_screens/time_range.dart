@@ -17,12 +17,13 @@ class BudgetTimeRange {
 
   String getBudgetLabel() {
     DateTime today = DateTime.now();
+    today = DateTime(today.year, today.month, today.day);
     DateTime begin = this.beginDay;
     DateTime end = this.endDay;
     if (end.weekday == 7 &&
         begin.weekday == 1 &&
-        begin.isBefore(today.add(Duration(days: 1))) &&
-        end.isAfter(today.subtract(Duration(days: 1)))) return 'This week';
+        begin.compareTo(today) <= 0 &&
+        end.compareTo(today) >= 0) return 'This week';
     if (begin.day == 1 &&
         end.day ==
             DateTime(begin.year, begin.month + 1, 1)
@@ -30,17 +31,17 @@ class BudgetTimeRange {
                 .day &&
         end.month == today.month &&
         begin.month == end.month &&
-        begin.isBefore(today) &&
-        end.isAfter(today)) return 'This month';
-    var temp = DateTime(today.year, today.month + 1, today.day);
+        begin.compareTo(today) <= 0 &&
+        end.compareTo(today) >= 0) return 'This month';
+    var temp = DateTime(today.year, today.month + 1, today.day, 1);
     if (begin.day == 1 &&
         end.day ==
             DateTime(begin.year, begin.month + 1, 1)
                 .subtract(Duration(days: 1))
                 .day &&
         end.month == temp.month &&
-        begin.isBefore(temp) &&
-        end.isAfter(temp)) return 'Next month';
+        begin.compareTo(temp) <= 0 &&
+        end.compareTo(temp) >= 0) return 'Next month';
 
     double quarterNumber = (today.month - 1) / 3 + 3;
     DateTime firstDayOfQuarter =

@@ -5,61 +5,73 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../budget_detail.dart';
 
-class MyBudgetTile extends StatelessWidget {
+class MyBudgetTile extends StatefulWidget {
   const MyBudgetTile({Key key, this.budget, this.wallet}) : super(key: key);
   final Budget budget;
   final Wallet wallet;
 
   @override
+  _MyBudgetTileState createState() => _MyBudgetTileState();
+}
+
+class _MyBudgetTileState extends State<MyBudgetTile> {
+  @override
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
-    var todayRate = today.difference(budget.beginDate).inDays /
-        budget.endDate.difference(budget.beginDate).inDays;
-    var todayTarget = budget.spent / budget.amount;
+    var todayRate = today.difference(widget.budget.beginDate).inDays /
+        widget.budget.endDate.difference(widget.budget.beginDate).inDays;
+    var todayTarget = widget.budget.spent / widget.budget.amount;
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    _firestore.updateBudget(budget, wallet);
-    if (budget.isRepeat && budget.endDate.isBefore(today)) {
+    _firestore.updateBudget(widget.budget, widget.wallet);
+    if (widget.budget.isRepeat &&
+        widget.budget.endDate.add(Duration(days: 1)).isBefore(today)) {
       Budget newBudget = new Budget(
           id: 'id',
-          category: budget.category,
-          amount: budget.amount,
-          spent: budget.spent,
-          walletId: budget.walletId,
-          isFinished: budget.isFinished,
-          beginDate: budget.endDate.add(Duration(days: 1)),
-          endDate:
-              budget.endDate.add(budget.endDate.difference(budget.beginDate)),
-          isRepeat: budget.isRepeat);
-      _firestore.addBudget(newBudget, wallet);
+          category: widget.budget.category,
+          amount: widget.budget.amount,
+          spent: widget.budget.spent,
+          walletId: widget.budget.walletId,
+          isFinished: widget.budget.isFinished,
+          beginDate: widget.budget.endDate.add(Duration(days: 1)),
+          endDate: widget.budget.endDate
+              .add(widget.budget.endDate.difference(widget.budget.beginDate)),
+          isRepeat: widget.budget.isRepeat);
+      Budget temp = widget.budget;
+      temp.isRepeat = false;
+      _firestore.updateBudget(temp, widget.wallet);
+      _firestore.addBudget(newBudget, widget.wallet);
     }
-    budget.label = getBudgetLabel(budget);
+
+    widget.budget.label = getBudgetLabel(widget.budget);
 
     return Center(
       child: GestureDetector(
         onTap: () async {
-          Wallet wallet = await _firestore.getWalletByID(budget.walletId);
+          Wallet wallet =
+              await _firestore.getWalletByID(widget.budget.walletId);
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => BudgetDetailScreen(
-                      budget: this.budget,
+                      budget: this.widget.budget,
                       wallet: wallet,
                     )),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
             color: Color(0xff222222),
           ),
           width: MediaQuery.of(context).size.width,
-          height: 140,
-          margin: EdgeInsets.only(bottom: 15, left: 5, right: 5),
-          padding: EdgeInsets.only(bottom: 5),
+          //height: 140,
+          margin: EdgeInsets.only(bottom: 15),
+          padding: EdgeInsets.only(bottom: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -69,31 +81,35 @@ class MyBudgetTile extends StatelessWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.only(
-                        left: 15, bottom: 10, top: 10, right: 15),
+                        left: 15, bottom: 15, top: 10, right: 15),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
                           child: Text(
-                            budget.label == null
+                            widget.budget.label == null
                                 ? 'Custom '
-                                : '${budget.label} ',
+                                : '${widget.budget.label} ',
                             style: TextStyle(
-                                color: white,
-                                fontSize: 18,
-                                fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor.withOpacity(0.7),
+                                fontSize: 14,
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                         Container(
                           child: Text(
-                            budget.label != 'Custom'
+                            widget.budget.label != 'Custom'
                                 ? ''
-                                : '${DateFormat('dd/MM/yyyy').format(budget.beginDate) + ' - ' + DateFormat('dd/MM/yyyy').format(budget.endDate)}',
+                                : '${DateFormat('dd/MM/yyyy').format(widget.budget.beginDate) + ' - ' + DateFormat('dd/MM/yyyy').format(widget.budget.endDate)}',
                             style: TextStyle(
-                                color: Colors.white54,
-                                fontFamily: 'Montserrat',
-                                fontSize: 12),
+                                color: Style.foregroundColor.withOpacity(0.54),
+                                fontFamily: Style.fontFamily,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                            ),
                           ),
                         )
                       ],
@@ -110,50 +126,64 @@ class MyBudgetTile extends StatelessWidget {
                             Container(
                                 padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
                                 child: SuperIcon(
-                                  iconPath: this.budget.category.iconID,
-                                  size: 50,
+                                  iconPath: this.widget.budget.category.iconID,
+                                  size: 30,
                                 )),
                             Container(
-                              padding: EdgeInsets.symmetric(vertical: 10),
                               child: Text(
-                                this.budget.category.name,
+                                this.widget.budget.category.name,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: Style.fontFamily,
+                                ),
                               ),
                             ), //Title cho khoản chi thu đã chọn
                           ],
                         ),
                         Container(
-                          padding: EdgeInsets.fromLTRB(15, 25, 15, 0),
+                          padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                MoneyFormatter(amount: this.budget.amount)
+                                MoneyFormatter(
+                                        amount: this.widget.budget.amount)
                                     .output
                                     .withoutFractionDigits,
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: Style.fontFamily,
+                                ),
                               ), // Target
                               Text(
                                 todayTarget > 1
                                     ? 'Over spent: ' +
                                         MoneyFormatter(
-                                                amount: this.budget.spent -
-                                                    this.budget.amount)
+                                                amount: this
+                                                        .widget
+                                                        .budget
+                                                        .spent -
+                                                    this.widget.budget.amount)
                                             .output
                                             .withoutFractionDigits
                                     : 'Remain: ' +
                                         MoneyFormatter(
-                                                amount: this.budget.amount -
-                                                    this.budget.spent)
+                                                amount: this
+                                                        .widget
+                                                        .budget
+                                                        .amount -
+                                                    this.widget.budget.spent)
                                             .output
                                             .withoutFractionDigits,
-                                style: TextStyle(color: Colors.white54),
+                                style: TextStyle(
+                                    color: Colors.white54,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: Style.fontFamily,
+                                ),
                               ), // Remain
                             ],
                           ),
@@ -164,7 +194,7 @@ class MyBudgetTile extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(80, 3, 15, 0),
+                padding: EdgeInsets.fromLTRB(60, 8, 15, 0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: LinearProgressIndicator(
@@ -174,32 +204,40 @@ class MyBudgetTile extends StatelessWidget {
                         : todayTarget > todayRate
                             ? Colors.orange[700]
                             : Color(0xFF2FB49C)),
-                    minHeight: 8,
-                    value: this.budget.spent / this.budget.amount > 1
-                        ? 1
-                        : this.budget.spent / this.budget.amount,
+                    minHeight: 3,
+                    value:
+                        this.widget.budget.spent / this.widget.budget.amount > 1
+                            ? 1
+                            : this.widget.budget.spent /
+                                this.widget.budget.amount,
                   ),
                 ),
               ),
               SizedBox(
                 height: 5,
               ),
-              budget.beginDate.isAfter(today) || today.isAfter(budget.endDate)
+              widget.budget.beginDate.isAfter(today) ||
+                      today.isAfter(widget.budget.endDate)
                   ? Container()
                   : Container(
                       margin: EdgeInsets.only(
                           left: 65 +
                               (MediaQuery.of(context).size.width - 105) *
                                   todayRate),
-                      height: 20,
-                      width: 40,
-                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      // height: 20,
+                      // width: 40,
+                      //alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(10),
                           color: Color(0xff171717)),
                       child: Text(
                         "Today",
-                        style: TextStyle(color: Colors.white, fontSize: 10),
+                        style: TextStyle(
+                            color: Colors.white, fontSize: 10,
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
             ],

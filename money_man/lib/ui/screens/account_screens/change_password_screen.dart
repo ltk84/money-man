@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/authentication_screens/forgot_password_screen.dart';
 import 'package:money_man/ui/style.dart';
@@ -27,22 +26,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: CloseButton(),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
         elevation: 0,
-        backgroundColor: backgroundColor1,
+        backgroundColor: Style.backgroundColor1,
       ),
       body: Container(
-        color: backgroundColor1,
+        color: Style.backgroundColor1,
         child: ListView(
           children: [
             Container(
                 child: Text(
                   'CHANGE PASSWORD',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w800,
                     fontSize: 24.0,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   ),
                   textAlign: TextAlign.center,
                 )
@@ -52,10 +53,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: Text(
                   'Enter your current password',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w400,
                     fontSize: 15.0,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   ),
                   textAlign: TextAlign.center,
                 )
@@ -63,7 +64,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               decoration: BoxDecoration(
-                  color: boxBackgroundColor,
+                  color: Style.boxBackgroundColor,
                   borderRadius: BorderRadius.circular(15)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,49 +75,61 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     contentPadding: EdgeInsets.fromLTRB(30, 5, 30, 5),
                     leading: Icon(
                       Icons.lock,
-                      color: foregroundColor.withOpacity(0.24),
+                      color: Style.foregroundColor.withOpacity(0.24),
                       size: 25,
                     ),
                     title: Theme(
                       data: Theme.of(context).copyWith(
-                        primaryColor: foregroundColor,
+                        primaryColor: Style.foregroundColor,
                       ),
                       child: TextFormField(
                         obscureText: obscure1,
-                        cursorColor: foregroundColor,
+                        cursorColor: Style.foregroundColor,
                         onChanged: (val) {
                           setState(() {
                             field1 = val;
                           });
                         },
                         style: TextStyle(
-                            color: foregroundColor,
+                            color: Style.foregroundColor,
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
-                            fontFamily: fontFamily
+                            fontFamily: Style.fontFamily
                         ),
                         autocorrect: false,
                         decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: inValid1 ? errorColor : foregroundColor.withOpacity(0.12),
+                                  color: inValid1 ? Style.errorColor : Style.foregroundColor.withOpacity(0.12),
                                   width: 1.5,
                                 )
                             ),
                             focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: inValid1 ? errorColor : foregroundColor,
+                                  color: inValid1 ? Style.errorColor : Style.foregroundColor,
                                   width: 2.0,
                                 )
                             ),
+                            // errorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 1.5,
+                            //     )
+                            // ),
+                            // focusedErrorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 2.0,
+                            //     )
+                            // ),
                             errorStyle: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
                             ),
                             labelText: 'Current password',
                             labelStyle: TextStyle(
-                                color: foregroundColor.withOpacity(0.24),
-                                fontFamily: fontFamily,
+                                color: Style.foregroundColor.withOpacity(0.24),
+                                fontFamily: Style.fontFamily,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w400
                             ),
@@ -133,7 +146,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       },
                       child: Icon(
                         obscure1 ? Icons.visibility_rounded : Icons.visibility_off_rounded,
-                        color: foregroundColorDark,
+                        color: Style.foregroundColorDark,
                       ),
                     ),
                   ),
@@ -147,8 +160,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   ? 'Password at least 6 characters'
                                   : 'Wrong password',
                               style: TextStyle(
-                                color: errorColor,
-                                fontFamily: fontFamily,
+                                color: Style.errorColor,
+                                fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12.0,
                               ),
@@ -162,10 +175,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: Text(
                   'Enter your new password',
                   style: TextStyle(
-                    fontFamily: fontFamily,
+                    fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w400,
                     fontSize: 15.0,
-                    color: foregroundColor,
+                    color: Style.foregroundColor,
                   ),
                   textAlign: TextAlign.center,
                 )
@@ -173,7 +186,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               decoration: BoxDecoration(
-                  color: boxBackgroundColor,
+                  color: Style.boxBackgroundColor,
                   borderRadius: BorderRadius.circular(15)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,49 +197,61 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     contentPadding: EdgeInsets.fromLTRB(30, 5,30, 5),
                     leading: Icon(
                       Icons.lock,
-                      color: foregroundColor.withOpacity(0.24),
+                      color: Style.foregroundColor.withOpacity(0.24),
                       size: 25,
                     ),
                     title: Theme(
                       data: Theme.of(context).copyWith(
-                        primaryColor: foregroundColor,
+                        primaryColor: Style.foregroundColor,
                       ),
                       child: TextFormField(
                         obscureText: obscure2,
-                        cursorColor: foregroundColor,
+                        cursorColor: Style.foregroundColor,
                         onChanged: (val) {
                           setState(() {
                             field2 = val;
                           });
                         },
                         style: TextStyle(
-                            color: foregroundColor,
+                            color: Style.foregroundColor,
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
-                            fontFamily: fontFamily
+                            fontFamily: Style.fontFamily
                         ),
                         autocorrect: false,
                         decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: invalid2 ? errorColor : foregroundColor.withOpacity(0.12),
+                                  color: invalid2 ? Style.errorColor : Style.foregroundColor.withOpacity(0.12),
                                   width: 1.5,
                                 )
                             ),
                             focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: invalid2 ? errorColor : foregroundColor,
+                                  color: invalid2 ? Style.errorColor : Style.foregroundColor,
                                   width: 2.0,
                                 )
                             ),
+                            // errorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 1.5,
+                            //     )
+                            // ),
+                            // focusedErrorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 2.0,
+                            //     )
+                            // ),
                             errorStyle: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
                             ),
                             labelText: 'New password',
                             labelStyle: TextStyle(
-                                color: foregroundColor.withOpacity(0.24),
-                                fontFamily: fontFamily,
+                                color: Style.foregroundColor.withOpacity(0.24),
+                                fontFamily: Style.fontFamily,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w400
                             ),
@@ -243,7 +268,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       },
                       child: Icon(
                         obscure2 ? Icons.visibility_rounded : Icons.visibility_off_rounded,
-                        color: foregroundColorDark,
+                        color: Style.foregroundColorDark,
                       ),
                     ),
                   ),
@@ -255,8 +280,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           : Text(
                               'Password at least 6 characers',
                         style: TextStyle(
-                          color: errorColor,
-                          fontFamily: fontFamily,
+                          color: Style.errorColor,
+                          fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w600,
                           fontSize: 12.0,
                         ),
@@ -266,49 +291,61 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     contentPadding: EdgeInsets.fromLTRB(30, 5,30, 5),
                     leading: Icon(
                       Icons.lock,
-                      color: foregroundColor.withOpacity(0.24),
+                      color: Style.foregroundColor.withOpacity(0.24),
                       size: 25,
                     ),
                     title: Theme(
                       data: Theme.of(context).copyWith(
-                        primaryColor: foregroundColor,
+                        primaryColor: Style.foregroundColor,
                       ),
                       child: TextFormField(
                         obscureText: obscure3,
-                        cursorColor: foregroundColor,
+                        cursorColor: Style.foregroundColor,
                         onChanged: (val) {
                           setState(() {
                             field3 = val;
                           });
                         },
                         style: TextStyle(
-                            color: foregroundColor,
+                            color: Style.foregroundColor,
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
-                            fontFamily: fontFamily
+                            fontFamily: Style.fontFamily
                         ),
                         autocorrect: false,
                         decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: invalid3 ? errorColor : foregroundColor.withOpacity(0.12),
+                                  color: invalid3 ? Style.errorColor : Style.foregroundColor.withOpacity(0.12),
                                   width: 1.5,
                                 )
                             ),
                             focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: invalid3 ? errorColor : foregroundColor,
+                                  color: invalid3 ? Style.errorColor : Style.foregroundColor,
                                   width: 2.0,
                                 )
                             ),
+                            // errorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 1.5,
+                            //     )
+                            // ),
+                            // focusedErrorBorder: UnderlineInputBorder(
+                            //     borderSide: BorderSide(
+                            //       color: Colors.red[700],
+                            //       width: 2.0,
+                            //     )
+                            // ),
                             errorStyle: TextStyle(
-                              fontFamily: fontFamily,
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
                             ),
                             labelText: 'Confirm new password',
                             labelStyle: TextStyle(
-                                color: foregroundColor.withOpacity(0.24),
-                                fontFamily: fontFamily,
+                                color: Style.foregroundColor.withOpacity(0.24),
+                                fontFamily: Style.fontFamily,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w400
                             ),
@@ -325,7 +362,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       },
                       child: Icon(
                         obscure3 ? Icons.visibility_rounded : Icons.visibility_off_rounded,
-                        color: foregroundColorDark,
+                        color: Style.foregroundColorDark,
                       ),
                     ),
                   ),
@@ -339,8 +376,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   ? 'Password at least 6 characers'
                                   : 'New password mismatch',
                         style: TextStyle(
-                          color: errorColor,
-                          fontFamily: fontFamily,
+                          color: Style.errorColor,
+                          fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w600,
                           fontSize: 12.0,
                         ),
@@ -418,10 +455,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     // Nếu tất cả đều hợp lệ
                     if (!(inValid1 || invalid2 || invalid3)) {
                       try {
+                        print("dm");
                         await _auth.updatePassword(field2);
                         await showDialog(
                           context: context,
-                          barrierColor: backgroundColor.withOpacity(0.54),
+                          barrierColor: Style.backgroundColor.withOpacity(0.54),
                           builder: (BuildContext context) {
                             return CustomAlert(
                               iconPath: 'assets/images/success.svg',
@@ -432,9 +470,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         );
                         Navigator.of(context).pop();
                       } catch (e) {
+                        print('vl');
                         showDialog(
                           context: context,
-                          barrierColor: backgroundColor.withOpacity(0.54),
+                          barrierColor: Style.backgroundColor.withOpacity(0.54),
                           builder: (BuildContext context) {
                             return CustomAlert(
                               iconPath: 'assets/images/error.svg',
@@ -451,7 +490,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: Text("CHANGE PASSWORD",
                     style: TextStyle(
                         fontSize: 14,
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.5,
                         wordSpacing: 2.0),
@@ -492,7 +531,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     "FORGOT PASSWORD",
                     style: TextStyle(
                         fontSize: 14,
-                        fontFamily: fontFamily,
+                        fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.5,
                         wordSpacing: 2.0),
@@ -504,4 +543,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       ),
     );
   }
+}
+
+AlertDialog alert(context, title, mess) {
+  return AlertDialog(
+    title: Text(
+      title,
+      style: TextStyle(color: Style.backgroundColor, fontWeight: FontWeight.w700),
+    ),
+    content: Text(
+      mess,
+      style: TextStyle(color: Style.backgroundColor, fontWeight: FontWeight.w500),
+    ),
+    actions: [
+      FlatButton(
+        child: Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    ],
+  );
 }

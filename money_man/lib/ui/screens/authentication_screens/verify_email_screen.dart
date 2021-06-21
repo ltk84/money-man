@@ -126,7 +126,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w700,
                               fontSize: 16.0,
-                              color: white,
+                              color: Colors.white,
                             )),
                         controller: _btnController,
                         onPressed: () async {
@@ -220,6 +220,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           try {
             UserCredential res =
                 await auth.currentUser.linkWithCredential(credential);
+            return res;
           } on FirebaseAuthException catch (e) {
             // TODO
             print(e.code);

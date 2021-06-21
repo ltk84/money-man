@@ -1,7 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:money_man/core/models/transaction_model.dart';
+import 'package:money_man/ui/style.dart';
 
 class BarChartScreen extends StatefulWidget {
   final List<MyTransaction> currentList;
@@ -14,8 +16,8 @@ class BarChartScreen extends StatefulWidget {
 }
 
 class BarChartScreenState extends State<BarChartScreen> {
-  final Color leftBarColor = const Color(0xff53fdd7);
-  final Color rightBarColor = const Color(0xffff5182);
+  final Color leftBarColor = Style.incomeBarColor;
+  final Color rightBarColor = Style.expenseBarColor;
   final double width = 7;
 
   List<BarChartGroupData> rawBarGroups = [];
@@ -39,33 +41,33 @@ class BarChartScreenState extends State<BarChartScreen> {
     rawBarGroups.clear();
     timeRangeList.clear();
     DateTimeRange value = DateTimeRange(start: beginDate, end: endDate);
-    if (value.duration >= Duration(days: 6)) {
-      List<dynamic> calculationList = [];
-      var x = (value.duration.inDays / 6).round();
-      var firstDate = beginDate.subtract(Duration(days: 1));
-      for (int i = 0; i < 6; i++) {
-        firstDate = firstDate.add(Duration(days: 1));
-        var secondDate = (i != 5) ? firstDate.add(Duration(days: x)) : endDate;
+    int dayRange = (value.duration >= Duration(days: 6)) ? 6
+        : (value.duration.inDays == 0) ? 1 : value.duration.inDays;
+    List<dynamic> calculationList = [];
+    var x = (value.duration.inDays / dayRange).round();
+    var firstDate = beginDate.subtract(Duration(days: 1));
+    for (int i = 0; i < dayRange; i++) {
+      firstDate = firstDate.add(Duration(days: 1));
+      var secondDate = (i != dayRange - 1) ? firstDate.add(Duration(days: x)) : endDate;
 
-        var calculation =
-            calculateByTimeRange(firstDate, secondDate, transactionList);
-        calculationList.add(calculation);
-        double temp = calculation.first > calculation.last
-            ? calculation.first
-            : calculation.last;
-        if (temp > _maximumAmount) _maximumAmount = temp;
-        timeRangeList
-            .add(firstDate.day.toString() + "-" + secondDate.day.toString());
-        firstDate = firstDate.add(Duration(days: x));
-      }
-      if (!calculationList.isEmpty) {
-        for (int i = 0; i < calculationList.length; i++) {
-          var barGroup = makeGroupData(
-              i,
-              (calculationList[i].first * 19) / _maximumAmount.round(),
-              (calculationList[i].last * 19) / _maximumAmount.round());
-          rawBarGroups.add(barGroup);
-        }
+      var calculation =
+          calculateByTimeRange(firstDate, secondDate, transactionList);
+      calculationList.add(calculation);
+      double temp = calculation.first > calculation.last
+          ? calculation.first
+          : calculation.last;
+      if (temp > _maximumAmount) _maximumAmount = temp;
+      timeRangeList
+          .add(firstDate.day.toString() + "-" + secondDate.day.toString());
+      firstDate = firstDate.add(Duration(days: x));
+    }
+    if (!calculationList.isEmpty) {
+      for (int i = 0; i < calculationList.length; i++) {
+        var barGroup = makeGroupData(
+            i,
+            (calculationList[i].first * 19) / _maximumAmount.round(),
+            (calculationList[i].last * 19) / _maximumAmount.round());
+        rawBarGroups.add(barGroup);
       }
     }
   }
@@ -128,7 +130,7 @@ class BarChartScreenState extends State<BarChartScreen> {
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         //color: const Color(0xff2c4260),
-        color: Colors.black,
+        color: Style.backgroundColor,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -144,7 +146,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                       maxY: 20,
                       barTouchData: BarTouchData(
                           touchTooltipData: BarTouchTooltipData(
-                            tooltipBgColor: Colors.grey,
+                            tooltipBgColor: Style.foregroundColor.withOpacity(0.54),
                             getTooltipItem: (_a, _b, _c, _d) => null,
                           ),
                           touchCallback: (response) {
@@ -195,33 +197,33 @@ class BarChartScreenState extends State<BarChartScreen> {
                         show: true,
                         bottomTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (value) => const TextStyle(
-                            color: Colors.white,
+                          getTextStyles: (value) => TextStyle(
+                            color: Style.foregroundColor,
                             fontWeight: FontWeight.w500,
                             fontSize: 13,
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                           ),
-                          margin: 5,
+                          margin: 10,
                           getTitles: (double value) {
                             return timeRangeList[value.toInt()];
                           },
                         ),
                         leftTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (value) => const TextStyle(
-                            color: Colors.white,
+                          getTextStyles: (value) => TextStyle(
+                            color: Style.foregroundColor,
                             fontWeight: FontWeight.w500,
                             fontSize: 13,
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                           ),
-                          margin: 5,
+                          margin: 10,
                           reservedSize: 50,
                           getTitles: (value) {
                             if (value == 0) {
                               return '0';
                             } else if (value == 10) {
                               return (_maximumAmount / 2).round().toString();
-                            } else if (value == 19) {
+                            } else if (value == 20) {
                               return _maximumAmount.round().toString();
                             } else {
                               return '';
@@ -233,7 +235,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                         show: true,
                         checkToShowHorizontalLine: (value) => value % 2 == 0,
                         getDrawingHorizontalLine: (value) => FlLine(
-                          color: Colors.white24,
+                          color: Style.foregroundColor.withOpacity(0.24),
                           strokeWidth: 1,
                         ),
                         drawHorizontalLine: true,
@@ -242,11 +244,11 @@ class BarChartScreenState extends State<BarChartScreen> {
                         show: true,
                         border: Border(
                           top: BorderSide(
-                            color: Colors.white24,
+                            color: Style.foregroundColor.withOpacity(0.24),
                             width: 1,
                           ),
                           bottom: BorderSide(
-                            color: Colors.white24,
+                            color: Style.foregroundColor.withOpacity(0.24),
                             width: 1,
                           ),
                         ),
@@ -259,6 +261,235 @@ class BarChartScreenState extends State<BarChartScreen> {
               const SizedBox(
                 height: 12,
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: width*2,
+                            width: width,
+                            decoration: BoxDecoration(
+                              color: leftBarColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                              'Total income',
+                              style: TextStyle(
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14.0,
+                                color: Style.foregroundColor.withOpacity(0.54),
+                              )
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Container(
+                            height: width*2,
+                            width: width,
+                            decoration: BoxDecoration(
+                              color: rightBarColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                              'Total expense',
+                            style: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0,
+                              color: Style.foregroundColor.withOpacity(0.54),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 80),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 6),
+                            height: 14,
+                            width: 2,
+                            color: Style.foregroundColor,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                              'Amount',
+                            style: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0,
+                              color: Style.foregroundColor.withOpacity(0.54),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Container(
+                            height: 2,
+                            width: 14,
+                            color: Style.foregroundColor,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                              'Time range (day)',
+                            style: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0,
+                              color: Style.foregroundColor.withOpacity(0.54),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              )
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.center,
+              //       children: [
+              //         Container(
+              //           height: width*2,
+              //           width: width,
+              //           decoration: BoxDecoration(
+              //             color: leftBarColor,
+              //             borderRadius: BorderRadius.circular(10),
+              //           ),
+              //         ),
+              //         SizedBox(height: 10),
+              //         Container(
+              //           height: 14,
+              //           width: 2,
+              //           color: foregroundColor,
+              //         ),
+              //       ],
+              //     ),
+              //     SizedBox(width: 10),
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text('Total income'),
+              //         SizedBox(height: 10),
+              //         Text('Amount'),
+              //       ],
+              //     ),
+              //     SizedBox(width: 80),
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.center,
+              //       children: [
+              //         Container(
+              //           height: width*2,
+              //           width: width,
+              //           decoration: BoxDecoration(
+              //             color: rightBarColor,
+              //             borderRadius: BorderRadius.circular(10),
+              //           ),
+              //         ),
+              //         SizedBox(height: 10),
+              //         Container(
+              //           height: 2,
+              //           width: 14,
+              //           color: foregroundColor,
+              //         ),
+              //       ],
+              //     ),
+              //     SizedBox(width: 10),
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text('Total expense'),
+              //         SizedBox(height: 10),
+              //         Text('Time range (day)'),
+              //       ],
+              //     ),
+              //     // Column(
+              //     //   crossAxisAlignment: CrossAxisAlignment.start,
+              //     //   children: [
+              //     //     Row(
+              //     //       mainAxisAlignment: MainAxisAlignment.center,
+              //     //       children: [
+              //     //         Container(
+              //     //           height: width*2,
+              //     //           width: width,
+              //     //           decoration: BoxDecoration(
+              //     //             color: leftBarColor,
+              //     //             borderRadius: BorderRadius.circular(10),
+              //     //           ),
+              //     //         ),
+              //     //         SizedBox(width: 10,),
+              //     //         Text('Total income'),
+              //     //       ],
+              //     //     ),
+              //     //     Row(
+              //     //       mainAxisAlignment: MainAxisAlignment.center,
+              //     //       children: [
+              //     //         Container(
+              //     //           height: width*2,
+              //     //           width: width,
+              //     //           color: foregroundColor,
+              //     //         ),
+              //     //         SizedBox(width: 10,),
+              //     //         Text('Amount'),
+              //     //       ],
+              //     //     )
+              //     //   ],
+              //     // ),
+              //     // SizedBox(width: 80,),
+              //     // Column(
+              //     //   crossAxisAlignment: CrossAxisAlignment.start,
+              //     //   children: [
+              //     //     Row(
+              //     //       mainAxisAlignment: MainAxisAlignment.center,
+              //     //       children: [
+              //     //         Container(
+              //     //           height: width*2,
+              //     //           width: width,
+              //     //           decoration: BoxDecoration(
+              //     //             color: rightBarColor,
+              //     //             borderRadius: BorderRadius.circular(10),
+              //     //           ),
+              //     //         ),
+              //     //         SizedBox(width: 10,),
+              //     //         Text('Total expense'),
+              //     //       ],
+              //     //     ),
+              //     //     Row(
+              //     //       mainAxisAlignment: MainAxisAlignment.center,
+              //     //       children: [
+              //     //         Container(
+              //     //           height: width*2,
+              //     //           width: width,
+              //     //           color: foregroundColor,
+              //     //         ),
+              //     //         SizedBox(width: 10,),
+              //     //         Text('Time range (day)'),
+              //     //       ],
+              //     //     )
+              //     //   ],
+              //     // ),
+              //   ],
+              // ),
             ],
           ),
         ),
