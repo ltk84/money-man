@@ -46,10 +46,10 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
   Widget build(BuildContext context) {
     String _beginDate = realBeginDate != null
         ? DateFormat('dd/MM/yyyy').format(realBeginDate)
-        : 'Begin date';
+        : 'Choose begin date';
     String _endDate = realEndDate != null
         ? DateFormat('dd/MM/yyyy').format(realEndDate)
-        : 'End date';
+        : 'Choose end date';
 
     return Scaffold(
         backgroundColor: Style.boxBackgroundColor,
@@ -78,7 +78,7 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                     : () {
                         if (realBeginDate != null &&
                             realEndDate != null &&
-                            realBeginDate.compareTo(realEndDate) < 0)
+                            realBeginDate.compareTo(realEndDate) <= 0)
                           Navigator.of(context).pop(TimeRangeInfo(
                               description: 'Custom',
                               begin: realBeginDate,
@@ -121,19 +121,19 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                   DatePicker.showDatePicker(context,
                       currentTime: realBeginDate == null
                           ? DateTime(DateTime.now().year, DateTime.now().month,
-                              DateTime.now().day)
+                          DateTime.now().day)
                           : realBeginDate,
                       showTitleActions: true, onConfirm: (date) {
-                    setState(() {
-                      // Bước xét DateFormat này là do realBeginDate có thể bị lệch giờ,
-                      // dẫn đến hiện tượng không so sánh được DateTime của transaction (không có giờ phút giây).
-                      // DateFormat này để cho realBeginDate có trùng giờ với DateTime của transaction (không có giờ phút giây).
-                      DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-                      String formattedDate = dateFormat.format(date);
-                      realBeginDate = dateFormat.parse(formattedDate);
-                      //_beginDate = DateFormat('dd/MM/yyyy').format(date);
-                    });
-                  },
+                        setState(() {
+                          // Bước xét DateFormat này là do realBeginDate có thể bị lệch giờ,
+                          // dẫn đến hiện tượng không so sánh được DateTime của transaction (không có giờ phút giây).
+                          // DateFormat này để cho realBeginDate có trùng giờ với DateTime của transaction (không có giờ phút giây).
+                          DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+                          String formattedDate = dateFormat.format(date);
+                          realBeginDate = dateFormat.parse(formattedDate);
+                          //_beginDate = DateFormat('dd/MM/yyyy').format(date);
+                        });
+                      },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(
@@ -185,19 +185,19 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                   DatePicker.showDatePicker(context,
                       currentTime: realEndDate == null
                           ? DateTime(DateTime.now().year, DateTime.now().month,
-                              DateTime.now().day)
+                          DateTime.now().day)
                           : realEndDate,
                       showTitleActions: true, onConfirm: (date) {
-                    setState(() {
-                      // Bước xét DateFormat này là do realEndDate có thể bị lệch giờ,
-                      // dẫn đến hiện tượng không so sánh được DateTime của transaction (không có giờ phút giây).
-                      // DateFormat này để cho realEndDate có trùng giờ với DateTime của transaction (không có giờ phút giây).
-                      DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-                      String formattedDate = dateFormat.format(date);
-                      realEndDate = dateFormat.parse(formattedDate);
-                      //_endDate = DateFormat('dd/MM/yyyy').format(date);
-                    });
-                  },
+                        setState(() {
+                          // Bước xét DateFormat này là do realEndDate có thể bị lệch giờ,
+                          // dẫn đến hiện tượng không so sánh được DateTime của transaction (không có giờ phút giây).
+                          // DateFormat này để cho realEndDate có trùng giờ với DateTime của transaction (không có giờ phút giây).
+                          DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+                          String formattedDate = dateFormat.format(date);
+                          realEndDate = dateFormat.parse(formattedDate);
+                          //_endDate = DateFormat('dd/MM/yyyy').format(date);
+                        });
+                      },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(
@@ -243,7 +243,7 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
       barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(
-            content: "End date muse be after begin date,\nplease try again.");
+            content: "End date can't be before begin date,\nplease try again.");
       },
     );
   }

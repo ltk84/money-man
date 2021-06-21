@@ -40,10 +40,10 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0))),
             leading: CloseButton(
-                color: Style.foregroundColor,
-                onPressed: () {
-                  Navigator.of(context).pop(widget.id);
-                }
+              color: Style.foregroundColor,
+              onPressed: () {
+                Navigator.of(context).pop(widget.id);
+              }
             ),
             title: Text('Select Wallet',
                 style: TextStyle(
@@ -53,29 +53,29 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                   color: Style.foregroundColor,)),
             actions: <Widget>[
               TextButton(
-                onPressed: () async {
-                  Wallet wallet = await _firestore.getWalletByID(widget.id);
-                  var res = '';
-                  res = await showCupertinoModalBottomSheet(
-                    backgroundColor: Style.boxBackgroundColor,
-                    context: context,
-                    builder: (context) => EditWalletScreen(wallet: wallet),
-                  );
-                  if (res != null)
-                    setState(() {
-                      widget.id = res;
-                      // widget.changeWallet(_firestore.getWalletByID(res));
-                    });
-                },
-                child: Text(
+                  onPressed: () async {
+                    Wallet wallet = await _firestore.getWalletByID(widget.id);
+                    var res = '';
+                    res = await showCupertinoModalBottomSheet(
+                      backgroundColor: Style.boxBackgroundColor,
+                      context: context,
+                      builder: (context) => EditWalletScreen(wallet: wallet),
+                    );
+                    if (res != null)
+                      setState(() {
+                        widget.id = res;
+                        // widget.changeWallet(_firestore.getWalletByID(res));
+                      });
+                  },
+                  child: Text(
                     'Edit',
-                    style: TextStyle(
-                      fontFamily: Style.fontFamily,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                      color: Style.foregroundColor,
-                    )
-                ),
+                      style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        color: Style.foregroundColor,
+                      )
+                  ),
               ),
             ],
           ),
@@ -173,102 +173,108 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
 
                   return widget.id == listWallet[index].id
                       ? GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Style.boxBackgroundColor,
-                          border: Border(
-                              bottom: BorderSide(
-                                color: Style.foregroundColorDark.withOpacity(0.12),
-                                width: 1.0,
-                              ))),
-                      child: ListTile(
-                        leading: SuperIcon(
-                          iconPath: iconData,
-                          size: 40.0,
-                        ),
-                        title: Text(
-                          listWallet[index].name,
-                          style: TextStyle(
-                            color: Style.foregroundColor,
-                            fontFamily: Style.fontFamily,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        subtitle: MoneySymbolFormatter(
-                          text: listWallet[index].amount,
-                          currencyId: listWallet[index].currencyID,
-                          textStyle: TextStyle(
-                            color: Style.foregroundColor,
-                            fontFamily: Style.fontFamily,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        trailing: Icon(Icons.check_rounded, color: Style.primaryColor),
-                      ),
-                    ),
-                  )
-                      : GestureDetector(
-                    onTap: () {
-                      // setState(() {
-                      //   widget.id = listWallet[index].id;
-                      //   _firestore.updateSelectedWallet(widget.id);
-                      // });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Style.boxBackgroundColor,
-                          border: Border(
-                              top: BorderSide(
-                                color: Style.foregroundColor.withOpacity(0.12),
-                                width: 1.0,
+                          onTap: () {},
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Style.boxBackgroundColor,
+                                border: Border(
+                                    top: BorderSide(
+                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      width: index == 0 ? 0.5 : 0,
+                                    ),
+                                    bottom: BorderSide(
+                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      width: 0.5,
+                                    )
+                                )
+                            ),
+                            child: ListTile(
+                              leading: SuperIcon(
+                                iconPath: iconData,
+                                size: 40.0,
                               ),
-                              bottom: BorderSide(
-                                color: Style.foregroundColorDark.withOpacity(0.12),
-                                width: 1.0,
-                              )
-                          )
-                      )
-                      ,
-                      child: ListTile(
-                        onTap: () async {
-                          widget.id = listWallet[index].id;
-                          final updateWalletId = await _firestore
-                              .updateSelectedWallet(widget.id);
-                          Navigator.pop(context, updateWalletId);
-                        },
-                        leading: SuperIcon(
-                          iconPath: iconData,
-                          size: 40.0,
-                        ),
-                        title: Text(
-                          listWallet[index].name,
-                          style: TextStyle(
-                            color: Style.foregroundColor,
-                            fontFamily: Style.fontFamily,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
+                              title: Text(
+                                listWallet[index].name,
+                                style: TextStyle(
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              subtitle: MoneySymbolFormatter(
+                                text: listWallet[index].amount,
+                                currencyId: listWallet[index].currencyID,
+                                textStyle: TextStyle(
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              trailing: Icon(Icons.check_rounded, color: Style.primaryColor),
+                            ),
                           ),
-                        ),
-                        subtitle: MoneySymbolFormatter(
-                          text: listWallet[index].amount,
-                          currencyId: listWallet[index].currencyID,
-                          textStyle: TextStyle(
-                            color: Style.foregroundColor,
-                            fontFamily: Style.fontFamily,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400,
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            // setState(() {
+                            //   widget.id = listWallet[index].id;
+                            //   _firestore.updateSelectedWallet(widget.id);
+                            // });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Style.boxBackgroundColor,
+                                border: Border(
+                                    top: BorderSide(
+                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      width: index == 0 ? 0.5 : 0,
+                                    ),
+                                    bottom: BorderSide(
+                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      width: 0.5,
+                                    )
+                                )
+                            )
+                            ,
+                            child: ListTile(
+                              onTap: () async {
+                                widget.id = listWallet[index].id;
+                                final updateWalletId = await _firestore
+                                    .updateSelectedWallet(widget.id);
+                                Navigator.pop(context, updateWalletId);
+                              },
+                              leading: SuperIcon(
+                                iconPath: iconData,
+                                size: 40.0,
+                              ),
+                              title: Text(
+                                listWallet[index].name,
+                                style: TextStyle(
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              subtitle: MoneySymbolFormatter(
+                                text: listWallet[index].amount,
+                                currencyId: listWallet[index].currencyID,
+                                textStyle: TextStyle(
+                                  color: Style.foregroundColor,
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  );
+                        );
                 });
           }),
     );

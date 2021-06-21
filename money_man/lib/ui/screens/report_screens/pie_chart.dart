@@ -186,7 +186,7 @@ class PieChartScreenState extends State<PieChartScreen> {
                               Container(
                                 padding: EdgeInsets.symmetric(vertical: 2),
                                 child: Text(
-                                  ((_info[index] / _total) * 100).round().toString() + '%',
+                                  ((_info[index] / _total) * 100).toStringAsFixed(2) + '%',
                                   style: TextStyle(
                                     fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w500,
@@ -213,13 +213,13 @@ class PieChartScreenState extends State<PieChartScreen> {
             final widgetSize = isTouched ? 40.0 : 20.0;
             final double fontTitleSize = isTouched ? 17 : 8.5;
 
-            var value = ((_info[i] / _total) * 100).round();
+            var value = ((_info[i] / _total) * 100);
 
             return PieChartSectionData(
               color: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
-              value: value.toDouble(),
+              value: value,
               showTitle: _isShowPercent,
-              title: value.toString() + '%',
+              title: value.toStringAsFixed(2) + '%',
               titlePositionPercentageOffset: isTouched ? 2.3 : 2.20,
               radius: radius,
               titleStyle: TextStyle(
@@ -253,7 +253,7 @@ class PieChartScreenState extends State<PieChartScreen> {
             final radius = 8.0;
             final widgetSize = 20.0;
 
-            var value = ((_info[i] / _total) * 100).round();
+            var value = ((_info[i] / _total) * 100);
 
             return PieChartSectionData(
               color: i < colors.length

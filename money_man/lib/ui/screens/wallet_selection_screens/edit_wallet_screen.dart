@@ -59,26 +59,26 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () async {
-                if (_formKey.currentState.validate()) {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  if (adjustAmount == null) {
-                    await _firestore.updateWallet(widget.wallet);
-                    await _firestore.updateSelectedWallet(widget.wallet.id);
-                  } else
-                    await _firestore.adjustBalance(
-                        widget.wallet, adjustAmount);
-                  Navigator.pop(context, widget.wallet.id);
-                }
-              },
-              child: Text('Save',
-                  style: TextStyle(
-                    fontFamily: Style.fontFamily,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                    color: Style.foregroundColor,
-                  )
-              ),
+                onPressed: () async {
+                  if (_formKey.currentState.validate()) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    if (adjustAmount == null) {
+                      await _firestore.updateWallet(widget.wallet);
+                      await _firestore.updateSelectedWallet(widget.wallet.id);
+                    } else
+                      await _firestore.adjustBalance(
+                          widget.wallet, adjustAmount);
+                    Navigator.pop(context, widget.wallet.id);
+                  }
+                },
+                child: Text('Save',
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      color: Style.foregroundColor,
+                    )
+                ),
             ),
           ],
         ),
@@ -150,7 +150,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             decoration: InputDecoration(
                                 errorBorder: UnderlineInputBorder(
                                   borderSide:
-                                  BorderSide(color: Style.errorColor, width: 1),
+                                      BorderSide(color: Style.errorColor, width: 1),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -254,23 +254,23 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                         size: 30.0, color: Style.foregroundColor.withOpacity(0.24)),
                     title: adjustAmount != null
                         ? MoneySymbolFormatter(
-                      text: adjustAmount,
-                      currencyId: widget.wallet.currencyID,
-                      textStyle: TextStyle(
-                          color: Style.foregroundColor,
-                          fontFamily: Style.fontFamily,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16.0),
-                    )
+                            text: adjustAmount,
+                            currencyId: widget.wallet.currencyID,
+                            textStyle: TextStyle(
+                                color: Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0),
+                          )
                         : MoneySymbolFormatter(
-                      text: widget.wallet.amount,
-                      currencyId: widget.wallet.currencyID,
-                      textStyle: TextStyle(
-                          color: Style.foregroundColor,
-                          fontFamily: Style.fontFamily,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16.0),
-                    ),
+                            text: widget.wallet.amount,
+                            currencyId: widget.wallet.currencyID,
+                            textStyle: TextStyle(
+                                color: Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0),
+                          ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Style.foregroundColor),
                   )

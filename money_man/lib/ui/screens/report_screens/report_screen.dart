@@ -165,7 +165,6 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
               onTap: () async {
                 final result = await showCupertinoModalBottomSheet(
                     isDismissible: true,
-                    backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) => TimeRangeSelection(
                         dateDescription: dateDescript,
@@ -201,7 +200,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                             fontFamily: Style.fontFamily,
                             color: Style.foregroundColor.withOpacity(0.7),
                             fontSize: 12.0,
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w400),
                       ),
                     ],
                   ),
@@ -253,7 +252,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                   if (element.date.isBefore(beginDate)) {
                     if (element.category.type == 'expense')
                       openingBalance -= element.amount;
-                    else
+                    else if (element.category.type == 'income')
                       openingBalance += element.amount;
                   }
                   if (element.date.compareTo(endDate) <= 0) {
@@ -273,7 +272,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                         // if (!_expenseCategoryList.contains(element.category))
                         //   _expenseCategoryList.add(element.category);
                       }
-                    } else {
+                    } else if (element.category.type == 'income') {
                       closingBalance += element.amount;
                       if (element.date.compareTo(beginDate) >= 0) {
                         income += element.amount;
@@ -300,78 +299,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                   color: Style.backgroundColor,
                   child: ListView(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(),
+                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey[900],
-                                  width: 1.0,
-                                ),
-                                top: BorderSide(
-                                  color: Colors.grey[900],
-                                  width: 1.0,
-                                ))),
-                        child: Column(children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Opening balance',
-                                      style: TextStyle(
-                                        color: Colors.grey[500],
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      openingBalance.toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Closing balance',
-                                      style: TextStyle(
-                                        color: Colors.grey[500],
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      closingBalance.toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ]),
-                      ),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                           decoration: BoxDecoration(

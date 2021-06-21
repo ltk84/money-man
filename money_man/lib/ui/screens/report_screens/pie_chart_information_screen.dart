@@ -66,6 +66,7 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
       });
     }
   }
+
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   bool isContained(MyCategory currentCategory, List<MyCategory> categoryList) {
     if (categoryList.isEmpty) return false;
@@ -138,8 +139,8 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<Object>(
-      stream: _firestore.transactionStream(widget.currentWallet, 50),
-        builder: (context,snapshot){
+        stream: _firestore.transactionStream(widget.currentWallet, 50),
+        builder: (context, snapshot) {
           return Container(
               decoration: BoxDecoration(
                   color: Style.boxBackgroundColor,
@@ -241,8 +242,6 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                   )
               )
           );
-        }
-        );
-
+        });
   }
 }

@@ -57,23 +57,23 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () async {
-                if (wallet.name == '' || wallet.name == null) return;
-                if (_formKey.currentState.validate()) {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  var res = await _firestore.addWallet(this.wallet);
-                  await _firestore.updateSelectedWallet(res);
-                  Navigator.of(context).pop(res);
-                }
-              },
-              child: Text('Done',
-                  style: TextStyle(
-                    fontFamily: Style.fontFamily,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                    color: (wallet.name == '' || wallet.name == null) ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
-                  )
-              ),
+                onPressed: () async {
+                  if (wallet.name == '' || wallet.name == null) return;
+                  if (_formKey.currentState.validate()) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    var res = await _firestore.addWallet(this.wallet);
+                    await _firestore.updateSelectedWallet(res);
+                    Navigator.of(context).pop(res);
+                  }
+                },
+                child: Text('Done',
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      color: (wallet.name == '' || wallet.name == null) ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                    )
+                ),
             ),
           ],
         ),
@@ -175,15 +175,15 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             decoration: InputDecoration(
                               errorBorder: UnderlineInputBorder(
                                 borderSide:
-                                BorderSide(color: Style.errorColor, width: 1),
+                                    BorderSide(color: Style.errorColor, width: 1),
                               ),
                               enabledBorder: UnderlineInputBorder(
                                 borderSide:
-                                BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 1),
+                                    BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 1),
                               ),
                               focusedBorder: UnderlineInputBorder(
                                 borderSide:
-                                BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 3),
+                                    BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 3),
                               ),
                               labelText: 'Name',
                               labelStyle: TextStyle(
@@ -215,7 +215,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           backgroundColor: Style.boxBackgroundColor,
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                           flagSize: 26,
                           titleTextStyle: TextStyle(
@@ -275,14 +275,14 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     title: wallet.amount == null
                         ? Text('Enter wallet amount')
                         : MoneySymbolFormatter(
-                      text: wallet.amount,
-                      currencyId: wallet.currencyID,
-                      textStyle: TextStyle(
-                          color: Style.foregroundColor,
-                          fontFamily: Style.fontFamily,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16.0),
-                    ),
+                            text: wallet.amount,
+                            currencyId: wallet.currencyID,
+                            textStyle: TextStyle(
+                                color: Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0),
+                          ),
                     trailing: Icon(Icons.chevron_right,
                         size: 20.0, color: Style.foregroundColor),
                   )

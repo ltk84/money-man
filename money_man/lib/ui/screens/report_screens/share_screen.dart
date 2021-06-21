@@ -63,7 +63,6 @@ class ShareScreenState extends State<ShareScreen> {
     return Scaffold(
       backgroundColor: Style.boxBackgroundColor,
       appBar: AppBar(
-        leadingWidth: 70.0,
         centerTitle: true,
         elevation: 0,
         backgroundColor: Style.boxBackgroundColor,
@@ -81,25 +80,18 @@ class ShareScreenState extends State<ShareScreen> {
           color: Style.foregroundColor,
         ),
       ),
-      // body: ListView(
-      //   scrollDirection: Axis.horizontal,
-      //   children: [
-      //     buildImage(reportData1),
-      //     buildImage(reportData2),
-      //     buildImage(reportData3),
-      //   ],
-      // )
       body: Container(
           color: Style.backgroundColor1,
           padding: EdgeInsets.symmetric(vertical: 20.0),
-          child: Column(
+          child: ListView(
+            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               Container(
                 child: CarouselSlider(
                   options: CarouselOptions(
                     scrollPhysics: BouncingScrollPhysics(),
                     autoPlay: false,
-                    aspectRatio: 1,
+                    aspectRatio: 1.2,
                     enlargeCenterPage: true,
                     enableInfiniteScroll: false,
                     onPageChanged: (index, reason) {
@@ -116,8 +108,9 @@ class ShareScreenState extends State<ShareScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 50.0, bottom: 10.0),
-                padding: EdgeInsets.symmetric(horizontal: 100.0),
+                height: 40,
+                width: double.infinity,
+                margin: EdgeInsets.fromLTRB(40, 50, 40, 10),
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -147,7 +140,8 @@ class ShareScreenState extends State<ShareScreen> {
                     Share.shareFiles([file.path]);
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.share),
                       SizedBox(width: 10,),
@@ -165,7 +159,9 @@ class ShareScreenState extends State<ShareScreen> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 100.0),
+                height: 40,
+                width: double.infinity,
+                margin: EdgeInsets.fromLTRB(40, 5, 40, 10),
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -219,7 +215,8 @@ class ShareScreenState extends State<ShareScreen> {
                     }
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.save_alt),
                       SizedBox(width: 10),

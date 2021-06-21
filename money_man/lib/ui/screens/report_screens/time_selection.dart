@@ -75,7 +75,6 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
     return Scaffold(
         backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
-          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.boxBackgroundColor,
@@ -130,8 +129,6 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
                         begin: listInfo[index].begin,
                         end: listInfo[index].end);
                     setState(() {
-                      listInfo.removeLast();
-                      listInfo.add(result);
                       _dateDescription = listInfo[index].description;
                     });
                     Navigator.of(context).pop(result);

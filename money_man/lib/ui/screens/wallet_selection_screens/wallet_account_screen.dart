@@ -44,18 +44,18 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
         elevation: 0,
         backgroundColor: Style.boxBackgroundColor,
         leading: TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(_wallet);
-          },
-          child: Text(
-            'Back',
-            style: TextStyle(
-              color: Style.foregroundColor,
-              fontSize: 16.0,
-              fontFamily: Style.fontFamily,
-              fontWeight: FontWeight.w600,
-            ),
-          ),),
+            onPressed: () {
+              Navigator.of(context).pop(_wallet);
+            },
+            child: Text(
+              'Back',
+              style: TextStyle(
+                color: Style.foregroundColor,
+                fontSize: 16.0,
+                fontFamily: Style.fontFamily,
+                fontWeight: FontWeight.w600,
+              ),
+            ),),
         title: Text('Select Wallet',
             style: TextStyle(
               fontFamily: Style.fontFamily,
@@ -114,7 +114,7 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
                                 Navigator.pop(context, listWallet[index]);
                               },
                               leading:
-                              SuperIcon(iconPath: iconData, size: 35.0),
+                                  SuperIcon(iconPath: iconData, size: 35.0),
                               title: Text(
                                 listWallet[index].name,
                                 style: TextStyle(
@@ -135,7 +135,7 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
                                 ),
                               ),
                               trailing: (_wallet != null &&
-                                  _wallet.name == listWallet[index].name)
+                                      _wallet.name == listWallet[index].name)
                                   ? Icon(Icons.check, color: Style.primaryColor)
                                   : null,
                             ),
