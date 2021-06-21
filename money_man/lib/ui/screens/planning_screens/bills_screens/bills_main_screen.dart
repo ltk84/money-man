@@ -61,13 +61,16 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                 children: [
                   Hero(
                     tag: 'billToDetail_title',
-                    child: Text('Bills',
-                        style: TextStyle(
-                          fontFamily: Style.fontFamily,
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.w600,
-                          color: Style.foregroundColor,
-                        )),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text('Bills',
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor,
+                          )),
+                    ),
                   ),
                   Icon(Icons.arrow_drop_down, color: Style.foregroundColorDark)
                 ],

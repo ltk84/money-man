@@ -68,13 +68,16 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
           ),
           title: Hero(
             tag: 'billToDetail_title',
-            child: Text('Bill',
-                style: TextStyle(
-                  fontFamily: Style.fontFamily,
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                  color: Style.foregroundColor,
-                )),
+            child: Material(
+              color: Colors.transparent,
+              child: Text('Bill',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                    color: Style.foregroundColor,
+                  )),
+            ),
           ),
           centerTitle: true,
           flexibleSpace: ClipRect(

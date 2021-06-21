@@ -129,7 +129,8 @@ class _TestState extends State<Test> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
                     child: reachTop == 0
-                        ? Hero(tag: 'alo', child: title)
+                        ? Hero(tag: 'alo', child: Material(
+                        color: Colors.transparent,child: title))
                         : emptyTitle,
                   ),
                   Container(

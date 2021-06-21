@@ -59,13 +59,16 @@ class _RecurringTransactionDetailScreenState
           ),
           title: Hero(
             tag: 'billToDetail_title',
-            child: Text('Recurring transaction',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                )),
+            child: Material(
+              color: Colors.transparent,
+              child: Text('Recurring transaction',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  )),
+            ),
           ),
           centerTitle: true,
           flexibleSpace: ClipRect(

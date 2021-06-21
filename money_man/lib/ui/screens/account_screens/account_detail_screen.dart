@@ -73,16 +73,19 @@ class _AccountDetailState extends State<AccountDetail> {
               },
               child: Hero(
                 tag: 'alo',
-                child: Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
-                    Text('More', style: TextStyle(
-                        color: Style.foregroundColor,
-                        fontFamily: Style.fontFamily,
-                        fontSize: 17.0
-                    )
-                    )
-                  ],
+                child: Material(
+                  color: Colors.transparent,
+                  child: Row(
+                    children: [
+                      Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+                      Text('More', style: TextStyle(
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
+                          fontSize: 17.0
+                      )
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

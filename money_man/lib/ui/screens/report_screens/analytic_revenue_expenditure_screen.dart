@@ -256,41 +256,44 @@ class _AnalyticRevenueAndExpenditureScreen
                                   color: Style.backgroundColor,
                                   child: Hero(
                                     tag: 'netIncomeChart',
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text('Net Income',
-                                            style: TextStyle(
-                                              color: Style.foregroundColor.withOpacity(
-                                                  0.7),
-                                              fontFamily: Style.fontFamily,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            )
-                                        ),
-                                        MoneySymbolFormatter(
-                                            text: closingBalance - openingBalance,
-                                            currencyId: _wallet.currencyID,
-                                            textStyle: TextStyle(
-                                              color: (closingBalance -
-                                                  openingBalance) > 0 ? Style.incomeColor
-                                                  : (closingBalance -
-                                                  openingBalance) == 0
-                                                  ? Style.foregroundColor
-                                                  : Style.expenseColor,
-                                              fontFamily: Style.fontFamily,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 26,
-                                              height: 1.5,
-                                            )),
-                                        Container(
-                                          width: 450,
-                                          height: 200,
-                                          child: BarChartScreen(
-                                              currentList: _transactionList,
-                                              beginDate: beginDate,
-                                              endDate: endDate),
-                                        ),
-                                      ],
+                                    child: Material(
+                                      color: Style.backgroundColor,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text('Net Income',
+                                              style: TextStyle(
+                                                color: Style.foregroundColor.withOpacity(
+                                                    0.7),
+                                                fontFamily: Style.fontFamily,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16,
+                                              )
+                                          ),
+                                          MoneySymbolFormatter(
+                                              text: closingBalance - openingBalance,
+                                              currencyId: _wallet.currencyID,
+                                              textStyle: TextStyle(
+                                                color: (closingBalance -
+                                                    openingBalance) > 0 ? Style.incomeColor
+                                                    : (closingBalance -
+                                                    openingBalance) == 0
+                                                    ? Style.foregroundColor
+                                                    : Style.expenseColor,
+                                                fontFamily: Style.fontFamily,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 26,
+                                                height: 1.5,
+                                              )),
+                                          Container(
+                                            width: 450,
+                                            height: 200,
+                                            child: BarChartScreen(
+                                                currentList: _transactionList,
+                                                beginDate: beginDate,
+                                                endDate: endDate),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   )
                               ),

@@ -199,13 +199,16 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                                 Expanded(
                                   child: Hero(
                                     tag: _listCategoryReport[index].name,
-                                    child: Text(_listCategoryReport[index].name,
-                                        style: TextStyle(
-                                          fontFamily: Style.fontFamily,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 15.0,
-                                          color: Style.foregroundColor,
-                                        )
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: Text(_listCategoryReport[index].name,
+                                          style: TextStyle(
+                                            fontFamily: Style.fontFamily,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15.0,
+                                            color: Style.foregroundColor,
+                                          )
+                                      ),
                                     ),
                                   ),
                                 ),

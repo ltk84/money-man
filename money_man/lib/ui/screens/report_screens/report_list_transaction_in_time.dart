@@ -119,16 +119,19 @@ class _ReportListTransaction extends State<ReportListTransaction> {
             tag: _viewByCategory
                 ? categoryDescription
                 : _beginDate.day.toString() + '-' + _endDate.day.toString(),
-            child: Text(
-                _viewByCategory
-                    ? categoryDescription
-                    : dateDescription,
-                style: TextStyle(
-                  fontFamily: Style.fontFamily,
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                  color: Style.foregroundColor,
-                )
+            child: Material(
+              color: Colors.transparent,
+              child: Text(
+                  _viewByCategory
+                      ? categoryDescription
+                      : dateDescription,
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                    color: Style.foregroundColor,
+                  )
+              ),
             ),
           ),
         ),

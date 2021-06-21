@@ -74,16 +74,19 @@ class _AboutScreenState extends State<AboutScreen> {
               },
               child: Hero(
                 tag: 'alo',
-                child: Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
-                    Text('More', style: TextStyle(
-                        color: Style.foregroundColor,
-                        fontFamily: Style.fontFamily,
-                        fontSize: 17.0
+                child: Material(
+                  color: Colors.transparent,
+                  child: Row(
+                    children: [
+                      Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+                      Text('More', style: TextStyle(
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
+                          fontSize: 17.0
+                        )
                       )
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -266,46 +269,52 @@ class InfoCard extends StatelessWidget {
       },
       child: Hero(
         tag: iconPath,
-        child: Container(
-          width: 300,
-          decoration: BoxDecoration(
-            color: Style.boxBackgroundColor,
+        child: Material(
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                backgroundColor: avatarColor,
-                radius: 45.0,
-                child: SuperIcon(
-                  iconPath: iconPath,
-                  size: 60.0,
+          color: Style.boxBackgroundColor,
+          child: Container(
+            width: 300,
+            decoration: BoxDecoration(
+              color: Style.boxBackgroundColor,
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  backgroundColor: avatarColor,
+                  radius: 45.0,
+                  child: SuperIcon(
+                    iconPath: iconPath,
+                    size: 60.0,
+                  ),
                 ),
-              ),
-              SizedBox(height: 20.0,),
-              Text(
-                name,
-                style: TextStyle(
-                  color: Style.foregroundColor,
-                  fontFamily: Style.fontFamily,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 22.0,
+                SizedBox(height: 20.0,),
+                Text(
+                  name,
+                  style: TextStyle(
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 22.0,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 5.0,),
-              Text(
-                quote,
-                style: TextStyle(
-                  color: Style.foregroundColor.withOpacity(0.54),
-                  fontFamily: Style.fontFamily,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14.0,
+                SizedBox(height: 5.0,),
+                Text(
+                  quote,
+                  style: TextStyle(
+                    color: Style.foregroundColor.withOpacity(0.54),
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14.0,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -337,10 +346,10 @@ class InfoCardDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Hero(
-        tag: iconPath,
+    return Hero(
+      tag: iconPath,
+      child: Material(
+        color: Colors.transparent,
         child: Stack(
           children: [
             Container(
@@ -520,9 +529,9 @@ class InfoCardDetail extends StatelessWidget {
                           //   size: 18,
                           // ),
                           Icon(
-                              Icons.email_rounded,
-                              size: 18,
-                              color: Style.backgroundColor,
+                            Icons.email_rounded,
+                            size: 18,
+                            color: Style.backgroundColor,
                           ),
                           SizedBox(width: 10.0,),
                           Text(
@@ -548,14 +557,14 @@ class InfoCardDetail extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
               child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Icon(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
                     Icons.close,
                     color: Style.foregroundColor,
                     size: 28.0,
-                )
+                  )
               ),
             ),
           ],

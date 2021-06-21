@@ -133,7 +133,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
                 child: reachTop == 0
                     ? Hero(
-                        tag: 'alo',
+                        tag: 'planningScreen',
                         child: Text('Planning',
                             style: TextStyle(
                                 fontSize: 30,

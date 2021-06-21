@@ -126,12 +126,15 @@ class _BarChartInformation extends State<BarChartInformation> {
                                 children: [
                                   Hero(
                                     tag: timeRangeList[index],
-                                    child: Text(timeRangeList[index],
-                                        style: TextStyle(
-                                            fontFamily: Style.fontFamily,
-                                            color: Style.foregroundColor,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500)),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: Text(timeRangeList[index],
+                                          style: TextStyle(
+                                              fontFamily: Style.fontFamily,
+                                              color: Style.foregroundColor,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500)),
+                                    ),
                                   ),
                                   SizedBox(height: 5),
                                   Padding(
