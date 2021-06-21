@@ -81,6 +81,7 @@ class _AcountScreenWidgetState extends State<AcountScreenWidget> {
         backgroundColor: Style.backgroundColor,
         //extendBodyBehindAppBar: true,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           centerTitle: true,
           backgroundColor: Colors.transparent,
           elevation: 0,

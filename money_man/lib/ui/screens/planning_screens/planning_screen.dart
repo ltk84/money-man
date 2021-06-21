@@ -83,6 +83,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
         backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           centerTitle: true,
           backgroundColor: Colors.transparent,
           elevation: 0,

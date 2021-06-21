@@ -12,6 +12,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +50,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
     amount = extraTransaction.extraAmountInfo;
     contact = extraTransaction.contact;
     isDebt = extraTransaction.category.name == 'Debt';
-    note = isDebt ? 'Debt paid to ' : 'Payment received  from ';
+    note = isDebt ? 'Debt paid to ' : 'Payment received from ';
     pickDate = DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
     selectedWallet = widget.wallet;
     currencySymbol =
@@ -62,8 +63,23 @@ class _CashBackScreenState extends State<CashBackScreen> {
     final _firestore =
         Provider.of<FirebaseFireStoreService>(context, listen: false);
     return Scaffold(
+      backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
-        title: Text('Cash back'),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Style.boxBackgroundColor,
+        title: Text(
+            'Cash back',
+            style: TextStyle(
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
+              color: Style.foregroundColor,
+            )
+        ),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
         actions: [
           TextButton(
               onPressed: () async {
@@ -108,26 +124,31 @@ class _CashBackScreenState extends State<CashBackScreen> {
                 }
               },
               child: Text(
-                'Save',
-                style: TextStyle(color: Colors.white),
+                'Done',
+                style: TextStyle(
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                )
               ))
         ],
       ),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: 35.0),
         decoration: BoxDecoration(
-            color: Colors.grey[900],
+            color: Style.boxBackgroundColor,
             border: Border(
                 top: BorderSide(
-                  color: Colors.white12,
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ),
                 bottom: BorderSide(
-                  color: Colors.white12,
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ))),
         child: ListView(shrinkWrap: true, children: [
-          Text('PAID FROM'),
+          //Text('PAID FROM'),
           ListTile(
             contentPadding: EdgeInsets.fromLTRB(10, 0, 20, 0),
             minVerticalPadding: 10.0,
@@ -140,12 +161,14 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   amount = double.parse(resultAmount);
                 });
             },
-            leading: Icon(Icons.money, color: Colors.white54, size: 45.0),
+            leading: Icon(Icons.money_rounded,
+                color: Style.foregroundColor.withOpacity(0.54), size: 45.0),
             title: TextFormField(
               readOnly: true,
               onTap: () async {
-                final resultAmount = await Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => EnterAmountScreen()));
+                final resultAmount = await showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (context) => EnterAmountScreen());
                 if (resultAmount != null)
                   setState(() {
                     print(resultAmount);
@@ -154,9 +177,9 @@ class _CashBackScreenState extends State<CashBackScreen> {
               },
               // onChanged: (value) => amount = double.tryParse(value),
               style: TextStyle(
-                  color: Colors.white,
+                  color: Style.foregroundColor,
                   fontSize: 30.0,
-                  fontFamily: 'Montserrat',
+                  fontFamily: Style.fontFamily,
                   fontWeight: FontWeight.w600),
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -165,9 +188,11 @@ class _CashBackScreenState extends State<CashBackScreen> {
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
                 hintStyle: TextStyle(
-                  color: amount == null ? Colors.grey[600] : Colors.white,
+                  color: amount == null
+                      ? Style.foregroundColor.withOpacity(0.24)
+                      : Style.foregroundColor,
                   fontSize: amount == null ? 22 : 30.0,
-                  fontFamily: 'Montserrat',
+                  fontFamily: Style.fontFamily,
                   fontWeight:
                       amount == null ? FontWeight.w500 : FontWeight.w600,
                 ),
@@ -182,15 +207,81 @@ class _CashBackScreenState extends State<CashBackScreen> {
           Container(
             margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
             child: Divider(
-              color: Colors.white24,
+              color: Style.foregroundColor.withOpacity(0.24),
               height: 1,
               thickness: 0.2,
             ),
           ),
+          ListTile(
+            dense: true,
+            onTap: () async {
+              var res = await showCupertinoModalBottomSheet(
+                  isDismissible: true,
+                  backgroundColor: Style.boxBackgroundColor,
+                  context: context,
+                  builder: (context) =>
+                      SelectWalletAccountScreen(wallet: selectedWallet));
+              if (res != null)
+                setState(() {
+                  selectedWallet = res;
+                  currencySymbol = CurrencyService()
+                      .findByCode(selectedWallet.currencyID)
+                      .symbol;
+                });
+            },
+            leading: selectedWallet == null
+                ? SuperIcon(iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
+                : SuperIcon(iconPath: selectedWallet.iconID, size: 28.0),
+            title: TextFormField(
+              readOnly: true,
+              style: TextStyle(
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600),
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: selectedWallet == null
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: selectedWallet == null
+                        ? FontWeight.w500
+                        : FontWeight.w600,
+                  ),
+                  hintText: selectedWallet == null
+                      ? 'Select wallet'
+                      : selectedWallet.name),
+              onTap: () async {
+                var res = await showCupertinoModalBottomSheet(
+                    isDismissible: true,
+                    backgroundColor: Style.boxBackgroundColor,
+                    context: context,
+                    builder: (context) =>
+                        SelectWalletAccountScreen(wallet: selectedWallet));
+                if (res != null)
+                  setState(() {
+                    selectedWallet = res;
+                    currencySymbol = CurrencyService()
+                        .findByCode(selectedWallet.currencyID)
+                        .symbol;
+                    // event = null;
+                  });
+              },
+            ),
+            trailing: Icon(Icons.chevron_right,
+                color: Style.foregroundColor.withOpacity(0.54)),
+          ),
           Container(
             margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
             child: Divider(
-              color: Colors.white24,
+              color: Style.foregroundColor.withOpacity(0.24),
               height: 1,
               thickness: 0.2,
             ),
@@ -198,7 +289,8 @@ class _CashBackScreenState extends State<CashBackScreen> {
           ListTile(
             dense: true,
             leading:
-                Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
+                Icon(Icons.calendar_today,
+                    color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
             title: TextFormField(
               onTap: () async {
                 DatePicker.showDatePicker(context,
@@ -215,16 +307,31 @@ class _CashBackScreenState extends State<CashBackScreen> {
                 },
                     locale: LocaleType.en,
                     theme: DatePickerTheme(
-                      cancelStyle: TextStyle(color: Colors.white),
-                      doneStyle: TextStyle(color: Colors.white),
-                      itemStyle: TextStyle(color: Colors.white),
-                      backgroundColor: Colors.grey[900],
+                      cancelStyle: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor
+                      ),
+                      doneStyle: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor
+                      ),
+                      itemStyle: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor
+                      ),
+                      backgroundColor: Style.boxBackgroundColor,
                     ));
               },
               readOnly: true,
               style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600),
               decoration: InputDecoration(
@@ -234,8 +341,10 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   hintStyle: TextStyle(
-                    color: pickDate == null ? Colors.grey[600] : Colors.white,
-                    fontFamily: 'Montserrat',
+                    color: pickDate == null
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight:
                         pickDate == null ? FontWeight.w500 : FontWeight.w600,
@@ -256,100 +365,30 @@ class _CashBackScreenState extends State<CashBackScreen> {
                               : DateFormat('EEEE, dd-MM-yyyy')
                                   .format(pickDate)),
             ),
-            trailing: Icon(Icons.chevron_right, color: Colors.white54),
+            trailing: Icon(Icons.chevron_right,
+                color: Style.foregroundColor.withOpacity(0.54)),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
             child: Divider(
-              color: Colors.white24,
+              color: Style.foregroundColor.withOpacity(0.24),
               height: 1,
               thickness: 0.2,
             ),
           ),
           ListTile(
             dense: true,
-            onTap: () async {
-              var res = await showCupertinoModalBottomSheet(
-                  isDismissible: true,
-                  backgroundColor: Colors.grey[900],
-                  context: context,
-                  builder: (context) =>
-                      SelectWalletAccountScreen(wallet: selectedWallet));
-              if (res != null)
-                setState(() {
-                  selectedWallet = res;
-                  currencySymbol = CurrencyService()
-                      .findByCode(selectedWallet.currencyID)
-                      .symbol;
-                });
-            },
-            leading: selectedWallet == null
-                ? SuperIcon(iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
-                : SuperIcon(iconPath: selectedWallet.iconID, size: 28.0),
+            leading: Icon(Icons.note,
+                color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
             title: TextFormField(
-              readOnly: true,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600),
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: selectedWallet == null
-                        ? Colors.grey[600]
-                        : Colors.white,
-                    fontFamily: 'Montserrat',
-                    fontSize: 16.0,
-                    fontWeight: selectedWallet == null
-                        ? FontWeight.w500
-                        : FontWeight.w600,
-                  ),
-                  hintText: selectedWallet == null
-                      ? 'Select wallet'
-                      : selectedWallet.name),
               onTap: () async {
-                var res = await showCupertinoModalBottomSheet(
+                final noteContent = await showCupertinoModalBottomSheet(
                     isDismissible: true,
-                    backgroundColor: Colors.grey[900],
+                    backgroundColor: Style.boxBackgroundColor,
                     context: context,
-                    builder: (context) =>
-                        SelectWalletAccountScreen(wallet: selectedWallet));
-                if (res != null)
-                  setState(() {
-                    selectedWallet = res;
-                    currencySymbol = CurrencyService()
-                        .findByCode(selectedWallet.currencyID)
-                        .symbol;
-                    // event = null;
-                  });
-              },
-            ),
-            trailing: Icon(Icons.chevron_right, color: Colors.white54),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-            child: Divider(
-              color: Colors.white24,
-              height: 1,
-              thickness: 0.2,
-            ),
-          ),
-          ListTile(
-            dense: true,
-            leading: Icon(Icons.note, color: Colors.white54, size: 28.0),
-            title: TextFormField(
-              onTap: () async {
-                final noteContent = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => NoteScreen(
-                              content: note ?? '',
-                            )));
+                    builder: (context) => NoteScreen(
+                      content: note ?? '',
+                    ));
                 print(noteContent);
                 if (noteContent != null) {
                   setState(() {
@@ -366,27 +405,40 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   hintStyle: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montserrat',
+                      color: note == '' || note == null
+                          ? Style.foregroundColor.withOpacity(0.24)
+                          : Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
-                      fontWeight: FontWeight.w500),
+                      fontWeight: note == '' || note == null
+                          ? FontWeight.w500
+                          : FontWeight.w600),
                   hintText: note == '' || note == null
                       ? 'Write note'
-                      : contact != null
-                          ? note + contact
-                          : note + 'someone'),
+                      : contact == null
+                      ? note + 'someone'
+                      : note + contact),
               style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600),
             ),
-            trailing: Icon(Icons.chevron_right, color: Colors.white54),
+            trailing: Icon(Icons.chevron_right,
+                color: Style.foregroundColor.withOpacity(0.54)),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+            child: Divider(
+              color: Style.foregroundColor.withOpacity(0.24),
+              height: 1,
+              thickness: 0.2,
+            ),
           ),
           ListTile(
             dense: true,
-            leading: Icon(Icons.account_balance_outlined,
-                color: Colors.white54, size: 28.0),
+            leading: Icon(Icons.person,
+                color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
             title: TextFormField(
               onTap: () async {
                 final PhoneContact phoneContact =
@@ -407,26 +459,21 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   hintStyle: TextStyle(
-                      color: Colors.grey[600],
-                      fontFamily: 'Montserrat',
+                      color: Style.foregroundColor.withOpacity(0.24),
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
-                      fontWeight: FontWeight.w500),
+                      fontWeight: contact == null
+                          ? FontWeight.w500
+                          : FontWeight.w600),
                   hintText: contact ?? hintTextConact),
               style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
+                  color: Style.foregroundColor,
+                  fontFamily: Style.fontFamily,
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600),
             ),
-            trailing: Icon(Icons.chevron_right, color: Colors.white54),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-            child: Divider(
-              color: Colors.white24,
-              height: 1,
-              thickness: 0.2,
-            ),
+            trailing: Icon(Icons.chevron_right,
+                color: Style.foregroundColor.withOpacity(0.54)),
           ),
         ]),
       ),
@@ -437,7 +484,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(content: content);
       },

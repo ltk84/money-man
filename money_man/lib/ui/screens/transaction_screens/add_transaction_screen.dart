@@ -106,7 +106,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   if (extraTransaction != null) {
                     if (trans.amount > extraTransaction.extraAmountInfo) {
                       await _showAlertDialog(
-                          'Inputted amount must be <= unpaid amount. Unpaid amount is ${extraTransaction.extraAmountInfo}');
+                          'The amount must be less than or equal to unpaid amount.\nUnpaid amount is '
+                          + getMoneyFormat(extraTransaction.extraAmountInfo, selectedWallet.currencyID)
+                      );
                       return;
                     }
                     MyTransaction newTransaction =
@@ -447,9 +449,24 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
-                        cancelStyle: TextStyle(color: Style.foregroundColor),
-                        doneStyle: TextStyle(color: Style.foregroundColor),
-                        itemStyle: TextStyle(color: Style.foregroundColor),
+                        cancelStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
+                        doneStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
+                        itemStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
                         backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
@@ -709,4 +726,24 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       },
     );
   }
+
+  String getMoneyFormat(double amount, String currencyId, {String digit = ''}) {
+    Currency currency = CurrencyService().findByCode(currencyId);
+    String symbol = currency.symbol;
+    bool onLeft = currency.symbolOnLeft;
+    String _digit = digit;
+    double _text = amount;
+    if (digit == '' && amount < 0) {
+      _digit = amount.toString().substring(0, 1);
+      _text = double.parse(amount.toString().substring(1));
+    }
+    String finalText = onLeft
+        ? '$_digit$symbol ' +
+        MoneyFormatter(amount: _text).output.withoutFractionDigits
+        : _digit +
+        MoneyFormatter(amount: _text).output.withoutFractionDigits +
+        ' $symbol';
+    return finalText;
+  }
+
 }

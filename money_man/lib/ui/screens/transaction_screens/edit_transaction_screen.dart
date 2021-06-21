@@ -115,7 +115,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     widget.transaction, _transaction, widget.wallet);
                 if (res == null) {
                   await _showAlertDialog(
-                      'Inputted amount must be <= unpaid amount');
+                      'The amount must be less than or equal to unpaid amount');
                   return;
                 }
               }
@@ -127,7 +127,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     (widget.transaction.amount -
                         widget.transaction.extraAmountInfo)) {
                   await _showAlertDialog(
-                      'Transaction amount must be <= paided amount');
+                      'Transaction amount must be less than or equal to paid amount');
                   return;
                 }
               }
@@ -136,7 +136,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               Navigator.pop(context, _transaction);
             },
             child: Text(
-              'Done',
+              'Save',
               style: TextStyle(
                 color:
                 (
@@ -344,9 +344,24 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
-                        cancelStyle: TextStyle(color: Style.foregroundColor),
-                        doneStyle: TextStyle(color: Style.foregroundColor),
-                        itemStyle: TextStyle(color: Style.foregroundColor),
+                        cancelStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
+                        doneStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
+                        itemStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor
+                        ),
                         backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
@@ -537,19 +552,22 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 ),
                 Visibility(
                   visible: !pickEvent,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        pickEvent = true;
-                      });
-                    },
-                    child: Text(
-                      'More',
-                      style: TextStyle(
-                        color: Style.primaryColor,
-                        fontFamily: Style.fontFamily,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
+                  child: Container(
+                    width: double.maxFinite,
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          pickEvent = true;
+                        });
+                      },
+                      child: Text(
+                        'More',
+                        style: TextStyle(
+                          color: Style.primaryColor,
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),

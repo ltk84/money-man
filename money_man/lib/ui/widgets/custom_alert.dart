@@ -48,12 +48,13 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
         ),
         child: Container(
             margin: EdgeInsets.only(top: 20, left: 20, right: 20.0),
-            height: 190,
             width: 315,
             decoration: BoxDecoration(
             ),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: ListView(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     children: [
