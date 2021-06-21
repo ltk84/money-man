@@ -147,8 +147,7 @@ class _RecurringTransactionDetailScreenState
                         thickness: 1,
                       ),
                     ),
-                    buildInfoAmount(
-                        amount: _recurringTransaction.amount),
+                    buildInfoAmount(amount: _recurringTransaction.amount),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -208,8 +207,8 @@ class _RecurringTransactionDetailScreenState
               child: TextButton(
                 onPressed: () async {
                   var result =
-                  await _firestore.executeInstantRecurringTransaction(
-                      widget.recurringTransaction, widget.wallet);
+                      await _firestore.executeInstantRecurringTransaction(
+                          _recurringTransaction, widget.wallet);
                   if (result > 0) {
                     await _showAlertDialog(
                         title: 'Congratulation!',
@@ -340,7 +339,7 @@ class _RecurringTransactionDetailScreenState
     );
   }
 
-  Widget buildNote ({String display}) {
+  Widget buildNote({String display}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
@@ -354,7 +353,9 @@ class _RecurringTransactionDetailScreenState
                 fontFamily: 'Montserrat',
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
-                color: display == null || display == '' ? Colors.white24 : Colors.white,
+                color: display == null || display == ''
+                    ? Colors.white24
+                    : Colors.white,
               )),
         ],
       ),
