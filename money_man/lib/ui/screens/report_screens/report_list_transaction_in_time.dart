@@ -149,7 +149,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
               transactionList = transactionList
                   .where((element) =>
               CompareDate(element.date, _endDate) &&
-                  CompareDate(_beginDate, element.date))
+                  CompareDate(_beginDate, element.date) && element.category.type != 'debt & loan')
                   .toList();
               transactionList.sort((a, b) => b.date.compareTo(a.date));
 
@@ -178,9 +178,11 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   final b = transactionList
                       .where((element) => element.date.compareTo(date) == 0);
                   b.forEach((element) {
-                    element.category.type == "income"
-                        ? total += element.amount
-                        : total -= element.amount;
+                    if (element.category.type == "income") {
+                      total += element.amount;
+                    } else if (element.category.type == "expense") {
+                      total -= element.amount;
+                    }
                   });
                   transactionListSorted.add(b.toList());
                 });
@@ -209,7 +211,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
             transactionListSortByDate[xIndex].forEach((element) {
               if (element.category.type == 'expense')
                 totalAmountInDay -= element.amount;
-              else
+              else if (element.category.type == 'income')
                 totalAmountInDay += element.amount;
             });
 
@@ -241,7 +243,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
             transactionListSortByCategory[xIndex].forEach((element) {
               if (element.category.type == 'expense')
                 totalAmountInDay -= element.amount;
-              else
+              else if (element.category.type == 'income')
                 totalAmountInDay += element.amount;
             });
 
@@ -269,7 +271,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
         if (e.category.type == "income") {
           //_totalMoney += e.amount;
           totalIncome += e.amount;
-        } else
+        } else if (e.category.type == 'expense')
           //_totalMoney -= e.amount;
           totalExpense += e.amount;
       });

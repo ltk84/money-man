@@ -201,7 +201,7 @@ class _AnalyticRevenueAndExpenditureScreen
                 if (element.date.isBefore(beginDate)) {
                   if (element.category.type == 'expense')
                     openingBalance -= element.amount;
-                  else
+                  else if (element.category.type == 'income')
                     openingBalance += element.amount;
                 }
                 if (element.date.compareTo(endDate) <= 0) {
@@ -209,15 +209,27 @@ class _AnalyticRevenueAndExpenditureScreen
                     closingBalance -= element.amount;
                     if (element.date.compareTo(beginDate) >= 0) {
                       expense += element.amount;
-                      if (!_expenseCategoryList.contains(element.category))
+                      if (!_expenseCategoryList.any((categoryElement) {
+                        if (categoryElement.name == element.category.name)
+                          return true;
+                        else
+                          return false;
+                      })) {
                         _expenseCategoryList.add(element.category);
+                      }
                     }
-                  } else {
+                  } else if (element.category.type == 'income') {
                     closingBalance += element.amount;
                     if (element.date.compareTo(beginDate) >= 0) {
                       income += element.amount;
-                      if (!_incomeCategoryList.contains(element.category))
+                      if (!_incomeCategoryList.any((categoryElement) {
+                        if (categoryElement.name == element.category.name)
+                          return true;
+                        else
+                          return false;
+                      })) {
                         _incomeCategoryList.add(element.category);
+                      }
                     }
                   }
                 }
@@ -225,7 +237,7 @@ class _AnalyticRevenueAndExpenditureScreen
               _transactionList = _transactionList
                   .where((element) =>
               element.date.compareTo(beginDate) >= 0 &&
-                  element.date.compareTo(endDate) <= 0)
+                  element.date.compareTo(endDate) <= 0 && element.category.type != 'debt & loan')
                   .toList();
               return Container(
                 color: Style.backgroundColor,

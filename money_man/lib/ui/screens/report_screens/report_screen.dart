@@ -296,7 +296,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                 _transactionList = _transactionList
                     .where((element) =>
                         element.date.compareTo(beginDate) >= 0 &&
-                        element.date.compareTo(endDate) <= 0)
+                        element.date.compareTo(endDate) <= 0 && element.category.type != 'debt & loan')
                     .toList();
                 return Container(
                   color: Style.backgroundColor,
