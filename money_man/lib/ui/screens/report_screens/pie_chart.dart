@@ -293,7 +293,7 @@ class _Badge extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: Style.foregroundColor,
+        color: Colors.white,
         shape: BoxShape.circle,
         border: Border.all(
           color: borderColor,
@@ -301,7 +301,7 @@ class _Badge extends StatelessWidget {
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Style.backgroundColor.withOpacity(.5),
+            color: Colors.black.withOpacity(.5),
             offset: const Offset(3, 3),
             blurRadius: 3,
           ),

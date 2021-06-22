@@ -14,10 +14,21 @@ void main() {
 }
 
 class App extends StatefulWidget {
+  static void restartApp(BuildContext context) {
+    context.findAncestorStateOfType<_AppState>().restartApp();
+  }
+
   _AppState createState() => _AppState();
 }
 
 class _AppState extends State<App> {
+  Key key = UniqueKey();
+
+  void restartApp() {
+    setState(() {
+      key = UniqueKey();
+    });
+  }
   // Set default `_initialized` and `_error` state to false
   bool _initialized = false;
   bool _error = false;
@@ -56,26 +67,29 @@ class _AppState extends State<App> {
       return MaterialApp(home: LoadingScreen());
     }
 
-    return MultiProvider(
-      providers: [
-        Provider(create: (_) {
-          return FirebaseAuthService();
-        }),
-      ],
-      child: WrapperBuilder(
-        builder: (context, userSnapshot) {
-          return MaterialApp(
-            theme: firstTheme(),
-            debugShowCheckedModeBanner: false,
-            home: SafeArea(
-              child: Wrapper(
-                userSnapshot: userSnapshot,
+    return KeyedSubtree(
+      key: key,
+      child: MultiProvider(
+        providers: [
+          Provider(create: (_) {
+            return FirebaseAuthService();
+          }),
+        ],
+        child: WrapperBuilder(
+          builder: (context, userSnapshot) {
+            return MaterialApp(
+              theme: firstTheme(),
+              debugShowCheckedModeBanner: false,
+              home: SafeArea(
+                child: Wrapper(
+                  userSnapshot: userSnapshot,
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
+        // child: MaterialApp(home: FirstStep()),
       ),
-      // child: MaterialApp(home: FirstStep()),
     );
   }
 }
