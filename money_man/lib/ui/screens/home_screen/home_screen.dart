@@ -116,7 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: (index) => _onItemTap(index, wallet)),
                 ),
                 floatingActionButton: FloatingActionButton(
-                  child: Icon(Icons.add),
+                  child: Icon(
+                      Icons.add_rounded,
+                      size: 30,
+                  ),
                   onPressed: () {
                     _onItemTap(2, wallet);
                   },
