@@ -165,11 +165,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     barrierDismissible: false,
                     builder: (_) {
                       return AlertDialog(
+                        backgroundColor: Style.boxBackgroundColor2,
                         title: Text(
                           'Delete this transaction?',
                           style: TextStyle(
-                            color: Colors.red,
-                            fontFamily: 'Montserrat',
+                            color: Style.errorColor,
+                            fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -179,7 +180,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                 Navigator.of(context, rootNavigator: true)
                                     .pop('No');
                               },
-                              child: Text('No')),
+                              child: Text('No',
+                                style: TextStyle(
+                                  color: Style.foregroundColor.withOpacity(0.7),
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w600,
+                                ),)),
                           FlatButton(
                               onPressed: () {
                                 Navigator.of(context, rootNavigator: true)
@@ -187,7 +193,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
 
                                 // chưa có animation để back ra transaction screen
                               },
-                              child: Text('Yes'))
+                              child: Text('Yes',
+                                style: TextStyle(
+                                  color: Style.foregroundColor.withOpacity(0.7),
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w600,
+                                ),))
                         ],
                       );
                     });
