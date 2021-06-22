@@ -1,9 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/basic_questions.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/basic_questions_screen.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/send_question_screen.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/user_guide_screens.dart';
+import 'package:money_man/ui/style.dart';
+import 'package:page_transition/page_transition.dart';
 
 class HelpScreens extends StatelessWidget {
   const HelpScreens({Key key}) : super(key: key);
@@ -11,69 +16,149 @@ class HelpScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Style.backgroundColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => SendQuestionScreen()));
+          showCupertinoModalBottomSheet(
+              isDismissible: false,
+              enableDrag: false,
+              context: context,
+              builder: (context) => SendQuestionScreen(),
+          );
         },
         child: Icon(Icons.message),
         elevation: 0,
-        backgroundColor: Color(0xFF2FB49C),
+        backgroundColor: Style.primaryColor,
       ),
       appBar: AppBar(
+        leadingWidth: 250.0,
+        leading: Hero(
+          tag: 'alo',
+          child: MaterialButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child:  Row(
+              children: [
+                Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+                Text('More', style: TextStyle(
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0
+                )
+                )
+              ],
+            ),
+          ),
+        ),
         centerTitle: true,
         title: Text(
-          "Helps",
-          style: TextStyle(fontFamily: 'Montserrat'),
+          "Help",
+            style: TextStyle(
+              color: Style.foregroundColor,
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
+            ),
         ),
-        backgroundColor: Color(0xff333333),
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        flexibleSpace: ClipRect(
+          child: AnimatedOpacity(
+            opacity: 1,
+            duration: Duration(milliseconds: 0),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                  sigmaX: 25,
+                  sigmaY: 25,
+                  tileMode: TileMode.values[0]),
+              child: AnimatedContainer(
+                duration: Duration(
+                    milliseconds: 100),
+                color: Colors.grey[800].withOpacity(0.2),
+              ),
+            ),
+          ),
+        ),
       ),
       body: Container(
         padding: EdgeInsets.only(top: 10),
-        color: Color(0xff1a1a1a),
+        color: Style.backgroundColor,
         child: ListView(
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             GestureDetector(
               onTap: () {
                 print("tapppp");
                 Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => BasicQuestionsScreens()));
+                    PageTransition(
+                        child: BasicQuestionsScreens(),
+                        type: PageTransitionType.rightToLeft));
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 child: Row(children: [
-                  Text(
-                    'Basic questions',
-                    style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: white,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 17),
+                  Hero(
+                    tag: 'titleQuestion',
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        'Basic Questions',
+                        style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            color: Style.foregroundColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 17),
+                      ),
+                    ),
                   ),
                 ]),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 20),
+              child: Divider(
+                color: Style.foregroundColor.withOpacity(0.24),
+                thickness: 0.5,
               ),
             ),
             GestureDetector(
               onTap: () {
                 print("tapppp");
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UserGuideScreen()));
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: UserGuideScreen(),
+                        type: PageTransitionType.rightToLeft));
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 child: Row(children: [
-                  Text(
-                    'User guide',
-                    style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: white,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 17),
+                  Hero(
+                    tag: 'titleGuide',
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        'User guide',
+                        style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            color: Style.foregroundColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 17),
+                      ),
+                    ),
                   ),
                 ]),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 20),
+              child: Divider(
+                color: Style.foregroundColor.withOpacity(0.24),
+                thickness: 0.5,
               ),
             ),
           ],

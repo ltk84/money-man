@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:money_man/core/services/constaints.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 
 class SendQuestionScreen extends StatefulWidget {
@@ -30,11 +31,11 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
       final sendReport = await send(message, smtpServer);
       print('Message sent: ' + sendReport.toString());
       await _showAlertDialog(
-          'Thank you for contact to us', 'Message sent successfully');
+          'Thank you for contact to us', 'Your message was sent successfully');
       Navigator.pop(context);
     } on MailerException catch (e) {
       await _showAlertDialog(
-          'Sorry, there is some mistake, please try again!', null);
+          'Sorry, something went wrong, please try again!', null);
       Navigator.pop(context);
       print('Message not sent.');
       for (var p in e.problems) {
@@ -46,14 +47,23 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Style.boxBackgroundColor2,
       appBar: AppBar(
         elevation: 0,
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
         title: Text(
-          'Contact with us',
-          style: TextStyle(fontFamily: 'Montserrat'),
+          'Contact us',
+          style: TextStyle(
+            color: Style.foregroundColor,
+            fontFamily: Style.fontFamily,
+            fontSize: 17.0,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         centerTitle: true,
-        backgroundColor: Color(0xff333333),
+        backgroundColor: Style.boxBackgroundColor2,
         actions: [
           GestureDetector(
             onTap: () async {
@@ -62,8 +72,9 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
               });
               if (content == null || content == "") {
                 _showAlertDialog('Please type your message!', null);
+              } else {
+                await sendMail();
               }
-              await sendMail();
               setState(() {
                 isSending = false;
               });
@@ -72,7 +83,10 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
             child: Container(
               padding: EdgeInsets.only(right: 10),
               child: Center(
-                child: Icon(Icons.send),
+                child: Icon(
+                    Icons.send,
+                  color: Style.foregroundColor,
+                ),
               ),
             ),
           )
@@ -80,38 +94,49 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
       ),
       body: isSending
           ? Container(
-              color: Color(0xff1a1a1a),
+              color: Style.backgroundColor1,
               child: Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  backgroundColor: Style.backgroundColor1,
+                  color: Style.primaryColor,
+                ),
               ),
             )
           : Container(
-              color: Color(0xff1a1a1a),
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+              color: Style.backgroundColor1,
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: ListView(
+                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                //physics: NeverScrollableScrollPhysics(),
                 children: [
                   TextFormField(
                     onChanged: (val) {
                       subject = val;
                     },
                     style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w400),
+                        color: Style.foregroundColor,
+                        fontFamily: Style.fontFamily,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w600),
                     cursorColor: white,
                     decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white70),
+                          borderSide: BorderSide(
+                              color: Style.foregroundColor.withOpacity(0.54)
+                          ),
                         ),
                         focusedBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 1.5),
+                          borderSide: BorderSide(
+                              color: Style.foregroundColor,
+                              width: 1.5,
+                          ),
                         ),
-                        hintText: "Type Subject",
+                        hintText: "Subject",
                         hintStyle: TextStyle(
-                            color: Colors.white54,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w400)),
+                            color: Style.foregroundColor.withOpacity(0.24),
+                            fontFamily: Style.fontFamily,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w500)),
                   ),
                   SizedBox(
                     height: 10,
@@ -122,16 +147,18 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
                     },
                     maxLines: 100,
                     style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montserrat',
+                        color: Style.foregroundColor,
+                        fontFamily: Style.fontFamily,
+                        fontSize: 18.0,
                         fontWeight: FontWeight.w400),
                     cursorColor: white,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Type your message",
                         hintStyle: TextStyle(
-                            color: Colors.white54,
-                            fontFamily: 'Montserrat',
+                            color: Style.foregroundColor.withOpacity(0.24),
+                            fontFamily: Style.fontFamily,
+                            fontSize: 18.0,
                             fontWeight: FontWeight.w400)),
                   )
                 ],
@@ -144,7 +171,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         if (title == null)
           return CustomAlert(
@@ -155,7 +182,6 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
             content: content,
             title: title,
             iconPath: 'assets/images/success.svg',
-            //iconPath: iconpath,
           );
       },
     );
