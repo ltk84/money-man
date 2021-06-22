@@ -150,12 +150,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w800,
                           fontSize: 16.0,
-                          color: Style.foregroundColor),
+                          color: Colors.white),
                       iconedButtons: {
                         ButtonState.idle: IconedButton(
                             text: 'Verify',
                             icon: Icon(Icons.verified_user,
-                                color: Style.foregroundColor, size: 20.0),
+                                color: Colors.white, size: 20.0),
                             color: Style.primaryColor),
                         ButtonState.loading: IconedButton(
                             text: 'Loading',
@@ -163,12 +163,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ButtonState.fail: IconedButton(
                             text: 'Failed',
                             icon: Icon(Icons.cancel,
-                                color: Style.foregroundColor, size: 20.0),
+                                color: Colors.white, size: 20.0),
                             color: Style.errorColor),
                         ButtonState.success: IconedButton(
                             text: 'Success',
                             icon: Icon(Icons.check_circle,
-                                color: Style.foregroundColor, size: 20.0),
+                                color: Colors.white, size: 20.0),
                             color: Style.successColor)
                       },
                       onPressed: onPressedIconWithText,

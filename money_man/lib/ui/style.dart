@@ -3,25 +3,27 @@ import 'package:flutter/material.dart';
 class Style {
   static String fontFamily = 'Montserrat';
 
-  static Color backgroundColor = Colors.black;
-  //static Color backgroundColor = Color(0xFF111111);
-  static Color backgroundColor1 = Color(0xFF111111);
-  static Color foregroundColor = Colors.white;
-  static Color foregroundColorDark = Color(0x70999999);
-  static Color boxBackgroundColor = Colors.grey[900];
-  static Color boxBackgroundColor2 = Color(0xFF1c1c1c);
-  static Color primaryColor = Color(0xff2FB49C);
-  static Color highlightPrimaryColor = Color(0xff36D1B5);
-
-  static Color igButtonColor = Color(0xFFc65072);
-  static Color fbButtonColor = Color(0xFF2c84d4);
-  static Color errorColor = Colors.red[700];
-  static Color warningColor = Colors.yellow[600];
-  static Color expenseColor = Colors.red[600];
-  static Color incomeColor = Color(0xFF76F676);
-  static Color incomeColor2 = Colors.blueAccent;
-  static Color runningColor = Color(0xFF51f08d);
-  static Color successColor = Color(0xFF4FCC5C);// Nut Save
+  // Start Theme 1
+  // static Color backgroundColor = Colors.black;
+  // //static Color backgroundColor = Color(0xFF111111);
+  // static Color backgroundColor1 = Color(0xFF111111);
+  // static Color foregroundColor = Colors.white;
+  // static Color foregroundColorDark = Color(0x70999999);
+  // static Color boxBackgroundColor = Colors.grey[900];
+  // static Color boxBackgroundColor2 = Color(0xFF1c1c1c);
+  // static Color primaryColor = Color(0xff2FB49C);
+  // static Color highlightPrimaryColor = Color(0xff36D1B5);
+  //
+  // static Color igButtonColor = Color(0xFFc65072);
+  // static Color fbButtonColor = Color(0xFF2c84d4);
+  // static Color errorColor = Colors.red[700];
+  // static Color warningColor = Colors.yellow[600];
+  // static Color expenseColor = Colors.red[600];
+  // static Color incomeColor = Color(0xFF76F676);
+  // static Color incomeColor2 = Colors.blueAccent;
+  // static Color runningColor = Color(0xFF51f08d);
+  // static Color successColor = Color(0xFF4FCC5C);// Nut Save
+  // End Theme 1
 
   static String calculatorFontFamily = 'Montserrat';
   static Color calculatorPrimaryColor = Color(0xff22252e);
@@ -49,21 +51,24 @@ class Style {
   static Color incomeBarColor = Color(0xff53fdd7);
   static Color expenseBarColor = Color(0xffff5182);
 
-  // static Color backgroundColor = Colors.white;
-  // static Color backgroundColor1 = Color(0xFFEEEEEE);
-  // static Color foregroundColor = Colors.black;
-  // static Color foregroundColorDark = Color(0x70666666);
-  // static Color boxBackgroundColor = Colors.grey[100];
-  // static Color boxBackgroundColor2 = Color(0xFFE3E3E3);
-  // static Color primaryColor = Color(0xff2FB49C);
-  // static Color highlightPrimaryColor = Color(0xff36D1B5);
-  //
-  // static Color igButtonColor = Color(0xFFc65072);
-  // static Color fbButtonColor = Color(0xFF2c84d4);
-  // static Color errorColor = Colors.red[700];
-  // static Color expenseColor = Colors.red[600];
-  // static Color incomeColor = Color(0xFF76F676);
-  // static Color incomeColor2 = Colors.blueAccent;
-  // static Color runningColor = Color(0xFF51f08d);
-  // static Color successColor = Color(0xFF4FCC5C);
+  // Start Theme 2
+  static Color backgroundColor = Color(0xFFf0f0f0);
+  static Color backgroundColor1 = Color(0xFFEEEEEE);
+  static Color foregroundColor = Color(0xFF2e2e2e);
+  static Color foregroundColorDark = Color(0xFF111111);
+  static Color boxBackgroundColor = Color(0xFFe6e6e6);
+  static Color boxBackgroundColor2 = Color(0xFFc9c9c9);
+  static Color primaryColor = Color(0xff2FB49C);
+  static Color highlightPrimaryColor = Color(0xff36D1B5);
+
+  static Color igButtonColor = Color(0xFFc65072);
+  static Color fbButtonColor = Color(0xFF2c84d4);
+  static Color errorColor = Colors.red[700];
+  static Color warningColor = Colors.yellow[600];
+  static Color expenseColor = Colors.red[600];
+  static Color incomeColor = Color(0xFF76F676);
+  static Color incomeColor2 = Colors.blueAccent;
+  static Color runningColor = Color(0xFF51f08d);
+  static Color successColor = Color(0xFF4FCC5C);
+  // End Theme 2
 }

@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             } else
               return Scaffold(
-                backgroundColor: Style.foregroundColor.withOpacity(0.38),
+                backgroundColor: Style.boxBackgroundColor2,
                 body: _screens.elementAt(_selectedIndex),
                 bottomNavigationBar: BottomAppBar(
                   notchMargin: 5,

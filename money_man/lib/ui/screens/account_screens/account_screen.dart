@@ -346,8 +346,9 @@ class _TestState extends State<Test> {
                           onTap: () {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => HelpScreens()));
+                                PageTransition(
+                                    child: HelpScreens(),
+                                    type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
                           leading: Icon(Icons.help_outline,
