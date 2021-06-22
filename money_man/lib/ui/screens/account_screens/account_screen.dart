@@ -375,12 +375,14 @@ class _TestState extends State<Test> {
                         ),
                         ListTile(
                           onTap: () async {
+                            int tempCurrentTheme = Style.currentTheme;
                             await Navigator.push(
                                 context,
                                 PageTransition(
                                     child: SettingScreen(),
                                     type: PageTransitionType.rightToLeft));
-                            App.restartApp(context);
+                            if (tempCurrentTheme != Style.currentTheme)
+                              App.restartApp(context);
                           },
                           dense: true,
                           leading: Icon(Icons.settings,
