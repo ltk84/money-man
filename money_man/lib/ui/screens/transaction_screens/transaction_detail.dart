@@ -181,7 +181,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 if (result == 'Yes') {
                   await _firestore.deleteTransaction(
                       _transaction, widget.wallet);
-                  Navigator.pop(context);
+                  Navigator.pop(context, 'Deleted');
                 }
               })
         ],

@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bills_main_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
@@ -60,11 +61,11 @@ class _PlanningScreenState extends State<PlanningScreen> {
     super.initState();
     _wallet = widget.currentWallet == null
         ? Wallet(
-        id: 'id',
-        name: 'defaultName',
-        amount: 0,
-        currencyID: 'USD',
-        iconID: 'assets/icons/wallet_2.svg')
+            id: 'id',
+            name: 'defaultName',
+            amount: 0,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
   }
 
@@ -103,11 +104,11 @@ class _PlanningScreenState extends State<PlanningScreen> {
                 child: AnimatedContainer(
                   duration: Duration(
                       milliseconds:
-                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                          reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                   //child: Container(
                   //color: Colors.transparent,
                   color: Colors.grey[
-                  reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+                          reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
                   //),
                 ),
@@ -119,13 +120,14 @@ class _PlanningScreenState extends State<PlanningScreen> {
               duration: Duration(milliseconds: 100),
               child: Text('Planning',
                   style: TextStyle(
+                      fontSize: 50,
                       color: Style.foregroundColor,
                       fontFamily: Style.fontFamily,
-                      fontSize: 17.0
-                  ))),
+                      fontWeight: FontWeight.bold))),
         ),
         body: ListView(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           controller: _controller,
           children: [
             Center(
@@ -136,24 +138,23 @@ class _PlanningScreenState extends State<PlanningScreen> {
                         tag: 'alo',
                         child: Text('Planning',
                             style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 50,
                                 color: Style.foregroundColor,
                                 fontFamily: Style.fontFamily,
-                                fontWeight: FontWeight.bold
-                            )))
-                    : Text('', style: TextStyle(
-                    fontSize: 30,
-                    color: Style.foregroundColor,
-                    fontFamily: Style.fontFamily,
-                    fontWeight: FontWeight.bold
-                )),
+                                fontWeight: FontWeight.bold)))
+                    : Text('',
+                        style: TextStyle(
+                            fontSize: 30,
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.bold)),
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
+              margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 10.0),
               //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
               decoration: BoxDecoration(
-                color: Style.boxBackgroundColor,
+                color: Color(0xff5eb4e7),
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
@@ -167,7 +168,10 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
                       children: [
-                        Icon(Icons.all_inbox, color: Style.foregroundColor, size: 40.0),
+                        SuperIcon(
+                          iconPath: 'assets/images/budget.svg',
+                          size: 45,
+                        ),
                         SizedBox(
                           height: 5.0,
                         ),
@@ -176,17 +180,15 @@ class _PlanningScreenState extends State<PlanningScreen> {
                                 color: Style.foregroundColor,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: Style.fontFamily,
-                                fontSize: 15.0
-                            )),
+                                fontSize: 15.0)),
                       ],
                     ),
                   )),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
-              //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+              margin: EdgeInsets.fromLTRB(110.0, 10.0, 110.0, 10.0),
               decoration: BoxDecoration(
-                color: Style.boxBackgroundColor,
+                color: Color(0xfff3653f),
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
@@ -206,8 +208,10 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
                       children: [
-                        Icon(Icons.sticky_note_2_outlined,
-                            color: Style.foregroundColor, size: 40.0),
+                        SuperIcon(
+                          iconPath: 'assets/images/bill.svg',
+                          size: 45,
+                        ),
                         SizedBox(
                           height: 5.0,
                         ),
@@ -216,17 +220,16 @@ class _PlanningScreenState extends State<PlanningScreen> {
                                 color: Style.foregroundColor,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: Style.fontFamily,
-                                fontSize: 15.0
-                            )),
+                                fontSize: 15.0)),
                       ],
                     ),
                   )),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
+              margin: EdgeInsets.fromLTRB(110.0, 10.0, 110.0, 10.0),
               //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
               decoration: BoxDecoration(
-                color: Style.boxBackgroundColor,
+                color: Color(0xffe2d839),
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
@@ -234,8 +237,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     Navigator.push(
                       context,
                       PageTransition(
-                          child: EventScreen(
-                          ),
+                          child: EventScreen(),
                           type: PageTransitionType.rightToLeft),
                     );
                   },
@@ -243,7 +245,10 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
                       children: [
-                        Icon(Icons.event, color: Style.foregroundColor, size: 40.0),
+                        SuperIcon(
+                          iconPath: 'assets/images/event.svg',
+                          size: 45,
+                        ),
                         SizedBox(
                           height: 5.0,
                         ),
@@ -258,10 +263,10 @@ class _PlanningScreenState extends State<PlanningScreen> {
                   )),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 20.0),
+              margin: EdgeInsets.fromLTRB(110.0, 10.0, 110.0, 10.0),
               //padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               decoration: BoxDecoration(
-                color: Style.boxBackgroundColor,
+                color: Color(0xff65f33f),
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
@@ -270,7 +275,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                       context,
                       PageTransition(
                           child:
-                          RecurringTransactionMainScreen(wallet: _wallet),
+                              RecurringTransactionMainScreen(wallet: _wallet),
                           type: PageTransitionType.rightToLeft),
                     );
                   },
@@ -278,7 +283,10 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     child: Column(
                       children: [
-                        Icon(Icons.event, color: Style.foregroundColor, size: 40.0),
+                        SuperIcon(
+                          iconPath: 'assets/images/recurring.svg',
+                          size: 45,
+                        ),
                         SizedBox(
                           height: 5.0,
                         ),
