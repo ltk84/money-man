@@ -283,17 +283,69 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () async {
-                    // Xử lý sự kiện click ở đây.
-                    final _firestore = Provider.of<FirebaseFireStoreService>(
-                        context,
-                        listen: false);
-                    final res = await _firestore.deleteWallet(widget.wallet.id);
-                    if (res is String && res == 'only 1 wallet') {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(res.toString())));
-                      return;
+                    String result = await showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return AlertDialog(
+                            backgroundColor: Style.boxBackgroundColor2,
+                            title: Text(
+                              'Delete this wallet?',
+                              style: TextStyle(
+                                color: Style.errorColor,
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            content: Text(
+                              "You can't recover this file after deleting, are you sure?",
+                              style: TextStyle(
+                                color: Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            actions: [
+                              FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop('No');
+                                  },
+                                  child: Text('No',
+                                    style: TextStyle(
+                                      color: Style.foregroundColor.withOpacity(0.7),
+                                      fontFamily: Style.fontFamily,
+                                      fontWeight: FontWeight.w600,
+                                    ),)),
+                              FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop('Yes');
+
+                                    // chưa có animation để back ra transaction screen
+                                  },
+                                  child: Text('Yes',
+                                    style: TextStyle(
+                                      color: Style.foregroundColor.withOpacity(0.7),
+                                      fontFamily: Style.fontFamily,
+                                      fontWeight: FontWeight.w600,
+                                    ),))
+                            ],
+                          );
+                        });
+                    if (result == 'Yes') {
+                      // Xử lý sự kiện click ở đây.
+                      final _firestore = Provider.of<FirebaseFireStoreService>(
+                          context,
+                          listen: false);
+                      final res = await _firestore.deleteWallet(widget.wallet.id);
+                      if (res is String && res == 'only 1 wallet') {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(res.toString())));
+                        return;
+                      }
+                      Navigator.pop(context, res);
                     }
-                    Navigator.pop(context, res);
                   },
                   child: Text("DELETE THIS WALLET",
                       style: TextStyle(
