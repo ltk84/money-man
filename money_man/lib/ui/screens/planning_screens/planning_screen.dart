@@ -238,7 +238,9 @@ class _PlanningScreenState extends State<PlanningScreen> {
                   Navigator.push(
                     context,
                     PageTransition(
-                        child: EventScreen(),
+                        child: EventScreen(
+                          currentWallet: _wallet,
+                        ),
                         type: PageTransitionType.rightToLeft),
                   );
                 },

@@ -13,6 +13,9 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.d
 import 'package:provider/provider.dart';
 
 class EventScreen extends StatefulWidget {
+  final Wallet currentWallet;
+
+  const EventScreen({Key key, this.currentWallet}) : super(key: key);
   @override
   _EventScreenState createState() => _EventScreenState();
 }
@@ -24,13 +27,14 @@ class _EventScreenState extends State<EventScreen> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _wallet =
-        Wallet(
-            id: 'id',
-            name: 'defaultName',
-            amount: 100,
-            currencyID: 'USD',
-            iconID: 'assets/icons/wallet_2.svg');
+    _wallet = widget.currentWallet != null?
+        widget.currentWallet :
+    Wallet(
+        id: 'id',
+        name: 'defaultName',
+        amount: 100,
+        currencyID: 'USD',
+        iconID: 'assets/icons/wallet_2.svg');
     _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
   }
   @override
