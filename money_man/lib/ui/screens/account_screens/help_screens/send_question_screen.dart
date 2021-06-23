@@ -98,7 +98,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
               child: Center(
                 child: CircularProgressIndicator(
                   backgroundColor: Style.backgroundColor1,
-                  color: Style.primaryColor,
+
                 ),
               ),
             )
