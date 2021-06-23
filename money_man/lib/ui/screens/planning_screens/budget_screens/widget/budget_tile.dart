@@ -134,7 +134,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                               child: Text(
                                 this.widget.budget.category.name,
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: Style.fontFamily,
@@ -154,7 +154,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                 currencyId: widget.wallet.currencyID,
                                 textStyle: TextStyle(
                                   fontSize: 14.0,
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: Style.fontFamily,
                                 ),
@@ -169,7 +169,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                         : 'Remain: ',
                                     style: TextStyle(
                                       fontSize: 12.0,
-                                      color: Colors.white54,
+                                      color:  Style.foregroundColor.withOpacity(0.54),
                                       fontWeight: FontWeight.w500,
                                       fontFamily: Style.fontFamily,
                                     ),

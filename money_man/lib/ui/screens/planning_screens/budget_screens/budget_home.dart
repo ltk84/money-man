@@ -49,7 +49,7 @@ class _BudgetScreenState extends State<BudgetScreen>
           child: Scaffold(
             backgroundColor: Style.backgroundColor,
             appBar: AppBar(
-              backgroundColor: Colors.grey[900].withOpacity(0.2),
+              backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
               leading: MaterialButton(
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -97,7 +97,10 @@ class _BudgetScreenState extends State<BudgetScreen>
                             _wallet != null ? _wallet.iconID : temp.iconID,
                         size: 30,
                       ),
-                      Icon(Icons.arrow_drop_down),
+                      Icon(
+                          Icons.arrow_drop_down,
+                          color: Style.foregroundColor.withOpacity(0.54),
+                      ),
                     ],
                   ),
                 )
