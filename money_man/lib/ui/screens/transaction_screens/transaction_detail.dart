@@ -203,6 +203,19 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       );
                     });
                 if (result == 'Yes') {
+                  if (_transaction.category.name == 'Repayment' ||
+                      _transaction.category.name ==
+                          'Debt Collection') {
+                    await _firestore
+                        .updateDebtLoanTransationAfterDelete(
+                        _transaction, widget.wallet);
+                  }
+                  if (_transaction.category.name == 'Debt' ||
+                      _transaction.category.name == 'Loan') {
+                    await _firestore
+                        .deleteInstanceInTransactionIdList(
+                        _transaction.id, widget.wallet.id);
+                  }
                   await _firestore.deleteTransaction(
                       _transaction, widget.wallet);
                   Navigator.pop(context, 'Deleted');
