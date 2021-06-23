@@ -92,6 +92,10 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                 // danh sách các date mà _transactionList có
                 List<DateTime> listDateOfTrans = [];
 
+                total = 0;
+                totalInCome = 0;
+                totalOutCome = 0;
+
                 // thực hiện sort theo thứ tự thời gian giảm dần
                 _transactionList.sort((a, b) => b.date.compareTo(a.date));
                 // Lấy các ngày có trong _transactionList ra cho vào listDateOfTrans
@@ -99,7 +103,9 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                 _transactionList.forEach((element) {
                   if (!listDateOfTrans.contains(element.date))
                     listDateOfTrans.add(element.date);
-                  if (element.category.type == 'expense')
+                  if (element.category.type == 'expense' ||
+                      element.category.name == 'Repayment' ||
+                      element.category.name == 'Loan')
                     totalOutCome += element.amount;
                   else
                     totalInCome += element.amount;
@@ -138,7 +144,8 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                   ),
                   isDense: true,
                   contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-                  prefixIcon: Icon(Icons.search, color: Style.foregroundColor.withOpacity(0.38)),
+                  prefixIcon: Icon(Icons.search,
+                      color: Style.foregroundColor.withOpacity(0.38)),
                   hintText: 'Search by #tag, category, etc',
                   hintStyle: TextStyle(
                       fontFamily: Style.fontFamily,
@@ -166,7 +173,9 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                 itemBuilder: (context, xIndex) {
                   double totalAmountInDay = 0;
                   transactionListSortByDate[xIndex].forEach((element) {
-                    if (element.category.type == 'expense')
+                    if (element.category.type == 'expense' ||
+                        element.category.name == 'Repayment' ||
+                        element.category.name == 'Loan')
                       totalAmountInDay -= element.amount;
                     else
                       totalAmountInDay += element.amount;
@@ -220,8 +229,7 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 30.0,
-                        color: Style.foregroundColor
-                    )),
+                        color: Style.foregroundColor)),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -238,15 +246,11 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.0,
-                        color: Style.foregroundColor.withOpacity(0.54)
-                    )),
+                        color: Style.foregroundColor.withOpacity(0.54))),
               ),
               Expanded(
                 child: MoneySymbolFormatter(
-                  digit: totalAmountInDay >=
-                      0
-                      ? '+'
-                      : '',
+                  digit: totalAmountInDay >= 0 ? '+' : '',
                   text: totalAmountInDay,
                   currencyId: widget.wallet.currencyID,
                   textAlign: TextAlign.end,
@@ -375,9 +379,9 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
               color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                    color: Style.foregroundColor.withOpacity(0.12),
-                    width: 0.5,
-                  ))),
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
+              ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
           child: Column(children: <Widget>[
             Container(
@@ -391,8 +395,7 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontFamily: Style.fontFamily,
-                      )
-                  ),
+                      )),
                   MoneySymbolFormatter(
                     text: totalInCome,
                     currencyId: widget.wallet.currencyID,
@@ -418,8 +421,7 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           fontFamily: Style.fontFamily,
-                        )
-                    ),
+                        )),
                     MoneySymbolFormatter(
                       text: totalOutCome,
                       currencyId: widget.wallet.currencyID,
@@ -447,10 +449,7 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                       width: 10,
                     ),
                     MoneySymbolFormatter(
-                      digit: total >=
-                          0
-                          ? '+'
-                          : '',
+                      digit: total >= 0 ? '+' : '',
                       text: total,
                       currencyId: widget.wallet.currencyID,
                       textStyle: TextStyle(
