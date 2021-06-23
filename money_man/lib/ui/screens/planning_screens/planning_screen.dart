@@ -162,7 +162,9 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => BudgetScreen()));
+                            builder: (context) => BudgetScreen(
+                                  crrWallet: _wallet,
+                                )));
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),

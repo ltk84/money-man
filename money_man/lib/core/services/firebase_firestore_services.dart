@@ -600,17 +600,15 @@ class FirebaseFireStoreService {
     if (transaction.eventID != "") {
       final event = await getEventByID(transaction.eventID, wallet);
       Event _event = event;
-      if(_event != null)
-        {
-          if (transaction.category.type == 'expense')
-            _event.spent += transaction.amount;
-          else
-            _event.spent -= transaction.amount;
-          _event.transactionIdList
-              .removeWhere((element) => element == transaction.id);
-          await updateEvent(_event, wallet);
-
-        }
+      if (_event != null) {
+        if (transaction.category.type == 'expense')
+          _event.spent += transaction.amount;
+        else
+          _event.spent -= transaction.amount;
+        _event.transactionIdList
+            .removeWhere((element) => element == transaction.id);
+        await updateEvent(_event, wallet);
+      }
     }
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
