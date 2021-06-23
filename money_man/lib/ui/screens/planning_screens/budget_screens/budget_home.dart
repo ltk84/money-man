@@ -29,10 +29,8 @@ class _BudgetScreenState extends State<BudgetScreen>
     // TODO: implement initState
     super.initState();
     _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
-    _wallet = widget.crrWallet;
   }
 
-  Wallet _wallet;
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -118,7 +116,7 @@ class _BudgetScreenState extends State<BudgetScreen>
                     backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) => AddBudget(
-                          wallet: _wallet,
+                          wallet: widget.crrWallet,
                         ));
               },
               child: Icon(
