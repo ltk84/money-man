@@ -154,7 +154,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
               }),
           IconButton(
               icon: Icon(
-                  Icons.delete,
+                Icons.delete,
                 color: Style.foregroundColor.withOpacity(0.54),
               ),
               onPressed: () async {
@@ -205,7 +205,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 if (result == 'Yes') {
                   await _firestore.deleteTransaction(
                       _transaction, widget.wallet);
-                  Navigator.pop(context);
+                  Navigator.pop(context, 'Deleted');
                 }
               })
         ],
@@ -216,31 +216,31 @@ class _TransactionDetailState extends State<TransactionDetail> {
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
               decoration: BoxDecoration(
                   color: Style.boxBackgroundColor2,
-                border: Border(
-                  top: BorderSide(
-                    width: 0.5,
-                    color: Style.foregroundColor.withOpacity(0.12),
-                  ),
-                  bottom: BorderSide(
-                    width: 0.5,
-                    color: Style.foregroundColor.withOpacity(0.12),
-                  )
-                )
-              ),
+                  border: Border(
+                      top: BorderSide(
+                        width: 0.5,
+                        color: Style.foregroundColor.withOpacity(0.12),
+                      ),
+                      bottom: BorderSide(
+                        width: 0.5,
+                        color: Style.foregroundColor.withOpacity(0.12),
+                      ))),
               child: Column(
                 children: [
                   ListTile(
                     minLeadingWidth: 60,
                     leading: Container(
                         child: SuperIcon(
-                          iconPath: _transaction.category.iconID,
-                          size: 50,
-                        )),
+                      iconPath: _transaction.category.iconID,
+                      size: 50,
+                    )),
                     title: Container(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,7 +254,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               fontSize: 20,
                             ),
                           ),
-                          if (_transaction.note != '' && _transaction.note != null)
+                          if (_transaction.note != '' &&
+                              _transaction.note != null)
                             Container(
                               padding: EdgeInsets.only(top: 2, bottom: 8),
                               child: Text(
@@ -263,7 +264,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                   fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 14.0,
-                                  color: Style.foregroundColor.withOpacity(0.54),
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54),
                                 ),
                               ),
                             ),
@@ -274,8 +276,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                 fontFamily: Style.fontFamily,
                                 color: _colorAmount,
                                 fontSize: 28,
-                                fontWeight: FontWeight.w500
-                            ),
+                                fontWeight: FontWeight.w500),
                           )
                         ],
                       ),
@@ -298,7 +299,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     ),
                     title: Text(
                       //_transaction.date.toString(),
-                      DateFormat('EEEE, dd MMMM yyyy').format(_transaction.date),
+                      DateFormat('EEEE, dd MMMM yyyy')
+                          .format(_transaction.date),
                       style: TextStyle(
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w600,
@@ -324,15 +326,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         size: 32,
                       ),
                     ),
-                    title: Text(
-                      'Wallet',
-                      style: TextStyle(
-                        fontFamily: Style.fontFamily,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.0,
-                        color: Style.foregroundColor.withOpacity(0.54),
-                      )
-                    ),
+                    title: Text('Wallet',
+                        style: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.0,
+                          color: Style.foregroundColor.withOpacity(0.54),
+                        )),
                     subtitle: Text(
                       '${widget.wallet.name}',
                       style: TextStyle(
@@ -343,7 +343,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       ),
                     ),
                   ),
-                  if (_transaction.eventID != "" && _transaction.eventID != null)
+                  if (_transaction.eventID != "" &&
+                      _transaction.eventID != null)
                     Column(
                       children: [
                         Container(
@@ -365,22 +366,22 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               size: 32.0,
                             ),
                           ),
-                          title: Text(
-                              'Event',
+                          title: Text('Event',
                               style: TextStyle(
                                 fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12.0,
                                 color: Style.foregroundColor.withOpacity(0.54),
-                              )
-                          ),
-                          subtitle: Text(event != null ? event.name : 'a',
+                              )),
+                          subtitle: Text(
+                            event != null ? event.name : 'a',
                             style: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w600,
                               fontSize: 16.0,
                               color: Style.foregroundColor,
-                            ),),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -404,15 +405,16 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                 size: 38.0),
                           ),
                           title: Text(
-                              _transaction.contact == null
-                                  ? 'With someone'
-                                  : 'With ${_transaction.contact}',
-                              style: TextStyle(
-                                fontFamily: Style.fontFamily,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16.0,
-                                color: Style.foregroundColor,
-                              ),),
+                            _transaction.contact == null
+                                ? 'With someone'
+                                : 'With ${_transaction.contact}',
+                            style: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.0,
+                              color: Style.foregroundColor,
+                            ),
+                          ),
                         ),
                         Container(
                           //padding: EdgeInsets.only(left: 92),
@@ -425,7 +427,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           count: count,
                           refesh: (transaction) {
                             setState(() {
-                              if (transaction != null) _transaction = transaction;
+                              if (transaction != null)
+                                _transaction = transaction;
                               // _transaction = widget.transaction;
                             });
                           },
@@ -437,7 +440,9 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             // Container(
             //   padding: EdgeInsets.symmetric(horizontal: 20),
             //   child: Divider(
@@ -452,6 +457,16 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 builder: (context, snapshot) {
                   List<Budget> budgets = snapshot.data ?? [];
                   print('Nafy la in tu transaction detail');
+                  budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
+                  for (int i = 0; i < budgets.length; i++) {
+                    if (budgets[i]
+                        .endDate
+                        .add(Duration(days: 1))
+                        .isBefore(DateTime.now())) {
+                      budgets.removeAt(i);
+                      i--;
+                    }
+                  }
 
                   // Nếu không có budgets nào có categories trùng với transaction hiển thị tùy chọn thêm transaction
                   if (budgets.length == 0)
@@ -500,11 +515,10 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                 //width: 300,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                    border:
-                                        Border.all(
-                                            color: Style.primaryColor,
-                                            width: 1.5,
-                                        ),
+                                    border: Border.all(
+                                      color: Style.primaryColor,
+                                      width: 1.5,
+                                    ),
                                     borderRadius: BorderRadius.circular(12)),
                                 child: Text(
                                   "Add budget for this transaction",
@@ -523,13 +537,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         ],
                       ),
                     );
-                  budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
-                  for (int i = 0; i < budgets.length; i++) {
-                    if (budgets[i].endDate.isBefore(DateTime.now())) {
-                      budgets.removeAt(i);
-                      i--;
-                    }
-                  }
+
                   /*return Column(
                     children: [
                       for (int i = 0; i < budgets.length; i++)
@@ -612,39 +620,37 @@ class DebtLoanSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                  transaction.category.name == 'Debt' ? 'Paid' : 'Received',
+              Text(transaction.category.name == 'Debt' ? 'Paid' : 'Received',
                   style: TextStyle(
                     fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w400,
                     color: Style.foregroundColor.withOpacity(0.54),
                     fontSize: 12.0,
-                  )
-              ),
-              Text(
-                  'Left',
+                  )),
+              Text('Left',
                   style: TextStyle(
                     fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w400,
                     color: Style.foregroundColor.withOpacity(0.54),
                     fontSize: 12.0,
-                  )
-              ),
+                  )),
             ],
           ),
-          SizedBox(height: 2,),
+          SizedBox(
+            height: 2,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               MoneySymbolFormatter(
-                  text: transaction.amount - transaction.extraAmountInfo,
-                  currencyId: wallet.currencyID,
-                  textStyle: TextStyle(
-                    fontFamily: Style.fontFamily,
-                    fontWeight: FontWeight.w600,
-                    color: Style.foregroundColor,
-                    fontSize: 14.0,
-                  ),
+                text: transaction.amount - transaction.extraAmountInfo,
+                currencyId: wallet.currencyID,
+                textStyle: TextStyle(
+                  fontFamily: Style.fontFamily,
+                  fontWeight: FontWeight.w600,
+                  color: Style.foregroundColor,
+                  fontSize: 14.0,
+                ),
               ),
               MoneySymbolFormatter(
                 text: transaction.extraAmountInfo,
@@ -658,15 +664,17 @@ class DebtLoanSection extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(
               backgroundColor: Style.foregroundColor,
               valueColor: AlwaysStoppedAnimation<Color>(
                   (transaction.amount - transaction.extraAmountInfo) /
-                      (transaction.amount) >=
-                      1
+                              (transaction.amount) >=
+                          1
                       ? Style.successColor
                       : Style.warningColor),
               minHeight: 3,
@@ -674,26 +682,27 @@ class DebtLoanSection extends StatelessWidget {
                   (transaction.amount),
             ),
           ),
-          SizedBox(height: 15,),
+          SizedBox(
+            height: 15,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
                   style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.white.withOpacity(0.87);
                         return Colors.white; // Use the component's default.
                       },
                     ),
-                    foregroundColor:
-                    MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
+                    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Style.successColor.withOpacity(0.87);
-                        return Style.successColor; // Use the component's default.
+                        return Style
+                            .successColor; // Use the component's default.
                       },
                     ),
                   ),
@@ -720,23 +729,27 @@ class DebtLoanSection extends StatelessWidget {
               if (transaction.extraAmountInfo != 0)
                 Row(
                   children: [
-                    SizedBox(width: 15,),
+                    SizedBox(
+                      width: 15,
+                    ),
                     TextButton(
                         style: ButtonStyle(
                           backgroundColor:
-                          MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
                               if (states.contains(MaterialState.pressed))
                                 return Style.successColor.withOpacity(0.7);
-                              return Style.successColor; // Use the component's default.
+                              return Style
+                                  .successColor; // Use the component's default.
                             },
                           ),
                           foregroundColor:
-                          MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
                               if (states.contains(MaterialState.pressed))
                                 return Colors.white.withOpacity(0.7);
-                              return Colors.white; // Use the component's default.
+                              return Colors
+                                  .white; // Use the component's default.
                             },
                           ),
                         ),
@@ -757,9 +770,9 @@ class DebtLoanSection extends StatelessWidget {
                         child: Text(
                           'Cashback',
                           style: TextStyle(
-                              fontSize: 13,
-                              fontFamily: Style.fontFamily,
-                              fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w700,
                           ),
                         )),
                   ],

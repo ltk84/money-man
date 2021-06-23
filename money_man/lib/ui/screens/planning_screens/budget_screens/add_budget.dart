@@ -487,17 +487,17 @@ class _AddBudgetState extends State<AddBudget> {
               Container(
                 margin: EdgeInsets.only(bottom: 10, top: 5),
                 padding: EdgeInsets.only(right: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isRepeat = !isRepeat;
-                        });
-                      },
-                      child: Container(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isRepeat = !isRepeat;
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
                         padding: const EdgeInsets.all(1),
                         margin:
                             EdgeInsets.only(left: 20, right: 10, bottom: 10),
@@ -517,18 +517,18 @@ class _AddBudgetState extends State<AddBudget> {
                                 color: Colors.black,
                               ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        'Repeat this budget',
-                        style: TextStyle(
-                            color: white,
-                            fontFamily: 'Montserrat',
-                            fontSize: 13),
-                      ),
-                    )
-                  ],
+                      Container(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          'Repeat this budget',
+                          style: TextStyle(
+                              color: white,
+                              fontFamily: 'Montserrat',
+                              fontSize: 13),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ],

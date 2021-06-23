@@ -6,6 +6,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../budget_detail.dart';
@@ -92,10 +93,10 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                 ? 'Custom '
                                 : '${widget.budget.label} ',
                             style: TextStyle(
-                                color: Style.foregroundColor.withOpacity(0.7),
-                                fontSize: 14,
-                                fontFamily: Style.fontFamily,
-                                fontWeight: FontWeight.w400,
+                              color: Style.foregroundColor.withOpacity(0.7),
+                              fontSize: 14,
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
@@ -105,10 +106,10 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                 ? ''
                                 : '${DateFormat('dd/MM/yyyy').format(widget.budget.beginDate) + ' - ' + DateFormat('dd/MM/yyyy').format(widget.budget.endDate)}',
                             style: TextStyle(
-                                color: Style.foregroundColor.withOpacity(0.54),
-                                fontFamily: Style.fontFamily,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
+                              color: Style.foregroundColor.withOpacity(0.54),
+                              fontFamily: Style.fontFamily,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         )
@@ -133,10 +134,10 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                               child: Text(
                                 this.widget.budget.category.name,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: Style.fontFamily,
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: Style.fontFamily,
                                 ),
                               ),
                             ), //Title cho khoản chi thu đã chọn
@@ -154,36 +155,35 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                     .output
                                     .withoutFractionDigits,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: Style.fontFamily,
-                                ),
-                              ), // Target
-                              Text(
-                                todayTarget > 1
-                                    ? 'Over spent: ' +
-                                        MoneyFormatter(
-                                                amount: this
-                                                        .widget
-                                                        .budget
-                                                        .spent -
-                                                    this.widget.budget.amount)
-                                            .output
-                                            .withoutFractionDigits
-                                    : 'Remain: ' +
-                                        MoneyFormatter(
-                                                amount: this
-                                                        .widget
-                                                        .budget
-                                                        .amount -
-                                                    this.widget.budget.spent)
-                                            .output
-                                            .withoutFractionDigits,
-                                style: TextStyle(
-                                    color: Colors.white54,
-                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
                                   fontFamily: Style.fontFamily,
                                 ),
+                              ), // Target
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    todayTarget > 1
+                                        ? 'Over spent: '
+                                        : 'Remain: ',
+                                    style: TextStyle(
+                                      color: Colors.white54,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: Style.fontFamily,
+                                    ),
+                                  ),
+                                  MoneySymbolFormatter(
+                                    text: (this.widget.budget.spent -
+                                            this.widget.budget.amount)
+                                        .abs(),
+                                    currencyId: widget.wallet.currencyID,
+                                    textStyle: TextStyle(
+                                        color: Colors.white54,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: Style.fontFamily),
+                                  ),
+                                ],
                               ), // Remain
                             ],
                           ),
@@ -224,7 +224,8 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                           left: 65 +
                               (MediaQuery.of(context).size.width - 105) *
                                   todayRate),
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       // height: 20,
                       // width: 40,
                       //alignment: Alignment.center,
@@ -234,9 +235,10 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                       child: Text(
                         "Today",
                         style: TextStyle(
-                            color: Colors.white, fontSize: 10,
-                            fontFamily: Style.fontFamily,
-                            fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontFamily: Style.fontFamily,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),

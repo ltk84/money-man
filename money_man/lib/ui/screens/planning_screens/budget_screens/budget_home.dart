@@ -30,12 +30,14 @@ class _BudgetScreenState extends State<BudgetScreen>
     _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
-  Wallet _wallet = Wallet(
+  Wallet temp = Wallet(
       id: 'id',
       name: 'defaultName',
       amount: 0,
       currencyID: 'USD',
       iconID: 'assets/icons/wallet_2.svg');
+
+  Wallet _wallet;
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -76,16 +78,18 @@ class _BudgetScreenState extends State<BudgetScreen>
                                     uid: _auth.currentUser.uid);
                               },
                               child: WalletSelectionScreen(
-                                id: _wallet.id,
+                                id: _wallet != null ? _wallet.id : temp,
                               ));
                         });
+                    setState(() {});
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SuperIcon(
-                        iconPath: _wallet.iconID,
+                        iconPath:
+                            _wallet != null ? _wallet.iconID : temp.iconID,
                         size: 30,
                       ),
                       Icon(Icons.arrow_drop_down),
@@ -153,7 +157,7 @@ class _BudgetScreenState extends State<BudgetScreen>
               child: StreamBuilder<Object>(
                   stream: _firestore.currentWallet,
                   builder: (context, snapshot) {
-                    _wallet = snapshot.data ?? _wallet;
+                    _wallet = snapshot.data ?? temp;
                     return TabBarView(
                       controller: _tabController,
                       children: [
