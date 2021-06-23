@@ -66,8 +66,8 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
         },
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Color(0xff222222),
+            borderRadius: BorderRadius.circular(8),
+            color: Style.boxBackgroundColor,
           ),
           width: MediaQuery.of(context).size.width,
           //height: 140,
@@ -93,10 +93,10 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                 ? 'Custom '
                                 : '${widget.budget.label} ',
                             style: TextStyle(
-                              color: Style.foregroundColor.withOpacity(0.7),
-                              fontSize: 14,
+                              color: Style.foregroundColor.withOpacity(0.54),
+                              fontSize: 12,
                               fontFamily: Style.fontFamily,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -135,7 +135,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                 this.widget.budget.category.name,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: Style.fontFamily,
                                 ),
@@ -149,17 +149,17 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
-                                MoneyFormatter(
-                                        amount: this.widget.budget.amount)
-                                    .output
-                                    .withoutFractionDigits,
-                                style: TextStyle(
+                              MoneySymbolFormatter(
+                                text: this.widget.budget.amount,
+                                currencyId: widget.wallet.currencyID,
+                                textStyle: TextStyle(
+                                  fontSize: 14.0,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w600,
                                   fontFamily: Style.fontFamily,
                                 ),
-                              ), // Target
+                              ),
+                              SizedBox(height: 2,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -168,6 +168,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                         ? 'Over spent: '
                                         : 'Remain: ',
                                     style: TextStyle(
+                                      fontSize: 12.0,
                                       color: Colors.white54,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: Style.fontFamily,
@@ -179,7 +180,8 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                         .abs(),
                                     currencyId: widget.wallet.currencyID,
                                     textStyle: TextStyle(
-                                        color: Colors.white54,
+                                        fontSize: 12.0,
+                                        color: Style.foregroundColor,
                                         fontWeight: FontWeight.w500,
                                         fontFamily: Style.fontFamily),
                                   ),
@@ -230,7 +232,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                       // width: 40,
                       //alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(8),
                           color: Color(0xff171717)),
                       child: Text(
                         "Today",
