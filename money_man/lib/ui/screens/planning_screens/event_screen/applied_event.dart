@@ -76,6 +76,32 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
               appliedEvent.add(element);
             }
           });
+          if (appliedEvent.length == 0)
+            return Container(
+                color: Style.backgroundColor,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.hourglass_empty,
+                      color: Style.foregroundColor.withOpacity(0.12),
+                      size: 100,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'There are no event',
+                      style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        color: Style.foregroundColor.withOpacity(0.24),
+                      ),
+                    ),
+                  ],
+                ));
           return Container(
             color: Style.backgroundColor,
             padding: EdgeInsets.only(top: 35, left: 15, right: 15),
