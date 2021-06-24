@@ -34,7 +34,7 @@ class _NoteScreenState extends State<NoteScreen> {
         },
         child: Icon(
             Icons.delete_forever_rounded,
-          color: Style.foregroundColor
+          color: Colors.white,
         ),
         elevation: 0,
         backgroundColor: Style.primaryColor,
