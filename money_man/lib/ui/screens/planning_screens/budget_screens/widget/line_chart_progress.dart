@@ -69,7 +69,7 @@ class _LineChartsState extends State<LineCharts> {
       var temp = budget.beginDate;
       var end = budget.endDate;
       var difference = end.difference(budget.beginDate).inMinutes / 6;
-      for (double i = 0; i < 7; i++) {
+      for (double i = 0; i < 6; i++) {
         temp = temp.add(Duration(minutes: difference.toInt()));
         var spent = await _firestore.calculateBudgetSpentFromDay(budget, temp);
         var YAxix = spent / maxOfY * 5;
@@ -108,6 +108,8 @@ class _LineChartsState extends State<LineCharts> {
         builder: (context, snapshot) {
           List<FlSpot> mSpot = snapshot.data ??
               [
+                FlSpot(0, 0),
+                FlSpot(0, 0),
                 FlSpot(0, 0),
                 FlSpot(0, 0),
                 FlSpot(0, 0),
