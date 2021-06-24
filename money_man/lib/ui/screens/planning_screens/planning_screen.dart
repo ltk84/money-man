@@ -123,8 +123,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                       color: Style.foregroundColor,
                       fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w600,
-                      fontSize: 17.0
-                  ))),
+                      fontSize: 17.0))),
         ),
         body: ListView(
           physics:
@@ -132,75 +131,37 @@ class _PlanningScreenState extends State<PlanningScreen> {
           controller: _controller,
           children: [
             Container(
-<<<<<<< HEAD
-              margin: EdgeInsets.fromLTRB(110.0, 20.0, 110.0, 10.0),
-              //padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
-              decoration: BoxDecoration(
-                color: Color(0xff5eb4e7),
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => BudgetScreen(
-                                  crrWallet: _wallet,
-                                )));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                    child: Column(
-                      children: [
-                        SuperIcon(
-                          iconPath: 'assets/images/budget.svg',
-                          size: 45,
-                        ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Text('BUDGET',
-                            style: TextStyle(
-                                color: Style.foregroundColor,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: Style.fontFamily,
-                                fontSize: 15.0)),
-                      ],
-                    ),
-                  )),
-=======
               alignment: Alignment.center,
               padding: const EdgeInsets.fromLTRB(0.0, 0, 0, 16.0),
               child: reachTop == 0
                   ? Hero(
-                  tag: 'planningScreen',
-                  child: Text('Planning',
+                      tag: 'planningScreen',
+                      child: Text('Planning',
+                          style: TextStyle(
+                            fontSize: 38,
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w700,
+                          )))
+                  : Text('',
                       style: TextStyle(
                         fontSize: 38,
                         color: Style.foregroundColor,
                         fontFamily: Style.fontFamily,
-                        fontWeight: FontWeight.w700,)))
-                  : Text('',
-                  style: TextStyle(
-                    fontSize: 38,
-                    color: Style.foregroundColor,
-                    fontFamily: Style.fontFamily,
-                    fontWeight: FontWeight.w700,)),
->>>>>>> phuc/sprint2_part3
+                        fontWeight: FontWeight.w700,
+                      )),
             ),
             TextButton(
                 style: ButtonStyle(
-                  backgroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xffe0f0f8);
                       return Color(0xff314656);
                     },
                   ),
-                  foregroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xff314656);
                       return Color(0xffe0f0f8);
@@ -211,7 +172,9 @@ class _PlanningScreenState extends State<PlanningScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => BudgetScreen()));
+                          builder: (context) => BudgetScreen(
+                                crrWallet: _wallet,
+                              )));
                 },
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
@@ -232,12 +195,13 @@ class _PlanningScreenState extends State<PlanningScreen> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontFamily: Style.fontFamily,
-                                    fontSize: 15.0)
-                            ),
+                                    fontSize: 15.0)),
                           ],
                         ),
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       Expanded(
                           flex: 6,
                           child: Text(
@@ -245,27 +209,24 @@ class _PlanningScreenState extends State<PlanningScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontFamily: Style.fontFamily,
-                                  fontSize: 16.0)
-                          )
-                      ),
+                                  fontSize: 16.0))),
                     ],
                   ),
-                )
+                )),
+            SizedBox(
+              height: 5,
             ),
-            SizedBox(height: 5,),
             TextButton(
                 style: ButtonStyle(
-                  backgroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xffffffff);
                       return Color(0xfffc745c);
                     },
                   ),
-                  foregroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xfffc745c);
                       return Color(0xffffffff);
@@ -301,12 +262,13 @@ class _PlanningScreenState extends State<PlanningScreen> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontFamily: Style.fontFamily,
-                                    fontSize: 15.0)
-                            ),
+                                    fontSize: 15.0)),
                           ],
                         ),
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       Expanded(
                           flex: 6,
                           child: Text(
@@ -314,27 +276,24 @@ class _PlanningScreenState extends State<PlanningScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontFamily: Style.fontFamily,
-                                  fontSize: 16.0)
-                          )
-                      ),
+                                  fontSize: 16.0))),
                     ],
                   ),
-                )
+                )),
+            SizedBox(
+              height: 5,
             ),
-            SizedBox(height: 5,),
             TextButton(
                 style: ButtonStyle(
-                  backgroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xfff3543c);
                       return Color(0xfff7dfbc);
                     },
                   ),
-                  foregroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xfff7dfbc);
                       return Color(0xfff3543c);
@@ -372,12 +331,13 @@ class _PlanningScreenState extends State<PlanningScreen> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontFamily: Style.fontFamily,
-                                    fontSize: 15.0)
-                            ),
+                                    fontSize: 15.0)),
                           ],
                         ),
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       Expanded(
                           flex: 6,
                           child: Text(
@@ -385,22 +345,20 @@ class _PlanningScreenState extends State<PlanningScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontFamily: Style.fontFamily,
-                                  fontSize: 16.0)
-                          )
-                      ),
+                                  fontSize: 16.0))),
                     ],
                   ),
-                )
+                )),
+            SizedBox(
+              height: 5,
             ),
-            SizedBox(height: 5,),
             TextButton(
                 style: ButtonStyle(
                   // shape:MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(
                   //   borderRadius: BorderRadius.circular(10),
                   // )),
-                  backgroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         //return Colors.white;
                         return Color(0xff17174e);
@@ -408,9 +366,8 @@ class _PlanningScreenState extends State<PlanningScreen> {
                       //return Color(0xff65f33f); // Use the component's default.
                     },
                   ),
-                  foregroundColor:
-                  MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         //return Color(0xff65f33f);
                         return Color(0xfffbe383);
@@ -423,8 +380,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                   Navigator.push(
                     context,
                     PageTransition(
-                        child:
-                        RecurringTransactionMainScreen(wallet: _wallet),
+                        child: RecurringTransactionMainScreen(wallet: _wallet),
                         type: PageTransitionType.rightToLeft),
                   );
                 },
@@ -447,12 +403,13 @@ class _PlanningScreenState extends State<PlanningScreen> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontFamily: Style.fontFamily,
-                                    fontSize: 15.0)
-                            ),
+                                    fontSize: 15.0)),
                           ],
                         ),
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       Expanded(
                           flex: 6,
                           child: Text(
@@ -460,13 +417,10 @@ class _PlanningScreenState extends State<PlanningScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontFamily: Style.fontFamily,
-                                  fontSize: 16.0)
-                          )
-                      ),
+                                  fontSize: 16.0))),
                     ],
                   ),
-                )
-            ),
+                )),
           ],
         ));
   }

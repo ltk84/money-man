@@ -159,7 +159,9 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                   fontFamily: Style.fontFamily,
                                 ),
                               ),
-                              SizedBox(height: 2,),
+                              SizedBox(
+                                height: 2,
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -169,7 +171,8 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                         : 'Remain: ',
                                     style: TextStyle(
                                       fontSize: 12.0,
-                                      color:  Style.foregroundColor.withOpacity(0.54),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.54),
                                       fontWeight: FontWeight.w500,
                                       fontFamily: Style.fontFamily,
                                     ),
@@ -224,10 +227,10 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                   ? Container()
                   : Container(
                       margin: EdgeInsets.only(
-                          left: 65 +
-                              (MediaQuery.of(context).size.width - 105) *
+                          left: 45 +
+                              (MediaQuery.of(context).size.width - 120) *
                                   todayRate),
-                      padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       // height: 20,
                       // width: 40,
                       //alignment: Alignment.center,

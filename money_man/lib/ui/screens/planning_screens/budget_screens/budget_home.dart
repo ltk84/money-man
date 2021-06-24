@@ -73,8 +73,8 @@ class _BudgetScreenState extends State<BudgetScreen>
                         size: 30,
                       ),
                       Icon(
-                          Icons.arrow_drop_down,
-                          color: Style.foregroundColor.withOpacity(0.54),
+                        Icons.arrow_drop_down,
+                        color: Style.foregroundColor.withOpacity(0.54),
                       ),
                     ],
                   ),
@@ -95,7 +95,8 @@ class _BudgetScreenState extends State<BudgetScreen>
                       fontWeight: FontWeight.w600,
                       fontSize: 14.0,
                     ),
-                    unselectedLabelColor: Style.foregroundColor.withOpacity(0.54),
+                    unselectedLabelColor:
+                        Style.foregroundColor.withOpacity(0.54),
                     labelColor: Style.foregroundColor,
                     isScrollable: true,
                     controller: _tabController,
@@ -145,37 +146,23 @@ class _BudgetScreenState extends State<BudgetScreen>
               elevation: 0,
             ),
             body: Container(
-<<<<<<< HEAD
-                color: Color(0xff1a1a1a),
-                padding: EdgeInsets.only(top: 15),
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    CurrentlyApplied(
-                      wallet: widget.crrWallet,
-                    ),
-                    Applied(wallet: widget.crrWallet)
-                  ],
-                )),
-=======
               color: Style.backgroundColor,
               padding: EdgeInsets.only(top: 15),
               child: StreamBuilder<Object>(
                   stream: _firestore.currentWallet,
                   builder: (context, snapshot) {
-                    _wallet = snapshot.data ?? temp;
+                    widget.crrWallet = snapshot.data;
                     return TabBarView(
                       controller: _tabController,
                       children: [
                         CurrentlyApplied(
-                          wallet: _wallet,
+                          wallet: widget.crrWallet,
                         ),
-                        Applied(wallet: _wallet)
+                        Applied(wallet: widget.crrWallet)
                       ],
                     );
                   }),
             ),
->>>>>>> phuc/sprint2_part3
           ),
         ));
   }
