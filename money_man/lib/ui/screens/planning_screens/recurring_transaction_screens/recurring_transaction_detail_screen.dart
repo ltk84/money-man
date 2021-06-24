@@ -415,7 +415,7 @@ class _RecurringTransactionDetailScreenState
                       fontFamily: 'Montserrat',
                       fontSize: 14.0,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: Style.foregroundColor,
                     )),
                 TextSpan(
                     text: nextDate,
@@ -447,7 +447,7 @@ class _RecurringTransactionDetailScreenState
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(
           iconPath: iconPath,

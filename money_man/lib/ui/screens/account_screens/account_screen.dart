@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/main.dart';
 import 'package:money_man/ui/screens/account_screens/about_screen.dart';
@@ -222,9 +223,11 @@ class _TestState extends State<Test> {
                                       type: PageTransitionType.rightToLeft));
                             },
                             dense: true,
-                            leading: Icon(Icons.person,
-                                color: Style.foregroundColor.withOpacity(0.54),
-                                size: 38.0),
+                            leading: SuperIcon(
+                              iconPath:
+                                  'assets/images/account_screen/user2.svg',
+                              size: 30,
+                            ),
                             title: Text('My Account',
                                 style: TextStyle(
                                     color: Style.foregroundColor,
@@ -266,9 +269,11 @@ class _TestState extends State<Test> {
                                     type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
-                          leading: Icon(Icons.account_balance_wallet_rounded,
-                              color: Style.foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                          leading: SuperIcon(
+                            iconPath:
+                                'assets/images/account_screen/wallet2.svg',
+                            size: 30,
+                          ),
                           title: Text('My Wallets',
                               style: TextStyle(
                                   color: Style.foregroundColor,
@@ -295,9 +300,11 @@ class _TestState extends State<Test> {
                                     type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
-                          leading: Icon(Icons.category,
-                              color: Style.foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                          leading: SuperIcon(
+                            iconPath:
+                                'assets/images/account_screen/category.svg',
+                            size: 30,
+                          ),
                           title: Text('Categories',
                               style: TextStyle(
                                   color: Style.foregroundColor,
@@ -328,9 +335,11 @@ class _TestState extends State<Test> {
                         ListTile(
                           onTap: () {},
                           dense: true,
-                          leading: Icon(Icons.explore,
-                              color: Style.foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                          leading: SuperIcon(
+                            iconPath:
+                                'assets/images/account_screen/explore.svg',
+                            size: 30,
+                          ),
                           title: Text('Explore',
                               style: TextStyle(
                                   color: Style.foregroundColor,
@@ -357,9 +366,10 @@ class _TestState extends State<Test> {
                                     type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
-                          leading: Icon(Icons.help_outline,
-                              color: Style.foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                          leading: SuperIcon(
+                            iconPath: 'assets/images/account_screen/help.svg',
+                            size: 30,
+                          ),
                           title: Text('Help & Support',
                               style: TextStyle(
                                   color: Style.foregroundColor,
@@ -389,9 +399,11 @@ class _TestState extends State<Test> {
                               App.restartApp(context);
                           },
                           dense: true,
-                          leading: Icon(Icons.settings,
-                              color: Style.foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                          leading: SuperIcon(
+                            iconPath:
+                                'assets/images/account_screen/setting.svg',
+                            size: 30,
+                          ),
                           title: Text('Settings',
                               style: TextStyle(
                                   color: Style.foregroundColor,
@@ -418,9 +430,10 @@ class _TestState extends State<Test> {
                                     type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
-                          leading: Icon(Icons.info,
-                              color: Style.foregroundColor.withOpacity(0.54),
-                              size: 25.0),
+                          leading: SuperIcon(
+                            iconPath: 'assets/images/account_screen/about.svg',
+                            size: 30,
+                          ),
                           title: Text('About',
                               style: TextStyle(
                                   color: Style.foregroundColor,
