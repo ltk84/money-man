@@ -14,6 +14,7 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/select_time
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
@@ -120,7 +121,7 @@ class _AddBudgetState extends State<AddBudget> {
               ),
             )
           ],
-          backgroundColor: Color(0xff333333),
+          backgroundColor: Style.appBarColor,
           centerTitle: true,
           title: Text(
             'Add budget',
@@ -128,14 +129,14 @@ class _AddBudgetState extends State<AddBudget> {
           ),
         ),
         body: Container(
-          color: Color(0xff111111),
+          color: Style.backgroundColor,
           padding: EdgeInsets.only(left: 15, right: 15, top: 30),
           child: Column(
             children: [
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
@@ -223,7 +224,7 @@ class _AddBudgetState extends State<AddBudget> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
@@ -301,7 +302,7 @@ class _AddBudgetState extends State<AddBudget> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
@@ -392,7 +393,7 @@ class _AddBudgetState extends State<AddBudget> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
@@ -504,7 +505,7 @@ class _AddBudgetState extends State<AddBudget> {
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.white, width: 1),
                             shape: BoxShape.circle,
-                            color: Color(0xff111111)),
+                            color: Style.backgroundColor),
                         child: isRepeat
                             ? Icon(
                                 Icons.check,

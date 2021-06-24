@@ -8,6 +8,7 @@ class Style {
   // Start Theme 1
   static Color backgroundColor = Colors.black;
   //static Color backgroundColor = Color(0xFF111111);
+  static Color appBarColor = Colors.grey[900];
   static Color backgroundColor1 = Color(0xFF111111);
   static Color foregroundColor = Colors.white;
   static Color foregroundColorDark = Color(0x70999999);
@@ -24,7 +25,7 @@ class Style {
   static Color incomeColor = Color(0xFF76F676);
   static Color incomeColor2 = Colors.blueAccent;
   static Color runningColor = Color(0xFF51f08d);
-  static Color successColor = Color(0xFF4FCC5C);// Nut Save
+  static Color successColor = Color(0xFF4FCC5C); // Nut Save
   // End Theme 1
 
   static String calculatorFontFamily = 'Montserrat';
@@ -75,10 +76,10 @@ class Style {
   // End Theme 2
 
   static void changeTheme(int themeCode) {
-    switch (themeCode)
-    {
-      case 0:
-        currentTheme = 0;
+    switch (themeCode) {
+      case 2:
+        currentTheme = 2;
+        appBarColor = Colors.grey[900];
         backgroundColor = Colors.black;
         //static Color backgroundColor = Color(0xFF111111);
         backgroundColor1 = Color(0xFF111111);
@@ -97,7 +98,30 @@ class Style {
         incomeColor = Color(0xFF76F676);
         incomeColor2 = Colors.blueAccent;
         runningColor = Color(0xFF51f08d);
-        successColor = Color(0xFF4FCC5C);// Nut Save
+        successColor = Color(0xFF4FCC5C); // Nut Save
+        break;
+      // nay la style The tao
+      case 0:
+        currentTheme = 0;
+        appBarColor = Color(0xff333333);
+        backgroundColor = Color(0xff1a1a1a);
+        backgroundColor1 = Color(0xFF111111);
+        foregroundColor = Colors.white;
+        foregroundColorDark = Color(0x70999999);
+        boxBackgroundColor = Color(0xff333333);
+        boxBackgroundColor2 = Color(0xFF333333);
+        primaryColor = Color(0xff2FB49C);
+        highlightPrimaryColor = Color(0xff36D1B5);
+
+        igButtonColor = Color(0xFFc65072);
+        fbButtonColor = Color(0xFF2c84d4);
+        errorColor = Colors.red[700];
+        warningColor = Colors.yellow[600];
+        expenseColor = Colors.red[600];
+        incomeColor = Color(0xFF76F676);
+        incomeColor2 = Colors.blueAccent;
+        runningColor = Color(0xFF51f08d);
+        successColor = Color(0xFF4FCC5C); // Nut Save
         break;
       case 1:
         currentTheme = 1;
@@ -106,6 +130,7 @@ class Style {
         foregroundColor = Color(0xFF2e2e2e);
         foregroundColorDark = Color(0xFF111111);
         boxBackgroundColor = Color(0xFFe6e6e6);
+        appBarColor = boxBackgroundColor;
         boxBackgroundColor2 = Color(0xFFc9c9c9);
         primaryColor = Color(0xff2FB49C);
         highlightPrimaryColor = Color(0xff36D1B5);

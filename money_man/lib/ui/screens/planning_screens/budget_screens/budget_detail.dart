@@ -10,6 +10,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/edit_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/widget/line_chart_progress.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
@@ -138,10 +139,10 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 }
               })*/
         ],
-        backgroundColor: Color(0xff333333),
+        backgroundColor: Style.appBarColor,
       ),
       body: Container(
-        color: Color(0xff1a1a1a),
+        color: Style.backgroundColor,
         child: ListView(
           children: [
             ListTile(
