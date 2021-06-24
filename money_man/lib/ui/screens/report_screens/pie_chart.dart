@@ -75,6 +75,7 @@ class PieChartScreenState extends State<PieChartScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         Transform.scale(
@@ -213,11 +214,13 @@ class PieChartScreenState extends State<PieChartScreen> {
             final widgetSize = isTouched ? 40.0 : 20.0;
             final double fontTitleSize = isTouched ? 17 : 8.5;
 
+            if (_total == 0)
+              _total = 1;
             var value = ((_info[i] / _total) * 100);
 
             return PieChartSectionData(
               color: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
-              value: value,
+              value: value == 0 ? 1 : value,
               showTitle: _isShowPercent,
               title: value.toStringAsFixed(2) + '%',
               titlePositionPercentageOffset: isTouched ? 2.3 : 2.20,
@@ -253,13 +256,15 @@ class PieChartScreenState extends State<PieChartScreen> {
             final radius = 8.0;
             final widgetSize = 20.0;
 
+            if (_total == 0)
+              _total = 1;
             var value = ((_info[i] / _total) * 100);
 
             return PieChartSectionData(
               color: i < colors.length
                   ? colors[i].withOpacity(0.4)
                   : Style.pieChartExtendedCategoryColor.withOpacity(0.4),
-              value: value.toDouble(),
+              value: value == 0 ? 1 : value,
               showTitle: false,
               radius: radius,
             );
