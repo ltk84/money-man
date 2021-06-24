@@ -131,8 +131,10 @@ class _TestState extends State<Test> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
                     child: reachTop == 0
-                        ? Hero(tag: 'alo', child: Material(
-                        color: Colors.transparent,child: title))
+                        ? Hero(
+                            tag: 'alo',
+                            child: Material(
+                                color: Colors.transparent, child: title))
                         : emptyTitle,
                   ),
                   Container(
@@ -164,8 +166,7 @@ class _TestState extends State<Test> {
                                   color: Style.primaryColor,
                                   fontSize: 30.0,
                                   fontFamily: Style.fontFamily,
-                                  fontWeight: FontWeight.w400
-                              ),
+                                  fontWeight: FontWeight.w400),
                             ),
                           ),
                           SizedBox(
@@ -197,7 +198,8 @@ class _TestState extends State<Test> {
                                           ? _user.email
                                           : 'Your email'),
                               style: TextStyle(
-                                  color: Style.foregroundColor.withOpacity(0.54),
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54),
                                   fontWeight: FontWeight.w400,
                                   fontFamily: Style.fontFamily,
                                   fontSize: 13.0)),
@@ -221,7 +223,8 @@ class _TestState extends State<Test> {
                             },
                             dense: true,
                             leading: Icon(Icons.person,
-                                color: Style.foregroundColor.withOpacity(0.54), size: 38.0),
+                                color: Style.foregroundColor.withOpacity(0.54),
+                                size: 38.0),
                             title: Text('My Account',
                                 style: TextStyle(
                                     color: Style.foregroundColor,
@@ -229,7 +232,8 @@ class _TestState extends State<Test> {
                                     fontFamily: Style.fontFamily)),
                             subtitle: Text('Your infomation',
                                 style: TextStyle(
-                                    color: Style.foregroundColor.withOpacity(0.54),
+                                    color:
+                                        Style.foregroundColor.withOpacity(0.54),
                                     fontWeight: FontWeight.w400,
                                     fontFamily: Style.fontFamily,
                                     fontSize: 13.0)),
@@ -408,10 +412,10 @@ class _TestState extends State<Test> {
                         ListTile(
                           onTap: () {
                             Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: AboutScreen(),
-                                  type: PageTransitionType.rightToLeft));
+                                context,
+                                PageTransition(
+                                    child: AboutScreen(),
+                                    type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
                           leading: Icon(Icons.info,
