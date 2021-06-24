@@ -3,6 +3,7 @@ import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
@@ -49,149 +50,117 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Container(
-      color: Colors.grey[900],
+      color: Style.backgroundColor,
       child: StreamBuilder<List<Event>>(
         stream: _firestore.eventStream(_wallet.id),
         builder: (context, snapshot) {
           List<Event> currentlyEvent = [];
           List<Event> eventList = snapshot.data ?? [];
           eventList.forEach((element) {
-            if(element.endDate.year < DateTime.now().year||
-                (element.endDate.year == DateTime.now().year
-                    && element.endDate.month < DateTime.now().month) ||
-                (element.endDate.year == DateTime.now().year
-                    && element.endDate.month == DateTime.now().month
-            && element.endDate.day < DateTime.now().day ))
-              {
-                element.isFinished = true;
-              }
-            if((!element.isFinished && !element.finishedByHand)
-                || (element.isFinished && !element.finishedByHand && !element.autofinish)
-            ||(!element.isFinished && element.autofinish))
-              {
-                currentlyEvent.add(element);
-              }
-          }
-          );
-          return ListView.builder(
-              physics: ScrollPhysics(),
-              itemCount: currentlyEvent.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.leftToRight,
-                              child: EventDetailScreen(
-                                currentEvent: currentlyEvent[index],
-                                eventWallet: _wallet,
-                              )));
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey[900],
-                            border: Border(
-                                bottom: BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ))),
-                        padding: EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 0),
-                        child: Row(children: <Widget>[
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            child: SuperIcon(
-                              iconPath: currentlyEvent[index].iconPath,
-                              size: 45,
+            if (element.endDate.year < DateTime.now().year ||
+                (element.endDate.year == DateTime.now().year &&
+                    element.endDate.month < DateTime.now().month) ||
+                (element.endDate.year == DateTime.now().year &&
+                    element.endDate.month == DateTime.now().month &&
+                    element.endDate.day < DateTime.now().day)) {
+              element.isFinished = true;
+            }
+            if ((!element.isFinished && !element.finishedByHand) ||
+                (element.isFinished &&
+                    !element.finishedByHand &&
+                    !element.autofinish) ||
+                (!element.isFinished && element.autofinish)) {
+              currentlyEvent.add(element);
+            }
+          });
+          return Container(
+            padding: EdgeInsets.only(top: 35, left: 15, right: 15),
+            child: ListView.builder(
+                physics: ScrollPhysics(),
+                itemCount: currentlyEvent.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 15),
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Style.boxBackgroundColor,
+                    ),
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.leftToRight,
+                                child: EventDetailScreen(
+                                  currentEvent: currentlyEvent[index],
+                                  eventWallet: _wallet,
+                                )));
+                      },
+                      leading: SuperIcon(
+                        iconPath: currentlyEvent[index].iconPath,
+                        size: 45,
+                      ),
+                      title: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              currentlyEvent[index].name,
+                              style: TextStyle(
+                                  fontSize: 24.0,
+                                  color: Style.foregroundColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Montserrat'),
+                              textAlign: TextAlign.start,
                             ),
-                          ),
-                          Container(
-                              width: MediaQuery.of(context).size.width - 80,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[900],
-                                  border: Border(
-                                      bottom: BorderSide(
-                                    color: Colors.black,
-                                    width: 1.0,
-                                  ))),
-                              padding: EdgeInsets.fromLTRB(6.0, 6.0, 0.0, 10),
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          currentlyEvent[index].name,
-                                          style: TextStyle(
-                                            fontSize: 22.0,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        Text('',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
-                                    child: Row(
-                                      mainAxisSize : MainAxisSize.max,
-                                      children: <Widget>[
-                                        Text('End date: ' + DateFormat('EEEE, dd-MM-yyyy').format(currentlyEvent[index].endDate),
-                                          style: TextStyle(
-                                              fontSize: 14.0,
-                                              color: Colors.white54),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        Text((currentlyEvent[index].isFinished)?' (Out of date)':'',
-                                          style: TextStyle(
-                                              fontSize: 14.0,
-                                              color: Colors.red),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                      margin: EdgeInsets.fromLTRB(2, 2, 2, 2),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        mainAxisSize : MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text('Spent: ',
-                                            style: TextStyle(
-                                                fontSize: 19.0,
-                                                color: Colors.white),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                          MoneySymbolFormatter(
-                                              text: currentlyEvent[index].spent,
-                                              currencyId: _wallet.currencyID,
-                                              textStyle: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: 'Montserrat',
-                                              )
-                                          ),
-                                        ],
-                                      )
-                                  ),
-                                ]
-                              )
-                          )
-                        ]
-                        )
-                    )
-                );
-              }
-              );
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              'End date: ' +
+                                  DateFormat('EEEE, dd-MM-yyyy')
+                                      .format(currentlyEvent[index].endDate),
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54),
+                                  fontFamily: 'Montserrat'),
+                              textAlign: TextAlign.start,
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Text(
+                                  'Spent: ',
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Style.foregroundColor,
+                                      fontFamily: 'Montserrat'),
+                                  textAlign: TextAlign.start,
+                                ),
+                                MoneySymbolFormatter(
+                                    text: currentlyEvent[index].spent,
+                                    currencyId: _wallet.currencyID,
+                                    textStyle: TextStyle(
+                                      color: Style.foregroundColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Montserrat',
+                                    )),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+          );
         },
       ),
     );
