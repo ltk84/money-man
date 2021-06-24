@@ -5,6 +5,7 @@ import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -28,11 +29,13 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return FutureBuilder<Object>(
-        future: _firestore.getListOfTransactionWithCriteria(
+        future: _firestore.getListOfTransactionWithCriteriaForBudget(
             widget.budget.category.name, widget.wallet.id),
         builder: (context, snapshot) {
           double total = 0;
           List<MyTransaction> listTransaction = snapshot.data ?? [];
+          print('current length: ${listTransaction.length}');
+
           for (int i = 0; i < listTransaction.length; i++) {
             if (listTransaction[i].date.compareTo(widget.budget.beginDate) <
                     0 ||
@@ -43,6 +46,7 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
               i--;
             }
           }
+
           listTransaction.sort((a, b) => b.date.compareTo(a.date));
           return Scaffold(
             backgroundColor: Color(0xff1a1a1a),
@@ -57,17 +61,30 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
             ),
             body: listTransaction.length == 0
                 ? Container(
-                    color: Color(0xff1a1a1a),
+                    color: Style.backgroundColor,
                     alignment: Alignment.center,
-                    child: Text(
-                      'No transaction',
-                      style: TextStyle(
-                        fontSize: 45,
-                        fontFamily: 'Montserrat',
-                        color: Colors.white54,
-                      ),
-                    ),
-                  )
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.hourglass_empty,
+                          color: Style.foregroundColor.withOpacity(0.24),
+                          size: 100,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'There are no transactions',
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
+                            color: Style.foregroundColor.withOpacity(0.36),
+                          ),
+                        ),
+                      ],
+                    ))
                 : buildDisplayTransactionByDate(filterData(listTransaction)),
           );
         });

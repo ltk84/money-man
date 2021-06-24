@@ -15,7 +15,8 @@ import 'applied_budget.dart';
 import 'current_applied_budget.dart';
 
 class BudgetScreen extends StatefulWidget {
-  const BudgetScreen({Key key}) : super(key: key);
+  Wallet crrWallet;
+  BudgetScreen({Key key, this.crrWallet}) : super(key: key);
 
   @override
   _BudgetScreenState createState() => _BudgetScreenState();
@@ -31,14 +32,6 @@ class _BudgetScreenState extends State<BudgetScreen>
     _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
-  Wallet temp = Wallet(
-      id: 'id',
-      name: 'defaultName',
-      amount: 0,
-      currencyID: 'USD',
-      iconID: 'assets/icons/wallet_2.svg');
-
-  Wallet _wallet;
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -69,37 +62,19 @@ class _BudgetScreenState extends State<BudgetScreen>
               actions: [
                 GestureDetector(
                   onTap: () async {
-                    final _auth = Provider.of<FirebaseAuthService>(context,
-                        listen: false);
-
-                    final result = await showCupertinoModalBottomSheet(
-                        isDismissible: true,
-                        backgroundColor: Colors.grey[900],
-                        context: context,
-                        builder: (context) {
-                          return Provider(
-                              create: (_) {
-                                return FirebaseFireStoreService(
-                                    uid: _auth.currentUser.uid);
-                              },
-                              child: WalletSelectionScreen(
-                                id: _wallet != null ? _wallet.id : temp,
-                              ));
-                        });
-                    setState(() {});
+                    await buildShowDialog(context, widget.crrWallet.id);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SuperIcon(
-                        iconPath:
-                            _wallet != null ? _wallet.iconID : temp.iconID,
+                        iconPath: widget.crrWallet.iconID,
                         size: 30,
                       ),
                       Icon(
-                          Icons.arrow_drop_down,
-                          color: Style.foregroundColor.withOpacity(0.54),
+                        Icons.arrow_drop_down,
+                        color: Style.foregroundColor.withOpacity(0.54),
                       ),
                     ],
                   ),
@@ -120,7 +95,8 @@ class _BudgetScreenState extends State<BudgetScreen>
                       fontWeight: FontWeight.w600,
                       fontSize: 14.0,
                     ),
-                    unselectedLabelColor: Style.foregroundColor.withOpacity(0.54),
+                    unselectedLabelColor:
+                        Style.foregroundColor.withOpacity(0.54),
                     labelColor: Style.foregroundColor,
                     isScrollable: true,
                     controller: _tabController,
@@ -159,7 +135,7 @@ class _BudgetScreenState extends State<BudgetScreen>
                     backgroundColor: Style.boxBackgroundColor,
                     context: context,
                     builder: (context) => AddBudget(
-                          wallet: _wallet,
+                          wallet: widget.crrWallet,
                         ));
               },
               child: Icon(
@@ -175,19 +151,43 @@ class _BudgetScreenState extends State<BudgetScreen>
               child: StreamBuilder<Object>(
                   stream: _firestore.currentWallet,
                   builder: (context, snapshot) {
-                    _wallet = snapshot.data ?? temp;
+                    widget.crrWallet = snapshot.data;
                     return TabBarView(
                       controller: _tabController,
                       children: [
                         CurrentlyApplied(
-                          wallet: _wallet,
+                          wallet: widget.crrWallet,
                         ),
-                        Applied(wallet: _wallet)
+                        Applied(wallet: widget.crrWallet)
                       ],
                     );
                   }),
             ),
           ),
         ));
+  }
+
+  void buildShowDialog(BuildContext context, String id) async {
+    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+    final _firestore =
+        Provider.of<FirebaseFireStoreService>(context, listen: false);
+
+    final result = await showCupertinoModalBottomSheet(
+        isDismissible: true,
+        backgroundColor: Colors.grey[900],
+        context: context,
+        builder: (context) {
+          return Provider(
+              create: (_) {
+                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+              },
+              child: WalletSelectionScreen(
+                id: id,
+              ));
+        });
+    final updatedWallet = await _firestore.getWalletByID(result);
+    setState(() {
+      widget.crrWallet = updatedWallet;
+    });
   }
 }
