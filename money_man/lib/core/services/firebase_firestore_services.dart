@@ -456,6 +456,25 @@ class FirebaseFireStoreService {
         .doc(walletId)
         .collection('transactions')
         .where('category.name', isEqualTo: criteria)
+        .where('extraAmountInfo', isNotEqualTo: 0)
+        .get()
+        .then((value) {
+      print('get complete with criteria: $criteria');
+      value.docs.map((e) => list.add(MyTransaction.fromMap(e.data()))).toList();
+    }).catchError((error) => print(error));
+    return list;
+  }
+
+// Nay la dung cho ben budget
+  Future<List<MyTransaction>> getListOfTransactionWithCriteriaForBudget(
+      String criteria, String walletId) async {
+    List<MyTransaction> list = [];
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactions')
+        .where('category.name', isEqualTo: criteria)
         //.where('extraAmountInfo', isNotEqualTo: 0)
         .get()
         .then((value) {
