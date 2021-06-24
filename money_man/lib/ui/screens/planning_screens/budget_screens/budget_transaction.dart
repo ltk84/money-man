@@ -29,11 +29,13 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return FutureBuilder<Object>(
-        future: _firestore.getListOfTransactionWithCriteria(
+        future: _firestore.getListOfTransactionWithCriteriaForBudget(
             widget.budget.category.name, widget.wallet.id),
         builder: (context, snapshot) {
           double total = 0;
           List<MyTransaction> listTransaction = snapshot.data ?? [];
+          print('current length: ${listTransaction.length}');
+
           for (int i = 0; i < listTransaction.length; i++) {
             if (listTransaction[i].date.compareTo(widget.budget.beginDate) <
                     0 ||
@@ -44,6 +46,7 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
               i--;
             }
           }
+
           listTransaction.sort((a, b) => b.date.compareTo(a.date));
           return Scaffold(
             backgroundColor: Color(0xff1a1a1a),

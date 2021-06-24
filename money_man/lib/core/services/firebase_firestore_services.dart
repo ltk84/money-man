@@ -456,7 +456,7 @@ class FirebaseFireStoreService {
         .doc(walletId)
         .collection('transactions')
         .where('category.name', isEqualTo: criteria)
-        .where('extraAmountInfo', isNotEqualTo: 0)
+        //.where('extraAmountInfo', isNotEqualTo: 0)
         .get()
         .then((value) {
       print('get complete with criteria: $criteria');
