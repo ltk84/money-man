@@ -33,7 +33,7 @@ class BasicQuestions {
       "Money Man helps you keep track of your debts & loans. Let's start with the simple concept: If you borrow money form other, you need to add a Debt. It's Payable transaction. If you lend other money, you need to add a Loan. It's Recievable transaction.",
       "Please tap wallet's icon at left top of main screen to see list of wallets -> tap 'Add new wallet' button to add new wallet and all are free for you!",
       'Thank you for feedback. Tap "Account" button on the bottom right of screen -> Select "My Wallets" -> Tap wallet which you want -> Tap "edit" option on the top right of screen -> You can change new currency, name or icon for that wallet at here. Hope this helps. Let me know if you need further support. Thank you :)',
-      "Should you need to set default wallet, please tap ARROW icon (top left of main screen) to see your list of wallet. The wallet are checked which is your current defaut wallet.",
+      "Should you need to set default wallet, please tap icon (top left of main screen) to see your list of wallet. The wallet are checked which is your current defaut wallet.",
       'Money Man supports all popular devices Android, IOS and Web',
     ];
   }
