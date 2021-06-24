@@ -33,7 +33,9 @@ class _BillCategoryListState extends State<BillCategoryList> {
         appBar: AppBar(
           backgroundColor: Style.boxBackgroundColor2,
           elevation: 0.0,
-          leading: CloseButton(),
+          leading: CloseButton(
+            color: Style.foregroundColor,
+          ),
           actions: [
             TextButton(
                 onPressed: () async {

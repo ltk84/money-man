@@ -324,13 +324,13 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 23.0),
-              child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
+              child: Icon(Icons.notes, color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
           Text(display == null || display == '' ? 'Note' : display,
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: Style.fontFamily,
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
-                color: display == null || display == '' ? Colors.white24 : Colors.white,
+                color: display == null || display == '' ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
               )),
         ],
       ),

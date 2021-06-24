@@ -91,6 +91,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
           backgroundColor: Style.boxBackgroundColor2,
           elevation: 0.0,
           leading: CloseButton(
+            color: Style.foregroundColor,
             onPressed: () {
                 Navigator.of(context).pop(_repeatOption);
             },
@@ -150,6 +151,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                       brightness: Brightness.dark,
                                       textTheme: CupertinoTextThemeData(
                                           pickerTextStyle: TextStyle(
+                                            color: Style.foregroundColor,
                                             fontFamily: Style.fontFamily,
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.w500,
@@ -221,6 +223,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                       brightness: Brightness.dark,
                                       textTheme: CupertinoTextThemeData(
                                           pickerTextStyle: TextStyle(
+                                            color: Style.foregroundColor,
                                             fontFamily: Style.fontFamily,
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.w500,
@@ -289,6 +292,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 brightness: Brightness.dark,
                                 textTheme: CupertinoTextThemeData(
                                   dateTimePickerTextStyle: TextStyle(
+                                    color: Style.foregroundColor,
                                     fontFamily: Style.fontFamily,
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w500,
@@ -366,6 +370,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 brightness: Brightness.dark,
                                 textTheme: CupertinoTextThemeData(
                                     dateTimePickerTextStyle: TextStyle(
+                                      color: Style.foregroundColor,
                                       fontFamily: Style.fontFamily,
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w500,

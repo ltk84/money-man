@@ -68,7 +68,9 @@ class _EditBillScreenState extends State<EditBillScreen> {
             appBar: AppBar(
               backgroundColor: Style.boxBackgroundColor2,
               elevation: 0.0,
-              leading: CloseButton(),
+              leading: CloseButton(
+                color: Style.foregroundColor,
+              ),
               title: Text('Edit Bill',
                   style: TextStyle(
                     fontFamily: Style.fontFamily,

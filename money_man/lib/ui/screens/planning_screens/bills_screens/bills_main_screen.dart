@@ -35,7 +35,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
         backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.grey[900].withOpacity(0.2),
+          backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
           elevation: 0.0,
           leading: Hero(
             tag: 'billToDetail_backBtn',
