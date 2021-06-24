@@ -6,6 +6,7 @@ class Style {
   static String fontFamily = 'Montserrat';
 
   // Start Theme 1
+  static Icon backIcon = Icon(Icons.arrow_back);
   static Color backgroundColor = Colors.black;
   //static Color backgroundColor = Color(0xFF111111);
   static Color appBarColor = Colors.grey[900];

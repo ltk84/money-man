@@ -82,7 +82,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
           IconButton(
             icon: Icon(
               Icons.edit,
-              color: Colors.white,
+              color: Style.foregroundColor,
             ),
             onPressed: () async {
               var result = await showCupertinoModalBottomSheet(
@@ -97,7 +97,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
             },
           ),
           IconButton(
-              icon: Icon(Icons.delete, color: Colors.white),
+              icon: Icon(Icons.delete, color: Style.foregroundColor),
               onPressed: () async {
                 String res = await showDialog<String>(
                   context: context,
@@ -160,7 +160,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       this.widget.budget.category.name,
                       style: TextStyle(
                         fontWeight: FontWeight.w200,
-                        color: Colors.white,
+                        color: Style.foregroundColor,
                         fontSize: 30,
                       ),
                     ),
@@ -223,7 +223,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                       todayTarget > 1 ? 'Over spent' : 'Remain',
                                       style: TextStyle(
                                         fontSize: 14,
-                                        color: Colors.white54,
+                                        color: Style.foregroundColor
+                                            .withOpacity(0.54),
                                       ),
                                     ),
                                     SizedBox(height: 2),
@@ -235,7 +236,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                               this.widget.budget.spent,
                                       currencyId: widget.wallet.currencyID,
                                       textStyle: TextStyle(
-                                          color: Colors.white,
+                                          color: Style.foregroundColor,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600),
                                     ),
@@ -288,7 +289,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                             color: Color(0xff171717)),
                         child: Text(
                           "Today",
-                          style: TextStyle(color: Colors.white, fontSize: 10),
+                          style: TextStyle(
+                              color: Style.foregroundColor, fontSize: 10),
                         ),
                       ),
               ],
@@ -298,14 +300,14 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                   padding: EdgeInsets.only(left: 10),
                   child: Icon(
                     Icons.date_range_outlined,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   )),
               title: Container(
                 padding: EdgeInsets.only(left: 5),
                 child: Text(
                   valueDate(widget.budget),
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   ),
                 ),
               ),
@@ -314,7 +316,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 child: Text(
                   TimeLeft(widget.budget),
                   style: TextStyle(
-                    color: Colors.white54,
+                    color: Style.foregroundColor.withOpacity(0.54),
                   ),
                 ),
               ),
@@ -332,7 +334,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 child: Text(
                   '${widget.wallet.name}',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   ),
                 ),
               ),
@@ -362,7 +364,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                         Text(
                           'Should spend/day ',
                           style: TextStyle(
-                              color: Colors.white54,
+                              color: Style.foregroundColor.withOpacity(0.54),
                               fontWeight: FontWeight.w400,
                               fontSize: 13),
                         ),
@@ -375,8 +377,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                   .difference(widget.budget.beginDate)
                                   .inDays,
                           currencyId: widget.wallet.currencyID,
-                          textStyle:
-                              TextStyle(color: Colors.white, fontSize: 15),
+                          textStyle: TextStyle(
+                              color: Style.foregroundColor, fontSize: 15),
                         ),
                       ],
                     ),
@@ -385,7 +387,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                         Text(
                           'Actual spend/ day',
                           style: TextStyle(
-                              color: Colors.white54,
+                              color: Style.foregroundColor.withOpacity(0.54),
                               fontWeight: FontWeight.w400,
                               fontSize: 13),
                         ),
@@ -398,8 +400,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                   .difference(widget.budget.beginDate)
                                   .inDays,
                           currencyId: widget.wallet.currencyID,
-                          textStyle:
-                              TextStyle(color: Colors.white, fontSize: 15),
+                          textStyle: TextStyle(
+                              color: Style.foregroundColor, fontSize: 15),
                         ),
                       ],
                     )
@@ -415,7 +417,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       Text(
                         'Expected spending',
                         style: TextStyle(
-                            color: Colors.white54,
+                            color: Style.foregroundColor.withOpacity(0.54),
                             fontWeight: FontWeight.w400,
                             fontSize: 13),
                       ),
@@ -426,7 +428,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                 .difference(widget.budget.beginDate)
                                 .inDays,
                         currencyId: widget.wallet.currencyID,
-                        textStyle: TextStyle(color: Colors.white, fontSize: 15),
+                        textStyle: TextStyle(
+                            color: Style.foregroundColor, fontSize: 15),
                       ),
                     ],
                   )
@@ -444,7 +447,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                   Text(
                     'Turn on notification',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Style.foregroundColor,
                     ),
                   ),
                   Switch(
@@ -458,7 +461,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             Divider(
-              color: Color(0xff333333),
+              color: Style.boxBackgroundColor,
             ),
             Container(
               margin: EdgeInsets.only(top: 10, bottom: 20),
@@ -483,7 +486,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                     child: Text(
                       'Transaction list',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Style.foregroundColor,
                       ),
                     ),
                   )),

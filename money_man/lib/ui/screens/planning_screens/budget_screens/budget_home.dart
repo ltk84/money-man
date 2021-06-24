@@ -48,7 +48,7 @@ class _BudgetScreenState extends State<BudgetScreen>
                     Navigator.of(context).pop();
                   },
                   child: Icon(
-                    Icons.arrow_back_ios_rounded,
+                    Style.backIcon,
                     color: Style.foregroundColor,
                   )),
               title: Text('Budgets',

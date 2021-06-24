@@ -76,7 +76,7 @@ class _AddBudgetState extends State<AddBudget> {
               child: Center(
                   child: Text(
                 'Cancel',
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: Style.foregroundColor.withOpacity(0.7)),
               )),
             ),
           ),
@@ -115,7 +115,8 @@ class _AddBudgetState extends State<AddBudget> {
                 child: Center(
                   child: Text(
                     'Save',
-                    style: TextStyle(color: Colors.white70),
+                    style: TextStyle(
+                        color: Style.foregroundColor.withOpacity(0.7)),
                   ),
                 ),
               ),
@@ -154,7 +155,7 @@ class _AddBudgetState extends State<AddBudget> {
                   },
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   ),
                   dense: true,
                   leading: SuperIcon(
@@ -164,7 +165,7 @@ class _AddBudgetState extends State<AddBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,9 +198,9 @@ class _AddBudgetState extends State<AddBudget> {
                           },
                           readOnly: true,
                           obscureText: false,
-                          cursorColor: Colors.white60,
+                          cursorColor: Style.foregroundColor.withOpacity(0.6),
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
@@ -207,8 +208,8 @@ class _AddBudgetState extends State<AddBudget> {
                                   cate == null ? 'Choose group' : cate.name,
                               hintStyle: TextStyle(
                                   color: cate == null
-                                      ? Colors.white54
-                                      : Colors.white,
+                                      ? Style.foregroundColor.withOpacity(0.54)
+                                      : Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -237,10 +238,8 @@ class _AddBudgetState extends State<AddBudget> {
                         amount = double.parse(resultAmount);
                       });
                   },
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right,
-                    color: Colors.white70,
-                  ),
+                  trailing: Icon(Icons.keyboard_arrow_right,
+                      color: Style.foregroundColor.withOpacity(0.7)),
                   dense: true,
                   leading: SuperIcon(
                     iconPath: 'assets/images/coin.svg',
@@ -248,7 +247,7 @@ class _AddBudgetState extends State<AddBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,8 +284,8 @@ class _AddBudgetState extends State<AddBudget> {
                                       .withoutFractionDigits,
                               hintStyle: TextStyle(
                                   color: amount == null
-                                      ? Colors.white54
-                                      : Colors.white,
+                                      ? Style.foregroundColor.withOpacity(0.54)
+                                      : Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -321,7 +320,7 @@ class _AddBudgetState extends State<AddBudget> {
                   },
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   ),
                   dense: true,
                   leading: SuperIcon(
@@ -330,7 +329,7 @@ class _AddBudgetState extends State<AddBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -365,9 +364,9 @@ class _AddBudgetState extends State<AddBudget> {
                           },
                           readOnly: true,
                           obscureText: false,
-                          cursorColor: Colors.white60,
+                          cursorColor: Style.foregroundColor.withOpacity(0.6),
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
@@ -377,7 +376,7 @@ class _AddBudgetState extends State<AddBudget> {
                                       ? mTimeRange.TimeRangeString()
                                       : mTimeRange.description,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -414,7 +413,7 @@ class _AddBudgetState extends State<AddBudget> {
                   },
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   ),
                   dense: true,
                   leading: SuperIcon(
@@ -425,7 +424,7 @@ class _AddBudgetState extends State<AddBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -459,9 +458,9 @@ class _AddBudgetState extends State<AddBudget> {
                           },
                           readOnly: true,
                           obscureText: false,
-                          cursorColor: Colors.white60,
+                          cursorColor: Style.foregroundColor.withOpacity(0.6),
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
@@ -469,7 +468,7 @@ class _AddBudgetState extends State<AddBudget> {
                                   ? 'Select wallet'
                                   : selectedWallet.name,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -503,7 +502,8 @@ class _AddBudgetState extends State<AddBudget> {
                         margin:
                             EdgeInsets.only(left: 20, right: 10, bottom: 10),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 1),
+                            border: Border.all(
+                                color: Style.foregroundColor, width: 1),
                             shape: BoxShape.circle,
                             color: Style.backgroundColor),
                         child: isRepeat
@@ -543,7 +543,7 @@ class _AddBudgetState extends State<AddBudget> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         if (title == null)
           return CustomAlert(
