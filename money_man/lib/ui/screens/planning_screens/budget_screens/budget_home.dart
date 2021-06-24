@@ -6,6 +6,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
+import 'package:money_man/ui/style.dart';
 //ui/screens/planning_screens/budget_screen/budget_home.dart
 import 'package:provider/provider.dart';
 
@@ -39,21 +40,25 @@ class _BudgetScreenState extends State<BudgetScreen>
         home: DefaultTabController(
           length: 2,
           child: Scaffold(
+            backgroundColor: Style.backgroundColor,
             appBar: AppBar(
-              backgroundColor: Color(0xff333333),
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              title: Text(
-                "Budget",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                ),
-              ),
+              backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
+              leading: MaterialButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Style.foregroundColor,
+                  )),
+              title: Text('Budgets',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                    color: Style.foregroundColor,
+                  )),
+              centerTitle: true,
               actions: [
                 GestureDetector(
                   onTap: () async {
@@ -67,7 +72,10 @@ class _BudgetScreenState extends State<BudgetScreen>
                         iconPath: widget.crrWallet.iconID,
                         size: 30,
                       ),
-                      Icon(Icons.arrow_drop_down),
+                      Icon(
+                          Icons.arrow_drop_down,
+                          color: Style.foregroundColor.withOpacity(0.54),
+                      ),
                     ],
                   ),
                 )
@@ -77,12 +85,22 @@ class _BudgetScreenState extends State<BudgetScreen>
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: TabBar(
+                    labelStyle: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14.0,
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14.0,
+                    ),
+                    unselectedLabelColor: Style.foregroundColor.withOpacity(0.54),
+                    labelColor: Style.foregroundColor,
                     isScrollable: true,
                     controller: _tabController,
-                    indicatorColor: Color(0xffd3db00),
+                    indicatorColor: Style.primaryColor,
                     indicatorWeight: 3,
-                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                    unselectedLabelColor: Colors.white30,
                     tabs: [
                       Tab(
                           child: Container(
@@ -113,20 +131,21 @@ class _BudgetScreenState extends State<BudgetScreen>
               onPressed: () async {
                 await showCupertinoModalBottomSheet(
                     isDismissible: true,
-                    backgroundColor: Colors.grey[900],
+                    backgroundColor: Style.boxBackgroundColor,
                     context: context,
                     builder: (context) => AddBudget(
                           wallet: widget.crrWallet,
                         ));
               },
               child: Icon(
-                Icons.add,
+                Icons.add_rounded,
                 size: 30,
               ),
-              backgroundColor: Color(0xFF2FB49C),
+              backgroundColor: Style.primaryColor,
               elevation: 0,
             ),
             body: Container(
+<<<<<<< HEAD
                 color: Color(0xff1a1a1a),
                 padding: EdgeInsets.only(top: 15),
                 child: TabBarView(
@@ -138,6 +157,25 @@ class _BudgetScreenState extends State<BudgetScreen>
                     Applied(wallet: widget.crrWallet)
                   ],
                 )),
+=======
+              color: Style.backgroundColor,
+              padding: EdgeInsets.only(top: 15),
+              child: StreamBuilder<Object>(
+                  stream: _firestore.currentWallet,
+                  builder: (context, snapshot) {
+                    _wallet = snapshot.data ?? temp;
+                    return TabBarView(
+                      controller: _tabController,
+                      children: [
+                        CurrentlyApplied(
+                          wallet: _wallet,
+                        ),
+                        Applied(wallet: _wallet)
+                      ],
+                    );
+                  }),
+            ),
+>>>>>>> phuc/sprint2_part3
           ),
         ));
   }

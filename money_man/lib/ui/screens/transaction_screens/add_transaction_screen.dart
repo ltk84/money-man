@@ -92,11 +92,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   MyTransaction trans = MyTransaction(
                       id: 'id',
                       amount: amount,
-                      note: note == null
-                          ? note
-                          : contact == null
-                              ? note + 'someone'
-                              : note + contact,
+                      note: note,
                       date: pickDate,
                       currencyID: selectedWallet.currencyID,
                       category: cate,
@@ -106,9 +102,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   if (extraTransaction != null) {
                     if (trans.amount > extraTransaction.extraAmountInfo) {
                       await _showAlertDialog(
-                          'The amount must be less than or equal to unpaid amount.\nUnpaid amount is '
-                          + getMoneyFormat(extraTransaction.extraAmountInfo, selectedWallet.currencyID)
-                      );
+                          'The amount must be less than or equal to unpaid amount.\nUnpaid amount is ' +
+                              getMoneyFormat(extraTransaction.extraAmountInfo,
+                                  selectedWallet.currencyID));
                       return;
                     }
                     MyTransaction newTransaction =
@@ -253,9 +249,17 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
                       note =
                           isDebt ? 'Debt paid to ' : 'Payment received from ';
+
+                      contact == null ? note += 'someone' : note += contact;
                     });
                   } else {
+                    if (cate != null && selectCate.id == cate.id) return;
                     setState(() {
+                      if (cate != null && cate.id != selectCate.id) {
+                        note = null;
+                        contact = null;
+                      }
+                      extraTransaction = null;
                       this.cate = selectCate;
                       if (cate.type == 'debt & loan') {
                         if (cate.name == 'Debt') {
@@ -305,9 +309,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
                         note =
                             isDebt ? 'Debt paid to ' : 'Payment received from ';
+                        contact == null ? note += 'someone' : note += contact;
                       });
                     } else {
+                      if (cate != null && selectCate.id == cate.id) return;
                       setState(() {
+                        if (cate != null && cate.id != selectCate.id) {
+                          note = null;
+                          contact = null;
+                        }
+                        extraTransaction = null;
                         this.cate = selectCate;
                         if (cate.type == 'debt & loan') {
                           if (cate.name == 'Debt') {
@@ -364,13 +375,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     context: context,
                     builder: (context) =>
                         SelectWalletAccountScreen(wallet: selectedWallet));
-                if (res != null)
+                if (res != null && res.id != selectedWallet.id)
                   setState(() {
                     selectedWallet = res;
                     currencySymbol = CurrencyService()
                         .findByCode(selectedWallet.currencyID)
                         .symbol;
+                    cate = null;
+                    contact = null;
                     event = null;
+                    note = null;
                   });
               },
               leading: selectedWallet == null
@@ -409,13 +423,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       context: context,
                       builder: (context) =>
                           SelectWalletAccountScreen(wallet: selectedWallet));
-                  if (res != null)
+                  if (res != null && res.id != selectedWallet.id)
                     setState(() {
                       selectedWallet = res;
                       currencySymbol = CurrencyService()
                           .findByCode(selectedWallet.currencyID)
                           .symbol;
-                      // event = null;
+                      cate = null;
+                      contact = null;
+                      event = null;
+                      note = null;
                     });
                 },
               ),
@@ -461,20 +478,17 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                             fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
+                            color: Style.foregroundColor),
                         doneStyle: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
+                            color: Style.foregroundColor),
                         itemStyle: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontSize: 20.0,
                             fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
+                            color: Style.foregroundColor),
                         backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
@@ -563,11 +577,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         fontWeight: note == '' || note == null
                             ? FontWeight.w500
                             : FontWeight.w600),
-                    hintText: note == '' || note == null
-                        ? 'Write note'
-                        : contact == null
-                            ? note + 'someone'
-                            : note + contact),
+                    hintText: note == '' || note == null ? 'Write note' : note),
                 style: TextStyle(
                     color: Style.foregroundColor,
                     fontFamily: Style.fontFamily,
@@ -607,18 +617,56 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             Visibility(
               visible: pickEvent,
               child: ListTile(
-                dense: true,
-                leading: Icon(Icons.person,
-                    color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
-                title: TextFormField(
-                  onTap: () async {
+                onTap: () async {
+                  try {
                     final PhoneContact phoneContact =
                         await FlutterContactPicker.pickPhoneContact();
                     if (phoneContact != null) {
                       print(phoneContact.fullName);
                       setState(() {
                         contact = phoneContact.fullName;
+                        if (cate != null && note != null) {
+                          if (cate.name == 'Debt Collection') {
+                            note = note.replaceRange(note.indexOf('from'),
+                                note.length, 'from $contact');
+                          } else if (cate.name == 'Repayment') {
+                            note = note.replaceRange(
+                                note.indexOf('to'), note.length, 'to $contact');
+                          }
+                        }
                       });
+                    }
+                  } on UserCancelledPickingException catch (e) {
+                    // TODO
+                    print('cancel');
+                  }
+                },
+                dense: true,
+                leading: Icon(Icons.person,
+                    color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+                title: TextFormField(
+                  onTap: () async {
+                    try {
+                      final PhoneContact phoneContact =
+                          await FlutterContactPicker.pickPhoneContact();
+                      if (phoneContact != null) {
+                        print(phoneContact.fullName);
+                        setState(() {
+                          contact = phoneContact.fullName;
+                          if (cate != null && note != null) {
+                            if (cate.name == 'Debt Collection') {
+                              note = note.replaceRange(note.indexOf('from'),
+                                  note.length, 'from $contact');
+                            } else if (cate.name == 'Repayment') {
+                              note = note.replaceRange(note.indexOf('to'),
+                                  note.length, 'to $contact');
+                            }
+                          }
+                        });
+                      }
+                    } on UserCancelledPickingException catch (e) {
+                      // TODO
+                      print('cancel');
                     }
                   },
                   readOnly: true,
@@ -753,11 +801,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     }
     String finalText = onLeft
         ? '$_digit$symbol ' +
-        MoneyFormatter(amount: _text).output.withoutFractionDigits
+            MoneyFormatter(amount: _text).output.withoutFractionDigits
         : _digit +
-        MoneyFormatter(amount: _text).output.withoutFractionDigits +
-        ' $symbol';
+            MoneyFormatter(amount: _text).output.withoutFractionDigits +
+            ' $symbol';
     return finalText;
   }
-
 }

@@ -66,6 +66,7 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
       });
     }
   }
+
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   bool isContained(MyCategory currentCategory, List<MyCategory> categoryList) {
     if (categoryList.isEmpty) return false;
@@ -138,8 +139,8 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<Object>(
-      stream: _firestore.transactionStream(widget.currentWallet, 50),
-        builder: (context,snapshot){
+        stream: _firestore.transactionStream(widget.currentWallet, 50),
+        builder: (context, snapshot) {
           return Container(
               decoration: BoxDecoration(
                   color: Style.boxBackgroundColor,
@@ -198,13 +199,16 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                                 Expanded(
                                   child: Hero(
                                     tag: _listCategoryReport[index].name,
-                                    child: Text(_listCategoryReport[index].name,
-                                        style: TextStyle(
-                                          fontFamily: Style.fontFamily,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 15.0,
-                                          color: Style.foregroundColor,
-                                        )
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: Text(_listCategoryReport[index].name,
+                                          style: TextStyle(
+                                            fontFamily: Style.fontFamily,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15.0,
+                                            color: Style.foregroundColor,
+                                          )
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -241,8 +245,6 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                   )
               )
           );
-        }
-        );
-
+        });
   }
 }

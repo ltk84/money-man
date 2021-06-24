@@ -4,6 +4,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 class SelectEventScreen extends StatefulWidget {
@@ -111,14 +112,15 @@ class _SelectEventScreen extends State<SelectEventScreen> {
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              subtitle: Text(
-                                listEvent[index].spent.toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                              subtitle: MoneySymbolFormatter(
+                                  text: listEvent[index].spent,
+                                  currencyId: _wallet.currencyID,
+                                  textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Montserrat',
+                                  )
                               ),
                               trailing: (_wallet != null &&
                                       _wallet.name == listEvent[index].name)

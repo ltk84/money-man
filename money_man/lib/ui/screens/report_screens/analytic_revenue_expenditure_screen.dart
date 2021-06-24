@@ -201,7 +201,7 @@ class _AnalyticRevenueAndExpenditureScreen
                 if (element.date.isBefore(beginDate)) {
                   if (element.category.type == 'expense')
                     openingBalance -= element.amount;
-                  else
+                  else if (element.category.type == 'income')
                     openingBalance += element.amount;
                 }
                 if (element.date.compareTo(endDate) <= 0) {
@@ -209,15 +209,27 @@ class _AnalyticRevenueAndExpenditureScreen
                     closingBalance -= element.amount;
                     if (element.date.compareTo(beginDate) >= 0) {
                       expense += element.amount;
-                      if (!_expenseCategoryList.contains(element.category))
+                      if (!_expenseCategoryList.any((categoryElement) {
+                        if (categoryElement.name == element.category.name)
+                          return true;
+                        else
+                          return false;
+                      })) {
                         _expenseCategoryList.add(element.category);
+                      }
                     }
-                  } else {
+                  } else if (element.category.type == 'income') {
                     closingBalance += element.amount;
                     if (element.date.compareTo(beginDate) >= 0) {
                       income += element.amount;
-                      if (!_incomeCategoryList.contains(element.category))
+                      if (!_incomeCategoryList.any((categoryElement) {
+                        if (categoryElement.name == element.category.name)
+                          return true;
+                        else
+                          return false;
+                      })) {
                         _incomeCategoryList.add(element.category);
+                      }
                     }
                   }
                 }
@@ -225,7 +237,7 @@ class _AnalyticRevenueAndExpenditureScreen
               _transactionList = _transactionList
                   .where((element) =>
               element.date.compareTo(beginDate) >= 0 &&
-                  element.date.compareTo(endDate) <= 0)
+                  element.date.compareTo(endDate) <= 0 && element.category.type != 'debt & loan')
                   .toList();
               return Container(
                 color: Style.backgroundColor,
@@ -244,41 +256,44 @@ class _AnalyticRevenueAndExpenditureScreen
                                   color: Style.backgroundColor,
                                   child: Hero(
                                     tag: 'netIncomeChart',
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text('Net Income',
-                                            style: TextStyle(
-                                              color: Style.foregroundColor.withOpacity(
-                                                  0.7),
-                                              fontFamily: Style.fontFamily,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            )
-                                        ),
-                                        MoneySymbolFormatter(
-                                            text: closingBalance - openingBalance,
-                                            currencyId: _wallet.currencyID,
-                                            textStyle: TextStyle(
-                                              color: (closingBalance -
-                                                  openingBalance) > 0 ? Style.incomeColor
-                                                  : (closingBalance -
-                                                  openingBalance) == 0
-                                                  ? Style.foregroundColor
-                                                  : Style.expenseColor,
-                                              fontFamily: Style.fontFamily,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 26,
-                                              height: 1.5,
-                                            )),
-                                        Container(
-                                          width: 450,
-                                          height: 200,
-                                          child: BarChartScreen(
-                                              currentList: _transactionList,
-                                              beginDate: beginDate,
-                                              endDate: endDate),
-                                        ),
-                                      ],
+                                    child: Material(
+                                      color: Style.backgroundColor,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text('Net Income',
+                                              style: TextStyle(
+                                                color: Style.foregroundColor.withOpacity(
+                                                    0.7),
+                                                fontFamily: Style.fontFamily,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16,
+                                              )
+                                          ),
+                                          MoneySymbolFormatter(
+                                              text: closingBalance - openingBalance,
+                                              currencyId: _wallet.currencyID,
+                                              textStyle: TextStyle(
+                                                color: (closingBalance -
+                                                    openingBalance) > 0 ? Style.incomeColor
+                                                    : (closingBalance -
+                                                    openingBalance) == 0
+                                                    ? Style.foregroundColor
+                                                    : Style.expenseColor,
+                                                fontFamily: Style.fontFamily,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 26,
+                                                height: 1.5,
+                                              )),
+                                          Container(
+                                            width: 450,
+                                            height: 200,
+                                            child: BarChartScreen(
+                                                currentList: _transactionList,
+                                                beginDate: beginDate,
+                                                endDate: endDate),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   )
                               ),

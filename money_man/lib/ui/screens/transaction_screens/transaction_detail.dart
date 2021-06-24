@@ -17,6 +17,7 @@ import 'package:money_man/ui/screens/transaction_screens/transaction_list_screen
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -93,21 +94,33 @@ class _TransactionDetailState extends State<TransactionDetail> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Style.boxBackgroundColor2,
-        leading: MaterialButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios_rounded,
-            color: Style.foregroundColor,
+        leading: Hero(
+          tag: 'backButton',
+          child: MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+                Icons.arrow_back_ios_rounded,
+                color: Style.foregroundColor,
+            ),
           ),
         ),
-        title: Text('Transaction',
-            style: TextStyle(
-                color: Style.foregroundColor,
-                fontWeight: FontWeight.w500,
-                fontFamily: Style.fontFamily,
-                fontSize: 18.0)),
+        title: Hero(
+          tag: 'title',
+          child: Material(
+            color: Colors.transparent,
+            child: Text(
+                'Transaction',
+              style: TextStyle(
+                  color: Style.foregroundColor,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: Style.fontFamily,
+                  fontSize: 18.0
+              )
+            ),
+          ),
+        ),
         centerTitle: false,
         actions: [
           // IconButton(
@@ -152,11 +165,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     barrierDismissible: false,
                     builder: (_) {
                       return AlertDialog(
+                        backgroundColor: Style.boxBackgroundColor2,
                         title: Text(
                           'Delete this transaction?',
                           style: TextStyle(
-                            color: Colors.red,
-                            fontFamily: 'Montserrat',
+                            color: Style.errorColor,
+                            fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -166,7 +180,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                 Navigator.of(context, rootNavigator: true)
                                     .pop('No');
                               },
-                              child: Text('No')),
+                              child: Text('No',
+                                style: TextStyle(
+                                  color: Style.foregroundColor.withOpacity(0.7),
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w600,
+                                ),)),
                           FlatButton(
                               onPressed: () {
                                 Navigator.of(context, rootNavigator: true)
@@ -174,11 +193,29 @@ class _TransactionDetailState extends State<TransactionDetail> {
 
                                 // chưa có animation để back ra transaction screen
                               },
-                              child: Text('Yes'))
+                              child: Text('Yes',
+                                style: TextStyle(
+                                  color: Style.foregroundColor.withOpacity(0.7),
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w600,
+                                ),))
                         ],
                       );
                     });
                 if (result == 'Yes') {
+                  if (_transaction.category.name == 'Repayment' ||
+                      _transaction.category.name ==
+                          'Debt Collection') {
+                    await _firestore
+                        .updateDebtLoanTransationAfterDelete(
+                        _transaction, widget.wallet);
+                  }
+                  if (_transaction.category.name == 'Debt' ||
+                      _transaction.category.name == 'Loan') {
+                    await _firestore
+                        .deleteInstanceInTransactionIdList(
+                        _transaction.id, widget.wallet.id);
+                  }
                   await _firestore.deleteTransaction(
                       _transaction, widget.wallet);
                   Navigator.pop(context, 'Deleted');
@@ -685,10 +722,12 @@ class DebtLoanSection extends StatelessWidget {
                   onPressed: () async {
                     MyTransaction trans = await Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (_) => TransactionListScreen(
+                        PageTransition(
+                            childCurrent: this,
+                            child: TransactionListScreen(
                                 transactionId: transaction.id,
-                                wallet: wallet)));
+                                wallet: wallet),
+                            type: PageTransitionType.rightToLeft));
 
                     refesh(trans);
                   },

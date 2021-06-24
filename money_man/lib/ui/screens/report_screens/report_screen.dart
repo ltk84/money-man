@@ -165,7 +165,6 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
               onTap: () async {
                 final result = await showCupertinoModalBottomSheet(
                     isDismissible: true,
-                    backgroundColor: Colors.grey[900],
                     context: context,
                     builder: (context) => TimeRangeSelection(
                         dateDescription: dateDescript,
@@ -179,34 +178,37 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                   });
                 }
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        dateDescript,
-                        style: TextStyle(
-                          fontFamily: Style.fontFamily,
-                          fontWeight: FontWeight.w600,
-                          color: Style.foregroundColor,
-                          fontSize: 14.0,
-                        ),
-                      ),
-                      Text(
-                        DateFormat('dd/MM/yyyy').format(beginDate) +
-                            " - " +
-                            DateFormat('dd/MM/yyyy').format(endDate),
-                        style: TextStyle(
+              child: Container(
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          dateDescript,
+                          style: TextStyle(
                             fontFamily: Style.fontFamily,
-                            color: Style.foregroundColor.withOpacity(0.7),
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                    ],
-                  ),
-                  Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
-                ],
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                        Text(
+                          DateFormat('dd/MM/yyyy').format(beginDate) +
+                              " - " +
+                              DateFormat('dd/MM/yyyy').format(endDate),
+                          style: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              color: Style.foregroundColor.withOpacity(0.7),
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                    Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
+                  ],
+                ),
               ),
             ),
             actions: <Widget>[
@@ -253,7 +255,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                   if (element.date.isBefore(beginDate)) {
                     if (element.category.type == 'expense')
                       openingBalance -= element.amount;
-                    else
+                    else if (element.category.type == 'income')
                       openingBalance += element.amount;
                   }
                   if (element.date.compareTo(endDate) <= 0) {
@@ -273,7 +275,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                         // if (!_expenseCategoryList.contains(element.category))
                         //   _expenseCategoryList.add(element.category);
                       }
-                    } else {
+                    } else if (element.category.type == 'income') {
                       closingBalance += element.amount;
                       if (element.date.compareTo(beginDate) >= 0) {
                         income += element.amount;
@@ -294,84 +296,14 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                 _transactionList = _transactionList
                     .where((element) =>
                         element.date.compareTo(beginDate) >= 0 &&
-                        element.date.compareTo(endDate) <= 0)
+                        element.date.compareTo(endDate) <= 0 && element.category.type != 'debt & loan')
                     .toList();
                 return Container(
                   color: Style.backgroundColor,
                   child: ListView(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(),
+                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey[900],
-                                  width: 1.0,
-                                ),
-                                top: BorderSide(
-                                  color: Colors.grey[900],
-                                  width: 1.0,
-                                ))),
-                        child: Column(children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Opening balance',
-                                      style: TextStyle(
-                                        color: Colors.grey[500],
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      openingBalance.toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Closing balance',
-                                      style: TextStyle(
-                                        color: Colors.grey[500],
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      closingBalance.toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ]),
-                      ),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                           decoration: BoxDecoration(
@@ -459,50 +391,53 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     SizedBox(height: 10,),
                                     Hero(
                                       tag: 'netIncomeChart',
-                                      child: Column(
-                                        children: [
-                                          Text('Net Income',
-                                              style: TextStyle(
-                                                color: Style.foregroundColor.withOpacity(0.7),
-                                                fontFamily: Style.fontFamily,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 16,
-                                              )
-                                          ),
-                                          MoneySymbolFormatter(
-                                              text: closingBalance - openingBalance,
-                                              currencyId: _wallet.currencyID,
-                                              textStyle: TextStyle(
-                                                color: (closingBalance - openingBalance) > 0 ? Style.incomeColor
-                                                    : (closingBalance - openingBalance) == 0 ? Style.foregroundColor : Style.expenseColor,
-                                                fontFamily: Style.fontFamily,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 26,
-                                                height: 1.5,
-                                              )),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  PageTransition(
-                                                      childCurrent: this.widget,
-                                                      child: AnalyticRevenueAndExpenditureScreen(
-                                                        currentWallet: _wallet,
-                                                        beginDate: beginDate,
-                                                        endDate: endDate,
-                                                      ),
-                                                      type: PageTransitionType.rightToLeft));
-                                            },
-                                            child: Container(
-                                              width: 450,
-                                              height: 200,
-                                              child: BarChartScreen(
-                                                  currentList: _transactionList,
-                                                  beginDate: beginDate,
-                                                  endDate: endDate),
+                                      child: Material(
+                                        color: Style.backgroundColor,
+                                        child: Column(
+                                          children: [
+                                            Text('Net Income',
+                                                style: TextStyle(
+                                                  color: Style.foregroundColor.withOpacity(0.7),
+                                                  fontFamily: Style.fontFamily,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 16,
+                                                )
                                             ),
-                                          ),
-                                        ],
+                                            MoneySymbolFormatter(
+                                                text: closingBalance - openingBalance,
+                                                currencyId: _wallet.currencyID,
+                                                textStyle: TextStyle(
+                                                  color: (closingBalance - openingBalance) > 0 ? Style.incomeColor
+                                                      : (closingBalance - openingBalance) == 0 ? Style.foregroundColor : Style.expenseColor,
+                                                  fontFamily: Style.fontFamily,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 26,
+                                                  height: 1.5,
+                                                )),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    PageTransition(
+                                                        childCurrent: this.widget,
+                                                        child: AnalyticRevenueAndExpenditureScreen(
+                                                          currentWallet: _wallet,
+                                                          beginDate: beginDate,
+                                                          endDate: endDate,
+                                                        ),
+                                                        type: PageTransitionType.rightToLeft));
+                                              },
+                                              child: Container(
+                                                width: 450,
+                                                height: 200,
+                                                child: BarChartScreen(
+                                                    currentList: _transactionList,
+                                                    beginDate: beginDate,
+                                                    endDate: endDate),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],

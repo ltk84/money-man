@@ -18,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 0;
 
   void _onItemTap(int index, Wallet wallet) {
     if (_selectedIndex != index) {
@@ -53,12 +53,16 @@ class _HomeScreenState extends State<HomeScreen> {
             AccountScreen(),
           ];
 
-          if (snapshot.connectionState == ConnectionState.active) {
+          //if (snapshot.connectionState == ConnectionState.active) {
             if (wallet == null) {
-              return FirstStep();
+              if (snapshot.connectionState == ConnectionState.active) {
+                return FirstStep();
+              } else {
+                return LoadingScreen();
+              }
             } else
               return Scaffold(
-                backgroundColor: Style.foregroundColor.withOpacity(0.38),
+                backgroundColor: Style.boxBackgroundColor2,
                 body: _screens.elementAt(_selectedIndex),
                 bottomNavigationBar: BottomAppBar(
                   notchMargin: 5,
@@ -112,7 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: (index) => _onItemTap(index, wallet)),
                 ),
                 floatingActionButton: FloatingActionButton(
-                  child: Icon(Icons.add),
+                  child: Icon(
+                      Icons.add_rounded,
+                      size: 30,
+                  ),
                   onPressed: () {
                     _onItemTap(2, wallet);
                   },
@@ -122,8 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerDocked,
               );
-          } else
-            return LoadingScreen();
+          //} else
+          //  return LoadingScreen();
         });
     // hello there
   }

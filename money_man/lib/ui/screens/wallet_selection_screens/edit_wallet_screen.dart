@@ -8,6 +8,7 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,6 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
     return Scaffold(
         backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
-          leadingWidth: 70.0,
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.boxBackgroundColor,
@@ -54,36 +54,32 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: Style.foregroundColor,)),
+                color: Style.foregroundColor,
+              )),
           leading: CloseButton(
             color: Style.foregroundColor,
           ),
           actions: <Widget>[
             TextButton(
-                onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    if (adjustAmount == null) {
-                      await _firestore.updateWallet(widget.wallet);
-                      await _firestore.updateSelectedWallet(widget.wallet.id);
-                    } else
-                      await _firestore.adjustBalance(
-                          widget.wallet, adjustAmount);
-                    Navigator.pop(context, widget.wallet.id);
-                  }
-                },
-                child: Text('Save',
-                    style: TextStyle(
-                      fontFamily: Style.fontFamily,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                      color: Style.foregroundColor,
-                    )
-                ),
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.transparent,
-                )),
+              onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  if (adjustAmount == null) {
+                    await _firestore.updateWallet(widget.wallet);
+                    await _firestore.updateSelectedWallet(widget.wallet.id);
+                  } else
+                    await _firestore.adjustBalance(widget.wallet, adjustAmount);
+                  Navigator.pop(context, widget.wallet.id);
+                }
+              },
+              child: Text('Save',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: Style.foregroundColor,
+                  )),
+            ),
           ],
         ),
         body: Container(
@@ -109,7 +105,8 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                   Row(
                     children: [
                       Container(
-                        color: Colors.transparent, // Không thừa đâu, như vậy mới ấn vùng ngoài được.
+                        color: Colors
+                            .transparent, // Không thừa đâu, như vậy mới ấn vùng ngoài được.
                         padding: EdgeInsets.fromLTRB(24, 20, 10, 0),
                         child: GestureDetector(
                           onTap: () async {
@@ -132,25 +129,12 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                 iconPath: iconData,
                                 size: 45.0,
                               ),
-                              Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54)),
+                              Icon(Icons.arrow_drop_down,
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54)),
                             ],
                           ),
                         ),
-                        // onPressed: () async {
-                        //   // TODO: Chọn icon cho ví
-                        //   var data = await showCupertinoModalBottomSheet(
-                        //     context: context,
-                        //     builder: (context) => IconPicker(),
-                        //   );
-                        //   if (data != null) {
-                        //     widget.wallet.iconID = data;
-                        //     setState(() {
-                        //       iconData = data;
-                        //     });
-                        //   }
-                        // },
-                        // iconSize: 70,
-                        // color: Color(0xff8f8f8f),
                       ),
                       Expanded(
                         child: Container(
@@ -168,16 +152,20 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             ),
                             decoration: InputDecoration(
                                 errorBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Style.errorColor, width: 1),
+                                  borderSide: BorderSide(
+                                      color: Style.errorColor, width: 1),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.6), width: 1),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.6),
+                                      width: 1),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.6), width: 3),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.6),
+                                      width: 3),
                                 ),
                                 // border: UnderlineInputBorder(
                                 //   borderSide:
@@ -185,7 +173,9 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                 // ),
                                 labelText: 'Name',
                                 labelStyle: TextStyle(
-                                    color: Style.foregroundColor.withOpacity(0.6), fontSize: 15)),
+                                    color:
+                                        Style.foregroundColor.withOpacity(0.6),
+                                    fontSize: 15)),
                             onChanged: (value) => widget.wallet.name = value,
                             validator: (value) {
                               if (value == null || value.length == 0)
@@ -198,6 +188,9 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                         ),
                       )
                     ],
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   Divider(
                     thickness: 0.05,
@@ -239,7 +232,8 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.monetization_on,
-                        size: 30.0, color: Style.foregroundColor.withOpacity(0.24)),
+                        size: 30.0,
+                        color: Style.foregroundColor.withOpacity(0.24)),
                     title: Text(currencyName,
                         style: TextStyle(
                             color: Style.foregroundColor,
@@ -269,7 +263,8 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.account_balance,
-                        size: 30.0, color: Style.foregroundColor.withOpacity(0.24)),
+                        size: 30.0,
+                        color: Style.foregroundColor.withOpacity(0.24)),
                     title: adjustAmount != null
                         ? MoneySymbolFormatter(
                             text: adjustAmount,
@@ -295,27 +290,75 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                // Xử lý sự kiện click ở đây.
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                alignment: Alignment.center,
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 40),
+                height: 40,
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () async {
-                    // Xử lý sự kiện click ở đây.
-                    final _firestore = Provider.of<FirebaseFireStoreService>(
-                        context,
-                        listen: false);
-                    final res = await _firestore.deleteWallet(widget.wallet.id);
-                    if (res is String && res == 'only 1 wallet') {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(res.toString())));
-                      return;
+                    String result = await showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return AlertDialog(
+                            backgroundColor: Style.boxBackgroundColor2,
+                            title: Text(
+                              'Delete this wallet?',
+                              style: TextStyle(
+                                color: Style.errorColor,
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            content: Text(
+                              "You can't recover this file after deleting, are you sure?",
+                              style: TextStyle(
+                                color: Style.foregroundColor,
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            actions: [
+                              FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop('No');
+                                  },
+                                  child: Text('No',
+                                    style: TextStyle(
+                                      color: Style.foregroundColor.withOpacity(0.7),
+                                      fontFamily: Style.fontFamily,
+                                      fontWeight: FontWeight.w600,
+                                    ),)),
+                              FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop('Yes');
+
+                                    // chưa có animation để back ra transaction screen
+                                  },
+                                  child: Text('Yes',
+                                    style: TextStyle(
+                                      color: Style.foregroundColor.withOpacity(0.7),
+                                      fontFamily: Style.fontFamily,
+                                      fontWeight: FontWeight.w600,
+                                    ),))
+                            ],
+                          );
+                        });
+                    if (result == 'Yes') {
+                      // Xử lý sự kiện click ở đây.
+                      final _firestore = Provider.of<FirebaseFireStoreService>(
+                          context,
+                          listen: false);
+                      final res = await _firestore.deleteWallet(widget.wallet.id);
+                      if (res is String && res == 'only 1 wallet') {
+                      _showAlertDialog(
+                          content: 'You can\'t delete the only wallet');
+                        return;
+                      }
+                      Navigator.pop(context, res);
                     }
-                    Navigator.pop(context, res);
                   },
                   child: Text("DELETE THIS WALLET",
                       style: TextStyle(
@@ -326,27 +369,22 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                           wordSpacing: 2.0),
                       textAlign: TextAlign.center),
                   style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.white;
                         return Colors.red[700]; // Use the component's default.
                       },
                     ),
-                    foregroundColor:
-                    MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
+                    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.red[700];
-                        return Colors
-                            .white; // Use the component's default.
+                        return Colors.white; // Use the component's default.
                       },
                     ),
                   ),
-                )
-              ),
-            ),
+                )),
           ],
         ),
       ],
@@ -371,5 +409,23 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
     for (i = 1; i < ff.length; i++) result += ff[i];
     print(result);
     return result;
+  }
+
+  Future<void> _showAlertDialog(
+      {String title = 'Oops...',
+      String content,
+      String iconPath = 'assets/images/alert.svg'}) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return CustomAlert(
+          iconPath: iconPath,
+          content: content,
+          title: title,
+        );
+      },
+    );
   }
 }

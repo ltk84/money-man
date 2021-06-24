@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
@@ -23,16 +24,16 @@ class AdjustBalanceScreen extends StatefulWidget {
 
 class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
   double adjustAmount;
-  bool invalid = false;
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     var iconData = widget.wallet.iconID;
-    // iconData = Wallet.getIconDataByIconID(widget.wallet.iconID);
 
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
+        elevation: 0,
         leadingWidth: 70,
         leading: CloseButton(
           color: Style.foregroundColor,
@@ -59,6 +60,7 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
         color: Style.backgroundColor1,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               height: 10,
@@ -130,16 +132,6 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: ListTile(
                 onTap: () async {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (_) => EnterAmountScreen()))
-                  //     .then((value) {
-                  //   if (value != null)
-                  //     setState(() {
-                  //       adjustAmount = double.parse(value);
-                  //     });
-                  // });
                   final resultAmount = await showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) => EnterAmountScreen());

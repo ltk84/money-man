@@ -51,6 +51,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
     contact = extraTransaction.contact;
     isDebt = extraTransaction.category.name == 'Debt';
     note = isDebt ? 'Debt paid to ' : 'Payment received from ';
+    contact == null ? note += 'someone' : note += contact;
     pickDate = DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
     selectedWallet = widget.wallet;
     currencySymbol =
@@ -68,15 +69,13 @@ class _CashBackScreenState extends State<CashBackScreen> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Style.boxBackgroundColor,
-        title: Text(
-            'Cash back',
+        title: Text('Cash back',
             style: TextStyle(
               fontFamily: Style.fontFamily,
               fontSize: 17.0,
               fontWeight: FontWeight.w600,
               color: Style.foregroundColor,
-            )
-        ),
+            )),
         leading: CloseButton(
           color: Style.foregroundColor,
         ),
@@ -99,7 +98,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   MyTransaction trans = MyTransaction(
                     id: 'id',
                     amount: amount,
-                    note: contact == null ? note + 'someone' : note + contact,
+                    note: note,
                     date: pickDate,
                     currencyID: selectedWallet.currencyID,
                     category: cate,
@@ -123,15 +122,13 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   Navigator.pop(context);
                 }
               },
-              child: Text(
-                'Done',
-                style: TextStyle(
-                  color: Style.foregroundColor,
-                  fontFamily: Style.fontFamily,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,
-                )
-              ))
+              child: Text('Done',
+                  style: TextStyle(
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                  )))
         ],
       ),
       body: Container(
@@ -214,21 +211,21 @@ class _CashBackScreenState extends State<CashBackScreen> {
           ),
           ListTile(
             dense: true,
-            onTap: () async {
-              var res = await showCupertinoModalBottomSheet(
-                  isDismissible: true,
-                  backgroundColor: Style.boxBackgroundColor,
-                  context: context,
-                  builder: (context) =>
-                      SelectWalletAccountScreen(wallet: selectedWallet));
-              if (res != null)
-                setState(() {
-                  selectedWallet = res;
-                  currencySymbol = CurrencyService()
-                      .findByCode(selectedWallet.currencyID)
-                      .symbol;
-                });
-            },
+            // onTap: () async {
+            //   var res = await showCupertinoModalBottomSheet(
+            //       isDismissible: true,
+            //       backgroundColor: Style.boxBackgroundColor,
+            //       context: context,
+            //       builder: (context) =>
+            //           SelectWalletAccountScreen(wallet: selectedWallet));
+            //   if (res != null)
+            //     setState(() {
+            //       selectedWallet = res;
+            //       currencySymbol = CurrencyService()
+            //           .findByCode(selectedWallet.currencyID)
+            //           .symbol;
+            //     });
+            // },
             leading: selectedWallet == null
                 ? SuperIcon(iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
                 : SuperIcon(iconPath: selectedWallet.iconID, size: 28.0),
@@ -258,24 +255,24 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   hintText: selectedWallet == null
                       ? 'Select wallet'
                       : selectedWallet.name),
-              onTap: () async {
-                var res = await showCupertinoModalBottomSheet(
-                    isDismissible: true,
-                    backgroundColor: Style.boxBackgroundColor,
-                    context: context,
-                    builder: (context) =>
-                        SelectWalletAccountScreen(wallet: selectedWallet));
-                if (res != null)
-                  setState(() {
-                    selectedWallet = res;
-                    currencySymbol = CurrencyService()
-                        .findByCode(selectedWallet.currencyID)
-                        .symbol;
-                    // event = null;
-                  });
-              },
+              // onTap: () async {
+              //   var res = await showCupertinoModalBottomSheet(
+              //       isDismissible: true,
+              //       backgroundColor: Style.boxBackgroundColor,
+              //       context: context,
+              //       builder: (context) =>
+              //           SelectWalletAccountScreen(wallet: selectedWallet));
+              //   if (res != null)
+              //     setState(() {
+              //       selectedWallet = res;
+              //       currencySymbol = CurrencyService()
+              //           .findByCode(selectedWallet.currencyID)
+              //           .symbol;
+              //       // event = null;
+              //     });
+              // },
             ),
-            trailing: Icon(Icons.chevron_right,
+            trailing: Icon(Icons.lock,
                 color: Style.foregroundColor.withOpacity(0.54)),
           ),
           Container(
@@ -288,9 +285,8 @@ class _CashBackScreenState extends State<CashBackScreen> {
           ),
           ListTile(
             dense: true,
-            leading:
-                Icon(Icons.calendar_today,
-                    color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+            leading: Icon(Icons.calendar_today,
+                color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
             title: TextFormField(
               onTap: () async {
                 DatePicker.showDatePicker(context,
@@ -311,20 +307,17 @@ class _CashBackScreenState extends State<CashBackScreen> {
                           fontFamily: Style.fontFamily,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
-                          color: Style.foregroundColor
-                      ),
+                          color: Style.foregroundColor),
                       doneStyle: TextStyle(
                           fontFamily: Style.fontFamily,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
-                          color: Style.foregroundColor
-                      ),
+                          color: Style.foregroundColor),
                       itemStyle: TextStyle(
                           fontFamily: Style.fontFamily,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w600,
-                          color: Style.foregroundColor
-                      ),
+                          color: Style.foregroundColor),
                       backgroundColor: Style.boxBackgroundColor,
                     ));
               },
@@ -387,8 +380,8 @@ class _CashBackScreenState extends State<CashBackScreen> {
                     backgroundColor: Style.boxBackgroundColor,
                     context: context,
                     builder: (context) => NoteScreen(
-                      content: note ?? '',
-                    ));
+                          content: note ?? '',
+                        ));
                 print(noteContent);
                 if (noteContent != null) {
                   setState(() {
@@ -413,11 +406,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
                       fontWeight: note == '' || note == null
                           ? FontWeight.w500
                           : FontWeight.w600),
-                  hintText: note == '' || note == null
-                      ? 'Write note'
-                      : contact == null
-                      ? note + 'someone'
-                      : note + contact),
+                  hintText: note == '' || note == null ? 'Write note' : note),
               style: TextStyle(
                   color: Style.foregroundColor,
                   fontFamily: Style.fontFamily,
@@ -436,18 +425,56 @@ class _CashBackScreenState extends State<CashBackScreen> {
             ),
           ),
           ListTile(
-            dense: true,
-            leading: Icon(Icons.person,
-                color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
-            title: TextFormField(
-              onTap: () async {
+            onTap: () async {
+              try {
                 final PhoneContact phoneContact =
                     await FlutterContactPicker.pickPhoneContact();
                 if (phoneContact != null) {
                   print(phoneContact.fullName);
                   setState(() {
                     contact = phoneContact.fullName;
+                    if (cate != null && note != null) {
+                      if (cate.name == 'Debt Collection') {
+                        note = note.replaceRange(
+                            note.indexOf('from'), note.length, 'from $contact');
+                      } else if (cate.name == 'Repayment') {
+                        note = note.replaceRange(
+                            note.indexOf('to'), note.length, 'to $contact');
+                      }
+                    }
                   });
+                }
+              } on UserCancelledPickingException catch (e) {
+                // TODO
+                print('cancel');
+              }
+            },
+            dense: true,
+            leading: Icon(Icons.person,
+                color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+            title: TextFormField(
+              onTap: () async {
+                try {
+                  final PhoneContact phoneContact =
+                      await FlutterContactPicker.pickPhoneContact();
+                  if (phoneContact != null) {
+                    print(phoneContact.fullName);
+                    setState(() {
+                      contact = phoneContact.fullName;
+                      if (note != null) {
+                        if (isDebt == false) {
+                          note = note.replaceRange(note.indexOf('from'),
+                              note.length, 'from $contact');
+                        } else {
+                          note = note.replaceRange(
+                              note.indexOf('to'), note.length, 'to $contact');
+                        }
+                      }
+                    });
+                  }
+                } on UserCancelledPickingException catch (e) {
+                  // TODO
+                  print('cancel');
                 }
               },
               readOnly: true,
@@ -462,9 +489,8 @@ class _CashBackScreenState extends State<CashBackScreen> {
                       color: Style.foregroundColor.withOpacity(0.24),
                       fontFamily: Style.fontFamily,
                       fontSize: 16.0,
-                      fontWeight: contact == null
-                          ? FontWeight.w500
-                          : FontWeight.w600),
+                      fontWeight:
+                          contact == null ? FontWeight.w500 : FontWeight.w600),
                   hintText: contact ?? hintTextConact),
               style: TextStyle(
                   color: Style.foregroundColor,

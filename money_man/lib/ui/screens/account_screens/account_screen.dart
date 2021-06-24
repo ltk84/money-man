@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/main.dart';
 import 'package:money_man/ui/screens/account_screens/about_screen.dart';
 import 'package:money_man/ui/screens/account_screens/my_wallets_screen.dart';
+import 'package:money_man/ui/screens/account_screens/setting_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_account_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
@@ -129,7 +131,8 @@ class _TestState extends State<Test> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
                     child: reachTop == 0
-                        ? Hero(tag: 'alo', child: title)
+                        ? Hero(tag: 'alo', child: Material(
+                        color: Colors.transparent,child: title))
                         : emptyTitle,
                   ),
                   Container(
@@ -345,8 +348,9 @@ class _TestState extends State<Test> {
                           onTap: () {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => HelpScreens()));
+                                PageTransition(
+                                    child: HelpScreens(),
+                                    type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
                           leading: Icon(Icons.help_outline,
@@ -370,7 +374,16 @@ class _TestState extends State<Test> {
                           ),
                         ),
                         ListTile(
-                          onTap: () {},
+                          onTap: () async {
+                            int tempCurrentTheme = Style.currentTheme;
+                            await Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: SettingScreen(),
+                                    type: PageTransitionType.rightToLeft));
+                            if (tempCurrentTheme != Style.currentTheme)
+                              App.restartApp(context);
+                          },
                           dense: true,
                           leading: Icon(Icons.settings,
                               color: Style.foregroundColor.withOpacity(0.54),

@@ -282,7 +282,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                   _controller.animateTo(
                                     _categoryList.length == 0
                                       ? 0
-                                      : _categoryList.length.toDouble()*67.4 - 193.2 + .05494505494505,
+                                      : _categoryList.length.toDouble()*67.4 - 193.2 + .05494505494505 + 100,
                                     curve: Curves.fastOutSlowIn,
                                     duration: const Duration(milliseconds: 500),
                                   );
@@ -338,7 +338,6 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
               ),
             );
           },
-        )
-    );
+        ));
   }
 }

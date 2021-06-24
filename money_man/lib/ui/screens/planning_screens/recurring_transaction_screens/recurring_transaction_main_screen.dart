@@ -51,13 +51,16 @@ class _RecurringTransactionMainScreenState
           centerTitle: true,
           title: Hero(
             tag: 'billToDetail_title',
-            child: Text('Recurring transactions',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                )),
+            child: Material(
+              color: Colors.transparent,
+              child: Text('Recurring transactions',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  )),
+            ),
           ),
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(

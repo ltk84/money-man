@@ -544,24 +544,3 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 }
-
-AlertDialog alert(context, title, mess) {
-  return AlertDialog(
-    title: Text(
-      title,
-      style: TextStyle(color: Style.backgroundColor, fontWeight: FontWeight.w700),
-    ),
-    content: Text(
-      mess,
-      style: TextStyle(color: Style.backgroundColor, fontWeight: FontWeight.w500),
-    ),
-    actions: [
-      FlatButton(
-        child: Text("OK"),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
-    ],
-  );
-}

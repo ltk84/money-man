@@ -327,45 +327,45 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             ),
             ListTile(
               onTap: () async {
-                  DatePicker.showDatePicker(context,
-                      currentTime: pickDate,
-                      showTitleActions: true, onConfirm: (date) {
-                    if (date != null) {
-                      setState(() {
-                        pickDate = date;
-                        if(_event != null)
-                        {
-                          if(pickDate.year > _event.endDate.year ||
-                              (pickDate.year == _event.endDate.year && pickDate.month > _event.endDate.month)||
-                              (pickDate.year == _event.endDate.year && pickDate.month == _event.endDate.month && pickDate.day > _event.endDate.day))
-                            _event = null;
-                        }
-                      });
-                    }
-                  },
-                      locale: LocaleType.en,
-                      theme: DatePickerTheme(
-                        cancelStyle: TextStyle(
-                            fontFamily: Style.fontFamily,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
-                        doneStyle: TextStyle(
-                            fontFamily: Style.fontFamily,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
-                        itemStyle: TextStyle(
-                            fontFamily: Style.fontFamily,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
-                        backgroundColor: Style.boxBackgroundColor,
-                      ));
-                },
+                DatePicker.showDatePicker(context,
+                    currentTime: pickDate,
+                    showTitleActions: true, onConfirm: (date) {
+                      if (date != null) {
+                        setState(() {
+                          pickDate = date;
+                          if(_event != null)
+                          {
+                            if(pickDate.year > _event.endDate.year ||
+                                (pickDate.year == _event.endDate.year && pickDate.month > _event.endDate.month)||
+                                (pickDate.year == _event.endDate.year && pickDate.month == _event.endDate.month && pickDate.day > _event.endDate.day))
+                              _event = null;
+                          }
+                        });
+                      }
+                    },
+                    locale: LocaleType.en,
+                    theme: DatePickerTheme(
+                      cancelStyle: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor
+                      ),
+                      doneStyle: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor
+                      ),
+                      itemStyle: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor
+                      ),
+                      backgroundColor: Style.boxBackgroundColor,
+                    ));
+              },
               dense: true,
               leading:
               Icon(Icons.calendar_today,
@@ -375,19 +375,19 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   DatePicker.showDatePicker(context,
                       currentTime: pickDate,
                       showTitleActions: true, onConfirm: (date) {
-                    if (date != null) {
-                      setState(() {
-                        pickDate = date;
-                        if(_event != null)
-                        {
-                          if(pickDate.year > _event.endDate.year ||
-                              (pickDate.year == _event.endDate.year && pickDate.month > _event.endDate.month)||
-                              (pickDate.year == _event.endDate.year && pickDate.month == _event.endDate.month && pickDate.day > _event.endDate.day))
-                            _event = null;
+                        if (date != null) {
+                          setState(() {
+                            pickDate = date;
+                            if(_event != null)
+                            {
+                              if(pickDate.year > _event.endDate.year ||
+                                  (pickDate.year == _event.endDate.year && pickDate.month > _event.endDate.month)||
+                                  (pickDate.year == _event.endDate.year && pickDate.month == _event.endDate.month && pickDate.day > _event.endDate.day))
+                                _event = null;
+                            }
+                          });
                         }
-                      });
-                    }
-                  },
+                      },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(
@@ -511,95 +511,99 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               trailing: Icon(Icons.chevron_right,
                   color: Style.foregroundColor.withOpacity(0.54)),
             ),
-            (_event != null)
-                ? Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-                  child: Divider(
-                    color: Style.foregroundColor.withOpacity(0.24),
-                    height: 1,
-                    thickness: 0.2,
-                  ),
-                ),
-                ListTile(
-                  dense: true,
-                  onTap: () async {
-                    var res = await showCupertinoModalBottomSheet(
-                        isDismissible: true,
-                        backgroundColor: Style.boxBackgroundColor,
-                        context: context,
-                        builder: (context) =>
-                            SelectEventScreen(
-                              wallet: widget.wallet,
-                              timeTransaction: pickDate,
-                            ));
-                    if (res != null)
-                      setState(() {
-                        _event = res;
-                      });
-                  },
-                  leading: _event == null
-                      ? Icon(
-                    Icons.event,
-                    size: 28.0,
-                    color: Style.foregroundColor.withOpacity(0.54),
-                  )
-                      : SuperIcon(iconPath: _event.iconPath, size: 28.0),
-                  title: TextFormField(
-                    readOnly: true,
-                    style: TextStyle(
-                        color: Style.foregroundColor,
-                        fontFamily: Style.fontFamily,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600),
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        hintStyle: TextStyle(
-                          color: _event == null
-                              ? Style.foregroundColor.withOpacity(0.24)
-                              : Style.foregroundColor,
-                          fontFamily: Style.fontFamily,
-                          fontSize: 16.0,
-                          fontWeight: _event == null
-                              ? FontWeight.w500
-                              : FontWeight.w600,
-                        ),
-                        hintText:
-                        _event == null ? 'Select event' : _event.name),
-                    onTap: () async {
-                      var res = await showCupertinoModalBottomSheet(
-                          isDismissible: true,
-                          backgroundColor: Style.boxBackgroundColor,
-                          context: context,
-                          builder: (context) =>
-                              SelectEventScreen(
-                                  wallet: widget.wallet,
-                                timeTransaction: pickDate,
-                              ));
-                      if (res != null)
-                        setState(() {
-                          _event = res;
-                        });
-                    },
-                  ),
-                  trailing: Icon(Icons.chevron_right,
-                      color: Style.foregroundColor.withOpacity(0.54)),
-                ),
-              ],
-            )
-                : Column(
+            // (_event != null)
+            //     ? Column(
+            //   children: [
+            //     Container(
+            //       margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+            //       child: Divider(
+            //         color: Style.foregroundColor.withOpacity(0.24),
+            //         height: 1,
+            //         thickness: 0.2,
+            //       ),
+            //     ),
+            //     ListTile(
+            //       dense: true,
+            //       onTap: () async {
+            //         var res = await showCupertinoModalBottomSheet(
+            //             isDismissible: true,
+            //             backgroundColor: Style.boxBackgroundColor,
+            //             context: context,
+            //             builder: (context) =>
+            //                 SelectEventScreen(
+            //                   wallet: widget.wallet,
+            //                   timeTransaction: pickDate,
+            //                 ));
+            //         if (res != null)
+            //           setState(() {
+            //             _event = res;
+            //           });
+            //       },
+            //       leading: _event == null
+            //           ? Icon(
+            //         Icons.event,
+            //         size: 28.0,
+            //         color: Style.foregroundColor.withOpacity(0.54),
+            //       )
+            //           : SuperIcon(iconPath: _event.iconPath, size: 28.0),
+            //       title: TextFormField(
+            //         readOnly: true,
+            //         style: TextStyle(
+            //             color: Style.foregroundColor,
+            //             fontFamily: Style.fontFamily,
+            //             fontSize: 16.0,
+            //             fontWeight: FontWeight.w600),
+            //         decoration: InputDecoration(
+            //             border: InputBorder.none,
+            //             focusedBorder: InputBorder.none,
+            //             enabledBorder: InputBorder.none,
+            //             errorBorder: InputBorder.none,
+            //             disabledBorder: InputBorder.none,
+            //             hintStyle: TextStyle(
+            //               color: _event == null
+            //                   ? Style.foregroundColor.withOpacity(0.24)
+            //                   : Style.foregroundColor,
+            //               fontFamily: Style.fontFamily,
+            //               fontSize: 16.0,
+            //               fontWeight: _event == null
+            //                   ? FontWeight.w500
+            //                   : FontWeight.w600,
+            //             ),
+            //             hintText:
+            //             _event == null ? 'Select event' : _event.name),
+            //         onTap: () async {
+            //           var res = await showCupertinoModalBottomSheet(
+            //               isDismissible: true,
+            //               backgroundColor: Style.boxBackgroundColor,
+            //               context: context,
+            //               builder: (context) =>
+            //                   SelectEventScreen(
+            //                     wallet: widget.wallet,
+            //                     timeTransaction: pickDate,
+            //                   ));
+            //           if (res != null)
+            //             setState(() {
+            //               _event = res;
+            //             });
+            //         },
+            //       ),
+            //       trailing: Icon(Icons.chevron_right,
+            //           color: Style.foregroundColor.withOpacity(0.54)),
+            //     ),
+            //   ],
+            // )
+                 //:
+        Column(
               children: <Widget>[
-                Container(
-                  margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-                  child: Divider(
-                    color: Style.foregroundColor.withOpacity(0.24),
-                    height: 1,
-                    thickness: 0.2,
+                Visibility(
+                  visible: !pickEvent,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                    child: Divider(
+                      color: Style.foregroundColor.withOpacity(0.24),
+                      height: 1,
+                      thickness: 0.2,
+                    ),
                   ),
                 ),
                 Visibility(
@@ -624,57 +628,72 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     ),
                   ),
                 ),
-                if (isDebtLoan == false)
-                  Visibility(
-                    visible: pickEvent,
-                    child: ListTile(
-                      dense: true,
-                      leading: Icon(Icons.person,
-                          color: Style.foregroundColor.withOpacity(0.54),
-                          size: 28.0),
-                      title: TextFormField(
-                        onTap: () async {
-                          final PhoneContact phoneContact =
-                          await FlutterContactPicker.pickPhoneContact();
-                          if (phoneContact != null)
-                            setState(() {
-                              contact = phoneContact.fullName;
-                            });
-                        },
-                        readOnly: true,
-                        autocorrect: false,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            hintStyle: TextStyle(
-                                color: Style.foregroundColor.withOpacity(0.24),
+                if (isDebtLoan == true)
+                  Column(
+                    children: [
+                      Visibility(
+                        visible: pickEvent,
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                          child: Divider(
+                            color: Style.foregroundColor.withOpacity(0.24),
+                            height: 1,
+                            thickness: 0.2,
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: pickEvent,
+                        child: ListTile(
+                          dense: true,
+                          leading: Icon(Icons.person,
+                              color: Style.foregroundColor.withOpacity(0.54),
+                              size: 28.0),
+                          title: TextFormField(
+                            onTap: () async {
+                              final PhoneContact phoneContact =
+                              await FlutterContactPicker.pickPhoneContact();
+                              if (phoneContact != null)
+                                setState(() {
+                                  contact = phoneContact.fullName;
+                                });
+                            },
+                            readOnly: true,
+                            autocorrect: false,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                hintStyle: TextStyle(
+                                    color: Style.foregroundColor.withOpacity(0.24),
+                                    fontFamily: Style.fontFamily,
+                                    fontSize: 16.0,
+                                    fontWeight: contact == null
+                                        ? FontWeight.w500
+                                        : FontWeight.w600
+                                ),
+                                hintText: contact == null
+                                    ? widget.transaction.category.name == 'Debt'
+                                    ? 'Lender'
+                                    : widget.transaction.category.name ==
+                                    'Loan'
+                                    ? 'Borrower'
+                                    : 'With'
+                                    : contact),
+                            style: TextStyle(
+                                color: Style.foregroundColor,
                                 fontFamily: Style.fontFamily,
                                 fontSize: 16.0,
-                                fontWeight: contact == null
-                                    ? FontWeight.w500
-                                    : FontWeight.w600
-                            ),
-                            hintText: contact == null
-                                ? widget.transaction.category.name == 'Debt'
-                                ? 'Lender'
-                                : widget.transaction.category.name ==
-                                'Loan'
-                                ? 'Borrower'
-                                : 'With'
-                                : contact),
-                        style: TextStyle(
-                            color: Style.foregroundColor,
-                            fontFamily: Style.fontFamily,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w600),
+                                fontWeight: FontWeight.w600),
+                          ),
+                          trailing:
+                          Icon(Icons.chevron_right,
+                              color: Style.foregroundColor.withOpacity(0.54)),
+                        ),
                       ),
-                      trailing:
-                      Icon(Icons.chevron_right,
-                          color: Style.foregroundColor.withOpacity(0.54)),
-                    ),
+                    ],
                   ),
                 Visibility(
                   visible: pickEvent,
@@ -698,7 +717,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                             context: context,
                             builder: (context) =>
                                 SelectEventScreen(
-                                    wallet: widget.wallet,
+                                  wallet: widget.wallet,
                                   timeTransaction: pickDate,
                                 ));
                         if (res != null)
@@ -748,7 +767,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                               context: context,
                               builder: (context) =>
                                   SelectEventScreen(
-                                      wallet: widget.wallet,
+                                    wallet: widget.wallet,
                                     timeTransaction: pickDate,
                                   ));
                           if (res != null)

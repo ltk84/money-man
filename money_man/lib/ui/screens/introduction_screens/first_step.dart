@@ -6,6 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/constaints.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'ending_introduction.dart';
 
@@ -270,23 +271,22 @@ class _FirstStepState extends State<FirstStep> {
                                 onTap: () {
                                   showCurrencyPicker(
                                     theme: CurrencyPickerThemeData(
+                                      backgroundColor: Style.boxBackgroundColor,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20.0)),
+                                        borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
                                       ),
                                       flagSize: 26,
                                       titleTextStyle: TextStyle(
-                                          fontFamily: 'Montserrat',
+                                          fontFamily: Style.fontFamily,
                                           fontSize: 17,
-                                          color: Colors.black,
+                                          color: Style.foregroundColor,
                                           fontWeight: FontWeight.w700),
                                       subtitleTextStyle: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.grey[900],
-                                      ),
-                                      backgroundColor: Color(0xFF08997E),
+                                          fontFamily: Style.fontFamily,
+                                          fontSize: 15,
+                                          color: Style.foregroundColor),
+                                      //backgroundColor: Style.boxBackgroundColor,
                                     ),
                                     onSelect: (value) {
                                       wallet.currencyID = value.code;
