@@ -413,7 +413,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                           if (states.contains(MaterialState.pressed))
                             return !info['bill'].isFinished
                                 ? Style.foregroundColor
-                                : Style.foregroundColor.withOpacity(0.9)
+                                : Style.foregroundColor.withOpacity(0.9);
                           else
                             return !info['bill'].isFinished
                                 ? Color(0xFF4FCC5C)
@@ -430,7 +430,8 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                           else
                             return !info['bill'].isFinished
                                 ? Style.foregroundColor
-                                : Style.foregroundColor.withOpacity(0.8); // Use the component's default.
+                                : Style.foregroundColor.withOpacity(
+                                    0.8); // Use the component's default.
                         },
                       ),
                     ),

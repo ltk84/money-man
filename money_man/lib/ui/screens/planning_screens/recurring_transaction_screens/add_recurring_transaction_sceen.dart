@@ -45,7 +45,7 @@ class _AddRecurringTransactionScreenState
 
   var dateUtility;
   DateTime now =
-  DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   @override
   void initState() {
@@ -71,10 +71,10 @@ class _AddRecurringTransactionScreenState
     repeatDescription = updateRepeatDescription();
 
     return Scaffold(
-        backgroundColor: Color(0xFF111111),
+        backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Color(0xFF1c1c1c),
+          backgroundColor: Style.appBarColor,
           elevation: 0.0,
           leading: CloseButton(),
           title: Text('Add recuring transaction',
@@ -82,7 +82,7 @@ class _AddRecurringTransactionScreenState
                 fontFamily: 'Montserrat',
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: Style.foregroundColor,
               )),
           centerTitle: true,
           actions: [
@@ -122,19 +122,19 @@ class _AddRecurringTransactionScreenState
         ),
         body: ListView(
           physics:
-          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
                 margin: EdgeInsets.only(top: 30.0),
                 decoration: BoxDecoration(
-                    color: Colors.grey[900],
+                    color: Style.boxBackgroundColor,
                     border: Border(
                         top: BorderSide(
-                          color: Colors.white12,
+                          color: Style.foregroundColor.withOpacity(0.12),
                           width: 0.5,
                         ),
                         bottom: BorderSide(
-                          color: Colors.white12,
+                          color: Style.foregroundColor.withOpacity(0.12),
                           width: 0.5,
                         ))),
                 child: Column(children: [
@@ -151,15 +151,14 @@ class _AddRecurringTransactionScreenState
                           this.amount = double.parse(resultAmount);
                         });
                     },
-                    child: buildAmountInput(
-                        amount: amount),
+                    child: buildAmountInput(amount: amount),
                   ),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
                     margin: EdgeInsets.only(left: 70),
                     child: Divider(
-                      color: Colors.white12,
+                      color: Style.foregroundColor.withOpacity(0.12),
                       thickness: 1,
                     ),
                   ),
@@ -169,8 +168,8 @@ class _AddRecurringTransactionScreenState
                       behavior: HitTestBehavior.translucent,
                       onTap: () async {
                         final selectCate = await showCupertinoModalBottomSheet(
-                          // isDismissible: true,
-                            backgroundColor: Colors.grey[900],
+                            // isDismissible: true,
+                            backgroundColor: Style.boxBackgroundColor,
                             context: context,
                             builder: (context) =>
                                 CategoriesRecurringTransactionScreen(
@@ -184,16 +183,16 @@ class _AddRecurringTransactionScreenState
                       },
                       child: buildCategorySelection(
                         display:
-                        this.category == null ? null : this.category.name,
+                            this.category == null ? null : this.category.name,
                         iconPath:
-                        this.category == null ? null : this.category.iconID,
+                            this.category == null ? null : this.category.iconID,
                       )),
 
                   // Divider ngăn cách giữa các input field.
                   Container(
                     margin: EdgeInsets.only(left: 70, top: 8),
                     child: Divider(
-                      color: Colors.white12,
+                      color: Style.foregroundColor.withOpacity(0.12),
                       thickness: 1,
                     ),
                     height: 2,
@@ -208,8 +207,8 @@ class _AddRecurringTransactionScreenState
                             backgroundColor: Style.boxBackgroundColor,
                             context: context,
                             builder: (context) => NoteScreen(
-                              content: note ?? '',
-                            ));
+                                  content: note ?? '',
+                                ));
 
                         if (noteContent != null) {
                           setState(() {
@@ -225,7 +224,7 @@ class _AddRecurringTransactionScreenState
                   Container(
                     margin: EdgeInsets.only(left: 70),
                     child: Divider(
-                      color: Colors.white12,
+                      color: Style.foregroundColor.withOpacity(0.12),
                       thickness: 1,
                     ),
                     height: 2,
@@ -237,7 +236,7 @@ class _AddRecurringTransactionScreenState
                       onTap: () async {
                         var res = await showCupertinoModalBottomSheet(
                             isDismissible: true,
-                            backgroundColor: Colors.grey[900],
+                            backgroundColor: Style.boxBackgroundColor,
                             context: context,
                             builder: (context) =>
                                 SelectWalletAccountScreen(wallet: _wallet));
@@ -248,9 +247,9 @@ class _AddRecurringTransactionScreenState
                       },
                       child: buildWalletSelection(
                         display:
-                        this._wallet == null ? null : this._wallet.name,
+                            this._wallet == null ? null : this._wallet.name,
                         iconPath:
-                        this._wallet == null ? null : this._wallet.iconID,
+                            this._wallet == null ? null : this._wallet.iconID,
                       )),
                 ])),
 
@@ -260,11 +259,11 @@ class _AddRecurringTransactionScreenState
                 var res = await showCupertinoModalBottomSheet(
                     enableDrag: false,
                     isDismissible: false,
-                    backgroundColor: Colors.grey[900],
+                    backgroundColor: Style.boxBackgroundColor,
                     context: context,
                     builder: (context) => RepeatOptionScreen(
-                      repeatOption: repeatOption,
-                    ));
+                          repeatOption: repeatOption,
+                        ));
                 if (res != null)
                   setState(() {
                     repeatOption = res;
@@ -273,14 +272,14 @@ class _AddRecurringTransactionScreenState
               child: Container(
                   margin: EdgeInsets.only(top: 30.0),
                   decoration: BoxDecoration(
-                      color: Colors.grey[900],
+                      color: Style.boxBackgroundColor,
                       border: Border(
                           top: BorderSide(
-                            color: Colors.white12,
+                            color: Style.foregroundColor.withOpacity(0.12),
                             width: 0.5,
                           ),
                           bottom: BorderSide(
-                            color: Colors.white12,
+                            color: Style.foregroundColor.withOpacity(0.12),
                             width: 0.5,
                           ))),
                   child: buildRepeatOptions()),
@@ -293,7 +292,7 @@ class _AddRecurringTransactionScreenState
                     fontFamily: 'Montserrat',
                     fontSize: 13.0,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white60,
+                    color: Style.foregroundColor.withOpacity(0.6),
                   ),
                 ))
           ],
@@ -304,9 +303,9 @@ class _AddRecurringTransactionScreenState
     String frequency = repeatOption.frequency == 'daily'
         ? 'day'
         : repeatOption.frequency
-        .substring(0, repeatOption.frequency.indexOf('ly'));
+            .substring(0, repeatOption.frequency.indexOf('ly'));
     String beginDateTime =
-    DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime);
+        DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime);
     String extraFeq = repeatOption.rangeAmount.toString();
     String type = repeatOption.type;
     String extra = repeatOption.type == 'until'
@@ -331,7 +330,8 @@ class _AddRecurringTransactionScreenState
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
                   child: Icon(Icons.attach_money,
-                      color: Colors.white70, size: 40.0)),
+                      color: Style.foregroundColor.withOpacity(0.7),
+                      size: 40.0)),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -340,34 +340,34 @@ class _AddRecurringTransactionScreenState
                         fontFamily: 'Montserrat',
                         fontSize: 12.0,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white60,
+                        color: Style.foregroundColor.withOpacity(0.6),
                       )),
                   SizedBox(height: 5.0),
                   (amount == null)
                       ? Text('Enter amount',
-                      style: TextStyle(
-                        fontFamily: Style.fontFamily,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                        color: Style.foregroundColor.withOpacity(0.24),
-                      ))
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w500,
+                            color: Style.foregroundColor.withOpacity(0.24),
+                          ))
                       : MoneySymbolFormatter(
-                    text: amount,
-                    currencyId: _wallet.currencyID,
-                    textStyle: TextStyle(
-                      color: Style.foregroundColor,
-                      fontFamily: Style.fontFamily,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  )
+                          text: amount,
+                          currencyId: _wallet.currencyID,
+                          textStyle: TextStyle(
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
                 ],
               ),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: Colors.white54,
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -394,13 +394,15 @@ class _AddRecurringTransactionScreenState
                     fontFamily: 'Montserrat',
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Colors.white24 : Colors.white,
+                    color: display == null
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: Colors.white54,
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -418,19 +420,23 @@ class _AddRecurringTransactionScreenState
             children: [
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
-                  child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
+                  child: Icon(Icons.notes,
+                      color: Style.foregroundColor.withOpacity(0.7),
+                      size: 24.0)),
               Text(display ?? 'Note',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Colors.white24 : Colors.white,
+                    color: display == null
+                        ? Style.foregroundColor.withOpacity((0.24))
+                        : Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: Colors.white54,
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -449,19 +455,22 @@ class _AddRecurringTransactionScreenState
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
                   child: Icon(Icons.calendar_today_outlined,
-                      color: Colors.white70, size: 24.0)),
+                      color: Style.foregroundColor.withOpacity(0.7),
+                      size: 24.0)),
               Text(display ?? 'No repeat',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Colors.white24 : Colors.white,
+                    color: display == null
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: Colors.white54,
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -488,13 +497,15 @@ class _AddRecurringTransactionScreenState
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Colors.white24 : Colors.white,
+                    color: display == null
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: Colors.white54,
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -513,20 +524,19 @@ class _AddRecurringTransactionScreenState
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
                   child: Icon(Icons.calendar_today,
-                      color: Colors.white70, size: 24.0)),
+                      color: Style.foregroundColor.withOpacity(0.7),
+                      size: 24.0)),
               Text('Repeat Options',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   )),
             ],
           ),
-          Icon(
-            Icons.chevron_right,
-            color: Colors.white54,
-          ),
+          Icon(Icons.chevron_right,
+              color: Style.foregroundColor.withOpacity(0.54)),
         ],
       ),
     );
@@ -537,7 +547,7 @@ class _AddRecurringTransactionScreenState
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(content: content);
       },

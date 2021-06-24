@@ -41,10 +41,10 @@ class _RecurringTransactionDetailScreenState
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.grey[900].withOpacity(0.2),
+          backgroundColor: Style.appBarColor,
           elevation: 0.0,
           leading: Hero(
             tag: 'billToDetail_backBtn',
@@ -53,8 +53,8 @@ class _RecurringTransactionDetailScreenState
                   Navigator.of(context).pop();
                 },
                 child: Icon(
-                  Icons.arrow_back_ios_rounded,
-                  color: Colors.white,
+                  Style.backIcon,
+                  color: Style.foregroundColor,
                 )),
           ),
           title: Hero(
@@ -66,7 +66,7 @@ class _RecurringTransactionDetailScreenState
                     fontFamily: 'Montserrat',
                     fontSize: 17.0,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   )),
             ),
           ),
@@ -83,8 +83,8 @@ class _RecurringTransactionDetailScreenState
                     //child: Container(
                     //color: Colors.transparent,
                     color: Colors.transparent
-                  //),
-                ),
+                    //),
+                    ),
               ),
             ),
           ),
@@ -112,7 +112,7 @@ class _RecurringTransactionDetailScreenState
                       fontFamily: 'Montserrat',
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Style.foregroundColor,
                     )),
               ),
             ),
@@ -120,20 +120,20 @@ class _RecurringTransactionDetailScreenState
         ),
         body: ListView(
           physics:
-          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
                 margin: EdgeInsets.only(top: 30.0),
                 padding: EdgeInsets.symmetric(vertical: 5.0),
                 decoration: BoxDecoration(
-                    color: Color(0xFF1c1c1c),
+                    color: Style.boxBackgroundColor,
                     border: Border(
                         top: BorderSide(
-                          color: Colors.white12,
+                          color: Style.foregroundColor.withOpacity(0.12),
                           width: 0.5,
                         ),
                         bottom: BorderSide(
-                          color: Colors.white12,
+                          color: Style.foregroundColor.withOpacity(0.12),
                           width: 0.5,
                         ))),
                 child: Column(
@@ -146,7 +146,7 @@ class _RecurringTransactionDetailScreenState
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
-                        color: Colors.white12,
+                        color: Style.foregroundColor.withOpacity(0.12),
                         thickness: 1,
                       ),
                     ),
@@ -155,7 +155,7 @@ class _RecurringTransactionDetailScreenState
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
-                        color: Colors.white12,
+                        color: Style.foregroundColor.withOpacity(0.12),
                         thickness: 1,
                       ),
                     ),
@@ -163,7 +163,7 @@ class _RecurringTransactionDetailScreenState
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
-                        color: Colors.white12,
+                        color: Style.foregroundColor.withOpacity(0.12),
                         thickness: 1,
                       ),
                     ),
@@ -174,7 +174,7 @@ class _RecurringTransactionDetailScreenState
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
-                        color: Colors.white12,
+                        color: Style.foregroundColor.withOpacity(0.12),
                         thickness: 1,
                       ),
                     ),
@@ -182,31 +182,31 @@ class _RecurringTransactionDetailScreenState
                         nextDate: DateFormat('dd/MM/yyyy').format(
                             _recurringTransaction.repeatOption.beginDateTime),
                         type: _recurringTransaction.repeatOption.type ==
-                            'forever'
+                                'forever'
                             ? 'Forever'
                             : _recurringTransaction.repeatOption.type == 'until'
-                            ? _recurringTransaction.repeatOption.type +
-                            ' ' +
-                            DateFormat('dd/MM/yyyy').format(
-                                _recurringTransaction
-                                    .repeatOption.extraTypeInfo)
-                            : _recurringTransaction.repeatOption.type +
-                            ' ' +
-                            _recurringTransaction
-                                .repeatOption.extraTypeInfo
-                                .toString() +
-                            ' time'),
+                                ? _recurringTransaction.repeatOption.type +
+                                    ' ' +
+                                    DateFormat('dd/MM/yyyy').format(
+                                        _recurringTransaction
+                                            .repeatOption.extraTypeInfo)
+                                : _recurringTransaction.repeatOption.type +
+                                    ' ' +
+                                    _recurringTransaction
+                                        .repeatOption.extraTypeInfo
+                                        .toString() +
+                                    ' time'),
                   ],
                 )),
             Container(
               margin: EdgeInsets.only(top: 30.0),
               decoration: BoxDecoration(
-                  color: Color(0xFF1c1c1c),
+                  color: Style.boxBackgroundColor,
                   border: Border(
                       bottom: BorderSide(
-                        color: Colors.white12,
-                        width: 0.5,
-                      ))),
+                    color: Style.foregroundColor.withOpacity(0.12),
+                    width: 0.5,
+                  ))),
               child: TextButton(
                 onPressed: () async {
                   var result =
@@ -225,7 +225,7 @@ class _RecurringTransactionDetailScreenState
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Colors.green.withOpacity(0.4);
                       else
@@ -245,12 +245,12 @@ class _RecurringTransactionDetailScreenState
             Container(
               margin: EdgeInsets.only(top: 30.0),
               decoration: BoxDecoration(
-                  color: Color(0xFF1c1c1c),
+                  color: Style.boxBackgroundColor,
                   border: Border(
                       bottom: BorderSide(
-                        color: Colors.white12,
-                        width: 0.5,
-                      ))),
+                    color: Style.foregroundColor.withOpacity(0.12),
+                    width: 0.5,
+                  ))),
               child: TextButton(
                 onPressed: () async {
                   await _firestore.deleteRecurringTransaction(
@@ -259,7 +259,7 @@ class _RecurringTransactionDetailScreenState
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Colors.redAccent.withOpacity(0.4);
                       else
@@ -288,8 +288,8 @@ class _RecurringTransactionDetailScreenState
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child:
-              Icon(Icons.attach_money, color: Colors.white70, size: 40.0)),
+              child: Icon(Icons.attach_money,
+                  color: Style.foregroundColor.withOpacity(0.7), size: 40.0)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -298,7 +298,7 @@ class _RecurringTransactionDetailScreenState
                     fontFamily: 'Montserrat',
                     fontSize: 12.0,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white60,
+                    color: Style.foregroundColor.withOpacity(0.6),
                   )),
               SizedBox(height: 5.0),
               MoneySymbolFormatter(
@@ -335,7 +335,9 @@ class _RecurringTransactionDetailScreenState
                 fontFamily: 'Montserrat',
                 fontSize: 20.0,
                 fontWeight: FontWeight.w500,
-                color: display == null ? Colors.white24 : Colors.white,
+                color: display == null
+                    ? Style.foregroundColor.withOpacity(0.24)
+                    : Style.foregroundColor,
               )),
         ],
       ),
@@ -350,15 +352,16 @@ class _RecurringTransactionDetailScreenState
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 23.0),
-              child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
+              child: Icon(Icons.notes,
+                  color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
           Text(display == null || display == '' ? 'Note' : display,
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
                 color: display == null || display == ''
-                    ? Colors.white24
-                    : Colors.white,
+                    ? Style.foregroundColor.withOpacity(0.24)
+                    : Style.foregroundColor,
               )),
         ],
       ),
@@ -382,7 +385,9 @@ class _RecurringTransactionDetailScreenState
                 fontFamily: 'Montserrat',
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
-                color: display == null ? Colors.white24 : Colors.white,
+                color: display == null
+                    ? Style.foregroundColor.withOpacity(0.24)
+                    : Style.foregroundColor,
               )),
         ],
       ),
@@ -398,40 +403,35 @@ class _RecurringTransactionDetailScreenState
           Container(
               padding: EdgeInsets.symmetric(horizontal: 23.0),
               child: Icon(Icons.calendar_today,
-                  color: Colors.white70, size: 24.0)),
+                  color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               RichText(
-                  text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: 'Next occurrence: ',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            )
-                        ),
-                        TextSpan(
-                            text: nextDate,
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                              color: Style.primaryColor,
-                            )
-                        ),
-                      ]
-                  )
-              ),
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: 'Next occurrence: ',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    )),
+                TextSpan(
+                    text: nextDate,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600,
+                      color: Style.primaryColor,
+                    )),
+              ])),
               Text(type,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 12.0,
                     fontWeight: FontWeight.w400,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   )),
             ],
           )
@@ -442,8 +442,8 @@ class _RecurringTransactionDetailScreenState
 
   Future<void> _showAlertDialog(
       {String title = 'Oops...',
-        String content,
-        String iconPath = 'assets/images/alert.svg'}) async {
+      String content,
+      String iconPath = 'assets/images/alert.svg'}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
