@@ -42,13 +42,13 @@ class _BudgetScreenState extends State<BudgetScreen>
           child: Scaffold(
             backgroundColor: Style.backgroundColor,
             appBar: AppBar(
-              backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
+              backgroundColor: Style.appBarColor,
               leading: MaterialButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                   child: Icon(
-                    Icons.arrow_back_ios_rounded,
+                    Style.backIcon,
                     color: Style.foregroundColor,
                   )),
               title: Text('Budgets',
