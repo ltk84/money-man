@@ -217,15 +217,15 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                 height: 5,
               ),
               widget.budget.beginDate.isAfter(today) ||
-                      today.isAfter(widget.budget.endDate)
+                      today
+                          .isAfter(widget.budget.endDate.add(Duration(days: 1)))
                   ? Container()
                   : Container(
                       margin: EdgeInsets.only(
                           left: 65 +
                               (MediaQuery.of(context).size.width - 105) *
                                   todayRate),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
                       // height: 20,
                       // width: 40,
                       //alignment: Alignment.center,
@@ -236,7 +236,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                         "Today",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 10,
+                          fontSize: 8,
                           fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w400,
                         ),
