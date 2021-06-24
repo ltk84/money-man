@@ -200,7 +200,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                       'Spent',
                                       style: TextStyle(
                                         fontSize: 14,
-                                        color: Colors.white54,
+                                        color: Style.foregroundColor
+                                            .withOpacity(0.54),
                                       ),
                                     ),
                                     SizedBox(height: 2),
@@ -208,7 +209,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                       text: widget.budget.spent,
                                       currencyId: widget.wallet.currencyID,
                                       textStyle: TextStyle(
-                                          color: Colors.white,
+                                          color: Style.foregroundColor,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600),
                                     ),
@@ -250,7 +251,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: LinearProgressIndicator(
-                                  backgroundColor: Color(0xff333333),
+                                  backgroundColor: Style.boxBackgroundColor,
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       todayTarget > 1
                                           ? Colors.red[700]
