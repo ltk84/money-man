@@ -174,11 +174,13 @@ class _PlanningScreenState extends State<PlanningScreen> {
                   ),
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => BudgetScreen(
-                                  crrWallet: _wallet,
-                                )));
+                      context,
+                      PageTransition(
+                          child: BudgetScreen(
+                            crrWallet: _wallet,
+                          ),
+                          type: PageTransitionType.rightToLeft),
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),

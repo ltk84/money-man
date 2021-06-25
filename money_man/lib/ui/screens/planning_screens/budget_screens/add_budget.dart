@@ -66,20 +66,10 @@ class _AddBudgetState extends State<AddBudget> {
       data: ThemeData(
           primaryColor: Style.foregroundColor, fontFamily: 'Montserrat'),
       child: Scaffold(
+        backgroundColor: Style.backgroundColor,
         appBar: AppBar(
-          leadingWidth: 65,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 0),
-              child: Center(
-                  child: Text(
-                'Cancel',
-                style: TextStyle(color: Style.foregroundColor.withOpacity(0.7)),
-              )),
-            ),
+          leading: CloseButton(
+          color: Style.foregroundColor,
           ),
           actions: [
             GestureDetector(
@@ -117,7 +107,11 @@ class _AddBudgetState extends State<AddBudget> {
                   child: Text(
                     'Save',
                     style: TextStyle(
-                        color: Style.foregroundColor.withOpacity(0.7)),
+                      fontFamily: Style.fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      color: Style.successColor,
+                    ),
                   ),
                 ),
               ),
@@ -210,7 +204,7 @@ class _AddBudgetState extends State<AddBudget> {
                                   cate == null ? 'Choose group' : cate.name,
                               hintStyle: TextStyle(
                                   color: cate == null
-                                      ? Style.foregroundColor.withOpacity(0.54)
+                                      ? Style.foregroundColor.withOpacity(0.24)
                                       : Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
@@ -287,7 +281,7 @@ class _AddBudgetState extends State<AddBudget> {
                                       .withoutFractionDigits,
                               hintStyle: TextStyle(
                                   color: amount == null
-                                      ? Style.foregroundColor.withOpacity(0.54)
+                                      ? Style.foregroundColor.withOpacity(0.24)
                                       : Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
