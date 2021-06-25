@@ -50,16 +50,6 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
           return Scaffold(
             backgroundColor: Style.backgroundColor,
             appBar: AppBar(
-<<<<<<< HEAD
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Icon(
-                  Style.backIcon,
-                  color: Style.foregroundColor,
-                ),
-=======
               leading: MaterialButton(
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -67,25 +57,17 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                   child: Icon(
                     Style.backIcon,
                     color: Style.foregroundColor,
-                  )
->>>>>>> lam/feature-theme
-              ),
+                  )),
               backgroundColor: Style.appBarColor,
               centerTitle: true,
               elevation: 0,
-              title: Text(
-                'Transaction List',
-                style: TextStyle(
-<<<<<<< HEAD
-                    fontFamily: 'Montserrat', color: Style.foregroundColor),
-=======
-                  fontFamily: Style.fontFamily,
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                  color: Style.foregroundColor,
-                )
->>>>>>> lam/feature-theme
-              ),
+              title: Text('Transaction List',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                    color: Style.foregroundColor,
+                  )),
             ),
             body: listTransaction.length == 0
                 ? Container(
@@ -123,7 +105,8 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
     return Container(
       color: Style.backgroundColor,
       child: ListView.builder(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           shrinkWrap: true,
           itemCount: transactionListSortByDate.length,
           itemBuilder: (context, xIndex) {
@@ -176,14 +159,10 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                           DateFormat("dd")
                               .format(transListSortByDate[xIndex][0].date),
                           style: TextStyle(
-<<<<<<< HEAD
-                              fontSize: 30.0, color: Style.foregroundColor)),
-=======
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
                               fontSize: 30.0,
                               color: Style.foregroundColor)),
->>>>>>> lam/feature-theme
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -203,16 +182,6 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                               color: Style.foregroundColor.withOpacity(0.54))),
                     ),
                     Expanded(
-<<<<<<< HEAD
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        child: MoneySymbolFormatter(
-                          text: totalAmountInDay,
-                          currencyId: widget.wallet.currencyID,
-                          textStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Style.foregroundColor),
-=======
                       child: MoneySymbolFormatter(
                         digit: totalAmountInDay >= 0 ? '+' : '',
                         text: totalAmountInDay,
@@ -223,7 +192,6 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                           fontWeight: FontWeight.w700,
                           fontSize: 14.0,
                           color: Style.foregroundColor,
->>>>>>> lam/feature-theme
                         ),
                       ),
                     ),
@@ -252,7 +220,7 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                             PageTransition(
                                 child: TransactionDetail(
                                   transaction: transListSortByDate[xIndex]
-                                  [yIndex],
+                                      [yIndex],
                                   wallet: widget.wallet,
                                 ),
                                 type: PageTransitionType.rightToLeft));
@@ -278,17 +246,11 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                                       .category
                                       .name,
                                   style: TextStyle(
-<<<<<<< HEAD
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Style.foregroundColor)),
-=======
                                     fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 14.0,
                                     color: Style.foregroundColor,
                                   )),
->>>>>>> lam/feature-theme
                             ),
                             Expanded(
                               child: Container(
@@ -302,9 +264,9 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                                       fontWeight: FontWeight.w500,
                                       fontSize: 14.0,
                                       color: transListSortByDate[xIndex][yIndex]
-                                          .category
-                                          .type ==
-                                          'income'
+                                                  .category
+                                                  .type ==
+                                              'income'
                                           ? Style.incomeColor2
                                           : Style.expenseColor),
                                 ),

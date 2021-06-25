@@ -7,7 +7,6 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../budget_detail.dart';
@@ -58,12 +57,11 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
               await _firestore.getWalletByID(widget.budget.walletId);
           Navigator.push(
             context,
-            PageTransition(
-                child: BudgetDetailScreen(
-                  budget: this.widget.budget,
-                  wallet: wallet,
-                ),
-                type: PageTransitionType.rightToLeft),
+            MaterialPageRoute(
+                builder: (context) => BudgetDetailScreen(
+                      budget: this.widget.budget,
+                      wallet: wallet,
+                    )),
           );
         },
         child: Container(

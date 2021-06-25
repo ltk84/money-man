@@ -97,7 +97,10 @@ class _CategoriesRecurringTransactionScreenState
             },
             child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+                Icon(Style.backIcon, color: Style.foregroundColor),
+                SizedBox(
+                  width: 5,
+                ),
                 Hero(
                     tag: 'alo',
                     child: Text('More',
@@ -110,7 +113,7 @@ class _CategoriesRecurringTransactionScreenState
           ),
           //),
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Style.appBarColor,
           elevation: 0,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(

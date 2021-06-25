@@ -69,22 +69,6 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-<<<<<<< HEAD
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.close_sharp,
-            color: Style.foregroundColor,
-          ),
-        ),
-        title: Text(
-          'Budget',
-          style: TextStyle(
-              color: Style.foregroundColor, fontFamily: Style.fontFamily),
-        ),
-=======
         leading: MaterialButton(
             onPressed: () {
               Navigator.of(context).pop();
@@ -94,7 +78,6 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               color: Style.foregroundColor,
             )),
         title: Text('Budget'),
->>>>>>> lam/feature-theme
         centerTitle: true,
         actions: [
           // Button chỉnh sửa budget
@@ -164,7 +147,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
         padding: EdgeInsets.only(top: 10),
         color: Style.backgroundColor,
         child: ListView(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             ListTile(
               minVerticalPadding: 10,
@@ -189,16 +173,17 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       ),
                     ),
                     Container(
-                        child:
-                            MoneySymbolFormatter(
-                          text: widget.budget.amount,
-                          currencyId: widget.wallet.currencyID,
-                          textStyle: TextStyle(
-                              fontFamily: Style.fontFamily,
-                              color: widget.budget.category.type == 'expense' ? Style.expenseColor : Style.incomeColor2,
-                              fontSize: 32,
-                              fontWeight: FontWeight.w500),
-                        )),
+                        child: MoneySymbolFormatter(
+                      text: widget.budget.amount,
+                      currencyId: widget.wallet.currencyID,
+                      textStyle: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          color: widget.budget.category.type == 'expense'
+                              ? Style.expenseColor
+                              : Style.incomeColor2,
+                          fontSize: 32,
+                          fontWeight: FontWeight.w500),
+                    )),
                     Container(
                       margin: EdgeInsets.only(top: 15),
                       padding: EdgeInsets.only(right: 10),
@@ -214,12 +199,11 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                     Text(
                                       'Spent',
                                       style: TextStyle(
-                                        fontFamily: Style.fontFamily,
-                                        fontSize: 12,
-                                        color: Style.foregroundColor
-                                            .withOpacity(0.54),
-                                        fontWeight: FontWeight.w500
-                                      ),
+                                          fontFamily: Style.fontFamily,
+                                          fontSize: 12,
+                                          color: Style.foregroundColor
+                                              .withOpacity(0.54),
+                                          fontWeight: FontWeight.w500),
                                     ),
                                     SizedBox(height: 2),
                                     MoneySymbolFormatter(
@@ -245,8 +229,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                           fontSize: 12,
                                           color: Style.foregroundColor
                                               .withOpacity(0.54),
-                                          fontWeight: FontWeight.w500
-                                      ),
+                                          fontWeight: FontWeight.w500),
                                     ),
                                     SizedBox(height: 2),
                                     MoneySymbolFormatter(
@@ -313,7 +296,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                           "Today",
                           style: TextStyle(
                               fontFamily: Style.fontFamily,
-                              color: Style.foregroundColor, fontSize: 10),
+                              color: Style.foregroundColor,
+                              fontSize: 10),
                         ),
                       ),
               ],
@@ -366,38 +350,37 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             ListTile(
-              minLeadingWidth: 50,
-              leading: Container(
-                padding: EdgeInsets.only(left: 10),
-                child: SuperIcon(
-                  iconPath: '${widget.wallet.iconID}',
-                  size: 30,
+                minLeadingWidth: 50,
+                leading: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: SuperIcon(
+                    iconPath: '${widget.wallet.iconID}',
+                    size: 30,
+                  ),
                 ),
-              ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Wallet',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10.0,
-                      fontFamily: Style.fontFamily,
-                      color: Style.foregroundColor.withOpacity(0.54),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Wallet',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10.0,
+                        fontFamily: Style.fontFamily,
+                        color: Style.foregroundColor.withOpacity(0.54),
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${widget.wallet.name}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15.0,
-                      fontFamily: Style.fontFamily,
-                      color: Style.foregroundColor,
+                    Text(
+                      '${widget.wallet.name}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15.0,
+                        fontFamily: Style.fontFamily,
+                        color: Style.foregroundColor,
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ),
+                  ],
+                )),
             Divider(
               color: Style.foregroundColor.withOpacity(0.12),
               thickness: 1,
@@ -444,7 +427,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                           textStyle: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w500,
-                              color: Style.foregroundColor, fontSize: 16),
+                              color: Style.foregroundColor,
+                              fontSize: 16),
                         ),
                       ],
                     ),
@@ -470,7 +454,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                           textStyle: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w500,
-                              color: Style.foregroundColor, fontSize: 16),
+                              color: Style.foregroundColor,
+                              fontSize: 16),
                         ),
                       ],
                     )
@@ -501,7 +486,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                         textStyle: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w500,
-                            color: Style.foregroundColor, fontSize: 16),
+                            color: Style.foregroundColor,
+                            fontSize: 16),
                       ),
                     ],
                   )

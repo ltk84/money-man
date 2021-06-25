@@ -136,22 +136,15 @@ class _EventDetailScreen extends State<EventDetailScreen>
               })
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                color: Style.backgroundColor,
-                border: Border(
-                    bottom: BorderSide(
-                      color: Style.foregroundColor.withOpacity(0.12),
-                      width: 0.5,
-                    ),
-                    top: BorderSide(
-                      color: Style.foregroundColor.withOpacity(0.12),
-                      width: 0.5,
-                    ))),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
+      body: Container(
+        padding: EdgeInsets.symmetric(vertical: 30),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Style.backgroundColor,
+                  borderRadius: BorderRadius.circular(8)),
+              padding: EdgeInsets.symmetric(vertical: 10),
               child: Column(
                 children: [
                   ListTile(
@@ -170,9 +163,8 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       ),
                     ),
                   ),
-                  Divider(
-                    color: Style.foregroundColor,
-                    thickness: 0.3,
+                  SizedBox(
+                    height: 15,
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 15),
@@ -182,19 +174,21 @@ class _EventDetailScreen extends State<EventDetailScreen>
                         iconPath: 'assets/images/time.svg',
                         size: 30,
                       ),
-                      title: Text(
-                          DateFormat('EEEE, dd-MM-yyyy')
-                              .format(_currentEvent.endDate),
-                          style: TextStyle(
-                            color: Style.foregroundColor.withOpacity(0.7),
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Montserrat',
-                          )),
+                      title: Container(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Text(
+                            DateFormat('EEEE, dd-MM-yyyy')
+                                .format(_currentEvent.endDate),
+                            style: TextStyle(
+                              color: Style.foregroundColor.withOpacity(0.7),
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Montserrat',
+                            )),
+                      ),
                     ),
                   ),
-                  Divider(
-                    color: Style.foregroundColor,
-                    thickness: 0.3,
+                  SizedBox(
+                    height: 15,
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 15),
@@ -204,114 +198,114 @@ class _EventDetailScreen extends State<EventDetailScreen>
                         iconPath: _eventWallet.iconID,
                         size: 30.0,
                       ),
-                      title: Text(_eventWallet.name,
-                          style: TextStyle(
-                              color: Style.foregroundColor.withOpacity(0.8),
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20.0)),
+                      title: Container(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Text(_eventWallet.name,
+                            style: TextStyle(
+                                color: Style.foregroundColor.withOpacity(0.8),
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20.0)),
+                      ),
                     ),
-                  ),
-                  Divider(
-                    color: Style.foregroundColor,
-                    thickness: 0.3,
                   ),
                 ],
               ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0),
-              height: 40,
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () {
-                  setState(() {
-                    if (_currentEvent.autofinish && _currentEvent.isFinished) {
-                      _currentEvent.finishedByHand = false;
-                    } else {
-                      _currentEvent.finishedByHand == false
-                          ? _currentEvent.finishedByHand = true
-                          : _currentEvent.finishedByHand = false;
-                    }
-                    _currentEvent.autofinish = false;
-                    _firestore.updateEvent(_currentEvent, _eventWallet);
-                  });
-                },
-                child: Text(
-                  (_currentEvent.finishedByHand ||
-                          (_currentEvent.isFinished &&
-                              _currentEvent.autofinish))
-                      ? 'Mark not complete'
-                      : 'Mark complete',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontFamily: 'Montserrat',
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.0),
+                height: 40,
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      if (_currentEvent.autofinish &&
+                          _currentEvent.isFinished) {
+                        _currentEvent.finishedByHand = false;
+                      } else {
+                        _currentEvent.finishedByHand == false
+                            ? _currentEvent.finishedByHand = true
+                            : _currentEvent.finishedByHand = false;
+                      }
+                      _currentEvent.autofinish = false;
+                      _firestore.updateEvent(_currentEvent, _eventWallet);
+                    });
+                  },
+                  child: Text(
+                    (_currentEvent.finishedByHand ||
+                            (_currentEvent.isFinished &&
+                                _currentEvent.autofinish))
+                        ? 'Mark not complete'
+                        : 'Mark complete',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: 'Montserrat',
+                    ),
                   ),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        return Colors.white;
-                      return Colors.green; // Use the component's default.
-                    },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.white;
+                        return Colors.green; // Use the component's default.
+                      },
+                    ),
+                    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.green;
+                        return Colors.white; // Use the component's default.
+                      },
+                    ),
                   ),
-                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        return Colors.green;
-                      return Colors.white; // Use the component's default.
-                    },
+                )),
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.0),
+                height: 40,
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EventListTransactionScreen(
+                            currentEvent: _currentEvent,
+                            eventWallet: _eventWallet,
+                          ),
+                        ));
+                  },
+                  child: Text(
+                    'Transaction of Event',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: 'Montserrat',
+                    ),
                   ),
-                ),
-              )),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0),
-              height: 40,
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => EventListTransactionScreen(
-                          currentEvent: _currentEvent,
-                          eventWallet: _eventWallet,
-                        ),
-                      ));
-                },
-                child: Text(
-                  'Transaction of Event',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontFamily: 'Montserrat',
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.white;
+                        return Colors.green; // Use the component's default.
+                      },
+                    ),
+                    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.green;
+                        return Colors.white; // Use the component's default.
+                      },
+                    ),
                   ),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        return Colors.white;
-                      return Colors.green; // Use the component's default.
-                    },
-                  ),
-                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        return Colors.green;
-                      return Colors.white; // Use the component's default.
-                    },
-                  ),
-                ),
-              )),
-        ],
+                )),
+          ],
+        ),
       ),
     );
   }
