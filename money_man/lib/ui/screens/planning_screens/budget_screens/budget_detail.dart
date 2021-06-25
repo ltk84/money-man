@@ -144,6 +144,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
         backgroundColor: Style.appBarColor,
       ),
       body: Container(
+        padding: EdgeInsets.only(top: 10),
         color: Style.backgroundColor,
         child: ListView(
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
