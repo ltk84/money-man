@@ -15,6 +15,7 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/select_time
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
@@ -56,8 +57,9 @@ class _AddBudgetState extends State<EditBudget> {
       data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           leadingWidth: 70,
-          backgroundColor: Color(0xff333333),
+          backgroundColor: Style.appBarColor,
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -68,7 +70,7 @@ class _AddBudgetState extends State<EditBudget> {
                 child: Text(
                   'Cancel',
                   style: TextStyle(
-                      color: Colors.white70,
+                      color: Style.foregroundColor.withOpacity(0.8),
                       fontFamily: 'Montserrat',
                       fontSize: 13),
                 )),
@@ -76,7 +78,9 @@ class _AddBudgetState extends State<EditBudget> {
           centerTitle: true,
           title: Text(
             'Edit Budget',
-            style: TextStyle(color: white, fontFamily: 'Montserrat'),
+            style: TextStyle(
+                color: Style.foregroundColor.withOpacity(1),
+                fontFamily: 'Montserrat'),
           ),
           actions: [
             GestureDetector(
@@ -90,16 +94,16 @@ class _AddBudgetState extends State<EditBudget> {
                   child: Text(
                     'Save',
                     style: TextStyle(
-                        color: Colors.white70,
+                        color: Style.foregroundColor.withOpacity(0.8),
                         fontFamily: 'Montserrat',
                         fontSize: 13),
                   )),
             ),
           ],
         ),
-        backgroundColor: Color(0xff111111),
+        backgroundColor: Style.backgroundColor,
         body: Container(
-          color: Color(0xff111111),
+          color: Style.backgroundColor,
           margin: EdgeInsets.symmetric(vertical: 15),
           padding: EdgeInsets.all(15),
           child: Column(
@@ -107,7 +111,7 @@ class _AddBudgetState extends State<EditBudget> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
@@ -126,7 +130,7 @@ class _AddBudgetState extends State<EditBudget> {
                   },
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   ),
                   dense: true,
                   leading: SuperIcon(
@@ -136,7 +140,7 @@ class _AddBudgetState extends State<EditBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,9 +174,9 @@ class _AddBudgetState extends State<EditBudget> {
                           },
                           readOnly: true,
                           obscureText: false,
-                          cursorColor: Colors.white60,
+                          cursorColor: Style.foregroundColor.withOpacity(0.7),
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
@@ -180,7 +184,7 @@ class _AddBudgetState extends State<EditBudget> {
                                   ? _budget.category.name
                                   : cate.name,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -196,7 +200,7 @@ class _AddBudgetState extends State<EditBudget> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
@@ -211,7 +215,7 @@ class _AddBudgetState extends State<EditBudget> {
                   },
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   ),
                   dense: true,
                   leading: SuperIcon(
@@ -220,7 +224,7 @@ class _AddBudgetState extends State<EditBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,7 +262,7 @@ class _AddBudgetState extends State<EditBudget> {
                                       .output
                                       .withoutFractionDigits,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -274,7 +278,7 @@ class _AddBudgetState extends State<EditBudget> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
@@ -294,7 +298,7 @@ class _AddBudgetState extends State<EditBudget> {
                   },
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   ),
                   dense: true,
                   leading: SuperIcon(
@@ -303,7 +307,7 @@ class _AddBudgetState extends State<EditBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,9 +343,9 @@ class _AddBudgetState extends State<EditBudget> {
                           },
                           readOnly: true,
                           obscureText: false,
-                          cursorColor: Colors.white60,
+                          cursorColor: Style.foregroundColor.withOpacity(0.6),
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
@@ -352,7 +356,7 @@ class _AddBudgetState extends State<EditBudget> {
                                       .getBudgetLabel()
                                   : mTimeRange.getBudgetLabel(),
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -368,15 +372,13 @@ class _AddBudgetState extends State<EditBudget> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
                   onTap: () {},
-                  trailing: Icon(
-                    Icons.lock,
-                    color: Colors.white70,
-                  ),
+                  trailing: Icon(Icons.lock,
+                      color: Style.foregroundColor.withOpacity(0.7)),
                   dense: true,
                   leading: SuperIcon(
                     iconPath: selectedWallet == null
@@ -386,7 +388,7 @@ class _AddBudgetState extends State<EditBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,7 +398,7 @@ class _AddBudgetState extends State<EditBudget> {
                           child: Text(
                             'Select wallet:',
                             style: TextStyle(
-                                color: Colors.white54,
+                                color: Style.foregroundColor.withOpacity(0.54),
                                 fontFamily: 'Montserrat'),
                           ),
                         ),
@@ -407,9 +409,9 @@ class _AddBudgetState extends State<EditBudget> {
                           onTap: () {},
                           readOnly: true,
                           obscureText: false,
-                          cursorColor: Colors.white60,
+                          cursorColor: Style.foregroundColor.withOpacity(0.6),
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
@@ -417,7 +419,8 @@ class _AddBudgetState extends State<EditBudget> {
                                   ? widget.wallet.name
                                   : selectedWallet.name,
                               hintStyle: TextStyle(
-                                  color: Colors.white54,
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54),
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -448,19 +451,20 @@ class _AddBudgetState extends State<EditBudget> {
                         margin:
                             EdgeInsets.only(left: 20, right: 10, bottom: 10),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 1),
+                            border: Border.all(
+                                color: Style.foregroundColor, width: 1),
                             shape: BoxShape.circle,
-                            color: Color(0xff111111)),
+                            color: Style.backgroundColor),
                         child: _budget.isRepeat
                             ? Icon(
                                 Icons.check,
                                 size: 17,
-                                color: Colors.white,
+                                color: Style.foregroundColor,
                               )
                             : Icon(
                                 null,
                                 size: 17,
-                                color: Colors.black,
+                                color: Style.backgroundColor,
                               ),
                       ),
                       Container(
@@ -488,7 +492,7 @@ class _AddBudgetState extends State<EditBudget> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(content: content);
       },

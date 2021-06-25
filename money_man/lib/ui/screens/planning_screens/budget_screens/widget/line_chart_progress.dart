@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -96,8 +97,8 @@ class _LineChartsState extends State<LineCharts> {
 
     var maxOfY = getMaxofY(widget.budget);
     const cutOffYValue = 0.0;
-    const yearTextStyle =
-        TextStyle(fontSize: 10, color: Colors.white, fontFamily: 'Montserrat');
+    var yearTextStyle = TextStyle(
+        fontSize: 10, color: Style.foregroundColor, fontFamily: 'Montserrat');
 
     TextStyle getTextStyle(double b) {
       return yearTextStyle;
@@ -116,6 +117,7 @@ class _LineChartsState extends State<LineCharts> {
                 FlSpot(0, 0),
               ];
           return Container(
+            color: Style.backgroundColor,
             padding: EdgeInsets.only(left: 15),
             child: SizedBox(
               width: 330,

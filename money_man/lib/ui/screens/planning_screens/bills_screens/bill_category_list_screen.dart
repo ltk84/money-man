@@ -24,45 +24,43 @@ class BillCategoryList extends StatefulWidget {
 }
 
 class _BillCategoryListState extends State<BillCategoryList> {
-
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: Style.backgroundColor1,
+        backgroundColor: Style.backgroundColor,
         appBar: AppBar(
-          backgroundColor: Style.boxBackgroundColor2,
+          backgroundColor: Style.appBarColor,
           elevation: 0.0,
           leading: CloseButton(
             color: Style.foregroundColor,
           ),
           actions: [
             TextButton(
-                onPressed: () async {
-                  await showCupertinoModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return AddBillScreen(
-                            currentWallet: widget.currentWallet);
-                      });
-                  setState(() { });
-                },
-                child: Text('Add',
-                    style: TextStyle(
-                      fontFamily: Style.fontFamily,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      color: Style.foregroundColor,
-                    )),
-              ),
+              onPressed: () async {
+                await showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return AddBillScreen(currentWallet: widget.currentWallet);
+                    });
+                setState(() {});
+              },
+              child: Text('Add',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                    color: Style.foregroundColor,
+                  )),
+            ),
           ],
         ),
-      body: buildListBills(context)
-    );
+        body: buildListBills(context));
   }
 
   Widget buildListBills(context) {
-    String currencySymbol = CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
+    String currencySymbol =
+        CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
 
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<List<Bill>>(
@@ -76,11 +74,14 @@ class _BillCategoryListState extends State<BillCategoryList> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.hourglass_empty,
+                    Icon(
+                      Icons.hourglass_empty,
                       color: Style.foregroundColor.withOpacity(0.12),
                       size: 100,
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text(
                       'No bill',
                       style: TextStyle(
@@ -91,8 +92,7 @@ class _BillCategoryListState extends State<BillCategoryList> {
                       ),
                     ),
                   ],
-                )
-            );
+                ));
           } else {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,8 +105,7 @@ class _BillCategoryListState extends State<BillCategoryList> {
                         fontSize: 14.0,
                         fontWeight: FontWeight.w500,
                         color: Style.foregroundColor.withOpacity(0.7),
-                      )
-                  ),
+                      )),
                 ),
                 ListView.builder(
                     shrinkWrap: true,
@@ -114,28 +113,27 @@ class _BillCategoryListState extends State<BillCategoryList> {
                         parent: AlwaysScrollableScrollPhysics()),
                     itemCount: listBills.length,
                     itemBuilder: (context, index) =>
-                        buildBillCard(_firestore, listBills[index])
-                ),
+                        buildBillCard(_firestore, listBills[index])),
               ],
             );
           }
-        }
-    );
+        });
   }
 
   Widget buildBillCard(dynamic _firestore, Bill bill) {
-    String currencySymbol = CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
+    String currencySymbol =
+        CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
     return GestureDetector(
       onTap: () {
         showCupertinoModalBottomSheet(
             context: context,
-            builder: (context) => BillGeneralDetailScreen(bill: bill, wallet: widget.currentWallet)
-        );
+            builder: (context) => BillGeneralDetailScreen(
+                bill: bill, wallet: widget.currentWallet));
       },
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-            color: Style.boxBackgroundColor2,
+            color: Style.boxBackgroundColor,
             border: Border(
                 top: BorderSide(
                   color: Style.foregroundColor.withOpacity(0.12),
@@ -167,16 +165,16 @@ class _BillCategoryListState extends State<BillCategoryList> {
                           color: Style.foregroundColor,
                         )),
                     if (bill.note != null && bill.note != '')
-                      Text(
-                          bill.note,
+                      Text(bill.note,
                           style: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w400,
                             fontSize: 13.0,
                             color: Style.foregroundColor.withOpacity(0.54),
-                          )
-                      ),
-                    SizedBox(height: 2,),
+                          )),
+                    SizedBox(
+                      height: 2,
+                    ),
                     MoneySymbolFormatter(
                       text: bill.amount,
                       currencyId: widget.currentWallet.currencyID,
@@ -196,12 +194,13 @@ class _BillCategoryListState extends State<BillCategoryList> {
                   fontFamily: Style.fontFamily,
                   fontSize: 15.0,
                   fontWeight: FontWeight.w600,
-                  color: bill.isFinished ? Style.foregroundColor.withOpacity(0.38) : Style.runningColor,
+                  color: bill.isFinished
+                      ? Style.foregroundColor.withOpacity(0.38)
+                      : Style.runningColor,
                 )),
           ],
         ),
       ),
     );
   }
-
 }

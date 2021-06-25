@@ -34,7 +34,6 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
         builder: (context, snapshot) {
           double total = 0;
           List<MyTransaction> listTransaction = snapshot.data ?? [];
-          print('current length: ${listTransaction.length}');
 
           for (int i = 0; i < listTransaction.length; i++) {
             if (listTransaction[i].date.compareTo(widget.budget.beginDate) <
@@ -49,9 +48,9 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
 
           listTransaction.sort((a, b) => b.date.compareTo(a.date));
           return Scaffold(
-            backgroundColor: Color(0xff1a1a1a),
+            backgroundColor: Style.backgroundColor,
             appBar: AppBar(
-              backgroundColor: Color(0xff333333),
+              backgroundColor: Style.appBarColor,
               centerTitle: true,
               elevation: 0,
               title: Text(
@@ -93,7 +92,7 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
   Container buildDisplayTransactionByDate(
       List<List<MyTransaction>> transactionListSortByDate) {
     return Container(
-      color: Color(0xff1a1a1a),
+      color: Style.backgroundColor,
       child: ListView.builder(
           physics: BouncingScrollPhysics(),
           shrinkWrap: true,
@@ -126,19 +125,19 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
         ? Container(
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
             decoration: BoxDecoration(
-                color: Colors.grey[900],
+                color: Style.boxBackgroundColor,
                 border: Border(
                     bottom: BorderSide(
                       color: Colors.black,
                       width: 1.0,
                     ),
                     top: BorderSide(
-                      color: Color(0xff1a1a1a),
+                      color: Style.backgroundColor,
                       width: 1.0,
                     ))),
             child: StickyHeader(
               header: Container(
-                color: Colors.grey[900],
+                color: Style.boxBackgroundColor,
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
                 child: Row(
                   children: <Widget>[

@@ -10,7 +10,7 @@ class AnswerTheQuestions extends StatelessWidget {
   Widget build(BuildContext context) {
     BasicQuestions mQuestion = new BasicQuestions();
     return Scaffold(
-      backgroundColor: Style.boxBackgroundColor2,
+      backgroundColor: Style.appBarColor,
       appBar: AppBar(
         leading: CloseButton(
           color: Style.foregroundColor,
@@ -32,7 +32,9 @@ class AnswerTheQuestions extends StatelessWidget {
         color: Style.backgroundColor1,
         child: ListView(
           children: [
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(

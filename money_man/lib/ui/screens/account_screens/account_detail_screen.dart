@@ -77,13 +77,15 @@ class _AccountDetailState extends State<AccountDetail> {
                   color: Colors.transparent,
                   child: Row(
                     children: [
-                      Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
-                      Text('More', style: TextStyle(
-                          color: Style.foregroundColor,
-                          fontFamily: Style.fontFamily,
-                          fontSize: 17.0
-                      )
-                      )
+                      Icon(Style.backIcon, color: Style.foregroundColor),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text('More',
+                          style: TextStyle(
+                              color: Style.foregroundColor,
+                              fontFamily: Style.fontFamily,
+                              fontSize: 17.0))
                     ],
                   ),
                 ),
@@ -91,8 +93,8 @@ class _AccountDetailState extends State<AccountDetail> {
             ),
             //),
             centerTitle: true,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
+            backgroundColor: Style.appBarColor,
+            elevation: 1,
             flexibleSpace: ClipRect(
               child: AnimatedOpacity(
                 opacity: reachAppBar == 1 ? 1 : 0,
@@ -122,18 +124,17 @@ class _AccountDetailState extends State<AccountDetail> {
                 duration: Duration(milliseconds: 100),
                 child: Text('My Account',
                     style: TextStyle(
-                        color: Style.foregroundColor,
-                        fontFamily: Style.fontFamily,
-                        fontSize: 17.0,
-                        fontWeight: FontWeight.w600,
-                    ))
-            )
-        ),
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w600,
+                    )))),
         body: ListView(
           physics: BouncingScrollPhysics(),
           controller: _controller,
           children: [
-            Padding(
+            Container(
+              color: Style.backgroundColor,
               padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
               child: reachTop == 0
                   ? Text('My Account',
@@ -141,19 +142,18 @@ class _AccountDetailState extends State<AccountDetail> {
                           fontSize: 30,
                           color: Style.foregroundColor,
                           fontFamily: Style.fontFamily,
-                          fontWeight: FontWeight.bold
-                      ))
-                  : Text('', style: TextStyle(
-                  fontSize: 30,
-                  color: Style.foregroundColor,
-                  fontFamily: Style.fontFamily,
-                  fontWeight: FontWeight.bold
-              )),
+                          fontWeight: FontWeight.bold))
+                  : Text('',
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
+                          fontWeight: FontWeight.bold)),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
               decoration: BoxDecoration(
-                  color: Style.boxBackgroundColor,
+                  color: Style.backgroundColor,
                   border: Border(
                       top: BorderSide(
                         width: 0.1,
@@ -169,18 +169,17 @@ class _AccountDetailState extends State<AccountDetail> {
                     backgroundColor: Style.foregroundColor,
                     radius: 30.0,
                     child: Text(
-                        (_user == null)
-                            ? ''
-                            : (_user.displayName != '' &&
-                                    _user.displayName != null)
-                                ? _user.displayName.substring(0, 1)
-                                : 'Y',
+                      (_user == null)
+                          ? ''
+                          : (_user.displayName != '' &&
+                                  _user.displayName != null)
+                              ? _user.displayName.substring(0, 1)
+                              : 'Y',
                       style: TextStyle(
                           color: Style.primaryColor,
                           fontSize: 30.0,
                           fontFamily: Style.fontFamily,
-                          fontWeight: FontWeight.w400
-                      ),
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
                   SizedBox(
@@ -198,8 +197,7 @@ class _AccountDetailState extends State<AccountDetail> {
                             color: Style.foregroundColor,
                             fontWeight: FontWeight.w600,
                             fontFamily: Style.fontFamily,
-                            fontSize: 15.0
-                        )),
+                            fontSize: 15.0)),
                   ),
                   Text(
                       _user.email == null
@@ -209,8 +207,7 @@ class _AccountDetailState extends State<AccountDetail> {
                           color: Style.foregroundColor.withOpacity(0.54),
                           fontWeight: FontWeight.w400,
                           fontFamily: Style.fontFamily,
-                          fontSize: 13.0
-                      )),
+                          fontSize: 13.0)),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -219,28 +216,29 @@ class _AccountDetailState extends State<AccountDetail> {
                     thickness: 0.1,
                     color: Style.foregroundColor,
                   ),
-                  ListTile(
-                    onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (BuildContext context) =>
-                      //             ChangePasswordScreen()));
-                      showCupertinoModalBottomSheet(
-                          context: context,
-                          builder: (context) => ChangePasswordScreen()
-                      );
-                    },
-                    dense: true,
-                    title: Text(
-                      'Change password',
-                      style: TextStyle(
-                          color: Style.foregroundColor,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: Style.fontFamily,
-                          fontSize: 15.0
+                  Container(
+                    color: Style.boxBackgroundColor,
+                    child: ListTile(
+                      onTap: () {
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (BuildContext context) =>
+                        //             ChangePasswordScreen()));
+                        showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (context) => ChangePasswordScreen());
+                      },
+                      dense: true,
+                      title: Text(
+                        'Change password',
+                        style: TextStyle(
+                            color: Style.foregroundColor,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: Style.fontFamily,
+                            fontSize: 15.0),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   )
                 ],
@@ -273,8 +271,7 @@ class _AccountDetailState extends State<AccountDetail> {
                           color: Style.foregroundColor,
                           fontWeight: FontWeight.w600,
                           fontFamily: Style.fontFamily,
-                          fontSize: 15.0
-                      ),
+                          fontSize: 15.0),
                       textAlign: TextAlign.center,
                     ),
                   ),

@@ -125,303 +125,309 @@ class _PlanningScreenState extends State<PlanningScreen> {
                       fontWeight: FontWeight.w600,
                       fontSize: 17.0))),
         ),
-        body: ListView(
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          controller: _controller,
-          children: [
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.fromLTRB(0.0, 0, 0, 16.0),
-              child: reachTop == 0
-                  ? Hero(
-                      tag: 'planningScreen',
-                      child: Text('Planning',
-                          style: TextStyle(
-                            fontSize: 38,
-                            color: Style.foregroundColor,
-                            fontFamily: Style.fontFamily,
-                            fontWeight: FontWeight.w700,
-                          )))
-                  : Text('',
-                      style: TextStyle(
-                        fontSize: 38,
-                        color: Style.foregroundColor,
-                        fontFamily: Style.fontFamily,
-                        fontWeight: FontWeight.w700,
-                      )),
-            ),
-            TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        return Color(0xffe0f0f8);
-                      return Color(0xff314656);
-                    },
-                  ),
-                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
+        body: Container(
+          child: ListView(
+            physics:
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            controller: _controller,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.fromLTRB(0.0, 20, 0, 16.0),
+                child: reachTop == 0
+                    ? Hero(
+                        tag: 'planningScreen',
+                        child: Text('Planning',
+                            style: TextStyle(
+                              fontSize: 38,
+                              color: Style.foregroundColor,
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w700,
+                            )))
+                    : Text('',
+                        style: TextStyle(
+                          fontSize: 38,
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
+                          fontWeight: FontWeight.w700,
+                        )),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Color(0xffe0f0f8);
                         return Color(0xff314656);
-                      return Color(0xffe0f0f8);
-                    },
+                      },
+                    ),
+                    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Color(0xff314656);
+                        return Color(0xffe0f0f8);
+                      },
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BudgetScreen(
-                                crrWallet: _wallet,
-                              )));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          children: [
-                            SuperIcon(
-                              iconPath: 'assets/images/budget.svg',
-                              size: 45,
-                            ),
-                            SizedBox(
-                              height: 5.0,
-                            ),
-                            Text('BUDGET',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: Style.fontFamily,
-                                    fontSize: 15.0)),
-                          ],
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BudgetScreen(
+                                  crrWallet: _wallet,
+                                )));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            children: [
+                              SuperIcon(
+                                iconPath: 'assets/images/budget.svg',
+                                size: 45,
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              Text('BUDGET',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: Style.fontFamily,
+                                      fontSize: 15.0)),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                          flex: 6,
-                          child: Text(
-                              "Build your own financial plan to balance your income and expenses.",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: Style.fontFamily,
-                                  fontSize: 16.0))),
-                    ],
-                  ),
-                )),
-            SizedBox(
-              height: 5,
-            ),
-            TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        return Color(0xffffffff);
-                      return Color(0xfffc745c);
-                    },
-                  ),
-                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                            flex: 6,
+                            child: Text(
+                                "Build your own financial plan to balance your income and expenses.",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: Style.fontFamily,
+                                    fontSize: 16.0))),
+                      ],
+                    ),
+                  )),
+              SizedBox(
+                height: 5,
+              ),
+              TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Color(0xffffffff);
                         return Color(0xfffc745c);
-                      return Color(0xffffffff);
-                    },
+                      },
+                    ),
+                    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Color(0xfffc745c);
+                        return Color(0xffffffff);
+                      },
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: EventScreen(
-                          currentWallet: _wallet,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: EventScreen(
+                            currentWallet: _wallet,
+                          ),
+                          type: PageTransitionType.rightToLeft),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            children: [
+                              SuperIcon(
+                                iconPath: 'assets/images/event.svg',
+                                size: 45,
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              Text('EVENTS',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: Style.fontFamily,
+                                      fontSize: 15.0)),
+                            ],
+                          ),
                         ),
-                        type: PageTransitionType.rightToLeft),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          children: [
-                            SuperIcon(
-                              iconPath: 'assets/images/event.svg',
-                              size: 45,
-                            ),
-                            SizedBox(
-                              height: 5.0,
-                            ),
-                            Text('EVENTS',
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                            flex: 6,
+                            child: Text(
+                                "Keep track of your spending during an event.",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                     fontFamily: Style.fontFamily,
-                                    fontSize: 15.0)),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                          flex: 6,
-                          child: Text(
-                              "Keep track of your spending during an event.",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: Style.fontFamily,
-                                  fontSize: 16.0))),
-                    ],
-                  ),
-                )),
-            SizedBox(
-              height: 5,
-            ),
-            TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        return Color(0xfff3543c);
-                      return Color(0xfff7dfbc);
-                    },
-                  ),
-                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
+                                    fontSize: 16.0))),
+                      ],
+                    ),
+                  )),
+              SizedBox(
+                height: 5,
+              ),
+              TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Color(0xfff3543c);
                         return Color(0xfff7dfbc);
-                      return Color(0xfff3543c);
-                    },
+                      },
+                    ),
+                    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Color(0xfff7dfbc);
+                        return Color(0xfff3543c);
+                      },
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  print('planing' + widget.currentWallet.id);
-                  print('planing' + _wallet.id);
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: BillsMainScreen(
-                          currentWallet: _wallet,
+                  onPressed: () {
+                    print('planing' + widget.currentWallet.id);
+                    print('planing' + _wallet.id);
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: BillsMainScreen(
+                            currentWallet: _wallet,
+                          ),
+                          type: PageTransitionType.rightToLeft),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            children: [
+                              SuperIcon(
+                                iconPath: 'assets/images/bill.svg',
+                                size: 45,
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              Text('BILLS',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: Style.fontFamily,
+                                      fontSize: 15.0)),
+                            ],
+                          ),
                         ),
-                        type: PageTransitionType.rightToLeft),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          children: [
-                            SuperIcon(
-                              iconPath: 'assets/images/bill.svg',
-                              size: 45,
-                            ),
-                            SizedBox(
-                              height: 5.0,
-                            ),
-                            Text('BILLS',
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                            flex: 6,
+                            child: Text(
+                                "Monitor your repetitive bills such as electricity, rent, etc.",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                     fontFamily: Style.fontFamily,
-                                    fontSize: 15.0)),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                          flex: 6,
-                          child: Text(
-                              "Monitor your repetitive bills such as electricity, rent, etc.",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: Style.fontFamily,
-                                  fontSize: 16.0))),
-                    ],
-                  ),
-                )),
-            SizedBox(
-              height: 5,
-            ),
-            TextButton(
-                style: ButtonStyle(
-                  // shape:MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.circular(10),
-                  // )),
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        //return Colors.white;
-                        return Color(0xff17174e);
-                      return Color(0xfffbe383);
-                      //return Color(0xff65f33f); // Use the component's default.
-                    },
-                  ),
-                  foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        //return Color(0xff65f33f);
+                                    fontSize: 16.0))),
+                      ],
+                    ),
+                  )),
+              SizedBox(
+                height: 5,
+              ),
+              TextButton(
+                  style: ButtonStyle(
+                    // shape:MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(
+                    //   borderRadius: BorderRadius.circular(10),
+                    // )),
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          //return Colors.white;
+                          return Color(0xff17174e);
                         return Color(0xfffbe383);
-                      return Color(0xff17174e);
-                      //return Colors.white; // Use the component's default.
-                    },
+                        //return Color(0xff65f33f); // Use the component's default.
+                      },
+                    ),
+                    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          //return Color(0xff65f33f);
+                          return Color(0xfffbe383);
+                        return Color(0xff17174e);
+                        //return Colors.white; // Use the component's default.
+                      },
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: RecurringTransactionMainScreen(wallet: _wallet),
-                        type: PageTransitionType.rightToLeft),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          children: [
-                            SuperIcon(
-                              iconPath: 'assets/images/recurring.svg',
-                              size: 45,
-                            ),
-                            SizedBox(
-                              height: 5.0,
-                            ),
-                            Text('RECURRING',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: Style.fontFamily,
-                                    fontSize: 15.0)),
-                          ],
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child:
+                              RecurringTransactionMainScreen(wallet: _wallet),
+                          type: PageTransitionType.rightToLeft),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            children: [
+                              SuperIcon(
+                                iconPath: 'assets/images/recurring.svg',
+                                size: 45,
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              Text('RECURRING',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: Style.fontFamily,
+                                      fontSize: 15.0)),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                          flex: 6,
-                          child: Text(
-                              "Add transactions automatically in the future.",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: Style.fontFamily,
-                                  fontSize: 16.0))),
-                    ],
-                  ),
-                )),
-          ],
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                            flex: 6,
+                            child: Text(
+                                "Add transactions automatically in the future.",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: Style.fontFamily,
+                                    fontSize: 16.0))),
+                      ],
+                    ),
+                  )),
+            ],
+          ),
         ));
   }
 }

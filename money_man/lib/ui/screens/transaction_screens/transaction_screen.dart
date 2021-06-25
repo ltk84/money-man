@@ -1524,33 +1524,35 @@ class _TransactionScreen extends State<TransactionScreen>
                           ),
                           if (_subTitle != null && _subTitle != '')
                             RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: _subTitle,
-                                    style: TextStyle(
-                                      fontFamily: Style.fontFamily,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12.0,
-                                      color: Style.foregroundColor.withOpacity(0.54),
-                                    ),
+                                text: TextSpan(children: [
+                              TextSpan(
+                                text: _subTitle,
+                                style: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12.0,
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54),
+                                ),
+                              ),
+                              if (transListSortByDate[xIndex][yIndex]
+                                          .category
+                                          .name ==
+                                      'Debt' ||
+                                  transListSortByDate[xIndex][yIndex]
+                                          .category
+                                          .name ==
+                                      'Loan')
+                                TextSpan(
+                                  text: _contact,
+                                  style: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.0,
+                                    color: Style.foregroundColor,
                                   ),
-                                  if (
-                                    transListSortByDate[xIndex][yIndex].category.name == 'Debt'
-                                    || transListSortByDate[xIndex][yIndex].category.name == 'Loan'
-                                  )
-                                  TextSpan(
-                                    text: _contact,
-                                    style: TextStyle(
-                                      fontFamily: Style.fontFamily,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14.0,
-                                      color: Style.foregroundColor,
-                                    ),
-                                  )
-                                ]
-                              )
-                            ),
+                                )
+                            ])),
                           // if (extraAmount != null)
                           //   Row(
                           //     mainAxisAlignment: MainAxisAlignment.end,

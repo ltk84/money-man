@@ -47,7 +47,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Style.boxBackgroundColor2,
+      backgroundColor: Style.backgroundColor,
       appBar: AppBar(
         elevation: 0,
         leading: CloseButton(
@@ -63,7 +63,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Style.boxBackgroundColor2,
+        backgroundColor: Style.appBarColor,
         actions: [
           GestureDetector(
             onTap: () async {
@@ -98,7 +98,6 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
               child: Center(
                 child: CircularProgressIndicator(
                   backgroundColor: Style.backgroundColor1,
-                  // color: Style.primaryColor,
                 ),
               ),
             )

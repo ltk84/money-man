@@ -44,38 +44,38 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                   Navigator.of(context).pop();
                 },
                 child: Icon(
-                  Icons.arrow_back_ios_rounded,
+                  Style.backIcon,
                   color: Style.foregroundColor,
                 )),
           ),
           title: GestureDetector(
-              onTap: () {
-                showCupertinoModalBottomSheet(
-                    context: context,
-                    builder: (context) => BillCategoryList(currentWallet: widget.currentWallet)
-                );
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Hero(
-                    tag: 'billToDetail_title',
-                    child: Material(
-                      color: Colors.transparent,
-                      child: Text('Bills',
-                          style: TextStyle(
-                            fontFamily: Style.fontFamily,
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor,
-                          )),
-                    ),
+            onTap: () {
+              showCupertinoModalBottomSheet(
+                  context: context,
+                  builder: (context) =>
+                      BillCategoryList(currentWallet: widget.currentWallet));
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Hero(
+                  tag: 'billToDetail_title',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Text('Bills',
+                        style: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor,
+                        )),
                   ),
-                  Icon(Icons.arrow_drop_down, color: Style.foregroundColorDark)
-                ],
-              ),
+                ),
+                Icon(Icons.arrow_drop_down, color: Style.foregroundColorDark)
+              ],
             ),
+          ),
           centerTitle: true,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(
@@ -126,19 +126,18 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       iconPath: widget.currentWallet.iconID,
                       size: 25.0,
                     ),
-                    Icon(Icons.arrow_drop_down, color: Style.foregroundColorDark)
+                    Icon(Icons.arrow_drop_down,
+                        color: Style.foregroundColorDark)
                   ],
                 ),
               ),
             ),
           ],
         ),
-        body: buildListBills(context)
-    );
+        body: buildListBills(context));
   }
 
   Widget buildListBills(context) {
-
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<List<Bill>>(
         stream: _firestore.billStream(widget.currentWallet.id),
@@ -153,7 +152,8 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
             element.updateDueDate();
             //_firestore.updateBill(element, widget.currentWallet);
 
-            var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+            var now = DateTime(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
             element.dueDates.forEach((e) {
               if (e.compareTo(now) == 0) {
@@ -165,18 +165,23 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               }
             });
           });
-          if (overDueBills.length == 0 && todayBills.length == 0 && thisPeriodBills.length == 0) {
+          if (overDueBills.length == 0 &&
+              todayBills.length == 0 &&
+              thisPeriodBills.length == 0) {
             return Container(
                 color: Style.backgroundColor,
                 alignment: Alignment.center,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.hourglass_empty,
+                    Icon(
+                      Icons.hourglass_empty,
                       color: Style.foregroundColor.withOpacity(0.12),
                       size: 100,
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text(
                       'There are no bills to pay',
                       style: TextStyle(
@@ -187,8 +192,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       ),
                     ),
                   ],
-                )
-            );
+                ));
           } else {
             return ListView(
               physics: BouncingScrollPhysics(
@@ -208,11 +212,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
               ],
             );
           }
-        }
-    );
+        });
   }
 
-  Widget buildListDue (dynamic _firestore, List<Map> listDue, int dueState) {
+  Widget buildListDue(dynamic _firestore, List<Map> listDue, int dueState) {
     String title;
 
     switch (dueState) {
@@ -246,8 +249,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
             shrinkWrap: true,
             itemCount: listDue.length,
             itemBuilder: (context, index) =>
-                buildBillCard(_firestore, listDue[index], dueState)
-        ),
+                buildBillCard(_firestore, listDue[index], dueState)),
         SizedBox(height: 20.0),
       ],
     );
@@ -257,7 +259,8 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
     String dueDate = DateFormat('dd/MM/yyyy').format(info['due']);
     String dueDescription;
 
-    var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    var now =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
     switch (dueState) {
       case 0:
@@ -267,7 +270,9 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
         dueDescription = 'Due today';
         break;
       case 2:
-        dueDescription = 'Due in ' + info['due'].difference(now).inDays.toString() + ' day(s)';
+        dueDescription = 'Due in ' +
+            info['due'].difference(now).inDays.toString() +
+            ' day(s)';
         break;
     }
 
@@ -320,40 +325,35 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                           color: Style.foregroundColor,
                         )),
                     if (info['bill'].note != null && info['bill'].note != '')
-                      Text(
-                          info['bill'].note,
+                      Text(info['bill'].note,
                           style: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w400,
                             fontSize: 12.0,
                             color: Style.foregroundColor.withOpacity(0.54),
-                          )
-                      ),
-                    SizedBox(height: 2,),
-                    RichText(
-                        text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: 'Due day is ',
-                                  style: TextStyle(
-                                    fontFamily: Style.fontFamily,
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Style.foregroundColor.withOpacity(0.7),
-                                  )
-                              ),
-                              TextSpan(
-                                  text: dueDate,
-                                  style: TextStyle(
-                                    fontFamily: Style.fontFamily,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w600,
-                                    color: Style.foregroundColor,
-                                  )
-                              ),
-                            ]
-                        )
+                          )),
+                    SizedBox(
+                      height: 2,
                     ),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: 'Due day is ',
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w400,
+                            color: Style.foregroundColor.withOpacity(0.7),
+                          )),
+                      TextSpan(
+                          text: dueDate,
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor,
+                          )),
+                    ])),
                   ],
                 ),
               ],
@@ -367,8 +367,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       fontSize: 13.0,
                       fontWeight: FontWeight.w600,
                       color: Style.foregroundColor,
-                    )
-                ),
+                    )),
                 TextButton(
                     onPressed: () async {
                       if (!info['bill'].isFinished) {
@@ -381,10 +380,13 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                             date: now,
                             currencyID: widget.currentWallet.currencyID,
                             category: info['bill'].category);
-                        await _firestore.addTransaction(widget.currentWallet, transFromBill);
+                        await _firestore.addTransaction(
+                            widget.currentWallet, transFromBill);
 
                         // Thêm transaction vào bill.
-                        if (!info['bill'].transactionIdList.contains(transFromBill.id)) {
+                        if (!info['bill']
+                            .transactionIdList
+                            .contains(transFromBill.id)) {
                           info['bill'].transactionIdList.add(transFromBill.id);
                         }
 
@@ -400,65 +402,68 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                             info['bill'], widget.currentWallet);
 
                         if (this.mounted) {
-                          setState(() { });
+                          setState(() {});
                         } // tránh bị lỗi setState() được call sau khi dispose().
 
                       }
                     },
                     style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed))
-                            return !info['bill'].isFinished ? Colors.white : Color(0xFFcccccc);
+                            return !info['bill'].isFinished
+                                ? Style.foregroundColor
+                                : Style.foregroundColor.withOpacity(0.9);
                           else
-                            return !info['bill'].isFinished ? Color(
-                                0xFF4FCC5C) : Color(0xFFcccccc); // Use the component's default.
+                            return !info['bill'].isFinished
+                                ? Color(0xFF4FCC5C)
+                                : Color(
+                                    0xFFcccccc); // Use the component's default.
                         },
                       ),
-                      foregroundColor:
-                      MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
+                      foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed))
-                            return !info['bill'].isFinished ? Color(0xFF4FCC5C) : Color(0xFFA8a8a8);
+                            return !info['bill'].isFinished
+                                ? Color(0xFF4FCC5C)
+                                : Style.foregroundColor.withOpacity(0.6);
                           else
-                            return !info['bill'].isFinished ? Colors
-                                .white : Color(0xFFA8a8a8); // Use the component's default.
+                            return !info['bill'].isFinished
+                                ? Style.foregroundColor
+                                : Style.foregroundColor.withOpacity(
+                                    0.8); // Use the component's default.
                         },
                       ),
                     ),
-                    child:
-                    (info['bill'].isFinished)
-                        ? Text(
-                        'Finished',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: Style.fontFamily,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        textAlign: TextAlign.center)
+                    child: (info['bill'].isFinished)
+                        ? Text('Finished',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            textAlign: TextAlign.center)
                         : Wrap(
-                      children: [
-                        Text(
-                          'PAY ',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: Style.fontFamily,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        MoneySymbolFormatter(
-                          text: info['bill'].amount,
-                          currencyId: widget.currentWallet.currencyID,
-                          textStyle: TextStyle(
-                            fontSize: 14,
-                            fontFamily: Style.fontFamily,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        )
-                      ],
-                    )
-                )
+                            children: [
+                              Text(
+                                'PAY ',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              MoneySymbolFormatter(
+                                text: info['bill'].amount,
+                                currencyId: widget.currentWallet.currencyID,
+                                textStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              )
+                            ],
+                          ))
               ],
             )
           ],
@@ -504,15 +509,14 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       color: Style.foregroundColor.withOpacity(0.38),
                     )),
                 MoneySymbolFormatter(
-                  text: overdue,
-                  currencyId: widget.currentWallet.currencyID,
-                  textStyle: TextStyle(
-                    fontFamily: Style.fontFamily,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                    color: Style.foregroundColor,
-                  )
-                )
+                    text: overdue,
+                    currencyId: widget.currentWallet.currencyID,
+                    textStyle: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      color: Style.foregroundColor,
+                    ))
               ],
             ),
             SizedBox(height: 10.0),
@@ -534,8 +538,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
                       color: Style.foregroundColor,
-                    )
-                )
+                    ))
               ],
             ),
             SizedBox(height: 10.0),
@@ -557,8 +560,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
                       color: Style.foregroundColor,
-                    )
-                )
+                    ))
               ],
             )
           ],
