@@ -213,6 +213,7 @@ class _TestState extends State<Test> {
                             color: Style.foregroundColor,
                           ),
                           ListTile(
+                            minLeadingWidth: 30,
                             onTap: () {
                               Navigator.push(
                                   context,
@@ -226,7 +227,7 @@ class _TestState extends State<Test> {
                             leading: SuperIcon(
                               iconPath:
                                   'assets/images/account_screen/user2.svg',
-                              size: 30,
+                              size: 25,
                             ),
                             title: Text('My Account',
                                 style: TextStyle(
@@ -261,6 +262,7 @@ class _TestState extends State<Test> {
                     child: Column(
                       children: [
                         ListTile(
+                          minLeadingWidth: 30,
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -272,7 +274,7 @@ class _TestState extends State<Test> {
                           leading: SuperIcon(
                             iconPath:
                                 'assets/images/account_screen/wallet2.svg',
-                            size: 30,
+                            size: 25,
                           ),
                           title: Text('My Wallets',
                               style: TextStyle(
@@ -284,7 +286,7 @@ class _TestState extends State<Test> {
                               color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(60, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
@@ -292,6 +294,7 @@ class _TestState extends State<Test> {
                           ),
                         ),
                         ListTile(
+                          minLeadingWidth: 30,
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -303,7 +306,7 @@ class _TestState extends State<Test> {
                           leading: SuperIcon(
                             iconPath:
                                 'assets/images/account_screen/category.svg',
-                            size: 30,
+                            size: 25,
                           ),
                           title: Text('Categories',
                               style: TextStyle(
@@ -333,12 +336,13 @@ class _TestState extends State<Test> {
                     child: Column(
                       children: [
                         ListTile(
+                          minLeadingWidth: 30,
                           onTap: () {},
                           dense: true,
                           leading: SuperIcon(
                             iconPath:
                                 'assets/images/account_screen/explore.svg',
-                            size: 30,
+                            size: 25,
                           ),
                           title: Text('Explore',
                               style: TextStyle(
@@ -350,7 +354,7 @@ class _TestState extends State<Test> {
                               color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(60, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
@@ -358,6 +362,7 @@ class _TestState extends State<Test> {
                           ),
                         ),
                         ListTile(
+                          minLeadingWidth: 30,
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -368,7 +373,7 @@ class _TestState extends State<Test> {
                           dense: true,
                           leading: SuperIcon(
                             iconPath: 'assets/images/account_screen/help.svg',
-                            size: 30,
+                            size: 25,
                           ),
                           title: Text('Help & Support',
                               style: TextStyle(
@@ -380,7 +385,7 @@ class _TestState extends State<Test> {
                               color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(60, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
@@ -388,6 +393,7 @@ class _TestState extends State<Test> {
                           ),
                         ),
                         ListTile(
+                          minLeadingWidth: 30,
                           onTap: () async {
                             int tempCurrentTheme = Style.currentTheme;
                             await Navigator.push(
@@ -402,7 +408,7 @@ class _TestState extends State<Test> {
                           leading: SuperIcon(
                             iconPath:
                                 'assets/images/account_screen/setting.svg',
-                            size: 30,
+                            size: 25,
                           ),
                           title: Text('Settings',
                               style: TextStyle(
@@ -414,7 +420,7 @@ class _TestState extends State<Test> {
                               color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(60, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
@@ -422,6 +428,7 @@ class _TestState extends State<Test> {
                           ),
                         ),
                         ListTile(
+                          minLeadingWidth: 30,
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -432,7 +439,7 @@ class _TestState extends State<Test> {
                           dense: true,
                           leading: SuperIcon(
                             iconPath: 'assets/images/account_screen/about.svg',
-                            size: 30,
+                            size: 25,
                           ),
                           title: Text('About',
                               style: TextStyle(
