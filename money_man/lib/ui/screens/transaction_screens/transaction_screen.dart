@@ -781,7 +781,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Style.backgroundColor,
+          backgroundColor: Style.appBarColor,
           centerTitle: true,
           elevation: 0,
           leadingWidth: 70,
@@ -1200,6 +1200,7 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
           color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
@@ -1212,7 +1213,10 @@ class _TransactionScreen extends State<TransactionScreen>
               ))),
       child: StickyHeader(
         header: Container(
-          color: Style.boxBackgroundColor,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Style.boxBackgroundColor,
+          ),
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -1352,7 +1356,9 @@ class _TransactionScreen extends State<TransactionScreen>
     print('build bottom by date');
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+      padding: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
+          //borderRadius:   BorderRadius.circular(8), // set chỗ này là bị mất conttent nè
           color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
@@ -1682,7 +1688,7 @@ class _TransactionScreen extends State<TransactionScreen>
                     fontFamily: Style.fontFamily,
                     fontSize: 14.0,
                     fontWeight: FontWeight.w600,
-                    color: Style.highlightPrimaryColor),
+                    color: Color(0xff2cb84b)),
               ),
             )
           ])),

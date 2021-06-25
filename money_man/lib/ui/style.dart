@@ -126,14 +126,14 @@ class Style {
         break;
       case 1:
         currentTheme = 1;
-        backgroundColor = Color(0xFFf0f0f0);
-        backgroundColor1 = Color(0xFFEEEEEE);
-        foregroundColor = Color(0xFF2e2e2e);
+        backgroundColor = Color(0xFFffffff);
+        backgroundColor1 = Color(0xFFe7f3ff);
+        foregroundColor = Color(0xFF000000);
         foregroundColorDark = Color(0xFF111111);
-        boxBackgroundColor = Color(0xFFe6e6e6);
-        appBarColor = boxBackgroundColor;
-        boxBackgroundColor2 = Color(0xFFc9c9c9);
-        primaryColor = Color(0xff2FB49C);
+        boxBackgroundColor = Color(0xFFe5e6eb);
+        appBarColor = Color(0xff2cb84b);
+        boxBackgroundColor2 = Color(0xFFcbccd1);
+        primaryColor = Color(0xff36f800);
         highlightPrimaryColor = Color(0xff36D1B5);
 
         igButtonColor = Color(0xFFc65072);
