@@ -28,9 +28,9 @@ class _BillCategoryListState extends State<BillCategoryList> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: Style.backgroundColor,
+        backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
-          backgroundColor: Style.appBarColor,
+          backgroundColor: Style.backgroundColor1,
           elevation: 0.0,
           leading: CloseButton(
             color: Style.foregroundColor,

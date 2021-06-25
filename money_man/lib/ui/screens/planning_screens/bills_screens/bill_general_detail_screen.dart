@@ -49,10 +49,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: Style.backgroundColor,
-        extendBodyBehindAppBar: true,
+        backgroundColor: Style.backgroundColor1,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
+          backgroundColor: Style.boxBackgroundColor2,
           elevation: 0.0,
           leading: Hero(
             tag: 'billToDetail_backBtn',
@@ -76,23 +76,23 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                 )),
           ),
           centerTitle: true,
-          flexibleSpace: ClipRect(
-            child: AnimatedOpacity(
-              opacity: 1,
-              duration: Duration(milliseconds: 0),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                    sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-                child: AnimatedContainer(
-                    duration: Duration(milliseconds: 1),
-                    //child: Container(
-                    //color: Colors.transparent,
-                    color: Colors.transparent
-                  //),
-                ),
-              ),
-            ),
-          ),
+          // flexibleSpace: ClipRect(
+          //   child: AnimatedOpacity(
+          //     opacity: 1,
+          //     duration: Duration(milliseconds: 0),
+          //     child: BackdropFilter(
+          //       filter: ImageFilter.blur(
+          //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
+          //       child: AnimatedContainer(
+          //           duration: Duration(milliseconds: 1),
+          //           //child: Container(
+          //           //color: Colors.transparent,
+          //           color: Colors.transparent
+          //         //),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           actions: [
             Hero(
               tag: 'billToDetail_actionBtn',

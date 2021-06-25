@@ -73,23 +73,23 @@ class BillTransactionListState extends State<BillTransactionList> {
               )),
         ),
         centerTitle: true,
-        flexibleSpace: ClipRect(
-          child: AnimatedOpacity(
-            opacity: 1,
-            duration: Duration(milliseconds: 0),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                  sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-              child: AnimatedContainer(
-                  duration: Duration(milliseconds: 1),
-                  //child: Container(
-                  //color: Colors.transparent,
-                  color: Colors.transparent
-                  //),
-                  ),
-            ),
-          ),
-        ),
+        // flexibleSpace: ClipRect(
+        //   child: AnimatedOpacity(
+        //     opacity: 1,
+        //     duration: Duration(milliseconds: 0),
+        //     child: BackdropFilter(
+        //       filter: ImageFilter.blur(
+        //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
+        //       child: AnimatedContainer(
+        //           duration: Duration(milliseconds: 1),
+        //           //child: Container(
+        //           //color: Colors.transparent,
+        //           color: Colors.transparent
+        //           //),
+        //           ),
+        //     ),
+        //   ),
+        // ),
       ),
       body: StreamBuilder<Object>(
           stream: _firestore.transactionStream(widget.currentWallet, 'full'),

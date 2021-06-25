@@ -33,7 +33,7 @@ class _RecurringTransactionMainScreenState
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Style.backgroundColor,
-        extendBodyBehindAppBar: true,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
           elevation: 0.0,
@@ -62,19 +62,19 @@ class _RecurringTransactionMainScreenState
                   )),
             ),
           ),
-          flexibleSpace: ClipRect(
-            child: AnimatedOpacity(
-              opacity: 1,
-              duration: Duration(milliseconds: 0),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                    sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-                child: AnimatedContainer(
-                    duration: Duration(milliseconds: 1),
-                    color: Colors.transparent),
-              ),
-            ),
-          ),
+          // flexibleSpace: ClipRect(
+          //   child: AnimatedOpacity(
+          //     opacity: 1,
+          //     duration: Duration(milliseconds: 0),
+          //     child: BackdropFilter(
+          //       filter: ImageFilter.blur(
+          //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
+          //       child: AnimatedContainer(
+          //           duration: Duration(milliseconds: 1),
+          //           color: Colors.transparent),
+          //     ),
+          //   ),
+          // ),
           actions: [
             Hero(
               tag: 'billToDetail_actionBtn',

@@ -86,7 +86,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Style.backgroundColor1,
-        extendBodyBehindAppBar: true,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Style.boxBackgroundColor2,
           elevation: 0.0,
