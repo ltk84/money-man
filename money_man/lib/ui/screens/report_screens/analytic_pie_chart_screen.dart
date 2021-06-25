@@ -126,6 +126,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Style.backgroundColor,
+        extendBodyBehindAppBar: true,
         appBar: new AppBar(
           leading: MaterialButton(
             onPressed: () {
@@ -139,27 +140,27 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
           //centerTitle: true,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          flexibleSpace: ClipRect(
-            child: AnimatedOpacity(
-              opacity: reachAppBar == 1 ? 1 : 0,
-              duration: Duration(milliseconds: 0),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                    sigmaX: reachTop == 1 ? 25 : 500,
-                    sigmaY: 25,
-                    tileMode: TileMode.values[0]),
-                child: AnimatedContainer(
-                  duration: Duration(
-                      milliseconds:
-                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  color: Colors.grey[reachAppBar == 1
-                      ? (reachTop == 1 ? 800 : 850)
-                      : 900]
-                      .withOpacity(0.2),
-                ),
-              ),
-            ),
-          ),
+          // flexibleSpace: ClipRect(
+          //   child: AnimatedOpacity(
+          //     opacity: reachAppBar == 1 ? 1 : 0,
+          //     duration: Duration(milliseconds: 0),
+          //     child: BackdropFilter(
+          //       filter: ImageFilter.blur(
+          //           sigmaX: reachTop == 1 ? 25 : 500,
+          //           sigmaY: 25,
+          //           tileMode: TileMode.values[0]),
+          //       child: AnimatedContainer(
+          //         duration: Duration(
+          //             milliseconds:
+          //             reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+          //         color: Colors.grey[reachAppBar == 1
+          //             ? (reachTop == 1 ? 800 : 850)
+          //             : 900]
+          //             .withOpacity(0.2),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           // title: AnimatedOpacity(
           //     opacity: reachTop == 1 ? 1 : 0,
           //     duration: Duration(milliseconds: 100),
