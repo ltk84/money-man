@@ -23,7 +23,7 @@ class PlanningScreen extends StatefulWidget {
 class _PlanningScreenState extends State<PlanningScreen> {
   Wallet _wallet;
 
-  final double fontSizeText = 40;
+  final double fontSizeText = 60;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
@@ -86,7 +86,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Style.backgroundColor,
-        extendBodyBehindAppBar: true,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: true,
@@ -133,27 +133,27 @@ class _PlanningScreenState extends State<PlanningScreen> {
             children: [
               Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(0.0, 20, 0, 16.0),
+                padding: const EdgeInsets.fromLTRB(0.0, 15, 0, 10.0),
                 child: reachTop == 0
                     ? Hero(
                         tag: 'planningScreen',
                         child: Text('Planning',
                             style: TextStyle(
-                              fontSize: 38,
+                              fontSize: 35,
                               color: Style.foregroundColor,
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w700,
                             )))
                     : Text('',
                         style: TextStyle(
-                          fontSize: 38,
+                          fontSize: 35,
                           color: Style.foregroundColor,
                           fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w700,
                         )),
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               TextButton(
                   style: ButtonStyle(
