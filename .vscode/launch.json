@@ -8,7 +8,7 @@
             "name": "money_man",
             "cwd": "money_man",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
         }
     ]
 }
