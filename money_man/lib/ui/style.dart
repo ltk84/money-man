@@ -104,13 +104,13 @@ class Style {
       // nay la style The tao
       case 2:
         currentTheme = 2;
-        appBarColor = Color(0xff333333);
+        appBarColor = Color(0xff444444);
         backgroundColor = Color(0xff1a1a1a);
         backgroundColor1 = Color(0xFF111111);
         foregroundColor = Colors.white;
         foregroundColorDark = Color(0x70999999);
         boxBackgroundColor = Color(0xff333333);
-        boxBackgroundColor2 = Color(0xFF333333);
+        boxBackgroundColor2 = Color(0xFF666666);
         primaryColor = Color(0xff2FB49C);
         highlightPrimaryColor = Color(0xff36D1B5);
 
@@ -144,7 +144,7 @@ class Style {
         incomeColor = Color(0xFF76F676);
         incomeColor2 = Colors.blueAccent;
         runningColor = Color(0xFF51f08d);
-        successColor = Color(0xFF4FCC5C);
+        successColor = Color(0xFF51f08d);
         break;
     }
   }

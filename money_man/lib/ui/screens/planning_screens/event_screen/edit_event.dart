@@ -16,34 +16,33 @@ import 'package:intl/src/intl/date_format.dart';
 class EditEventScreen extends StatefulWidget {
   Event currentEvent;
   Wallet eventWallet;
-  EditEventScreen({Key key, this.currentEvent, this.eventWallet}) : super(key: key);
+  EditEventScreen({Key key, this.currentEvent, this.eventWallet})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _EditEventScreen();
   }
 }
+
 class _EditEventScreen extends State<EditEventScreen>
     with TickerProviderStateMixin {
   Event _currentEvent;
   Wallet _eventWallet;
   DateTime endDate;
 
-  String iconPath ;
+  String iconPath;
 
   String currencySymbol = 'Viet Nam Dong';
 
   String nameEvent;
   DateTime formatTransDate;
-  bool CompareDate(DateTime a, DateTime b)
-  {
-    if( a.year < b.year)
-      return true;
-    if(a.year == b.year && a.month < b.month)
-      return true;
-    if(a.year == b.year && a.month == b.month && a.day < b.day)
-      return true;
+  bool CompareDate(DateTime a, DateTime b) {
+    if (a.year < b.year) return true;
+    if (a.year == b.year && a.month < b.month) return true;
+    if (a.year == b.year && a.month == b.month && a.day < b.day) return true;
     return false;
   }
+
   @override
   void initState() {
     _currentEvent = widget.currentEvent;
@@ -56,22 +55,18 @@ class _EditEventScreen extends State<EditEventScreen>
         widget.currentEvent.endDate.month, widget.currentEvent.endDate.day);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: Colors.black26,
+      backgroundColor: Style.backgroundColor,
       appBar: AppBar(
-        leadingWidth: 380,
         elevation: 0,
-        backgroundColor: Color(0xff1a1a1a),
+        centerTitle: true,
+        backgroundColor: Style.appBarColor,
         leading: TextButton(
-          child: Row(
-            children: [
-              const Icon(Icons.arrow_back_ios_outlined,
-                  color: Colors.white, size: 16.0),
-            ],
-          ),
+          child: Icon(Style.backIcon, color: Style.foregroundColor),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -79,11 +74,8 @@ class _EditEventScreen extends State<EditEventScreen>
         title: Text('Edit event',
             style: TextStyle(
               fontFamily: 'Montserrat',
-              color: Colors.white,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w500,
-            )
-        ),
+              color: Style.foregroundColor,
+            )),
         actions: [
           TextButton(
               onPressed: () async {
@@ -94,50 +86,46 @@ class _EditEventScreen extends State<EditEventScreen>
                 } else if (iconPath == null) {
                   _showAlertDialog('Please pick category');
                 } else if (CompareDate(endDate, DateTime.now())) {
-                  _showAlertDialog('Please select an end date greater than or equal to today ');
-                }
-                else {
-                     _currentEvent.name = nameEvent;
-                     _currentEvent.endDate = endDate;
-                     _currentEvent.iconPath = iconPath;
-                     _currentEvent.isFinished =   (endDate.year < DateTime
-                         .now()
-                         .year) ? true :
-                     (endDate.month < DateTime
-                         .now()
-                         .month) ? true :
-                     (endDate.day < DateTime
-                         .now()
-                         .day) ? true : false;
-                     _currentEvent.walletId = _currentEvent.id;
+                  _showAlertDialog(
+                      'Please select an end date greater than or equal to today ');
+                } else {
+                  _currentEvent.name = nameEvent;
+                  _currentEvent.endDate = endDate;
+                  _currentEvent.iconPath = iconPath;
+                  _currentEvent.isFinished =
+                      (endDate.year < DateTime.now().year)
+                          ? true
+                          : (endDate.month < DateTime.now().month)
+                              ? true
+                              : (endDate.day < DateTime.now().day)
+                                  ? true
+                                  : false;
+                  _currentEvent.walletId = _currentEvent.id;
                   await _firestore.updateEvent(_currentEvent, _eventWallet);
                   Navigator.pop(context);
                 }
               },
-              child: const Text(
-                'Save',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              child: Text('Save',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: Style.successColor,
+                  )),
               style: TextButton.styleFrom(
                 primary: Colors.white,
                 backgroundColor: Colors.transparent,
-              )
-          )
+              ))
         ],
       ),
       body: Container(
-          color: Colors.black26,
+          color: Style.backgroundColor,
           child: Form(
             child: buildInput(),
-          )
-
-      ),
+          )),
     );
   }
+
   Widget buildInput() {
     return ListView(
       children: [
@@ -146,7 +134,10 @@ class _EditEventScreen extends State<EditEventScreen>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              color: Colors.grey[900],
+              padding: EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                  color: Style.boxBackgroundColor,
+                  borderRadius: BorderRadius.circular(8)),
               margin: EdgeInsets.symmetric(vertical: 35.0, horizontal: 0.0),
               child: Column(
                 children: [
@@ -170,7 +161,7 @@ class _EditEventScreen extends State<EditEventScreen>
                           }
                         },
                         iconSize: 70,
-                        color: Color(0xff8f8f8f),
+                        color: Style.foregroundColor.withOpacity(0.7),
                       ),
                       Expanded(
                         child: Container(
@@ -182,25 +173,30 @@ class _EditEventScreen extends State<EditEventScreen>
                             keyboardType: TextInputType.name,
                             style: TextStyle(
                               fontSize: 20,
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               decoration: TextDecoration.none,
                             ),
                             decoration: InputDecoration(
                               errorBorder: UnderlineInputBorder(
                                 borderSide:
-                                BorderSide(color: Colors.red, width: 1),
+                                    BorderSide(color: Colors.red, width: 1),
                               ),
                               enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.white60, width: 1),
+                                borderSide: BorderSide(
+                                    color:
+                                        Style.foregroundColor.withOpacity(0.6),
+                                    width: 1),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.white60, width: 3),
+                                borderSide: BorderSide(
+                                    color:
+                                        Style.foregroundColor.withOpacity(0.6),
+                                    width: 3),
                               ),
                               labelText: 'Name event',
                               labelStyle: TextStyle(
-                                  color: Colors.white60, fontSize: 15),
+                                  color: Style.foregroundColor.withOpacity(0.6),
+                                  fontSize: 15),
                             ),
                             onChanged: (value) => nameEvent = value,
                             validator: (value) {
@@ -216,111 +212,108 @@ class _EditEventScreen extends State<EditEventScreen>
                     ],
                   ),
                   Divider(
-                    thickness: 0.05,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
+                    thickness: 0.3,
                   ),
                   ListTile(
                     dense: true,
-                    leading:
-                    Icon(Icons.calendar_today, color: Colors.white54, size: 28.0),
+                    leading: SuperIcon(
+                      iconPath: 'assets/images/time.svg',
+                      size: 30,
+                    ),
                     title: TextFormField(
                       onTap: () async {
                         DatePicker.showDatePicker(context,
                             currentTime:
-                            endDate == null ? formatTransDate : endDate,
+                                endDate == null ? formatTransDate : endDate,
                             showTitleActions: true, onConfirm: (date) {
-                              if (date != null) {
-                                setState(() {
-                                  endDate = date;
-                                  _currentEvent.endDate = endDate;
-                                });
-                              }
-                            },
+                          if (date != null) {
+                            setState(() {
+                              endDate = date;
+                              _currentEvent.endDate = endDate;
+                            });
+                          }
+                        },
                             locale: LocaleType.en,
                             theme: DatePickerTheme(
                               cancelStyle: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor
-                              ),
+                                  color: Style.foregroundColor),
                               doneStyle: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor
-                              ),
+                                  color: Style.foregroundColor),
                               itemStyle: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor
-                              ),
+                                  color: Style.foregroundColor),
                               backgroundColor: Style.boxBackgroundColor,
                             ));
                       },
                       readOnly: true,
                       style: TextStyle(
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                           fontFamily: 'Montserrat',
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600),
                       decoration: InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: _currentEvent.endDate == null
-                                ? Colors.grey[600]
-                                : Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontSize: 16.0,
-                            fontWeight: _currentEvent.endDate == null
-                                ? FontWeight.w500
-                                : FontWeight.w600,
-                          ),
-                          hintText:
-                              DateFormat('EEEE, dd-MM-yyyy')
-                                  .format(_currentEvent.endDate),
-                              ),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: _currentEvent.endDate == null
+                              ? Style.foregroundColor.withOpacity(0.6)
+                              : Style.foregroundColor,
+                          fontFamily: 'Montserrat',
+                          fontSize: 16.0,
+                          fontWeight: _currentEvent.endDate == null
+                              ? FontWeight.w500
+                              : FontWeight.w600,
+                        ),
+                        hintText: DateFormat('EEEE, dd-MM-yyyy')
+                            .format(_currentEvent.endDate),
+                      ),
                     ),
-                    trailing: Icon(Icons.chevron_right, color: Colors.white54),
+                    trailing: Icon(Icons.chevron_right,
+                        color: Style.foregroundColor.withOpacity(0.6)),
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-                    child: Divider(
-                      color: Colors.white24,
-                      height: 1,
-                      thickness: 0.2,
-                    ),
+                  Divider(
+                    color: Style.foregroundColor,
+                    thickness: 0.3,
                   ),
                   ListTile(
-                    onTap: () {
-                    },
+                    onTap: () {},
                     dense: true,
-                    leading: Icon(Icons.monetization_on,
-                        size: 30.0, color: Colors.white54),
+                    leading: SuperIcon(
+                      iconPath: 'assets/images/coin.svg',
+                      size: 30,
+                    ),
                     title: Text(currencySymbol,
                         style: TextStyle(
-                            color: Colors.white,
+                            color: Style.foregroundColor,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w600,
                             fontSize: 16.0)),
                     trailing: Icon(Icons.lock,
-                        size: 20.0, color: Colors.white54),
+                        size: 20.0,
+                        color: Style.foregroundColor.withOpacity(0.6)),
                   ),
                   Divider(
-                    thickness: 0.05,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
+                    thickness: 0.3,
                   ),
                   ListTile(
                     dense: true,
                     onTap: () async {
                       var res = await showCupertinoModalBottomSheet(
                           isDismissible: true,
-                          backgroundColor: Colors.grey[900],
+                          backgroundColor: Style.backgroundColor,
                           context: context,
                           builder: (context) =>
                               SelectWalletAccountScreen(wallet: _eventWallet));
@@ -330,13 +323,14 @@ class _EditEventScreen extends State<EditEventScreen>
                         });
                     },
                     leading: _eventWallet == null
-                        ? SuperIcon(iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
+                        ? SuperIcon(
+                            iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
                         : SuperIcon(iconPath: _eventWallet.iconID, size: 28.0),
                     title: TextFormField(
                       initialValue: _eventWallet.name,
                       readOnly: true,
                       style: TextStyle(
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                           fontFamily: 'Montserrat',
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600),
@@ -348,8 +342,8 @@ class _EditEventScreen extends State<EditEventScreen>
                           disabledBorder: InputBorder.none,
                           hintStyle: TextStyle(
                             color: _eventWallet == null
-                                ? Colors.grey[600]
-                                : Colors.white,
+                                ? Style.foregroundColor.withOpacity(0.6)
+                                : Style.foregroundColor,
                             fontFamily: 'Montserrat',
                             fontSize: 16.0,
                             fontWeight: _eventWallet == null
@@ -359,10 +353,10 @@ class _EditEventScreen extends State<EditEventScreen>
                           hintText: _eventWallet == null
                               ? 'Select wallet'
                               : _eventWallet.name),
-                      onTap: () async {
-                      },
+                      onTap: () async {},
                     ),
-                    trailing: Icon(Icons.lock, color: Colors.white54),
+                    trailing: Icon(Icons.lock,
+                        color: Style.foregroundColor.withOpacity(0.6)),
                   ),
                 ],
               ),
@@ -372,11 +366,12 @@ class _EditEventScreen extends State<EditEventScreen>
       ],
     );
   }
+
   Future<void> _showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.6),
       builder: (BuildContext context) {
         return CustomAlert(content: content);
       },
