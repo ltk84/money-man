@@ -203,7 +203,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: LinearProgressIndicator(
-                    backgroundColor: Color(0xff161616),
+                    backgroundColor: Style.boxBackgroundColor2,
                     valueColor: AlwaysStoppedAnimation<Color>(todayTarget > 1
                         ? Colors.red[700]
                         : todayTarget > todayRate
@@ -236,11 +236,11 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                       //alignment: Alignment.center,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: Color(0xff171717)),
+                          color: Style.boxBackgroundColor2),
                       child: Text(
                         "Today",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                           fontSize: 8,
                           fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w400,

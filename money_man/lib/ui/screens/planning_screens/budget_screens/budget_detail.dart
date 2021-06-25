@@ -73,9 +73,16 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.close_sharp),
+          icon: Icon(
+            Icons.close_sharp,
+            color: Style.foregroundColor,
+          ),
         ),
-        title: Text('Budget'),
+        title: Text(
+          'Budget',
+          style: TextStyle(
+              color: Style.foregroundColor, fontFamily: Style.fontFamily),
+        ),
         centerTitle: true,
         actions: [
           // Button chỉnh sửa budget
@@ -287,7 +294,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            color: Color(0xff171717)),
+                            color: Style.boxBackgroundColor),
                         child: Text(
                           "Today",
                           style: TextStyle(
@@ -438,7 +445,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             Divider(
-              color: Color(0xff333333),
+              color: Style.foregroundColor,
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 25),

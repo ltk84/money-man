@@ -54,7 +54,8 @@ class _AddBudgetState extends State<EditBudget> {
     if (mTimeRange.getBudgetLabel() == 'Custom') _budget.isRepeat = false;
 
     return Theme(
-      data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
+      data: ThemeData(
+          primaryColor: Style.foregroundColor, fontFamily: 'Montserrat'),
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -150,7 +151,8 @@ class _AddBudgetState extends State<EditBudget> {
                           child: Text(
                             'Choose group:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -234,7 +236,8 @@ class _AddBudgetState extends State<EditBudget> {
                           child: Text(
                             'Target:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -317,7 +320,8 @@ class _AddBudgetState extends State<EditBudget> {
                           child: Text(
                             'Time range:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -472,7 +476,7 @@ class _AddBudgetState extends State<EditBudget> {
                         child: Text(
                           'Repeat this budget',
                           style: TextStyle(
-                              color: white,
+                              color: Style.foregroundColor,
                               fontFamily: 'Montserrat',
                               fontSize: 13),
                         ),

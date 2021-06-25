@@ -50,12 +50,22 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
           return Scaffold(
             backgroundColor: Style.backgroundColor,
             appBar: AppBar(
+              leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Style.backIcon,
+                  color: Style.foregroundColor,
+                ),
+              ),
               backgroundColor: Style.appBarColor,
               centerTitle: true,
               elevation: 0,
               title: Text(
                 'Transaction List',
-                style: TextStyle(fontFamily: 'Montserrat'),
+                style: TextStyle(
+                    fontFamily: 'Montserrat', color: Style.foregroundColor),
               ),
             ),
             body: listTransaction.length == 0
@@ -146,8 +156,8 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                       child: Text(
                           DateFormat("dd")
                               .format(transListSortByDate[xIndex][0].date),
-                          style:
-                              TextStyle(fontSize: 30.0, color: Colors.white)),
+                          style: TextStyle(
+                              fontSize: 30.0, color: Style.foregroundColor)),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -170,7 +180,8 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                           text: totalAmountInDay,
                           currencyId: widget.wallet.currencyID,
                           textStyle: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
+                              fontWeight: FontWeight.bold,
+                              color: Style.foregroundColor),
                         ),
                       ),
                     ),
@@ -225,7 +236,7 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
+                                      color: Style.foregroundColor)),
                             ),
                             Expanded(
                               child: Container(
