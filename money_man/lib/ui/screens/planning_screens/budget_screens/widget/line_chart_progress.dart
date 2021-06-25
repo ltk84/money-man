@@ -98,7 +98,7 @@ class _LineChartsState extends State<LineCharts> {
     var maxOfY = getMaxofY(widget.budget);
     const cutOffYValue = 0.0;
     var yearTextStyle = TextStyle(
-        fontSize: 10, color: Style.foregroundColor, fontFamily: 'Montserrat');
+        fontSize: 12, color: Style.foregroundColor, fontFamily: Style.fontFamily);
 
     TextStyle getTextStyle(double b) {
       return yearTextStyle;
