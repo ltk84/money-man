@@ -69,12 +69,14 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.close_sharp),
-        ),
+        leading: MaterialButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Icon(
+              Style.backIcon,
+              color: Style.foregroundColor,
+            )),
         title: Text('Budget'),
         centerTitle: true,
         actions: [
