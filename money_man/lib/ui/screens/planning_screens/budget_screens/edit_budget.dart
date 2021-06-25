@@ -58,22 +58,9 @@ class _AddBudgetState extends State<EditBudget> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          leadingWidth: 70,
           backgroundColor: Style.appBarColor,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                alignment: Alignment.center,
-                child: Text(
-                  'Cancel',
-                  style: TextStyle(
-                      color: Style.foregroundColor.withOpacity(0.8),
-                      fontFamily: 'Montserrat',
-                      fontSize: 13),
-                )),
+          leading: CloseButton(
+            color: Style.foregroundColor,
           ),
           centerTitle: true,
           title: Text(
@@ -94,9 +81,11 @@ class _AddBudgetState extends State<EditBudget> {
                   child: Text(
                     'Save',
                     style: TextStyle(
-                        color: Style.foregroundColor.withOpacity(0.8),
-                        fontFamily: 'Montserrat',
-                        fontSize: 13),
+                      fontFamily: Style.fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      color: Style.successColor,
+                    ),
                   )),
             ),
           ],
