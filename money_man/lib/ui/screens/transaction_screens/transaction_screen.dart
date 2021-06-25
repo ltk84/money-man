@@ -11,6 +11,7 @@ import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/screens/report_screens/report_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
@@ -1141,7 +1142,7 @@ class _TransactionScreen extends State<TransactionScreen>
             return xIndex == 0
                 ? Column(
                     children: [
-                      buildHeader(totalInCome, totalOutCome, total),
+                      buildHeader(transactionListSortByCategory,totalInCome, totalOutCome, total),
                       buildBottomViewByCategory(transactionListSortByCategory,
                           xIndex, totalAmountInDay)
                     ],
@@ -1182,7 +1183,7 @@ class _TransactionScreen extends State<TransactionScreen>
             return xIndex == 0
                 ? Column(
                     children: [
-                      buildHeader(totalInCome, totalOutCome, total),
+                      buildHeader(transactionListSortByDate,totalInCome, totalOutCome, total),
                       buildBottomViewByDate(
                           transactionListSortByDate, xIndex, totalAmountInDay)
                     ],
@@ -1580,7 +1581,7 @@ class _TransactionScreen extends State<TransactionScreen>
     );
   }
 
-  StickyHeader buildHeader(
+  StickyHeader buildHeader( List<List<MyTransaction>> transListSortByDate,
       double totalInCome, double totalOutCome, double total) {
     print('build header');
     return StickyHeader(
@@ -1673,7 +1674,17 @@ class _TransactionScreen extends State<TransactionScreen>
                   ]),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child:  ReportScreen(
+                          currentWallet: _wallet,
+                          beginDate: transListSortByDate[transListSortByDate.length-1][0].date,
+                          endDate: transListSortByDate[0][0].date,
+                        ),
+                        type: PageTransitionType.rightToLeft));
+              },
               child: Text(
                 'View report for this period',
                 style: TextStyle(

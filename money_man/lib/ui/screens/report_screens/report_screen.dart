@@ -27,8 +27,9 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 
 class ReportScreen extends StatefulWidget {
   Wallet currentWallet;
-
-  ReportScreen({Key key, this.currentWallet}) : super(key: key);
+  DateTime beginDate;
+  DateTime endDate;
+  ReportScreen({Key key, this.currentWallet, this.endDate, this.beginDate}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _ReportScreen();
@@ -74,12 +75,14 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
   Wallet _wallet;
 
   // Khởi tạo mốc thời gian cần thống kê.
-  DateTime beginDate = DateTime(DateTime.now().year, DateTime.now().month, 1);
-  DateTime endDate = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  DateTime beginDate ;
+  DateTime endDate;
   String dateDescript = 'This month';
 
   @override
   void initState() {
+    beginDate = widget.beginDate ?? DateTime(DateTime.now().year, DateTime.now().month, 1);
+    endDate = widget.endDate?? DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
