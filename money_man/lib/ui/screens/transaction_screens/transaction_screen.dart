@@ -46,6 +46,8 @@ class _TransactionScreen extends State<TransactionScreen>
   int choosedTimeRange;
   String currencySymbol;
   List<Tab> myTabs;
+  List<DateTime> _beginDate = [];
+  List<DateTime> _endDate= [];
 
   @override
   void initState() {
@@ -53,11 +55,28 @@ class _TransactionScreen extends State<TransactionScreen>
 
     viewByCategory = false;
     choosedTimeRange = 3;
+    _beginDate.clear();
+    _endDate.clear();
+    int index = 0 ;
+    var now = DateTime.now();
+    for (index ; index < 20 ; index ++)
+    {
+      var date = DateTime(now.year, now.month - (18 - index), 1);
+      _beginDate.add(date);
+      if(index < 19)
+      {
+        _endDate.add(
+            DateTime(
+              _beginDate[index].year,
+              _beginDate[index].month + 1,
+              _beginDate[index].day -1,
+            ));
+      }
+    }
     listScrollController = ScrollController();
     listScrollController.addListener(scrollListener);
 
     myTabs = initTabBar(choosedTimeRange);
-
     _tabController = TabController(length: 20, vsync: this, initialIndex: 18);
     _tabController.addListener(() {
       setState(() {});
@@ -213,6 +232,19 @@ class _TransactionScreen extends State<TransactionScreen>
       switch (value) {
         case 1:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
+            int index = 0 ;
+            var now = DateTime.now();
+            for (index ; index < 20 ; index ++)
+              {
+                var date = DateTime(now.year, now.month, now.day - (18 - index));
+                _beginDate.add(date);
+                if(index < 19)
+                  {
+                   _endDate.add(date);
+                  }
+              }
             choosedTimeRange = 1;
 
             myTabs = initTabBar(choosedTimeRange);
@@ -225,6 +257,25 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 2:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
+            int index = 0 ;
+            for (index ; index < 20 ; index ++)
+            {
+              var firstDateInAWeek = DateTime.now()
+                  .subtract(Duration(days: DateTime.now().weekday - 1))
+                  .subtract(Duration(days: 7 * (18 - index)));
+              _beginDate.add(firstDateInAWeek);
+              if(index < 19)
+              {
+                _endDate.add(
+                    DateTime(
+                        firstDateInAWeek.year,
+                        firstDateInAWeek.month,
+                        firstDateInAWeek.day + 6,
+                    ));
+              }
+            }
             choosedTimeRange = 2;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -236,6 +287,24 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 3:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
+            int index = 0 ;
+            var now = DateTime.now();
+            for (index ; index < 20 ; index ++)
+            {
+              var date = DateTime(now.year, now.month - (18 - index), 1);
+              _beginDate.add(date);
+              if(index < 19)
+              {
+                _endDate.add(
+                    DateTime(
+                      _beginDate[index].year,
+                      _beginDate[index].month + 1,
+                      _beginDate[index].day -1,
+                    ));
+              }
+            }
             choosedTimeRange = 3;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -247,6 +316,30 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 4:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
+            int index = 0 ;
+            var now = DateTime.now();
+            var  initQuater = (now.month + 2) % 3  ;
+            for (index ; index < 20 ; index ++)
+            {
+              _beginDate.add(
+                  DateTime(
+                    now.year,
+                    now.month - initQuater - (18 - index)*3,
+                    1,
+                  )
+              );
+              if(index < 19)
+              {
+                _endDate.add(
+                    DateTime(
+                      _beginDate[index].year,
+                      _beginDate[index].month + 3,
+                      _beginDate[index].day -1,
+                    ));
+              }
+            }
             choosedTimeRange = 4;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -258,6 +351,29 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 5:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
+            int index = 0 ;
+            var now = DateTime.now();
+            for (index ; index < 20 ; index ++)
+            {
+              _beginDate.add(
+                  DateTime(
+                    now.year - (18- index),
+                    1,
+                    1,
+                  )
+              );
+              if(index < 19)
+              {
+                _endDate.add(
+                    DateTime(
+                      _beginDate[index].year,
+                      12,
+                      31,
+                    ));
+              }
+            }
             choosedTimeRange = 5;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -269,6 +385,8 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 6:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
             choosedTimeRange = 6;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -279,6 +397,8 @@ class _TransactionScreen extends State<TransactionScreen>
           });
           break;
         case 7:
+          _beginDate.clear();
+          _endDate.clear();
           List<DateTime> timeRange = [];
           await showDialog(
               context: context,
@@ -287,11 +407,11 @@ class _TransactionScreen extends State<TransactionScreen>
               }).then((value) => timeRange = value);
 
           if (timeRange == null) return null;
-
           String displayTab = DateFormat('dd/MM/yyyy').format(timeRange[0]) +
               " - " +
               DateFormat('dd/MM/yyyy').format(timeRange[1]);
-
+          _beginDate.add(timeRange[0]);
+          _endDate.add(timeRange[1]);
           setState(() {
             choosedTimeRange = 7;
             myTabs = initTabBar(choosedTimeRange, extraInfo: displayTab);
@@ -1676,13 +1796,40 @@ class _TransactionScreen extends State<TransactionScreen>
             ),
             TextButton(
               onPressed: () {
+                if(choosedTimeRange < 6)
+                  {
+                    if(transListSortByDate[0][0].date.year < _beginDate[19].year ||
+                        (transListSortByDate[0][0].date.year == _beginDate[19].year
+                           && transListSortByDate[0][0].date.month < _beginDate[19].month)||
+                        (transListSortByDate[0][0].date.year == _beginDate[19].year
+                            && transListSortByDate[0][0].date.month == _beginDate[19].month
+                        && transListSortByDate[0][0].date.day <= _beginDate[19].day))
+                      {
+                        _endDate.add(
+                          DateTime(
+                              _beginDate[19].year,
+                              _beginDate[19].month,
+                              _beginDate[19].day + 6
+                          )
+                        );
+                      }
+                    else
+                      _endDate.add(transListSortByDate[0][0].date);
+                  }
+                else if(choosedTimeRange == 6)
+                  {
+                    _endDate.clear();
+                    _endDate.add( transListSortByDate[0][0].date);
+                    _beginDate.clear();
+                    _beginDate.add(transListSortByDate[transListSortByDate.length-1][0].date);
+                  }
                 Navigator.of(context).push(
                     PageTransition(
                         child:
                             ReportForThisPeriodScreen(
                               currentWallet: _wallet,
-                              beginDate: transListSortByDate[transListSortByDate.length-1][0].date,
-                              endDate: transListSortByDate[0][0].date,
+                              beginDate: _beginDate[_tabController.index],
+                              endDate: _endDate[_tabController.index],
                             )));
               },
               child: Text(

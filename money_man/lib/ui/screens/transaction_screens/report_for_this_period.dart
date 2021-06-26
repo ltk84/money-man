@@ -167,7 +167,7 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                     Column(
                       children: <Widget>[
                         Text(
-                          dateDescript,
+                          'This period',
                           style: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w600,
