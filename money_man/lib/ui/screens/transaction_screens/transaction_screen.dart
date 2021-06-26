@@ -13,6 +13,7 @@ import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/report_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/report_for_this_period.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/ui/style.dart';
@@ -1675,15 +1676,14 @@ class _TransactionScreen extends State<TransactionScreen>
             ),
             TextButton(
               onPressed: () {
-                Navigator.push(
-                    context,
+                Navigator.of(context).push(
                     PageTransition(
-                        child:  ReportScreen(
-                          currentWallet: _wallet,
-                          beginDate: transListSortByDate[transListSortByDate.length-1][0].date,
-                          endDate: transListSortByDate[0][0].date,
-                        ),
-                        type: PageTransitionType.rightToLeft));
+                        child:
+                            ReportForThisPeriodScreen(
+                              currentWallet: _wallet,
+                              beginDate: transListSortByDate[transListSortByDate.length-1][0].date,
+                              endDate: transListSortByDate[0][0].date,
+                            )));
               },
               child: Text(
                 'View report for this period',
