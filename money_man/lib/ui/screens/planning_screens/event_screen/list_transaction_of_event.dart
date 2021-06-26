@@ -83,7 +83,13 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                     backgroundColor: Style.appBarColor,
                     centerTitle: true,
                     elevation: 0,
-                    title: Text('Transaction List'),
+                    title: Text('Transaction List',
+                        style: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor,
+                        )),
                   ),
                   body: Container(
                       color: Style.backgroundColor,
