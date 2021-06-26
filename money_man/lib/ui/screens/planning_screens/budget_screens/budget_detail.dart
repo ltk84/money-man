@@ -13,6 +13,7 @@ import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.da
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_transaction.dart';
 
@@ -532,11 +533,12 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                   onPressed: () async {
                     await Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => BudgetTransactionScreen(
-                                  wallet: widget.wallet,
-                                  budget: widget.budget,
-                                )));
+                        PageTransition(
+                            type: PageTransitionType.leftToRight,
+                            child: BudgetTransactionScreen(
+                              wallet: widget.wallet,
+                              budget: widget.budget,
+                            )));
                     await _firestore.updateBudget(widget.budget, widget.wallet);
                     setState(() {});
                   },

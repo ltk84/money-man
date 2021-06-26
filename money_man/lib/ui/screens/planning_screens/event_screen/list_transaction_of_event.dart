@@ -180,9 +180,9 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
               color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                color: Style.backgroundColor,
-                width: 1.0,
-              ))),
+                    color: Style.backgroundColor,
+                    width: 1.0,
+                  ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
           child: Column(children: <Widget>[
             Container(
@@ -193,9 +193,9 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                     Text('Overview',
                         style: TextStyle(
                           color: Style.foregroundColor,
-                          fontFamily: 'Montserrat',
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         )),
                     SizedBox(
                       width: 10,
@@ -216,19 +216,20 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                   children: <Widget>[
                     Text(total >= 0 ? 'Income' : 'Outcome',
                         style: TextStyle(
-                          color: Style.foregroundColor,
-                          fontSize: 15,
-                          fontFamily: 'Montserrat',
+                          color: Style.foregroundColor.withOpacity(0.54),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: Style.fontFamily,
                         )),
                     MoneySymbolFormatter(
                         text: total,
                         currencyId: widget.eventWallet.currencyID,
                         textStyle: TextStyle(
                           color: Style.foregroundColor,
-                          fontSize: 15,
+                          fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          fontFamily: 'Montserrat',
-                        )),
+                          fontFamily: Style.fontFamily,
+                        ),),
                   ]),
             ),
           ])),
@@ -249,12 +250,12 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
           color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Style.backgroundColor,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ),
               top: BorderSide(
-                color: Style.backgroundColor,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
@@ -268,7 +269,10 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                     DateFormat("dd")
                         .format(transListSortByDate[xIndex][0].date),
                     style: TextStyle(
-                        fontSize: 30.0, color: Style.foregroundColor)),
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 30.0,
+                        color: Style.foregroundColor)),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -282,18 +286,23 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                             .toString(),
                     // 'hello',
                     style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
                         fontSize: 12.0,
-                        color: Style.foregroundColor.withOpacity(0.6))),
+                        color: Style.foregroundColor.withOpacity(0.54))),
               ),
               Expanded(
                 child: MoneySymbolFormatter(
+                  digit: totalAmountInDay >= 0 ? '+' : '',
                   text: totalAmountInDay,
                   currencyId: widget.eventWallet.currencyID,
                   textAlign: TextAlign.end,
                   textStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Style.foregroundColor,
-                      fontFamily: Style.fontFamily),
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.0,
+                    color: Style.foregroundColor,
+                  ),
                 ),
               ),
             ],
@@ -334,9 +343,11 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                         child: Text(
                             transListSortByDate[xIndex][yIndex].category.name,
                             style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                color: Style.foregroundColor)),
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14.0,
+                              color: Style.foregroundColor,
+                            )),
                       ),
                       Expanded(
                         child: MoneySymbolFormatter(
@@ -344,13 +355,15 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                             currencyId: widget.eventWallet.currencyID,
                             textAlign: TextAlign.end,
                             textStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.0,
                                 color: transListSortByDate[xIndex][yIndex]
-                                            .category
-                                            .type ==
-                                        'income'
-                                    ? Colors.green
-                                    : Colors.red[600])),
+                                    .category
+                                    .type ==
+                                    'income'
+                                    ? Style.incomeColor2
+                                    : Style.expenseColor),),
                       ),
                     ],
                   ),

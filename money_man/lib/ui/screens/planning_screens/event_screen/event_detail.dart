@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
@@ -7,6 +8,7 @@ import 'package:money_man/ui/screens/planning_screens/event_screen/delete_event.
 import 'package:money_man/ui/screens/planning_screens/event_screen/edit_event.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/list_transaction_of_event.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/src/intl/date_format.dart';
 
@@ -62,13 +64,15 @@ class _EventDetailScreen extends State<EventDetailScreen>
         actions: <Widget>[
           IconButton(
             onPressed: () async {
-              final updatedTrans = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => EditEventScreen(
-                            currentEvent: _currentEvent,
-                            eventWallet: _eventWallet,
-                          )));
+              final updatedTrans = await showCupertinoModalBottomSheet(
+                  isDismissible: false,
+                  enableDrag: false,
+                  context: context,
+                  builder: (context) =>EditEventScreen(
+                    currentEvent: _currentEvent,
+                    eventWallet: _eventWallet,
+                  )
+              );
               if (updatedTrans != null) setState(() {});
             },
             icon: Icon(
@@ -141,10 +145,18 @@ class _EventDetailScreen extends State<EventDetailScreen>
         child: Column(
           children: [
             Container(
+              padding: EdgeInsets.symmetric(vertical: 15.0),
               decoration: BoxDecoration(
-                  color: Style.backgroundColor,
-                  borderRadius: BorderRadius.circular(8)),
-              padding: EdgeInsets.symmetric(vertical: 10),
+                  color: Style.boxBackgroundColor,
+                  border: Border(
+                      top: BorderSide(
+                        color: Style.foregroundColor.withOpacity(0.12),
+                        width: 0.5,
+                      ),
+                      bottom: BorderSide(
+                        color: Style.foregroundColor.withOpacity(0.12),
+                        width: 0.5,
+                      ))),
               child: Column(
                 children: [
                   ListTile(
@@ -163,8 +175,12 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 15,
+                  Container(
+                    margin: EdgeInsets.only(left: 70, top: 10),
+                    child: Divider(
+                      color: Style.foregroundColor.withOpacity(0.12),
+                      thickness: 0.5,
+                    ),
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 15),
@@ -187,8 +203,12 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 15,
+                  Container(
+                    margin: EdgeInsets.only(left: 70, top: 10),
+                    child: Divider(
+                      color: Style.foregroundColor.withOpacity(0.12),
+                      thickness: 0.5,
+                    ),
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 15),
@@ -271,14 +291,15 @@ class _EventDetailScreen extends State<EventDetailScreen>
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () async {
-                    Navigator.push(
+                    await Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => EventListTransactionScreen(
-                            currentEvent: _currentEvent,
-                            eventWallet: _eventWallet,
-                          ),
-                        ));
+                        PageTransition(
+                            type: PageTransitionType.leftToRight,
+                            child: EventListTransactionScreen(
+                              currentEvent: _currentEvent,
+                              eventWallet: _eventWallet,
+                            )));
+                    setState(() {});
                   },
                   child: Text(
                     'Transaction of Event',

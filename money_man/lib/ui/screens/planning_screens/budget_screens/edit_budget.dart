@@ -67,8 +67,11 @@ class _AddBudgetState extends State<EditBudget> {
           title: Text(
             'Edit Budget',
             style: TextStyle(
-                color: Style.foregroundColor.withOpacity(1),
-                fontFamily: 'Montserrat'),
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
+              color: Style.foregroundColor,
+            ),
           ),
           actions: [
             GestureDetector(

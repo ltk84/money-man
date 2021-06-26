@@ -68,6 +68,7 @@ class _AddBudgetState extends State<AddBudget> {
       child: Scaffold(
         backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
+          elevation: 0,
           leading: CloseButton(
           color: Style.foregroundColor,
           ),
@@ -121,7 +122,12 @@ class _AddBudgetState extends State<AddBudget> {
           centerTitle: true,
           title: Text(
             'Add budget',
-            style: TextStyle(color: Style.foregroundColor),
+            style: TextStyle(
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
+              color: Style.foregroundColor,
+            ),
           ),
         ),
         body: Container(

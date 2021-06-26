@@ -58,20 +58,18 @@ class _AddEventState extends State<AddEvent> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-      backgroundColor: Style.backgroundColor,
+      backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
         leadingWidth: 70.0,
         centerTitle: true,
         elevation: 0,
         backgroundColor: Style.appBarColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0))),
         title: Text('Add Event',
             style: TextStyle(
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
               color: Style.foregroundColor,
-              fontFamily: 'Montserrat',
             )),
         leading: CloseButton(
           color: Style.foregroundColor,
@@ -126,7 +124,7 @@ class _AddEventState extends State<AddEvent> {
         ],
       ),
       body: Container(
-          color: Style.backgroundColor.withOpacity(0.56),
+          color: Style.backgroundColor1,
           child: Form(
             child: buildInput(),
           )),
@@ -146,288 +144,300 @@ class _AddEventState extends State<AddEvent> {
 
   Widget buildInput() {
     return ListView(
+      physics:
+      BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              color: Style.backgroundColor,
-              margin: EdgeInsets.symmetric(vertical: 35.0, horizontal: 0.0),
-              child: Column(
+        Container(
+          margin: EdgeInsets.only(top: 30.0),
+          decoration: BoxDecoration(
+              color: Style.boxBackgroundColor,
+              border: Border(
+                  top: BorderSide(
+                    color: Style.foregroundColor.withOpacity(0.12),
+                    width: 0.5,
+                  ),
+                  bottom: BorderSide(
+                    color: Style.foregroundColor.withOpacity(0.12),
+                    width: 0.5,
+                  ))),
+          child: Column(
+            children: [
+              Row(
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
-                        icon: SuperIcon(
-                          iconPath: cate.iconID,
-                          size: 70.0,
+                  IconButton(
+                    padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
+                    icon: SuperIcon(
+                      iconPath: cate.iconID,
+                      size: 40.0,
+                    ),
+                    onPressed: () async {
+                      var data = await showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (context) => IconPicker(),
+                      );
+                      if (data != null) {
+                        setState(() {
+                          cate.iconID = data;
+                        });
+                      }
+                    },
+                    iconSize: 50,
+                    color: Style.foregroundColor.withOpacity(0.7),
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      size: 40.0,
+                    ),
+                    onPressed: () async {
+                      var data = await showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (context) => IconPicker(),
+                      );
+                      if (data != null) {
+                        setState(() {
+                          cate.iconID = data;
+                        });
+                      }
+                    },
+                    iconSize: 20,
+                    color: Style.foregroundColor.withOpacity(0.7),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.only(right: 50),
+                      width: 250,
+                      child: TextFormField(
+                        autocorrect: false,
+                        keyboardType: TextInputType.name,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Style.foregroundColor,
+                          decoration: TextDecoration.none,
                         ),
-                        onPressed: () async {
-                          var data = await showCupertinoModalBottomSheet(
-                            context: context,
-                            builder: (context) => IconPicker(),
-                          );
-                          if (data != null) {
-                            setState(() {
-                              cate.iconID = data;
-                            });
-                          }
-                        },
-                        iconSize: 50,
-                        color: Style.foregroundColor.withOpacity(0.7),
-                      ),
-                      IconButton(
-                        padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
-                        icon: Icon(
-                          Icons.arrow_drop_down,
-                          size: 40.0,
-                        ),
-                        onPressed: () async {
-                          var data = await showCupertinoModalBottomSheet(
-                            context: context,
-                            builder: (context) => IconPicker(),
-                          );
-                          if (data != null) {
-                            setState(() {
-                              cate.iconID = data;
-                            });
-                          }
-                        },
-                        iconSize: 20,
-                        color: Style.foregroundColor.withOpacity(0.7),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.only(right: 50),
-                          width: 250,
-                          child: TextFormField(
-                            autocorrect: false,
-                            keyboardType: TextInputType.name,
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Style.foregroundColor,
-                              decoration: TextDecoration.none,
-                            ),
-                            decoration: InputDecoration(
-                              errorBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.red, width: 1),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color:
-                                        Style.foregroundColor.withOpacity(0.6),
-                                    width: 1),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color:
-                                        Style.foregroundColor.withOpacity(0.6),
-                                    width: 3),
-                              ),
-                              labelText: 'Name event',
-                              labelStyle: TextStyle(
-                                  color: Style.foregroundColor.withOpacity(0.6),
-                                  fontSize: 15),
-                            ),
-                            onChanged: (value) => nameEvent = value,
-                            validator: (value) {
-                              if (value == null || value.length == 0)
-                                return 'Name is empty';
-                              return (value != null && value.contains('@'))
-                                  ? 'Do not use the @ char.'
-                                  : null;
-                            },
+                        decoration: InputDecoration(
+                          errorBorder: UnderlineInputBorder(
+                            borderSide:
+                            BorderSide(color: Colors.red, width: 1),
                           ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color:
+                                Style.foregroundColor.withOpacity(0.6),
+                                width: 1),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color:
+                                Style.foregroundColor.withOpacity(0.6),
+                                width: 3),
+                          ),
+                          labelText: 'Name event',
+                          labelStyle: TextStyle(
+                              color: Style.foregroundColor.withOpacity(0.6),
+                              fontSize: 15),
                         ),
-                      )
-                    ],
-                  ),
-                  Divider(
-                    thickness: 0.3,
-                    color: Style.foregroundColor,
-                  ),
-                  ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    dense: true,
-                    leading: Icon(Icons.calendar_today,
-                        color: Style.foregroundColor.withOpacity(0.54),
-                        size: 28.0),
-                    title: TextFormField(
-                      onTap: () async {
-                        DatePicker.showDatePicker(context,
-                            currentTime: endDate == null
-                                ? DateTime(DateTime.now().year,
-                                    DateTime.now().month, DateTime.now().day)
-                                : endDate,
-                            showTitleActions: true, onConfirm: (date) {
+                        onChanged: (value) => nameEvent = value,
+                        validator: (value) {
+                          if (value == null || value.length == 0)
+                            return 'Name is empty';
+                          return (value != null && value.contains('@'))
+                              ? 'Do not use the @ char.'
+                              : null;
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 70, top: 10),
+                child: Divider(
+                  color: Style.foregroundColor.withOpacity(0.12),
+                  thickness: 0.5,
+                ),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                dense: true,
+                leading: Icon(Icons.calendar_today,
+                    color: Style.foregroundColor.withOpacity(0.54),
+                    size: 28.0),
+                title: TextFormField(
+                  onTap: () async {
+                    DatePicker.showDatePicker(context,
+                        currentTime: endDate == null
+                            ? DateTime(DateTime.now().year,
+                            DateTime.now().month, DateTime.now().day)
+                            : endDate,
+                        showTitleActions: true, onConfirm: (date) {
                           if (date != null) {
                             setState(() {
                               endDate = date;
                             });
                           }
                         },
-                            locale: LocaleType.en,
-                            theme: DatePickerTheme(
-                              cancelStyle: TextStyle(
-                                  fontFamily: Style.fontFamily,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor),
-                              doneStyle: TextStyle(
-                                  fontFamily: Style.fontFamily,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor),
-                              itemStyle: TextStyle(
-                                  fontFamily: Style.fontFamily,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor),
-                              backgroundColor: Style.boxBackgroundColor,
-                            ));
-                      },
-                      readOnly: true,
-                      style: TextStyle(
-                          color: Style.foregroundColor,
-                          fontFamily: 'Montserrat',
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600),
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: endDate == null
-                                ? Style.foregroundColor.withOpacity(0.6)
-                                : Style.foregroundColor,
-                            fontFamily: 'Montserrat',
-                            fontSize: 16.0,
-                            fontWeight: endDate == null
-                                ? FontWeight.w500
-                                : FontWeight.w600,
-                          ),
-                          hintText: endDate ==
-                                  DateTime.parse(DateFormat("yyyy-MM-dd")
-                                      .format(DateTime.now()))
-                              ? 'Today'
-                              : endDate ==
-                                      DateTime.parse(DateFormat("yyyy-MM-dd")
-                                          .format(DateTime.now()
-                                              .add(Duration(days: 1))))
-                                  ? 'Tomorrow'
-                                  : endDate ==
-                                          DateTime.parse(
-                                              DateFormat("yyyy-MM-dd").format(
-                                                  DateTime.now().subtract(
-                                                      Duration(days: 1))))
-                                      ? 'Yesterday'
-                                      : DateFormat('EEEE, dd-MM-yyyy')
-                                          .format(endDate)),
-                    ),
-                    trailing: Icon(Icons.chevron_right,
-                        color: Style.foregroundColor.withOpacity(0.54)),
-                  ),
-                  Divider(
-                    thickness: 0.3,
-                    color: Style.foregroundColor,
-                  ),
-                  ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    onTap: () {},
-                    dense: true,
-                    leading: Icon(Icons.monetization_on,
-                        size: 30.0,
-                        color: Style.foregroundColor.withOpacity(0.54)),
-                    title: Text(currencySymbol,
-                        style: TextStyle(
-                            color: Style.foregroundColor,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.0)),
-                    trailing: Icon(Icons.lock,
-                        size: 20.0,
-                        color: Style.foregroundColor.withOpacity(0.54)),
-                  ),
-                  Divider(
-                    thickness: 0.3,
-                    color: Style.foregroundColor,
-                  ),
-                  ListTile(
-                    dense: true,
-                    onTap: () async {
-                      var res = await showCupertinoModalBottomSheet(
-                          isDismissible: true,
-                          backgroundColor: Style.backgroundColor,
-                          context: context,
-                          builder: (context) => SelectWalletAccountScreen(
-                              wallet: selectedWallet));
-                      if (res != null)
-                        setState(() {
-                          selectedWallet = res;
-                        });
-                    },
-                    leading: selectedWallet == null
-                        ? SuperIcon(
-                            iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
-                        : SuperIcon(
-                            iconPath: selectedWallet.iconID, size: 28.0),
-                    title: TextFormField(
-                      readOnly: true,
-                      style: TextStyle(
-                          color: Style.foregroundColor,
-                          fontFamily: 'Montserrat',
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600),
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: selectedWallet == null
-                                ? Style.foregroundColor.withOpacity(0.6)
-                                : Style.foregroundColor,
-                            fontFamily: 'Montserrat',
-                            fontSize: 16.0,
-                            fontWeight: selectedWallet == null
-                                ? FontWeight.w500
-                                : FontWeight.w600,
-                          ),
-                          hintText: selectedWallet == null
-                              ? 'Select wallet'
-                              : selectedWallet.name),
-                      onTap: () async {
-                        var res = await showCupertinoModalBottomSheet(
-                            isDismissible: true,
-                            backgroundColor: Style.backgroundColor,
-                            context: context,
-                            builder: (context) => SelectWalletAccountScreen(
-                                wallet: selectedWallet));
-                        if (res != null)
-                          setState(() {
-                            selectedWallet = res;
-                            currencySymbol = selectedWallet.currencyID;
-                          });
-                      },
-                    ),
-                    trailing: Icon(Icons.chevron_right,
-                        color: Style.foregroundColor.withOpacity(0.54)),
-                  ),
-                  Divider(
-                    thickness: 0.3,
-                    color: Style.foregroundColor,
-                  ),
-                ],
+                        locale: LocaleType.en,
+                        theme: DatePickerTheme(
+                          cancelStyle: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600,
+                              color: Style.foregroundColor),
+                          doneStyle: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600,
+                              color: Style.foregroundColor),
+                          itemStyle: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w600,
+                              color: Style.foregroundColor),
+                          backgroundColor: Style.boxBackgroundColor,
+                        ));
+                  },
+                  readOnly: true,
+                  style: TextStyle(
+                      color: Style.foregroundColor,
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      hintStyle: TextStyle(
+                        color: endDate == null
+                            ? Style.foregroundColor.withOpacity(0.6)
+                            : Style.foregroundColor,
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: endDate == null
+                            ? FontWeight.w500
+                            : FontWeight.w600,
+                      ),
+                      hintText: endDate ==
+                          DateTime.parse(DateFormat("yyyy-MM-dd")
+                              .format(DateTime.now()))
+                          ? 'Today'
+                          : endDate ==
+                          DateTime.parse(DateFormat("yyyy-MM-dd")
+                              .format(DateTime.now()
+                              .add(Duration(days: 1))))
+                          ? 'Tomorrow'
+                          : endDate ==
+                          DateTime.parse(
+                              DateFormat("yyyy-MM-dd").format(
+                                  DateTime.now().subtract(
+                                      Duration(days: 1))))
+                          ? 'Yesterday'
+                          : DateFormat('EEEE, dd-MM-yyyy')
+                          .format(endDate)),
+                ),
+                trailing: Icon(Icons.chevron_right,
+                    color: Style.foregroundColor.withOpacity(0.54)),
               ),
-            ),
-          ],
+              Container(
+                margin: EdgeInsets.only(left: 70),
+                child: Divider(
+                  color: Style.foregroundColor.withOpacity(0.12),
+                  thickness: 0.5,
+                ),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                onTap: () {},
+                dense: true,
+                leading: Icon(Icons.monetization_on,
+                    size: 30.0,
+                    color: Style.foregroundColor.withOpacity(0.54)),
+                title: Text(currencySymbol,
+                    style: TextStyle(
+                        color: Style.foregroundColor,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.0)),
+                trailing: Icon(Icons.lock,
+                    size: 20.0,
+                    color: Style.foregroundColor.withOpacity(0.54)),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 70),
+                child: Divider(
+                  color: Style.foregroundColor.withOpacity(0.12),
+                  thickness: 0.5,
+                ),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                dense: true,
+                onTap: () async {
+                  var res = await showCupertinoModalBottomSheet(
+                      isDismissible: true,
+                      backgroundColor: Style.backgroundColor,
+                      context: context,
+                      builder: (context) => SelectWalletAccountScreen(
+                          wallet: selectedWallet));
+                  if (res != null)
+                    setState(() {
+                      selectedWallet = res;
+                    });
+                },
+                leading: selectedWallet == null
+                    ? SuperIcon(
+                    iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
+                    : SuperIcon(
+                    iconPath: selectedWallet.iconID, size: 28.0),
+                title: TextFormField(
+                  readOnly: true,
+                  style: TextStyle(
+                      color: Style.foregroundColor,
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      hintStyle: TextStyle(
+                        color: selectedWallet == null
+                            ? Style.foregroundColor.withOpacity(0.6)
+                            : Style.foregroundColor,
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        fontWeight: selectedWallet == null
+                            ? FontWeight.w500
+                            : FontWeight.w600,
+                      ),
+                      hintText: selectedWallet == null
+                          ? 'Select wallet'
+                          : selectedWallet.name),
+                  onTap: () async {
+                    var res = await showCupertinoModalBottomSheet(
+                        isDismissible: true,
+                        backgroundColor: Style.backgroundColor,
+                        context: context,
+                        builder: (context) => SelectWalletAccountScreen(
+                            wallet: selectedWallet));
+                    if (res != null)
+                      setState(() {
+                        selectedWallet = res;
+                        currencySymbol = selectedWallet.currencyID;
+                      });
+                  },
+                ),
+                trailing: Icon(Icons.chevron_right,
+                    color: Style.foregroundColor.withOpacity(0.54)),
+              ),
+            ],
+          ),
         ),
       ],
     );
