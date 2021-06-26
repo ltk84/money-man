@@ -42,10 +42,10 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.appBarColor,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0))),
+          //shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.only(
+          //      topLeft: Radius.circular(20.0),
+          //      topRight: Radius.circular(20.0))),
           title: Text('Add Wallet',
               style: TextStyle(
                 fontFamily: Style.fontFamily,

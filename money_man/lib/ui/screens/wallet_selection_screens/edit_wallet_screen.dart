@@ -45,10 +45,10 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.appBarColor,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0))),
+          // shape: RoundedRectangleBorder(
+          //    borderRadius: BorderRadius.only(
+          //      topLeft: Radius.circular(20.0),
+          //      topRight: Radius.circular(20.0))),
           title: Text('Edit Wallet',
               style: TextStyle(
                 fontFamily: Style.fontFamily,

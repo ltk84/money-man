@@ -95,7 +95,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
           ),
           //),
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Style.appBarColor,
           elevation: 0,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(
