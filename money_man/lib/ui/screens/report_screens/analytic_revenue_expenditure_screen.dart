@@ -87,11 +87,11 @@ class _AnalyticRevenueAndExpenditureScreen
     super.initState();
     _wallet = widget.currentWallet == null
         ? Wallet(
-        id: 'id',
-        name: 'defaultName',
-        amount: 0,
-        currencyID: 'USD',
-        iconID: 'a')
+            id: 'id',
+            name: 'defaultName',
+            amount: 0,
+            currencyID: 'USD',
+            iconID: 'a')
         : widget.currentWallet;
   }
 
@@ -122,11 +122,11 @@ class _AnalyticRevenueAndExpenditureScreen
             },
             child: Hero(
               tag: 'alo',
-              child: Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+              child: Icon(Style.backIcon, color: Style.foregroundColor),
             ),
           ),
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Style.appBarColor,
           elevation: 0,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(
@@ -140,10 +140,9 @@ class _AnalyticRevenueAndExpenditureScreen
                 child: AnimatedContainer(
                   duration: Duration(
                       milliseconds:
-                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  color: Colors.grey[reachAppBar == 1
-                      ? (reachTop == 1 ? 800 : 850)
-                      : 900]
+                          reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                  color: Colors.grey[
+                          reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
                 ),
               ),
@@ -158,8 +157,7 @@ class _AnalyticRevenueAndExpenditureScreen
                     fontFamily: Style.fontFamily,
                     fontSize: 17.0,
                     fontWeight: FontWeight.w600,
-                  ))
-          ),
+                  ))),
           actions: <Widget>[
             Hero(
               tag: 'shareButton',
@@ -175,11 +173,8 @@ class _AnalyticRevenueAndExpenditureScreen
                       isDismissible: true,
                       backgroundColor: Style.boxBackgroundColor,
                       context: context,
-                      builder: (context) =>
-                          ShareScreen(
-                              bytes1: this.bytes1,
-                              bytes2: null,
-                              bytes3: null));
+                      builder: (context) => ShareScreen(
+                          bytes1: this.bytes1, bytes2: null, bytes3: null));
                 },
               ),
             ),
@@ -236,8 +231,9 @@ class _AnalyticRevenueAndExpenditureScreen
               });
               _transactionList = _transactionList
                   .where((element) =>
-              element.date.compareTo(beginDate) >= 0 &&
-                  element.date.compareTo(endDate) <= 0 && element.category.type != 'debt & loan')
+                      element.date.compareTo(beginDate) >= 0 &&
+                      element.date.compareTo(endDate) <= 0 &&
+                      element.category.type != 'debt & loan')
                   .toList();
               return Container(
                 color: Style.backgroundColor,
@@ -246,69 +242,68 @@ class _AnalyticRevenueAndExpenditureScreen
                   physics: BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
                   children: <Widget>[
-                    WidgetToImage(
-                        builder: (key) {
-                          this.key1 = key;
-                          return Column(
-                            children: [
-                              Container(
-                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                    WidgetToImage(builder: (key) {
+                      this.key1 = key;
+                      return Column(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                              color: Style.backgroundColor,
+                              child: Hero(
+                                tag: 'netIncomeChart',
+                                child: Material(
                                   color: Style.backgroundColor,
-                                  child: Hero(
-                                    tag: 'netIncomeChart',
-                                    child: Material(
-                                      color: Style.backgroundColor,
-                                      child: Column(
-                                        children: <Widget>[
-                                          Text('Net Income',
-                                              style: TextStyle(
-                                                color: Style.foregroundColor.withOpacity(
-                                                    0.7),
-                                                fontFamily: Style.fontFamily,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 16,
-                                              )
-                                          ),
-                                          MoneySymbolFormatter(
-                                              text: closingBalance - openingBalance,
-                                              currencyId: _wallet.currencyID,
-                                              textStyle: TextStyle(
-                                                color: (closingBalance -
-                                                    openingBalance) > 0 ? Style.incomeColor
-                                                    : (closingBalance -
-                                                    openingBalance) == 0
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text('Net Income',
+                                          style: TextStyle(
+                                            color: Style.foregroundColor
+                                                .withOpacity(0.7),
+                                            fontFamily: Style.fontFamily,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                          )),
+                                      MoneySymbolFormatter(
+                                          text: closingBalance - openingBalance,
+                                          currencyId: _wallet.currencyID,
+                                          textStyle: TextStyle(
+                                            color: (closingBalance -
+                                                        openingBalance) >
+                                                    0
+                                                ? Style.incomeColor
+                                                : (closingBalance -
+                                                            openingBalance) ==
+                                                        0
                                                     ? Style.foregroundColor
                                                     : Style.expenseColor,
-                                                fontFamily: Style.fontFamily,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 26,
-                                                height: 1.5,
-                                              )),
-                                          Container(
-                                            width: 450,
-                                            height: 200,
-                                            child: BarChartScreen(
-                                                currentList: _transactionList,
-                                                beginDate: beginDate,
-                                                endDate: endDate),
-                                          ),
-                                        ],
+                                            fontFamily: Style.fontFamily,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 26,
+                                            height: 1.5,
+                                          )),
+                                      Container(
+                                        width: 450,
+                                        height: 200,
+                                        child: BarChartScreen(
+                                            currentList: _transactionList,
+                                            beginDate: beginDate,
+                                            endDate: endDate),
                                       ),
-                                    ),
-                                  )
-                              ),
-                              Container(
-                                child: BarChartInformation(
-                                  currentList: _transactionList,
-                                  beginDate: beginDate,
-                                  endDate: endDate,
-                                  currentWallet: _wallet,
+                                    ],
+                                  ),
                                 ),
-                              )
-                            ],
-                          );
-                        }
-                    )
+                              )),
+                          Container(
+                            child: BarChartInformation(
+                              currentList: _transactionList,
+                              beginDate: beginDate,
+                              endDate: endDate,
+                              currentWallet: _wallet,
+                            ),
+                          )
+                        ],
+                      );
+                    })
                   ],
                 ),
               );

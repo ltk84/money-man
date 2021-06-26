@@ -50,7 +50,10 @@ class _EventScreenState extends State<EventScreen>
               appBar: AppBar(
                 backgroundColor: Style.appBarColor,
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: Icon(
+                    Style.backIcon,
+                    color: Style.foregroundColor,
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
