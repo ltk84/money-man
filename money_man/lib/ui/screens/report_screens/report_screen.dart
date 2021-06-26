@@ -116,7 +116,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
           backgroundColor: Style.backgroundColor,
           //extendBodyBehindAppBar: true,
           appBar: new AppBar(
-            backgroundColor: Style.appBarColor,
+            backgroundColor: Style.backgroundColor,
             centerTitle: true,
             elevation: 0,
             // flexibleSpace: ClipRect(

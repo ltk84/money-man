@@ -126,7 +126,7 @@ class _AnalyticRevenueAndExpenditureScreen
             ),
           ),
           centerTitle: true,
-          backgroundColor: Style.appBarColor,
+          backgroundColor: Style.backgroundColor,
           elevation: 0,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(

@@ -103,7 +103,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     return Scaffold(
         backgroundColor: Style.backgroundColor,
         appBar: new AppBar(
-          backgroundColor: Style.appBarColor,
+          backgroundColor: Style.backgroundColor,
           centerTitle: true,
           elevation: 0,
           leading: MaterialButton(

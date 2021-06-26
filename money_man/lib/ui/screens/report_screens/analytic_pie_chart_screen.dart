@@ -139,7 +139,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
             ),
           ),
           //centerTitle: true,
-          backgroundColor: Style.appBarColor,
+          backgroundColor: Colors.transparent,
           elevation: 0,
           // flexibleSpace: ClipRect(
           //   child: AnimatedOpacity(

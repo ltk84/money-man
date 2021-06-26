@@ -113,7 +113,7 @@ class _CategoriesTransactionScreenState
           ),
           //),
           centerTitle: true,
-          backgroundColor: Style.appBarColor,
+          backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(
@@ -179,7 +179,7 @@ class _CategoriesTransactionScreenState
                               .toLowerCase())
                       .toList();
                   return ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       controller: _controller,
                       itemCount: _selectCateTab.length,
                       itemBuilder: (context, index) {

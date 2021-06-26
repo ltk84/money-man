@@ -61,7 +61,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     print('add build');
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: Style.backgroundColor,
+        backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,

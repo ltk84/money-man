@@ -9,7 +9,7 @@ class Style {
   static IconData backIcon = Icons.arrow_back_ios_rounded;
   static Color backgroundColor = Colors.black;
   //static Color backgroundColor = Color(0xFF111111);
-  static Color appBarColor = Colors.black;
+  static Color appBarColor = Colors.grey[900];
   static Color backgroundColor1 = Color(0xFF111111);
   static Color foregroundColor = Colors.white;
   static Color foregroundColorDark = Color(0x70999999);
@@ -81,7 +81,7 @@ class Style {
       case 0:
         currentTheme = 0;
         backgroundColor = Colors.black;
-        appBarColor = backgroundColor;
+        appBarColor = Colors.grey[900];
         //static Color backgroundColor = Color(0xFF111111);
         backgroundColor1 = Color(0xFF111111);
         foregroundColor = Colors.white;
