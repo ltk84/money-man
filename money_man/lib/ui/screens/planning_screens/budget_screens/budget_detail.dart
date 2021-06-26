@@ -495,7 +495,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             Divider(
-              color: Style.foregroundColor,
+              color: Style.foregroundColor.withOpacity(0.24),
+              thickness: 0.5
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 25),
@@ -521,7 +522,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             Divider(
-              color: Style.boxBackgroundColor,
+                color: Style.foregroundColor.withOpacity(0.24),
+                thickness: 0.5
             ),
             Container(
               margin: EdgeInsets.only(top: 10, bottom: 20),

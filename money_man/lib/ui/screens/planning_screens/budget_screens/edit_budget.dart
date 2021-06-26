@@ -91,9 +91,9 @@ class _AddBudgetState extends State<EditBudget> {
             ),
           ],
         ),
-        backgroundColor: Style.backgroundColor,
+        backgroundColor: Style.backgroundColor1,
         body: Container(
-          color: Style.backgroundColor,
+          color: Style.backgroundColor1,
           margin: EdgeInsets.symmetric(vertical: 15),
           padding: EdgeInsets.all(15),
           child: Column(

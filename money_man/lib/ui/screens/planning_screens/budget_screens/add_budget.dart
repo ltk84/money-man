@@ -66,7 +66,7 @@ class _AddBudgetState extends State<AddBudget> {
       data: ThemeData(
           primaryColor: Style.foregroundColor, fontFamily: 'Montserrat'),
       child: Scaffold(
-        backgroundColor: Style.backgroundColor,
+        backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
           leading: CloseButton(
           color: Style.foregroundColor,
@@ -125,7 +125,7 @@ class _AddBudgetState extends State<AddBudget> {
           ),
         ),
         body: Container(
-          color: Style.backgroundColor,
+          color: Style.backgroundColor1,
           padding: EdgeInsets.only(left: 15, right: 15, top: 30),
           child: Column(
             children: [

@@ -48,7 +48,7 @@ class _SettingScreenState extends State<SettingScreen> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        backgroundColor: Style.appBarColor,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: ClipRect(
           child: AnimatedOpacity(
