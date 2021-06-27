@@ -21,7 +21,7 @@ class UserGuides {
       'Budget : a targeted limit for one specific wallet’s all categories or one specific category.',
       'Create an app event to track spending on a real event, like a weekend trip ',
       'Tracking your bil, such as electronic, tax, internet,.. You can make it in planning section',
-      'Sorry, but you can not do this, our mechandise is one currency for one wallet',
+      'Sorry, but you can not do this, our merchandise is one currency for one wallet',
       'By accessing Account tab in the bottom navigation bar, you should choose "My account", you will see the option "Change password" there!'
     ];
   }
