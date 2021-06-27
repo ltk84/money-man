@@ -1064,24 +1064,24 @@ class _TransactionScreen extends State<TransactionScreen>
                             ),
                           ],
                         )),
-                    PopupMenuItem(
-                        value: 'Transfer money',
-                        child: Row(
-                          children: [
-                            Icon(Icons.attach_money,
-                                color: Style.backgroundColor),
-                            SizedBox(width: 10.0),
-                            Text(
-                              'Transfer money',
-                              style: TextStyle(
-                                color: Style.backgroundColor,
-                                fontFamily: Style.fontFamily,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        )),
+                    // PopupMenuItem(
+                    //     value: 'Transfer money',
+                    //     child: Row(
+                    //       children: [
+                    //         Icon(Icons.attach_money,
+                    //             color: Style.backgroundColor),
+                    //         SizedBox(width: 10.0),
+                    //         Text(
+                    //           'Transfer money',
+                    //           style: TextStyle(
+                    //             color: Style.backgroundColor,
+                    //             fontFamily: Style.fontFamily,
+                    //             fontSize: 16.0,
+                    //             fontWeight: FontWeight.w500,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     )),
                     PopupMenuItem(
                         value: 'Search for transaction',
                         child: Row(
@@ -1099,23 +1099,23 @@ class _TransactionScreen extends State<TransactionScreen>
                             ),
                           ],
                         )),
-                    PopupMenuItem(
-                        value: 'Synchronize',
-                        child: Row(
-                          children: [
-                            Icon(Icons.sync, color: Style.backgroundColor),
-                            SizedBox(width: 10.0),
-                            Text(
-                              'Synchronize',
-                              style: TextStyle(
-                                color: Style.backgroundColor,
-                                fontFamily: Style.fontFamily,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        )),
+                    // PopupMenuItem(
+                    //     value: 'Synchronize',
+                    //     child: Row(
+                    //       children: [
+                    //         Icon(Icons.sync, color: Style.backgroundColor),
+                    //         SizedBox(width: 10.0),
+                    //         Text(
+                    //           'Synchronize',
+                    //           style: TextStyle(
+                    //             color: Style.backgroundColor,
+                    //             fontFamily: Style.fontFamily,
+                    //             fontSize: 16.0,
+                    //             fontWeight: FontWeight.w500,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     )),
                   ];
                 })
           ],
