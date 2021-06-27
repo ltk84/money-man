@@ -682,20 +682,20 @@ class _TransactionScreen extends State<TransactionScreen>
       } else {
         switch (chooseTime[0]) {
           case 'Q1':
-            headTime = DateTime(now.year, DateTime.january);
-            tailTime = DateTime(now.year, DateTime.march);
+            headTime = DateTime(now.year, DateTime.january, 1);
+            tailTime = DateTime(now.year, DateTime.march, 31);
             break;
           case 'Q2':
-            headTime = DateTime(now.year, DateTime.april);
-            tailTime = DateTime(now.year, DateTime.june);
+            headTime = DateTime(now.year, DateTime.april, 1);
+            tailTime = DateTime(now.year, DateTime.june, 30);
             break;
           case 'Q3':
-            headTime = DateTime(now.year, DateTime.july);
-            tailTime = DateTime(now.year, DateTime.september);
+            headTime = DateTime(now.year, DateTime.july, 1);
+            tailTime = DateTime(now.year, DateTime.september, 30);
             break;
           case 'Q4':
-            headTime = DateTime(now.year, DateTime.october);
-            tailTime = DateTime(now.year, DateTime.december);
+            headTime = DateTime(now.year, DateTime.october, 1);
+            tailTime = DateTime(now.year, DateTime.december, 31);
             break;
           default:
         }
@@ -999,7 +999,7 @@ class _TransactionScreen extends State<TransactionScreen>
           ],
         ),
         body: StreamBuilder<List<MyTransaction>>(
-            stream: _firestore.transactionStream(_wallet, _limit),
+            stream: _firestore.transactionStream(_wallet, 'full'),
             builder: (context, snapshot) {
               print('streambuilder build');
               List<MyTransaction> _transactionList = snapshot.data ?? [];

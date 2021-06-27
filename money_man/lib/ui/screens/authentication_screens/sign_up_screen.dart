@@ -364,55 +364,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // }
 
   Future _signInWithFacebookAccount() async {
-    try {
-      _auth.signInWithFacebook();
-    } on FirebaseAuthException catch (e) {
-      String error = '';
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          error =
-              "This account is linked with another provider! Try another provider!";
-          break;
-        case 'email-already-in-use':
-          error = "Your email address has been registered.";
-          break;
-        case 'invalid-credential':
-          error = "Your credential is malformed or has expired.";
-          break;
-        case 'user-disabled':
-          error = "This user has been disable.";
-          break;
-        default:
-          error = e.code;
-      }
-      _showAlertDialog(error);
+    var result = await _auth.signInWithFacebookVer2();
+    if (result != null && result != 'login-success') {
+      await _showAlertDialog(result);
     }
   }
 
   Future _signInWithGoogleAccount() async {
-    try {
-      _auth.signInWithGoogleAccount();
-    } on FirebaseAuthException catch (e) {
-      String error = '';
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          error =
-              "This account is linked with another provider! Try another provider!";
-          break;
-        case 'email-already-in-use':
-          error = "Your email address has been registered.";
-          break;
-        case 'invalid-credential':
-          error = "Your credential is malformed or has expired.";
-          break;
-        case 'user-disabled':
-          error = "This user has been disable.";
-          break;
-        default:
-          error = e.code;
-      }
-      _showAlertDialog(error);
-    } on PlatformException catch (e) {}
+    var res = await _auth.signInWithGoogleAccount();
+    // print(res.additionalUserInfo.providerId);
+    if (res != null && res != 'login-success') {
+      await _showAlertDialog(res);
+    }
   }
 
   Future _signUpWithEmailAndPassword(
@@ -422,25 +385,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         loading = true;
       });
       final res = await _auth.signUpWithEmailAndPassword(_email, _password);
-      if (res is String) {
-        setState(() {
-          loading = false;
-        });
-        String error = "";
-        switch (res) {
-          case 'invalid-email':
-            error = "This email is invalid.";
-            break;
-          case 'email-already-in-use':
-            error = "Your email address has been registered.";
-            break;
-          case 'weak-password':
-            error = "Your password is so weak! Be stronger bro!";
-            break;
-          default:
-            error = res;
-        }
-        _showAlertDialog(error);
+      if (res != null && res != 'login-success') {
+        _showAlertDialog(res);
       }
     }
   }
