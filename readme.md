@@ -11,11 +11,13 @@ lập kế hoạch chi tiêu một cách hiệu quả, trực quan.
 * Lấy lại mật khẩu đã quên.
 ### **Quản lý ví**
 * Thêm, sửa, xóa, hiển thị ví.
+* Chỉnh sửa số tiền đang có trong ví.
 ### **Quản lý các giao dịch**
 * Thêm, sửa, xóa, hiển thị giao dịch.
 * Xem thông tin chi tiết giao dịch.
 * Tìm kiếm giao dịch.
-* Tùy chọn hiển thị giao dịch theo các mốc thời gian.
+* Tùy chọn hiển thị giao dịch theo các khoảng thời gian.
+* Tùy chọn hiển thị giao dịch theo thể loại/thời gian.
 ### **Quản lý các giao dịch vay/cho vay**
 * Thêm liên hệ đã vay/cho vay.
 * Tính toán lượng tiền cần phải trả nợ/thu nợ.

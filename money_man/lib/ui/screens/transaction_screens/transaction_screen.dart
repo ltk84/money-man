@@ -913,7 +913,7 @@ class _TransactionScreen extends State<TransactionScreen>
                             SizedBox(width: 10.0),
                             Text(
                               viewByCategory
-                                  ? 'View by transaction'
+                                  ? 'View by date'
                                   : 'View by category',
                               style: TextStyle(
                                 color: Style.backgroundColor,
