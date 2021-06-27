@@ -1200,7 +1200,6 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
           color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
@@ -1213,10 +1212,7 @@ class _TransactionScreen extends State<TransactionScreen>
               ))),
       child: StickyHeader(
         header: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Style.boxBackgroundColor,
-          ),
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
