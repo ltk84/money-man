@@ -438,18 +438,29 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Future _signInWithFacebookAccount() async {
+    setState(() {
+      loading = true;
+    });
     var result = await _auth.signInWithFacebookVer2();
     if (result != null && result != 'login-success') {
       await _showAlertDialog(result);
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   Future _signInWithGoogleAccount() async {
+    setState(() {
+      loading = true;
+    });
     var res = await _auth.signInWithGoogleAccount();
-    // print(res.additionalUserInfo.providerId);
     if (res != null && res != 'login-success') {
       await _showAlertDialog(res);
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   Future _signInWithEmailAndPassword(
