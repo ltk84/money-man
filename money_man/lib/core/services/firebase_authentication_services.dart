@@ -217,7 +217,7 @@ class FirebaseAuthService {
   Future signInWithFacebookVer2() async {
     try {
       final facebookLogin = FacebookLogin();
-      facebookLogin.loginBehavior = FacebookLoginBehavior.nativeOnly;
+      facebookLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
       final result = await facebookLogin.logIn(['email']);
 
       switch (result.status) {

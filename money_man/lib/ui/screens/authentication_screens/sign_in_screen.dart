@@ -460,8 +460,11 @@ class _SignInScreenState extends State<SignInScreen> {
       });
       final res = await _auth.signInWithEmailAndPassword(_email, _password);
       if (res != null && res != 'login-success') {
-        _showAlertDialog(res);
+        await _showAlertDialog(res);
       }
+      setState(() {
+        loading = false;
+      });
     }
   }
 

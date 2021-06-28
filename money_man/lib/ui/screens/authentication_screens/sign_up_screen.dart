@@ -388,6 +388,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (res != null && res != 'login-success') {
         _showAlertDialog(res);
       }
+      setState(() {
+        loading = false;
+      });
     }
   }
 
