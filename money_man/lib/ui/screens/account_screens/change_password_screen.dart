@@ -409,7 +409,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                 ),
                 onPressed: () async {
-                  //TODO: Validate va change password
                   setState(() async {
                     // Kiểm tra mật khẩu đúng hay k
                     // Validate field 1

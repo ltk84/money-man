@@ -1,5 +1,4 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -382,16 +381,16 @@ class _SignInScreenState extends State<SignInScreen> {
           );
   }
 
-  Future _signInAnonymously(
-      FirebaseAuthService _auth, BuildContext context) async {
-    final res = await _auth.signInAnonymously();
+  // Future _signInAnonymously(
+  //     FirebaseAuthService _auth, BuildContext context) async {
+  //   final res = await _auth.signInAnonymously();
 
-    if (res is String) {
-      final error = res;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error)));
-    }
-  }
+  //   if (res is String) {
+  //     final error = res;
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text(error)));
+  //   }
+  // }
 
   bool isNumeric(String s) {
     if (s == null) {

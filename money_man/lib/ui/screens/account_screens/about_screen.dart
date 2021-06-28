@@ -1,14 +1,7 @@
 import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/services/firebase_authentication_services.dart';
-import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../style.dart';

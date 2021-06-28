@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
 import 'package:money_man/ui/style.dart';
@@ -30,8 +29,7 @@ class _AccountInformation extends State<AccountInformation> {
       //padding: EdgeInsets.fromLTRB(20,10,20,20),
       decoration: BoxDecoration(
           color: Style.boxBackgroundColor,
-          borderRadius: BorderRadius.circular(10)
-      ),
+          borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,34 +62,29 @@ class _AccountInformation extends State<AccountInformation> {
                     color: Style.foregroundColor,
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
-                    fontFamily: Style.fontFamily
-                ),
+                    fontFamily: Style.fontFamily),
                 autocorrect: false,
                 decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Style.foregroundColor.withOpacity(0.12),
-                        width: 1.5,
-                      )
-                    ),
+                        borderSide: BorderSide(
+                      color: Style.foregroundColor.withOpacity(0.12),
+                      width: 1.5,
+                    )),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Style.foregroundColor.withOpacity(0.12),
-                        width: 2.0,
-                      )
-                    ),
+                        borderSide: BorderSide(
+                      color: Style.foregroundColor.withOpacity(0.12),
+                      width: 2.0,
+                    )),
                     errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                          color: Style.errorColor,
-                          width: 1.5,
-                        )
-                    ),
+                      color: Style.errorColor,
+                      width: 1.5,
+                    )),
                     focusedErrorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                          color: Style.errorColor,
-                          width: 2.0,
-                        )
-                    ),
+                      color: Style.errorColor,
+                      width: 2.0,
+                    )),
                     errorStyle: TextStyle(
                       fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w400,
@@ -101,11 +94,9 @@ class _AccountInformation extends State<AccountInformation> {
                         color: Style.foregroundColor.withOpacity(0.24),
                         fontFamily: Style.fontFamily,
                         fontSize: 16.0,
-                        fontWeight: FontWeight.w400
-                    ),
+                        fontWeight: FontWeight.w400),
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(vertical: 5)
-                ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 5)),
               ),
             ),
           ),
@@ -130,12 +121,11 @@ class _AccountInformation extends State<AccountInformation> {
                 _auth.signOut();
               },
               icon: Icon(
-                  Icons.exit_to_app,
-                  color: Style.foregroundColor.withOpacity(0.24),
-                  size: 28.0,
+                Icons.exit_to_app,
+                color: Style.foregroundColor.withOpacity(0.24),
+                size: 28.0,
               ),
-            )
-        ),
+            )),
       ),
       body: Container(
         height: double.infinity,
@@ -152,8 +142,8 @@ class _AccountInformation extends State<AccountInformation> {
                       margin: EdgeInsets.symmetric(vertical: 40),
                       height: 150,
                       width: 150,
-                      decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: Style.foregroundColor),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Style.foregroundColor),
                       child: Text(
                         username == null || username.length == 0
                             ? 'M'
@@ -166,15 +156,13 @@ class _AccountInformation extends State<AccountInformation> {
                       ),
                       alignment: Alignment.center),
                 ),
-                Text(
-                  'Tell me what your name is.',
-                  style: TextStyle(
-                    fontFamily: Style.fontFamily,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w300,
-                    color: Style.foregroundColor,
-                  )
-                ),
+                Text('Tell me what your name is.',
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w300,
+                      color: Style.foregroundColor,
+                    )),
                 InputTile(context),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 100.0),
@@ -183,14 +171,15 @@ class _AccountInformation extends State<AccountInformation> {
                   child: TextButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
+                        (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed))
                             return Colors.white;
-                          return Color(0xFF2FB49C); // Use the component's default.
+                          return Color(
+                              0xFF2FB49C); // Use the component's default.
                         },
                       ),
                       foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
+                        (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed))
                             return Color(0xFF2FB49C);
                           return Colors.white; // Use the component's default.
@@ -202,13 +191,13 @@ class _AccountInformation extends State<AccountInformation> {
                         _auth.currentUser.updateProfile(
                           displayName: username,
                         );
-                        Navigator.pushReplacement(context,
+                        Navigator.pushReplacement(
+                            context,
                             PageTransition(
                               child: FirstStep(),
                               type: PageTransitionType.scale,
                               curve: Curves.elasticInOut,
-                            )
-                        );
+                            ));
                       }
                     },
                     child: Text('CONFIRM',
@@ -217,10 +206,8 @@ class _AccountInformation extends State<AccountInformation> {
                             fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.5,
-                            wordSpacing: 2.0
-                        ),
-                        textAlign: TextAlign.center
-                    ),
+                            wordSpacing: 2.0),
+                        textAlign: TextAlign.center),
                   ),
                 ),
               ],

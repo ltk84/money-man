@@ -23,7 +23,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
   int reachAppBar = 0;
 
   // Tab controller cho tab bar
-  TabController _tabController;
+  // TabController _tabController;
 
   // Text title = Text('My Account', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
   // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
@@ -160,7 +160,8 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                 print('stream ' + listWallet.length.toString());
                 return ListView.builder(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    physics: BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
                     itemCount: listWallet.length,
                     itemBuilder: (context, index) {
                       String iconData = listWallet[index].iconID;

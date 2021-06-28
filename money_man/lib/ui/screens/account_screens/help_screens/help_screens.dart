@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/basic_questions.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/basic_questions_screen.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/send_question_screen.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/user_guide_screens.dart';

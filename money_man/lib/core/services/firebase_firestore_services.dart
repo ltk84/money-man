@@ -1024,7 +1024,7 @@ class FirebaseFireStoreService {
 
   // add bill
   Future addBill(Bill bill, Wallet wallet) async {
-    final billsRef = await users
+    final billsRef = users
         .doc(uid)
         .collection('wallets')
         .doc(wallet.id)

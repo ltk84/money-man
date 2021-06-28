@@ -2,9 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/basic_questions.dart';
 import 'package:money_man/core/models/user_guide.dart';
-import 'package:money_man/ui/screens/account_screens/help_screens/answer_questions_screen.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/guide_detail.dart';
 import 'package:money_man/ui/style.dart';
 

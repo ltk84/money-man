@@ -10,7 +10,6 @@ import 'package:money_man/core/models/repeat_option_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_bill_screen.dart';
-import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
@@ -43,14 +42,14 @@ class _AddBillScreenState extends State<AddBillScreen> {
   String repeatDescription;
 
   DateTime now =
-  DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     selectedWallet = widget.currentWallet;
-    currencySymbol = CurrencyService().findByCode(selectedWallet.currencyID).symbol;
+    currencySymbol =
+        CurrencyService().findByCode(selectedWallet.currencyID).symbol;
     repeatOption = RepeatOption(
         frequency: 'daily',
         rangeAmount: 1,
@@ -67,38 +66,40 @@ class _AddBillScreenState extends State<AddBillScreen> {
     repeatDescription = updateRepeatDescription();
 
     return StreamBuilder<Object>(
-      stream: _firestore.billStream(selectedWallet.id),
-      builder: (context, snapshot) {
-        List<Bill> listBills = snapshot.data ?? [];
-        return Scaffold(
-            backgroundColor: Style.backgroundColor1,
-            extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              backgroundColor: Style.boxBackgroundColor2,
-              elevation: 0.0,
-              leading: CloseButton(
-                color: Style.foregroundColor,
-              ),
-              title: Text('Add Bill',
-                  style: TextStyle(
-                    fontFamily: Style.fontFamily,
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.w600,
-                    color: Style.foregroundColor,
-                  )),
-              centerTitle: true,
-              actions: [
-                TextButton(
-                  onPressed: () async {
-                    if (amount == null) {
-                      _showAlertDialog('Please enter amount!');
-                    } else if (category == null) {
-                      _showAlertDialog('Please pick category!');
-                    } else if (listBills.any((element) => element.category.name == category.name)) {
-                      _showAlertDialog('This category has already been used,\nplease pick again!');
-                    } else {
-                      dueDates = initDueDate();
-                      var bill = Bill(
+        stream: _firestore.billStream(selectedWallet.id),
+        builder: (context, snapshot) {
+          List<Bill> listBills = snapshot.data ?? [];
+          return Scaffold(
+              backgroundColor: Style.backgroundColor1,
+              extendBodyBehindAppBar: true,
+              appBar: AppBar(
+                backgroundColor: Style.boxBackgroundColor2,
+                elevation: 0.0,
+                leading: CloseButton(
+                  color: Style.foregroundColor,
+                ),
+                title: Text('Add Bill',
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w600,
+                      color: Style.foregroundColor,
+                    )),
+                centerTitle: true,
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      if (amount == null) {
+                        _showAlertDialog('Please enter amount!');
+                      } else if (category == null) {
+                        _showAlertDialog('Please pick category!');
+                      } else if (listBills.any((element) =>
+                          element.category.name == category.name)) {
+                        _showAlertDialog(
+                            'This category has already been used,\nplease pick again!');
+                      } else {
+                        dueDates = initDueDate();
+                        var bill = Bill(
                           id: 'id',
                           category: category,
                           amount: amount,
@@ -109,211 +110,219 @@ class _AddBillScreenState extends State<AddBillScreen> {
                           isFinished: false,
                           dueDates: dueDates,
                           paidDueDates: [],
-                      );
+                        );
 
-                      await _firestore.addBill(bill, selectedWallet);
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Text('Save',
-                      style: TextStyle(
-                        fontFamily: Style.fontFamily,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: Style.successColor,
-                      )),
-                ),
-              ],
-            ),
-            body: ListView(
-              physics:
-                  BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              children: [
-                Container(
-                    margin: EdgeInsets.only(top: 30.0),
-                    decoration: BoxDecoration(
-                        color: Style.boxBackgroundColor,
-                        border: Border(
-                            top: BorderSide(
-                              color: Style.foregroundColor.withOpacity(0.12),
-                              width: 0.5,
-                            ),
-                            bottom: BorderSide(
-                              color: Style.foregroundColor.withOpacity(0.12),
-                              width: 0.5,
-                            ))),
-                    child: Column(children: [
-                      // Hàm build Amount Input.
-                      GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTap: () async {
-                            final resultAmount = await showCupertinoModalBottomSheet(
-                                context: context,
-                                builder: (context) => EnterAmountScreen());
-                            if (resultAmount != null)
-                              setState(() {
-                                print(resultAmount);
-                                this.amount = double.parse(resultAmount);
-                              });
-                          },
-                          child: buildAmountInput(
-                            amount: amount,
-                          )
-                      ),
+                        await _firestore.addBill(bill, selectedWallet);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text('Save',
+                        style: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.successColor,
+                        )),
+                  ),
+                ],
+              ),
+              body: ListView(
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(top: 30.0),
+                      decoration: BoxDecoration(
+                          color: Style.boxBackgroundColor,
+                          border: Border(
+                              top: BorderSide(
+                                color: Style.foregroundColor.withOpacity(0.12),
+                                width: 0.5,
+                              ),
+                              bottom: BorderSide(
+                                color: Style.foregroundColor.withOpacity(0.12),
+                                width: 0.5,
+                              ))),
+                      child: Column(children: [
+                        // Hàm build Amount Input.
+                        GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () async {
+                              final resultAmount =
+                                  await showCupertinoModalBottomSheet(
+                                      context: context,
+                                      builder: (context) =>
+                                          EnterAmountScreen());
+                              if (resultAmount != null)
+                                setState(() {
+                                  print(resultAmount);
+                                  this.amount = double.parse(resultAmount);
+                                });
+                            },
+                            child: buildAmountInput(
+                              amount: amount,
+                            )),
 
-                      // Divider ngăn cách giữa các input field.
-                      Container(
-                        margin: EdgeInsets.only(left: 70),
-                        child: Divider(
-                          color: Style.foregroundColor.withOpacity(0.12),
-                          thickness: 1,
+                        // Divider ngăn cách giữa các input field.
+                        Container(
+                          margin: EdgeInsets.only(left: 70),
+                          child: Divider(
+                            color: Style.foregroundColor.withOpacity(0.12),
+                            thickness: 1,
+                          ),
                         ),
-                      ),
 
-                      // Hàm build Category Selection.
-                      GestureDetector(
+                        // Hàm build Category Selection.
+                        GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () async {
+                              final selectCate =
+                                  await showCupertinoModalBottomSheet(
+                                      isDismissible: true,
+                                      backgroundColor: Style.boxBackgroundColor,
+                                      context: context,
+                                      builder: (context) =>
+                                          CategoriesBillScreen());
+                              if (selectCate != null) {
+                                setState(() {
+                                  this.category = selectCate;
+                                });
+                              }
+                            },
+                            child: buildCategorySelection(
+                              display: this.category == null
+                                  ? null
+                                  : this.category.name,
+                              iconPath: this.category == null
+                                  ? null
+                                  : this.category.iconID,
+                            )),
+
+                        // Divider ngăn cách giữa các input field.
+                        Container(
+                          margin: EdgeInsets.only(left: 70, top: 8),
+                          child: Divider(
+                            color: Style.foregroundColor.withOpacity(0.12),
+                            thickness: 1,
+                          ),
+                          height: 2,
+                        ),
+
+                        // Hàm build Note Input.
+                        GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () async {
+                              final noteContent =
+                                  await showCupertinoModalBottomSheet(
+                                      isDismissible: true,
+                                      backgroundColor: Style.boxBackgroundColor,
+                                      context: context,
+                                      builder: (context) => NoteScreen(
+                                            content: note ?? '',
+                                          ));
+
+                              if (noteContent != null) {
+                                setState(() {
+                                  note = noteContent;
+                                });
+                              }
+                            },
+                            child: buildNoteInput(
+                              display: this.note == '' ? null : this.note,
+                            )),
+
+                        // Divider ngăn cách giữa các input field.
+                        Container(
+                          margin: EdgeInsets.only(left: 70),
+                          child: Divider(
+                            color: Style.foregroundColor.withOpacity(0.12),
+                            thickness: 1,
+                          ),
+                          height: 2,
+                        ),
+
+                        // Hàm build Wallet Selection.
+                        GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () async {
-                            final selectCate = await showCupertinoModalBottomSheet(
+                            var res = await showCupertinoModalBottomSheet(
                                 isDismissible: true,
                                 backgroundColor: Style.boxBackgroundColor,
                                 context: context,
-                                builder: (context) => CategoriesBillScreen());
-                            if (selectCate != null) {
+                                builder: (context) => SelectWalletAccountScreen(
+                                    wallet: selectedWallet));
+                            if (res != null)
                               setState(() {
-                                this.category = selectCate;
+                                selectedWallet = res;
+                                currencySymbol = CurrencyService()
+                                    .findByCode(selectedWallet.currencyID)
+                                    .symbol;
                               });
-                            }
                           },
-                          child: buildCategorySelection(
-                              display: this.category == null ? null : this.category.name,
-                              iconPath: this.category == null ? null : this.category.iconID,
-                          )
-                      ),
-
-                      // Divider ngăn cách giữa các input field.
-                      Container(
-                        margin: EdgeInsets.only(left: 70, top: 8),
-                        child: Divider(
-                          color: Style.foregroundColor.withOpacity(0.12),
-                          thickness: 1,
+                          child: buildWalletSelection(
+                            display: this.selectedWallet == null
+                                ? null
+                                : this.selectedWallet.name,
+                            iconPath: this.selectedWallet == null
+                                ? null
+                                : this.selectedWallet.iconID,
+                          ),
                         ),
-                        height: 2,
-                      ),
-
-                      // Hàm build Note Input.
-                      GestureDetector(
+                      ])),
+                  Container(
+                      margin: EdgeInsets.only(top: 30.0),
+                      decoration: BoxDecoration(
+                          color: Style.boxBackgroundColor,
+                          border: Border(
+                              top: BorderSide(
+                                color: Style.foregroundColor.withOpacity(0.12),
+                                width: 0.5,
+                              ),
+                              bottom: BorderSide(
+                                color: Style.foregroundColor.withOpacity(0.12),
+                                width: 0.5,
+                              ))),
+                      child: GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () async {
-                            final noteContent = await showCupertinoModalBottomSheet(
-                                isDismissible: true,
+                            var res = await showCupertinoModalBottomSheet(
+                                enableDrag: false,
+                                isDismissible: false,
                                 backgroundColor: Style.boxBackgroundColor,
                                 context: context,
-                                builder: (context) => NoteScreen(
-                                  content: note ?? '',
-                                ));
-
-                            if (noteContent != null) {
+                                builder: (context) => RepeatOptionScreen(
+                                      repeatOption: repeatOption,
+                                    ));
+                            if (res != null)
                               setState(() {
-                                note = noteContent;
+                                repeatOption = res;
                               });
-                            }
                           },
-                          child: buildNoteInput(
-                            display: this.note == '' ? null : this.note,
-                          )),
-
-
-                      // Divider ngăn cách giữa các input field.
-                      Container(
-                        margin: EdgeInsets.only(left: 70),
-                        child: Divider(
-                          color: Style.foregroundColor.withOpacity(0.12),
-                          thickness: 1,
+                          child: buildRepeatOptions())),
+                  Container(
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                      child: Text(
+                        repeatDescription ?? 'Select repeat option',
+                        style: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 13.0,
+                          fontWeight: FontWeight.w500,
+                          color: Style.foregroundColor.withOpacity(0.60),
                         ),
-                        height: 2,
-                      ),
-
-                      // Hàm build Wallet Selection.
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () async {
-                          var res = await showCupertinoModalBottomSheet(
-                              isDismissible: true,
-                              backgroundColor: Style.boxBackgroundColor,
-                              context: context,
-                              builder: (context) => SelectWalletAccountScreen(wallet: selectedWallet));
-                          if (res != null)
-                            setState(() {
-                              selectedWallet = res;
-                              currencySymbol = CurrencyService()
-                                  .findByCode(selectedWallet.currencyID)
-                                  .symbol;
-                            });
-                        },
-                        child: buildWalletSelection(
-                          display: this.selectedWallet == null ? null : this.selectedWallet.name,
-                          iconPath: this.selectedWallet == null ? null : this.selectedWallet.iconID,
-                        ),
-                      ),
-                    ])),
-                Container(
-                    margin: EdgeInsets.only(top: 30.0),
-                    decoration: BoxDecoration(
-                        color: Style.boxBackgroundColor,
-                        border: Border(
-                            top: BorderSide(
-                              color: Style.foregroundColor.withOpacity(0.12),
-                              width: 0.5,
-                            ),
-                            bottom: BorderSide(
-                              color: Style.foregroundColor.withOpacity(0.12),
-                              width: 0.5,
-                            ))),
-                    child: GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () async {
-                          var res = await showCupertinoModalBottomSheet(
-                              enableDrag: false,
-                              isDismissible: false,
-                              backgroundColor: Style.boxBackgroundColor,
-                              context: context,
-                              builder: (context) => RepeatOptionScreen(
-                                repeatOption: repeatOption,
-                              )
-                          );
-                          if (res != null)
-                            setState(() {
-                              repeatOption = res;
-                            });
-                        },
-                        child: buildRepeatOptions()
-                    )
-                ),
-                Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-                    child: Text(
-                      repeatDescription ?? 'Select repeat option',
-                      style: TextStyle(
-                        fontFamily: Style.fontFamily,
-                        fontSize: 13.0,
-                        fontWeight: FontWeight.w500,
-                        color: Style.foregroundColor.withOpacity(0.60),
-                      ),
-                    ))
-              ],
-            ));
-      }
-    );
+                      ))
+                ],
+              ));
+        });
   }
 
   String updateRepeatDescription() {
     String frequency = repeatOption.frequency == 'daily'
         ? 'day'
         : repeatOption.frequency
-        .substring(0, repeatOption.frequency.indexOf('ly'));
+            .substring(0, repeatOption.frequency.indexOf('ly'));
     String beginDateTime =
-    DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime);
+        DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime);
     String extraFeq = repeatOption.rangeAmount.toString();
     String type = repeatOption.type;
     String extra = repeatOption.type == 'until'
@@ -339,7 +348,8 @@ class _AddBillScreenState extends State<AddBillScreen> {
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
                   child: Icon(Icons.attach_money,
-                      color: Style.foregroundColor.withOpacity(0.70), size: 40.0)),
+                      color: Style.foregroundColor.withOpacity(0.70),
+                      size: 40.0)),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -353,22 +363,22 @@ class _AddBillScreenState extends State<AddBillScreen> {
                   SizedBox(height: 5.0),
                   (amount == null)
                       ? Text('Enter amount',
-                      style: TextStyle(
-                        fontFamily: Style.fontFamily,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                        color: Style.foregroundColor.withOpacity(0.24),
-                      ))
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w500,
+                            color: Style.foregroundColor.withOpacity(0.24),
+                          ))
                       : MoneySymbolFormatter(
-                    text: amount,
-                    currencyId: selectedWallet.currencyID,
-                    textStyle: TextStyle(
-                      color: Style.foregroundColor,
-                      fontFamily: Style.fontFamily,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  )
+                          text: amount,
+                          currencyId: selectedWallet.currencyID,
+                          textStyle: TextStyle(
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
                 ],
               ),
             ],
@@ -403,7 +413,9 @@ class _AddBillScreenState extends State<AddBillScreen> {
                     fontFamily: Style.fontFamily,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                    color: display == null
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
                   )),
             ],
           ),
@@ -428,13 +440,17 @@ class _AddBillScreenState extends State<AddBillScreen> {
             children: [
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
-                  child: Icon(Icons.notes, color: Style.foregroundColor.withOpacity(0.70), size: 24.0)),
+                  child: Icon(Icons.notes,
+                      color: Style.foregroundColor.withOpacity(0.70),
+                      size: 24.0)),
               Text(display ?? 'Note',
                   style: TextStyle(
                     fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                    color: display == null
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
                   )),
             ],
           ),
@@ -468,7 +484,9 @@ class _AddBillScreenState extends State<AddBillScreen> {
                     fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                    color: display == null
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
                   )),
             ],
           ),
@@ -494,7 +512,8 @@ class _AddBillScreenState extends State<AddBillScreen> {
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
                   child: Icon(Icons.calendar_today,
-                      color: Style.foregroundColor.withOpacity(0.70), size: 24.0)),
+                      color: Style.foregroundColor.withOpacity(0.70),
+                      size: 24.0)),
               Text('Repeat Options',
                   style: TextStyle(
                     fontFamily: Style.fontFamily,
@@ -513,13 +532,13 @@ class _AddBillScreenState extends State<AddBillScreen> {
     );
   }
 
-  List<DateTime> initDueDate () {
+  List<DateTime> initDueDate() {
     List<DateTime> dueDates = [];
-    var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    var now =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
     int freq;
-    switch (repeatOption.frequency)
-    {
+    switch (repeatOption.frequency) {
       case 'daily':
         freq = repeatOption.rangeAmount;
         break;
@@ -533,7 +552,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
       case 'yearly':
         bool isLeap = DateTime(now.year, 3, 0).day == 29;
         int dayOfYear = isLeap ? 366 : 365;
-        freq = dayOfYear  * repeatOption.rangeAmount;
+        freq = dayOfYear * repeatOption.rangeAmount;
         break;
     }
 
@@ -543,12 +562,10 @@ class _AddBillScreenState extends State<AddBillScreen> {
         dueDates.add(repeatOption.beginDateTime);
     } else {
       if (timeRange % freq == 0) {
-        if (!dueDates.contains(now))
-          dueDates.add(now);
+        if (!dueDates.contains(now)) dueDates.add(now);
       } else {
         var realDue = now.add(Duration(days: freq - (timeRange % freq)));
-        if (!dueDates.contains(realDue))
-          dueDates.add(realDue);
+        if (!dueDates.contains(realDue)) dueDates.add(realDue);
       }
     }
     return dueDates;

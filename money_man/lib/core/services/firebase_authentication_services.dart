@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -54,8 +52,7 @@ class FirebaseAuthService {
   // đăng nhập với email và password
   Future signInWithEmailAndPassword(email, password) async {
     try {
-      final result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
       return 'login-success';
     } on FirebaseAuthException catch (e) {
       String error = '';
@@ -88,7 +85,7 @@ class FirebaseAuthService {
   // đăng ký với email và password
   Future signUpWithEmailAndPassword(email, password) async {
     try {
-      final result = await _auth.createUserWithEmailAndPassword(
+      await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       return 'login-success';
     } on FirebaseAuthException catch (e) {
@@ -195,7 +192,7 @@ class FirebaseAuthService {
 
 //Hàm kiểm tra password
   Future<bool> validatePassword(String password) async {
-    var firebaseUser = await _auth.currentUser;
+    var firebaseUser = _auth.currentUser;
 
     var authCredentials = EmailAuthProvider.credential(
         email: firebaseUser.email, password: password);
@@ -210,7 +207,7 @@ class FirebaseAuthService {
   }
 
   Future<void> updatePassword(String password) async {
-    var firebaseUser = await _auth.currentUser;
+    var firebaseUser = _auth.currentUser;
     firebaseUser.updatePassword(password);
   }
 

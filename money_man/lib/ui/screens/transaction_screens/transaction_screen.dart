@@ -4,14 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_formatter/money_formatter.dart';
-import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/screens/report_screens/report_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/report_for_this_period.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
@@ -39,15 +36,15 @@ class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
   ScrollController listScrollController;
-  int _limit = 200;
-  int _limitIncrement = 20;
+  // int _limit = 200;
+  // int _limitIncrement = 20;
   Wallet _wallet;
   bool viewByCategory;
   int choosedTimeRange;
   String currencySymbol;
   List<Tab> myTabs;
   List<DateTime> _beginDate = [];
-  List<DateTime> _endDate= [];
+  List<DateTime> _endDate = [];
 
   @override
   void initState() {
@@ -57,20 +54,17 @@ class _TransactionScreen extends State<TransactionScreen>
     choosedTimeRange = 3;
     _beginDate.clear();
     _endDate.clear();
-    int index = 0 ;
+    int index = 0;
     var now = DateTime.now();
-    for (index ; index < 20 ; index ++)
-    {
+    for (; index < 20; index++) {
       var date = DateTime(now.year, now.month - (18 - index), 1);
       _beginDate.add(date);
-      if(index < 19)
-      {
-        _endDate.add(
-            DateTime(
-              _beginDate[index].year,
-              _beginDate[index].month + 1,
-              _beginDate[index].day -1,
-            ));
+      if (index < 19) {
+        _endDate.add(DateTime(
+          _beginDate[index].year,
+          _beginDate[index].month + 1,
+          _beginDate[index].day - 1,
+        ));
       }
     }
     listScrollController = ScrollController();
@@ -234,17 +228,15 @@ class _TransactionScreen extends State<TransactionScreen>
           setState(() {
             _beginDate.clear();
             _endDate.clear();
-            int index = 0 ;
+            int index = 0;
             var now = DateTime.now();
-            for (index ; index < 20 ; index ++)
-              {
-                var date = DateTime(now.year, now.month, now.day - (18 - index));
-                _beginDate.add(date);
-                if(index < 19)
-                  {
-                   _endDate.add(date);
-                  }
+            for (; index < 20; index++) {
+              var date = DateTime(now.year, now.month, now.day - (18 - index));
+              _beginDate.add(date);
+              if (index < 19) {
+                _endDate.add(date);
               }
+            }
             choosedTimeRange = 1;
 
             myTabs = initTabBar(choosedTimeRange);
@@ -259,21 +251,18 @@ class _TransactionScreen extends State<TransactionScreen>
           setState(() {
             _beginDate.clear();
             _endDate.clear();
-            int index = 0 ;
-            for (index ; index < 20 ; index ++)
-            {
+            int index = 0;
+            for (; index < 20; index++) {
               var firstDateInAWeek = DateTime.now()
                   .subtract(Duration(days: DateTime.now().weekday - 1))
                   .subtract(Duration(days: 7 * (18 - index)));
               _beginDate.add(firstDateInAWeek);
-              if(index < 19)
-              {
-                _endDate.add(
-                    DateTime(
-                        firstDateInAWeek.year,
-                        firstDateInAWeek.month,
-                        firstDateInAWeek.day + 6,
-                    ));
+              if (index < 19) {
+                _endDate.add(DateTime(
+                  firstDateInAWeek.year,
+                  firstDateInAWeek.month,
+                  firstDateInAWeek.day + 6,
+                ));
               }
             }
             choosedTimeRange = 2;
@@ -289,20 +278,17 @@ class _TransactionScreen extends State<TransactionScreen>
           setState(() {
             _beginDate.clear();
             _endDate.clear();
-            int index = 0 ;
+            int index = 0;
             var now = DateTime.now();
-            for (index ; index < 20 ; index ++)
-            {
+            for (; index < 20; index++) {
               var date = DateTime(now.year, now.month - (18 - index), 1);
               _beginDate.add(date);
-              if(index < 19)
-              {
-                _endDate.add(
-                    DateTime(
-                      _beginDate[index].year,
-                      _beginDate[index].month + 1,
-                      _beginDate[index].day -1,
-                    ));
+              if (index < 19) {
+                _endDate.add(DateTime(
+                  _beginDate[index].year,
+                  _beginDate[index].month + 1,
+                  _beginDate[index].day - 1,
+                ));
               }
             }
             choosedTimeRange = 3;
@@ -318,26 +304,21 @@ class _TransactionScreen extends State<TransactionScreen>
           setState(() {
             _beginDate.clear();
             _endDate.clear();
-            int index = 0 ;
+            int index = 0;
             var now = DateTime.now();
-            var  initQuater = (now.month + 2) % 3  ;
-            for (index ; index < 20 ; index ++)
-            {
-              _beginDate.add(
-                  DateTime(
-                    now.year,
-                    now.month - initQuater - (18 - index)*3,
-                    1,
-                  )
-              );
-              if(index < 19)
-              {
-                _endDate.add(
-                    DateTime(
-                      _beginDate[index].year,
-                      _beginDate[index].month + 3,
-                      _beginDate[index].day -1,
-                    ));
+            var initQuater = (now.month + 2) % 3;
+            for (; index < 20; index++) {
+              _beginDate.add(DateTime(
+                now.year,
+                now.month - initQuater - (18 - index) * 3,
+                1,
+              ));
+              if (index < 19) {
+                _endDate.add(DateTime(
+                  _beginDate[index].year,
+                  _beginDate[index].month + 3,
+                  _beginDate[index].day - 1,
+                ));
               }
             }
             choosedTimeRange = 4;
@@ -353,25 +334,20 @@ class _TransactionScreen extends State<TransactionScreen>
           setState(() {
             _beginDate.clear();
             _endDate.clear();
-            int index = 0 ;
+            int index = 0;
             var now = DateTime.now();
-            for (index ; index < 20 ; index ++)
-            {
-              _beginDate.add(
-                  DateTime(
-                    now.year - (18- index),
-                    1,
-                    1,
-                  )
-              );
-              if(index < 19)
-              {
-                _endDate.add(
-                    DateTime(
-                      _beginDate[index].year,
-                      12,
-                      31,
-                    ));
+            for (; index < 20; index++) {
+              _beginDate.add(DateTime(
+                now.year - (18 - index),
+                1,
+                1,
+              ));
+              if (index < 19) {
+                _endDate.add(DateTime(
+                  _beginDate[index].year,
+                  12,
+                  31,
+                ));
               }
             }
             choosedTimeRange = 5;
@@ -476,7 +452,6 @@ class _TransactionScreen extends State<TransactionScreen>
       });
     } else if (choosedTimeRange == 2) {
       return List.generate(20, (index) {
-        var now = DateTime.now();
         if (index == 17) {
           return Tab(
             text: 'LAST WEEK',
@@ -1263,7 +1238,8 @@ class _TransactionScreen extends State<TransactionScreen>
             return xIndex == 0
                 ? Column(
                     children: [
-                      buildHeader(transactionListSortByCategory,totalInCome, totalOutCome, total),
+                      buildHeader(transactionListSortByCategory, totalInCome,
+                          totalOutCome, total),
                       buildBottomViewByCategory(transactionListSortByCategory,
                           xIndex, totalAmountInDay)
                     ],
@@ -1304,7 +1280,8 @@ class _TransactionScreen extends State<TransactionScreen>
             return xIndex == 0
                 ? Column(
                     children: [
-                      buildHeader(transactionListSortByDate,totalInCome, totalOutCome, total),
+                      buildHeader(transactionListSortByDate, totalInCome,
+                          totalOutCome, total),
                       buildBottomViewByDate(
                           transactionListSortByDate, xIndex, totalAmountInDay)
                     ],
@@ -1573,8 +1550,8 @@ class _TransactionScreen extends State<TransactionScreen>
                               'Debt Collection'
                       ? '+'
                       : '-';
-              double extraAmount =
-                  transListSortByDate[xIndex][yIndex].extraAmountInfo;
+              // double extraAmount =
+              //     transListSortByDate[xIndex][yIndex].extraAmountInfo;
 
               return GestureDetector(
                 onTap: () async {
@@ -1706,7 +1683,7 @@ class _TransactionScreen extends State<TransactionScreen>
     );
   }
 
-  StickyHeader buildHeader( List<List<MyTransaction>> transListSortByDate,
+  StickyHeader buildHeader(List<List<MyTransaction>> transListSortByDate,
       double totalInCome, double totalOutCome, double total) {
     print('build header');
     return StickyHeader(
@@ -1800,41 +1777,38 @@ class _TransactionScreen extends State<TransactionScreen>
             ),
             TextButton(
               onPressed: () {
-                if(choosedTimeRange < 6)
-                  {
-                    if(transListSortByDate[0][0].date.year < _beginDate[19].year ||
-                        (transListSortByDate[0][0].date.year == _beginDate[19].year
-                           && transListSortByDate[0][0].date.month < _beginDate[19].month)||
-                        (transListSortByDate[0][0].date.year == _beginDate[19].year
-                            && transListSortByDate[0][0].date.month == _beginDate[19].month
-                        && transListSortByDate[0][0].date.day <= _beginDate[19].day))
-                      {
-                        _endDate.add(
-                          DateTime(
-                              _beginDate[19].year,
-                              _beginDate[19].month,
-                              _beginDate[19].day + 6
-                          )
-                        );
-                      }
-                    else
-                      _endDate.add(transListSortByDate[0][0].date);
-                  }
-                else if(choosedTimeRange == 6)
-                  {
-                    _endDate.clear();
-                    _endDate.add( transListSortByDate[0][0].date);
-                    _beginDate.clear();
-                    _beginDate.add(transListSortByDate[transListSortByDate.length-1][0].date);
-                  }
-                Navigator.of(context).push(
-                    PageTransition(
-                        child:
-                            ReportForThisPeriodScreen(
-                              currentWallet: _wallet,
-                              beginDate: _beginDate[_tabController.index],
-                              endDate: _endDate[_tabController.index],
-                            )));
+                if (choosedTimeRange < 6) {
+                  if (transListSortByDate[0][0].date.year <
+                          _beginDate[19].year ||
+                      (transListSortByDate[0][0].date.year ==
+                              _beginDate[19].year &&
+                          transListSortByDate[0][0].date.month <
+                              _beginDate[19].month) ||
+                      (transListSortByDate[0][0].date.year ==
+                              _beginDate[19].year &&
+                          transListSortByDate[0][0].date.month ==
+                              _beginDate[19].month &&
+                          transListSortByDate[0][0].date.day <=
+                              _beginDate[19].day)) {
+                    _endDate.add(DateTime(_beginDate[19].year,
+                        _beginDate[19].month, _beginDate[19].day + 6));
+                  } else
+                    _endDate.add(transListSortByDate[0][0].date);
+                } else if (choosedTimeRange == 6) {
+                  _endDate.clear();
+                  _endDate.add(transListSortByDate[0][0].date);
+                  _beginDate.clear();
+                  _beginDate.add(
+                      transListSortByDate[transListSortByDate.length - 1][0]
+                          .date);
+                }
+                Navigator.of(context).push(PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    child: ReportForThisPeriodScreen(
+                      currentWallet: _wallet,
+                      beginDate: _beginDate[_tabController.index],
+                      endDate: _endDate[_tabController.index],
+                    )));
               },
               child: Text(
                 'View report for this period',
@@ -1852,7 +1826,7 @@ class _TransactionScreen extends State<TransactionScreen>
   void buildShowDialog(BuildContext context, id) async {
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
-    final result = await showCupertinoModalBottomSheet(
+    await showCupertinoModalBottomSheet(
         isDismissible: true,
         backgroundColor: Style.boxBackgroundColor,
         context: context,

@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
 
 import '../../style.dart';
@@ -130,7 +128,8 @@ class _AccountDetailState extends State<AccountDetail> {
                       fontWeight: FontWeight.w600,
                     )))),
         body: ListView(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           controller: _controller,
           children: [
             Container(
@@ -207,8 +206,7 @@ class _AccountDetailState extends State<AccountDetail> {
                           color: Style.foregroundColor.withOpacity(0.54),
                           fontWeight: FontWeight.w400,
                           fontFamily: Style.fontFamily,
-                          fontSize: 13.0)
-                  ),
+                          fontSize: 13.0)),
                   SizedBox(
                     height: 20.0,
                   ),
