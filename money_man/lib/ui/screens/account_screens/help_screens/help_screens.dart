@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/basic_questions.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/basic_questions_screen.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/send_question_screen.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/user_guide_screens.dart';
@@ -20,10 +18,10 @@ class HelpScreens extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showCupertinoModalBottomSheet(
-              isDismissible: false,
-              enableDrag: false,
-              context: context,
-              builder: (context) => SendQuestionScreen(),
+            isDismissible: false,
+            enableDrag: false,
+            context: context,
+            builder: (context) => SendQuestionScreen(),
           );
         },
         child: Icon(Icons.message),
@@ -38,15 +36,17 @@ class HelpScreens extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child:  Row(
+            child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
-                Text('More', style: TextStyle(
-                    color: Style.foregroundColor,
-                    fontFamily: Style.fontFamily,
-                    fontSize: 17.0
-                )
-                )
+                Icon(Style.backIcon, color: Style.foregroundColor),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('More',
+                    style: TextStyle(
+                        color: Style.foregroundColor,
+                        fontFamily: Style.fontFamily,
+                        fontSize: 17.0))
               ],
             ),
           ),
@@ -54,12 +54,12 @@ class HelpScreens extends StatelessWidget {
         centerTitle: true,
         title: Text(
           "Help",
-            style: TextStyle(
-              color: Style.foregroundColor,
-              fontFamily: Style.fontFamily,
-              fontSize: 17.0,
-              fontWeight: FontWeight.w600,
-            ),
+          style: TextStyle(
+            color: Style.foregroundColor,
+            fontFamily: Style.fontFamily,
+            fontSize: 17.0,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -69,12 +69,9 @@ class HelpScreens extends StatelessWidget {
             duration: Duration(milliseconds: 0),
             child: BackdropFilter(
               filter: ImageFilter.blur(
-                  sigmaX: 25,
-                  sigmaY: 25,
-                  tileMode: TileMode.values[0]),
+                  sigmaX: 25, sigmaY: 25, tileMode: TileMode.values[0]),
               child: AnimatedContainer(
-                duration: Duration(
-                    milliseconds: 100),
+                duration: Duration(milliseconds: 100),
                 color: Colors.grey[800].withOpacity(0.2),
               ),
             ),
@@ -85,7 +82,8 @@ class HelpScreens extends StatelessWidget {
         padding: EdgeInsets.only(top: 10),
         color: Style.backgroundColor,
         child: ListView(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             GestureDetector(
               onTap: () {

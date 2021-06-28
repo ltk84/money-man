@@ -1,5 +1,4 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -90,43 +89,6 @@ class _SignInScreenState extends State<SignInScreen> {
                             await _signInWithEmailAndPassword(_auth, context);
                           },
                           child: Text("LOGIN",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.5,
-                                  wordSpacing: 2.0),
-                              textAlign: TextAlign.center),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 80.0),
-                        width: double.infinity,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Color(0xFF2FB49C);
-                                return Colors
-                                    .white; // Use the component's default.
-                              },
-                            ),
-                            foregroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Colors.white;
-                                return Color(
-                                    0xFF2FB49C); // Use the component's default.
-                              },
-                            ),
-                          ),
-                          onPressed: () async {
-                            await _signInAnonymously(_auth, context);
-                          },
-                          child: Text("LOGIN AS GUEST",
                               style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: 'Montserrat',
@@ -352,65 +314,65 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 60.0),
-                        width: double.infinity,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Color(0xFF0c0c0c);
-                                return Colors
-                                    .white; // Use the component's default.
-                              },
-                            ),
-                            foregroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Colors.white;
-                                return Color(
-                                    0xFF0c0c0c); // Use the component's default.
-                              },
-                            ),
-                          ),
-                          onPressed: () {
-                            //_auth.signInWithGoogleAccount();
-                          },
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: SuperIcon(
-                                  iconPath: 'assets/images/apple.svg',
-                                  size: 18,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: SizedBox(
-                                  width: 10,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 8,
-                                child: Text(
-                                  "Connect with Apple",
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0.5,
-                                      wordSpacing: 2.0),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   margin: EdgeInsets.symmetric(horizontal: 60.0),
+                      //   width: double.infinity,
+                      //   child: TextButton(
+                      //     style: ButtonStyle(
+                      //       backgroundColor:
+                      //           MaterialStateProperty.resolveWith<Color>(
+                      //         (Set<MaterialState> states) {
+                      //           if (states.contains(MaterialState.pressed))
+                      //             return Color(0xFF0c0c0c);
+                      //           return Colors
+                      //               .white; // Use the component's default.
+                      //         },
+                      //       ),
+                      //       foregroundColor:
+                      //           MaterialStateProperty.resolveWith<Color>(
+                      //         (Set<MaterialState> states) {
+                      //           if (states.contains(MaterialState.pressed))
+                      //             return Colors.white;
+                      //           return Color(
+                      //               0xFF0c0c0c); // Use the component's default.
+                      //         },
+                      //       ),
+                      //     ),
+                      //     onPressed: () {
+                      //       //_auth.signInWithGoogleAccount();
+                      //     },
+                      //     child: Row(
+                      //       children: [
+                      //         Expanded(
+                      //           flex: 1,
+                      //           child: SuperIcon(
+                      //             iconPath: 'assets/images/apple.svg',
+                      //             size: 18,
+                      //           ),
+                      //         ),
+                      //         Expanded(
+                      //           flex: 1,
+                      //           child: SizedBox(
+                      //             width: 10,
+                      //           ),
+                      //         ),
+                      //         Expanded(
+                      //           flex: 8,
+                      //           child: Text(
+                      //             "Connect with Apple",
+                      //             style: TextStyle(
+                      //                 fontSize: 13,
+                      //                 fontFamily: 'Montserrat',
+                      //                 fontWeight: FontWeight.w700,
+                      //                 letterSpacing: 0.5,
+                      //                 wordSpacing: 2.0),
+                      //             textAlign: TextAlign.left,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -419,16 +381,16 @@ class _SignInScreenState extends State<SignInScreen> {
           );
   }
 
-  Future _signInAnonymously(
-      FirebaseAuthService _auth, BuildContext context) async {
-    final res = await _auth.signInAnonymously();
+  // Future _signInAnonymously(
+  //     FirebaseAuthService _auth, BuildContext context) async {
+  //   final res = await _auth.signInAnonymously();
 
-    if (res is String) {
-      final error = res;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error)));
-    }
-  }
+  //   if (res is String) {
+  //     final error = res;
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text(error)));
+  //   }
+  // }
 
   bool isNumeric(String s) {
     if (s == null) {
@@ -438,56 +400,29 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Future _signInWithFacebookAccount() async {
-    try {
-      _auth.signInWithFacebook();
-    } on FirebaseAuthException catch (e) {
-      String error = '';
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          error =
-              "This account is linked with another provider! Try another provider!";
-          break;
-        case 'email-already-in-use':
-          error = "Your email address has been registered.";
-          break;
-        case 'invalid-credential':
-          error = "Your credential is malformed or has expired.";
-          break;
-        case 'user-disabled':
-          error = "This user has been disable.";
-          break;
-        default:
-          error = e.code;
-      }
-      _showAlertDialog(error);
+    setState(() {
+      loading = true;
+    });
+    var result = await _auth.signInWithFacebookVer2();
+    if (result != null && result != 'login-success') {
+      await _showAlertDialog(result);
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   Future _signInWithGoogleAccount() async {
-    try {
-      UserCredential res = await _auth.signInWithGoogleAccount();
-      // print(res.additionalUserInfo.providerId);
-    } on FirebaseAuthException catch (e) {
-      String error = '';
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          error =
-              "This account is linked with another provider! Try another provider!";
-          break;
-        case 'email-already-in-use':
-          error = "Your email address has been registered.";
-          break;
-        case 'invalid-credential':
-          error = "Your credential is malformed or has expired.";
-          break;
-        case 'user-disabled':
-          error = "This user has been disable.";
-          break;
-        default:
-          error = e.code;
-      }
-      _showAlertDialog(error);
-    } on PlatformException catch (e) {}
+    setState(() {
+      loading = true;
+    });
+    var res = await _auth.signInWithGoogleAccount();
+    if (res != null && res != 'login-success') {
+      await _showAlertDialog(res);
+    }
+    setState(() {
+      loading = false;
+    });
   }
 
   Future _signInWithEmailAndPassword(
@@ -497,29 +432,12 @@ class _SignInScreenState extends State<SignInScreen> {
         loading = true;
       });
       final res = await _auth.signInWithEmailAndPassword(_email, _password);
-      if (res is String) {
-        setState(() {
-          loading = false;
-        });
-        String error = "";
-        switch (res) {
-          case 'invalid-email':
-            error = "This email is invalid.";
-            break;
-          case 'wrong-password':
-            error = "Your password is wrong! Try again!";
-            break;
-          case 'user-disable':
-            error = "This user is disable.";
-            break;
-          case 'user-not-found':
-            error = "User has not been registered.";
-            break;
-          default:
-            error = res;
-        }
-        _showAlertDialog(error);
+      if (res != null && res != 'login-success') {
+        await _showAlertDialog(res);
       }
+      setState(() {
+        loading = false;
+      });
     }
   }
 

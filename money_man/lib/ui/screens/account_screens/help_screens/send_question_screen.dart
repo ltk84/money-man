@@ -47,7 +47,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Style.boxBackgroundColor2,
+      backgroundColor: Style.backgroundColor,
       appBar: AppBar(
         elevation: 0,
         leading: CloseButton(
@@ -63,7 +63,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Style.boxBackgroundColor2,
+        backgroundColor: Style.appBarColor,
         actions: [
           GestureDetector(
             onTap: () async {
@@ -84,7 +84,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
               padding: EdgeInsets.only(right: 10),
               child: Center(
                 child: Icon(
-                    Icons.send,
+                  Icons.send,
                   color: Style.foregroundColor,
                 ),
               ),
@@ -98,7 +98,6 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
               child: Center(
                 child: CircularProgressIndicator(
                   backgroundColor: Style.backgroundColor1,
-                  color: Style.primaryColor,
                 ),
               ),
             )
@@ -106,7 +105,8 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
               color: Style.backgroundColor1,
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: ListView(
-                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 //physics: NeverScrollableScrollPhysics(),
                 children: [
                   TextFormField(
@@ -122,13 +122,12 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
                     decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                              color: Style.foregroundColor.withOpacity(0.54)
-                          ),
+                              color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                              color: Style.foregroundColor,
-                              width: 1.5,
+                            color: Style.foregroundColor,
+                            width: 1.5,
                           ),
                         ),
                         hintText: "Subject",

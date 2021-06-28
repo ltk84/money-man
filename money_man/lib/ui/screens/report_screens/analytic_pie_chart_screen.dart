@@ -89,13 +89,14 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     expandDetail = false;
     _wallet = widget.currentWallet == null
         ? Wallet(
-        id: 'id',
-        name: 'defaultName',
-        amount: 0,
-        currencyID: 'USD',
-        iconID: 'a')
+            id: 'id',
+            name: 'defaultName',
+            amount: 0,
+            currencyID: 'USD',
+            iconID: 'a')
         : widget.currentWallet;
   }
+
   //
   // @override
   // void didUpdateWidget(covariant AnalyticPieChartSreen oldWidget) {
@@ -126,6 +127,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Style.backgroundColor,
+        extendBodyBehindAppBar: true,
         appBar: new AppBar(
           leading: MaterialButton(
             onPressed: () {
@@ -133,33 +135,33 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
             },
             child: Hero(
               tag: 'alo',
-              child: Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+              child: Icon(Style.backIcon, color: Style.foregroundColor),
             ),
           ),
           //centerTitle: true,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          flexibleSpace: ClipRect(
-            child: AnimatedOpacity(
-              opacity: reachAppBar == 1 ? 1 : 0,
-              duration: Duration(milliseconds: 0),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                    sigmaX: reachTop == 1 ? 25 : 500,
-                    sigmaY: 25,
-                    tileMode: TileMode.values[0]),
-                child: AnimatedContainer(
-                  duration: Duration(
-                      milliseconds:
-                      reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  color: Colors.grey[reachAppBar == 1
-                      ? (reachTop == 1 ? 800 : 850)
-                      : 900]
-                      .withOpacity(0.2),
-                ),
-              ),
-            ),
-          ),
+          // flexibleSpace: ClipRect(
+          //   child: AnimatedOpacity(
+          //     opacity: reachAppBar == 1 ? 1 : 0,
+          //     duration: Duration(milliseconds: 0),
+          //     child: BackdropFilter(
+          //       filter: ImageFilter.blur(
+          //           sigmaX: reachTop == 1 ? 25 : 500,
+          //           sigmaY: 25,
+          //           tileMode: TileMode.values[0]),
+          //       child: AnimatedContainer(
+          //         duration: Duration(
+          //             milliseconds:
+          //             reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+          //         color: Colors.grey[reachAppBar == 1
+          //             ? (reachTop == 1 ? 800 : 850)
+          //             : 900]
+          //             .withOpacity(0.2),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           // title: AnimatedOpacity(
           //     opacity: reachTop == 1 ? 1 : 0,
           //     duration: Duration(milliseconds: 100),
@@ -186,11 +188,8 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                       isDismissible: true,
                       backgroundColor: Style.boxBackgroundColor,
                       context: context,
-                      builder: (context) =>
-                          ShareScreen(
-                              bytes1: this.bytes1,
-                              bytes2: null,
-                              bytes3: null));
+                      builder: (context) => ShareScreen(
+                          bytes1: this.bytes1, bytes2: null, bytes3: null));
                 },
               ),
             ),
@@ -223,14 +222,15 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
             });
             _transactionList = _transactionList
                 .where((element) =>
-            element.date.compareTo(beginDate) >= 0 &&
-                element.date.compareTo(endDate) <= 0)
+                    element.date.compareTo(beginDate) >= 0 &&
+                    element.date.compareTo(endDate) <= 0)
                 .toList();
             return Container(
               color: Style.backgroundColor,
               child: ListView(
                 controller: _controller,
-                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 children: <Widget>[
                   Container(
                     color: Style.backgroundColor,
@@ -240,13 +240,16 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                         this.key1 = key;
 
                         return Container(
-                          color: Style.backgroundColor, // để lúc export ra không bị transparent.
+                          color: Style
+                              .backgroundColor, // để lúc export ra không bị transparent.
                           child: Column(children: <Widget>[
                             Column(
                               children: <Widget>[
-                                Text(_content,
+                                Text(
+                                  _content,
                                   style: TextStyle(
-                                    color: Style.foregroundColor.withOpacity(0.7),
+                                    color:
+                                        Style.foregroundColor.withOpacity(0.7),
                                     fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16,
@@ -271,51 +274,58 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                     total: total),
                               ],
                             ),
-                            SizedBox(height: 20,),
+                            SizedBox(
+                              height: 20,
+                            ),
                             GestureDetector(
                               onTap: () async {
                                 await setState(() {
                                   expandDetail = !expandDetail;
-                                  print(_controller.position.maxScrollExtent.toString());
+                                  print(_controller.position.maxScrollExtent
+                                      .toString());
                                 });
                                 if (expandDetail)
                                   _controller.animateTo(
                                     _categoryList.length == 0
-                                      ? 0
-                                      : _categoryList.length.toDouble()*67.4 - 193.2 + .05494505494505 + 100,
+                                        ? 0
+                                        : _categoryList.length.toDouble() *
+                                                67.4 -
+                                            193.2 +
+                                            .05494505494505 +
+                                            100,
                                     curve: Curves.fastOutSlowIn,
                                     duration: const Duration(milliseconds: 500),
                                   );
-                                  //_controller.jumpTo(100);
+                                //_controller.jumpTo(100);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
                                     color: Style.boxBackgroundColor,
                                     border: Border(
                                         top: BorderSide(
-                                          color: Style.foregroundColor.withOpacity(0.12),
+                                          color: Style.foregroundColor
+                                              .withOpacity(0.12),
                                           width: 1,
                                         ),
                                         bottom: BorderSide(
-                                          color: Style.foregroundColor.withOpacity(0.12),
+                                          color: Style.foregroundColor
+                                              .withOpacity(0.12),
                                           width: 1,
-                                        )
-                                    )
-                                ),
+                                        ))),
                                 padding: EdgeInsets.symmetric(vertical: 5),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      'View amount',
-                                      style: TextStyle(
-                                        fontFamily: Style.fontFamily,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16.0,
-                                        color: Style.foregroundColor,
-                                      )
-                                    ),
-                                    Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54)),
+                                    Text('View amount',
+                                        style: TextStyle(
+                                          fontFamily: Style.fontFamily,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16.0,
+                                          color: Style.foregroundColor,
+                                        )),
+                                    Icon(Icons.arrow_drop_down,
+                                        color: Style.foregroundColor
+                                            .withOpacity(0.54)),
                                   ],
                                 ),
                               ),

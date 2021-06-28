@@ -7,6 +7,7 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
 import 'package:money_man/ui/screens/report_screens/custom_time_range.dart';
 import 'package:money_man/ui/screens/report_screens/time_selection.dart';
+import 'package:money_man/ui/style.dart';
 
 class SelectTimeRangeScreen extends StatefulWidget {
   @override
@@ -120,21 +121,29 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: GestureDetector(
-            child: Container(alignment: Alignment.center, child: Text('Back')),
+            child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  'Back',
+                  style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      color: Style.foregroundColor),
+                )),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Color(0xff222222),
+          backgroundColor: Style.appBarColor,
           title: Text(
             'Select time range',
-            style: TextStyle(fontFamily: 'Montserrat'),
+            style: TextStyle(
+                fontFamily: 'Montserrat', color: Style.foregroundColor),
           ),
         ),
         body: Container(
-          color: Color(0xff1a1a1a),
+          color: Style.backgroundColor,
           child: ListView(
             children: [
               Container(
@@ -142,9 +151,6 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
                     title: 'This week',
                     subTitle: GetSubTitileOfTheWeek(today),
                     mTimeRange: GetmTimeRangeWeek(today)),
-              ),
-              Divider(
-                color: Color(0xff333333),
               ),
               Container(
                 child: buildTimeRangeListTile(
@@ -213,37 +219,47 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
       BudgetTimeRange mTimeRange = null}) {
     return Container(
       padding: EdgeInsets.only(left: 50),
-      child: ListTile(
-        onTap: mCustom
-            ? () async {
-                print('psoidjb oker');
-                TimeRangeInfo result = await showCupertinoModalBottomSheet(
-                    //TimeRangeInfor
-                    isDismissible: true,
-                    backgroundColor: Colors.grey[900],
-                    context: context,
-                    builder: (context) => CustomTimeRange(
-                        beginDate: beginDate, endDate: endDate));
-                if (result != null) {
-                  setState(() {
-                    mTimeRange = new BudgetTimeRange(
-                        beginDay: result.begin, endDay: result.end);
-                  });
-                  Navigator.of(context).pop(mTimeRange);
-                }
-              }
-            : () {
-                Navigator.of(context).pop(mTimeRange);
-              },
-        title: Text(
-          title,
-          style:
-              TextStyle(color: white, fontFamily: 'Montserrat', fontSize: 17),
-        ),
-        subtitle: Text(
-          subTitle,
-          style: TextStyle(color: Colors.white38, fontSize: 14),
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            onTap: mCustom
+                ? () async {
+                    print('psoidjb oker');
+                    TimeRangeInfo result = await showCupertinoModalBottomSheet(
+                        //TimeRangeInfor
+                        isDismissible: true,
+                        backgroundColor: Style.backgroundColor,
+                        context: context,
+                        builder: (context) => CustomTimeRange(
+                            beginDate: beginDate, endDate: endDate));
+                    if (result != null) {
+                      setState(() {
+                        mTimeRange = new BudgetTimeRange(
+                            beginDay: result.begin, endDay: result.end);
+                      });
+                      Navigator.of(context).pop(mTimeRange);
+                    }
+                  }
+                : () {
+                    Navigator.of(context).pop(mTimeRange);
+                  },
+            title: Text(
+              title,
+              style: TextStyle(
+                  color: Style.foregroundColor,
+                  fontFamily: 'Montserrat',
+                  fontSize: 17),
+            ),
+            subtitle: Text(
+              subTitle,
+              style: TextStyle(color: Style.foregroundColor, fontSize: 14),
+            ),
+          ),
+          Divider(
+            color: Style.boxBackgroundColor2,
+          )
+        ],
       ),
     );
   }

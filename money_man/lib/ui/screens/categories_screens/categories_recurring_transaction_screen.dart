@@ -1,10 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/screens/transaction_screens/select_other_source.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
@@ -97,7 +95,10 @@ class _CategoriesRecurringTransactionScreenState
             },
             child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+                Icon(Style.backIcon, color: Style.foregroundColor),
+                SizedBox(
+                  width: 5,
+                ),
                 Hero(
                     tag: 'alo',
                     child: Text('More',
@@ -173,7 +174,8 @@ class _CategoriesRecurringTransactionScreenState
                               .toLowerCase())
                       .toList();
                   return ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
                       controller: _controller,
                       itemCount: _selectCateTab.length,
                       itemBuilder: (context, index) {

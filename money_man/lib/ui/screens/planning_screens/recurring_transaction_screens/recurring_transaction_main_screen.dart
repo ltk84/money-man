@@ -32,10 +32,10 @@ class _RecurringTransactionMainScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
-        extendBodyBehindAppBar: true,
+        backgroundColor: Style.backgroundColor,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.grey[900].withOpacity(0.2),
+          backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
           elevation: 0.0,
           leading: Hero(
             tag: 'billToDetail_backBtn',
@@ -45,7 +45,7 @@ class _RecurringTransactionMainScreenState
                 },
                 child: Icon(
                   Icons.arrow_back_ios_rounded,
-                  color: Colors.white,
+                  color: Style.foregroundColor,
                 )),
           ),
           centerTitle: true,
@@ -55,26 +55,26 @@ class _RecurringTransactionMainScreenState
               color: Colors.transparent,
               child: Text('Recurring transactions',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontSize: 17.0,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   )),
             ),
           ),
-          flexibleSpace: ClipRect(
-            child: AnimatedOpacity(
-              opacity: 1,
-              duration: Duration(milliseconds: 0),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                    sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-                child: AnimatedContainer(
-                    duration: Duration(milliseconds: 1),
-                    color: Colors.transparent),
-              ),
-            ),
-          ),
+          // flexibleSpace: ClipRect(
+          //   child: AnimatedOpacity(
+          //     opacity: 1,
+          //     duration: Duration(milliseconds: 0),
+          //     child: BackdropFilter(
+          //       filter: ImageFilter.blur(
+          //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
+          //       child: AnimatedContainer(
+          //           duration: Duration(milliseconds: 1),
+          //           color: Colors.transparent),
+          //     ),
+          //   ),
+          // ),
           actions: [
             Hero(
               tag: 'billToDetail_actionBtn',
@@ -89,10 +89,10 @@ class _RecurringTransactionMainScreenState
                 },
                 child: Text('Add',
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Style.foregroundColor,
                     )),
               ),
             ),
@@ -107,7 +107,7 @@ class _RecurringTransactionMainScreenState
                       iconPath: widget.wallet.iconID,
                       size: 25.0,
                     ),
-                    Icon(Icons.arrow_drop_down, color: Colors.grey)
+                    Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54))
                   ],
                 ),
               ),
@@ -154,10 +154,10 @@ class _RecurringTransactionMainScreenState
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Text('All',
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white70,
+                      color: Style.foregroundColor.withOpacity(0.7),
                     )),
               ),
               ListView.builder(
@@ -187,14 +187,14 @@ class _RecurringTransactionMainScreenState
       child: Container(
         padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
         decoration: BoxDecoration(
-            color: Color(0xFF1c1c1c),
+            color: Style.boxBackgroundColor2,
             border: Border(
                 top: BorderSide(
-                  color: Colors.white12,
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ),
                 bottom: BorderSide(
-                  color: Colors.white12,
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ))),
         child: Row(
@@ -213,34 +213,34 @@ class _RecurringTransactionMainScreenState
                   children: [
                     Text(reTrans.category.name,
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                         )),
                     if (reTrans.note != null && reTrans.note != '')
                     Text(reTrans.note,
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 12.0,
                           fontWeight: FontWeight.w400,
-                          color: Colors.white.withOpacity(0.54),
+                          color: Style.foregroundColor.withOpacity(0.54),
                         )),
                     SizedBox(height: 2,),
                     Text('Next occurrence:',
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 13.0,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                         )),
                     Text(DateFormat('EEEE, dd-MM-yyyy')
                         .format(reTrans.repeatOption.beginDateTime),
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 13.0,
                           fontWeight: FontWeight.w400,
-                          color: Colors.white.withOpacity(0.7),
+                          color: Style.foregroundColor.withOpacity(0.7),
                         )
                     )
                   ],
@@ -267,14 +267,14 @@ class _RecurringTransactionMainScreenState
     return Container(
         padding: EdgeInsets.all(20.0),
         decoration: BoxDecoration(
-            color: Color(0xFF1c1c1c),
+            color: Style.boxBackgroundColor2,
             border: Border(
                 top: BorderSide(
-                  color: Colors.white12,
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ),
                 bottom: BorderSide(
-                  color: Colors.white12,
+                  color: Style.foregroundColor.withOpacity(0.12),
                   width: 0.5,
                 ))),
         child: Column(
@@ -282,10 +282,10 @@ class _RecurringTransactionMainScreenState
           children: [
             Text('Remaining Bills',
                 style: TextStyle(
-                  fontFamily: 'Montserrat',
+                  fontFamily: Style.fontFamily,
                   fontSize: 14.0,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Style.foregroundColor,
                 )),
             SizedBox(height: 10.0),
             Row(
@@ -293,17 +293,17 @@ class _RecurringTransactionMainScreenState
               children: [
                 Text('Overdue',
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white38,
+                      color: Style.foregroundColor.withOpacity(0.38),
                     )),
                 Text(overdue,
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Style.foregroundColor,
                     ))
               ],
             ),
@@ -313,17 +313,17 @@ class _RecurringTransactionMainScreenState
               children: [
                 Text('For today',
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white38,
+                      color: Style.foregroundColor.withOpacity(0.38),
                     )),
                 Text(forToday,
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Style.foregroundColor,
                     ))
               ],
             ),
@@ -333,17 +333,17 @@ class _RecurringTransactionMainScreenState
               children: [
                 Text('This period',
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white38,
+                      color: Style.foregroundColor.withOpacity(0.38),
                     )),
                 Text(thisPeriod,
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Style.foregroundColor,
                     ))
               ],
             )
@@ -358,7 +358,7 @@ class _RecurringTransactionMainScreenState
 
     final result = await showCupertinoModalBottomSheet(
         isDismissible: true,
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.boxBackgroundColor,
         context: context,
         builder: (context) {
           return Provider(

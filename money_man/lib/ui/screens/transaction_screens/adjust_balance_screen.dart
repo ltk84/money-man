@@ -38,7 +38,7 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
         leading: CloseButton(
           color: Style.foregroundColor,
         ),
-        backgroundColor: Style.backgroundColor1,
+        backgroundColor: Style.appBarColor,
         actions: [
           TextButton(
             onPressed: () async {
@@ -103,10 +103,12 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   verticalOffset: -72,
                   //preferBelow: false,
-                  message: 'Please change your wallet outside to adjust another wallet balance.',
+                  message:
+                      'Please change your wallet outside to adjust another wallet balance.',
                   decoration: BoxDecoration(
                     color: Style.foregroundColor.withOpacity(0.92),
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(5),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(5),
                         topRight: Radius.circular(5),
                         bottomLeft: Radius.circular(5)),
                   ),
@@ -126,7 +128,7 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
             SizedBox(height: 15),
             Container(
               decoration: BoxDecoration(
-                //color: Color(0xff268b79),
+                  //color: Color(0xff268b79),
                   color: Style.primaryColor.withOpacity(0.87),
                   borderRadius: BorderRadius.circular(10)),
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),

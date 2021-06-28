@@ -14,6 +14,7 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/select_time
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
@@ -62,22 +63,14 @@ class _AddBudgetState extends State<AddBudget> {
     if (mTimeRange.getBudgetLabel() == 'Custom') isRepeat = false;
 
     return Theme(
-      data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
+      data: ThemeData(
+          primaryColor: Style.foregroundColor, fontFamily: 'Montserrat'),
       child: Scaffold(
+        backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
-          leadingWidth: 65,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 0),
-              child: Center(
-                  child: Text(
-                'Cancel',
-                style: TextStyle(color: Colors.white70),
-              )),
-            ),
+          elevation: 0,
+          leading: CloseButton(
+          color: Style.foregroundColor,
           ),
           actions: [
             GestureDetector(
@@ -114,28 +107,38 @@ class _AddBudgetState extends State<AddBudget> {
                 child: Center(
                   child: Text(
                     'Save',
-                    style: TextStyle(color: Colors.white70),
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      color: Style.successColor,
+                    ),
                   ),
                 ),
               ),
             )
           ],
-          backgroundColor: Color(0xff333333),
+          backgroundColor: Style.appBarColor,
           centerTitle: true,
           title: Text(
             'Add budget',
-            style: TextStyle(color: white),
+            style: TextStyle(
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
+              color: Style.foregroundColor,
+            ),
           ),
         ),
         body: Container(
-          color: Color(0xff111111),
+          color: Style.backgroundColor1,
           padding: EdgeInsets.only(left: 15, right: 15, top: 30),
           child: Column(
             children: [
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
@@ -153,7 +156,7 @@ class _AddBudgetState extends State<AddBudget> {
                   },
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   ),
                   dense: true,
                   leading: SuperIcon(
@@ -163,7 +166,7 @@ class _AddBudgetState extends State<AddBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +176,8 @@ class _AddBudgetState extends State<AddBudget> {
                           child: Text(
                             'Choose group:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -196,9 +200,9 @@ class _AddBudgetState extends State<AddBudget> {
                           },
                           readOnly: true,
                           obscureText: false,
-                          cursorColor: Colors.white60,
+                          cursorColor: Style.foregroundColor.withOpacity(0.6),
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
@@ -206,8 +210,8 @@ class _AddBudgetState extends State<AddBudget> {
                                   cate == null ? 'Choose group' : cate.name,
                               hintStyle: TextStyle(
                                   color: cate == null
-                                      ? Colors.white54
-                                      : Colors.white,
+                                      ? Style.foregroundColor.withOpacity(0.24)
+                                      : Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -223,7 +227,7 @@ class _AddBudgetState extends State<AddBudget> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
@@ -236,10 +240,8 @@ class _AddBudgetState extends State<AddBudget> {
                         amount = double.parse(resultAmount);
                       });
                   },
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right,
-                    color: Colors.white70,
-                  ),
+                  trailing: Icon(Icons.keyboard_arrow_right,
+                      color: Style.foregroundColor.withOpacity(0.7)),
                   dense: true,
                   leading: SuperIcon(
                     iconPath: 'assets/images/coin.svg',
@@ -247,7 +249,7 @@ class _AddBudgetState extends State<AddBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,7 +259,8 @@ class _AddBudgetState extends State<AddBudget> {
                           child: Text(
                             'Target:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -284,8 +287,8 @@ class _AddBudgetState extends State<AddBudget> {
                                       .withoutFractionDigits,
                               hintStyle: TextStyle(
                                   color: amount == null
-                                      ? Colors.white54
-                                      : Colors.white,
+                                      ? Style.foregroundColor.withOpacity(0.24)
+                                      : Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -301,14 +304,14 @@ class _AddBudgetState extends State<AddBudget> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
                   onTap: () async {
                     var resultAmount = await showCupertinoModalBottomSheet(
                         isDismissible: true,
-                        backgroundColor: Colors.grey[900],
+                        backgroundColor: Style.backgroundColor,
                         context: context,
                         builder: (context) => SelectTimeRangeScreen());
                     if (resultAmount != null)
@@ -320,7 +323,7 @@ class _AddBudgetState extends State<AddBudget> {
                   },
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   ),
                   dense: true,
                   leading: SuperIcon(
@@ -329,7 +332,7 @@ class _AddBudgetState extends State<AddBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,7 +342,8 @@ class _AddBudgetState extends State<AddBudget> {
                           child: Text(
                             'Time range:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -350,7 +354,7 @@ class _AddBudgetState extends State<AddBudget> {
                             var resultAmount =
                                 await showCupertinoModalBottomSheet(
                                     isDismissible: true,
-                                    backgroundColor: Colors.grey[900],
+                                    backgroundColor: Style.backgroundColor,
                                     context: context,
                                     builder: (context) =>
                                         SelectTimeRangeScreen());
@@ -364,9 +368,9 @@ class _AddBudgetState extends State<AddBudget> {
                           },
                           readOnly: true,
                           obscureText: false,
-                          cursorColor: Colors.white60,
+                          cursorColor: Style.foregroundColor.withOpacity(0.6),
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
@@ -376,7 +380,7 @@ class _AddBudgetState extends State<AddBudget> {
                                       ? mTimeRange.TimeRangeString()
                                       : mTimeRange.description,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -392,14 +396,14 @@ class _AddBudgetState extends State<AddBudget> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Color(0xff333333),
+                    color: Style.boxBackgroundColor,
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
                   onTap: () async {
                     var res = await showCupertinoModalBottomSheet(
                         isDismissible: true,
-                        backgroundColor: Colors.grey[900],
+                        backgroundColor: Style.backgroundColor,
                         context: context,
                         builder: (context) =>
                             SelectWalletAccountScreen(wallet: widget.wallet));
@@ -413,7 +417,7 @@ class _AddBudgetState extends State<AddBudget> {
                   },
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.white70,
+                    color: Style.foregroundColor.withOpacity(0.7),
                   ),
                   dense: true,
                   leading: SuperIcon(
@@ -424,7 +428,7 @@ class _AddBudgetState extends State<AddBudget> {
                   ),
                   title: Theme(
                     data: Theme.of(context).copyWith(
-                      primaryColor: Colors.white,
+                      primaryColor: Style.foregroundColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,7 +438,8 @@ class _AddBudgetState extends State<AddBudget> {
                           child: Text(
                             'Select wallet:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -444,7 +449,7 @@ class _AddBudgetState extends State<AddBudget> {
                           onTap: () async {
                             var res = await showCupertinoModalBottomSheet(
                                 isDismissible: true,
-                                backgroundColor: Colors.grey[900],
+                                backgroundColor: Style.backgroundColor,
                                 context: context,
                                 builder: (context) => SelectWalletAccountScreen(
                                     wallet: widget.wallet));
@@ -458,9 +463,9 @@ class _AddBudgetState extends State<AddBudget> {
                           },
                           readOnly: true,
                           obscureText: false,
-                          cursorColor: Colors.white60,
+                          cursorColor: Style.foregroundColor.withOpacity(0.6),
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Style.foregroundColor,
                               fontSize: 20,
                               fontFamily: 'Montserrat'),
                           decoration: InputDecoration(
@@ -468,7 +473,7 @@ class _AddBudgetState extends State<AddBudget> {
                                   ? 'Select wallet'
                                   : selectedWallet.name,
                               hintStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontSize: 20,
                                   fontFamily: 'Montserrat'),
                               isDense: true,
@@ -487,48 +492,49 @@ class _AddBudgetState extends State<AddBudget> {
               Container(
                 margin: EdgeInsets.only(bottom: 10, top: 5),
                 padding: EdgeInsets.only(right: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isRepeat = !isRepeat;
-                        });
-                      },
-                      child: Container(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isRepeat = !isRepeat;
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
                         padding: const EdgeInsets.all(1),
                         margin:
                             EdgeInsets.only(left: 20, right: 10, bottom: 10),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 1),
+                            border: Border.all(
+                                color: Style.foregroundColor, width: 1),
                             shape: BoxShape.circle,
-                            color: Color(0xff111111)),
+                            color: Style.backgroundColor),
                         child: isRepeat
                             ? Icon(
                                 Icons.check,
                                 size: 17,
-                                color: Colors.white,
+                                color: Style.foregroundColor,
                               )
                             : Icon(
                                 null,
                                 size: 17,
-                                color: Colors.black,
+                                color: Style.backgroundColor,
                               ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        'Repeat this budget',
-                        style: TextStyle(
-                            color: white,
-                            fontFamily: 'Montserrat',
-                            fontSize: 13),
-                      ),
-                    )
-                  ],
+                      Container(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          'Repeat this budget',
+                          style: TextStyle(
+                              color: Style.foregroundColor,
+                              fontFamily: 'Montserrat',
+                              fontSize: 13),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -542,7 +548,7 @@ class _AddBudgetState extends State<AddBudget> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         if (title == null)
           return CustomAlert(

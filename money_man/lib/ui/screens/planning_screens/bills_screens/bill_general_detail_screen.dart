@@ -49,10 +49,10 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
-        backgroundColor: Style.backgroundColor,
-        extendBodyBehindAppBar: true,
+        backgroundColor: Style.backgroundColor1,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
+          backgroundColor: Style.boxBackgroundColor2,
           elevation: 0.0,
           leading: Hero(
             tag: 'billToDetail_backBtn',
@@ -76,23 +76,23 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                 )),
           ),
           centerTitle: true,
-          flexibleSpace: ClipRect(
-            child: AnimatedOpacity(
-              opacity: 1,
-              duration: Duration(milliseconds: 0),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                    sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-                child: AnimatedContainer(
-                    duration: Duration(milliseconds: 1),
-                    //child: Container(
-                    //color: Colors.transparent,
-                    color: Colors.transparent
-                  //),
-                ),
-              ),
-            ),
-          ),
+          // flexibleSpace: ClipRect(
+          //   child: AnimatedOpacity(
+          //     opacity: 1,
+          //     duration: Duration(milliseconds: 0),
+          //     child: BackdropFilter(
+          //       filter: ImageFilter.blur(
+          //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
+          //       child: AnimatedContainer(
+          //           duration: Duration(milliseconds: 1),
+          //           //child: Container(
+          //           //color: Colors.transparent,
+          //           color: Colors.transparent
+          //         //),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           actions: [
             Hero(
               tag: 'billToDetail_actionBtn',
@@ -324,13 +324,13 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 23.0),
-              child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
+              child: Icon(Icons.notes, color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
           Text(display == null || display == '' ? 'Note' : display,
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: Style.fontFamily,
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
-                color: display == null || display == '' ? Colors.white24 : Colors.white,
+                color: display == null || display == '' ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
               )),
         ],
       ),

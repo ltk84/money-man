@@ -56,11 +56,11 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Style.boxBackgroundColor,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0))),
+          backgroundColor: Style.appBarColor,
+          //  shape: RoundedRectangleBorder(
+          //  borderRadius: BorderRadius.only(
+          //     topLeft: Radius.circular(20.0),
+          //     topRight: Radius.circular(20.0))),
           title: Text('Custom',
               style: TextStyle(
                 fontFamily: Style.fontFamily,
@@ -90,12 +90,13 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                 child: Text(
                   'Done',
                   style: TextStyle(
-                      color: (realBeginDate == null || realEndDate == null)
-                          ? Style.foregroundColor.withOpacity(0.24)
-                          : Style.foregroundColor,
-                      fontFamily: Style.fontFamily,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,),
+                    color: (realBeginDate == null || realEndDate == null)
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ))
           ],
         ),
@@ -106,54 +107,49 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(5, 8, 8, 2),
-                child: Text(
-                  'Begin date',
-                  style: TextStyle(
-                    fontFamily: Style.fontFamily,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: Style.foregroundColor.withOpacity(0.54),
-                  )
-                ),
+                child: Text('Begin date',
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: Style.foregroundColor.withOpacity(0.54),
+                    )),
               ),
               ListTile(
                 onTap: () {
                   DatePicker.showDatePicker(context,
                       currentTime: realBeginDate == null
                           ? DateTime(DateTime.now().year, DateTime.now().month,
-                          DateTime.now().day)
+                              DateTime.now().day)
                           : realBeginDate,
                       showTitleActions: true, onConfirm: (date) {
-                        setState(() {
-                          // Bước xét DateFormat này là do realBeginDate có thể bị lệch giờ,
-                          // dẫn đến hiện tượng không so sánh được DateTime của transaction (không có giờ phút giây).
-                          // DateFormat này để cho realBeginDate có trùng giờ với DateTime của transaction (không có giờ phút giây).
-                          DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-                          String formattedDate = dateFormat.format(date);
-                          realBeginDate = dateFormat.parse(formattedDate);
-                          //_beginDate = DateFormat('dd/MM/yyyy').format(date);
-                        });
-                      },
+                    setState(() {
+                      // Bước xét DateFormat này là do realBeginDate có thể bị lệch giờ,
+                      // dẫn đến hiện tượng không so sánh được DateTime của transaction (không có giờ phút giây).
+                      // DateFormat này để cho realBeginDate có trùng giờ với DateTime của transaction (không có giờ phút giây).
+                      DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+                      String formattedDate = dateFormat.format(date);
+                      realBeginDate = dateFormat.parse(formattedDate);
+                      //_beginDate = DateFormat('dd/MM/yyyy').format(date);
+                    });
+                  },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
+                            color: Style.foregroundColor),
                         doneStyle: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
+                            color: Style.foregroundColor),
                         itemStyle: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontSize: 20.0,
                             fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
+                            color: Style.foregroundColor),
                         backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
@@ -163,61 +159,61 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                       fontFamily: Style.fontFamily,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: _beginDate != 'Choose begin date' ? Style.foregroundColor : Style.foregroundColor.withOpacity(0.24),
+                      color: _beginDate != 'Choose begin date'
+                          ? Style.foregroundColor
+                          : Style.foregroundColor.withOpacity(0.24),
                     )),
-                trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
+                trailing: Icon(Icons.chevron_right,
+                    color: Style.foregroundColor.withOpacity(0.54)),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(5, 8, 8, 2),
-                child: Text(
-                    'End date',
+                child: Text('End date',
                     style: TextStyle(
                       fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                       color: Style.foregroundColor.withOpacity(0.54),
-                    )
-                ),
+                    )),
               ),
               ListTile(
                 onTap: () {
                   DatePicker.showDatePicker(context,
                       currentTime: realEndDate == null
                           ? DateTime(DateTime.now().year, DateTime.now().month,
-                          DateTime.now().day)
+                              DateTime.now().day)
                           : realEndDate,
                       showTitleActions: true, onConfirm: (date) {
-                        setState(() {
-                          // Bước xét DateFormat này là do realEndDate có thể bị lệch giờ,
-                          // dẫn đến hiện tượng không so sánh được DateTime của transaction (không có giờ phút giây).
-                          // DateFormat này để cho realEndDate có trùng giờ với DateTime của transaction (không có giờ phút giây).
-                          DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-                          String formattedDate = dateFormat.format(date);
-                          realEndDate = dateFormat.parse(formattedDate);
-                          //_endDate = DateFormat('dd/MM/yyyy').format(date);
-                        });
-                      },
+                    setState(() {
+                      // Bước xét DateFormat này là do realEndDate có thể bị lệch giờ,
+                      // dẫn đến hiện tượng không so sánh được DateTime của transaction (không có giờ phút giây).
+                      // DateFormat này để cho realEndDate có trùng giờ với DateTime của transaction (không có giờ phút giây).
+                      DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+                      String formattedDate = dateFormat.format(date);
+                      realEndDate = dateFormat.parse(formattedDate);
+                      //_endDate = DateFormat('dd/MM/yyyy').format(date);
+                    });
+                  },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
                         cancelStyle: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
+                            color: Style.foregroundColor),
                         doneStyle: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
+                            color: Style.foregroundColor),
                         itemStyle: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontSize: 20.0,
                             fontWeight: FontWeight.w600,
-                            color: Style.foregroundColor
-                        ),
+                            color: Style.foregroundColor),
                         backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
@@ -227,9 +223,12 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                       fontFamily: Style.fontFamily,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: _endDate != 'Choose end date' ? Style.foregroundColor : Style.foregroundColor.withOpacity(0.24),
+                      color: _endDate != 'Choose end date'
+                          ? Style.foregroundColor
+                          : Style.foregroundColor.withOpacity(0.24),
                     )),
-                trailing: Icon(Icons.chevron_right, color: Style.foregroundColor.withOpacity(0.54)),
+                trailing: Icon(Icons.chevron_right,
+                    color: Style.foregroundColor.withOpacity(0.54)),
               ),
             ],
           ),

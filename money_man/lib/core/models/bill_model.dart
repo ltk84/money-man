@@ -1,11 +1,8 @@
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:money_man/core/models/repeat_option_model.dart';
 
 import './category_model.dart';
-import './transaction_model.dart';
-import './wallet_model.dart';
 
 class Bill {
   String id;

@@ -2,9 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/core/models/basic_questions.dart';
 import 'package:money_man/core/models/user_guide.dart';
-import 'package:money_man/ui/screens/account_screens/help_screens/answer_questions_screen.dart';
 import 'package:money_man/ui/screens/account_screens/help_screens/guide_detail.dart';
 import 'package:money_man/ui/style.dart';
 
@@ -25,15 +23,17 @@ class UserGuideScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child:  Row(
+            child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
-                Text('Help', style: TextStyle(
-                    color: Style.foregroundColor,
-                    fontFamily: Style.fontFamily,
-                    fontSize: 17.0
-                )
-                )
+                Icon(Style.backIcon, color: Style.foregroundColor),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Help',
+                    style: TextStyle(
+                        color: Style.foregroundColor,
+                        fontFamily: Style.fontFamily,
+                        fontSize: 17.0))
               ],
             ),
           ),
@@ -62,12 +62,9 @@ class UserGuideScreen extends StatelessWidget {
             duration: Duration(milliseconds: 0),
             child: BackdropFilter(
               filter: ImageFilter.blur(
-                  sigmaX: 25,
-                  sigmaY: 25,
-                  tileMode: TileMode.values[0]),
+                  sigmaX: 25, sigmaY: 25, tileMode: TileMode.values[0]),
               child: AnimatedContainer(
-                duration: Duration(
-                    milliseconds: 100),
+                duration: Duration(milliseconds: 100),
                 color: Colors.grey[800].withOpacity(0.2),
               ),
             ),
@@ -78,7 +75,8 @@ class UserGuideScreen extends StatelessWidget {
         padding: EdgeInsets.only(top: 10),
         color: Style.backgroundColor,
         child: ListView.builder(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           itemCount: num,
           itemBuilder: (context, i) {
             return mQandA(
@@ -104,9 +102,8 @@ class mQandA extends StatelessWidget {
         showCupertinoModalBottomSheet(
             context: context,
             builder: (context) => GuideDetailScreen(
-              index: index,
-            )
-        );
+                  index: index,
+                ));
       },
       child: Container(
         color: Colors.transparent,

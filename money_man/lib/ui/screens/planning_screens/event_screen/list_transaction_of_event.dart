@@ -5,6 +5,7 @@ import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +48,7 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<Object>(
         stream: _firestore.transactionStream(_eventWallet, 'full'),
-        builder: (context,snapshot) {
+        builder: (context, snapshot) {
           double total = 0;
           List<MyTransaction> listTransaction = snapshot.data ?? [];
           List<MyTransaction> listTransactionOfEventByDate = [];
@@ -75,43 +76,69 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                 .where((element) => element.date.compareTo(date) == 0);
             transactionListSorted.add(b.toList());
           });
-          return (listTransactionOfEventByDate.length == 0)?
-          Scaffold(
-              backgroundColor: Colors.black,
-              appBar: new AppBar(
-                backgroundColor: Colors.black,
-                centerTitle: true,
-                elevation: 0,
-                title: Text('Transaction List'),
-              ),
-              body: Container(
-                alignment:  Alignment.center,
-                child: Text(
-                  'No transaction',
-                  style: TextStyle(
-                    fontSize: 45,
-                    color: Colors.white54,
+          return (listTransactionOfEventByDate.length == 0)
+              ? Scaffold(
+                  backgroundColor: Style.backgroundColor,
+                  appBar: new AppBar(
+                    backgroundColor: Style.appBarColor,
+                    centerTitle: true,
+                    elevation: 0,
+                    title: Text('Transaction List',
+                        style: TextStyle(
+                          fontFamily: Style.fontFamily,
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w600,
+                          color: Style.foregroundColor,
+                        )),
                   ),
-                ),
-              )
-          ) : Scaffold(
-            backgroundColor: Colors.black,
-            appBar: new AppBar(
-              backgroundColor: Colors.black,
-              centerTitle: true,
-              elevation: 0,
-              title: Text('Transaction List'),
-            ),
-            body: buildDisplayTransactionByDate(transactionListSorted, total),
-          );
-        }
-    );
+                  body: Container(
+                      color: Style.backgroundColor,
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.hourglass_empty,
+                            color: Style.foregroundColor.withOpacity(0.12),
+                            size: 100,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'There are no events',
+                            style: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                              color: Style.foregroundColor.withOpacity(0.24),
+                            ),
+                          ),
+                        ],
+                      )))
+              : Scaffold(
+                  backgroundColor: Style.backgroundColor,
+                  appBar: AppBar(
+                    backgroundColor: Style.appBarColor,
+                    centerTitle: true,
+                    elevation: 0,
+                    title: Text(
+                      'Transaction List',
+                      style: TextStyle(
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily),
+                    ),
+                  ),
+                  body: buildDisplayTransactionByDate(
+                      transactionListSorted, total),
+                );
+        });
   }
 
   Container buildDisplayTransactionByDate(
       List<List<MyTransaction>> transactionListSortByDate, double total) {
     return Container(
-      color: Colors.black,
+      color: Style.backgroundColor,
       child: ListView.builder(
           physics: BouncingScrollPhysics(),
           //primary: false,
@@ -129,19 +156,20 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
 
             return xIndex == 0
                 ? Column(
-              children: [
-                buildHeader(transactionListSortByDate, total),
-                buildBottomViewByDate(
-                    transactionListSortByDate, xIndex, totalAmountInDay)
-              ],
-            )
+                    children: [
+                      buildHeader(transactionListSortByDate, total),
+                      buildBottomViewByDate(
+                          transactionListSortByDate, xIndex, totalAmountInDay)
+                    ],
+                  )
                 : buildBottomViewByDate(
-                transactionListSortByDate, xIndex, totalAmountInDay);
+                    transactionListSortByDate, xIndex, totalAmountInDay);
           }),
     );
   }
 
-  Widget buildHeader(List<List<MyTransaction>> transListSortByDate, double total) {
+  Widget buildHeader(
+      List<List<MyTransaction>> transListSortByDate, double total) {
     total = 0;
     transListSortByDate.forEach((element) {
       element.forEach((e) {
@@ -155,10 +183,10 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
       header: SizedBox(height: 0),
       content: Container(
           decoration: BoxDecoration(
-              color: Colors.grey[900],
+              color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                    color: Colors.black,
+                    color: Style.backgroundColor,
                     width: 1.0,
                   ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
@@ -170,21 +198,21 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                   children: <Widget>[
                     Text('Overview',
                         style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Montserrat',
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
+                          color: Style.foregroundColor,
+                          fontFamily: Style.fontFamily,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         )),
                     SizedBox(
                       width: 10,
                       height: 10,
                     ),
                     Divider(
-                      color: Colors.black,
+                      color: Style.backgroundColor,
                       thickness: 1.0,
                       height: 10,
                     ),
-                    ColoredBox(color: Colors.black87)
+                    ColoredBox(color: Style.backgroundColor.withOpacity(0.87))
                   ]),
             ),
             Container(
@@ -194,20 +222,20 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                   children: <Widget>[
                     Text(total >= 0 ? 'Income' : 'Outcome',
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontFamily: 'Montserrat',
+                          color: Style.foregroundColor.withOpacity(0.54),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: Style.fontFamily,
                         )),
                     MoneySymbolFormatter(
                         text: total,
                         currencyId: widget.eventWallet.currencyID,
                         textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
+                          color: Style.foregroundColor,
+                          fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          fontFamily: 'Montserrat',
-                        )
-                    ),
+                          fontFamily: Style.fontFamily,
+                        ),),
                   ]),
             ),
           ])),
@@ -225,19 +253,19 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ),
               top: BorderSide(
-                color: Colors.black,
-                width: 1.0,
+                color: Style.foregroundColor.withOpacity(0.12),
+                width: 0.5,
               ))),
       child: StickyHeader(
         header: Container(
-          color: Colors.grey[900],
+          color: Style.boxBackgroundColor,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
           child: Row(
             children: <Widget>[
@@ -246,30 +274,41 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                 child: Text(
                     DateFormat("dd")
                         .format(transListSortByDate[xIndex][0].date),
-                    style:
-                    TextStyle(fontSize: 30.0, color: Colors.white)),
+                    style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 30.0,
+                        color: Style.foregroundColor)),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
                 child: Text(
                     DateFormat("EEEE")
-                        .format(transListSortByDate[xIndex][0].date)
-                        .toString() +
+                            .format(transListSortByDate[xIndex][0].date)
+                            .toString() +
                         '\n' +
                         DateFormat("MMMM yyyy")
                             .format(transListSortByDate[xIndex][0].date)
                             .toString(),
                     // 'hello',
                     style: TextStyle(
-                        fontSize: 12.0, color: Colors.grey[500])),
+                        fontFamily: Style.fontFamily,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.0,
+                        color: Style.foregroundColor.withOpacity(0.54))),
               ),
               Expanded(
                 child: MoneySymbolFormatter(
+                  digit: totalAmountInDay >= 0 ? '+' : '',
                   text: totalAmountInDay,
                   currencyId: widget.eventWallet.currencyID,
                   textAlign: TextAlign.end,
                   textStyle: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
+                    fontFamily: Style.fontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.0,
+                    color: Style.foregroundColor,
+                  ),
                 ),
               ),
             ],
@@ -286,8 +325,7 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex]
-                            [yIndex],
+                            transaction: transListSortByDate[xIndex][yIndex],
                             wallet: widget.eventWallet,
                           ),
                           type: PageTransitionType.rightToLeft));
@@ -309,31 +347,29 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
                         child: Text(
-                            transListSortByDate[xIndex][yIndex]
-                                .category
-                                .name,
+                            transListSortByDate[xIndex][yIndex].category.name,
                             style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14.0,
+                              color: Style.foregroundColor,
+                            )),
                       ),
                       Expanded(
                         child: MoneySymbolFormatter(
-                            text: transListSortByDate[xIndex][yIndex]
-                                .amount,
+                            text: transListSortByDate[xIndex][yIndex].amount,
                             currencyId: widget.eventWallet.currencyID,
                             textAlign: TextAlign.end,
-
                             textStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.0,
                                 color: transListSortByDate[xIndex][yIndex]
                                     .category
                                     .type ==
                                     'income'
-                                    ? Colors.green
-                                    : Colors.red[600])
-                        ),
-
+                                    ? Style.incomeColor2
+                                    : Style.expenseColor),),
                       ),
                     ],
                   ),

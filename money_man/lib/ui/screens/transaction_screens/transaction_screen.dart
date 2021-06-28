@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_formatter/money_formatter.dart';
-import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
+import 'package:money_man/ui/screens/transaction_screens/report_for_this_period.dart';
 import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/ui/style.dart';
@@ -37,13 +36,15 @@ class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
   TabController _tabController;
   ScrollController listScrollController;
-  int _limit = 200;
-  int _limitIncrement = 20;
+  // int _limit = 200;
+  // int _limitIncrement = 20;
   Wallet _wallet;
   bool viewByCategory;
   int choosedTimeRange;
   String currencySymbol;
   List<Tab> myTabs;
+  List<DateTime> _beginDate = [];
+  List<DateTime> _endDate = [];
 
   @override
   void initState() {
@@ -51,11 +52,25 @@ class _TransactionScreen extends State<TransactionScreen>
 
     viewByCategory = false;
     choosedTimeRange = 3;
+    _beginDate.clear();
+    _endDate.clear();
+    int index = 0;
+    var now = DateTime.now();
+    for (; index < 20; index++) {
+      var date = DateTime(now.year, now.month - (18 - index), 1);
+      _beginDate.add(date);
+      if (index < 19) {
+        _endDate.add(DateTime(
+          _beginDate[index].year,
+          _beginDate[index].month + 1,
+          _beginDate[index].day - 1,
+        ));
+      }
+    }
     listScrollController = ScrollController();
     listScrollController.addListener(scrollListener);
 
     myTabs = initTabBar(choosedTimeRange);
-
     _tabController = TabController(length: 20, vsync: this, initialIndex: 18);
     _tabController.addListener(() {
       setState(() {});
@@ -211,6 +226,17 @@ class _TransactionScreen extends State<TransactionScreen>
       switch (value) {
         case 1:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
+            int index = 0;
+            var now = DateTime.now();
+            for (; index < 20; index++) {
+              var date = DateTime(now.year, now.month, now.day - (18 - index));
+              _beginDate.add(date);
+              if (index < 19) {
+                _endDate.add(date);
+              }
+            }
             choosedTimeRange = 1;
 
             myTabs = initTabBar(choosedTimeRange);
@@ -223,6 +249,22 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 2:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
+            int index = 0;
+            for (; index < 20; index++) {
+              var firstDateInAWeek = DateTime.now()
+                  .subtract(Duration(days: DateTime.now().weekday - 1))
+                  .subtract(Duration(days: 7 * (18 - index)));
+              _beginDate.add(firstDateInAWeek);
+              if (index < 19) {
+                _endDate.add(DateTime(
+                  firstDateInAWeek.year,
+                  firstDateInAWeek.month,
+                  firstDateInAWeek.day + 6,
+                ));
+              }
+            }
             choosedTimeRange = 2;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -234,6 +276,21 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 3:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
+            int index = 0;
+            var now = DateTime.now();
+            for (; index < 20; index++) {
+              var date = DateTime(now.year, now.month - (18 - index), 1);
+              _beginDate.add(date);
+              if (index < 19) {
+                _endDate.add(DateTime(
+                  _beginDate[index].year,
+                  _beginDate[index].month + 1,
+                  _beginDate[index].day - 1,
+                ));
+              }
+            }
             choosedTimeRange = 3;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -245,6 +302,25 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 4:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
+            int index = 0;
+            var now = DateTime.now();
+            var initQuater = (now.month + 2) % 3;
+            for (; index < 20; index++) {
+              _beginDate.add(DateTime(
+                now.year,
+                now.month - initQuater - (18 - index) * 3,
+                1,
+              ));
+              if (index < 19) {
+                _endDate.add(DateTime(
+                  _beginDate[index].year,
+                  _beginDate[index].month + 3,
+                  _beginDate[index].day - 1,
+                ));
+              }
+            }
             choosedTimeRange = 4;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -256,6 +332,24 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 5:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
+            int index = 0;
+            var now = DateTime.now();
+            for (; index < 20; index++) {
+              _beginDate.add(DateTime(
+                now.year - (18 - index),
+                1,
+                1,
+              ));
+              if (index < 19) {
+                _endDate.add(DateTime(
+                  _beginDate[index].year,
+                  12,
+                  31,
+                ));
+              }
+            }
             choosedTimeRange = 5;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -267,6 +361,8 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 6:
           setState(() {
+            _beginDate.clear();
+            _endDate.clear();
             choosedTimeRange = 6;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -277,6 +373,8 @@ class _TransactionScreen extends State<TransactionScreen>
           });
           break;
         case 7:
+          _beginDate.clear();
+          _endDate.clear();
           List<DateTime> timeRange = [];
           await showDialog(
               context: context,
@@ -285,11 +383,11 @@ class _TransactionScreen extends State<TransactionScreen>
               }).then((value) => timeRange = value);
 
           if (timeRange == null) return null;
-
           String displayTab = DateFormat('dd/MM/yyyy').format(timeRange[0]) +
               " - " +
               DateFormat('dd/MM/yyyy').format(timeRange[1]);
-
+          _beginDate.add(timeRange[0]);
+          _endDate.add(timeRange[1]);
           setState(() {
             choosedTimeRange = 7;
             myTabs = initTabBar(choosedTimeRange, extraInfo: displayTab);
@@ -354,7 +452,6 @@ class _TransactionScreen extends State<TransactionScreen>
       });
     } else if (choosedTimeRange == 2) {
       return List.generate(20, (index) {
-        var now = DateTime.now();
         if (index == 17) {
           return Tab(
             text: 'LAST WEEK',
@@ -682,20 +779,20 @@ class _TransactionScreen extends State<TransactionScreen>
       } else {
         switch (chooseTime[0]) {
           case 'Q1':
-            headTime = DateTime(now.year, DateTime.january);
-            tailTime = DateTime(now.year, DateTime.march);
+            headTime = DateTime(now.year, DateTime.january, 1);
+            tailTime = DateTime(now.year, DateTime.march, 31);
             break;
           case 'Q2':
-            headTime = DateTime(now.year, DateTime.april);
-            tailTime = DateTime(now.year, DateTime.june);
+            headTime = DateTime(now.year, DateTime.april, 1);
+            tailTime = DateTime(now.year, DateTime.june, 30);
             break;
           case 'Q3':
-            headTime = DateTime(now.year, DateTime.july);
-            tailTime = DateTime(now.year, DateTime.september);
+            headTime = DateTime(now.year, DateTime.july, 1);
+            tailTime = DateTime(now.year, DateTime.september, 30);
             break;
           case 'Q4':
-            headTime = DateTime(now.year, DateTime.october);
-            tailTime = DateTime(now.year, DateTime.december);
+            headTime = DateTime(now.year, DateTime.october, 1);
+            tailTime = DateTime(now.year, DateTime.december, 31);
             break;
           default:
         }
@@ -913,7 +1010,7 @@ class _TransactionScreen extends State<TransactionScreen>
                             SizedBox(width: 10.0),
                             Text(
                               viewByCategory
-                                  ? 'View by transaction'
+                                  ? 'View by date'
                                   : 'View by category',
                               style: TextStyle(
                                 color: Style.backgroundColor,
@@ -942,24 +1039,24 @@ class _TransactionScreen extends State<TransactionScreen>
                             ),
                           ],
                         )),
-                    PopupMenuItem(
-                        value: 'Transfer money',
-                        child: Row(
-                          children: [
-                            Icon(Icons.attach_money,
-                                color: Style.backgroundColor),
-                            SizedBox(width: 10.0),
-                            Text(
-                              'Transfer money',
-                              style: TextStyle(
-                                color: Style.backgroundColor,
-                                fontFamily: Style.fontFamily,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        )),
+                    // PopupMenuItem(
+                    //     value: 'Transfer money',
+                    //     child: Row(
+                    //       children: [
+                    //         Icon(Icons.attach_money,
+                    //             color: Style.backgroundColor),
+                    //         SizedBox(width: 10.0),
+                    //         Text(
+                    //           'Transfer money',
+                    //           style: TextStyle(
+                    //             color: Style.backgroundColor,
+                    //             fontFamily: Style.fontFamily,
+                    //             fontSize: 16.0,
+                    //             fontWeight: FontWeight.w500,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     )),
                     PopupMenuItem(
                         value: 'Search for transaction',
                         child: Row(
@@ -977,29 +1074,29 @@ class _TransactionScreen extends State<TransactionScreen>
                             ),
                           ],
                         )),
-                    PopupMenuItem(
-                        value: 'Synchronize',
-                        child: Row(
-                          children: [
-                            Icon(Icons.sync, color: Style.backgroundColor),
-                            SizedBox(width: 10.0),
-                            Text(
-                              'Synchronize',
-                              style: TextStyle(
-                                color: Style.backgroundColor,
-                                fontFamily: Style.fontFamily,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        )),
+                    // PopupMenuItem(
+                    //     value: 'Synchronize',
+                    //     child: Row(
+                    //       children: [
+                    //         Icon(Icons.sync, color: Style.backgroundColor),
+                    //         SizedBox(width: 10.0),
+                    //         Text(
+                    //           'Synchronize',
+                    //           style: TextStyle(
+                    //             color: Style.backgroundColor,
+                    //             fontFamily: Style.fontFamily,
+                    //             fontSize: 16.0,
+                    //             fontWeight: FontWeight.w500,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     )),
                   ];
                 })
           ],
         ),
         body: StreamBuilder<List<MyTransaction>>(
-            stream: _firestore.transactionStream(_wallet, _limit),
+            stream: _firestore.transactionStream(_wallet, 'full'),
             builder: (context, snapshot) {
               print('streambuilder build');
               List<MyTransaction> _transactionList = snapshot.data ?? [];
@@ -1141,7 +1238,8 @@ class _TransactionScreen extends State<TransactionScreen>
             return xIndex == 0
                 ? Column(
                     children: [
-                      buildHeader(totalInCome, totalOutCome, total),
+                      buildHeader(transactionListSortByCategory, totalInCome,
+                          totalOutCome, total),
                       buildBottomViewByCategory(transactionListSortByCategory,
                           xIndex, totalAmountInDay)
                     ],
@@ -1182,7 +1280,8 @@ class _TransactionScreen extends State<TransactionScreen>
             return xIndex == 0
                 ? Column(
                     children: [
-                      buildHeader(totalInCome, totalOutCome, total),
+                      buildHeader(transactionListSortByDate, totalInCome,
+                          totalOutCome, total),
                       buildBottomViewByDate(
                           transactionListSortByDate, xIndex, totalAmountInDay)
                     ],
@@ -1352,7 +1451,9 @@ class _TransactionScreen extends State<TransactionScreen>
     print('build bottom by date');
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+      padding: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
+          //borderRadius:   BorderRadius.circular(8), // set chỗ này là bị mất conttent nè
           color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
@@ -1449,8 +1550,8 @@ class _TransactionScreen extends State<TransactionScreen>
                               'Debt Collection'
                       ? '+'
                       : '-';
-              double extraAmount =
-                  transListSortByDate[xIndex][yIndex].extraAmountInfo;
+              // double extraAmount =
+              //     transListSortByDate[xIndex][yIndex].extraAmountInfo;
 
               return GestureDetector(
                 onTap: () async {
@@ -1524,33 +1625,35 @@ class _TransactionScreen extends State<TransactionScreen>
                           ),
                           if (_subTitle != null && _subTitle != '')
                             RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: _subTitle,
-                                    style: TextStyle(
-                                      fontFamily: Style.fontFamily,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12.0,
-                                      color: Style.foregroundColor.withOpacity(0.54),
-                                    ),
+                                text: TextSpan(children: [
+                              TextSpan(
+                                text: _subTitle,
+                                style: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12.0,
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54),
+                                ),
+                              ),
+                              if (transListSortByDate[xIndex][yIndex]
+                                          .category
+                                          .name ==
+                                      'Debt' ||
+                                  transListSortByDate[xIndex][yIndex]
+                                          .category
+                                          .name ==
+                                      'Loan')
+                                TextSpan(
+                                  text: _contact,
+                                  style: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.0,
+                                    color: Style.foregroundColor,
                                   ),
-                                  if (
-                                    transListSortByDate[xIndex][yIndex].category.name == 'Debt'
-                                    || transListSortByDate[xIndex][yIndex].category.name == 'Loan'
-                                  )
-                                  TextSpan(
-                                    text: _contact,
-                                    style: TextStyle(
-                                      fontFamily: Style.fontFamily,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14.0,
-                                      color: Style.foregroundColor,
-                                    ),
-                                  )
-                                ]
-                              )
-                            ),
+                                )
+                            ])),
                           // if (extraAmount != null)
                           //   Row(
                           //     mainAxisAlignment: MainAxisAlignment.end,
@@ -1580,7 +1683,7 @@ class _TransactionScreen extends State<TransactionScreen>
     );
   }
 
-  StickyHeader buildHeader(
+  StickyHeader buildHeader(List<List<MyTransaction>> transListSortByDate,
       double totalInCome, double totalOutCome, double total) {
     print('build header');
     return StickyHeader(
@@ -1673,14 +1776,47 @@ class _TransactionScreen extends State<TransactionScreen>
                   ]),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                if (choosedTimeRange < 6) {
+                  if (transListSortByDate[0][0].date.year <
+                          _beginDate[19].year ||
+                      (transListSortByDate[0][0].date.year ==
+                              _beginDate[19].year &&
+                          transListSortByDate[0][0].date.month <
+                              _beginDate[19].month) ||
+                      (transListSortByDate[0][0].date.year ==
+                              _beginDate[19].year &&
+                          transListSortByDate[0][0].date.month ==
+                              _beginDate[19].month &&
+                          transListSortByDate[0][0].date.day <=
+                              _beginDate[19].day)) {
+                    _endDate.add(DateTime(_beginDate[19].year,
+                        _beginDate[19].month, _beginDate[19].day + 6));
+                  } else
+                    _endDate.add(transListSortByDate[0][0].date);
+                } else if (choosedTimeRange == 6) {
+                  _endDate.clear();
+                  _endDate.add(transListSortByDate[0][0].date);
+                  _beginDate.clear();
+                  _beginDate.add(
+                      transListSortByDate[transListSortByDate.length - 1][0]
+                          .date);
+                }
+                Navigator.of(context).push(PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    child: ReportForThisPeriodScreen(
+                      currentWallet: _wallet,
+                      beginDate: _beginDate[_tabController.index],
+                      endDate: _endDate[_tabController.index],
+                    )));
+              },
               child: Text(
                 'View report for this period',
                 style: TextStyle(
                     fontFamily: Style.fontFamily,
                     fontSize: 14.0,
                     fontWeight: FontWeight.w600,
-                    color: Style.highlightPrimaryColor),
+                    color: Color(0xff2cb84b)),
               ),
             )
           ])),
@@ -1690,7 +1826,7 @@ class _TransactionScreen extends State<TransactionScreen>
   void buildShowDialog(BuildContext context, id) async {
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
-    final result = await showCupertinoModalBottomSheet(
+    await showCupertinoModalBottomSheet(
         isDismissible: true,
         backgroundColor: Style.boxBackgroundColor,
         context: context,

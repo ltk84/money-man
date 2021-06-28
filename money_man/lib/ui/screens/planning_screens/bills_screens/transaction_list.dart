@@ -19,9 +19,7 @@ class BillTransactionList extends StatefulWidget {
   final Wallet currentWallet;
   final List<String> transactionListID;
   const BillTransactionList(
-      {Key key,
-        this.transactionListID,
-        this.currentWallet})
+      {Key key, this.transactionListID, this.currentWallet})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => BillTransactionListState();
@@ -35,7 +33,8 @@ class BillTransactionListState extends State<BillTransactionList> {
   @override
   void initState() {
     super.initState();
-    currencySymbol = CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
+    currencySymbol =
+        CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
     _transactionListID = widget.transactionListID ?? [];
   }
 
@@ -45,13 +44,12 @@ class BillTransactionListState extends State<BillTransactionList> {
     _transactionListID = widget.transactionListID ?? [];
   }
 
-
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       backgroundColor: Style.backgroundColor,
-      appBar: new AppBar(
-        backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
+      appBar: AppBar(
+        backgroundColor: Style.appBarColor,
         elevation: 0.0,
         leading: Hero(
           tag: 'billToDetail_backBtn',
@@ -60,7 +58,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                 Navigator.of(context).pop();
               },
               child: Icon(
-                Icons.arrow_back_ios_rounded,
+                Style.backIcon,
                 color: Style.foregroundColor,
               )),
         ),
@@ -75,63 +73,67 @@ class BillTransactionListState extends State<BillTransactionList> {
               )),
         ),
         centerTitle: true,
-        flexibleSpace: ClipRect(
-          child: AnimatedOpacity(
-            opacity: 1,
-            duration: Duration(milliseconds: 0),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                  sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-              child: AnimatedContainer(
-                  duration: Duration(milliseconds: 1),
-                  //child: Container(
-                  //color: Colors.transparent,
-                  color: Colors.transparent
-                //),
-              ),
-            ),
-          ),
-        ),
+        // flexibleSpace: ClipRect(
+        //   child: AnimatedOpacity(
+        //     opacity: 1,
+        //     duration: Duration(milliseconds: 0),
+        //     child: BackdropFilter(
+        //       filter: ImageFilter.blur(
+        //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
+        //       child: AnimatedContainer(
+        //           duration: Duration(milliseconds: 1),
+        //           //child: Container(
+        //           //color: Colors.transparent,
+        //           color: Colors.transparent
+        //           //),
+        //           ),
+        //     ),
+        //   ),
+        // ),
       ),
       body: StreamBuilder<Object>(
-        stream: _firestore.transactionStream(widget.currentWallet, 'full'),
-        builder: (context, snapshot) {
-          List<MyTransaction> listTransactions = snapshot.data ?? [];
+          stream: _firestore.transactionStream(widget.currentWallet, 'full'),
+          builder: (context, snapshot) {
+            List<MyTransaction> listTransactions = snapshot.data ?? [];
 
-          print("test 1: " + listTransactions.length.toString());
-          // Lấy danh sách transaction từ transaction ID của bill.
-          List<MyTransaction> billTransactions = listTransactions.where((element) => _transactionListID.contains(element.id)).toList();
+            print("test 1: " + listTransactions.length.toString());
+            // Lấy danh sách transaction từ transaction ID của bill.
+            List<MyTransaction> billTransactions = listTransactions
+                .where((element) => _transactionListID.contains(element.id))
+                .toList();
 
+            print("test 2: " + billTransactions.length.toString());
+            List<List<MyTransaction>> transactionListSorted = [];
+            List<DateTime> dateInChoosenTime = [];
+            double total = 0;
 
-          print("test 2: " + billTransactions.length.toString());
-          List<List<MyTransaction>> transactionListSorted = [];
-          List<DateTime> dateInChoosenTime = [];
-          double total = 0;
+            billTransactions.sort((a, b) => b.date.compareTo(a.date));
+            billTransactions.forEach((element) {
+              if (!dateInChoosenTime.contains(element.date))
+                dateInChoosenTime.add(element.date);
+              total += element.amount;
+            });
+            dateInChoosenTime.forEach((date) {
+              final b = billTransactions
+                  .where((element) => element.date.compareTo(date) == 0);
+              transactionListSorted.add(b.toList());
+            });
 
-          billTransactions.sort((a, b) => b.date.compareTo(a.date));
-          billTransactions.forEach((element) {
-            if (!dateInChoosenTime.contains(element.date))
-              dateInChoosenTime.add(element.date);
-            total += element.amount;
-          });
-          dateInChoosenTime.forEach((date) {
-            final b = billTransactions
-                .where((element) => element.date.compareTo(date) == 0);
-            transactionListSorted.add(b.toList());
-          });
-
-          if (transactionListSorted.length == 0) {
+            if (transactionListSorted.length == 0) {
               return Container(
                   color: Style.backgroundColor,
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.hourglass_empty,
+                      Icon(
+                        Icons.hourglass_empty,
                         color: Style.foregroundColor.withOpacity(0.12),
                         size: 100,
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Text(
                         'No transaction',
                         style: TextStyle(
@@ -142,13 +144,12 @@ class BillTransactionListState extends State<BillTransactionList> {
                         ),
                       ),
                     ],
-                  )
-              );
-          } else {
-            return buildDisplayTransactionByDate(transactionListSorted, total);
-          }
-        }
-      ),
+                  ));
+            } else {
+              return buildDisplayTransactionByDate(
+                  transactionListSorted, total);
+            }
+          }),
     );
   }
 
@@ -158,7 +159,8 @@ class BillTransactionListState extends State<BillTransactionList> {
       height: double.infinity,
       color: Style.backgroundColor,
       child: ListView.builder(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           //primary: false,
           //shrinkWrap: true,
           // itemCount: TRANSACTION_DATA.length + 1,
@@ -174,14 +176,14 @@ class BillTransactionListState extends State<BillTransactionList> {
 
             return xIndex == 0
                 ? Column(
-              children: [
-                  buildHeader(total),
-                  buildBottomViewByDate(
-                    transactionListSortByDate, xIndex, totalAmountInDay)
-              ],
-            )
+                    children: [
+                      buildHeader(total),
+                      buildBottomViewByDate(
+                          transactionListSortByDate, xIndex, totalAmountInDay)
+                    ],
+                  )
                 : buildBottomViewByDate(
-                transactionListSortByDate, xIndex, totalAmountInDay);
+                    transactionListSortByDate, xIndex, totalAmountInDay);
           }),
     );
   }
@@ -194,9 +196,9 @@ class BillTransactionListState extends State<BillTransactionList> {
               color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                    color: Style.backgroundColor,
-                    width: 1.0,
-                  ))),
+                color: Style.backgroundColor,
+                width: 1.0,
+              ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
           child: Column(children: <Widget>[
             Container(
@@ -234,8 +236,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           fontFamily: Style.fontFamily,
-                        )
-                    ),
+                        )),
                     MoneySymbolFormatter(
                       text: total,
                       currencyId: widget.currentWallet.currencyID,
@@ -283,15 +284,14 @@ class BillTransactionListState extends State<BillTransactionList> {
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
                         fontSize: 30.0,
-                        color: Style.foregroundColor
-                    )),
+                        color: Style.foregroundColor)),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
                 child: Text(
                     DateFormat("EEEE")
-                        .format(transListSortByDate[xIndex][0].date)
-                        .toString() +
+                            .format(transListSortByDate[xIndex][0].date)
+                            .toString() +
                         '\n' +
                         DateFormat("MMMM yyyy")
                             .format(transListSortByDate[xIndex][0].date)
@@ -305,10 +305,7 @@ class BillTransactionListState extends State<BillTransactionList> {
               ),
               Expanded(
                 child: MoneySymbolFormatter(
-                  digit: totalAmountInDay >=
-                      0
-                      ? '+'
-                      : '',
+                  digit: totalAmountInDay >= 0 ? '+' : '',
                   text: totalAmountInDay,
                   currencyId: widget.currentWallet.currencyID,
                   textAlign: TextAlign.end,
@@ -338,7 +335,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                             wallet: widget.currentWallet,
                           ),
                           type: PageTransitionType.rightToLeft));
-                  setState(() { });
+                  setState(() {});
                 },
                 child: Container(
                   color: Colors.transparent,
@@ -356,9 +353,7 @@ class BillTransactionListState extends State<BillTransactionList> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
                         child: Text(
-                            transListSortByDate[xIndex][yIndex]
-                                .category
-                                .name,
+                            transListSortByDate[xIndex][yIndex].category.name,
                             style: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w700,

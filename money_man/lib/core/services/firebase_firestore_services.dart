@@ -465,6 +465,25 @@ class FirebaseFireStoreService {
     return list;
   }
 
+// Nay la dung cho ben budget
+  Future<List<MyTransaction>> getListOfTransactionWithCriteriaForBudget(
+      String criteria, String walletId) async {
+    List<MyTransaction> list = [];
+    await users
+        .doc(uid)
+        .collection('wallets')
+        .doc(walletId)
+        .collection('transactions')
+        .where('category.name', isEqualTo: criteria)
+        //.where('extraAmountInfo', isNotEqualTo: 0)
+        .get()
+        .then((value) {
+      print('get complete with criteria: $criteria');
+      value.docs.map((e) => list.add(MyTransaction.fromMap(e.data()))).toList();
+    }).catchError((error) => print(error));
+    return list;
+  }
+
   // add transaction
   Future<MyTransaction> addTransaction(
       Wallet wallet, MyTransaction transaction) async {
@@ -601,17 +620,15 @@ class FirebaseFireStoreService {
     if (transaction.eventID != "") {
       final event = await getEventByID(transaction.eventID, wallet);
       Event _event = event;
-      if(_event != null)
-        {
-          if (transaction.category.type == 'expense')
-            _event.spent += transaction.amount;
-          else
-            _event.spent -= transaction.amount;
-          _event.transactionIdList
-              .removeWhere((element) => element == transaction.id);
-          await updateEvent(_event, wallet);
-
-        }
+      if (_event != null) {
+        if (transaction.category.type == 'expense')
+          _event.spent += transaction.amount;
+        else
+          _event.spent -= transaction.amount;
+        _event.transactionIdList
+            .removeWhere((element) => element == transaction.id);
+        await updateEvent(_event, wallet);
+      }
     }
     await updateWallet(wallet);
     await updateSelectedWallet(wallet.id);
@@ -1007,7 +1024,7 @@ class FirebaseFireStoreService {
 
   // add bill
   Future addBill(Bill bill, Wallet wallet) async {
-    final billsRef = await users
+    final billsRef = users
         .doc(uid)
         .collection('wallets')
         .doc(wallet.id)

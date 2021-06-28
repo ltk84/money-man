@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -69,7 +70,7 @@ class _LineChartsState extends State<LineCharts> {
       var temp = budget.beginDate;
       var end = budget.endDate;
       var difference = end.difference(budget.beginDate).inMinutes / 6;
-      for (double i = 0; i < 7; i++) {
+      for (double i = 0; i < 6; i++) {
         temp = temp.add(Duration(minutes: difference.toInt()));
         var spent = await _firestore.calculateBudgetSpentFromDay(budget, temp);
         var YAxix = spent / maxOfY * 5;
@@ -96,8 +97,10 @@ class _LineChartsState extends State<LineCharts> {
 
     var maxOfY = getMaxofY(widget.budget);
     const cutOffYValue = 0.0;
-    const yearTextStyle =
-        TextStyle(fontSize: 10, color: Colors.white, fontFamily: 'Montserrat');
+    var yearTextStyle = TextStyle(
+        fontSize: 12,
+        color: Style.foregroundColor,
+        fontFamily: Style.fontFamily);
 
     TextStyle getTextStyle(double b) {
       return yearTextStyle;
@@ -112,8 +115,11 @@ class _LineChartsState extends State<LineCharts> {
                 FlSpot(0, 0),
                 FlSpot(0, 0),
                 FlSpot(0, 0),
+                FlSpot(0, 0),
+                FlSpot(0, 0),
               ];
           return Container(
+            color: Style.backgroundColor,
             padding: EdgeInsets.only(left: 15),
             child: SizedBox(
               width: 330,
@@ -242,7 +248,7 @@ class _LineChartsState extends State<LineCharts> {
                           }
                         }),
                     leftTitles: SideTitles(
-                      margin: 15,
+                      margin: 20,
                       getTextStyles: getTextStyle,
                       showTitles: true,
                       // này là giá trị của các cột nè, val chạy từ 0 tới maxY
@@ -256,7 +262,8 @@ class _LineChartsState extends State<LineCharts> {
                   gridData: FlGridData(
                     show: true,
                     getDrawingHorizontalLine: (double value) {
-                      return FlLine(color: Colors.white, strokeWidth: 0.2);
+                      return FlLine(
+                          color: Style.foregroundColor, strokeWidth: 0.2);
                     },
                     checkToShowHorizontalLine: (double value) {
                       return true;

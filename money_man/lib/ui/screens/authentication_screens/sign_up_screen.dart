@@ -1,11 +1,8 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
-import 'package:money_man/ui/screens/authentication_screens/verify_email_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 
@@ -285,65 +282,65 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 60.0),
-                        width: double.infinity,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Color(0xFF0c0c0c);
-                                return Colors
-                                    .white; // Use the component's default.
-                              },
-                            ),
-                            foregroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Colors.white;
-                                return Color(
-                                    0xFF0c0c0c); // Use the component's default.
-                              },
-                            ),
-                          ),
-                          onPressed: () {
-                            //_auth.signInWithGoogleAccount();
-                          },
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: SuperIcon(
-                                  iconPath: 'assets/images/apple.svg',
-                                  size: 18,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: SizedBox(
-                                  width: 10,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 8,
-                                child: Text(
-                                  "Connect with Apple",
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0.5,
-                                      wordSpacing: 2.0),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   margin: EdgeInsets.symmetric(horizontal: 60.0),
+                      //   width: double.infinity,
+                      //   child: TextButton(
+                      //     style: ButtonStyle(
+                      //       backgroundColor:
+                      //           MaterialStateProperty.resolveWith<Color>(
+                      //         (Set<MaterialState> states) {
+                      //           if (states.contains(MaterialState.pressed))
+                      //             return Color(0xFF0c0c0c);
+                      //           return Colors
+                      //               .white; // Use the component's default.
+                      //         },
+                      //       ),
+                      //       foregroundColor:
+                      //           MaterialStateProperty.resolveWith<Color>(
+                      //         (Set<MaterialState> states) {
+                      //           if (states.contains(MaterialState.pressed))
+                      //             return Colors.white;
+                      //           return Color(
+                      //               0xFF0c0c0c); // Use the component's default.
+                      //         },
+                      //       ),
+                      //     ),
+                      //     onPressed: () {
+                      //       //_auth.signInWithGoogleAccount();
+                      //     },
+                      //     child: Row(
+                      //       children: [
+                      //         Expanded(
+                      //           flex: 1,
+                      //           child: SuperIcon(
+                      //             iconPath: 'assets/images/apple.svg',
+                      //             size: 18,
+                      //           ),
+                      //         ),
+                      //         Expanded(
+                      //           flex: 1,
+                      //           child: SizedBox(
+                      //             width: 10,
+                      //           ),
+                      //         ),
+                      //         Expanded(
+                      //           flex: 8,
+                      //           child: Text(
+                      //             "Connect with Apple",
+                      //             style: TextStyle(
+                      //                 fontSize: 13,
+                      //                 fontFamily: 'Montserrat',
+                      //                 fontWeight: FontWeight.w700,
+                      //                 letterSpacing: 0.5,
+                      //                 wordSpacing: 2.0),
+                      //             textAlign: TextAlign.left,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -364,55 +361,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // }
 
   Future _signInWithFacebookAccount() async {
-    try {
-      _auth.signInWithFacebook();
-    } on FirebaseAuthException catch (e) {
-      String error = '';
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          error =
-              "This account is linked with another provider! Try another provider!";
-          break;
-        case 'email-already-in-use':
-          error = "Your email address has been registered.";
-          break;
-        case 'invalid-credential':
-          error = "Your credential is malformed or has expired.";
-          break;
-        case 'user-disabled':
-          error = "This user has been disable.";
-          break;
-        default:
-          error = e.code;
-      }
-      _showAlertDialog(error);
+    setState(() {
+      loading = true;
+    });
+    var result = await _auth.signInWithFacebookVer2();
+    if (result != null && result != 'login-success') {
+      await _showAlertDialog(result);
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   Future _signInWithGoogleAccount() async {
-    try {
-      _auth.signInWithGoogleAccount();
-    } on FirebaseAuthException catch (e) {
-      String error = '';
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          error =
-              "This account is linked with another provider! Try another provider!";
-          break;
-        case 'email-already-in-use':
-          error = "Your email address has been registered.";
-          break;
-        case 'invalid-credential':
-          error = "Your credential is malformed or has expired.";
-          break;
-        case 'user-disabled':
-          error = "This user has been disable.";
-          break;
-        default:
-          error = e.code;
-      }
-      _showAlertDialog(error);
-    } on PlatformException catch (e) {}
+    setState(() {
+      loading = true;
+    });
+    var res = await _auth.signInWithGoogleAccount();
+    // print(res.additionalUserInfo.providerId);
+    if (res != null && res != 'login-success') {
+      await _showAlertDialog(res);
+    }
+    setState(() {
+      loading = false;
+    });
   }
 
   Future _signUpWithEmailAndPassword(
@@ -422,26 +394,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         loading = true;
       });
       final res = await _auth.signUpWithEmailAndPassword(_email, _password);
-      if (res is String) {
-        setState(() {
-          loading = false;
-        });
-        String error = "";
-        switch (res) {
-          case 'invalid-email':
-            error = "This email is invalid.";
-            break;
-          case 'email-already-in-use':
-            error = "Your email address has been registered.";
-            break;
-          case 'weak-password':
-            error = "Your password is so weak! Be stronger bro!";
-            break;
-          default:
-            error = res;
-        }
-        _showAlertDialog(error);
+      if (res != null && res != 'login-success') {
+        _showAlertDialog(res);
       }
+      setState(() {
+        loading = false;
+      });
     }
   }
 

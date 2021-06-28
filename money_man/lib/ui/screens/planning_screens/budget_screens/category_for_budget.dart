@@ -5,6 +5,7 @@ import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/transaction_screens/select_other_source.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesBudgetScreen extends StatefulWidget {
@@ -80,7 +81,7 @@ class _CategoriesBudgetScreenState extends State<CategoriesBudgetScreen>
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Style.backgroundColor,
         //extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
@@ -90,17 +91,13 @@ class _CategoriesBudgetScreenState extends State<CategoriesBudgetScreen>
             },
             child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: Colors.white),
-                Hero(
-                    tag: 'alo',
-                    child: Text('More',
-                        style: Theme.of(context).textTheme.headline6)),
+                Icon(Style.backIcon, color: Style.foregroundColor),
               ],
             ),
           ),
           //),
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Style.appBarColor,
           elevation: 0,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(
@@ -125,19 +122,14 @@ class _CategoriesBudgetScreenState extends State<CategoriesBudgetScreen>
               ),
             ),
           ),
-          title: AnimatedOpacity(
-              opacity: reachTop == 1 ? 1 : 0,
-              duration: Duration(milliseconds: 100),
-              child: Text(
-                  ''
-                  'Categories',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montseratt',
-                      fontSize: 17.0))),
+          title: Text('Categories',
+              style: TextStyle(
+                  color: Style.foregroundColor,
+                  fontFamily: 'Montseratt',
+                  fontSize: 20.0)),
           bottom: TabBar(
             unselectedLabelColor: Colors.grey[500],
-            labelColor: Colors.white,
+            labelColor: Style.foregroundColor,
             indicatorColor: Colors.yellow[700],
             physics: NeverScrollableScrollPhysics(),
             isScrollable: true,
@@ -171,7 +163,7 @@ class _CategoriesBudgetScreenState extends State<CategoriesBudgetScreen>
                               size: 35.0),
                           title: Text(_selectCateTab[index].name,
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w600)),
                           onTap: () {

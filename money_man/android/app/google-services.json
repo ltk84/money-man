@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "132678681327-q6vebm2afnpajv3see4o6anfp3uvdqd0.apps.googleusercontent.com",
+          "client_id": "132678681327-d4anbviio1rpquhv3sqd1i6gvll68e3k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.money_man",
-            "certificate_hash": "0d1fa46b10166b0ded318fa4195dad22e1e3631d"
+            "certificate_hash": "7f7ed50097b7846d89bbdfed26eeae6e773a1c65"
           }
         },
         {
@@ -35,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "132678681327-mn1l7p1vm14r9u2abs8cf8s873pi8vbs.apps.googleusercontent.com",
+              "client_id": "132678681327-dp3t2hs9pb7je5q97s7qsemm2f83nin9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

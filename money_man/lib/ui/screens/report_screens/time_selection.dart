@@ -77,7 +77,7 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Style.boxBackgroundColor,
+          backgroundColor: Style.appBarColor,
           title: Text('Select Time Range',
               style: TextStyle(
                 fontFamily: Style.fontFamily,
@@ -110,10 +110,12 @@ class TimeRangeSelectionState extends State<TimeRangeSelection> {
                         backgroundColor: Style.boxBackgroundColor,
                         context: context,
                         builder: (context) => CustomTimeRange(
-                            beginDate:
-                                _dateDescription == 'Custom' ? _beginDate : null,
-                            endDate:
-                                _dateDescription == 'Custom' ? _endDate : null));
+                            beginDate: _dateDescription == 'Custom'
+                                ? _beginDate
+                                : null,
+                            endDate: _dateDescription == 'Custom'
+                                ? _endDate
+                                : null));
                     if (result.runtimeType == listInfo[0].runtimeType &&
                         result != null) {
                       setState(() {

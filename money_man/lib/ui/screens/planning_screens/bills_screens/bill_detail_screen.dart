@@ -43,7 +43,8 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
     // TODO: implement initState
     super.initState();
     _bill = widget.bill;
-    currencySymbol = CurrencyService().findByCode(widget.wallet.currencyID).symbol;
+    currencySymbol =
+        CurrencyService().findByCode(widget.wallet.currencyID).symbol;
   }
 
   @override
@@ -51,7 +52,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Style.backgroundColor,
-        extendBodyBehindAppBar: true,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
           elevation: 0.0,
@@ -80,23 +81,23 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
             ),
           ),
           centerTitle: true,
-          flexibleSpace: ClipRect(
-            child: AnimatedOpacity(
-              opacity: 1,
-              duration: Duration(milliseconds: 0),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                    sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-                child: AnimatedContainer(
-                    duration: Duration(milliseconds: 1),
-                    //child: Container(
-                    //color: Colors.transparent,
-                    color: Colors.transparent
-                    //),
-                    ),
-              ),
-            ),
-          ),
+          // flexibleSpace: ClipRect(
+          //   child: AnimatedOpacity(
+          //     opacity: 1,
+          //     duration: Duration(milliseconds: 0),
+          //     child: BackdropFilter(
+          //       filter: ImageFilter.blur(
+          //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
+          //       child: AnimatedContainer(
+          //           duration: Duration(milliseconds: 1),
+          //           //child: Container(
+          //           //color: Colors.transparent,
+          //           color: Colors.transparent
+          //           //),
+          //           ),
+          //     ),
+          //   ),
+          //),
           actions: [
             Hero(
               tag: 'billToDetail_actionBtn',
@@ -176,7 +177,10 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                         thickness: 1,
                       ),
                     ),
-                    buildInfoRepeat(dueDate: DateFormat('dd/MM/yyyy').format(widget.dueDate), dueDescription: widget.description),
+                    buildInfoRepeat(
+                        dueDate:
+                            DateFormat('dd/MM/yyyy').format(widget.dueDate),
+                        dueDescription: widget.description),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -207,9 +211,8 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
               child: TextButton(
                 onPressed: () async {
                   _bill.isFinished = !_bill.isFinished;
-                  await _firestore.updateBill(
-                      _bill, widget.wallet);
-                  setState(() { });
+                  await _firestore.updateBill(_bill, widget.wallet);
+                  setState(() {});
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -225,7 +228,10 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(_bill.isFinished ? "Mark as running" : "Mark as finished",
+                    Text(
+                        _bill.isFinished
+                            ? "Mark as running"
+                            : "Mark as finished",
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: Style.fontFamily,
@@ -252,7 +258,9 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                       context,
                       PageTransition(
                           childCurrent: this.widget,
-                          child: BillTransactionList(transactionListID: _bill.transactionIdList, currentWallet: widget.wallet),
+                          child: BillTransactionList(
+                              transactionListID: _bill.transactionIdList,
+                              currentWallet: widget.wallet),
                           type: PageTransitionType.rightToLeft));
                 },
                 style: ButtonStyle(
@@ -294,16 +302,17 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
               child: TextButton(
                 onPressed: () async {
                   final type = await showMaterialModalBottomSheet(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                      ),
-                      backgroundColor: Style.boxBackgroundColor2,
-                      context: context,
-                      builder: (context) => DeleteDialog(),
-                  ) ?? 'none';
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(15)),
+                        ),
+                        backgroundColor: Style.boxBackgroundColor2,
+                        context: context,
+                        builder: (context) => DeleteDialog(),
+                      ) ??
+                      'none';
                   if (type == 'all') {
-                    await _firestore.deleteBill(
-                        _bill, widget.wallet);
+                    await _firestore.deleteBill(_bill, widget.wallet);
                   } else if (type == 'only') {
                     // Xử lý các dueDate. (Thanh toán rồi thì dueDate sẽ được cho vào list due Dates đã thanh toán,
                     // và xóa khỏi list due Dates chưa thanh toán.
@@ -315,8 +324,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                     }
 
                     // Cập nhật thông tin bill lên firestore.
-                    await _firestore.updateBill(
-                        _bill, widget.wallet);
+                    await _firestore.updateBill(_bill, widget.wallet);
                   }
                   Navigator.pop(context);
                 },
@@ -351,8 +359,8 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child:
-                  Icon(Icons.attach_money, color: Style.foregroundColor.withOpacity(0.7), size: 40.0)),
+              child: Icon(Icons.attach_money,
+                  color: Style.foregroundColor.withOpacity(0.7), size: 40.0)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -398,14 +406,16 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                 fontFamily: Style.fontFamily,
                 fontSize: 20.0,
                 fontWeight: FontWeight.w500,
-                color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                color: display == null
+                    ? Style.foregroundColor.withOpacity(0.24)
+                    : Style.foregroundColor,
               )),
         ],
       ),
     );
   }
 
-  Widget buildNote ({String display}) {
+  Widget buildNote({String display}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
@@ -413,13 +423,16 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 23.0),
-              child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
+              child: Icon(Icons.notes,
+                  color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
           Text(display == null || display == '' ? 'Note' : display,
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: Style.fontFamily,
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
-                color: display == null || display == '' ? Colors.white24 : Colors.white,
+                color: display == null || display == ''
+                    ? Style.foregroundColor.withOpacity(0.24)
+                    : Style.foregroundColor,
               )),
         ],
       ),
@@ -443,7 +456,9 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                 fontFamily: Style.fontFamily,
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
-                color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                color: display == null
+                    ? Style.foregroundColor.withOpacity(0.24)
+                    : Style.foregroundColor,
               )),
         ],
       ),

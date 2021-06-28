@@ -23,7 +23,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
   int reachAppBar = 0;
 
   // Tab controller cho tab bar
-  TabController _tabController;
+  // TabController _tabController;
 
   // Text title = Text('My Account', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
   // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
@@ -79,12 +79,15 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                 color: Colors.transparent,
                 child: Row(
                   children: [
-                    Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
-                    Text('More', style: TextStyle(
-                        color: Style.foregroundColor,
-                        fontFamily: Style.fontFamily,
-                        fontSize: 17.0
-                    )),
+                    Icon(Style.backIcon, color: Style.foregroundColor),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text('More',
+                        style: TextStyle(
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
+                            fontSize: 17.0)),
                   ],
                 ),
               ),
@@ -139,11 +142,11 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                 );
                 setState(() {});
               },
-              child: Text('Add', style: TextStyle(
-                  color: Style.foregroundColor,
-                  fontFamily: Style.fontFamily,
-                  fontSize: 17.0
-              )),
+              child: Text('Add',
+                  style: TextStyle(
+                      color: Style.foregroundColor,
+                      fontFamily: Style.fontFamily,
+                      fontSize: 17.0)),
             ),
           ],
         ),
@@ -157,7 +160,8 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                 print('stream ' + listWallet.length.toString());
                 return ListView.builder(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(),
+                    physics: BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
                     itemCount: listWallet.length,
                     itemBuilder: (context, index) {
                       String iconData = listWallet[index].iconID;
@@ -174,17 +178,13 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                               fontSize: 30,
                                               color: Style.foregroundColor,
                                               fontFamily: Style.fontFamily,
-                                              fontWeight: FontWeight.bold
-                                          )
-                                  )
+                                              fontWeight: FontWeight.bold))
                                       : Text('',
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          color: Style.foregroundColor,
-                                          fontFamily: Style.fontFamily,
-                                          fontWeight: FontWeight.bold
-                                      )
-                                  ),
+                                          style: TextStyle(
+                                              fontSize: 30,
+                                              color: Style.foregroundColor,
+                                              fontFamily: Style.fontFamily,
+                                              fontWeight: FontWeight.bold)),
                                 )
                               : Container(),
                           index == 0
@@ -193,7 +193,8 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                   child: Text(
                                     'Included in Total',
                                     style: TextStyle(
-                                        color: Style.foregroundColor.withOpacity(0.7),
+                                        color: Style.foregroundColor
+                                            .withOpacity(0.7),
                                         fontSize: 18,
                                         fontFamily: Style.fontFamily,
                                         fontWeight: FontWeight.w400),
@@ -206,11 +207,13 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                 color: Style.boxBackgroundColor,
                                 border: Border(
                                     top: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.12),
                                       width: 0.5,
                                     ),
                                     bottom: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.12),
                                       width: 0.5,
                                     ))),
                             child: ListTile(

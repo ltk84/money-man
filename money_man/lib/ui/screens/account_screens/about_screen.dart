@@ -1,14 +1,7 @@
 import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/services/firebase_authentication_services.dart';
-import 'package:money_man/ui/screens/planning_screens/bills_screens/edit_bill_screen.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../style.dart';
@@ -67,60 +60,62 @@ class _AboutScreenState extends State<AboutScreen> {
         backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-            leadingWidth: 250.0,
-            leading: MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Hero(
-                tag: 'alo',
-                child: Material(
-                  color: Colors.transparent,
-                  child: Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
-                      Text('More', style: TextStyle(
-                          color: Style.foregroundColor,
-                          fontFamily: Style.fontFamily,
-                          fontSize: 17.0
-                        )
-                      )
-                    ],
-                  ),
+          leadingWidth: 250.0,
+          leading: MaterialButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Hero(
+              tag: 'alo',
+              child: Material(
+                color: Colors.transparent,
+                child: Row(
+                  children: [
+                    Icon(Style.backIcon, color: Style.foregroundColor),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text('More',
+                        style: TextStyle(
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
+                            fontSize: 17.0))
+                  ],
                 ),
               ),
             ),
-            //),
-            //centerTitle: true,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            flexibleSpace: ClipRect(
-              child: AnimatedOpacity(
-                opacity: reachAppBar == 1 ? 1 : 0,
-                duration: Duration(milliseconds: 0),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                      sigmaX: reachTop == 1 ? 25 : 500,
-                      sigmaY: 25,
-                      tileMode: TileMode.values[0]),
-                  child: AnimatedContainer(
-                    duration: Duration(
-                        milliseconds:
-                        reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                    //child: Container(
-                    //color: Colors.transparent,
-                    color: Colors.grey[reachAppBar == 1
-                        ? (reachTop == 1 ? 800 : 850)
-                        : 900]
-                        .withOpacity(0.2),
-                    //),
-                  ),
-                ),
-              ),
-            ),
+          ),
+          //),
+          //centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          // flexibleSpace: ClipRect(
+          //   child: AnimatedOpacity(
+          //     opacity: reachAppBar == 1 ? 1 : 0,
+          //     duration: Duration(milliseconds: 0),
+          //     child: BackdropFilter(
+          //       filter: ImageFilter.blur(
+          //           sigmaX: reachTop == 1 ? 25 : 500,
+          //           sigmaY: 25,
+          //           tileMode: TileMode.values[0]),
+          //       child: AnimatedContainer(
+          //         duration: Duration(
+          //             milliseconds:
+          //                 reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+          //         //child: Container(
+          //         //color: Colors.transparent,
+          //         color: Colors.grey[
+          //                 reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
+          //             .withOpacity(0.2),
+          //         //),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ),
         body: ListView(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           controller: _controller,
           children: [
             Column(
@@ -141,8 +136,8 @@ class _AboutScreenState extends State<AboutScreen> {
                   textAlign: TextAlign.center,
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 40.0),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 40.0),
                   child: Text(
                     'Made by a group of sophomores of\nUniversity of Information Technology\nVNU-HCM',
                     style: TextStyle(
@@ -154,10 +149,12 @@ class _AboutScreenState extends State<AboutScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 20.0,),
+                SizedBox(
+                  height: 20.0,
+                ),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 20.0, horizontal: 60.0),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
                   child: Text(
                     'TEAM MEMBERS',
                     style: TextStyle(
@@ -193,7 +190,8 @@ class _AboutScreenState extends State<AboutScreen> {
                         iconPath: 'assets/images/avatars/avatar_6.svg',
                         avatarColor: Color(0xFFaef2fc),
                         quote: 'I did everything',
-                        fbURL: 'https://facebook.com/profile.php?id=100008011025292',
+                        fbURL:
+                            'https://facebook.com/profile.php?id=100008011025292',
                         igURL: 'https://instagram.com/tung8201/',
                         email: '19522496@gm.uit.edu.vn',
                       ),
@@ -221,8 +219,7 @@ class _AboutScreenState extends State<AboutScreen> {
               ],
             )
           ],
-        )
-    );
+        ));
   }
 }
 
@@ -235,37 +232,31 @@ class InfoCard extends StatelessWidget {
   final String email;
   final String quote;
 
-  const InfoCard(
-      {
-        Key key,
-        @required this.name,
-        @required this.iconPath,
-        @required this.avatarColor,
-        @required this.fbURL,
-        @required this.igURL,
-        @required this.email,
-        @required this.quote,
-      })
-      : super(key: key);
+  const InfoCard({
+    Key key,
+    @required this.name,
+    @required this.iconPath,
+    @required this.avatarColor,
+    @required this.fbURL,
+    @required this.igURL,
+    @required this.email,
+    @required this.quote,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-              builder:
-                  (context) => InfoCardDetail(
-                    name: name,
-                    iconPath: iconPath,
-                    avatarColor: avatarColor,
-                    fbURL: fbURL,
-                    igURL: igURL,
-                    email: email,
-                    quote: quote,
-                  )
-          )
-        );
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => InfoCardDetail(
+                  name: name,
+                  iconPath: iconPath,
+                  avatarColor: avatarColor,
+                  fbURL: fbURL,
+                  igURL: igURL,
+                  email: email,
+                  quote: quote,
+                )));
       },
       child: Hero(
         tag: iconPath,
@@ -291,7 +282,9 @@ class InfoCard extends StatelessWidget {
                     size: 60.0,
                   ),
                 ),
-                SizedBox(height: 20.0,),
+                SizedBox(
+                  height: 20.0,
+                ),
                 Text(
                   name,
                   style: TextStyle(
@@ -302,7 +295,9 @@ class InfoCard extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 5.0,),
+                SizedBox(
+                  height: 5.0,
+                ),
                 Text(
                   quote,
                   style: TextStyle(
@@ -331,18 +326,16 @@ class InfoCardDetail extends StatelessWidget {
   final String email;
   final String quote;
 
-  const InfoCardDetail(
-      {
-        Key key,
-        @required this.name,
-        @required this.iconPath,
-        @required this.avatarColor,
-        @required this.fbURL,
-        @required this.igURL,
-        @required this.email,
-        @required this.quote,
-      })
-      : super(key: key);
+  const InfoCardDetail({
+    Key key,
+    @required this.name,
+    @required this.iconPath,
+    @required this.avatarColor,
+    @required this.fbURL,
+    @required this.igURL,
+    @required this.email,
+    @required this.quote,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -370,7 +363,9 @@ class InfoCardDetail extends StatelessWidget {
                       size: 60.0,
                     ),
                   ),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   Text(
                     name,
                     style: TextStyle(
@@ -381,7 +376,9 @@ class InfoCardDetail extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 5.0,),
+                  SizedBox(
+                    height: 5.0,
+                  ),
                   Text(
                     quote,
                     style: TextStyle(
@@ -392,23 +389,26 @@ class InfoCardDetail extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 60.0),
                     width: double.infinity,
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
                               return Colors.white;
-                            return Style.fbButtonColor; // Use the component's default.
+                            return Style
+                                .fbButtonColor; // Use the component's default.
                           },
                         ),
                         foregroundColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
                               return Style.fbButtonColor;
                             return Colors.white; // Use the component's default.
@@ -425,7 +425,9 @@ class InfoCardDetail extends StatelessWidget {
                             iconPath: 'assets/images/facebook.svg',
                             size: 18,
                           ),
-                          SizedBox(width: 10.0,),
+                          SizedBox(
+                            width: 10.0,
+                          ),
                           Text(
                             "Facebook",
                             style: TextStyle(
@@ -446,21 +448,20 @@ class InfoCardDetail extends StatelessWidget {
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
-                              return Colors
-                                  .white;
-                            return Style.igButtonColor; // Use the component's default.
+                              return Colors.white;
+                            return Style
+                                .igButtonColor; // Use the component's default.
                           },
                         ),
                         foregroundColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
                               return Style.igButtonColor;
-                            return Colors
-                                .white; // Use the component's default.
+                            return Colors.white; // Use the component's default.
                           },
                         ),
                       ),
@@ -474,7 +475,9 @@ class InfoCardDetail extends StatelessWidget {
                             iconPath: 'assets/images/instagram.svg',
                             size: 18,
                           ),
-                          SizedBox(width: 10.0,),
+                          SizedBox(
+                            width: 10.0,
+                          ),
                           Text(
                             "Instagram",
                             style: TextStyle(
@@ -495,19 +498,21 @@ class InfoCardDetail extends StatelessWidget {
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
                               return Style.backgroundColor;
-                            return Style.foregroundColor; // Use the component's default.
+                            return Style
+                                .foregroundColor; // Use the component's default.
                           },
                         ),
                         foregroundColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
                               return Style.foregroundColor;
-                            return Style.backgroundColor; // Use the component's default.
+                            return Style
+                                .backgroundColor; // Use the component's default.
                           },
                         ),
                       ),
@@ -515,10 +520,7 @@ class InfoCardDetail extends StatelessWidget {
                         Uri emailLaunchUri = Uri(
                             scheme: 'mailto',
                             path: email,
-                            queryParameters: {
-                              'subject': "[MoneyMan]"
-                            }
-                        );
+                            queryParameters: {'subject': "[MoneyMan]"});
                         launchURL(emailLaunchUri.toString());
                       },
                       child: Row(
@@ -533,7 +535,9 @@ class InfoCardDetail extends StatelessWidget {
                             size: 18,
                             color: Style.backgroundColor,
                           ),
-                          SizedBox(width: 10.0,),
+                          SizedBox(
+                            width: 10.0,
+                          ),
                           Text(
                             "Send Email",
                             style: TextStyle(
@@ -564,8 +568,7 @@ class InfoCardDetail extends StatelessWidget {
                     Icons.close,
                     color: Style.foregroundColor,
                     size: 28.0,
-                  )
-              ),
+                  )),
             ),
           ],
         ),

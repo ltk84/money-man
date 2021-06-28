@@ -41,39 +41,41 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Style.boxBackgroundColor,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0))),
+          backgroundColor: Style.appBarColor,
+          //shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.only(
+          //      topLeft: Radius.circular(20.0),
+          //      topRight: Radius.circular(20.0))),
           title: Text('Add Wallet',
               style: TextStyle(
                 fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: Style.foregroundColor,)),
+                color: Style.foregroundColor,
+              )),
           leading: CloseButton(
             color: Style.foregroundColor,
           ),
           actions: <Widget>[
             TextButton(
-                onPressed: () async {
-                  if (wallet.name == '' || wallet.name == null) return;
-                  if (_formKey.currentState.validate()) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    var res = await _firestore.addWallet(this.wallet);
-                    await _firestore.updateSelectedWallet(res);
-                    Navigator.of(context).pop(res);
-                  }
-                },
-                child: Text('Done',
-                    style: TextStyle(
-                      fontFamily: Style.fontFamily,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                      color: (wallet.name == '' || wallet.name == null) ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
-                    )
-                ),
+              onPressed: () async {
+                if (wallet.name == '' || wallet.name == null) return;
+                if (_formKey.currentState.validate()) {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  var res = await _firestore.addWallet(this.wallet);
+                  await _firestore.updateSelectedWallet(res);
+                  Navigator.of(context).pop(res);
+                }
+              },
+              child: Text('Done',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: (wallet.name == '' || wallet.name == null)
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
+                  )),
             ),
           ],
         ),
@@ -132,7 +134,8 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        color: Colors.transparent, // Không thừa đâu, như vậy mới ấn vùng ngoài được.
+                        color: Colors
+                            .transparent, // Không thừa đâu, như vậy mới ấn vùng ngoài được.
                         padding: EdgeInsets.fromLTRB(24, 20, 10, 0),
                         child: GestureDetector(
                           onTap: () async {
@@ -154,7 +157,9 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                                 iconPath: wallet.iconID,
                                 size: 45.0,
                               ),
-                              Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54)),
+                              Icon(Icons.arrow_drop_down,
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54)),
                             ],
                           ),
                         ),
@@ -174,20 +179,25 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             ),
                             decoration: InputDecoration(
                               errorBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Style.errorColor, width: 1),
+                                borderSide: BorderSide(
+                                    color: Style.errorColor, width: 1),
                               ),
                               enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 1),
+                                borderSide: BorderSide(
+                                    color:
+                                        Style.foregroundColor.withOpacity(0.6),
+                                    width: 1),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 3),
+                                borderSide: BorderSide(
+                                    color:
+                                        Style.foregroundColor.withOpacity(0.6),
+                                    width: 3),
                               ),
                               labelText: 'Name',
                               labelStyle: TextStyle(
-                                  color: Style.foregroundColor.withOpacity(0.6), fontSize: 15),
+                                  color: Style.foregroundColor.withOpacity(0.6),
+                                  fontSize: 15),
                             ),
                             onChanged: (value) => wallet.name = value,
                             validator: (value) {
@@ -202,7 +212,9 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                       )
                     ],
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Divider(
                     thickness: 0.05,
                     color: Style.foregroundColor,
@@ -243,7 +255,8 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.monetization_on,
-                        size: 30.0, color: Style.foregroundColor.withOpacity(0.24)),
+                        size: 30.0,
+                        color: Style.foregroundColor.withOpacity(0.24)),
                     title: Text(currencyName,
                         style: TextStyle(
                             color: Style.foregroundColor,
@@ -271,7 +284,8 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     },
                     dense: true,
                     leading: Icon(Icons.account_balance,
-                        size: 30.0, color: Style.foregroundColor.withOpacity(0.24)),
+                        size: 30.0,
+                        color: Style.foregroundColor.withOpacity(0.24)),
                     title: wallet.amount == null
                         ? Text('Enter wallet amount')
                         : MoneySymbolFormatter(

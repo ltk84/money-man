@@ -63,18 +63,20 @@ class _EditRecurringTransactionScreenState
     repeatDescription = updateRepeatDescription();
 
     return Scaffold(
-        backgroundColor: Color(0xFF111111),
+        backgroundColor: Style.backgroundColor1,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Color(0xFF1c1c1c),
+          backgroundColor: Style.boxBackgroundColor2,
           elevation: 0.0,
-          leading: CloseButton(),
+          leading: CloseButton(
+            color: Style.foregroundColor,
+          ),
           title: Text('Edit Recurring transaction',
               style: TextStyle(
-                fontFamily: 'Montserrat',
+                fontFamily: Style.fontFamily,
                 fontSize: 17.0,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: Style.foregroundColor,
               )),
           centerTitle: true,
           actions: [
@@ -99,10 +101,10 @@ class _EditRecurringTransactionScreenState
               },
               child: Text('Save',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF4FCC5C),
+                    color: Style.successColor,
                   )),
             ),
           ],
@@ -114,14 +116,14 @@ class _EditRecurringTransactionScreenState
             Container(
                 margin: EdgeInsets.only(top: 30.0),
                 decoration: BoxDecoration(
-                    color: Colors.grey[900],
+                    color: Style.boxBackgroundColor,
                     border: Border(
                         top: BorderSide(
-                          color: Colors.white12,
+                          color: Style.foregroundColor.withOpacity(0.12),
                           width: 0.5,
                         ),
                         bottom: BorderSide(
-                          color: Colors.white12,
+                          color: Style.foregroundColor.withOpacity(0.12),
                           width: 0.5,
                         ))),
                 child: Column(children: [
@@ -145,7 +147,7 @@ class _EditRecurringTransactionScreenState
                   Container(
                     margin: EdgeInsets.only(left: 70),
                     child: Divider(
-                      color: Colors.white12,
+                      color: Style.foregroundColor.withOpacity(0.12),
                       thickness: 1,
                     ),
                   ),
@@ -156,7 +158,7 @@ class _EditRecurringTransactionScreenState
                     onTap: () async {
                       final selectCate = await showCupertinoModalBottomSheet(
                           isDismissible: true,
-                          backgroundColor: Colors.grey[900],
+                          backgroundColor: Style.boxBackgroundColor,
                           context: context,
                           builder: (context) =>
                               CategoriesRecurringTransactionScreen(
@@ -181,7 +183,7 @@ class _EditRecurringTransactionScreenState
                   Container(
                     margin: EdgeInsets.only(left: 70, top: 8),
                     child: Divider(
-                      color: Colors.white12,
+                      color: Style.foregroundColor.withOpacity(0.12),
                       thickness: 1,
                     ),
                     height: 2,
@@ -211,7 +213,7 @@ class _EditRecurringTransactionScreenState
                   Container(
                     margin: EdgeInsets.only(left: 70),
                     child: Divider(
-                      color: Colors.white12,
+                      color: Style.foregroundColor.withOpacity(0.12),
                       thickness: 1,
                     ),
                     height: 2,
@@ -225,14 +227,14 @@ class _EditRecurringTransactionScreenState
             Container(
                 margin: EdgeInsets.only(top: 30.0),
                 decoration: BoxDecoration(
-                    color: Colors.grey[900],
+                    color: Style.boxBackgroundColor,
                     border: Border(
                         top: BorderSide(
-                          color: Colors.white12,
+                          color: Style.foregroundColor.withOpacity(0.12),
                           width: 0.5,
                         ),
                         bottom: BorderSide(
-                          color: Colors.white12,
+                          color: Style.foregroundColor.withOpacity(0.12),
                           width: 0.5,
                         ))),
                 child: GestureDetector(
@@ -241,7 +243,7 @@ class _EditRecurringTransactionScreenState
                       var res = await showCupertinoModalBottomSheet(
                           enableDrag: false,
                           isDismissible: false,
-                          backgroundColor: Colors.grey[900],
+                          backgroundColor: Style.boxBackgroundColor,
                           context: context,
                           builder: (context) => RepeatOptionScreen(
                             repeatOption: repeatOption,
@@ -280,10 +282,10 @@ class _EditRecurringTransactionScreenState
                 child: Text(
                   repeatDescription,
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontSize: 13.0,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white60,
+                    color: Style.foregroundColor.withOpacity(0.6),
                   ),
                 ))
           ],
@@ -321,16 +323,16 @@ class _EditRecurringTransactionScreenState
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
                   child: Icon(Icons.attach_money,
-                      color: Colors.white70, size: 40.0)),
+                      color: Style.foregroundColor.withOpacity(0.7), size: 40.0)),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Amount',
                       style: TextStyle(
-                        fontFamily: 'Montserrat',
+                        fontFamily: Style.fontFamily,
                         fontSize: 12.0,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white60,
+                        color: Style.foregroundColor.withOpacity(0.6),
                       )),
                   SizedBox(height: 5.0),
                   (amount == null)
@@ -357,7 +359,7 @@ class _EditRecurringTransactionScreenState
           ),
           Icon(
             Icons.chevron_right,
-            color: Colors.white54,
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -381,16 +383,16 @@ class _EditRecurringTransactionScreenState
                   )),
               Text(display ?? 'Select category',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Colors.white24 : Colors.white,
+                    color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: Colors.white54,
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -408,19 +410,19 @@ class _EditRecurringTransactionScreenState
             children: [
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
-                  child: Icon(Icons.notes, color: Colors.white70, size: 24.0)),
+                  child: Icon(Icons.notes, color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
               Text(display == null || display == '' ? 'Note' : display,
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null || display == '' ? Colors.white24 : Colors.white,
+                    color: display == null || display == '' ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: Colors.white54,
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -444,17 +446,17 @@ class _EditRecurringTransactionScreenState
                   )),
               Text(display ?? 'Select wallet',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: display == null ? Colors.white24 : Colors.white,
+                    color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.lock,
             size: 20,
-            color: Colors.white54,
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
@@ -473,19 +475,19 @@ class _EditRecurringTransactionScreenState
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
                   child: Icon(Icons.calendar_today,
-                      color: Colors.white70, size: 24.0)),
+                      color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
               Text('Repeat Options',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
+                    fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white,
+                    color: Style.foregroundColor,
                   )),
             ],
           ),
           Icon(
             Icons.chevron_right,
-            color: Colors.white54,
+            color: Style.foregroundColor.withOpacity(0.54),
           ),
         ],
       ),
