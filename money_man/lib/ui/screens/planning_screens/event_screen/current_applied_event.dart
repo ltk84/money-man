@@ -89,7 +89,7 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                       height: 10,
                     ),
                     Text(
-                      'There are no budgets',
+                      'There are no events',
                       style: TextStyle(
                         fontFamily: Style.fontFamily,
                         fontSize: 16.0,

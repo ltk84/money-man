@@ -160,7 +160,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                 print('stream ' + listWallet.length.toString());
                 return ListView.builder(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(),
+                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     itemCount: listWallet.length,
                     itemBuilder: (context, index) {
                       String iconData = listWallet[index].iconID;

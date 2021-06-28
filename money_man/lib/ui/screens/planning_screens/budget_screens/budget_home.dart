@@ -151,7 +151,13 @@ class _BudgetScreenState extends State<BudgetScreen>
               child: StreamBuilder<Object>(
                   stream: _firestore.currentWallet,
                   builder: (context, snapshot) {
-                    widget.crrWallet = snapshot.data;
+                    widget.crrWallet = snapshot.data ??
+                        Wallet(
+                            id: 'id',
+                            name: 'defaultName',
+                            amount: 100,
+                            currencyID: 'USD',
+                            iconID: 'assets/icons/wallet_2.svg');
                     return TabBarView(
                       controller: _tabController,
                       children: [

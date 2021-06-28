@@ -7,7 +7,6 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../budget_detail.dart';
@@ -58,12 +57,11 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
               await _firestore.getWalletByID(widget.budget.walletId);
           Navigator.push(
             context,
-            PageTransition(
-                child: BudgetDetailScreen(
-                  budget: this.widget.budget,
-                  wallet: wallet,
-                ),
-                type: PageTransitionType.rightToLeft),
+            MaterialPageRoute(
+                builder: (context) => BudgetDetailScreen(
+                      budget: this.widget.budget,
+                      wallet: wallet,
+                    )),
           );
         },
         child: Container(
@@ -205,7 +203,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: LinearProgressIndicator(
-                    backgroundColor: Color(0xff161616),
+                    backgroundColor: Style.boxBackgroundColor2,
                     valueColor: AlwaysStoppedAnimation<Color>(todayTarget > 1
                         ? Colors.red[700]
                         : todayTarget > todayRate
@@ -238,11 +236,11 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                       //alignment: Alignment.center,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: Color(0xff171717)),
+                          color: Style.boxBackgroundColor2),
                       child: Text(
                         "Today",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                           fontSize: 8,
                           fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.w400,

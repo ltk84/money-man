@@ -63,10 +63,12 @@ class _AddBudgetState extends State<AddBudget> {
     if (mTimeRange.getBudgetLabel() == 'Custom') isRepeat = false;
 
     return Theme(
-      data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
+      data: ThemeData(
+          primaryColor: Style.foregroundColor, fontFamily: 'Montserrat'),
       child: Scaffold(
-        backgroundColor: Style.backgroundColor,
+        backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
+          elevation: 0,
           leading: CloseButton(
           color: Style.foregroundColor,
           ),
@@ -120,11 +122,16 @@ class _AddBudgetState extends State<AddBudget> {
           centerTitle: true,
           title: Text(
             'Add budget',
-            style: TextStyle(color: white),
+            style: TextStyle(
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
+              color: Style.foregroundColor,
+            ),
           ),
         ),
         body: Container(
-          color: Style.backgroundColor,
+          color: Style.backgroundColor1,
           padding: EdgeInsets.only(left: 15, right: 15, top: 30),
           child: Column(
             children: [
@@ -169,7 +176,8 @@ class _AddBudgetState extends State<AddBudget> {
                           child: Text(
                             'Choose group:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -251,7 +259,8 @@ class _AddBudgetState extends State<AddBudget> {
                           child: Text(
                             'Target:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -302,7 +311,7 @@ class _AddBudgetState extends State<AddBudget> {
                   onTap: () async {
                     var resultAmount = await showCupertinoModalBottomSheet(
                         isDismissible: true,
-                        backgroundColor: Colors.grey[900],
+                        backgroundColor: Style.backgroundColor,
                         context: context,
                         builder: (context) => SelectTimeRangeScreen());
                     if (resultAmount != null)
@@ -333,7 +342,8 @@ class _AddBudgetState extends State<AddBudget> {
                           child: Text(
                             'Time range:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -344,7 +354,7 @@ class _AddBudgetState extends State<AddBudget> {
                             var resultAmount =
                                 await showCupertinoModalBottomSheet(
                                     isDismissible: true,
-                                    backgroundColor: Colors.grey[900],
+                                    backgroundColor: Style.backgroundColor,
                                     context: context,
                                     builder: (context) =>
                                         SelectTimeRangeScreen());
@@ -393,7 +403,7 @@ class _AddBudgetState extends State<AddBudget> {
                   onTap: () async {
                     var res = await showCupertinoModalBottomSheet(
                         isDismissible: true,
-                        backgroundColor: Colors.grey[900],
+                        backgroundColor: Style.backgroundColor,
                         context: context,
                         builder: (context) =>
                             SelectWalletAccountScreen(wallet: widget.wallet));
@@ -428,7 +438,8 @@ class _AddBudgetState extends State<AddBudget> {
                           child: Text(
                             'Select wallet:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -438,7 +449,7 @@ class _AddBudgetState extends State<AddBudget> {
                           onTap: () async {
                             var res = await showCupertinoModalBottomSheet(
                                 isDismissible: true,
-                                backgroundColor: Colors.grey[900],
+                                backgroundColor: Style.backgroundColor,
                                 context: context,
                                 builder: (context) => SelectWalletAccountScreen(
                                     wallet: widget.wallet));
@@ -504,12 +515,12 @@ class _AddBudgetState extends State<AddBudget> {
                             ? Icon(
                                 Icons.check,
                                 size: 17,
-                                color: Colors.white,
+                                color: Style.foregroundColor,
                               )
                             : Icon(
                                 null,
                                 size: 17,
-                                color: Colors.black,
+                                color: Style.backgroundColor,
                               ),
                       ),
                       Container(
@@ -517,7 +528,7 @@ class _AddBudgetState extends State<AddBudget> {
                         child: Text(
                           'Repeat this budget',
                           style: TextStyle(
-                              color: white,
+                              color: Style.foregroundColor,
                               fontFamily: 'Montserrat',
                               fontSize: 13),
                         ),

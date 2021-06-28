@@ -93,8 +93,8 @@ class _AccountDetailState extends State<AccountDetail> {
             ),
             //),
             centerTitle: true,
-            backgroundColor: Style.appBarColor,
-            elevation: 1,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
             flexibleSpace: ClipRect(
               child: AnimatedOpacity(
                 opacity: reachAppBar == 1 ? 1 : 0,
@@ -130,7 +130,7 @@ class _AccountDetailState extends State<AccountDetail> {
                       fontWeight: FontWeight.w600,
                     )))),
         body: ListView(
-          physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           controller: _controller,
           children: [
             Container(
@@ -153,7 +153,7 @@ class _AccountDetailState extends State<AccountDetail> {
             Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
               decoration: BoxDecoration(
-                  color: Style.backgroundColor,
+                  color: Style.boxBackgroundColor,
                   border: Border(
                       top: BorderSide(
                         width: 0.1,
@@ -207,7 +207,8 @@ class _AccountDetailState extends State<AccountDetail> {
                           color: Style.foregroundColor.withOpacity(0.54),
                           fontWeight: FontWeight.w400,
                           fontFamily: Style.fontFamily,
-                          fontSize: 13.0)),
+                          fontSize: 13.0)
+                  ),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -226,6 +227,7 @@ class _AccountDetailState extends State<AccountDetail> {
                         //         builder: (BuildContext context) =>
                         //             ChangePasswordScreen()));
                         showCupertinoModalBottomSheet(
+                            backgroundColor: Style.backgroundColor1,
                             context: context,
                             builder: (context) => ChangePasswordScreen());
                       },
@@ -240,12 +242,12 @@ class _AccountDetailState extends State<AccountDetail> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
               decoration: BoxDecoration(
                   color: Style.boxBackgroundColor,
                   border: Border(

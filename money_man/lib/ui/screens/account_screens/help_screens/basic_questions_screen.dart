@@ -55,7 +55,7 @@ class BasicQuestionsScreens extends StatelessWidget {
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Style.appBarColor,
+        backgroundColor: Colors.transparent,
         flexibleSpace: ClipRect(
           child: AnimatedOpacity(
             opacity: 1,

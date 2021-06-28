@@ -91,7 +91,7 @@ class _CategoriesBudgetScreenState extends State<CategoriesBudgetScreen>
             },
             child: Row(
               children: [
-                Icon(Icons.arrow_back, color: Colors.white),
+                Icon(Style.backIcon, color: Style.foregroundColor),
               ],
             ),
           ),
@@ -124,12 +124,12 @@ class _CategoriesBudgetScreenState extends State<CategoriesBudgetScreen>
           ),
           title: Text('Categories',
               style: TextStyle(
-                  color: Colors.white,
+                  color: Style.foregroundColor,
                   fontFamily: 'Montseratt',
                   fontSize: 20.0)),
           bottom: TabBar(
             unselectedLabelColor: Colors.grey[500],
-            labelColor: Colors.white,
+            labelColor: Style.foregroundColor,
             indicatorColor: Colors.yellow[700],
             physics: NeverScrollableScrollPhysics(),
             isScrollable: true,
@@ -163,7 +163,7 @@ class _CategoriesBudgetScreenState extends State<CategoriesBudgetScreen>
                               size: 35.0),
                           title: Text(_selectCateTab[index].name,
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w600)),
                           onTap: () {

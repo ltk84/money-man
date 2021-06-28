@@ -93,7 +93,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Style.boxBackgroundColor2,
+        backgroundColor: Style.appBarColor,
         leading: Hero(
           tag: 'backButton',
           child: MaterialButton(
@@ -101,8 +101,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
               Navigator.pop(context);
             },
             child: Icon(
-                Icons.arrow_back_ios_rounded,
-                color: Style.foregroundColor,
+              Icons.arrow_back_ios_rounded,
+              color: Style.foregroundColor,
             ),
           ),
         ),
@@ -110,15 +110,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
           tag: 'title',
           child: Material(
             color: Colors.transparent,
-            child: Text(
-                'Transaction',
-              style: TextStyle(
-                  color: Style.foregroundColor,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: Style.fontFamily,
-                  fontSize: 18.0
-              )
-            ),
+            child: Text('Transaction',
+                style: TextStyle(
+                    color: Style.foregroundColor,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: Style.fontFamily,
+                    fontSize: 18.0)),
           ),
         ),
         centerTitle: false,
@@ -180,12 +177,14 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                 Navigator.of(context, rootNavigator: true)
                                     .pop('No');
                               },
-                              child: Text('No',
+                              child: Text(
+                                'No',
                                 style: TextStyle(
                                   color: Style.foregroundColor.withOpacity(0.7),
                                   fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w600,
-                                ),)),
+                                ),
+                              )),
                           FlatButton(
                               onPressed: () {
                                 Navigator.of(context, rootNavigator: true)
@@ -193,27 +192,26 @@ class _TransactionDetailState extends State<TransactionDetail> {
 
                                 // chưa có animation để back ra transaction screen
                               },
-                              child: Text('Yes',
+                              child: Text(
+                                'Yes',
                                 style: TextStyle(
                                   color: Style.foregroundColor.withOpacity(0.7),
                                   fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w600,
-                                ),))
+                                ),
+                              ))
                         ],
                       );
                     });
                 if (result == 'Yes') {
                   if (_transaction.category.name == 'Repayment' ||
-                      _transaction.category.name ==
-                          'Debt Collection') {
-                    await _firestore
-                        .updateDebtLoanTransationAfterDelete(
+                      _transaction.category.name == 'Debt Collection') {
+                    await _firestore.updateDebtLoanTransationAfterDelete(
                         _transaction, widget.wallet);
                   }
                   if (_transaction.category.name == 'Debt' ||
                       _transaction.category.name == 'Loan') {
-                    await _firestore
-                        .deleteInstanceInTransactionIdList(
+                    await _firestore.deleteInstanceInTransactionIdList(
                         _transaction.id, widget.wallet.id);
                   }
                   await _firestore.deleteTransaction(
@@ -224,7 +222,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
         ],
       ),
       body: Container(
-        color: Style.backgroundColor1,
+        color: Style.backgroundColor,
         child: ListView(
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -235,7 +233,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
             Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
               decoration: BoxDecoration(
-                  color: Style.boxBackgroundColor2,
+                  color: Style.boxBackgroundColor,
                   border: Border(
                       top: BorderSide(
                         width: 0.5,
@@ -725,8 +723,7 @@ class DebtLoanSection extends StatelessWidget {
                         PageTransition(
                             childCurrent: this,
                             child: TransactionListScreen(
-                                transactionId: transaction.id,
-                                wallet: wallet),
+                                transactionId: transaction.id, wallet: wallet),
                             type: PageTransitionType.rightToLeft));
 
                     refesh(trans);

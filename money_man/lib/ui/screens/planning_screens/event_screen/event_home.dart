@@ -48,9 +48,12 @@ class _EventScreenState extends State<EventScreen>
             length: 2,
             child: Scaffold(
               appBar: AppBar(
-                backgroundColor: Style.backgroundColor,
+                backgroundColor: Style.appBarColor,
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: Icon(
+                    Style.backIcon,
+                    color: Style.foregroundColor,
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

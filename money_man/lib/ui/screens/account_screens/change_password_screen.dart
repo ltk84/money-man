@@ -25,15 +25,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
         leading: CloseButton(
           color: Style.foregroundColor,
         ),
         elevation: 0,
-        backgroundColor: Style.backgroundColor,
+        backgroundColor: Colors.transparent,
       ),
       body: Container(
-        color: Style.backgroundColor,
+        color: Style.backgroundColor1,
         child: ListView(
           children: [
             Container(

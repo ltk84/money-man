@@ -65,7 +65,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Style.boxBackgroundColor,
+          backgroundColor: Style.appBarColor,
           title: Text('Add Transaction',
               style: TextStyle(
                 fontFamily: Style.fontFamily,
@@ -141,6 +141,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           ],
         ),
         body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
           margin: EdgeInsets.symmetric(vertical: 35.0),
           decoration: BoxDecoration(
               color: Style.boxBackgroundColor,
@@ -167,8 +168,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     amount = double.parse(resultAmount);
                   });
               },
-              leading: Icon(Icons.money_rounded,
-                  color: Style.foregroundColor.withOpacity(0.54), size: 45.0),
+              leading: Container(
+                padding: EdgeInsets.only(top: 5),
+                child: SuperIcon(
+                  iconPath: 'assets/images/coin.svg',
+                  size: 40,
+                ),
+              ),
               title: TextFormField(
                 readOnly: true,
                 onTap: () async {
@@ -273,9 +279,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 }
               },
               leading: cate == null
-                  ? Icon(Icons.question_answer,
-                      color: Style.foregroundColor.withOpacity(0.54),
-                      size: 28.0)
+                  ? SuperIcon(
+                      iconPath: 'assets/images/account_screen/category.svg',
+                      size: 28)
                   : SuperIcon(
                       iconPath: cate.iconID,
                       size: 28.0,
@@ -449,8 +455,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.calendar_today,
-                  color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+              leading: SuperIcon(iconPath: 'assets/images/time.svg', size: 28),
               title: TextFormField(
                 onTap: () async {
                   DatePicker.showDatePicker(context,
@@ -462,13 +467,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     if (date != null) {
                       setState(() {
                         pickDate = date;
-                        if(event != null)
-                          {
-                            if(pickDate.year > event.endDate.year ||
-                                (pickDate.year == event.endDate.year && pickDate.month > event.endDate.month)||
-                                (pickDate.year == event.endDate.year && pickDate.month == event.endDate.month && pickDate.day > event.endDate.day))
-                              event = null;
-                          }
+                        if (event != null) {
+                          if (pickDate.year > event.endDate.year ||
+                              (pickDate.year == event.endDate.year &&
+                                  pickDate.month > event.endDate.month) ||
+                              (pickDate.year == event.endDate.year &&
+                                  pickDate.month == event.endDate.month &&
+                                  pickDate.day > event.endDate.day))
+                            event = null;
+                        }
                       });
                     }
                   },
@@ -542,8 +549,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.note,
-                  color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+              leading: Icon(Icons.note, color: Colors.orange, size: 28.0),
               title: TextFormField(
                 onTap: () async {
                   final noteContent = await showCupertinoModalBottomSheet(
@@ -642,8 +648,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   }
                 },
                 dense: true,
-                leading: Icon(Icons.person,
-                    color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+                leading: SuperIcon(
+                  iconPath: 'assets/images/account_screen/user2.svg',
+                  size: 28,
+                ),
                 title: TextFormField(
                   onTap: () async {
                     try {
@@ -715,9 +723,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         isDismissible: true,
                         backgroundColor: Style.boxBackgroundColor,
                         context: context,
-                        builder: (context) =>
-                            SelectEventScreen(
-                                wallet: selectedWallet,
+                        builder: (context) => SelectEventScreen(
+                              wallet: selectedWallet,
                               timeTransaction: pickDate,
                             ));
                     if (res != null)
@@ -726,11 +733,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       });
                   },
                   leading: event == null
-                      ? Icon(
-                          Icons.event,
-                          size: 28.0,
-                          color: Style.foregroundColor.withOpacity(0.54),
-                        )
+                      ? SuperIcon(iconPath: 'assets/images/event.svg', size: 28)
                       : SuperIcon(iconPath: event.iconPath, size: 28.0),
                   title: TextFormField(
                     readOnly: true,
@@ -760,9 +763,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           isDismissible: true,
                           backgroundColor: Style.boxBackgroundColor,
                           context: context,
-                          builder: (context) =>
-                              SelectEventScreen(
-                                  wallet: selectedWallet,
+                          builder: (context) => SelectEventScreen(
+                                wallet: selectedWallet,
                                 timeTransaction: pickDate,
                               ));
                       if (res != null)

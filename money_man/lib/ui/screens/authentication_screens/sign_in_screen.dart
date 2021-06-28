@@ -123,43 +123,6 @@ class _SignInScreenState extends State<SignInScreen> {
                               },
                             ),
                           ),
-                          onPressed: () async {
-                            await _signInAnonymously(_auth, context);
-                          },
-                          child: Text("LOGIN AS GUEST",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.5,
-                                  wordSpacing: 2.0),
-                              textAlign: TextAlign.center),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 80.0),
-                        width: double.infinity,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Color(0xFF2FB49C);
-                                return Colors
-                                    .white; // Use the component's default.
-                              },
-                            ),
-                            foregroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Colors.white;
-                                return Color(
-                                    0xFF2FB49C); // Use the component's default.
-                              },
-                            ),
-                          ),
                           onPressed: () {
                             // Thao tác đăng nhập
                             widget.changeShow();
@@ -352,65 +315,65 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 60.0),
-                        width: double.infinity,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Color(0xFF0c0c0c);
-                                return Colors
-                                    .white; // Use the component's default.
-                              },
-                            ),
-                            foregroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Colors.white;
-                                return Color(
-                                    0xFF0c0c0c); // Use the component's default.
-                              },
-                            ),
-                          ),
-                          onPressed: () {
-                            //_auth.signInWithGoogleAccount();
-                          },
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: SuperIcon(
-                                  iconPath: 'assets/images/apple.svg',
-                                  size: 18,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: SizedBox(
-                                  width: 10,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 8,
-                                child: Text(
-                                  "Connect with Apple",
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0.5,
-                                      wordSpacing: 2.0),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   margin: EdgeInsets.symmetric(horizontal: 60.0),
+                      //   width: double.infinity,
+                      //   child: TextButton(
+                      //     style: ButtonStyle(
+                      //       backgroundColor:
+                      //           MaterialStateProperty.resolveWith<Color>(
+                      //         (Set<MaterialState> states) {
+                      //           if (states.contains(MaterialState.pressed))
+                      //             return Color(0xFF0c0c0c);
+                      //           return Colors
+                      //               .white; // Use the component's default.
+                      //         },
+                      //       ),
+                      //       foregroundColor:
+                      //           MaterialStateProperty.resolveWith<Color>(
+                      //         (Set<MaterialState> states) {
+                      //           if (states.contains(MaterialState.pressed))
+                      //             return Colors.white;
+                      //           return Color(
+                      //               0xFF0c0c0c); // Use the component's default.
+                      //         },
+                      //       ),
+                      //     ),
+                      //     onPressed: () {
+                      //       //_auth.signInWithGoogleAccount();
+                      //     },
+                      //     child: Row(
+                      //       children: [
+                      //         Expanded(
+                      //           flex: 1,
+                      //           child: SuperIcon(
+                      //             iconPath: 'assets/images/apple.svg',
+                      //             size: 18,
+                      //           ),
+                      //         ),
+                      //         Expanded(
+                      //           flex: 1,
+                      //           child: SizedBox(
+                      //             width: 10,
+                      //           ),
+                      //         ),
+                      //         Expanded(
+                      //           flex: 8,
+                      //           child: Text(
+                      //             "Connect with Apple",
+                      //             style: TextStyle(
+                      //                 fontSize: 13,
+                      //                 fontFamily: 'Montserrat',
+                      //                 fontWeight: FontWeight.w700,
+                      //                 letterSpacing: 0.5,
+                      //                 wordSpacing: 2.0),
+                      //             textAlign: TextAlign.left,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

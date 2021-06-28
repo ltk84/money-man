@@ -42,26 +42,28 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
         leadingWidth: 70.0,
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Style.boxBackgroundColor,
+        backgroundColor: Style.appBarColor,
         leading: TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(_wallet);
-            },
-            child: Text(
-              'Back',
-              style: TextStyle(
-                color: Style.foregroundColor,
-                fontSize: 16.0,
-                fontFamily: Style.fontFamily,
-                fontWeight: FontWeight.w600,
-              ),
-            ),),
+          onPressed: () {
+            Navigator.of(context).pop(_wallet);
+          },
+          child: Text(
+            'Back',
+            style: TextStyle(
+              color: Style.foregroundColor,
+              fontSize: 16.0,
+              fontFamily: Style.fontFamily,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
         title: Text('Select Wallet',
             style: TextStyle(
               fontFamily: Style.fontFamily,
               fontSize: 17.0,
               fontWeight: FontWeight.w600,
-              color: Style.foregroundColor,)),
+              color: Style.foregroundColor,
+            )),
       ),
       body: Container(
         color: Style.backgroundColor1,
@@ -97,11 +99,13 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
                                 color: Style.boxBackgroundColor,
                                 border: Border(
                                     top: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.12),
                                       width: 0.5,
                                     ),
                                     bottom: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.12),
                                       width: 0.5,
                                     ))),
                             child: ListTile(

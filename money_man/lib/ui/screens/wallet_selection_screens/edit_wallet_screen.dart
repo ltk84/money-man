@@ -44,11 +44,11 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Style.boxBackgroundColor,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0))),
+          backgroundColor: Style.appBarColor,
+          // shape: RoundedRectangleBorder(
+          //    borderRadius: BorderRadius.only(
+          //      topLeft: Radius.circular(20.0),
+          //      topRight: Radius.circular(20.0))),
           title: Text('Edit Wallet',
               style: TextStyle(
                 fontFamily: Style.fontFamily,
@@ -324,12 +324,15 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                     Navigator.of(context, rootNavigator: true)
                                         .pop('No');
                                   },
-                                  child: Text('No',
+                                  child: Text(
+                                    'No',
                                     style: TextStyle(
-                                      color: Style.foregroundColor.withOpacity(0.7),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.7),
                                       fontFamily: Style.fontFamily,
                                       fontWeight: FontWeight.w600,
-                                    ),)),
+                                    ),
+                                  )),
                               FlatButton(
                                   onPressed: () {
                                     Navigator.of(context, rootNavigator: true)
@@ -337,12 +340,15 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
 
                                     // chưa có animation để back ra transaction screen
                                   },
-                                  child: Text('Yes',
+                                  child: Text(
+                                    'Yes',
                                     style: TextStyle(
-                                      color: Style.foregroundColor.withOpacity(0.7),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.7),
                                       fontFamily: Style.fontFamily,
                                       fontWeight: FontWeight.w600,
-                                    ),))
+                                    ),
+                                  ))
                             ],
                           );
                         });
@@ -351,10 +357,11 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                       final _firestore = Provider.of<FirebaseFireStoreService>(
                           context,
                           listen: false);
-                      final res = await _firestore.deleteWallet(widget.wallet.id);
+                      final res =
+                          await _firestore.deleteWallet(widget.wallet.id);
                       if (res is String && res == 'only 1 wallet') {
-                      _showAlertDialog(
-                          content: 'You can\'t delete the only wallet');
+                        _showAlertDialog(
+                            content: 'You can\'t delete the only wallet');
                         return;
                       }
                       Navigator.pop(context, res);

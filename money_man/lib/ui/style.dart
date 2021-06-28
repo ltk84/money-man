@@ -9,7 +9,7 @@ class Style {
   static IconData backIcon = Icons.arrow_back_ios_rounded;
   static Color backgroundColor = Colors.black;
   //static Color backgroundColor = Color(0xFF111111);
-  static Color appBarColor = Colors.black;
+  static Color appBarColor = Colors.grey[900];
   static Color backgroundColor1 = Color(0xFF111111);
   static Color foregroundColor = Colors.white;
   static Color foregroundColorDark = Color(0x70999999);
@@ -81,7 +81,7 @@ class Style {
       case 0:
         currentTheme = 0;
         backgroundColor = Colors.black;
-        appBarColor = backgroundColor;
+        appBarColor = Colors.grey[900];
         //static Color backgroundColor = Color(0xFF111111);
         backgroundColor1 = Color(0xFF111111);
         foregroundColor = Colors.white;
@@ -104,13 +104,13 @@ class Style {
       // nay la style The tao
       case 2:
         currentTheme = 2;
-        appBarColor = Color(0xff333333);
+        appBarColor = Color(0xff444444);
         backgroundColor = Color(0xff1a1a1a);
         backgroundColor1 = Color(0xFF111111);
         foregroundColor = Colors.white;
         foregroundColorDark = Color(0x70999999);
         boxBackgroundColor = Color(0xff333333);
-        boxBackgroundColor2 = Color(0xFF333333);
+        boxBackgroundColor2 = Color(0xFF666666);
         primaryColor = Color(0xff2FB49C);
         highlightPrimaryColor = Color(0xff36D1B5);
 
@@ -126,14 +126,14 @@ class Style {
         break;
       case 1:
         currentTheme = 1;
-        backgroundColor = Color(0xFFf0f0f0);
-        backgroundColor1 = Color(0xFFEEEEEE);
-        foregroundColor = Color(0xFF2e2e2e);
+        backgroundColor = Color(0xFFffffff);
+        backgroundColor1 = Color(0xFFe7f3ff);
+        foregroundColor = Color(0xFF000000);
         foregroundColorDark = Color(0xFF111111);
-        boxBackgroundColor = Color(0xFFe6e6e6);
-        appBarColor = boxBackgroundColor;
-        boxBackgroundColor2 = Color(0xFFc9c9c9);
-        primaryColor = Color(0xff2FB49C);
+        boxBackgroundColor = Color(0xFFe5e6eb);
+        appBarColor = Color(0xff2cb84b);
+        boxBackgroundColor2 = Color(0xFFcbccd1);
+        primaryColor = Color(0xff36f800);
         highlightPrimaryColor = Color(0xff36D1B5);
 
         igButtonColor = Color(0xFFc65072);
@@ -144,7 +144,7 @@ class Style {
         incomeColor = Color(0xFF76F676);
         incomeColor2 = Colors.blueAccent;
         runningColor = Color(0xFF51f08d);
-        successColor = Color(0xFF4FCC5C);
+        successColor = Color(0xFF51f08d);
         break;
     }
   }

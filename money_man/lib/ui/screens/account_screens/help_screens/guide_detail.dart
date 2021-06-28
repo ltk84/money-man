@@ -13,7 +13,7 @@ class GuideDetailScreen extends StatelessWidget {
       backgroundColor: Style.backgroundColor,
       appBar: AppBar(
         leading: CloseButton(
-          color: Style.appBarColor,
+          color: Style.foregroundColor,
         ),
         title: Text(
           'Our Answer',

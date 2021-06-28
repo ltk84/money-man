@@ -63,7 +63,7 @@ class HelpScreens extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        backgroundColor: Style.appBarColor,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: ClipRect(
           child: AnimatedOpacity(

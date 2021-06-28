@@ -12,6 +12,7 @@ import 'package:money_man/ui/screens/categories_screens/categories_account_scree
 import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'account_detail_screen.dart';
 import 'help_screens/help_screens.dart';
 
@@ -28,6 +29,8 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> {
+  String exploreURL = "https://github.com/ltk84/money-man/";
+
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
@@ -337,7 +340,9 @@ class _TestState extends State<Test> {
                       children: [
                         ListTile(
                           minLeadingWidth: 30,
-                          onTap: () {},
+                          onTap: () {
+                            launchURL(exploreURL);
+                          },
                           dense: true,
                           leading: SuperIcon(
                             iconPath:
@@ -460,4 +465,7 @@ class _TestState extends State<Test> {
               );
             }));
   }
+
+  void launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 }

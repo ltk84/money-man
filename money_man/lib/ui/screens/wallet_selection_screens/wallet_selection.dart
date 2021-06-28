@@ -34,48 +34,46 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
           appBar: AppBar(
             centerTitle: true,
             elevation: 0,
-            backgroundColor: Style.boxBackgroundColor,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0))),
+            backgroundColor: Style.appBarColor,
+            // shape: RoundedRectangleBorder(
+            //    borderRadius: BorderRadius.only(
+            //       topLeft: Radius.circular(20.0),
+            //       topRight: Radius.circular(20.0))),
             leading: CloseButton(
-              color: Style.foregroundColor,
-              onPressed: () {
-                Navigator.of(context).pop(widget.id);
-              }
-            ),
+                color: Style.foregroundColor,
+                onPressed: () {
+                  Navigator.of(context).pop(widget.id);
+                }),
             title: Text('Select Wallet',
                 style: TextStyle(
                   fontFamily: Style.fontFamily,
                   fontSize: 17.0,
                   fontWeight: FontWeight.w600,
-                  color: Style.foregroundColor,)),
+                  color: Style.foregroundColor,
+                )),
             actions: <Widget>[
               TextButton(
-                  onPressed: () async {
-                    Wallet wallet = await _firestore.getWalletByID(widget.id);
-                    var res = '';
-                    res = await showCupertinoModalBottomSheet(
-                      backgroundColor: Style.boxBackgroundColor,
-                      context: context,
-                      builder: (context) => EditWalletScreen(wallet: wallet),
-                    );
-                    if (res != null)
-                      setState(() {
-                        widget.id = res;
-                        // widget.changeWallet(_firestore.getWalletByID(res));
-                      });
-                  },
-                  child: Text(
-                    'Edit',
-                      style: TextStyle(
-                        fontFamily: Style.fontFamily,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: Style.foregroundColor,
-                      )
-                  ),
+                onPressed: () async {
+                  Wallet wallet = await _firestore.getWalletByID(widget.id);
+                  var res = '';
+                  res = await showCupertinoModalBottomSheet(
+                    backgroundColor: Style.boxBackgroundColor,
+                    context: context,
+                    builder: (context) => EditWalletScreen(wallet: wallet),
+                  );
+                  if (res != null)
+                    setState(() {
+                      widget.id = res;
+                      // widget.changeWallet(_firestore.getWalletByID(res));
+                    });
+                },
+                child: Text('Edit',
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      color: Style.foregroundColor,
+                    )),
               ),
             ],
           ),
@@ -130,8 +128,8 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                           textAlign: TextAlign.center),
                       style: ButtonStyle(
                         backgroundColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
                               return Colors.white;
                             return Color(
@@ -139,12 +137,11 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                           },
                         ),
                         foregroundColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed))
                               return Color(0xFF2FB49C);
-                            return Colors
-                                .white; // Use the component's default.
+                            return Colors.white; // Use the component's default.
                           },
                         ),
                       ),
@@ -166,7 +163,8 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
             final listWallet = snapshot.data ?? [];
             print('stream ' + listWallet.length.toString());
             return ListView.builder(
-                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 itemCount: listWallet.length,
                 itemBuilder: (context, index) {
                   String iconData = listWallet[index].iconID;
@@ -181,15 +179,15 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 color: Style.boxBackgroundColor,
                                 border: Border(
                                     top: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.12),
                                       width: index == 0 ? 0.5 : 0,
                                     ),
                                     bottom: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.12),
                                       width: 0.5,
-                                    )
-                                )
-                            ),
+                                    ))),
                             child: ListTile(
                               leading: SuperIcon(
                                 iconPath: iconData,
@@ -214,7 +212,8 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              trailing: Icon(Icons.check_rounded, color: Style.primaryColor),
+                              trailing: Icon(Icons.check_rounded,
+                                  color: Style.primaryColor),
                             ),
                           ),
                         )
@@ -232,16 +231,15 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 color: Style.boxBackgroundColor,
                                 border: Border(
                                     top: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.12),
                                       width: index == 0 ? 0.5 : 0,
                                     ),
                                     bottom: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.12),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.12),
                                       width: 0.5,
-                                    )
-                                )
-                            )
-                            ,
+                                    ))),
                             child: ListTile(
                               onTap: () async {
                                 widget.id = listWallet[index].id;

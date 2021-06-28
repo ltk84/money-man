@@ -54,7 +54,8 @@ class _AddBudgetState extends State<EditBudget> {
     if (mTimeRange.getBudgetLabel() == 'Custom') _budget.isRepeat = false;
 
     return Theme(
-      data: ThemeData(primaryColor: Colors.white, fontFamily: 'Montserrat'),
+      data: ThemeData(
+          primaryColor: Style.foregroundColor, fontFamily: 'Montserrat'),
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -66,8 +67,11 @@ class _AddBudgetState extends State<EditBudget> {
           title: Text(
             'Edit Budget',
             style: TextStyle(
-                color: Style.foregroundColor.withOpacity(1),
-                fontFamily: 'Montserrat'),
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
+              color: Style.foregroundColor,
+            ),
           ),
           actions: [
             GestureDetector(
@@ -90,9 +94,9 @@ class _AddBudgetState extends State<EditBudget> {
             ),
           ],
         ),
-        backgroundColor: Style.backgroundColor,
+        backgroundColor: Style.backgroundColor1,
         body: Container(
-          color: Style.backgroundColor,
+          color: Style.backgroundColor1,
           margin: EdgeInsets.symmetric(vertical: 15),
           padding: EdgeInsets.all(15),
           child: Column(
@@ -139,7 +143,8 @@ class _AddBudgetState extends State<EditBudget> {
                           child: Text(
                             'Choose group:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -223,7 +228,8 @@ class _AddBudgetState extends State<EditBudget> {
                           child: Text(
                             'Target:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -306,7 +312,8 @@ class _AddBudgetState extends State<EditBudget> {
                           child: Text(
                             'Time range:',
                             style: TextStyle(
-                                color: white, fontFamily: 'Montserrat'),
+                                color: Style.foregroundColor,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                         SizedBox(
@@ -461,7 +468,7 @@ class _AddBudgetState extends State<EditBudget> {
                         child: Text(
                           'Repeat this budget',
                           style: TextStyle(
-                              color: white,
+                              color: Style.foregroundColor,
                               fontFamily: 'Montserrat',
                               fontSize: 13),
                         ),

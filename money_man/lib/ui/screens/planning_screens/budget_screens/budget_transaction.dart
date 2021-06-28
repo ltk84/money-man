@@ -57,20 +57,17 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                   child: Icon(
                     Style.backIcon,
                     color: Style.foregroundColor,
-                  )
-              ),
+                  )),
               backgroundColor: Style.appBarColor,
               centerTitle: true,
               elevation: 0,
-              title: Text(
-                'Transaction List',
-                style: TextStyle(
-                  fontFamily: Style.fontFamily,
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                  color: Style.foregroundColor,
-                )
-              ),
+              title: Text('Transaction List',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                    color: Style.foregroundColor,
+                  )),
             ),
             body: listTransaction.length == 0
                 ? Container(
@@ -108,7 +105,8 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
     return Container(
       color: Style.backgroundColor,
       child: ListView.builder(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           shrinkWrap: true,
           itemCount: transactionListSortByDate.length,
           itemBuilder: (context, xIndex) {
@@ -222,7 +220,7 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                             PageTransition(
                                 child: TransactionDetail(
                                   transaction: transListSortByDate[xIndex]
-                                  [yIndex],
+                                      [yIndex],
                                   wallet: widget.wallet,
                                 ),
                                 type: PageTransitionType.rightToLeft));
@@ -266,9 +264,9 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                                       fontWeight: FontWeight.w500,
                                       fontSize: 14.0,
                                       color: transListSortByDate[xIndex][yIndex]
-                                          .category
-                                          .type ==
-                                          'income'
+                                                  .category
+                                                  .type ==
+                                              'income'
                                           ? Style.incomeColor2
                                           : Style.expenseColor),
                                 ),

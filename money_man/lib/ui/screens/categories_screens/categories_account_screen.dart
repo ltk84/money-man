@@ -93,10 +93,11 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                 child: Row(
                   children: [
                     Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
-                    Text('More', style: TextStyle(
-                        color: Style.foregroundColor,
-                        fontFamily: Style.fontFamily,
-                        fontSize: 17.0)),
+                    Text('More',
+                        style: TextStyle(
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
+                            fontSize: 17.0)),
                   ],
                 ),
               ),
@@ -171,7 +172,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                               .toLowerCase())
                       .toList();
                   return ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       controller: _controller,
                       itemCount: _selectCateTab.length,
                       itemBuilder: (context, index) {

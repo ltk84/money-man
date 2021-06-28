@@ -58,24 +58,26 @@ class ShareScreenState extends State<ShareScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String reportName = 'Report_' + DateTime.now().difference(DateTime(2021)).inSeconds.toString();
+    String reportName = 'Report_' +
+        DateTime.now().difference(DateTime(2021)).inSeconds.toString();
 
     return Scaffold(
       backgroundColor: Style.boxBackgroundColor,
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Style.boxBackgroundColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0))),
+        backgroundColor: Style.appBarColor,
+        //shape: RoundedRectangleBorder(
+        //    borderRadius: BorderRadius.only(
+        //        topLeft: Radius.circular(20.0),
+        //        topRight: Radius.circular(20.0))),
         title: Text('Share',
             style: TextStyle(
-                color: Style.foregroundColor,
+              color: Style.foregroundColor,
               fontFamily: Style.fontFamily,
               fontSize: 17.0,
-              fontWeight: FontWeight.w600,)),
+              fontWeight: FontWeight.w600,
+            )),
         leading: CloseButton(
           color: Style.foregroundColor,
         ),
@@ -84,7 +86,8 @@ class ShareScreenState extends State<ShareScreen> {
           color: Style.backgroundColor1,
           padding: EdgeInsets.symmetric(vertical: 20.0),
           child: ListView(
-            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics:
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               Container(
                 child: CarouselSlider(
@@ -132,7 +135,8 @@ class ShareScreenState extends State<ShareScreen> {
                   onPressed: () async {
                     final tempDir = await getTemporaryDirectory();
                     final file =
-                        await new File('${tempDir.path}/$reportName.jpg').create();
+                        await new File('${tempDir.path}/$reportName.jpg')
+                            .create();
                     var data = (_currentIndex == 0)
                         ? reportData1
                         : ((_currentIndex == 1) ? reportData2 : reportData3);
@@ -144,15 +148,17 @@ class ShareScreenState extends State<ShareScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.share),
-                      SizedBox(width: 10,),
-                      Text('SHARE',
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'SHARE',
                         style: TextStyle(
                             fontSize: 14,
                             fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.5,
-                            wordSpacing: 2.0
-                        ),
+                            wordSpacing: 2.0),
                       ),
                     ],
                   ),
@@ -195,13 +201,13 @@ class ShareScreenState extends State<ShareScreen> {
                         barrierColor: Style.backgroundColor.withOpacity(0.54),
                         builder: (BuildContext context) {
                           return CustomAlert(
-                            iconPath: "assets/images/success.svg",
-                            title: "Successfully",
-                            content: "Image has been saved,\ncheck your gallery.");
+                              iconPath: "assets/images/success.svg",
+                              title: "Successfully",
+                              content:
+                                  "Image has been saved,\ncheck your gallery.");
                         },
                       );
-                    }
-                    else {
+                    } else {
                       showDialog<void>(
                         context: context,
                         barrierDismissible: false, // user must tap button!
@@ -209,7 +215,8 @@ class ShareScreenState extends State<ShareScreen> {
                         builder: (BuildContext context) {
                           return CustomAlert(
                               iconPath: "assets/images/error.svg",
-                              content: "Something was wrong,\nplease try again.");
+                              content:
+                                  "Something was wrong,\nplease try again.");
                         },
                       );
                     }
@@ -220,14 +227,14 @@ class ShareScreenState extends State<ShareScreen> {
                     children: [
                       Icon(Icons.save_alt),
                       SizedBox(width: 10),
-                      Text('SAVE',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: Style.fontFamily,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.5,
-                              wordSpacing: 2.0
-                          ),
+                      Text(
+                        'SAVE',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.5,
+                            wordSpacing: 2.0),
                       ),
                     ],
                   ),

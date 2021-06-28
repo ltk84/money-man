@@ -8,12 +8,11 @@ import 'package:provider/provider.dart';
 
 class CategoriesBillScreen extends StatefulWidget {
   @override
-  _CategoriesBillScreenState createState() =>
-      _CategoriesBillScreenState();
+  _CategoriesBillScreenState createState() => _CategoriesBillScreenState();
 }
 
-class _CategoriesBillScreenState
-    extends State<CategoriesBillScreen> with TickerProviderStateMixin {
+class _CategoriesBillScreenState extends State<CategoriesBillScreen>
+    with TickerProviderStateMixin {
   final double fontSizeText = 30;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
@@ -64,7 +63,10 @@ class _CategoriesBillScreenState
             },
             child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+                Icon(Style.backIcon, color: Style.foregroundColor),
+                SizedBox(
+                  width: 5,
+                ),
                 Hero(
                     tag: 'alo',
                     child: Text('More',
@@ -118,19 +120,16 @@ class _CategoriesBillScreenState
             builder: (context, snapshot) {
               final _listCategories = snapshot.data ?? [];
               final _selectCateTab = _listCategories
-                  .where((element) =>
-              element.type ==
-                  'expense')
+                  .where((element) => element.type == 'expense')
                   .toList();
               return ListView.builder(
-                  physics: BouncingScrollPhysics(),
+                  physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   controller: _controller,
                   itemCount: _selectCateTab.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       leading: SuperIcon(
-                          iconPath: _selectCateTab[index].iconID,
-                          size: 35.0),
+                          iconPath: _selectCateTab[index].iconID, size: 35.0),
                       title: Text(_selectCateTab[index].name,
                           style: TextStyle(
                               color: Style.foregroundColor,
@@ -141,7 +140,6 @@ class _CategoriesBillScreenState
                       },
                     );
                   });
-            })
-      );
+            }));
   }
 }

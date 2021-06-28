@@ -97,7 +97,10 @@ class _CategoriesRecurringTransactionScreenState
             },
             child: Row(
               children: [
-                Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+                Icon(Style.backIcon, color: Style.foregroundColor),
+                SizedBox(
+                  width: 5,
+                ),
                 Hero(
                     tag: 'alo',
                     child: Text('More',
@@ -173,7 +176,7 @@ class _CategoriesRecurringTransactionScreenState
                               .toLowerCase())
                       .toList();
                   return ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       controller: _controller,
                       itemCount: _selectCateTab.length,
                       itemBuilder: (context, index) {
