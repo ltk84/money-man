@@ -110,7 +110,7 @@ class _EventScreenState extends State<EventScreen>
                       tabs: [
                         Tab(
                             child: Container(
-                          width: 120,
+                          width: (MediaQuery.of(context).size.width - 155) / 2,
                           child: Center(
                             child: Text(
                               "Running",
@@ -119,7 +119,7 @@ class _EventScreenState extends State<EventScreen>
                         )),
                         Tab(
                             child: Container(
-                          width: 120,
+                          width: (MediaQuery.of(context).size.width - 155) / 2,
                           child: Center(
                             child: Text(
                               "Finished",
