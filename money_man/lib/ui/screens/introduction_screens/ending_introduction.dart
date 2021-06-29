@@ -17,7 +17,6 @@ class OnboardingScreenTwo extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 30),
         decoration: BoxDecoration(
             gradient: LinearGradient(
           begin: Alignment.bottomLeft,
@@ -50,7 +49,7 @@ class OnboardingScreenTwo extends StatelessWidget {
             //   ),
             // ),
             Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 60),
+              padding: EdgeInsets.fromLTRB(0, 0, 20, size.width - 250),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -59,10 +58,10 @@ class OnboardingScreenTwo extends StatelessWidget {
                     'PURCHASE',
                     textAlign: TextAlign.right,
                     style: TextStyle(
-                      letterSpacing: 5,
+                      letterSpacing: 4,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                      fontSize: size.height * 0.05 * 4 / 3,
+                      fontSize: 50,
                     ),
                   ),
                   Text(
@@ -72,7 +71,6 @@ class OnboardingScreenTwo extends StatelessWidget {
                       letterSpacing: 2,
                       fontWeight: FontWeight.w400,
                       color: Colors.white,
-                      //fontSize: size.height * 0.05 * 4 / 3,
                       fontSize: 24.0,
                     ),
                   ),
