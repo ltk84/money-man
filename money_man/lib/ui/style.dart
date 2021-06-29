@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
 class Style {
-  static int currentTheme = 0;
+  static int currentTheme = 2;
 
   static String fontFamily = 'Montserrat';
 
-  static Color transactionAppbarColor = Colors.grey[900];
+  static Color transactionAppbarColor = Color(0xff1a1a1a);
   // Start Theme 1
   static IconData backIcon = Icons.arrow_back_ios_rounded;
-  static Color backgroundColor = Colors.black;
+  static Color backgroundColor = Color(0xff1a1a1a);
   //static Color backgroundColor = Color(0xFF111111);
-  static Color appBarColor = Colors.grey[900];
+  static Color appBarColor = Color(0xff444444);
   static Color backgroundColor1 = Color(0xFF111111);
   static Color foregroundColor = Colors.white;
   static Color foregroundColorDark = Color(0x70999999);
-  static Color boxBackgroundColor = Colors.grey[900];
-  static Color boxBackgroundColor2 = Color(0xFF1c1c1c);
+  static Color boxBackgroundColor = Color(0xff333333);
+  static Color boxBackgroundColor2 = Color(0xFF666666);
   static Color primaryColor = Color(0xff2FB49C);
   static Color highlightPrimaryColor = Color(0xff36D1B5);
 

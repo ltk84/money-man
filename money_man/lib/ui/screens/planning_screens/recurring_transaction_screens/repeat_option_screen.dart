@@ -88,7 +88,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
         backgroundColor: Style.backgroundColor1,
         //extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Style.boxBackgroundColor2,
+          backgroundColor: Style.appBarColor,
           elevation: 0.0,
           leading: CloseButton(
             color: Style.foregroundColor,
@@ -149,7 +149,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 brightness: Brightness.dark,
                                 textTheme: CupertinoTextThemeData(
                                     pickerTextStyle: TextStyle(
-                                      color: Style.foregroundColor,
+                                  color: Style.foregroundColor,
                                   fontFamily: Style.fontFamily,
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w500,
@@ -218,7 +218,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 brightness: Brightness.dark,
                                 textTheme: CupertinoTextThemeData(
                                     pickerTextStyle: TextStyle(
-                                      color: Style.foregroundColor,
+                                  color: Style.foregroundColor,
                                   fontFamily: Style.fontFamily,
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w500,
@@ -286,7 +286,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 brightness: Brightness.dark,
                                 textTheme: CupertinoTextThemeData(
                                     dateTimePickerTextStyle: TextStyle(
-                                      color: Style.foregroundColor,
+                                  color: Style.foregroundColor,
                                   fontFamily: Style.fontFamily,
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w500,
@@ -358,7 +358,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                             brightness: Brightness.dark,
                             textTheme: CupertinoTextThemeData(
                                 dateTimePickerTextStyle: TextStyle(
-                                  color: Style.foregroundColor,
+                              color: Style.foregroundColor,
                               fontFamily: Style.fontFamily,
                               fontSize: 18.0,
                               fontWeight: FontWeight.w500,
@@ -436,13 +436,15 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(5),
                                     borderSide: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.24),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.24),
                                       width: 0.5,
                                     )),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(5),
                                     borderSide: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.24),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.24),
                                       width: 0.5,
                                     )),
                               ),
