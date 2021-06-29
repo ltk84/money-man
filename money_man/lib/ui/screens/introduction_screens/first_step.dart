@@ -20,7 +20,7 @@ class _FirstStepState extends State<FirstStep> {
   Wallet wallet = Wallet(
       id: 'id',
       name: '',
-      amount: 0,
+      amount: -1,
       currencyID: 'USD',
       iconID: 'assets/icons/wallet_2.svg');
   String currencyName = 'USD';
@@ -107,7 +107,7 @@ class _FirstStepState extends State<FirstStep> {
                       ),
                     ]),
                 SizedBox(
-                  height: 25,
+                  height: 10,
                 ),
                 Column(
                   children: [
@@ -143,6 +143,33 @@ class _FirstStepState extends State<FirstStep> {
                           onChanged: (value) => wallet.name = value,
                           decoration: InputDecoration(
                             hintText: 'Wallet name',
+                            isDense: false,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 10.0),
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none),
+                              borderRadius: BorderRadius.circular(23),
+                            ),
+                          ),
+                          style: TextStyle(color: Colors.black)),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 50,
+                      width: 250.0,
+                      child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          autocorrect: false,
+                          textAlign: TextAlign.center,
+                          onChanged: (value) =>
+                              wallet.amount = double.tryParse(value),
+                          decoration: InputDecoration(
+                            hintText: 'Wallet amount',
                             isDense: false,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 8.0, horizontal: 10.0),
@@ -217,7 +244,7 @@ class _FirstStepState extends State<FirstStep> {
                       ),
                     ),
                     SizedBox(
-                      height: size.width - 172,
+                      height: size.width - 211,
                     ),
                     Container(
                       child: ButtonTheme(
@@ -229,6 +256,10 @@ class _FirstStepState extends State<FirstStep> {
                             if (wallet.name == null || wallet.name.length == 0)
                               _showAlertDialog(
                                   "Please type wallet's name!", null);
+                            else if (wallet.amount < 0)
+                              _showAlertDialog(
+                                  "Wallet's amount is not negative number",
+                                  null);
                             else
                               Navigator.of(context).push(_createRoute());
                           },

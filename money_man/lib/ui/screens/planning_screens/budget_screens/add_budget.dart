@@ -70,7 +70,7 @@ class _AddBudgetState extends State<AddBudget> {
         appBar: AppBar(
           elevation: 0,
           leading: CloseButton(
-          color: Style.foregroundColor,
+            color: Style.foregroundColor,
           ),
           actions: [
             GestureDetector(
