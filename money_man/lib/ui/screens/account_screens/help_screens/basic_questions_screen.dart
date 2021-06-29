@@ -55,21 +55,7 @@ class BasicQuestionsScreens extends StatelessWidget {
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        flexibleSpace: ClipRect(
-          child: AnimatedOpacity(
-            opacity: 1,
-            duration: Duration(milliseconds: 0),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                  sigmaX: 25, sigmaY: 25, tileMode: TileMode.values[0]),
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 100),
-                color: Colors.grey[800].withOpacity(0.2),
-              ),
-            ),
-          ),
-        ),
+        backgroundColor: Style.appBarColor,
       ),
       body: Container(
         padding: EdgeInsets.only(top: 10),

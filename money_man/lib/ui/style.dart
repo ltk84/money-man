@@ -5,6 +5,7 @@ class Style {
 
   static String fontFamily = 'Montserrat';
 
+  static Color transactionAppbarColor = Colors.grey[900];
   // Start Theme 1
   static IconData backIcon = Icons.arrow_back_ios_rounded;
   static Color backgroundColor = Colors.black;
@@ -79,8 +80,10 @@ class Style {
   static void changeTheme(int themeCode) {
     switch (themeCode) {
       case 0:
+        backIcon = Icons.arrow_back_ios_rounded;
         currentTheme = 0;
         backgroundColor = Colors.black;
+        transactionAppbarColor = Colors.grey[900];
         appBarColor = Colors.grey[900];
         //static Color backgroundColor = Color(0xFF111111);
         backgroundColor1 = Color(0xFF111111);
@@ -103,8 +106,10 @@ class Style {
         break;
       // nay la style The tao
       case 2:
+        backIcon = Icons.arrow_back_ios_rounded;
         currentTheme = 2;
         appBarColor = Color(0xff444444);
+        transactionAppbarColor = Color(0xff1a1a1a);
         backgroundColor = Color(0xff1a1a1a);
         backgroundColor1 = Color(0xFF111111);
         foregroundColor = Colors.white;
@@ -124,7 +129,8 @@ class Style {
         runningColor = Color(0xFF51f08d);
         successColor = Color(0xFF4FCC5C); // Nut Save
         break;
-      case 1:
+      case 1: //light themes
+        backIcon = Icons.arrow_back;
         currentTheme = 1;
         backgroundColor = Color(0xFFffffff);
         backgroundColor1 = Color(0xFFe7f3ff);
@@ -132,6 +138,7 @@ class Style {
         foregroundColorDark = Color(0xFF111111);
         boxBackgroundColor = Color(0xFFe5e6eb);
         appBarColor = Color(0xff2cb84b);
+        transactionAppbarColor = appBarColor;
         boxBackgroundColor2 = Color(0xFFcbccd1);
         primaryColor = Color(0xff36f800);
         highlightPrimaryColor = Color(0xff36D1B5);

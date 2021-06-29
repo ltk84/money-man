@@ -101,7 +101,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
               Navigator.pop(context);
             },
             child: Icon(
-              Icons.arrow_back_ios_rounded,
+              Style.backIcon,
               color: Style.foregroundColor,
             ),
           ),

@@ -878,7 +878,7 @@ class _TransactionScreen extends State<TransactionScreen>
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Style.backgroundColor,
+          backgroundColor: Style.transactionAppbarColor,
           centerTitle: true,
           elevation: 0,
           leadingWidth: 70,

@@ -111,7 +111,8 @@ class _CategoriesRecurringTransactionScreenState
           ),
           //),
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor:
+              reachAppBar == 1 ? Colors.transparent : Style.appBarColor,
           elevation: 0,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(

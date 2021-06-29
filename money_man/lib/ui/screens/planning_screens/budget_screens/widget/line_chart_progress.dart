@@ -248,7 +248,7 @@ class _LineChartsState extends State<LineCharts> {
                           }
                         }),
                     leftTitles: SideTitles(
-                      margin: 20,
+                      margin: 25,
                       getTextStyles: getTextStyle,
                       showTitles: true,
                       // này là giá trị của các cột nè, val chạy từ 0 tới maxY

@@ -29,7 +29,7 @@ class _BillCategoryListState extends State<BillCategoryList> {
     return Scaffold(
         backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
-          backgroundColor: Style.backgroundColor1,
+          backgroundColor: Style.appBarColor,
           elevation: 0.0,
           leading: CloseButton(
             color: Style.foregroundColor,

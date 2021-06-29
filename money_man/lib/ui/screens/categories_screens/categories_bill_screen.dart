@@ -79,7 +79,8 @@ class _CategoriesBillScreenState extends State<CategoriesBillScreen>
           ),
           //),
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor:
+              reachAppBar == 1 ? Colors.transparent : Style.appBarColor,
           elevation: 0,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(
@@ -123,7 +124,8 @@ class _CategoriesBillScreenState extends State<CategoriesBillScreen>
                   .where((element) => element.type == 'expense')
                   .toList();
               return ListView.builder(
-                  physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  physics: BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
                   controller: _controller,
                   itemCount: _selectCateTab.length,
                   itemBuilder: (context, index) {

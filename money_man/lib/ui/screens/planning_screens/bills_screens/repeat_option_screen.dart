@@ -88,7 +88,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
         backgroundColor: Style.backgroundColor1,
         //extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Style.boxBackgroundColor2,
+          backgroundColor: Style.appBarColor,
           elevation: 0.0,
           leading: CloseButton(
             color: Style.foregroundColor,

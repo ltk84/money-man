@@ -153,7 +153,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                         )),
               ),
               SizedBox(
-                height: 10,
+                height: 30,
               ),
               TextButton(
                   style: ButtonStyle(

@@ -26,7 +26,7 @@ class AnswerTheQuestions extends StatelessWidget {
           ),
         ),
         elevation: 0,
-        backgroundColor: Style.boxBackgroundColor2,
+        backgroundColor: Style.appBarColor,
       ),
       body: Container(
         color: Style.backgroundColor1,
