@@ -182,7 +182,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   });
               },
               leading:
-                  SuperIcon(iconPath: 'assets/images/coin.svg', size: 45.0),
+                  SuperIcon(
+                    iconPath: 'assets/images/coin.svg',
+                    size: 35,
+                  ),
               title: TextFormField(
                 readOnly: true,
                 onTap: () async {
@@ -458,7 +461,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.note, color: Colors.orange, size: 28.0),
+              leading: Container(
+                  padding: EdgeInsets.only(left: 4),
+                  child: SuperIcon(iconPath: 'assets/images/note.svg', size: 21)
+              ),
               title: TextFormField(
                 readOnly: true,
                 decoration: InputDecoration(
@@ -636,10 +642,12 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       Visibility(
                         visible: pickEvent,
                         child: ListTile(
+                          minLeadingWidth: 42,
                           dense: true,
-                          leading: Icon(Icons.person,
-                              color: Style.foregroundColor.withOpacity(0.54),
-                              size: 28.0),
+                          leading: SuperIcon(
+                            iconPath: 'assets/images/account_screen/user2.svg',
+                            size: 28,
+                          ),
                           title: TextFormField(
                             onTap: () async {
                               final PhoneContact phoneContact =
@@ -699,6 +707,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 Visibility(
                     visible: pickEvent,
                     child: ListTile(
+                      minLeadingWidth: 42,
                       dense: true,
                       onTap: () async {
                         var res = await showCupertinoModalBottomSheet(
@@ -716,11 +725,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                           });
                       },
                       leading: _event == null
-                          ? Icon(
-                              Icons.event,
-                              size: 28.0,
-                              color: Style.foregroundColor.withOpacity(0.54),
-                            )
+                          ? SuperIcon(iconPath: 'assets/images/event.svg', size: 28)
                           : SuperIcon(iconPath: _event.iconPath, size: 28.0),
                       title: TextFormField(
                         readOnly: true,

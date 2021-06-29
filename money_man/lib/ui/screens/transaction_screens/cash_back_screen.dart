@@ -158,8 +158,13 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   amount = double.parse(resultAmount);
                 });
             },
-            leading: Icon(Icons.money_rounded,
-                color: Style.foregroundColor.withOpacity(0.54), size: 45.0),
+            leading: Container(
+              padding: EdgeInsets.only(top: 8, left: 4),
+              child: SuperIcon(
+                iconPath: 'assets/images/coin.svg',
+                size: 32,
+              ),
+            ),
             title: TextFormField(
               readOnly: true,
               onTap: () async {
@@ -285,8 +290,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
           ),
           ListTile(
             dense: true,
-            leading: Icon(Icons.calendar_today,
-                color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+            leading: SuperIcon(iconPath: 'assets/images/time.svg', size: 28),
             title: TextFormField(
               onTap: () async {
                 DatePicker.showDatePicker(context,
@@ -371,8 +375,10 @@ class _CashBackScreenState extends State<CashBackScreen> {
           ),
           ListTile(
             dense: true,
-            leading: Icon(Icons.note,
-                color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+            leading: Container(
+                padding: EdgeInsets.only(left: 4),
+                child: SuperIcon(iconPath: 'assets/images/note.svg', size: 21)
+            ),
             title: TextFormField(
               onTap: () async {
                 final noteContent = await showCupertinoModalBottomSheet(
@@ -450,8 +456,13 @@ class _CashBackScreenState extends State<CashBackScreen> {
               }
             },
             dense: true,
-            leading: Icon(Icons.person,
-                color: Style.foregroundColor.withOpacity(0.54), size: 28.0),
+            leading: Container(
+              padding: EdgeInsets.only(left: 2),
+              child: SuperIcon(
+                iconPath: 'assets/images/account_screen/user2.svg',
+                size: 25,
+              ),
+            ),
             title: TextFormField(
               onTap: () async {
                 try {

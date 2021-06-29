@@ -158,6 +158,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ListTile(
               contentPadding: EdgeInsets.fromLTRB(10, 0, 20, 0),
               minVerticalPadding: 10.0,
+              minLeadingWidth: 43,
               onTap: () async {
                 final resultAmount = await showCupertinoModalBottomSheet(
                     context: context,
@@ -169,10 +170,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   });
               },
               leading: Container(
-                padding: EdgeInsets.only(top: 5),
+                padding: EdgeInsets.only(top: 8, left: 4),
                 child: SuperIcon(
                   iconPath: 'assets/images/coin.svg',
-                  size: 40,
+                  size: 35,
                 ),
               ),
               title: TextFormField(
@@ -549,7 +550,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.note, color: Colors.orange, size: 28.0),
+              leading: Container(
+                  padding: EdgeInsets.only(left: 4),
+                  child: SuperIcon(iconPath: 'assets/images/note.svg', size: 21)
+              ),
               title: TextFormField(
                 onTap: () async {
                   final noteContent = await showCupertinoModalBottomSheet(
@@ -623,6 +627,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             Visibility(
               visible: pickEvent,
               child: ListTile(
+                minLeadingWidth: 42,
                 onTap: () async {
                   try {
                     final PhoneContact phoneContact =
@@ -717,6 +722,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             Visibility(
                 visible: pickEvent,
                 child: ListTile(
+                  minLeadingWidth: 42,
                   dense: true,
                   onTap: () async {
                     var res = await showCupertinoModalBottomSheet(

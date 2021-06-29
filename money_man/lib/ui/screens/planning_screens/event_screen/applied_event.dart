@@ -121,7 +121,7 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                         Navigator.push(
                             context,
                             PageTransition(
-                                type: PageTransitionType.leftToRight,
+                                type: PageTransitionType.rightToLeft,
                                 child: EventDetailScreen(
                                   currentEvent: appliedEvent[index],
                                   eventWallet: _wallet,
@@ -141,46 +141,56 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                                   fontSize: 24.0,
                                   color: Style.foregroundColor,
                                   fontWeight: FontWeight.w500,
-                                  fontFamily: 'Montserrat'),
-                              textAlign: TextAlign.start,
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              'End date: ' +
-                                  DateFormat('EEEE, dd-MM-yyyy')
-                                      .format(appliedEvent[index].endDate),
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color:
-                                      Style.foregroundColor.withOpacity(0.54),
-                                  fontFamily: 'Montserrat'),
+                                  fontFamily: Style.fontFamily),
                               textAlign: TextAlign.start,
                             ),
                             SizedBox(
                               height: 3,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Text(
+                                  'Ending date: ',
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Style.foregroundColor.withOpacity(0.54),
+                                      fontFamily: Style.fontFamily),
+                                  textAlign: TextAlign.start,
+                                ),
+                                Text(
+                                  DateFormat('EEEE, dd-MM-yyyy').format(appliedEvent[index].endDate),
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Style.foregroundColor,
+                                      fontFamily: Style.fontFamily),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
                               mainAxisSize: MainAxisSize.max,
                               children: <Widget>[
                                 Text(
                                   'Spent: ',
                                   style: TextStyle(
                                       fontSize: 16.0,
-                                      color: Style.foregroundColor,
-                                      fontFamily: 'Montserrat'),
+                                      color: Style.foregroundColor.withOpacity(0.54),
+                                      fontFamily: Style.fontFamily),
                                   textAlign: TextAlign.start,
                                 ),
                                 MoneySymbolFormatter(
                                     text: appliedEvent[index].spent,
                                     currencyId: _wallet.currencyID,
                                     textStyle: TextStyle(
+                                      fontWeight: FontWeight.w600,
                                       color: Style.foregroundColor,
                                       fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Montserrat',
+                                      fontFamily: Style.fontFamily,
                                     )),
                               ],
                             )

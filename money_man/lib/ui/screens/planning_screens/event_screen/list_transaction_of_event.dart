@@ -83,6 +83,15 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                     backgroundColor: Style.appBarColor,
                     centerTitle: true,
                     elevation: 0,
+                    leading: IconButton(
+                      icon: Icon(
+                        Style.backIcon,
+                        color: Style.foregroundColor,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
                     title: Text('Transaction List',
                         style: TextStyle(
                           fontFamily: Style.fontFamily,
@@ -119,6 +128,15 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
               : Scaffold(
                   backgroundColor: Style.backgroundColor,
                   appBar: AppBar(
+                    leading: IconButton(
+                      icon: Icon(
+                        Style.backIcon,
+                        color: Style.foregroundColor,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
                     backgroundColor: Style.appBarColor,
                     centerTitle: true,
                     elevation: 0,

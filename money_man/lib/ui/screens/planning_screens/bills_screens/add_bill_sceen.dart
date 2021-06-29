@@ -127,8 +127,6 @@ class _AddBillScreenState extends State<AddBillScreen> {
                 ],
               ),
               body: ListView(
-                physics: BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
                 children: [
                   Container(
                       margin: EdgeInsets.only(top: 30.0),

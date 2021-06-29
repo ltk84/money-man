@@ -349,7 +349,7 @@ class InfoCardDetail extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: Style.boxBackgroundColor,
-                borderRadius: BorderRadius.circular(15.0),
+                //borderRadius: BorderRadius.circular(15.0),
               ),
               child: ListView(
                 physics: NeverScrollableScrollPhysics(),

@@ -143,8 +143,6 @@ class _AddEventState extends State<AddEvent> {
 
   Widget buildInput() {
     return ListView(
-      physics:
-      BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       children: [
         Container(
           margin: EdgeInsets.only(top: 30.0),
@@ -261,9 +259,10 @@ class _AddEventState extends State<AddEvent> {
               ListTile(
                 contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 dense: true,
-                leading: Icon(Icons.calendar_today,
-                    color: Style.foregroundColor.withOpacity(0.54),
-                    size: 28.0),
+                leading: SuperIcon(
+                  iconPath: 'assets/images/time.svg',
+                  size: 30,
+                ),
                 title: TextFormField(
                   onTap: () async {
                     DatePicker.showDatePicker(context,
@@ -352,9 +351,10 @@ class _AddEventState extends State<AddEvent> {
                 contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 onTap: () {},
                 dense: true,
-                leading: Icon(Icons.monetization_on,
-                    size: 30.0,
-                    color: Style.foregroundColor.withOpacity(0.54)),
+                leading: SuperIcon(
+                  iconPath: 'assets/images/coin.svg',
+                  size: 28,
+                ),
                 title: Text(currencySymbol,
                     style: TextStyle(
                         color: Style.foregroundColor,

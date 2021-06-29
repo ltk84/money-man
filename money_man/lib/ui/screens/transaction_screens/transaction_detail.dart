@@ -304,9 +304,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     minLeadingWidth: 60,
                     leading: Container(
                       padding: const EdgeInsets.only(left: 10),
-                      child: Icon(Icons.date_range_rounded,
-                          color: Style.foregroundColor.withOpacity(0.54),
-                          size: 35.0),
+                      child: SuperIcon(iconPath: 'assets/images/time.svg', size: 35.0),
                     ),
                     title: Text(
                       //_transaction.date.toString(),
@@ -373,7 +371,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                             child: SuperIcon(
                               iconPath: event != null
                                   ? event.iconPath
-                                  : 'assets/images/email.svg',
+                                  : 'assets/images/event.svg',
                               size: 32.0,
                             ),
                           ),
@@ -410,10 +408,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           dense: true,
                           minLeadingWidth: 60,
                           leading: Container(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Icon(Icons.person,
-                                color: Style.foregroundColor.withOpacity(0.54),
-                                size: 38.0),
+                            padding: const EdgeInsets.only(left: 14),
+                            child: SuperIcon(
+                              iconPath: 'assets/images/account_screen/user2.svg',
+                              size: 28,
+                            ),
                           ),
                           title: Text(
                             _transaction.contact == null

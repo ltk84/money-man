@@ -51,7 +51,9 @@ class _EventDetailScreen extends State<EventDetailScreen>
         centerTitle: true,
         title: Text('Event',
             style: TextStyle(
-              fontFamily: 'Montserrat',
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
               color: Style.foregroundColor,
             )),
         backgroundColor: Style.appBarColor,
@@ -65,8 +67,6 @@ class _EventDetailScreen extends State<EventDetailScreen>
           IconButton(
             onPressed: () async {
               final updatedTrans = await showCupertinoModalBottomSheet(
-                  isDismissible: false,
-                  enableDrag: false,
                   context: context,
                   builder: (context) =>EditEventScreen(
                     currentEvent: _currentEvent,
@@ -98,7 +98,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                             'Do you want to delete this event?',
                             style: TextStyle(
                               color: Colors.red,
-                              fontFamily: 'Montserrat',
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -129,12 +129,13 @@ class _EventDetailScreen extends State<EventDetailScreen>
                   });
                   final delete = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (_) => DeleteEventScreen(
-                                currentEvent: _currentEvent,
-                                eventWallet: _eventWallet,
-                                count: _currentEvent.transactionIdList.length,
-                              )));
+                      PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: DeleteEventScreen(
+                            currentEvent: _currentEvent,
+                            eventWallet: _eventWallet,
+                            count: _currentEvent.transactionIdList.length,
+                          )));
                   if (delete != null) setState(() {});
                 }
               })
@@ -160,74 +161,71 @@ class _EventDetailScreen extends State<EventDetailScreen>
               child: Column(
                 children: [
                   ListTile(
+                    minLeadingWidth: 50,
                     dense: true,
                     leading: SuperIcon(
                       iconPath: _currentEvent.iconPath,
-                      size: 60.0,
+                      size: 45.0,
                     ),
                     title: Text(
                       _currentEvent.name,
                       style: TextStyle(
-                        fontFamily: 'Montserrat',
+                        fontFamily: Style.fontFamily,
                         fontSize: 28,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w700,
                         color: Style.foregroundColor.withOpacity(0.9),
                       ),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 70, top: 10),
+                    margin: EdgeInsets.only(left: 80, top: 0),
                     child: Divider(
                       color: Style.foregroundColor.withOpacity(0.12),
                       thickness: 0.5,
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 15),
-                    child: ListTile(
-                      dense: true,
-                      leading: SuperIcon(
+                  ListTile(
+                    minLeadingWidth: 50,
+                    dense: true,
+                    leading: Container(
+                      padding: EdgeInsets.only(left: 8),
+                      child: SuperIcon(
                         iconPath: 'assets/images/time.svg',
                         size: 30,
                       ),
-                      title: Container(
-                        padding: EdgeInsets.only(left: 5),
-                        child: Text(
-                            DateFormat('EEEE, dd-MM-yyyy')
-                                .format(_currentEvent.endDate),
-                            style: TextStyle(
-                              color: Style.foregroundColor.withOpacity(0.7),
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Montserrat',
-                            )),
-                      ),
                     ),
+                    title: Text(
+                        DateFormat('EEEE, dd-MM-yyyy')
+                            .format(_currentEvent.endDate),
+                        style: TextStyle(
+                            color: Style.foregroundColor.withOpacity(0.8),
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18.0)),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 70, top: 10),
+                    margin: EdgeInsets.only(left: 80, top: 0),
                     child: Divider(
                       color: Style.foregroundColor.withOpacity(0.12),
                       thickness: 0.5,
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 15),
-                    child: ListTile(
-                      dense: true,
-                      leading: SuperIcon(
+                  ListTile(
+                    minLeadingWidth: 50,
+                    dense: true,
+                    leading: Container(
+                      padding: EdgeInsets.only(left: 8),
+                      child: SuperIcon(
                         iconPath: _eventWallet.iconID,
                         size: 30.0,
                       ),
-                      title: Container(
-                        padding: EdgeInsets.only(left: 5),
-                        child: Text(_eventWallet.name,
-                            style: TextStyle(
-                                color: Style.foregroundColor.withOpacity(0.8),
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20.0)),
-                      ),
                     ),
+                    title: Text(_eventWallet.name,
+                        style: TextStyle(
+                            color: Style.foregroundColor.withOpacity(0.8),
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18.0)),
                   ),
                 ],
               ),
@@ -261,8 +259,9 @@ class _EventDetailScreen extends State<EventDetailScreen>
                         ? 'Mark not complete'
                         : 'Mark complete',
                     style: TextStyle(
+                      fontWeight: FontWeight.w600,
                       fontSize: 17,
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                     ),
                   ),
                   style: ButtonStyle(
@@ -270,20 +269,20 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.white;
-                        return Colors.green; // Use the component's default.
+                        return Style.primaryColor; // Use the component's default.
                       },
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Colors.green;
+                          return Style.primaryColor;
                         return Colors.white; // Use the component's default.
                       },
                     ),
                   ),
                 )),
             SizedBox(
-              height: 8,
+              height: 10,
             ),
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -294,7 +293,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                     await Navigator.push(
                         context,
                         PageTransition(
-                            type: PageTransitionType.leftToRight,
+                            type: PageTransitionType.rightToLeft,
                             child: EventListTransactionScreen(
                               currentEvent: _currentEvent,
                               eventWallet: _eventWallet,
@@ -304,23 +303,24 @@ class _EventDetailScreen extends State<EventDetailScreen>
                   child: Text(
                     'Transaction of Event',
                     style: TextStyle(
+                      fontWeight: FontWeight.w600,
                       fontSize: 17,
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                     ),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Colors.white;
-                        return Colors.green; // Use the component's default.
+                          return Style.primaryColor;
+                        return Colors.white; // Use the component's default.
                       },
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Colors.green;
-                        return Colors.white; // Use the component's default.
+                          return Colors.white;
+                        return Style.primaryColor; // Use the component's default.
                       },
                     ),
                   ),

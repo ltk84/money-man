@@ -128,8 +128,6 @@ class _EditEventScreen extends State<EditEventScreen>
 
   Widget buildInput() {
     return ListView(
-      physics:
-      BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       children: [
         Container(
           margin: EdgeInsets.only(top: 30.0),
@@ -324,7 +322,7 @@ class _EditEventScreen extends State<EditEventScreen>
                 dense: true,
                 leading: SuperIcon(
                   iconPath: 'assets/images/coin.svg',
-                  size: 30,
+                  size: 28,
                 ),
                 title: Text(currencySymbol,
                     style: TextStyle(

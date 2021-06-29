@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
@@ -117,7 +118,7 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                         Navigator.push(
                             context,
                             PageTransition(
-                                type: PageTransitionType.leftToRight,
+                                type: PageTransitionType.rightToLeft,
                                 child: EventDetailScreen(
                                   currentEvent: currentlyEvent[index],
                                   eventWallet: _wallet,
@@ -136,47 +137,57 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                               style: TextStyle(
                                   fontSize: 24.0,
                                   color: Style.foregroundColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Montserrat'),
-                              textAlign: TextAlign.start,
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              'End date: ' +
-                                  DateFormat('EEEE, dd-MM-yyyy')
-                                      .format(currentlyEvent[index].endDate),
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color:
-                                      Style.foregroundColor.withOpacity(0.54),
-                                  fontFamily: 'Montserrat'),
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: Style.fontFamily),
                               textAlign: TextAlign.start,
                             ),
                             SizedBox(
                               height: 3,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Text(
+                                  'Ending date: ',
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Style.foregroundColor.withOpacity(0.54),
+                                      fontFamily: Style.fontFamily),
+                                  textAlign: TextAlign.start,
+                                ),
+                                Text(
+                                  DateFormat('EEEE, dd-MM-yyyy').format(currentlyEvent[index].endDate),
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Style.foregroundColor,
+                                      fontFamily: Style.fontFamily),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
                               mainAxisSize: MainAxisSize.max,
                               children: <Widget>[
                                 Text(
                                   'Spent: ',
                                   style: TextStyle(
                                       fontSize: 16.0,
-                                      color: Style.foregroundColor,
-                                      fontFamily: 'Montserrat'),
+                                      color: Style.foregroundColor.withOpacity(0.54),
+                                      fontFamily: Style.fontFamily),
                                   textAlign: TextAlign.start,
                                 ),
                                 MoneySymbolFormatter(
                                     text: currentlyEvent[index].spent,
                                     currencyId: _wallet.currencyID,
                                     textStyle: TextStyle(
+                                      fontWeight: FontWeight.w600,
                                       color: Style.foregroundColor,
                                       fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Montserrat',
+                                      fontFamily: Style.fontFamily,
                                     )),
                               ],
                             )

@@ -22,7 +22,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
     final smtpServer = gmail(username, password);
     final message = Message()
       ..from = Address(username)
-      ..recipients.add('hienthe473@gmail.com')
+      ..recipients.add('namyenom.tiu@gmail.com')
       ..subject = 'This is a feedback mail with subject: $subject 😀 '
       ..text = 'This is the plain text.\nThis is line 2 of the text part.'
       ..html = "<h1>This is my feedback content</h1>\n<p>$content</p>";

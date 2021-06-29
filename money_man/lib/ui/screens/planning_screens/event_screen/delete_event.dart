@@ -5,6 +5,7 @@ import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_time.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 class DeleteEventScreen extends StatefulWidget {
@@ -67,20 +68,31 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
           listTransactionOfEventByDate.sort(
                   (a, b) => b.date.compareTo(a.date));
           return Scaffold(
-            backgroundColor: Colors.grey[850],
+            backgroundColor: Style.backgroundColor,
             appBar: AppBar(
-              backgroundColor: Colors.grey[900],
+              leading: IconButton(
+                icon: Icon(
+                  Style.backIcon,
+                  color: Style.foregroundColor,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              backgroundColor: Style.appBarColor,
               title: Text('Delete event'),
             ),
             body: ListView(
               children: [
                 Container(
                   padding: EdgeInsets.fromLTRB(12,25,12,20),
-                  child: Text(widget.count < 2 ?
+                  child: Text(widget.count < 2 ? 'There is ' +
                   widget.count.toString() + ' transaction in event'
-                    : widget.count.toString() + ' transactions in event',
+                    : 'There are ' + widget.count.toString() + ' transactions in event',
                     style: TextStyle(
-                        color:  Colors.white,
+                      fontFamily: Style.fontFamily,
+                      color:  Style.foregroundColor,
+                      fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
                   ),
@@ -88,8 +100,15 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                 Column(
                   children: <Widget>[
                     Container(
-                      height :listTransactionOfEventByDate.length.toDouble()*65,
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(vertical: 2),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Style.boxBackgroundColor,
+                      ),
+                      //height :listTransactionOfEventByDate.length.toDouble()*65,
                       child: ListView.builder(
+                        shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: listTransactionOfEventByDate.length,
                         itemBuilder: (BuildContext context, int index){
@@ -103,13 +122,15 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                                       size: 35,
                                     )),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(5, 0, 18, 0),
+                                  padding: const EdgeInsets.fromLTRB(14, 0, 18, 0),
                                   child: Text(
                                       listTransactionOfEventByDate[index].category.name,
                                       style: TextStyle(
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white)),
+                                          fontSize: 16.0,
+                                          fontFamily: Style.fontFamily,
+                                          fontWeight: FontWeight.w600,
+                                          color: Style.foregroundColor)
+                                  ),
                                 ),
                                 Expanded(
                                   child: Text(listTransactionOfEventByDate[index].category.type == 'income' ?
@@ -117,10 +138,14 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                                       : '-' + listTransactionOfEventByDate[index].amount.toString(),
                                       textAlign: TextAlign.end,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0,
+                                          fontFamily: Style.fontFamily,
+                                          fontWeight: FontWeight.w700,
                                           color: listTransactionOfEventByDate[index].category.type == 'income'
-                                              ? Colors.green
-                                              : Colors.red[600])),
+                                              ? Style.incomeColor2
+                                              : Style.expenseColor
+                                      )
+                                  ),
                                 ),
                               ],
                             ),
@@ -135,11 +160,12 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                     child: Column(
                       children: <Widget>[
                         Padding(
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(16),
                           child: Text('Do you want to delete only event or delete all transactions in the event?',
                             style: TextStyle(
                               color:  Colors.white,
                               fontSize: 16,
+                              fontFamily: Style.fontFamily,
                             ),
                           ),
                         ),
@@ -157,14 +183,20 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                               Navigator.pop(context);
                               Navigator.pop(context);
                             },
-                            child: const Text('Delete only event', style: TextStyle(fontSize: 20)),
-                            color: Colors.red,
+                            child: Text('Delete only event',
+                                style: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16
+                                )
+                            ),
+                            color: Style.errorColor,
                             textColor: Colors.white,
                             elevation: 5,
                           ),
                         ),
                         Container(
-                          height: 8,
+                          height: 10,
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -179,8 +211,14 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                               Navigator.pop(context);
                               Navigator.pop(context);
                             },
-                            child: const Text('Delete both', style: TextStyle(fontSize: 20)),
-                            color: Colors.red,
+                            child: Text('Delete both',
+                                style: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16
+                                )
+                            ),
+                            color: Style.expenseColor,
                             textColor: Colors.white,
                             elevation: 5,
                           ),

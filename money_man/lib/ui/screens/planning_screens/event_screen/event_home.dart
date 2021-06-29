@@ -61,8 +61,10 @@ class _EventScreenState extends State<EventScreen>
                 title: Text(
                   "Event",
                   style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
                     color: Style.foregroundColor,
-                    fontFamily: 'Montserrat',
                   ),
                 ),
                 actions: [

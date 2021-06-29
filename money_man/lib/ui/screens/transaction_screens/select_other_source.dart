@@ -42,34 +42,37 @@ class SelectOtherSourceScreen extends StatelessWidget {
         ),
       ),
       body: ListView(
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
-        SizedBox(
-          height: 30,
-        ),
-        OtherSourceListView(
-          criteria: criteria,
-          wallet: wallet,
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        ListTile(
-          onTap: () {
-            Navigator.pop(context, 0);
-          },
-          leading: Icon(
-              Icons.money,
-              color: Style.foregroundColor.withOpacity(0.54),
-            ),
-          title: Text(
-            titleAtEnd,
-            style: TextStyle(
-                color: Colors.black
-            ),
+        Container(
+          margin: EdgeInsets.only(top: 30),
+          child: OtherSourceListView(
+            criteria: criteria,
+            wallet: wallet,
           ),
-          trailing: Icon(
-              Icons.chevron_right
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: ListTile(
+            onTap: () {
+              Navigator.pop(context, 0);
+            },
+            leading: Icon(
+                Icons.money,
+                color: Style.foregroundColor.withOpacity(0.54),
+              ),
+            title: Text(
+              titleAtEnd,
+              style: TextStyle(
+                fontFamily: Style.fontFamily,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w600,
+                color: Style.foregroundColor,
+              ),
+            ),
+            trailing: Icon(
+                Icons.chevron_right,
+                color: Style.foregroundColor,
+            ),
           ),
         )
       ]),
@@ -95,7 +98,9 @@ class OtherSourceListView extends StatelessWidget {
           List<MyTransaction> transList = snapshot.data ?? [];
           print(snapshot.hasData);
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return CircularProgressIndicator(
+              color: Style.primaryColor,
+            );
           } else {
             return ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
