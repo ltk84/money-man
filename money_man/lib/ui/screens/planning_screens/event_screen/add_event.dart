@@ -210,6 +210,8 @@ class _AddEventState extends State<AddEvent> {
                         autocorrect: false,
                         keyboardType: TextInputType.name,
                         style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontFamily: Style.fontFamily,
                           fontSize: 20,
                           color: Style.foregroundColor,
                           decoration: TextDecoration.none,
@@ -233,6 +235,7 @@ class _AddEventState extends State<AddEvent> {
                           ),
                           labelText: 'Name event',
                           labelStyle: TextStyle(
+                              fontFamily: Style.fontFamily,
                               color: Style.foregroundColor.withOpacity(0.6),
                               fontSize: 15),
                         ),

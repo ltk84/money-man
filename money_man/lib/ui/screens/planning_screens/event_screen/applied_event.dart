@@ -138,7 +138,7 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                             Text(
                               appliedEvent[index].name,
                               style: TextStyle(
-                                  fontSize: 24.0,
+                                  fontSize: 18.0,
                                   color: Style.foregroundColor,
                                   fontWeight: FontWeight.w500,
                                   fontFamily: Style.fontFamily),

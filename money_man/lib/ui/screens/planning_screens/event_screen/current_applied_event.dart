@@ -135,7 +135,7 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                             Text(
                               currentlyEvent[index].name,
                               style: TextStyle(
-                                  fontSize: 24.0,
+                                  fontSize: 18.0,
                                   color: Style.foregroundColor,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: Style.fontFamily),

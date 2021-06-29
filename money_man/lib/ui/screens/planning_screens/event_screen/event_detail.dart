@@ -171,8 +171,8 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       _currentEvent.name,
                       style: TextStyle(
                         fontFamily: Style.fontFamily,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
                         color: Style.foregroundColor.withOpacity(0.9),
                       ),
                     ),
