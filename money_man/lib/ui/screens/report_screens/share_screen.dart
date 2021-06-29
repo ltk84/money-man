@@ -86,8 +86,6 @@ class ShareScreenState extends State<ShareScreen> {
           color: Style.backgroundColor1,
           padding: EdgeInsets.symmetric(vertical: 20.0),
           child: ListView(
-            physics:
-                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               Container(
                 child: CarouselSlider(
