@@ -229,6 +229,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                       margin: EdgeInsets.only(
                           left: 45 +
                               (MediaQuery.of(context).size.width - 120) *
+                                  1 /
                                   todayRate),
                       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       // height: 20,
@@ -269,8 +270,8 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                 .day &&
         end.month == today.month &&
         begin.month == end.month &&
-        begin.isBefore(today) &&
-        end.isAfter(today)) return 'This month';
+        begin.compareTo(today) <= 0 &&
+        end.add(Duration(days: 1)).compareTo(today) >= 0) return 'This month';
     var temp = DateTime(today.year, today.month + 1, today.day);
     if (begin.day == 1 &&
         end.day ==
