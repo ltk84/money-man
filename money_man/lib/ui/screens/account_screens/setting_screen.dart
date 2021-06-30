@@ -200,7 +200,7 @@ class ThemeSettingDialog extends StatelessWidget {
               },
               dense: true,
               title: Text(
-                'TheThemes',
+                'Grey',
                 style: TextStyle(
                     fontFamily: Style.fontFamily,
                     color: Style.foregroundColor,

@@ -29,7 +29,9 @@ class ReportForThisPeriodScreen extends StatefulWidget {
   Wallet currentWallet;
   DateTime beginDate;
   DateTime endDate;
-  ReportForThisPeriodScreen({Key key, this.currentWallet, this.endDate, this.beginDate}) : super(key: key);
+  ReportForThisPeriodScreen(
+      {Key key, this.currentWallet, this.endDate, this.beginDate})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _ReportForThisPeriodScreen();
@@ -76,24 +78,26 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
   Wallet _wallet;
 
   // Khởi tạo mốc thời gian cần thống kê.
-  DateTime beginDate ;
+  DateTime beginDate;
   DateTime endDate;
   String dateDescript = 'This month';
 
   @override
   void initState() {
-    beginDate = widget.beginDate ?? DateTime(DateTime.now().year, DateTime.now().month, 1);
-    endDate = widget.endDate?? DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+    beginDate = widget.beginDate ??
+        DateTime(DateTime.now().year, DateTime.now().month, 1);
+    endDate = widget.endDate ??
+        DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
     _wallet = widget.currentWallet == null
         ? Wallet(
-        id: 'id',
-        name: 'defaultName',
-        amount: 0,
-        currencyID: 'USD',
-        iconID: 'assets/icons/wallet_2.svg')
+            id: 'id',
+            name: 'defaultName',
+            amount: 0,
+            currencyID: 'USD',
+            iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
   }
 
@@ -135,12 +139,12 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                   child: AnimatedContainer(
                     duration: Duration(
                         milliseconds:
-                        reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
+                            reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
                     //child: Container(
                     //color: Colors.transparent,
                     color: Colors.grey[reachAppBar == 1
-                        ? (reachTop == 1 ? 800 : 850)
-                        : 900]
+                            ? (reachTop == 1 ? 800 : 850)
+                            : 900]
                         .withOpacity(0.2),
                     //),
                   ),
@@ -157,8 +161,7 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
               ),
             ),
             title: GestureDetector(
-              onTap: () async {
-              },
+              onTap: () async {},
               child: Container(
                 color: Colors.transparent,
                 child: Row(
@@ -275,14 +278,16 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                 });
                 _transactionList = _transactionList
                     .where((element) =>
-                element.date.compareTo(beginDate) >= 0 &&
-                    element.date.compareTo(endDate) <= 0 && element.category.type != 'debt & loan')
+                        element.date.compareTo(beginDate) >= 0 &&
+                        element.date.compareTo(endDate) <= 0 &&
+                        element.category.type != 'debt & loan')
                     .toList();
                 return Container(
                   color: Style.backgroundColor,
                   child: ListView(
                     controller: _controller,
-                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    physics: BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
@@ -297,14 +302,14 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                               //   color: Style.foregroundColor.withOpacity(0.12),
                               //   width: 1.0,
                               // )
-                            )
-                        ),
+                            )),
                         child: WidgetToImage(
                           builder: (key) {
                             this.key1 = key;
 
                             return Container(
-                              color: Style.backgroundColor, // để lúc export ra không bị transparent.
+                              color: Style
+                                  .backgroundColor, // để lúc export ra không bị transparent.
                               child: Column(
                                 children: <Widget>[
                                   Row(
@@ -315,7 +320,8 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                             Text(
                                               'Opening balance',
                                               style: TextStyle(
-                                                color: Style.foregroundColor.withOpacity(0.7),
+                                                color: Style.foregroundColor
+                                                    .withOpacity(0.7),
                                                 fontFamily: Style.fontFamily,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 15,
@@ -341,7 +347,8 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                             Text(
                                               'Closing balance',
                                               style: TextStyle(
-                                                color: Style.foregroundColor.withOpacity(0.7),
+                                                color: Style.foregroundColor
+                                                    .withOpacity(0.7),
                                                 fontFamily: Style.fontFamily,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 15,
@@ -364,11 +371,14 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                     ],
                                   ),
                                   Divider(
-                                    color: Style.foregroundColor.withOpacity(0.12),
+                                    color:
+                                        Style.foregroundColor.withOpacity(0.12),
                                     thickness: 1,
                                     height: 20,
                                   ),
-                                  SizedBox(height: 10,),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
                                   Hero(
                                     tag: 'netIncomeChart',
                                     child: Material(
@@ -377,18 +387,26 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                         children: [
                                           Text('Net Income',
                                               style: TextStyle(
-                                                color: Style.foregroundColor.withOpacity(0.7),
+                                                color: Style.foregroundColor
+                                                    .withOpacity(0.7),
                                                 fontFamily: Style.fontFamily,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 16,
-                                              )
-                                          ),
+                                              )),
                                           MoneySymbolFormatter(
-                                              text: closingBalance - openingBalance,
+                                              text: closingBalance -
+                                                  openingBalance,
                                               currencyId: _wallet.currencyID,
                                               textStyle: TextStyle(
-                                                color: (closingBalance - openingBalance) > 0 ? Style.incomeColor
-                                                    : (closingBalance - openingBalance) == 0 ? Style.foregroundColor : Style.expenseColor,
+                                                color: (closingBalance -
+                                                            openingBalance) >
+                                                        0
+                                                    ? Style.incomeColor
+                                                    : (closingBalance -
+                                                                openingBalance) ==
+                                                            0
+                                                        ? Style.foregroundColor
+                                                        : Style.expenseColor,
                                                 fontFamily: Style.fontFamily,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 26,
@@ -400,12 +418,14 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                                   context,
                                                   PageTransition(
                                                       childCurrent: this.widget,
-                                                      child: AnalyticRevenueAndExpenditureScreen(
+                                                      child:
+                                                          AnalyticRevenueAndExpenditureScreen(
                                                         currentWallet: _wallet,
                                                         beginDate: beginDate,
                                                         endDate: endDate,
                                                       ),
-                                                      type: PageTransitionType.rightToLeft));
+                                                      type: PageTransitionType
+                                                          .rightToLeft));
                                             },
                                             child: Container(
                                               width: 450,
@@ -437,14 +457,16 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                   builder: (key) {
                                     this.key2 = key;
 
-                                    return  Container(
-                                      color: Style.backgroundColor, // để lúc export ra không bị transparent.
+                                    return Container(
+                                      color: Style
+                                          .backgroundColor, // để lúc export ra không bị transparent.
                                       child: Column(
                                         children: <Widget>[
                                           Text(
                                             'Income',
                                             style: TextStyle(
-                                              color: Style.foregroundColor.withOpacity(0.7),
+                                              color: Style.foregroundColor
+                                                  .withOpacity(0.7),
                                               fontFamily: Style.fontFamily,
                                               fontWeight: FontWeight.w400,
                                               fontSize: 16,
@@ -469,20 +491,23 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                                   context,
                                                   PageTransition(
                                                       childCurrent: this.widget,
-                                                      child: AnalyticPieChartSreen(
+                                                      child:
+                                                          AnalyticPieChartSreen(
                                                         currentWallet: _wallet,
                                                         type: 'income',
                                                         beginDate: beginDate,
                                                         endDate: endDate,
                                                       ),
-                                                      type: PageTransitionType.rightToLeft));
+                                                      type: PageTransitionType
+                                                          .rightToLeft));
                                             },
                                             child: Container(
                                               color: Colors.transparent,
                                               child: PieChartScreen(
                                                   isShowPercent: false,
                                                   currentList: _transactionList,
-                                                  categoryList: _incomeCategoryList,
+                                                  categoryList:
+                                                      _incomeCategoryList,
                                                   total: income),
                                             ),
                                           ),
@@ -492,65 +517,65 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                   },
                                 ),
                               ),
-                              VerticalDivider(
-                                color: Style.foregroundColor.withOpacity(0.12),
-                                thickness: 1,
-                              ),
                               Expanded(
                                 child: WidgetToImage(
                                   builder: (key) {
                                     this.key3 = key;
 
                                     return Container(
-                                      color: Style.backgroundColor, // để lúc export ra không bị transparent.
-                                      child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              'Expense',
-                                              style: TextStyle(
-                                                color: Style.foregroundColor.withOpacity(0.7),
-                                                fontFamily: Style.fontFamily,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 16,
-                                              ),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                            MoneySymbolFormatter(
-                                              text: expense,
-                                              currencyId: _wallet.currencyID,
-                                              textStyle: TextStyle(
-                                                color: Style.expenseColor,
-                                                fontFamily: Style.fontFamily,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 24,
-                                                height: 1.5,
-                                              ),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    PageTransition(
-                                                        childCurrent: this.widget,
-                                                        child: AnalyticPieChartSreen(
-                                                          currentWallet: _wallet,
-                                                          type: 'expense',
-                                                          beginDate: beginDate,
-                                                          endDate: endDate,
-                                                        ),
-                                                        type: PageTransitionType.rightToLeft));
-                                              },
-                                              child: Container(
-                                                color: Colors.transparent,
-                                                child: PieChartScreen(
-                                                    isShowPercent: false,
-                                                    currentList: _transactionList,
-                                                    categoryList: _expenseCategoryList,
-                                                    total: expense),
-                                              ),
-                                            ),
-                                          ]),
+                                      color: Style
+                                          .backgroundColor, // để lúc export ra không bị transparent.
+                                      child: Column(children: <Widget>[
+                                        Text(
+                                          'Expense',
+                                          style: TextStyle(
+                                            color: Style.foregroundColor
+                                                .withOpacity(0.7),
+                                            fontFamily: Style.fontFamily,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        MoneySymbolFormatter(
+                                          text: expense,
+                                          currencyId: _wallet.currencyID,
+                                          textStyle: TextStyle(
+                                            color: Style.expenseColor,
+                                            fontFamily: Style.fontFamily,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 24,
+                                            height: 1.5,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    childCurrent: this.widget,
+                                                    child:
+                                                        AnalyticPieChartSreen(
+                                                      currentWallet: _wallet,
+                                                      type: 'expense',
+                                                      beginDate: beginDate,
+                                                      endDate: endDate,
+                                                    ),
+                                                    type: PageTransitionType
+                                                        .rightToLeft));
+                                          },
+                                          child: Container(
+                                            color: Colors.transparent,
+                                            child: PieChartScreen(
+                                                isShowPercent: false,
+                                                currentList: _transactionList,
+                                                categoryList:
+                                                    _expenseCategoryList,
+                                                total: expense),
+                                          ),
+                                        ),
+                                      ]),
                                     );
                                   },
                                 ),

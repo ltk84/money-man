@@ -29,7 +29,8 @@ class ReportScreen extends StatefulWidget {
   Wallet currentWallet;
   DateTime beginDate;
   DateTime endDate;
-  ReportScreen({Key key, this.currentWallet, this.endDate, this.beginDate}) : super(key: key);
+  ReportScreen({Key key, this.currentWallet, this.endDate, this.beginDate})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _ReportScreen();
@@ -75,14 +76,16 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
   Wallet _wallet;
 
   // Khởi tạo mốc thời gian cần thống kê.
-  DateTime beginDate ;
+  DateTime beginDate;
   DateTime endDate;
   String dateDescript = 'This month';
 
   @override
   void initState() {
-    beginDate = widget.beginDate ?? DateTime(DateTime.now().year, DateTime.now().month, 1);
-    endDate = widget.endDate?? DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+    beginDate = widget.beginDate ??
+        DateTime(DateTime.now().year, DateTime.now().month, 1);
+    endDate = widget.endDate ??
+        DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
@@ -537,10 +540,6 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                     );
                                   },
                                 ),
-                              ),
-                              VerticalDivider(
-                                color: Style.foregroundColor.withOpacity(0.12),
-                                thickness: 1,
                               ),
                               Expanded(
                                 child: WidgetToImage(
