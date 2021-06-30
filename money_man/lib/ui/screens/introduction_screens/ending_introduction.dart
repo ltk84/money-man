@@ -17,7 +17,7 @@ class OnboardingScreenTwo extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 30),
+        // padding: EdgeInsets.symmetric(vertical: 30),
         decoration: BoxDecoration(
             gradient: LinearGradient(
           begin: Alignment.bottomLeft,
