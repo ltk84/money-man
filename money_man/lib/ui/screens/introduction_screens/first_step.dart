@@ -126,12 +126,12 @@ class _FirstStepState extends State<FirstStep> {
                       child: Container(
                         child: SuperIcon(
                           iconPath: wallet.iconID,
-                          size: 140,
+                          size: size.height * 0.16,
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -244,7 +244,7 @@ class _FirstStepState extends State<FirstStep> {
                       ),
                     ),
                     SizedBox(
-                      height: size.width - 211,
+                      height: size.height - 590,
                     ),
                     Container(
                       child: ButtonTheme(
