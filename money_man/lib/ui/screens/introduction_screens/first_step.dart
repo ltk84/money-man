@@ -126,12 +126,12 @@ class _FirstStepState extends State<FirstStep> {
                       child: Container(
                         child: SuperIcon(
                           iconPath: wallet.iconID,
-                          size: 140,
+                          size: size.height * 0.16,
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -143,6 +143,9 @@ class _FirstStepState extends State<FirstStep> {
                           onChanged: (value) => wallet.name = value,
                           decoration: InputDecoration(
                             hintText: 'Wallet name',
+                            hintStyle: TextStyle(
+                              color: Colors.black.withOpacity(0.35),
+                            ),
                             isDense: false,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 8.0, horizontal: 10.0),
@@ -170,6 +173,9 @@ class _FirstStepState extends State<FirstStep> {
                               wallet.amount = double.tryParse(value),
                           decoration: InputDecoration(
                             hintText: 'Wallet amount',
+                            hintStyle: TextStyle(
+                              color: Colors.black.withOpacity(0.35),
+                            ),
                             isDense: false,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 8.0, horizontal: 10.0),
@@ -238,13 +244,17 @@ class _FirstStepState extends State<FirstStep> {
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600),
                                 ))),
-                                Icon(Icons.arrow_drop_down, color: Colors.white)
+                                Icon(Icons.arrow_drop_down,
+                                    color: Colors.white),
+                                SizedBox(
+                                  width: 8,
+                                )
                               ],
                             )),
                       ),
                     ),
                     SizedBox(
-                      height: size.width - 211,
+                      height: size.height - 590,
                     ),
                     Container(
                       child: ButtonTheme(
