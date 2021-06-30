@@ -151,16 +151,20 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                                   'Ending date: ',
                                   style: TextStyle(
                                       fontSize: 14.0,
-                                      color: Style.foregroundColor.withOpacity(0.54),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.54),
                                       fontFamily: Style.fontFamily),
                                   textAlign: TextAlign.start,
                                 ),
                                 Text(
-                                  DateFormat('EEEE, dd-MM-yyyy').format(currentlyEvent[index].endDate),
+                                  DateFormat('EEEE, dd-MM-yyyy')
+                                      .format(currentlyEvent[index].endDate),
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w600,
-                                      color: Style.foregroundColor,
+                                      color: (currentlyEvent[index].isFinished)
+                                          ? Colors.red
+                                          : Style.foregroundColor,
                                       fontFamily: Style.fontFamily),
                                   textAlign: TextAlign.start,
                                 ),
@@ -176,7 +180,8 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                                   'Spent: ',
                                   style: TextStyle(
                                       fontSize: 16.0,
-                                      color: Style.foregroundColor.withOpacity(0.54),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.54),
                                       fontFamily: Style.fontFamily),
                                   textAlign: TextAlign.start,
                                 ),
