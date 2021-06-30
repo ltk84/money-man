@@ -68,13 +68,14 @@ class _EditEventScreen extends State<EditEventScreen>
         leading: CloseButton(
           color: Style.foregroundColor,
         ),
-        title: Text('Edit event',
-            style: TextStyle(
-              fontFamily: Style.fontFamily,
-              fontSize: 17.0,
-              fontWeight: FontWeight.w600,
-              color: Style.foregroundColor,
-            ),
+        title: Text(
+          'Edit event',
+          style: TextStyle(
+            fontFamily: Style.fontFamily,
+            fontSize: 17.0,
+            fontWeight: FontWeight.w600,
+            color: Style.foregroundColor,
+          ),
         ),
         actions: [
           TextButton(
@@ -101,7 +102,7 @@ class _EditEventScreen extends State<EditEventScreen>
                                   ? true
                                   : false;
                   _currentEvent.walletId = _currentEvent.id;
-                  await _firestore.updateEvent(_currentEvent, _eventWallet);
+                  _firestore.updateEvent(_currentEvent, _eventWallet);
                   Navigator.pop(context);
                 }
               },
@@ -204,19 +205,16 @@ class _EditEventScreen extends State<EditEventScreen>
                         ),
                         decoration: InputDecoration(
                           errorBorder: UnderlineInputBorder(
-                            borderSide:
-                            BorderSide(color: Colors.red, width: 1),
+                            borderSide: BorderSide(color: Colors.red, width: 1),
                           ),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                                color:
-                                Style.foregroundColor.withOpacity(0.6),
+                                color: Style.foregroundColor.withOpacity(0.6),
                                 width: 1),
                           ),
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                                color:
-                                Style.foregroundColor.withOpacity(0.6),
+                                color: Style.foregroundColor.withOpacity(0.6),
                                 width: 3),
                           ),
                           labelText: 'Name event',
@@ -255,15 +253,15 @@ class _EditEventScreen extends State<EditEventScreen>
                   onTap: () async {
                     DatePicker.showDatePicker(context,
                         currentTime:
-                        endDate == null ? formatTransDate : endDate,
+                            endDate == null ? formatTransDate : endDate,
                         showTitleActions: true, onConfirm: (date) {
-                          if (date != null) {
-                            setState(() {
-                              endDate = date;
-                              _currentEvent.endDate = endDate;
-                            });
-                          }
-                        },
+                      if (date != null) {
+                        setState(() {
+                          endDate = date;
+                          _currentEvent.endDate = endDate;
+                        });
+                      }
+                    },
                         locale: LocaleType.en,
                         theme: DatePickerTheme(
                           cancelStyle: TextStyle(
@@ -359,7 +357,7 @@ class _EditEventScreen extends State<EditEventScreen>
                 },
                 leading: _eventWallet == null
                     ? SuperIcon(
-                    iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
+                        iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
                     : SuperIcon(iconPath: _eventWallet.iconID, size: 28.0),
                 title: TextFormField(
                   initialValue: _eventWallet.name,

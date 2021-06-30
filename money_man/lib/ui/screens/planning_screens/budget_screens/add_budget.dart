@@ -70,7 +70,7 @@ class _AddBudgetState extends State<AddBudget> {
         appBar: AppBar(
           elevation: 0,
           leading: CloseButton(
-          color: Style.foregroundColor,
+            color: Style.foregroundColor,
           ),
           actions: [
             GestureDetector(
@@ -98,7 +98,7 @@ class _AddBudgetState extends State<AddBudget> {
                       beginDate: mTimeRange.beginDay,
                       endDate: mTimeRange.endDay,
                       isRepeat: isRepeat);
-                  await _firestore.addBudget(mBudget, selectedWallet);
+                  _firestore.addBudget(mBudget, selectedWallet);
                   Navigator.pop(context);
                 }
               },

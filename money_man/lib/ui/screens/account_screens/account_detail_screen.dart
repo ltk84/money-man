@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 
 import '../../style.dart';
 
@@ -218,16 +220,24 @@ class _AccountDetailState extends State<AccountDetail> {
                   Container(
                     color: Style.boxBackgroundColor,
                     child: ListTile(
-                      onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (BuildContext context) =>
-                        //             ChangePasswordScreen()));
-                        showCupertinoModalBottomSheet(
-                            backgroundColor: Style.backgroundColor1,
-                            context: context,
-                            builder: (context) => ChangePasswordScreen());
+                      onTap: () async {
+                        try {
+                          final result =
+                              await InternetAddress.lookup('example.com');
+                          if (result.isNotEmpty &&
+                              result[0].rawAddress.isNotEmpty) {
+                            print('connected');
+                            showCupertinoModalBottomSheet(
+                                backgroundColor: Style.backgroundColor1,
+                                context: context,
+                                builder: (context) => ChangePasswordScreen());
+                          }
+                        } on SocketException catch (_) {
+                          print('not connected');
+                          //show dialog
+                          await _showAlertDialog(
+                              'Network is required for Change Password feature!');
+                        }
                       },
                       dense: true,
                       title: Text(
@@ -284,16 +294,15 @@ class _AccountDetailState extends State<AccountDetail> {
           ],
         ));
   }
-}
 
-// class Test extends StatelessWidget {
-//   Text title = Text('More', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Hero(tag: 'alo', child: title),
-//       )
-//     );
-//   }
-// }
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
+    );
+  }
+}

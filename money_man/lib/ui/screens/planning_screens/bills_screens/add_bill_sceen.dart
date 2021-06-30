@@ -112,7 +112,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                           paidDueDates: [],
                         );
 
-                        await _firestore.addBill(bill, selectedWallet);
+                        _firestore.addBill(bill, selectedWallet);
                         Navigator.pop(context);
                       }
                     },

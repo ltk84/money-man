@@ -68,11 +68,10 @@ class _EventDetailScreen extends State<EventDetailScreen>
             onPressed: () async {
               final updatedTrans = await showCupertinoModalBottomSheet(
                   context: context,
-                  builder: (context) =>EditEventScreen(
-                    currentEvent: _currentEvent,
-                    eventWallet: _eventWallet,
-                  )
-              );
+                  builder: (context) => EditEventScreen(
+                        currentEvent: _currentEvent,
+                        eventWallet: _eventWallet,
+                      ));
               if (updatedTrans != null) setState(() {});
             },
             icon: Icon(
@@ -269,7 +268,8 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.white;
-                        return Style.primaryColor; // Use the component's default.
+                        return Style
+                            .primaryColor; // Use the component's default.
                       },
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -320,7 +320,8 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.white;
-                        return Style.primaryColor; // Use the component's default.
+                        return Style
+                            .primaryColor; // Use the component's default.
                       },
                     ),
                   ),

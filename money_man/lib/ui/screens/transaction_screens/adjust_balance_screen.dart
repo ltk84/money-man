@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -8,6 +10,7 @@ import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -42,9 +45,19 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
         actions: [
           TextButton(
             onPressed: () async {
-              if (adjustAmount != null)
-                await _firestore.adjustBalance(widget.wallet, adjustAmount);
-              Navigator.pop(context);
+              try {
+                final result = await InternetAddress.lookup('example.com');
+                if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                  print('connected');
+                  if (adjustAmount != null)
+                    await _firestore.adjustBalance(widget.wallet, adjustAmount);
+                  Navigator.pop(context);
+                }
+              } on SocketException catch (_) {
+                print('not connected');
+                await _showAlertDialog(
+                    'Network is required for Adjust balance feature!');
+              }
             },
             child: Text('Save',
                 style: TextStyle(
@@ -166,6 +179,17 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
     );
   }
 }

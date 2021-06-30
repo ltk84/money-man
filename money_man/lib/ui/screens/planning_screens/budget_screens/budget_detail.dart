@@ -121,26 +121,11 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 );
                 print(res);
                 if (res == 'OK') {
-                  await _firestore.deleteBudget(
+                  _firestore.deleteBudget(
                       widget.budget.walletId, widget.budget.id);
                   Navigator.pop(context);
                 }
               })
-
-          /*IconButton(
-              icon: Icon(Icons.delete, color: Colors.white),
-              onPressed: () async {
-                //TODO: Thuc hien xoa budget
-                String result = await _showAcceptionDialog();
-                print(result);
-                if (result == 'no') {
-                  return;
-                } else {
-                  await _firestore.deleteBudget(
-                      widget.budget.walletId, widget.budget.id);
-                  Navigator.pop(context);
-                }
-              })*/
         ],
         backgroundColor: Style.appBarColor,
       ),
@@ -496,9 +481,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             Divider(
-              color: Style.foregroundColor.withOpacity(0.24),
-              thickness: 0.5
-            ),
+                color: Style.foregroundColor.withOpacity(0.24), thickness: 0.5),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 25),
               child: Row(
@@ -523,9 +506,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             Divider(
-                color: Style.foregroundColor.withOpacity(0.24),
-                thickness: 0.5
-            ),
+                color: Style.foregroundColor.withOpacity(0.24), thickness: 0.5),
             Container(
               margin: EdgeInsets.only(top: 10, bottom: 20),
               alignment: Alignment.center,
@@ -539,7 +520,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                               wallet: widget.wallet,
                               budget: widget.budget,
                             )));
-                    await _firestore.updateBudget(widget.budget, widget.wallet);
+                    _firestore.updateBudget(widget.budget, widget.wallet);
                     setState(() {});
                   },
                   child: Container(

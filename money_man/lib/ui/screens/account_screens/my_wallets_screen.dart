@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -7,6 +8,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/edit_wallet_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -219,13 +221,26 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                             child: ListTile(
                               contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 0),
                               onTap: () async {
-                                await showCupertinoModalBottomSheet(
-                                  backgroundColor: Style.boxBackgroundColor,
-                                  context: context,
-                                  builder: (context) => EditWalletScreen(
-                                      wallet: listWallet[index]),
-                                );
-                                setState(() {});
+                                try {
+                                  final result = await InternetAddress.lookup(
+                                      'example.com');
+                                  if (result.isNotEmpty &&
+                                      result[0].rawAddress.isNotEmpty) {
+                                    print('connected');
+                                    await showCupertinoModalBottomSheet(
+                                      backgroundColor: Style.boxBackgroundColor,
+                                      context: context,
+                                      builder: (context) => EditWalletScreen(
+                                          wallet: listWallet[index]),
+                                    );
+                                    setState(() {});
+                                  }
+                                } on SocketException catch (_) {
+                                  print('not connected');
+                                  await _showAlertDialog(
+                                      'Network is required for Edit wallet feature!',
+                                      null);
+                                }
                               },
                               leading:
                                   SuperIcon(iconPath: iconData, size: 35.0),
@@ -261,6 +276,26 @@ class _MyWalletScreenState extends State<MyWalletScreen>
               }),
         ),
       ),
+    );
+  }
+
+  Future<void> _showAlertDialog(String content, String title) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
+      builder: (BuildContext context) {
+        if (title == null)
+          return CustomAlert(
+            content: content,
+          );
+        else
+          return CustomAlert(
+            content: content,
+            title: title,
+            iconPath: 'assets/images/success.svg',
+          );
+      },
     );
   }
 }

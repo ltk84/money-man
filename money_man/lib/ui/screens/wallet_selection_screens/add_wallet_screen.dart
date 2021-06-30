@@ -62,8 +62,8 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                 if (wallet.name == '' || wallet.name == null) return;
                 if (_formKey.currentState.validate()) {
                   FocusScope.of(context).requestFocus(FocusNode());
-                  var res = await _firestore.addWallet(this.wallet);
-                  await _firestore.updateSelectedWallet(res);
+                  var res = _firestore.addWallet(this.wallet);
+                  //await _firestore.updateSelectedWallet(res);
                   Navigator.of(context).pop(res);
                 }
               },

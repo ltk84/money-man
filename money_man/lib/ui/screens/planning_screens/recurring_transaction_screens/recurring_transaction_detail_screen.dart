@@ -120,7 +120,7 @@ class _RecurringTransactionDetailScreenState
         ),
         body: ListView(
           physics:
-          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
                 margin: EdgeInsets.only(top: 30.0),
@@ -182,20 +182,20 @@ class _RecurringTransactionDetailScreenState
                         nextDate: DateFormat('dd/MM/yyyy').format(
                             _recurringTransaction.repeatOption.beginDateTime),
                         type: _recurringTransaction.repeatOption.type ==
-                            'forever'
+                                'forever'
                             ? 'Forever'
                             : _recurringTransaction.repeatOption.type == 'until'
-                            ? _recurringTransaction.repeatOption.type +
-                            ' ' +
-                            DateFormat('dd/MM/yyyy').format(
-                                _recurringTransaction
-                                    .repeatOption.extraTypeInfo)
-                            : _recurringTransaction.repeatOption.type +
-                            ' ' +
-                            _recurringTransaction
-                                .repeatOption.extraTypeInfo
-                                .toString() +
-                            ' time'),
+                                ? _recurringTransaction.repeatOption.type +
+                                    ' ' +
+                                    DateFormat('dd/MM/yyyy').format(
+                                        _recurringTransaction
+                                            .repeatOption.extraTypeInfo)
+                                : _recurringTransaction.repeatOption.type +
+                                    ' ' +
+                                    _recurringTransaction
+                                        .repeatOption.extraTypeInfo
+                                        .toString() +
+                                    ' time'),
                   ],
                 )),
             Container(
@@ -204,9 +204,9 @@ class _RecurringTransactionDetailScreenState
                   color: Style.boxBackgroundColor2,
                   border: Border(
                       bottom: BorderSide(
-                        color: Style.foregroundColor.withOpacity(0.12),
-                        width: 0.5,
-                      ))),
+                    color: Style.foregroundColor.withOpacity(0.12),
+                    width: 0.5,
+                  ))),
               child: TextButton(
                 onPressed: () async {
                   var result =
@@ -225,7 +225,7 @@ class _RecurringTransactionDetailScreenState
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Colors.green.withOpacity(0.4);
                       else
@@ -248,18 +248,18 @@ class _RecurringTransactionDetailScreenState
                   color: Style.boxBackgroundColor2,
                   border: Border(
                       bottom: BorderSide(
-                        color: Style.foregroundColor.withOpacity(0.12),
-                        width: 0.5,
-                      ))),
+                    color: Style.foregroundColor.withOpacity(0.12),
+                    width: 0.5,
+                  ))),
               child: TextButton(
                 onPressed: () async {
-                  await _firestore.deleteRecurringTransaction(
+                  _firestore.deleteRecurringTransaction(
                       _recurringTransaction, widget.wallet);
                   Navigator.pop(context);
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Colors.redAccent.withOpacity(0.4);
                       else
@@ -288,8 +288,8 @@ class _RecurringTransactionDetailScreenState
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child:
-              Icon(Icons.attach_money, color: Style.foregroundColor.withOpacity(0.7), size: 40.0)),
+              child: Icon(Icons.attach_money,
+                  color: Style.foregroundColor.withOpacity(0.7), size: 40.0)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -335,7 +335,9 @@ class _RecurringTransactionDetailScreenState
                 fontFamily: Style.fontFamily,
                 fontSize: 20.0,
                 fontWeight: FontWeight.w500,
-                color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                color: display == null
+                    ? Style.foregroundColor.withOpacity(0.24)
+                    : Style.foregroundColor,
               )),
         ],
       ),
@@ -350,7 +352,8 @@ class _RecurringTransactionDetailScreenState
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 23.0),
-              child: Icon(Icons.notes, color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
+              child: Icon(Icons.notes,
+                  color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
           Text(display == null || display == '' ? 'Note' : display,
               style: TextStyle(
                 fontFamily: Style.fontFamily,
@@ -382,7 +385,9 @@ class _RecurringTransactionDetailScreenState
                 fontFamily: Style.fontFamily,
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
-                color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                color: display == null
+                    ? Style.foregroundColor.withOpacity(0.24)
+                    : Style.foregroundColor,
               )),
         ],
       ),
@@ -403,29 +408,24 @@ class _RecurringTransactionDetailScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               RichText(
-                  text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: 'Next occurrence: ',
-                            style: TextStyle(
-                              fontFamily: Style.fontFamily,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                              color: Style.foregroundColor,
-                            )
-                        ),
-                        TextSpan(
-                            text: nextDate,
-                            style: TextStyle(
-                              fontFamily: Style.fontFamily,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                              color: Style.primaryColor,
-                            )
-                        ),
-                      ]
-                  )
-              ),
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: 'Next occurrence: ',
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600,
+                      color: Style.foregroundColor,
+                    )),
+                TextSpan(
+                    text: nextDate,
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600,
+                      color: Style.primaryColor,
+                    )),
+              ])),
               Text(type,
                   style: TextStyle(
                     fontFamily: Style.fontFamily,
@@ -442,8 +442,8 @@ class _RecurringTransactionDetailScreenState
 
   Future<void> _showAlertDialog(
       {String title = 'Oops...',
-        String content,
-        String iconPath = 'assets/images/alert.svg'}) async {
+      String content,
+      String iconPath = 'assets/images/alert.svg'}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

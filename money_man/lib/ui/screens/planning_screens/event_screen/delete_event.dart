@@ -8,11 +8,13 @@ import 'package:money_man/ui/screens/report_screens/report_list_transaction_in_t
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
+
 class DeleteEventScreen extends StatefulWidget {
   Event currentEvent;
   Wallet eventWallet;
   int count;
-  DeleteEventScreen({Key key,
+  DeleteEventScreen({
+    Key key,
     this.currentEvent,
     this.eventWallet,
     this.count,
@@ -22,6 +24,7 @@ class DeleteEventScreen extends StatefulWidget {
     return _DeleteEventScreen();
   }
 }
+
 class _DeleteEventScreen extends State<DeleteEventScreen>
     with TickerProviderStateMixin {
   Event _currentEvent;
@@ -32,11 +35,11 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
     id: '',
     name: 'na',
     endDate: DateTime.now(),
-    walletId:'id',
+    walletId: 'id',
     isFinished: false,
     transactionIdList: [],
-    spent:0,
-    finishedByHand:false,
+    spent: 0,
+    finishedByHand: false,
     autofinish: false,
   );
   @override
@@ -45,28 +48,27 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
     _eventWallet = widget.eventWallet;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<Object>(
         stream: _firestore.transactionStream(_eventWallet, 100),
-        builder: (context,snapshot) {
+        builder: (context, snapshot) {
           double total = 0;
           listTransactionOfEventByDate = [];
-          List<MyTransaction> listTransaction = snapshot.data??[];
+          List<MyTransaction> listTransaction = snapshot.data ?? [];
           listTransaction.forEach((element) {
-            if(element.eventID != null)
-              if(element.eventID == _currentEvent.id)
-              {
-                listTransactionOfEventByDate.add(element);
-                if(element.category.type == 'income')
-                  total += element.amount;
-                else
-                  total -= element.amount;
-              }
+            if (element.eventID != null) if (element.eventID ==
+                _currentEvent.id) {
+              listTransactionOfEventByDate.add(element);
+              if (element.category.type == 'income')
+                total += element.amount;
+              else
+                total -= element.amount;
+            }
           });
-          listTransactionOfEventByDate.sort(
-                  (a, b) => b.date.compareTo(a.date));
+          listTransactionOfEventByDate.sort((a, b) => b.date.compareTo(a.date));
           return Scaffold(
             backgroundColor: Style.backgroundColor,
             appBar: AppBar(
@@ -85,13 +87,18 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
             body: ListView(
               children: [
                 Container(
-                  padding: EdgeInsets.fromLTRB(12,25,12,20),
-                  child: Text(widget.count < 2 ? 'There is ' +
-                  widget.count.toString() + ' transaction in event'
-                    : 'There are ' + widget.count.toString() + ' transactions in event',
+                  padding: EdgeInsets.fromLTRB(12, 25, 12, 20),
+                  child: Text(
+                    widget.count < 2
+                        ? 'There is ' +
+                            widget.count.toString() +
+                            ' transaction in event'
+                        : 'There are ' +
+                            widget.count.toString() +
+                            ' transactions in event',
                     style: TextStyle(
                       fontFamily: Style.fontFamily,
-                      color:  Style.foregroundColor,
+                      color: Style.foregroundColor,
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
@@ -111,41 +118,61 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: listTransactionOfEventByDate.length,
-                        itemBuilder: (BuildContext context, int index){
+                        itemBuilder: (BuildContext context, int index) {
                           return ListTile(
-                            title:  Row(
+                            title: Row(
                               children: <Widget>[
                                 Padding(
-                                    padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(4, 0, 4, 0),
                                     child: SuperIcon(
-                                      iconPath: listTransactionOfEventByDate[index].category.iconID,
+                                      iconPath:
+                                          listTransactionOfEventByDate[index]
+                                              .category
+                                              .iconID,
                                       size: 35,
                                     )),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(14, 0, 18, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(14, 0, 18, 0),
                                   child: Text(
-                                      listTransactionOfEventByDate[index].category.name,
+                                      listTransactionOfEventByDate[index]
+                                          .category
+                                          .name,
                                       style: TextStyle(
                                           fontSize: 16.0,
                                           fontFamily: Style.fontFamily,
                                           fontWeight: FontWeight.w600,
-                                          color: Style.foregroundColor)
-                                  ),
+                                          color: Style.foregroundColor)),
                                 ),
                                 Expanded(
-                                  child: Text(listTransactionOfEventByDate[index].category.type == 'income' ?
-                                  '+' + listTransactionOfEventByDate[index].amount.toString()
-                                      : '-' + listTransactionOfEventByDate[index].amount.toString(),
+                                  child: Text(
+                                      listTransactionOfEventByDate[index]
+                                                  .category
+                                                  .type ==
+                                              'income'
+                                          ? '+' +
+                                              listTransactionOfEventByDate[
+                                                      index]
+                                                  .amount
+                                                  .toString()
+                                          : '-' +
+                                              listTransactionOfEventByDate[
+                                                      index]
+                                                  .amount
+                                                  .toString(),
                                       textAlign: TextAlign.end,
                                       style: TextStyle(
                                           fontSize: 16.0,
                                           fontFamily: Style.fontFamily,
                                           fontWeight: FontWeight.w700,
-                                          color: listTransactionOfEventByDate[index].category.type == 'income'
+                                          color: listTransactionOfEventByDate[
+                                                          index]
+                                                      .category
+                                                      .type ==
+                                                  'income'
                                               ? Style.incomeColor2
-                                              : Style.expenseColor
-                                      )
-                                  ),
+                                              : Style.expenseColor)),
                                 ),
                               ],
                             ),
@@ -160,10 +187,11 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                     child: Column(
                       children: <Widget>[
                         Padding(
-                            padding: EdgeInsets.all(16),
-                          child: Text('Do you want to delete only event or delete all transactions in the event?',
+                          padding: EdgeInsets.all(16),
+                          child: Text(
+                            'Do you want to delete only event or delete all transactions in the event?',
                             style: TextStyle(
-                              color:  Colors.white,
+                              color: Colors.white,
                               fontSize: 16,
                               fontFamily: Style.fontFamily,
                             ),
@@ -175,11 +203,14 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                           child: RaisedButton(
                             padding: EdgeInsets.all(12),
                             onPressed: () async {
-                              listTransactionOfEventByDate.forEach((element)  async {
-                                element.eventID= "";
-                                await _firestore.updateTransactionAfterDeletingEvent(element, _eventWallet);
+                              listTransactionOfEventByDate
+                                  .forEach((element) async {
+                                element.eventID = "";
+                                _firestore.updateTransactionAfterDeletingEvent(
+                                    element, _eventWallet);
                               });
-                              await _firestore.deleteEvent(_currentEvent.id, _eventWallet.id);
+                              _firestore.deleteEvent(
+                                  _currentEvent.id, _eventWallet.id);
                               Navigator.pop(context);
                               Navigator.pop(context);
                             },
@@ -187,9 +218,7 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                                 style: TextStyle(
                                     fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 16
-                                )
-                            ),
+                                    fontSize: 16)),
                             color: Style.errorColor,
                             textColor: Colors.white,
                             elevation: 5,
@@ -204,10 +233,13 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                           child: RaisedButton(
                             padding: EdgeInsets.all(12),
                             onPressed: () async {
-                              listTransactionOfEventByDate.forEach((element) async {
-                                await _firestore.deleteTransaction(element, _eventWallet);
+                              listTransactionOfEventByDate
+                                  .forEach((element) async {
+                                _firestore.deleteTransaction(
+                                    element, _eventWallet);
                               });
-                              await  _firestore.deleteEvent(_currentEvent.id, _eventWallet.id);
+                              _firestore.deleteEvent(
+                                  _currentEvent.id, _eventWallet.id);
                               Navigator.pop(context);
                               Navigator.pop(context);
                             },
@@ -215,21 +247,17 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                                 style: TextStyle(
                                     fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 16
-                                )
-                            ),
+                                    fontSize: 16)),
                             color: Style.expenseColor,
                             textColor: Colors.white,
                             elevation: 5,
                           ),
                         ),
                       ],
-                    )
-                )
+                    ))
               ],
             ),
           );
-        }
-    );
+        });
   }
 }

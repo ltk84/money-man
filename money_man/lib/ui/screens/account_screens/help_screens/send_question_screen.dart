@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
@@ -67,18 +69,28 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
         actions: [
           GestureDetector(
             onTap: () async {
-              setState(() {
-                isSending = true;
-              });
-              if (content == null || content == "") {
-                _showAlertDialog('Please type your message!', null);
-              } else {
-                await sendMail();
+              try {
+                final result = await InternetAddress.lookup('example.com');
+                if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                  print('connected');
+                  setState(() {
+                    isSending = true;
+                  });
+                  if (content == null || content == "") {
+                    _showAlertDialog('Please type your message!', null);
+                  } else {
+                    await sendMail();
+                  }
+                  setState(() {
+                    isSending = false;
+                  });
+                  print('ok');
+                }
+              } on SocketException catch (_) {
+                print('not connected');
+                await _showAlertDialog(
+                    'Network is required for Send question feature!', null);
               }
-              setState(() {
-                isSending = false;
-              });
-              print('ok');
             },
             child: Container(
               padding: EdgeInsets.only(right: 10),

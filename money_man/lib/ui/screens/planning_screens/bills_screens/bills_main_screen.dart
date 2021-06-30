@@ -380,7 +380,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                             date: now,
                             currencyID: widget.currentWallet.currencyID,
                             category: info['bill'].category);
-                        await _firestore.addTransaction(
+                        _firestore.addTransaction(
                             widget.currentWallet, transFromBill);
 
                         // Thêm transaction vào bill.
@@ -398,7 +398,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                         }
 
                         // Cập nhật thông tin bill lên firestore.
-                        await _firestore.updateBill(
+                        _firestore.updateBill(
                             info['bill'], widget.currentWallet);
 
                         if (this.mounted) {

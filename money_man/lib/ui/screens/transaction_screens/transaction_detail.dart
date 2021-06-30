@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -16,6 +18,7 @@ import 'package:money_man/ui/screens/transaction_screens/edit_transaction_screen
 import 'package:money_man/ui/screens/transaction_screens/transaction_list_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/accept_dialog.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -206,16 +209,28 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 if (result == 'Yes') {
                   if (_transaction.category.name == 'Repayment' ||
                       _transaction.category.name == 'Debt Collection') {
-                    await _firestore.updateDebtLoanTransationAfterDelete(
-                        _transaction, widget.wallet);
+                    try {
+                      final result =
+                          await InternetAddress.lookup('example.com');
+                      if (result.isNotEmpty &&
+                          result[0].rawAddress.isNotEmpty) {
+                        print('connected');
+                        await _firestore.updateDebtLoanTransationAfterDelete(
+                            _transaction, widget.wallet);
+                      }
+                    } on SocketException catch (_) {
+                      print('not connected');
+                      await _showAlertDialog(
+                          'Network is required for Debt Collection and Repayment feature!',
+                          context);
+                    }
                   }
                   if (_transaction.category.name == 'Debt' ||
                       _transaction.category.name == 'Loan') {
-                    await _firestore.deleteInstanceInTransactionIdList(
+                    _firestore.deleteInstanceInTransactionIdList(
                         _transaction.id, widget.wallet.id);
                   }
-                  await _firestore.deleteTransaction(
-                      _transaction, widget.wallet);
+                  _firestore.deleteTransaction(_transaction, widget.wallet);
                   Navigator.pop(context, 'Deleted');
                 }
               })
@@ -304,7 +319,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     minLeadingWidth: 60,
                     leading: Container(
                       padding: const EdgeInsets.only(left: 10),
-                      child: SuperIcon(iconPath: 'assets/images/time.svg', size: 35.0),
+                      child: SuperIcon(
+                          iconPath: 'assets/images/time.svg', size: 35.0),
                     ),
                     title: Text(
                       //_transaction.date.toString(),
@@ -410,7 +426,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           leading: Container(
                             padding: const EdgeInsets.only(left: 14),
                             child: SuperIcon(
-                              iconPath: 'assets/images/account_screen/user2.svg',
+                              iconPath:
+                                  'assets/images/account_screen/user2.svg',
                               size: 28,
                             ),
                           ),
@@ -763,18 +780,28 @@ class DebtLoanSection extends StatelessWidget {
                           ),
                         ),
                         onPressed: () async {
-                          // await Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (_) => CashBackScreen(
-                          //             transaction: transaction, wallet: wallet)));
-                          await showCupertinoModalBottomSheet(
-                              context: context,
-                              builder: (context) => CashBackScreen(
-                                  transaction: transaction, wallet: wallet));
-                          print('alo');
-                          refesh(null);
-                          print(transaction.extraAmountInfo);
+                          try {
+                            final result =
+                                await InternetAddress.lookup('example.com');
+                            if (result.isNotEmpty &&
+                                result[0].rawAddress.isNotEmpty) {
+                              print('connected');
+
+                              await showCupertinoModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => CashBackScreen(
+                                      transaction: transaction,
+                                      wallet: wallet));
+                              print('alo');
+                              refesh(null);
+                              print(transaction.extraAmountInfo);
+                            }
+                          } on SocketException catch (_) {
+                            print('not connected');
+                            await _showAlertDialog(
+                                'Network is required for Cashback feature!',
+                                context);
+                          }
                         },
                         child: Text(
                           'Cashback',
@@ -792,4 +819,15 @@ class DebtLoanSection extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _showAlertDialog(String content, BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    barrierColor: Style.backgroundColor.withOpacity(0.54),
+    builder: (BuildContext context) {
+      return CustomAlert(content: content);
+    },
+  );
 }

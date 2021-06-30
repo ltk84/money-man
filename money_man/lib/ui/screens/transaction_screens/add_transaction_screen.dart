@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -100,25 +102,36 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       eventID: event == null ? '' : event.id);
 
                   if (extraTransaction != null) {
-                    if (trans.amount > extraTransaction.extraAmountInfo) {
-                      await _showAlertDialog(
-                          'The amount must be less than or equal to unpaid amount.\nUnpaid amount is ' +
-                              getMoneyFormat(extraTransaction.extraAmountInfo,
-                                  selectedWallet.currencyID));
-                      return;
-                    }
-                    MyTransaction newTransaction =
-                        await _firestore.addTransaction(selectedWallet, trans);
+                    try {
+                      final result =
+                          await InternetAddress.lookup('example.com');
+                      if (result.isNotEmpty &&
+                          result[0].rawAddress.isNotEmpty) {
+                        print('connected');
+                      }
+                      if (trans.amount > extraTransaction.extraAmountInfo) {
+                        await _showAlertDialog(
+                            'The amount must be less than or equal to unpaid amount.\nUnpaid amount is ' +
+                                getMoneyFormat(extraTransaction.extraAmountInfo,
+                                    selectedWallet.currencyID));
+                        return;
+                      }
+                      MyTransaction newTransaction = await _firestore
+                          .addTransaction(selectedWallet, trans);
 
-                    _firestore.updateDebtLoanTransationAfterAdd(
-                        extraTransaction, newTransaction, selectedWallet);
+                      _firestore.updateDebtLoanTransationAfterAdd(
+                          extraTransaction, newTransaction, selectedWallet);
+                    } on SocketException catch (_) {
+                      print('not connected');
+                      await _showAlertDialog(
+                          'Network is required for Debt Collection & Repayment feature!');
+                    }
                   } else {
-                    MyTransaction newTransaction =
-                        await _firestore.addTransaction(selectedWallet, trans);
+                    _firestore.addTransaction(selectedWallet, trans);
                   }
 
                   if (event != null) {
-                    await _firestore.updateEventAmountAndTransList(
+                    _firestore.updateEventAmountAndTransList(
                         event, selectedWallet, trans);
                   }
 
@@ -552,8 +565,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               dense: true,
               leading: Container(
                   padding: EdgeInsets.only(left: 4),
-                  child: SuperIcon(iconPath: 'assets/images/note.svg', size: 21)
-              ),
+                  child:
+                      SuperIcon(iconPath: 'assets/images/note.svg', size: 21)),
               title: TextFormField(
                 onTap: () async {
                   final noteContent = await showCupertinoModalBottomSheet(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -7,6 +9,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/add_wallet_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/edit_wallet_screen.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +25,17 @@ class WalletSelectionScreen extends StatefulWidget {
 }
 
 class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
+  Future<void> _showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     print('wallet selection build' + widget.id.toString());
@@ -54,18 +68,28 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
             actions: <Widget>[
               TextButton(
                 onPressed: () async {
-                  Wallet wallet = await _firestore.getWalletByID(widget.id);
-                  var res = '';
-                  res = await showCupertinoModalBottomSheet(
-                    backgroundColor: Style.boxBackgroundColor,
-                    context: context,
-                    builder: (context) => EditWalletScreen(wallet: wallet),
-                  );
-                  if (res != null)
-                    setState(() {
-                      widget.id = res;
-                      // widget.changeWallet(_firestore.getWalletByID(res));
-                    });
+                  try {
+                    final result = await InternetAddress.lookup('example.com');
+                    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                      print('connected');
+                      Wallet wallet = await _firestore.getWalletByID(widget.id);
+                      var res = '';
+                      res = await showCupertinoModalBottomSheet(
+                        backgroundColor: Style.boxBackgroundColor,
+                        context: context,
+                        builder: (context) => EditWalletScreen(wallet: wallet),
+                      );
+                      if (res != null)
+                        setState(() {
+                          widget.id = res;
+                          // widget.changeWallet(_firestore.getWalletByID(res));
+                        });
+                    }
+                  } on SocketException catch (_) {
+                    print('not connected');
+                    await _showAlertDialog(
+                        'Network is required for Edit wallet feature!');
+                  }
                 },
                 child: Text('Edit',
                     style: TextStyle(
@@ -241,9 +265,9 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             child: ListTile(
                               onTap: () async {
                                 widget.id = listWallet[index].id;
-                                final updateWalletId = await _firestore
-                                    .updateSelectedWallet(widget.id);
-                                Navigator.pop(context, updateWalletId);
+                                final updateWalletId =
+                                    _firestore.updateSelectedWallet(widget.id);
+                                Navigator.pop(context, listWallet[index]);
                               },
                               leading: SuperIcon(
                                 iconPath: iconData,

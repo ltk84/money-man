@@ -71,7 +71,7 @@ class _AddBudgetState extends State<EditBudget> {
           actions: [
             GestureDetector(
               onTap: () async {
-                await _firestore.updateBudget(_budget, widget.wallet);
+                _firestore.updateBudget(_budget, widget.wallet);
                 Navigator.pop(context);
               },
               child: Container(

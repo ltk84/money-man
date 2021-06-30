@@ -211,7 +211,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
               child: TextButton(
                 onPressed: () async {
                   _bill.isFinished = !_bill.isFinished;
-                  await _firestore.updateBill(_bill, widget.wallet);
+                  _firestore.updateBill(_bill, widget.wallet);
                   setState(() {});
                 },
                 style: ButtonStyle(
@@ -312,7 +312,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                       ) ??
                       'none';
                   if (type == 'all') {
-                    await _firestore.deleteBill(_bill, widget.wallet);
+                    _firestore.deleteBill(_bill, widget.wallet);
                   } else if (type == 'only') {
                     // Xử lý các dueDate. (Thanh toán rồi thì dueDate sẽ được cho vào list due Dates đã thanh toán,
                     // và xóa khỏi list due Dates chưa thanh toán.
@@ -324,7 +324,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                     }
 
                     // Cập nhật thông tin bill lên firestore.
-                    await _firestore.updateBill(_bill, widget.wallet);
+                    _firestore.updateBill(_bill, widget.wallet);
                   }
                   Navigator.pop(context);
                 },

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -107,12 +109,23 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
 
               if (_transaction.category.name == 'Repayment' ||
                   _transaction.category.name == 'Debt Collection') {
-                var res = await _firestore.updateDebtLoanTransationAfterEdit(
-                    widget.transaction, _transaction, widget.wallet);
-                if (res == null) {
+                try {
+                  final result = await InternetAddress.lookup('example.com');
+                  if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                    print('connected');
+                    var res =
+                        await _firestore.updateDebtLoanTransationAfterEdit(
+                            widget.transaction, _transaction, widget.wallet);
+                    if (res == null) {
+                      await _showAlertDialog(
+                          'The amount must be less than or equal to unpaid amount');
+                      return;
+                    }
+                  }
+                } on SocketException catch (_) {
+                  print('not connected');
                   await _showAlertDialog(
-                      'The amount must be less than or equal to unpaid amount');
-                  return;
+                      'Network is required for Debt collection & Repayment feature!');
                 }
               }
 
@@ -128,7 +141,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 }
               }
 
-              await _firestore.updateTransaction(_transaction, widget.wallet);
+              _firestore.updateTransaction(_transaction, widget.wallet);
               Navigator.pop(context, _transaction);
             },
             child: Text(
@@ -181,11 +194,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     amount = double.parse(resultAmount);
                   });
               },
-              leading:
-                  SuperIcon(
-                    iconPath: 'assets/images/coin.svg',
-                    size: 35,
-                  ),
+              leading: SuperIcon(
+                iconPath: 'assets/images/coin.svg',
+                size: 35,
+              ),
               title: TextFormField(
                 readOnly: true,
                 onTap: () async {
@@ -463,8 +475,8 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               dense: true,
               leading: Container(
                   padding: EdgeInsets.only(left: 4),
-                  child: SuperIcon(iconPath: 'assets/images/note.svg', size: 21)
-              ),
+                  child:
+                      SuperIcon(iconPath: 'assets/images/note.svg', size: 21)),
               title: TextFormField(
                 readOnly: true,
                 decoration: InputDecoration(
@@ -725,7 +737,8 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                           });
                       },
                       leading: _event == null
-                          ? SuperIcon(iconPath: 'assets/images/event.svg', size: 28)
+                          ? SuperIcon(
+                              iconPath: 'assets/images/event.svg', size: 28)
                           : SuperIcon(iconPath: _event.iconPath, size: 28.0),
                       title: TextFormField(
                         readOnly: true,
