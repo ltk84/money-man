@@ -247,8 +247,8 @@ class _AddBillScreenState extends State<AddBillScreen> {
                                 isDismissible: true,
                                 backgroundColor: Style.boxBackgroundColor,
                                 context: context,
-                                builder: (context) => SelectWalletAccountScreen(
-                                    wallet: selectedWallet));
+                                builder: (context) => SelectWalletScreen(
+                                    currentWallet: selectedWallet));
                             if (res != null)
                               setState(() {
                                 selectedWallet = res;

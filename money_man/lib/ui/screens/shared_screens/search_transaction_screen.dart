@@ -276,7 +276,8 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex][yIndex],
+                            currentTransaction: transListSortByDate[xIndex]
+                                [yIndex],
                             wallet: widget.wallet,
                           ),
                           type: PageTransitionType.rightToLeft));

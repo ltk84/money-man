@@ -68,7 +68,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
   @override
   Widget build(BuildContext context) {
     // biến thao tác với database
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
@@ -121,7 +121,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               if (transaction.category.name == 'Repayment' ||
                   transaction.category.name == 'Debt Collection') {
                 // update các thông tin cần thiết của transaction sau khi edit
-                var res = await _firestore.updateDebtLoanTransationAfterEdit(
+                var res = await firestore.updateDebtLoanTransationAfterEdit(
                     widget.transaction, transaction, widget.wallet);
                 if (res == null) {
                   await showAlertDialog(
@@ -142,7 +142,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 }
               }
 
-              await _firestore.updateTransaction(transaction, widget.wallet);
+              await firestore.updateTransaction(transaction, widget.wallet);
               Navigator.pop(context, transaction);
             },
             child: Text(

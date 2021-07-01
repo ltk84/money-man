@@ -6,9 +6,7 @@ import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/category_for_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/select_time_range.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
@@ -408,7 +406,7 @@ class _AddBudgetState extends State<AddBudget> {
                         backgroundColor: Style.backgroundColor,
                         context: context,
                         builder: (context) =>
-                            SelectWalletAccountScreen(wallet: widget.wallet));
+                            SelectWalletScreen(currentWallet: widget.wallet));
                     if (res != null)
                       setState(() {
                         selectedWallet = res;
@@ -453,8 +451,8 @@ class _AddBudgetState extends State<AddBudget> {
                                 isDismissible: true,
                                 backgroundColor: Style.backgroundColor,
                                 context: context,
-                                builder: (context) => SelectWalletAccountScreen(
-                                    wallet: widget.wallet));
+                                builder: (context) => SelectWalletScreen(
+                                    currentWallet: widget.wallet));
                             if (res != null)
                               setState(() {
                                 selectedWallet = res;

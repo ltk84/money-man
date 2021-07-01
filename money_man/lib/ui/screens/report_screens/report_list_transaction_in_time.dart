@@ -459,7 +459,8 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex][yIndex],
+                            currentTransaction: transListSortByDate[xIndex]
+                                [yIndex],
                             wallet: widget.currentWallet,
                           ),
                           type: PageTransitionType.rightToLeft));
@@ -586,7 +587,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            transaction: transListSortByCategory[xIndex]
+                            currentTransaction: transListSortByCategory[xIndex]
                                 [yIndex],
                             wallet: widget.currentWallet,
                           ),

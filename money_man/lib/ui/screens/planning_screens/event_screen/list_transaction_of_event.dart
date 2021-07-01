@@ -344,7 +344,8 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex][yIndex],
+                            currentTransaction: transListSortByDate[xIndex]
+                                [yIndex],
                             wallet: widget.eventWallet,
                           ),
                           type: PageTransitionType.rightToLeft));
