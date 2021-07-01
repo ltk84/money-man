@@ -79,7 +79,7 @@ class _AddBudgetState extends State<AddBudget> {
                 // await _firestore.updateEvent();
                 if (selectedWallet == null) {
                   _showAlertDialog('Please pick your wallet!', null);
-                } else if (amount == null) {
+                } else if (amount == null || amount <= 0) {
                   _showAlertDialog('Please enter amount!', null);
                 } else if (cate == null) {
                   _showAlertDialog('Please pick category', null);
