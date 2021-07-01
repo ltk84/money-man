@@ -1,9 +1,8 @@
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
-import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
+import 'package:money_man/ui/screens/introduction_screens/first_step_first_wallet_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -189,6 +188,7 @@ class _AccountInformation extends State<AccountInformation> {
                         },
                       ),
                     ),
+                    // Sau khi đặt tên xong thì tới màn hình đặt ví đầu tiên thoy
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         _auth.currentUser.updateProfile(
@@ -197,7 +197,7 @@ class _AccountInformation extends State<AccountInformation> {
                         Navigator.pushReplacement(
                             context,
                             PageTransition(
-                              child: FirstStep(),
+                              child: FirstStepForFirstWallet(),
                               type: PageTransitionType.scale,
                               curve: Curves.elasticInOut,
                             ));

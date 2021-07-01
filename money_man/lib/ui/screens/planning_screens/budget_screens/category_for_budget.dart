@@ -1,13 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/screens/transaction_screens/select_other_source.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
+// Này là màn hình chọn category cho budget, giống với các màn hình chọn category khác, chỉ bỏ đi phần Debt & Loan
 class CategoriesBudgetScreen extends StatefulWidget {
   final String walletId;
 
