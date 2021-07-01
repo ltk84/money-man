@@ -11,6 +11,7 @@ class UserGuideScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Biến lưu trữ danh sách các câu hỏi của Userguide
     UserGuides mQuestion = new UserGuides();
     int num = mQuestion.answers.length;
     return Scaffold(
@@ -89,6 +90,7 @@ class UserGuideScreen extends StatelessWidget {
   }
 }
 
+// Lưu trữ, hiển thị hướng dẫn với index tương ứng
 class mQandA extends StatelessWidget {
   const mQandA({Key key, this.index}) : super(key: key);
   final int index;
@@ -97,6 +99,7 @@ class mQandA extends StatelessWidget {
   Widget build(BuildContext context) {
     UserGuides mQuestion = new UserGuides();
     return GestureDetector(
+      // chuyển hướng đến màn hình hướng dẫn chi tiết
       onTap: () {
         print("tappsdfgnpp");
         showCupertinoModalBottomSheet(

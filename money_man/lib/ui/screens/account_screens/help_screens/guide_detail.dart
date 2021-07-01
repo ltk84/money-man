@@ -4,10 +4,12 @@ import 'package:money_man/ui/style.dart';
 
 class GuideDetailScreen extends StatelessWidget {
   const GuideDetailScreen({Key key, this.index}) : super(key: key);
+  // Biến lưu trữ vị trí của câu hỏi hiện tại trong danh sách
   final int index;
 
   @override
   Widget build(BuildContext context) {
+    //Biến lưu trữ danh sách các câu hỏi
     UserGuides mQuestion = new UserGuides();
     return Scaffold(
       backgroundColor: Style.backgroundColor,
@@ -35,6 +37,7 @@ class GuideDetailScreen extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
+            // Câu hỏi được viết in đậm và đặt ở trên
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
@@ -46,6 +49,7 @@ class GuideDetailScreen extends StatelessWidget {
                     fontSize: 18),
               ),
             ),
+            // Câu trả lời được đặt ở dưới
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(

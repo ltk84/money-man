@@ -89,6 +89,7 @@ class _AboutScreenState extends State<AboutScreen> {
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           controller: _controller,
           children: [
+            // Column lưu trữ thông tin sơ bộ về ứng dụng :v
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -138,6 +139,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   ),
                 ),
                 Container(
+                  // Slider mô tả thông tin các thành viên
                   child: CarouselSlider(
                     options: CarouselOptions(
                       scrollPhysics: BouncingScrollPhysics(),
@@ -196,13 +198,13 @@ class _AboutScreenState extends State<AboutScreen> {
 
 // Card về thông tin của thành viên, avt, tên và description
 class InfoCard extends StatelessWidget {
-  final String name;
+  final String name; // Tên thành viên
   final String iconPath; // path đến icon chỉ định của thành viên
-  final Color avatarColor;
-  final String fbURL;
-  final String igURL;
-  final String email;
-  final String quote;
+  final Color avatarColor; // màu chủ đạo của thành viên
+  final String fbURL; // link đến fb cá nhân
+  final String igURL; // link đến insta cá nhân
+  final String email; // mail của thành viên
+  final String quote; // trích dẫn mô tả thành viên
 
   const InfoCard({
     Key key,

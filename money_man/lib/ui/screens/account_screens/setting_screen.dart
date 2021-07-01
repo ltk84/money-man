@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:money_man/ui/style.dart';
 
+// Màn hình cài đặt
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key key}) : super(key: key);
 
@@ -72,6 +73,7 @@ class _SettingScreenState extends State<SettingScreen> {
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             GestureDetector(
+              // Hiển thị dialog để chọn theme
               onTap: () async {
                 final result = await showDialog(
                   barrierColor: Style.backgroundColor.withOpacity(0.54),
@@ -81,11 +83,10 @@ class _SettingScreenState extends State<SettingScreen> {
                 );
                 if (result != null) {
                   if (result != Style.currentTheme && result != -1) {
-                    //Style.currentTheme = result;
                     setState(() {
+                      // Gọi hàm thay đổi ở Style
                       Style.changeTheme(result);
                     });
-                    //App.restartApp(context);
                   }
                 }
               },
@@ -122,6 +123,7 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 }
 
+// Dialog cài đặt theme
 class ThemeSettingDialog extends StatelessWidget {
   final int currentTheme;
 
@@ -153,6 +155,7 @@ class ThemeSettingDialog extends StatelessWidget {
                     fontSize: 18),
               ),
             ),
+            // Theme đen thui thùi lùi
             ListTile(
               onTap: () {
                 Navigator.of(context).pop(0);
@@ -173,6 +176,7 @@ class ThemeSettingDialog extends StatelessWidget {
                     )
                   : null,
             ),
+            // Theme trắng bốc
             ListTile(
               onTap: () {
                 Navigator.of(context).pop(1);
@@ -193,6 +197,7 @@ class ThemeSettingDialog extends StatelessWidget {
                     )
                   : null,
             ),
+            // Theme siêu hài hòa đẹp đẽ của thế :v
             ListTile(
               onTap: () {
                 Navigator.of(context).pop(2);
@@ -223,6 +228,7 @@ class ThemeSettingDialog extends StatelessWidget {
                 color: Style.foregroundColor.withOpacity(0.12),
               ))),
               width: double.infinity,
+              // Button hủy việc thay đổi
               child: TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(-1);
