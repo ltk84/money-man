@@ -107,7 +107,7 @@ class _FirstStepState extends State<FirstStep> {
                       ),
                     ]),
                 SizedBox(
-                  height: 10,
+                  height: 30,
                 ),
                 Column(
                   children: [
@@ -124,9 +124,22 @@ class _FirstStepState extends State<FirstStep> {
                         }
                       },
                       child: Container(
-                        child: SuperIcon(
-                          iconPath: wallet.iconID,
-                          size: size.height * 0.16,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 30,
+                            ),
+                            SuperIcon(
+                              iconPath: wallet.iconID,
+                              size: size.height * 0.13,
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: white,
+                              size: 30,
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -142,7 +155,7 @@ class _FirstStepState extends State<FirstStep> {
                           textAlign: TextAlign.center,
                           onChanged: (value) => wallet.name = value,
                           decoration: InputDecoration(
-                            hintText: 'Wallet name',
+                            hintText: 'Name',
                             hintStyle: TextStyle(
                               color: Colors.black.withOpacity(0.35),
                             ),
@@ -153,7 +166,7 @@ class _FirstStepState extends State<FirstStep> {
                             fillColor: Colors.white,
                             border: OutlineInputBorder(
                               borderSide: BorderSide(style: BorderStyle.none),
-                              borderRadius: BorderRadius.circular(23),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
                           style: TextStyle(color: Colors.black)),
@@ -172,7 +185,7 @@ class _FirstStepState extends State<FirstStep> {
                           onChanged: (value) =>
                               wallet.amount = double.tryParse(value),
                           decoration: InputDecoration(
-                            hintText: 'Wallet amount',
+                            hintText: 'Amount',
                             hintStyle: TextStyle(
                               color: Colors.black.withOpacity(0.35),
                             ),
@@ -199,7 +212,7 @@ class _FirstStepState extends State<FirstStep> {
                               backgroundColor: Style.boxBackgroundColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(23.0)),
                               ),
                               flagSize: 26,
                               titleTextStyle: TextStyle(
@@ -254,7 +267,7 @@ class _FirstStepState extends State<FirstStep> {
                       ),
                     ),
                     SizedBox(
-                      height: size.height - 590,
+                      height: size.height - 626,
                     ),
                     Container(
                       child: ButtonTheme(
