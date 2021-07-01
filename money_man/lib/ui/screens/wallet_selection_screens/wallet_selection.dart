@@ -24,7 +24,7 @@ class WalletSelectionScreen extends StatefulWidget {
 class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
   @override
   Widget build(BuildContext context) {
-    print('wallet selection build' + widget.id.toString());
+    // biến thao tác với database
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Container(
@@ -35,10 +35,6 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
             centerTitle: true,
             elevation: 0,
             backgroundColor: Style.appBarColor,
-            // shape: RoundedRectangleBorder(
-            //    borderRadius: BorderRadius.only(
-            //       topLeft: Radius.circular(20.0),
-            //       topRight: Radius.circular(20.0))),
             leading: CloseButton(
                 color: Style.foregroundColor,
                 onPressed: () {
@@ -54,9 +50,10 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
             actions: <Widget>[
               TextButton(
                 onPressed: () async {
+                  // lấy wallet bằng id
                   Wallet wallet = await _firestore.getWalletByID(widget.id);
-                  var res = '';
-                  res = await showCupertinoModalBottomSheet(
+                  // dẫn vào screen edit wallet
+                  var res = await showCupertinoModalBottomSheet(
                     backgroundColor: Style.boxBackgroundColor,
                     context: context,
                     builder: (context) => EditWalletScreen(wallet: wallet),
@@ -64,7 +61,6 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                   if (res != null)
                     setState(() {
                       widget.id = res;
-                      // widget.changeWallet(_firestore.getWalletByID(res));
                     });
                 },
                 child: Text('Edit',
@@ -109,6 +105,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                     width: double.infinity,
                     child: TextButton(
                       onPressed: () async {
+                        // add wallet
                         final res = await showCupertinoModalBottomSheet(
                             backgroundColor: Style.boxBackgroundColor,
                             context: context,
@@ -152,8 +149,9 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
     );
   }
 
+  // build phần display các wallet
   Widget buildDisplayWallet() {
-    print('wallet select inside build + ${widget.id}');
+    // biến thao tác với database
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Expanded(
@@ -161,12 +159,13 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
           stream: _firestore.walletStream,
           builder: (context, snapshot) {
             final listWallet = snapshot.data ?? [];
-            print('stream ' + listWallet.length.toString());
             return ListView.builder(
                 itemCount: listWallet.length,
                 itemBuilder: (context, index) {
                   String iconData = listWallet[index].iconID;
 
+                  // nếu wallet là wallet đang được chọn thì trailing có icon dấu tích
+                  // còn không phải thì không có
                   return widget.id == listWallet[index].id
                       ? GestureDetector(
                           onTap: () {},
@@ -216,12 +215,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                           ),
                         )
                       : GestureDetector(
-                          onTap: () {
-                            // setState(() {
-                            //   widget.id = listWallet[index].id;
-                            //   _firestore.updateSelectedWallet(widget.id);
-                            // });
-                          },
+                          onTap: () {},
                           child: Container(
                             padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
                             width: double.infinity,
@@ -241,6 +235,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                             child: ListTile(
                               onTap: () async {
                                 widget.id = listWallet[index].id;
+                                // update wallet đang được chọn
                                 final updateWalletId = await _firestore
                                     .updateSelectedWallet(widget.id);
                                 Navigator.pop(context, updateWalletId);

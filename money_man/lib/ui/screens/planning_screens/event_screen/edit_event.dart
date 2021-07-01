@@ -349,7 +349,7 @@ class _EditEventScreen extends State<EditEventScreen>
                       backgroundColor: Style.backgroundColor,
                       context: context,
                       builder: (context) =>
-                          SelectWalletAccountScreen(wallet: _eventWallet));
+                          SelectWalletScreen(currentWallet: _eventWallet));
                   if (res != null)
                     setState(() {
                       _eventWallet = res;

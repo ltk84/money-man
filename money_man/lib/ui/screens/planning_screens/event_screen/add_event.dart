@@ -218,19 +218,16 @@ class _AddEventState extends State<AddEvent> {
                         ),
                         decoration: InputDecoration(
                           errorBorder: UnderlineInputBorder(
-                            borderSide:
-                            BorderSide(color: Colors.red, width: 1),
+                            borderSide: BorderSide(color: Colors.red, width: 1),
                           ),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                                color:
-                                Style.foregroundColor.withOpacity(0.6),
+                                color: Style.foregroundColor.withOpacity(0.6),
                                 width: 1),
                           ),
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                                color:
-                                Style.foregroundColor.withOpacity(0.6),
+                                color: Style.foregroundColor.withOpacity(0.6),
                                 width: 3),
                           ),
                           labelText: 'Name event',
@@ -271,15 +268,15 @@ class _AddEventState extends State<AddEvent> {
                     DatePicker.showDatePicker(context,
                         currentTime: endDate == null
                             ? DateTime(DateTime.now().year,
-                            DateTime.now().month, DateTime.now().day)
+                                DateTime.now().month, DateTime.now().day)
                             : endDate,
                         showTitleActions: true, onConfirm: (date) {
-                          if (date != null) {
-                            setState(() {
-                              endDate = date;
-                            });
-                          }
-                        },
+                      if (date != null) {
+                        setState(() {
+                          endDate = date;
+                        });
+                      }
+                    },
                         locale: LocaleType.en,
                         theme: DatePickerTheme(
                           cancelStyle: TextStyle(
@@ -318,27 +315,25 @@ class _AddEventState extends State<AddEvent> {
                             : Style.foregroundColor,
                         fontFamily: 'Montserrat',
                         fontSize: 16.0,
-                        fontWeight: endDate == null
-                            ? FontWeight.w500
-                            : FontWeight.w600,
+                        fontWeight:
+                            endDate == null ? FontWeight.w500 : FontWeight.w600,
                       ),
                       hintText: endDate ==
-                          DateTime.parse(DateFormat("yyyy-MM-dd")
-                              .format(DateTime.now()))
+                              DateTime.parse(DateFormat("yyyy-MM-dd")
+                                  .format(DateTime.now()))
                           ? 'Today'
                           : endDate ==
-                          DateTime.parse(DateFormat("yyyy-MM-dd")
-                              .format(DateTime.now()
-                              .add(Duration(days: 1))))
-                          ? 'Tomorrow'
-                          : endDate ==
-                          DateTime.parse(
-                              DateFormat("yyyy-MM-dd").format(
-                                  DateTime.now().subtract(
-                                      Duration(days: 1))))
-                          ? 'Yesterday'
-                          : DateFormat('EEEE, dd-MM-yyyy')
-                          .format(endDate)),
+                                  DateTime.parse(DateFormat("yyyy-MM-dd")
+                                      .format(DateTime.now()
+                                          .add(Duration(days: 1))))
+                              ? 'Tomorrow'
+                              : endDate ==
+                                      DateTime.parse(DateFormat("yyyy-MM-dd")
+                                          .format(DateTime.now()
+                                              .subtract(Duration(days: 1))))
+                                  ? 'Yesterday'
+                                  : DateFormat('EEEE, dd-MM-yyyy')
+                                      .format(endDate)),
                 ),
                 trailing: Icon(Icons.chevron_right,
                     color: Style.foregroundColor.withOpacity(0.54)),
@@ -365,8 +360,7 @@ class _AddEventState extends State<AddEvent> {
                         fontWeight: FontWeight.w600,
                         fontSize: 16.0)),
                 trailing: Icon(Icons.lock,
-                    size: 20.0,
-                    color: Style.foregroundColor.withOpacity(0.54)),
+                    size: 20.0, color: Style.foregroundColor.withOpacity(0.54)),
               ),
               Container(
                 margin: EdgeInsets.only(left: 70),
@@ -383,8 +377,8 @@ class _AddEventState extends State<AddEvent> {
                       isDismissible: true,
                       backgroundColor: Style.backgroundColor,
                       context: context,
-                      builder: (context) => SelectWalletAccountScreen(
-                          wallet: selectedWallet));
+                      builder: (context) =>
+                          SelectWalletScreen(currentWallet: selectedWallet));
                   if (res != null)
                     setState(() {
                       selectedWallet = res;
@@ -392,9 +386,8 @@ class _AddEventState extends State<AddEvent> {
                 },
                 leading: selectedWallet == null
                     ? SuperIcon(
-                    iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
-                    : SuperIcon(
-                    iconPath: selectedWallet.iconID, size: 28.0),
+                        iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
+                    : SuperIcon(iconPath: selectedWallet.iconID, size: 28.0),
                 title: TextFormField(
                   readOnly: true,
                   style: TextStyle(
@@ -426,8 +419,8 @@ class _AddEventState extends State<AddEvent> {
                         isDismissible: true,
                         backgroundColor: Style.backgroundColor,
                         context: context,
-                        builder: (context) => SelectWalletAccountScreen(
-                            wallet: selectedWallet));
+                        builder: (context) =>
+                            SelectWalletScreen(currentWallet: selectedWallet));
                     if (res != null)
                       setState(() {
                         selectedWallet = res;
