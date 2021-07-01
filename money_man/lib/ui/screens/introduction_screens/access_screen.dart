@@ -3,6 +3,8 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/ui/screens/authentication_screens/authentication.dart';
 import 'package:page_transition/page_transition.dart';
 
+// Màn hình truy cập lúc ấn let get started trong màn hình bắt đầuuu
+
 class AccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class AccessScreen extends StatelessWidget {
                       },
                     ),
                   ),
+                  // Chuyển đến màn hình đăng kí
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -59,10 +62,6 @@ class AccessScreen extends StatelessWidget {
                           duration: Duration(milliseconds: 300),
                           reverseDuration: Duration(milliseconds: 300),
                         ));
-                    // showCupertinoModalBottomSheet(
-                    //     context: context,
-                    //     builder: (context) => Authentication(showSignIn: false)
-                    //);
                   },
                   child: Text("NEW TO MONEY MAN",
                       style: TextStyle(
@@ -95,6 +94,7 @@ class AccessScreen extends StatelessWidget {
                       },
                     ),
                   ),
+                  // Chuyển đến màn hình đăng nhập
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -106,10 +106,6 @@ class AccessScreen extends StatelessWidget {
                           duration: Duration(milliseconds: 300),
                           reverseDuration: Duration(milliseconds: 300),
                         ));
-                    // showCupertinoModalBottomSheet(
-                    //     context: context,
-                    //     builder: (context) => Authentication(showSignIn: true)
-                    // );
                   },
                   child: Text("ALREADY USING MONEY MAN",
                       style: TextStyle(
