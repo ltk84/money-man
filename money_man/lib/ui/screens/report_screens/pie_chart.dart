@@ -6,15 +6,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/category_model.dart';
-import 'package:money_man/ui/screens/report_screens/indicator_pie_chart.dart';
 import 'package:money_man/ui/style.dart';
 
-/// Icons by svgrepo.com (https://www.svgrepo.com/collection/job-and-professions-3/)
 class PieChartScreen extends StatefulWidget {
-  List<MyTransaction> currentList;
-  List<MyCategory> categoryList;
-  bool isShowPercent;
-  double total;
+  final List<MyTransaction> currentList;
+  final List<MyCategory> categoryList;
+  final bool isShowPercent;
+  final double total;
   PieChartScreen({
     Key key,
     @required this.currentList,
@@ -27,43 +25,68 @@ class PieChartScreen extends StatefulWidget {
 }
 
 class PieChartScreenState extends State<PieChartScreen> {
+  // Lấy danh sách các màu cho các thể loại để hiển thị lên pie chart.
   List<Color> colors = Style.pieChartCategoryColors;
-  double _total;
+
+  // Tổng số tiền.
+  double total;
+
+  // Biến để lấy vị trí đã chạm vào pie chart.
   int touchedIndex = -1;
-  bool _isShowPercent;
-  List<MyTransaction> _transactionList;
-  List<MyCategory> _categoryList;
-  List<double> _info = [];
+
+  // Biến để hiển thị phần trăm pie chart.
+  bool isShowPercent;
+
+  // Danh sách transactions.
+  List<MyTransaction> transactionList;
+
+  // Danh sách các danh mục của các transaction.
+  List<MyCategory> categoryList;
+
+  // Danh sách tổng số tiền của từng danh mục.
+  List<double> info = [];
 
   @override
   void initState() {
     super.initState();
-    _transactionList = widget.currentList;
-    _categoryList = widget.categoryList;
-    _total = widget.total;
-    _isShowPercent = widget.isShowPercent;
-    generateData(_categoryList, _transactionList);
+
+    // Lấy các giá trị từ tham số đầu vào.
+    transactionList = widget.currentList;
+    categoryList = widget.categoryList;
+    total = widget.total;
+    isShowPercent = widget.isShowPercent;
+
+    // Hàm lấy thông tin tổng số tiền của từng danh mục.
+    generateData(categoryList, transactionList);
   }
 
   @override
   void didUpdateWidget(covariant PieChartScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    _transactionList = widget.currentList ?? [];
-    _categoryList = widget.categoryList ?? [];
-    _total = widget.total;
-    _isShowPercent = widget.isShowPercent;
-    generateData(_categoryList, _transactionList);
+
+    // Lấy các giá trị từ tham số đầu vào.
+    transactionList = widget.currentList ?? [];
+    categoryList = widget.categoryList ?? [];
+    total = widget.total;
+    isShowPercent = widget.isShowPercent;
+
+    // Hàm lấy thông tin tổng số tiền của từng danh mục.
+    generateData(categoryList, transactionList);
   }
 
+  // Hàm lấy thông tin tổng số tiền của từng danh mục.
   void generateData(
       List<MyCategory> categoryList, List<MyTransaction> transactionList) {
-    _info.clear();
+    // Đảm bảo danh sách thông tin được làm trống.
+    info.clear();
+
+    // Thực thi tính toán các thông tin trên tất cả danh mục hiện có.
     categoryList.forEach((element) {
-      _info.add(calculateByCategory(element, transactionList));
+      info.add(calculateByCategory(element, transactionList));
     });
   }
 
+  // Hàm tính toán tổng số tiền của từng danh mục trong danh sách transactions.
   double calculateByCategory(
       MyCategory category, List<MyTransaction> transactionList) {
     double sum = 0;
@@ -79,7 +102,7 @@ class PieChartScreenState extends State<PieChartScreen> {
     return Column(
       children: [
         Transform.scale(
-          scale: _isShowPercent ? 1.6 : 1,
+          scale: isShowPercent ? 1.6 : 1,
           child: Stack(children: [
             AspectRatio(
               aspectRatio: 1.3,
@@ -110,6 +133,7 @@ class PieChartScreenState extends State<PieChartScreen> {
                     PieChartData(
                         pieTouchData: PieTouchData(
                             touchCallback: (pieTouchResponse) {
+                              // Xử lý chạm trong pie chart.
                               setState(() {
                                 final desiredTouch =
                                     pieTouchResponse
@@ -140,14 +164,14 @@ class PieChartScreenState extends State<PieChartScreen> {
           ]),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _isShowPercent ? 50 : 5),
+          padding: EdgeInsets.symmetric(horizontal: isShowPercent ? 50 : 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
-                    _categoryList.length,
+                    categoryList.length,
                         (index) =>
                         Container(
                           padding: EdgeInsets.symmetric(vertical: 2),
@@ -159,18 +183,21 @@ class PieChartScreenState extends State<PieChartScreen> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.rectangle, // BoxShape.circle,
                                   color: index < colors.length ? colors[index] : Style.pieChartExtendedCategoryColor,
+                                  // Vì số lượng danh mục có thể lớn hơn danh sách màu của danh mục. Nên nếu số thứ tự bị vượt quá, màu của danh mục đó sẽ theo màu mặc định được cài đặt trong Style.dart
                                 ),
                               ),
                               const SizedBox(
                                 width: 5,
                               ),
                               Text(
-                                _categoryList[index].name,
+                                categoryList[index].name,
                                 style: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14.0,
                                   color: index < colors.length ? colors[index] : Style.pieChartExtendedCategoryColor,
+                                  // Vì số lượng danh mục có thể lớn hơn danh sách màu của danh mục.
+                                  // Nên nếu số thứ tự bị vượt quá, màu của danh mục đó sẽ theo màu mặc định được cài đặt trong Style.dart.
                                 ),
                               )
                             ],
@@ -178,21 +205,23 @@ class PieChartScreenState extends State<PieChartScreen> {
                         ),
                   )
               ),
-              if (_isShowPercent)
+              if (isShowPercent)
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: List.generate(
-                      _categoryList.length,
+                      categoryList.length,
                           (index) =>
                               Container(
                                 padding: EdgeInsets.symmetric(vertical: 2),
                                 child: Text(
-                                  ((_info[index] / _total) * 100).toStringAsFixed(2) + '%',
+                                  ((info[index] / total) * 100).toStringAsFixed(2) + '%',
                                   style: TextStyle(
                                     fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14.0,
                                     color: index < colors.length ? colors[index] : Style.pieChartExtendedCategoryColor,
+                                    // Vì số lượng danh mục có thể lớn hơn danh sách màu của danh mục.
+                                    // Nên nếu số thứ tự bị vượt quá, màu của danh mục đó sẽ theo màu mặc định được cài đặt trong Style.dart.
                                   ),
                                 ),
                               )
@@ -206,34 +235,39 @@ class PieChartScreenState extends State<PieChartScreen> {
   }
 
   List<PieChartSectionData> showingSections() {
-    return (_categoryList.length != 0)
-        ? List.generate(_categoryList.length, (i) {
+    return (categoryList.length != 0)
+        ? List.generate(categoryList.length, (i) {
             final isTouched = i == touchedIndex;
-            final fontSize = isTouched ? 16.0 : 14.0;
             final radius = isTouched ? 28.0 : 18.0;
             final widgetSize = isTouched ? 40.0 : 20.0;
             final double fontTitleSize = isTouched ? 17 : 8.5;
 
-            if (_total == 0)
-              _total = 1;
-            var value = ((_info[i] / _total) * 100);
+            if (total == 0)
+              total = 1;
+            var value = ((info[i] / total) * 100);
 
             return PieChartSectionData(
+              // Vì số lượng danh mục có thể lớn hơn danh sách màu của danh mục.
+              // Nên nếu số thứ tự bị vượt quá, màu của danh mục đó sẽ theo màu mặc định được cài đặt trong Style.dart.
               color: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
               value: value == 0 ? 1 : value,
-              showTitle: _isShowPercent,
+              showTitle: isShowPercent,
               title: value.toStringAsFixed(2) + '%',
               titlePositionPercentageOffset: isTouched ? 2.3 : 2.20,
               radius: radius,
               titleStyle: TextStyle(
                   color: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
+                  // Vì số lượng danh mục có thể lớn hơn danh sách màu của danh mục.
+                  // Nên nếu số thứ tự bị vượt quá, màu của danh mục đó sẽ theo màu mặc định được cài đặt trong Style.dart.
                   fontSize: fontTitleSize,
                   fontWeight: FontWeight.w500,
                   fontFamily: Style.fontFamily),
-              badgeWidget: _Badge(
-                _categoryList[i].iconID, // category icon.
+              badgeWidget: Badge(
+                categoryList[i].iconID, // category icon.
                 size: widgetSize,
                 borderColor: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
+                // Vì số lượng danh mục có thể lớn hơn danh sách màu của danh mục.
+                // Nên nếu số thứ tự bị vượt quá, màu của danh mục đó sẽ theo màu mặc định được cài đặt trong Style.dart.
               ),
               badgePositionPercentageOffset: .98,
             );
@@ -249,16 +283,13 @@ class PieChartScreenState extends State<PieChartScreen> {
   }
 
   List<PieChartSectionData> showingSubSections() {
-    return (_categoryList.length != 0)
-        ? List.generate(_categoryList.length, (i) {
-            //final isTouched = i == touchedIndex;
-            //final fontSize = isTouched ? 16.0 : 14.0;
+    return (categoryList.length != 0)
+        ? List.generate(categoryList.length, (i) {
             final radius = 8.0;
-            final widgetSize = 20.0;
 
-            if (_total == 0)
-              _total = 1;
-            var value = ((_info[i] / _total) * 100);
+            if (total == 0)
+              total = 1;
+            var value = ((info[i] / total) * 100);
 
             return PieChartSectionData(
               color: i < colors.length
@@ -280,12 +311,12 @@ class PieChartScreenState extends State<PieChartScreen> {
   }
 }
 
-class _Badge extends StatelessWidget {
+class Badge extends StatelessWidget {
   final String svgAsset;
   final double size;
   final Color borderColor;
 
-  const _Badge(this.svgAsset, {
+  const Badge(this.svgAsset, {
     Key key,
     @required this.size,
     @required this.borderColor,

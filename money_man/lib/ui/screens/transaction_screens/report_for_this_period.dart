@@ -492,7 +492,7 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                                   PageTransition(
                                                       childCurrent: this.widget,
                                                       child:
-                                                          AnalyticPieChartSreen(
+                                                          AnalyticPieChartScreen(
                                                         currentWallet: _wallet,
                                                         type: 'income',
                                                         beginDate: beginDate,
@@ -556,7 +556,7 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                                 PageTransition(
                                                     childCurrent: this.widget,
                                                     child:
-                                                        AnalyticPieChartSreen(
+                                                        AnalyticPieChartScreen(
                                                       currentWallet: _wallet,
                                                       type: 'expense',
                                                       beginDate: beginDate,

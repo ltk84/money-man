@@ -13,10 +13,10 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class PieChartInformationScreen extends StatefulWidget {
-  List<MyTransaction> currentList;
-  List<MyCategory> categoryList;
+  final List<MyTransaction> currentList;
+  final List<MyCategory> categoryList;
   final Wallet currentWallet;
-  Color color;
+  final Color color;
   PieChartInformationScreen(
       {Key key,
       @required this.currentList,
@@ -29,45 +29,29 @@ class PieChartInformationScreen extends StatefulWidget {
 }
 
 class _PieChartInformationScreen extends State<PieChartInformationScreen> {
+  // Biến để lấy vị trí đã chạm vào pie chart.
   int touchedIndex = -1;
-  List<MyTransaction> _transactionList;
-  List<List<MyTransaction>> _listTransactionOfEachCatecory = [];
-  List<MyCategory> _categoryList;
-  List<double> _info = [];
-  Color _color;
-  List<MyCategory> _listCategoryReport = [];
 
-  final double fontSizeText = 30;
+  // Danh sách transactions.
+  List<MyTransaction> transactionList;
 
-  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
-  int reachTop = 0;
-  int reachAppBar = 0;
+  // Danh sách transactions của mỗi danh mục.
+  List<List<MyTransaction>> listTransactionOfEachCategory = [];
 
-  // Phần này để check xem mình đã Scroll tới đâu trong ListView
-  ScrollController _controller = ScrollController();
+  // Danh sách danh mục.
+  List<MyCategory> categoryList;
 
-  _scrollListener() {
-    if (_controller.offset > 0) {
-      setState(() {
-        reachAppBar = 1;
-      });
-    } else {
-      setState(() {
-        reachAppBar = 0;
-      });
-    }
-    if (_controller.offset >= fontSizeText - 5) {
-      setState(() {
-        reachTop = 1;
-      });
-    } else {
-      setState(() {
-        reachTop = 0;
-      });
-    }
-  }
 
-  // Phần này để check xem mình đã Scroll tới đâu trong ListView
+  // Danh sách tổng số tiền của từng danh mục.
+  List<double> info = [];
+
+  // Màu để hỗ trợ cho việc phân biệt Expense hay Income chart.
+  Color color;
+
+  // Danh sách danh mục thực tế sẽ tính toán để đưa lên chart.
+  List<MyCategory> listCategoryReport = [];
+
+  // Hàm để kiểm tra xem danh mục hiện tại có trong danh sách danh mục hay không.
   bool isContained(MyCategory currentCategory, List<MyCategory> categoryList) {
     if (categoryList.isEmpty) return false;
     int n = 0;
@@ -78,68 +62,78 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
     return false;
   }
 
+  // Hàm lấy thông tin để đưa vào danh sách thông tin.
   void generateData(List<MyCategory> categoryList,
       List<MyTransaction> transactionList) {
+    // Duyệt danh sách danh mục ban đầu để lọc danh mục vào danh sách danh mục thức tế.
+    // Việc lọc này là để tránh việc các danh mục bị lặp lại trong danh sách danh mục.
     categoryList.forEach((element) {
-      if (!isContained(element, _listCategoryReport)) {
-        _listCategoryReport.add(element);
+      if (!isContained(element, listCategoryReport)) {
+        listCategoryReport.add(element);
       }
     });
-    _listCategoryReport.forEach((element) {
-      _info.add(calculateByCategory(element, transactionList));
+
+    // Tính toán tổng số tiền của từng danh mục vào thêm vào danh sách thông tin.
+    listCategoryReport.forEach((element) {
+      info.add(calculateByCategory(element, transactionList));
     });
   }
 
-  int b = 0;
-
+  // Hàm tính toán tổng số tiền của danh mục và thêm danh sách các giao dịch thuộc danh mục vào danh sách listTransactionOfEachCategory được khai báo khi khởi tạo.
   double calculateByCategory(MyCategory category,
       List<MyTransaction> transactionList) {
+
+    // Tính toán tổng số tiền của danh mục.
     double sum = 0;
     transactionList.forEach((element) {
       if (element.category.name == category.name) {
         sum += element.amount;
       }
     });
+
+    // Thêm danh sách các giao dịch thuộc danh mục vào danh sách listTransactionOfEachCategory.
     final b = transactionList
         .where((element) => element.category.name == category.name);
-    _listTransactionOfEachCatecory.add(b.toList());
-    _listTransactionOfEachCatecory[_listTransactionOfEachCatecory.length - 1]
+    listTransactionOfEachCategory.add(b.toList());
+    listTransactionOfEachCategory[listTransactionOfEachCategory.length - 1]
         .sort((a, b) => b.date.compareTo(a.date));
     return sum;
   }
 
   @override
   void initState() {
-    _transactionList = widget.currentList;
-    _transactionList.sort((a, b) => b.date.compareTo(a.date));
-    _categoryList = widget.categoryList;
-    _color = widget.color;
-    generateData(_categoryList, _transactionList);
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
+    // Khởi tạo giá trị biến từ tham số đầu vào.
+    transactionList = widget.currentList;
+    transactionList.sort((a, b) => b.date.compareTo(a.date));
+    categoryList = widget.categoryList;
+    color = widget.color;
+
+    // Tính toán cái thông tin.
+    generateData(categoryList, transactionList);
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant PieChartInformationScreen oldWidget) {
-    _transactionList = widget.currentList ?? [];
-    _transactionList.sort((a, b) => b.date.compareTo(a.date));
-    _categoryList = widget.categoryList ?? [];
-    _color = widget.color;
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
-    _listTransactionOfEachCatecory = [];
-    _info = [];
-    _listCategoryReport = [];
-    generateData(_categoryList, _transactionList);
+    // Khởi tạo giá trị biến từ tham số đầu vào.
+    transactionList = widget.currentList ?? [];
+    transactionList.sort((a, b) => b.date.compareTo(a.date));
+    categoryList = widget.categoryList ?? [];
+    color = widget.color;
+    listTransactionOfEachCategory = [];
+    info = [];
+    listCategoryReport = [];
+
+    // Tính toán cái thông tin.
+    generateData(categoryList, transactionList);
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<Object>(
-        stream: _firestore.transactionStream(widget.currentWallet, 50),
+        stream: firestore.transactionStream(widget.currentWallet, 50),
         builder: (context, snapshot) {
           return Container(
               decoration: BoxDecoration(
@@ -152,9 +146,9 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                   )
               ),
               padding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5),
-              child: _listCategoryReport.length > 0 ? Column(
+              child: listCategoryReport.length > 0 ? Column(
                 children: List.generate(
-                    _listCategoryReport.length,
+                    listCategoryReport.length,
                         (index) =>
                         GestureDetector(
                           onTap: () {
@@ -163,25 +157,25 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                                 PageTransition(
                                     childCurrent: this.widget,
                                     child: ReportListTransaction(
-                                        endDate: _listTransactionOfEachCatecory[index]
+                                        endDate: listTransactionOfEachCategory[index]
                                         [0]
                                             .date,
-                                        beginDate: _listTransactionOfEachCatecory[
+                                        beginDate: listTransactionOfEachCategory[
                                         index][
-                                        _listTransactionOfEachCatecory[index]
+                                        listTransactionOfEachCategory[index]
                                             .length -
                                             1]
                                             .date,
                                         totalMoney:
-                                        _listTransactionOfEachCatecory[index][0]
+                                        listTransactionOfEachCategory[index][0]
                                             .category
                                             .type ==
                                             'expense'
-                                            ? -_info[index]
-                                            : _info[index],
+                                            ? -info[index]
+                                            : info[index],
                                         currentWallet: widget.currentWallet,
                                         viewByCategory: true,
-                                        category: _listCategoryReport[index]
+                                        category: listCategoryReport[index]
                                     ),
                                     type: PageTransitionType.rightToLeft));
                           },
@@ -192,16 +186,16 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 SuperIcon(
-                                  iconPath: _listCategoryReport[index].iconID,
+                                  iconPath: listCategoryReport[index].iconID,
                                   size: 30,
                                 ),
                                 SizedBox(width: 15,),
                                 Expanded(
                                   child: Hero(
-                                    tag: _listCategoryReport[index].name,
+                                    tag: listCategoryReport[index].name,
                                     child: Material(
                                       color: Colors.transparent,
-                                      child: Text(_listCategoryReport[index].name,
+                                      child: Text(listCategoryReport[index].name,
                                           style: TextStyle(
                                             fontFamily: Style.fontFamily,
                                             fontWeight: FontWeight.w700,
@@ -215,14 +209,14 @@ class _PieChartInformationScreen extends State<PieChartInformationScreen> {
                                 Column(
                                   children: <Widget>[
                                     MoneySymbolFormatter(
-                                        text: _info[index],
+                                        text: info[index],
                                         currencyId: widget.currentWallet
                                             .currencyID,
                                         textStyle: TextStyle(
                                             fontFamily: Style.fontFamily,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 15.0,
-                                            color: _color)
+                                            color: color)
                                     ),
                                   ],
                                 )

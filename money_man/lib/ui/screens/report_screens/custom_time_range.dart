@@ -1,14 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:money_man/core/models/time_range_info_model.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class CustomTimeRange extends StatefulWidget {
   final beginDate;
@@ -21,14 +17,11 @@ class CustomTimeRange extends StatefulWidget {
 }
 
 class CustomTimeRangeState extends State<CustomTimeRange> {
-  // String _beginDate = 'Begin date';
-  // String _endDate = 'End date';
   DateTime realBeginDate;
   DateTime realEndDate;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     realBeginDate = widget.beginDate;
     realEndDate = widget.endDate;
@@ -36,7 +29,6 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
 
   @override
   void didUpdateWidget(covariant CustomTimeRange oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     realBeginDate = widget.beginDate;
     realEndDate = widget.endDate;
@@ -44,10 +36,13 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
 
   @override
   Widget build(BuildContext context) {
-    String _beginDate = realBeginDate != null
+    // Lấy giá trị ngày bắt đầu từ tham số truyền vào.
+    String beginDate = realBeginDate != null
         ? DateFormat('dd/MM/yyyy').format(realBeginDate)
         : 'Choose begin date';
-    String _endDate = realEndDate != null
+
+    // Lấy giá trị ngày kết thúc từ tham số truyền vào.
+    String endDate = realEndDate != null
         ? DateFormat('dd/MM/yyyy').format(realEndDate)
         : 'Choose end date';
 
@@ -57,10 +52,6 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.appBarColor,
-          //  shape: RoundedRectangleBorder(
-          //  borderRadius: BorderRadius.only(
-          //     topLeft: Radius.circular(20.0),
-          //     topRight: Radius.circular(20.0))),
           title: Text('Custom',
               style: TextStyle(
                 fontFamily: Style.fontFamily,
@@ -73,6 +64,7 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
           ),
           actions: [
             TextButton(
+                // Đảm bảo phải có giá trị ngày bắt đầu và ngày kết thúc được chọn một cách hợp lệ thì mới có thể trả về kết quả.
                 onPressed: (realBeginDate == null || realEndDate == null)
                     ? null
                     : () {
@@ -84,7 +76,8 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                               begin: realBeginDate,
                               end: realEndDate));
                         else {
-                          _showAlertDialog();
+                          // Ngày kết thúc nhỏ hơn ngày bắt đầu và một trong hai bằng rỗng thì sẽ hiện lên thông báo lỗi.
+                          showAlertDialog();
                         }
                       },
                 child: Text(
@@ -130,7 +123,6 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                       DateFormat dateFormat = DateFormat('dd/MM/yyyy');
                       String formattedDate = dateFormat.format(date);
                       realBeginDate = dateFormat.parse(formattedDate);
-                      //_beginDate = DateFormat('dd/MM/yyyy').format(date);
                     });
                   },
                       locale: LocaleType.en,
@@ -154,12 +146,12 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                       ));
                 },
                 tileColor: Colors.transparent,
-                title: Text(_beginDate,
+                title: Text(beginDate,
                     style: TextStyle(
                       fontFamily: Style.fontFamily,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: _beginDate != 'Choose begin date'
+                      color: beginDate != 'Choose begin date'
                           ? Style.foregroundColor
                           : Style.foregroundColor.withOpacity(0.24),
                     )),
@@ -218,12 +210,12 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                       ));
                 },
                 tileColor: Colors.transparent,
-                title: Text(_endDate,
+                title: Text(endDate,
                     style: TextStyle(
                       fontFamily: Style.fontFamily,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: _endDate != 'Choose end date'
+                      color: endDate != 'Choose end date'
                           ? Style.foregroundColor
                           : Style.foregroundColor.withOpacity(0.24),
                     )),
@@ -235,10 +227,10 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
         ));
   }
 
-  Future<void> _showAlertDialog() async {
+  Future<void> showAlertDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(

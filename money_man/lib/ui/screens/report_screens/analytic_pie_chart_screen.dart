@@ -1,7 +1,5 @@
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -19,13 +17,18 @@ import 'package:money_man/ui/widgets/expandable_widget.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
-class AnalyticPieChartSreen extends StatefulWidget {
+class AnalyticPieChartScreen extends StatefulWidget {
+  // Ví được chọn hiện tại.
   final Wallet currentWallet;
+
+  // Biến để xem đây là income chart hay expense chart.
   final String type;
+
+  // Ngày bắt đầu và ngày kết thúc.
   final DateTime endDate;
   final DateTime beginDate;
 
-  AnalyticPieChartSreen(
+  AnalyticPieChartScreen(
       {Key key,
       @required this.currentWallet,
       @required this.type,
@@ -33,61 +36,47 @@ class AnalyticPieChartSreen extends StatefulWidget {
       @required this.endDate})
       : super(key: key);
   @override
-  State<StatefulWidget> createState() => _AnalyticPieChartSreen();
+  State<StatefulWidget> createState() => _AnalyticPieChartScreen();
 }
 
-class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
-  String _content;
-  Color _color;
+class _AnalyticPieChartScreen extends State<AnalyticPieChartScreen> {
+  // Biến nội dung và màu để nhận biệt là income chart hay expense chart.
+  String content;
+  Color color;
 
+  // Biến thứ tự chạm để xử lý chạm cho pie chart.
   int touchedIndex = -1;
+
+  // Các biến để chuyển widget thành dữ liệu để convert sang hình ảnh.
   GlobalKey key1;
   Uint8List bytes1;
+
+  // Mở rộng phần danh sách transactions của pie chart.
   bool expandDetail;
+
+  // Các biến về khoảng thời gian thống kê.
   DateTime beginDate;
   DateTime endDate;
 
-  final double fontSizeText = 35;
-  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
-  int reachTop = 0;
-  int reachAppBar = 0;
-  ScrollController _controller = ScrollController();
-  _scrollListener() {
-    if (_controller.offset > 0) {
-      setState(() {
-        reachAppBar = 1;
-      });
-    } else {
-      setState(() {
-        reachAppBar = 0;
-      });
-    }
-    if (_controller.offset >= fontSizeText - 5) {
-      setState(() {
-        reachTop = 1;
-      });
-    } else {
-      setState(() {
-        reachTop = 0;
-      });
-    }
-  }
+  // Để kiểm tra xem scroll view được scroll tới đâu.
+  ScrollController controller = ScrollController();
 
-  Wallet _wallet;
+  // Lấy ví từ tham số mặc định.
+  Wallet wallet;
 
   @override
   void initState() {
     super.initState();
+    // Khởi tạo các giá trị từ tham số cũng như khởi tạo các giá trị mặc định.
     beginDate = widget.beginDate;
     endDate = widget.endDate;
-
-    _content = widget.type == 'expense' ? 'Expense' : 'Income';
-    _color = widget.type == 'expense' ? Style.expenseColor : Style.incomeColor2;
-
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
+    content = widget.type == 'expense' ? 'Expense' : 'Income';
+    color = widget.type == 'expense' ? Style.expenseColor : Style.incomeColor2;
+    controller = ScrollController();
     expandDetail = false;
-    _wallet = widget.currentWallet == null
+
+    // Lấy ví từ tham số mặc định.
+    wallet = widget.currentWallet == null
         ? Wallet(
             id: 'id',
             name: 'defaultName',
@@ -97,23 +86,12 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
         : widget.currentWallet;
   }
 
-  //
-  // @override
-  // void didUpdateWidget(covariant AnalyticPieChartSreen oldWidget) {
-  //   //_transactionList = widget.currentList ?? [];
-  //   //_categoryList = widget.categoryList ?? [];
-  //   _total = widget.total;
-  //   _content = widget.content;
-  //   _controller = ScrollController();
-  //   _color = widget.color;
-  //   _controller.addListener(_scrollListener);
-  //   super.didUpdateWidget(oldWidget);
-  // }
   @override
-  void didUpdateWidget(covariant AnalyticPieChartSreen oldWidget) {
+  void didUpdateWidget(covariant AnalyticPieChartScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _wallet = widget.currentWallet ??
+    // Lấy ví từ tham số mặc định.
+    wallet = widget.currentWallet ??
         Wallet(
             id: 'id',
             name: 'defaultName',
@@ -124,7 +102,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Style.backgroundColor,
         extendBodyBehindAppBar: true,
@@ -138,50 +116,18 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
               child: Icon(Style.backIcon, color: Style.foregroundColor),
             ),
           ),
-          //centerTitle: true,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          // flexibleSpace: ClipRect(
-          //   child: AnimatedOpacity(
-          //     opacity: reachAppBar == 1 ? 1 : 0,
-          //     duration: Duration(milliseconds: 0),
-          //     child: BackdropFilter(
-          //       filter: ImageFilter.blur(
-          //           sigmaX: reachTop == 1 ? 25 : 500,
-          //           sigmaY: 25,
-          //           tileMode: TileMode.values[0]),
-          //       child: AnimatedContainer(
-          //         duration: Duration(
-          //             milliseconds:
-          //             reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-          //         color: Colors.grey[reachAppBar == 1
-          //             ? (reachTop == 1 ? 800 : 850)
-          //             : 900]
-          //             .withOpacity(0.2),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // title: AnimatedOpacity(
-          //     opacity: reachTop == 1 ? 1 : 0,
-          //     duration: Duration(milliseconds: 100),
-          //     child: Text(_content,
-          //         style: TextStyle(
-          //           color: foregroundColor,
-          //           fontFamily: fontFamily,
-          //           fontSize: 17.0,
-          //           fontWeight: FontWeight.w600,
-          //         ))
-          // ),
           actions: <Widget>[
             Hero(
               tag: 'shareButton',
               child: MaterialButton(
                 child: Icon(Icons.ios_share, color: Style.foregroundColor),
                 onPressed: () async {
+                  // Lấy dữ liệu của widget theo key.
                   final bytes1 = await Utils.capture(key1);
 
-                  await setState(() {
+                  setState(() {
                     this.bytes1 = bytes1;
                   });
                   showCupertinoModalBottomSheet(
@@ -196,31 +142,38 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
           ],
         ),
         body: StreamBuilder<Object>(
-          stream: _firestore.transactionStream(_wallet, 'full'),
+          stream: firestore.transactionStream(wallet, 'full'),
           builder: (context, snapshot) {
-            List<MyTransaction> _transactionList = snapshot.data ?? [];
-            List<MyCategory> _categoryList = [];
+            // Lấy danh sách transaction từ stream.
+            List<MyTransaction> transactionList = snapshot.data ?? [];
+            // Khởi tạo danh sách danh mục.
+            List<MyCategory> categoryList = [];
 
+            // Tổng số tiền của chart.
             double total = 0;
 
-            _transactionList.forEach((element) {
+            // Duyệt danh sách transactions để thực hiện các tác vụ lọc danh sách danh mục và tính toán các khoản tiền.
+            transactionList.forEach((element) {
               if (element.date.compareTo(endDate) <= 0) {
                 if (element.category.type == widget.type) {
                   if (element.date.compareTo(beginDate) >= 0) {
+                    // Tính toán tổng số tiền.
                     total += element.amount;
-                    if (!_categoryList.any((categoryElement) {
+                    // Lọc những danh mục từ danh sách transaction và thêm vào danh sách danh mục.
+                    if (!categoryList.any((categoryElement) {
                       if (categoryElement.name == element.category.name)
                         return true;
                       else
                         return false;
                     })) {
-                      _categoryList.add(element.category);
+                      categoryList.add(element.category);
                     }
                   }
                 }
               }
             });
-            _transactionList = _transactionList
+            // Lọc danh sách transactions trong khoảng thời gian đã được xác định.
+            transactionList = transactionList
                 .where((element) =>
                     element.date.compareTo(beginDate) >= 0 &&
                     element.date.compareTo(endDate) <= 0)
@@ -228,7 +181,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
             return Container(
               color: Style.backgroundColor,
               child: ListView(
-                controller: _controller,
+                controller: controller,
                 physics: BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
                 children: <Widget>[
@@ -237,6 +190,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                     padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                     child: WidgetToImage(
                       builder: (key) {
+                        // Lấy key để khi ấn share, có thể nhận biết được widget nào để convert sang hình ảnh.
                         this.key1 = key;
 
                         return Container(
@@ -246,7 +200,7 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                             Column(
                               children: <Widget>[
                                 Text(
-                                  _content,
+                                  content,
                                   style: TextStyle(
                                     color:
                                         Style.foregroundColor.withOpacity(0.7),
@@ -257,9 +211,9 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                 ),
                                 MoneySymbolFormatter(
                                   text: total,
-                                  currencyId: _wallet.currencyID,
+                                  currencyId: wallet.currencyID,
                                   textStyle: TextStyle(
-                                    color: _color,
+                                    color: color,
                                     fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 24,
@@ -269,8 +223,8 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                                 ),
                                 PieChartScreen(
                                     isShowPercent: true,
-                                    currentList: _transactionList,
-                                    categoryList: _categoryList,
+                                    currentList: transactionList,
+                                    categoryList: categoryList,
                                     total: total),
                               ],
                             ),
@@ -279,16 +233,18 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                await setState(() {
+                                // Xử lý mở rộng phần danh sách transactions cho chart detail.
+                                setState(() {
                                   expandDetail = !expandDetail;
-                                  print(_controller.position.maxScrollExtent
+                                  print(controller.position.maxScrollExtent
                                       .toString());
                                 });
+                                // Điều hướng controller scroll xuống dưới cùng.
                                 if (expandDetail)
-                                  _controller.animateTo(
-                                    _categoryList.length == 0
+                                  controller.animateTo(
+                                    categoryList.length == 0
                                         ? 0
-                                        : _categoryList.length.toDouble() *
+                                        : categoryList.length.toDouble() *
                                                 67.4 -
                                             193.2 +
                                             .05494505494505 +
@@ -333,10 +289,10 @@ class _AnalyticPieChartSreen extends State<AnalyticPieChartSreen> {
                             ExpandableWidget(
                               expand: expandDetail,
                               child: PieChartInformationScreen(
-                                currentList: _transactionList,
-                                categoryList: _categoryList,
-                                currentWallet: _wallet,
-                                color: _color,
+                                currentList: transactionList,
+                                categoryList: categoryList,
+                                currentWallet: wallet,
+                                color: color,
                               ),
                             )
                           ]),

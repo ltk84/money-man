@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -26,9 +25,9 @@ import 'package:provider/provider.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 
 class ReportScreen extends StatefulWidget {
-  Wallet currentWallet;
-  DateTime beginDate;
-  DateTime endDate;
+  final Wallet currentWallet;
+  final DateTime beginDate;
+  final DateTime endDate;
   ReportScreen({Key key, this.currentWallet, this.endDate, this.beginDate})
       : super(key: key);
   @override
@@ -38,6 +37,7 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
+  // Các biến để chuyển widget thành dữ liệu để convert sang hình ảnh.
   GlobalKey key1;
   GlobalKey key2;
   GlobalKey key3;
@@ -45,51 +45,24 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
   Uint8List bytes2;
   Uint8List bytes3;
 
-  final double fontSizeText = 30;
-  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
-  int reachTop = 0;
-  int reachAppBar = 0;
-
-  // Phần này để check xem mình đã Scroll tới đâu trong ListView
-  ScrollController _controller = ScrollController();
-  _scrollListener() {
-    if (_controller.offset > 0) {
-      setState(() {
-        reachAppBar = 1;
-      });
-    } else {
-      setState(() {
-        reachAppBar = 0;
-      });
-    }
-    if (_controller.offset >= fontSizeText - 5) {
-      setState(() {
-        reachTop = 1;
-      });
-    } else {
-      setState(() {
-        reachTop = 0;
-      });
-    }
-  }
-
-  Wallet _wallet;
+  // Lấy ví được truyền vào từ tham số.
+  Wallet wallet;
 
   // Khởi tạo mốc thời gian cần thống kê.
   DateTime beginDate;
   DateTime endDate;
-  String dateDescript = 'This month';
+  String dateDescription = 'This month';
 
   @override
   void initState() {
+    // Lấy ngày đầu tiên của tháng và năm hiện tại.
     beginDate = widget.beginDate ??
         DateTime(DateTime.now().year, DateTime.now().month, 1);
+    // Lấy ngày cuối cùng của tháng và năm hiện tại.
     endDate = widget.endDate ??
         DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
     super.initState();
-    _wallet = widget.currentWallet == null
+    wallet = widget.currentWallet == null
         ? Wallet(
             id: 'id',
             name: 'defaultName',
@@ -101,10 +74,9 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
 
   @override
   void didUpdateWidget(covariant ReportScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
-    _wallet = widget.currentWallet ??
+    wallet = widget.currentWallet ??
         Wallet(
             id: 'id',
             name: 'defaultName',
@@ -115,7 +87,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return DefaultTabController(
       length: 300,
       child: Scaffold(
@@ -125,41 +97,17 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
             backgroundColor: Style.backgroundColor,
             centerTitle: true,
             elevation: 0,
-            // flexibleSpace: ClipRect(
-            //   child: AnimatedOpacity(
-            //     opacity: reachAppBar == 1 ? 1 : 0,
-            //     duration: Duration(milliseconds: 0),
-            //     child: BackdropFilter(
-            //       filter: ImageFilter.blur(
-            //           sigmaX: reachTop == 1 ? 25 : 500,
-            //           sigmaY: 25,
-            //           tileMode: TileMode.values[0]),
-            //       child: AnimatedContainer(
-            //         duration: Duration(
-            //             milliseconds:
-            //                 reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-            //         //child: Container(
-            //         //color: Colors.transparent,
-            //         color: Colors.grey[reachAppBar == 1
-            //                 ? (reachTop == 1 ? 800 : 850)
-            //                 : 900]
-            //             .withOpacity(0.2),
-            //         //),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             leadingWidth: 70,
             leading: GestureDetector(
               onTap: () async {
-                buildShowDialog(context, _wallet.id);
+                buildShowDialog(context, wallet.id);
               },
               child: Container(
                 padding: EdgeInsets.only(left: 20.0),
                 child: Row(
                   children: [
                     SuperIcon(
-                      iconPath: _wallet.iconID,
+                      iconPath: wallet.iconID,
                       size: 25.0,
                     ),
                     Icon(Icons.arrow_drop_down,
@@ -174,12 +122,12 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                     isDismissible: true,
                     context: context,
                     builder: (context) => TimeRangeSelection(
-                        dateDescription: dateDescript,
+                        dateDescription: dateDescription,
                         beginDate: beginDate,
                         endDate: endDate));
                 if (result != null) {
                   setState(() {
-                    dateDescript = result.description;
+                    dateDescription = result.description;
                     beginDate = result.begin;
                     endDate = result.end;
                   });
@@ -193,7 +141,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                     Column(
                       children: <Widget>[
                         Text(
-                          dateDescript,
+                          dateDescription,
                           style: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w600,
@@ -224,11 +172,12 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                 child: MaterialButton(
                   child: Icon(Icons.ios_share, color: Style.foregroundColor),
                   onPressed: () async {
+                    // Lấy dữ liệu của widget theo key.
                     final bytes1 = await Utils.capture(key1);
                     final bytes2 = await Utils.capture(key2);
                     final bytes3 = await Utils.capture(key3);
 
-                    await setState(() {
+                    setState(() {
                       this.bytes1 = bytes1;
                       this.bytes2 = bytes2;
                       this.bytes3 = bytes3;
@@ -247,60 +196,67 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
             ],
           ),
           body: StreamBuilder<Object>(
-              stream: _firestore.transactionStream(_wallet, 'full'),
+              stream: firestore.transactionStream(wallet, 'full'),
               builder: (context, snapshot) {
-                List<MyTransaction> _transactionList = snapshot.data ?? [];
-                List<MyCategory> _incomeCategoryList = [];
-                List<MyCategory> _expenseCategoryList = [];
+                // Lấy danh sách transaction từ stream.
+                List<MyTransaction> transactionList = snapshot.data ?? [];
 
+                // Khởi tạo danh sách để các danh mục income, expense.
+                List<MyCategory> incomeCategoryList = [];
+                List<MyCategory> expenseCategoryList = [];
+
+                // Các biến tính toán số tiền.
                 double openingBalance = 0;
                 double closingBalance = 0;
                 double income = 0;
                 double expense = 0;
 
-                _transactionList.forEach((element) {
+                // Duyệt danh sách transactions để thực hiện các tác vụ lọc danh sách danh mục và tính toán các khoản tiền.
+                transactionList.forEach((element) {
                   if (element.date.isBefore(beginDate)) {
+                    // Tính toán opening balance.
                     if (element.category.type == 'expense')
                       openingBalance -= element.amount;
                     else if (element.category.type == 'income')
                       openingBalance += element.amount;
                   }
                   if (element.date.compareTo(endDate) <= 0) {
+                    // Tính toán closing balance.
                     if (element.category.type == 'expense') {
                       closingBalance -= element.amount;
                       if (element.date.compareTo(beginDate) >= 0) {
+                        // Tính toán khoản tiền chi.
                         expense += element.amount;
-
-                        if (!_expenseCategoryList.any((categoryElement) {
+                        // Lọc những danh mục expense từ danh sách transaction hiện có và thêm vào danh sách danh mục expense.
+                        if (!expenseCategoryList.any((categoryElement) {
                           if (categoryElement.name == element.category.name)
                             return true;
                           else
                             return false;
                         })) {
-                          _expenseCategoryList.add(element.category);
+                          expenseCategoryList.add(element.category);
                         }
-                        // if (!_expenseCategoryList.contains(element.category))
-                        //   _expenseCategoryList.add(element.category);
                       }
                     } else if (element.category.type == 'income') {
                       closingBalance += element.amount;
                       if (element.date.compareTo(beginDate) >= 0) {
+                        // Tính toán khoản tiền thu.
                         income += element.amount;
-                        if (!_incomeCategoryList.any((categoryElement) {
+                        // Lọc những danh mục income từ danh sách transaction hiện có và thêm vào danh sách danh mục income.
+                        if (!incomeCategoryList.any((categoryElement) {
                           if (categoryElement.name == element.category.name)
                             return true;
                           else
                             return false;
                         })) {
-                          _incomeCategoryList.add(element.category);
+                          incomeCategoryList.add(element.category);
                         }
-                        // if (!_incomeCategoryList.contains(element.category))
-                        //   _incomeCategoryList.add(element.category);
                       }
                     }
                   }
                 });
-                _transactionList = _transactionList
+                // Lọc danh sách transactions trong khoảng thời gian đã được xác định.
+                transactionList = transactionList
                     .where((element) =>
                         element.date.compareTo(beginDate) >= 0 &&
                         element.date.compareTo(endDate) <= 0 &&
@@ -309,7 +265,6 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                 return Container(
                   color: Style.backgroundColor,
                   child: ListView(
-                    controller: _controller,
                     physics: BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
                     children: <Widget>[
@@ -322,13 +277,10 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                 color: Style.foregroundColor.withOpacity(0.24),
                                 width: 0.5,
                               ),
-                              // top: BorderSide(
-                              //   color: Style.foregroundColor.withOpacity(0.12),
-                              //   width: 1.0,
-                              // )
                             )),
                         child: WidgetToImage(
                           builder: (key) {
+                            // Lấy key để khi ấn share, có thể nhận biết được widget nào để convert sang hình ảnh.
                             this.key1 = key;
 
                             return Container(
@@ -353,7 +305,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             ),
                                             MoneySymbolFormatter(
                                               text: openingBalance,
-                                              currencyId: _wallet.currencyID,
+                                              currencyId: wallet.currencyID,
                                               textStyle: TextStyle(
                                                 color: Style.foregroundColor,
                                                 fontFamily: Style.fontFamily,
@@ -380,7 +332,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             ),
                                             MoneySymbolFormatter(
                                               text: closingBalance,
-                                              currencyId: _wallet.currencyID,
+                                              currencyId: wallet.currencyID,
                                               textStyle: TextStyle(
                                                 color: Style.foregroundColor,
                                                 fontFamily: Style.fontFamily,
@@ -420,7 +372,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                           MoneySymbolFormatter(
                                               text: closingBalance -
                                                   openingBalance,
-                                              currencyId: _wallet.currencyID,
+                                              currencyId: wallet.currencyID,
                                               textStyle: TextStyle(
                                                 color: (closingBalance -
                                                             openingBalance) >
@@ -444,7 +396,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                       childCurrent: this.widget,
                                                       child:
                                                           AnalyticRevenueAndExpenditureScreen(
-                                                        currentWallet: _wallet,
+                                                        currentWallet: wallet,
                                                         beginDate: beginDate,
                                                         endDate: endDate,
                                                       ),
@@ -455,7 +407,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                               width: 450,
                                               height: 200,
                                               child: BarChartScreen(
-                                                  currentList: _transactionList,
+                                                  currentList: transactionList,
                                                   beginDate: beginDate,
                                                   endDate: endDate),
                                             ),
@@ -479,6 +431,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                               Expanded(
                                 child: WidgetToImage(
                                   builder: (key) {
+                                    // Lấy key để khi ấn share, có thể nhận biết được widget nào để convert sang hình ảnh.
                                     this.key2 = key;
 
                                     return Container(
@@ -499,7 +452,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                           ),
                                           MoneySymbolFormatter(
                                             text: income,
-                                            currencyId: _wallet.currencyID,
+                                            currencyId: wallet.currencyID,
                                             textStyle: TextStyle(
                                               color: Style.incomeColor2,
                                               fontFamily: Style.fontFamily,
@@ -516,8 +469,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                   PageTransition(
                                                       childCurrent: this.widget,
                                                       child:
-                                                          AnalyticPieChartSreen(
-                                                        currentWallet: _wallet,
+                                                          AnalyticPieChartScreen(
+                                                        currentWallet: wallet,
                                                         type: 'income',
                                                         beginDate: beginDate,
                                                         endDate: endDate,
@@ -529,9 +482,9 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                               color: Colors.transparent,
                                               child: PieChartScreen(
                                                   isShowPercent: false,
-                                                  currentList: _transactionList,
+                                                  currentList: transactionList,
                                                   categoryList:
-                                                      _incomeCategoryList,
+                                                      incomeCategoryList,
                                                   total: income),
                                             ),
                                           ),
@@ -544,6 +497,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                               Expanded(
                                 child: WidgetToImage(
                                   builder: (key) {
+                                    // Lấy key để khi ấn share, có thể nhận biết được widget nào để convert sang hình ảnh.
                                     this.key3 = key;
 
                                     return Container(
@@ -563,7 +517,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                         ),
                                         MoneySymbolFormatter(
                                           text: expense,
-                                          currencyId: _wallet.currencyID,
+                                          currencyId: wallet.currencyID,
                                           textStyle: TextStyle(
                                             color: Style.expenseColor,
                                             fontFamily: Style.fontFamily,
@@ -580,8 +534,8 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                                 PageTransition(
                                                     childCurrent: this.widget,
                                                     child:
-                                                        AnalyticPieChartSreen(
-                                                      currentWallet: _wallet,
+                                                        AnalyticPieChartScreen(
+                                                      currentWallet: wallet,
                                                       type: 'expense',
                                                       beginDate: beginDate,
                                                       endDate: endDate,
@@ -593,9 +547,9 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             color: Colors.transparent,
                                             child: PieChartScreen(
                                                 isShowPercent: false,
-                                                currentList: _transactionList,
+                                                currentList: transactionList,
                                                 categoryList:
-                                                    _expenseCategoryList,
+                                                    expenseCategoryList,
                                                 total: expense),
                                           ),
                                         ),
@@ -615,10 +569,11 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
     );
   }
 
+  // Hàm hiển thị wallet selection.
   void buildShowDialog(BuildContext context, id) async {
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
-    final result = await showCupertinoModalBottomSheet(
+    await showCupertinoModalBottomSheet(
         isDismissible: true,
         backgroundColor: Style.boxBackgroundColor,
         context: context,

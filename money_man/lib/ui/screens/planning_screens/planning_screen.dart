@@ -12,7 +12,7 @@ import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 
 class PlanningScreen extends StatefulWidget {
-  Wallet currentWallet;
+  final Wallet currentWallet;
 
   PlanningScreen({Key key, this.currentWallet}) : super(key: key);
 
@@ -21,19 +21,17 @@ class PlanningScreen extends StatefulWidget {
 }
 
 class _PlanningScreenState extends State<PlanningScreen> {
-  Wallet _wallet;
+  // Biến để lưu ví khi lấy từ tham số.
+  Wallet wallet;
 
-  final double fontSizeText = 60;
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
+  final double fontSizeText = 60;
   int reachTop = 0;
   int reachAppBar = 0;
-  //
-  // Text title = Text('Planning', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
-  // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
-  _scrollListener() {
+  scrollListener() {
     if (_controller.offset > 0) {
       setState(() {
         reachAppBar = 1;
@@ -57,9 +55,11 @@ class _PlanningScreenState extends State<PlanningScreen> {
   @override
   void initState() {
     _controller = ScrollController();
-    _controller.addListener(_scrollListener);
+    _controller.addListener(scrollListener);
     super.initState();
-    _wallet = widget.currentWallet == null
+
+    // Lấy ví từ tham số.
+    wallet = widget.currentWallet == null
         ? Wallet(
             id: 'id',
             name: 'defaultName',
@@ -73,7 +73,8 @@ class _PlanningScreenState extends State<PlanningScreen> {
   void didUpdateWidget(covariant PlanningScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _wallet = widget.currentWallet ??
+    // Lấy ví từ tham số.
+    wallet = widget.currentWallet ??
         Wallet(
             id: 'id',
             name: 'defaultName',
@@ -86,7 +87,6 @@ class _PlanningScreenState extends State<PlanningScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Style.backgroundColor,
-        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: true,
@@ -105,12 +105,9 @@ class _PlanningScreenState extends State<PlanningScreen> {
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  //child: Container(
-                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
-                  //),
                 ),
               ),
             ),
@@ -177,7 +174,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                       context,
                       PageTransition(
                           child: BudgetScreen(
-                            crrWallet: _wallet,
+                            crrWallet: wallet,
                           ),
                           type: PageTransitionType.rightToLeft),
                     );
@@ -244,7 +241,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                       context,
                       PageTransition(
                           child: EventScreen(
-                            currentWallet: _wallet,
+                            currentWallet: wallet,
                           ),
                           type: PageTransitionType.rightToLeft),
                     );
@@ -308,12 +305,12 @@ class _PlanningScreenState extends State<PlanningScreen> {
                   ),
                   onPressed: () {
                     print('planing' + widget.currentWallet.id);
-                    print('planing' + _wallet.id);
+                    print('planing' + wallet.id);
                     Navigator.push(
                       context,
                       PageTransition(
                           child: BillsMainScreen(
-                            currentWallet: _wallet,
+                            currentWallet: wallet,
                           ),
                           type: PageTransitionType.rightToLeft),
                     );
@@ -360,25 +357,18 @@ class _PlanningScreenState extends State<PlanningScreen> {
               ),
               TextButton(
                   style: ButtonStyle(
-                    // shape:MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(10),
-                    // )),
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          //return Colors.white;
                           return Color(0xff17174e);
                         return Color(0xfffbe383);
-                        //return Color(0xff65f33f); // Use the component's default.
                       },
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          //return Color(0xff65f33f);
                           return Color(0xfffbe383);
                         return Color(0xff17174e);
-                        //return Colors.white; // Use the component's default.
                       },
                     ),
                   ),
@@ -387,7 +377,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                       context,
                       PageTransition(
                           child:
-                              RecurringTransactionMainScreen(wallet: _wallet),
+                              RecurringTransactionMainScreen(wallet: wallet),
                           type: PageTransitionType.rightToLeft),
                     );
                   },

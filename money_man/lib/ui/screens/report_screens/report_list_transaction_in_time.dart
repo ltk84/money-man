@@ -35,58 +35,29 @@ class ReportListTransaction extends StatefulWidget {
 }
 
 class _ReportListTransaction extends State<ReportListTransaction> {
-  final double fontSizeText = 30;
+  // Biến để check xem view transaction list theo date hay category.
+  bool viewByCategory;
 
-  // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
-  int reachTop = 0;
-  int reachAppBar = 0;
-
-  // Phần này để check xem mình đã Scroll tới đâu trong ListView
-  ScrollController _controller = ScrollController();
-
-  _scrollListener() {
-    if (_controller.offset > 0) {
-      setState(() {
-        reachAppBar = 1;
-      });
-    } else {
-      setState(() {
-        reachAppBar = 0;
-      });
-    }
-    if (_controller.offset >= fontSizeText - 5) {
-      setState(() {
-        reachTop = 1;
-      });
-    } else {
-      setState(() {
-        reachTop = 0;
-      });
-    }
-  }
-
-  bool _viewByCategory;
-  MyCategory _category;
+  // Danh mục.
+  MyCategory category;
 
   // sort theo date giảm dần
-  DateTime _beginDate;
-  DateTime _endDate;
+  DateTime beginDate;
+  DateTime endDate;
   double total;
-  double _totalMoney;
+  double totalMoney;
 
   @override
   void initState() {
     super.initState();
-    _category = widget.category;
-    _viewByCategory = widget.viewByCategory;
-    _beginDate = widget.beginDate;
-    _endDate = widget.endDate;
+    category = widget.category;
+    viewByCategory = widget.viewByCategory;
+    beginDate = widget.beginDate;
+    endDate = widget.endDate;
     total = 0;
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
   }
 
-  bool CompareDate(DateTime a, DateTime b) {
+  bool compareDate(DateTime a, DateTime b) {
     if (a.year < b.year) return true;
     if (a.year == b.year && a.month < b.month) return true;
     if (a.year == b.year && a.month == b.month && a.day <= b.day) return true;
@@ -94,11 +65,11 @@ class _ReportListTransaction extends State<ReportListTransaction> {
   }
 
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    String dateDescription = DateFormat('dd/MM/yyyy').format(_beginDate) +
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
+    String dateDescription = DateFormat('dd/MM/yyyy').format(beginDate) +
         " - " +
-        DateFormat('dd/MM/yyyy').format(_endDate);
-    String categoryDescription = _category != null ? _category.name : '';
+        DateFormat('dd/MM/yyyy').format(endDate);
+    String categoryDescription = category != null ? category.name : '';
 
     return Scaffold(
         backgroundColor: Style.backgroundColor,
@@ -116,13 +87,13 @@ class _ReportListTransaction extends State<ReportListTransaction> {
             ),
           ),
           title: Hero(
-            tag: _viewByCategory
+            tag: viewByCategory
                 ? categoryDescription
-                : _beginDate.day.toString() + '-' + _endDate.day.toString(),
+                : beginDate.day.toString() + '-' + endDate.day.toString(),
             child: Material(
               color: Colors.transparent,
               child:
-                  Text(_viewByCategory ? categoryDescription : dateDescription,
+                  Text(viewByCategory ? categoryDescription : dateDescription,
                       style: TextStyle(
                         fontFamily: Style.fontFamily,
                         fontSize: 17.0,
@@ -133,7 +104,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
           ),
         ),
         body: StreamBuilder<Object>(
-            stream: _firestore.transactionStream(widget.currentWallet, 'full'),
+            stream: firestore.transactionStream(widget.currentWallet, 'full'),
             builder: (context, snapshot) {
               List<MyTransaction> transactionList = snapshot.data ?? [];
 
@@ -148,18 +119,18 @@ class _ReportListTransaction extends State<ReportListTransaction> {
               // Sort transaction List giam dan.
               transactionList = transactionList
                   .where((element) =>
-                      CompareDate(element.date, _endDate) &&
-                      CompareDate(_beginDate, element.date) &&
+                      compareDate(element.date, endDate) &&
+                      compareDate(beginDate, element.date) &&
                       element.category.type != 'debt & loan')
                   .toList();
               transactionList.sort((a, b) => b.date.compareTo(a.date));
 
               //
-              if (_viewByCategory) {
+              if (viewByCategory) {
                 transactionList.forEach((element) {
                   // lấy các category trong transaction đã lọc
-                  if (_category != null &&
-                      element.category.name == _category.name) {
+                  if (category != null &&
+                      element.category.name == category.name) {
                     if (!categoryInChoosenTime.contains(element.category.name))
                       categoryInChoosenTime.add(element.category.name);
                   }
@@ -190,7 +161,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                 });
               }
 
-              return _viewByCategory
+              return viewByCategory
                   ? buildDisplayTransactionByCategory(
                       transactionListSorted, total)
                   : buildDisplayTransactionByDate(transactionListSorted, total);
@@ -204,9 +175,6 @@ class _ReportListTransaction extends State<ReportListTransaction> {
       child: ListView.builder(
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          //primary: false,
-          //shrinkWrap: true,
-          // itemCount: TRANSACTION_DATA.length + 1,
           itemCount: transactionListSortByDate.length,
           itemBuilder: (context, xIndex) {
             double totalAmountInDay = 0;
@@ -264,7 +232,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
   }
 
   Widget buildHeader(List<List<MyTransaction>> transListSorted, double total) {
-    _totalMoney = 0;
+    totalMoney = 0;
     double totalExpense = 0;
     double totalIncome = 0;
     transListSorted.forEach((element) {
@@ -277,7 +245,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
           totalExpense += e.amount;
       });
     });
-    _totalMoney = totalIncome - totalExpense;
+    totalMoney = totalIncome - totalExpense;
 
     return StickyHeader(
       header: SizedBox(height: 0),
@@ -303,8 +271,8 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                 SizedBox(
                   height: 5,
                 ),
-                if (!_viewByCategory ||
-                    (_category != null && _category.type == 'income'))
+                if (!viewByCategory ||
+                    (category != null && category.type == 'income'))
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -328,8 +296,8 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                 SizedBox(
                   height: 2,
                 ),
-                if (!_viewByCategory ||
-                    (_category != null && _category.type == 'expense'))
+                if (!viewByCategory ||
+                    (category != null && category.type == 'expense'))
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -350,20 +318,20 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                               fontFamily: Style.fontFamily,
                             )),
                       ]),
-                if (!_viewByCategory)
+                if (!viewByCategory)
                   Divider(
                     //height: 20,
                     thickness: 1,
                     color: Style.foregroundColor.withOpacity(0.12),
                   ),
-                if (!_viewByCategory)
+                if (!viewByCategory)
                   Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         MoneySymbolFormatter(
-                            digit: _totalMoney >= 0 ? '+' : '',
-                            text: _totalMoney,
+                            digit: totalMoney >= 0 ? '+' : '',
+                            text: totalMoney,
                             currencyId: widget.currentWallet.currencyID,
                             textStyle: TextStyle(
                               color: Style.foregroundColor,
