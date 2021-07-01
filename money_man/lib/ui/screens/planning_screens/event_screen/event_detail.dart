@@ -12,6 +12,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/src/intl/date_format.dart';
 
+// Màn hình detail của event
 class EventDetailScreen extends StatefulWidget {
   Event currentEvent;
   Wallet eventWallet;
@@ -25,10 +26,13 @@ class EventDetailScreen extends StatefulWidget {
 
 class _EventDetailScreen extends State<EventDetailScreen>
     with TickerProviderStateMixin {
+  // truyền vào event hiện tại
   Event _currentEvent;
+  // Truyền vào ví của event
   Wallet _eventWallet;
   @override
   void initState() {
+    // truyền giá trị cho các biến khi vừa được khởi tạo
     _currentEvent = widget.currentEvent;
     _eventWallet = widget.eventWallet;
     super.initState();
@@ -36,6 +40,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
 
   @override
   void didUpdateWidget(covariant EventDetailScreen oldWidget) {
+    // update giá trị của các biến khi có sự thay đổi
     _currentEvent = widget.currentEvent;
     _eventWallet = widget.eventWallet;
     super.didUpdateWidget(oldWidget);
@@ -43,6 +48,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Tham chiếu đến các hàm firestore
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       backgroundColor: Style.backgroundColor,
@@ -65,14 +71,14 @@ class _EventDetailScreen extends State<EventDetailScreen>
         ),
         actions: <Widget>[
           IconButton(
+            // chỉnh sửa event
             onPressed: () async {
               final updatedTrans = await showCupertinoModalBottomSheet(
                   context: context,
-                  builder: (context) =>EditEventScreen(
-                    currentEvent: _currentEvent,
-                    eventWallet: _eventWallet,
-                  )
-              );
+                  builder: (context) => EditEventScreen(
+                        currentEvent: _currentEvent,
+                        eventWallet: _eventWallet,
+                      ));
               if (updatedTrans != null) setState(() {});
             },
             icon: Icon(
@@ -87,6 +93,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                 color: Style.foregroundColor,
               ),
               iconSize: 25,
+              // Xóa event
               onPressed: () async {
                 if (_currentEvent.transactionIdList.length == 0) {
                   await showDialog(
@@ -238,6 +245,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                 height: 40,
                 width: double.infinity,
                 child: TextButton(
+                  // Mark as finish hoặc mark as chưa finished
                   onPressed: () {
                     setState(() {
                       if (_currentEvent.autofinish &&
@@ -269,7 +277,8 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.white;
-                        return Style.primaryColor; // Use the component's default.
+                        return Style
+                            .primaryColor; // Use the component's default.
                       },
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -320,7 +329,8 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.white;
-                        return Style.primaryColor; // Use the component's default.
+                        return Style
+                            .primaryColor; // Use the component's default.
                       },
                     ),
                   ),

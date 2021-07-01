@@ -7,10 +7,11 @@ import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
+// Màn hình chọn event xuất hineej khi chọn event trong add transaction
 class SelectEventScreen extends StatefulWidget {
-  final Wallet wallet;
-  Event event;
-  final DateTime timeTransaction;
+  final Wallet wallet; // ví được chọn
+  Event event; // event đã chọn
+  final DateTime timeTransaction; // thời gian của transaction
   SelectEventScreen({Key key, this.wallet, this.event, this.timeTransaction})
       : super(key: key);
   @override
@@ -22,6 +23,7 @@ class _SelectEventScreen extends State<SelectEventScreen> {
   DateTime _timeTransaction;
   @override
   void initState() {
+    // Khởi tạo giá trị truyền vào các biến state
     super.initState();
     _wallet = widget.wallet;
     _timeTransaction = widget.timeTransaction;
@@ -35,7 +37,8 @@ class _SelectEventScreen extends State<SelectEventScreen> {
     _timeTransaction = widget.timeTransaction;
   }
 
-  bool CompareDate(DateTime a, DateTime b) {
+// Hàm so sánh a và b (ngày)
+  bool AIsBeforeB(DateTime a, DateTime b) {
     if (a.year < b.year) return true;
     if (a.year == b.year && a.month < b.month) return true;
     if (a.year == b.year && a.month == b.month && a.day < b.day) return true;
@@ -44,6 +47,7 @@ class _SelectEventScreen extends State<SelectEventScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //Tham chiếu đến các hàm trong firebase
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
@@ -51,7 +55,9 @@ class _SelectEventScreen extends State<SelectEventScreen> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Style.appBarColor,
-        leading: CloseButton(),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
         title: Text('Select Event',
             style: TextStyle(
               fontFamily: Style.fontFamily,
@@ -70,9 +76,11 @@ class _SelectEventScreen extends State<SelectEventScreen> {
             ),
             Expanded(
               child: StreamBuilder<List<Event>>(
+                  // stream lấy tất cả các event
                   stream: _firestore.eventStream(_wallet.id),
                   builder: (context, snapshot) {
                     final listEvent = snapshot.data ?? [];
+                    // Chỉ lấy những event còn đang running
                     listEvent.removeWhere((element) =>
                         (!element.isFinished && element.finishedByHand) ||
                         (element.isFinished &&
@@ -82,7 +90,7 @@ class _SelectEventScreen extends State<SelectEventScreen> {
                             element.autofinish &&
                             element.isFinished));
                     listEvent.removeWhere((element) =>
-                        CompareDate(element.endDate, _timeTransaction));
+                        AIsBeforeB(element.endDate, _timeTransaction));
                     return ListView.builder(
                         itemCount: listEvent.length,
                         itemBuilder: (context, index) {
@@ -95,6 +103,7 @@ class _SelectEventScreen extends State<SelectEventScreen> {
                             ),
                             child: ListTile(
                               contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+                              //Thực hiện chọn event
                               onTap: () {
                                 setState(() {
                                   widget.event = listEvent[index];

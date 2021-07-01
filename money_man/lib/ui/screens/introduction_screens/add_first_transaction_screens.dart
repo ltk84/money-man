@@ -7,6 +7,7 @@ import 'package:money_man/ui/screens/home_screen/home_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+// Màn hình trung gian, chuyển tiếp từ màn hình first step kia
 class AddFirstTransactionScreen extends StatelessWidget {
   final Wallet wallet;
 

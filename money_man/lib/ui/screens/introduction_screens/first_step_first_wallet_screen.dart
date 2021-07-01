@@ -16,7 +16,7 @@ class FirstStepForFirstWallet extends StatefulWidget {
   _FirstStepState createState() => _FirstStepState();
 }
 
-// tạo ví mẫu để cập nhật thông tin
+// tạo ví mẫu để cập nhật thông tin, xuất hiện khi người dùng đăng nhập lần đầu tiên :3
 class _FirstStepState extends State<FirstStepForFirstWallet> {
   Wallet wallet = Wallet(
       id: 'id',
