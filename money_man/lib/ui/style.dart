@@ -127,7 +127,7 @@ class Style {
       case 1:
         currentTheme = 1;
         backgroundColor = Color(0xFFffffff);
-        backgroundColor1 = Color(0xFFe7f3ff);
+        backgroundColor1 = Color(0xFFffffff);
         foregroundColor = Color(0xFF000000);
         foregroundColorDark = Color(0xFF111111);
         boxBackgroundColor = Color(0xFFe5e6eb);
