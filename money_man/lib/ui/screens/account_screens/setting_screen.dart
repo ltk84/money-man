@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:money_man/main.dart';
 import 'package:money_man/ui/style.dart';
 
 class SettingScreen extends StatefulWidget {

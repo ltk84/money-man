@@ -73,7 +73,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
               backgroundColor: Style.backgroundColor1,
               extendBodyBehindAppBar: true,
               appBar: AppBar(
-                backgroundColor: Style.boxBackgroundColor2,
+                backgroundColor: Style.appBarColor,
                 elevation: 0.0,
                 leading: CloseButton(
                   color: Style.foregroundColor,
@@ -121,7 +121,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                           fontFamily: Style.fontFamily,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
-                          color: Style.successColor,
+                          color: Style.foregroundColor,
                         )),
                   ),
                 ],

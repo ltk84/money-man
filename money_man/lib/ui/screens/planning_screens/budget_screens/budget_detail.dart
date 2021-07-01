@@ -63,9 +63,11 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     DateTime today = DateTime.now();
     today = DateTime(today.year, today.month, today.day);
+    var currentTime = (today).difference(widget.budget.beginDate).inDays;
+    if (currentTime == 0) currentTime = 1;
     // todayRate là biến biểu thị tỉ lệ thời gian hiện tại trong khoảng thời gian của budget. nếu >1 đã kết thúc, <0 chưa bắt đầu
-    var todayRate = today.difference(widget.budget.beginDate).inHours /
-        widget.budget.endDate.difference(widget.budget.beginDate).inHours;
+    var todayRate = today.difference(widget.budget.beginDate).inSeconds /
+        widget.budget.endDate.difference(widget.budget.beginDate).inSeconds;
     var todayTarget = widget.budget.spent / widget.budget.amount;
     return Scaffold(
       appBar: AppBar(
@@ -447,10 +449,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                           height: 2,
                         ),
                         MoneySymbolFormatter(
-                          text: widget.budget.spent /
-                              (today)
-                                  .difference(widget.budget.beginDate)
-                                  .inDays,
+                          text: widget.budget.spent / currentTime,
                           currencyId: widget.wallet.currencyID,
                           textStyle: TextStyle(
                               fontFamily: Style.fontFamily,
@@ -479,7 +478,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       ),
                       MoneySymbolFormatter(
                         text: widget.budget.spent /
-                            (today).difference(widget.budget.beginDate).inDays *
+                            currentTime *
                             (widget.budget.endDate)
                                 .difference(widget.budget.beginDate)
                                 .inDays,
@@ -496,9 +495,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             Divider(
-              color: Style.foregroundColor.withOpacity(0.24),
-              thickness: 0.5
-            ),
+                color: Style.foregroundColor.withOpacity(0.24), thickness: 0.5),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 25),
               child: Row(
@@ -523,9 +520,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             Divider(
-                color: Style.foregroundColor.withOpacity(0.24),
-                thickness: 0.5
-            ),
+                color: Style.foregroundColor.withOpacity(0.24), thickness: 0.5),
             Container(
               margin: EdgeInsets.only(top: 10, bottom: 20),
               alignment: Alignment.center,

@@ -114,7 +114,7 @@ class _AddEventState extends State<AddEvent> {
                     fontFamily: Style.fontFamily,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
-                    color: Style.successColor,
+                    color: Style.foregroundColor,
                   )),
               style: TextButton.styleFrom(
                 primary: Style.foregroundColor,
