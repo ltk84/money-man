@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
@@ -23,11 +21,14 @@ class AdjustBalanceScreen extends StatefulWidget {
 }
 
 class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
+  // biến cho số tiền mới của wallet
   double adjustAmount;
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    // biến thao tác với database
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
+    // biến id của icon của wallet
     var iconData = widget.wallet.iconID;
 
     return Scaffold(
@@ -43,7 +44,7 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
           TextButton(
             onPressed: () async {
               if (adjustAmount != null)
-                await _firestore.adjustBalance(widget.wallet, adjustAmount);
+                await firestore.adjustBalance(widget.wallet, adjustAmount);
               Navigator.pop(context);
             },
             child: Text('Save',
@@ -134,6 +135,7 @@ class _AdjustBalanceScreenState extends State<AdjustBalanceScreen> {
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: ListTile(
                 onTap: () async {
+                  // nhập số tiền
                   final resultAmount = await showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) => EnterAmountScreen());

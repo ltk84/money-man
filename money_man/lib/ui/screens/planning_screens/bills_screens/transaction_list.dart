@@ -331,7 +331,8 @@ class BillTransactionListState extends State<BillTransactionList> {
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex][yIndex],
+                            currentTransaction: transListSortByDate[xIndex]
+                                [yIndex],
                             wallet: widget.currentWallet,
                           ),
                           type: PageTransitionType.rightToLeft));

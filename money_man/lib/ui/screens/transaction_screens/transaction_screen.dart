@@ -34,17 +34,23 @@ class TransactionScreen extends StatefulWidget {
 
 class _TransactionScreen extends State<TransactionScreen>
     with TickerProviderStateMixin {
+  // tab controller để điều khiển tab
   TabController _tabController;
-  ScrollController listScrollController;
-  // int _limit = 200;
-  // int _limitIncrement = 20;
-  Wallet _wallet;
+  // ScrollController listScrollController;
+  // biến wallet hiện tại
+  Wallet wallet;
+  // biến điều khiển việc hiển thị transaction ở dạng view by category hay view by date
   bool viewByCategory;
+  // biến điều khiển cách phân chia tab
   int choosedTimeRange;
+  // ký tự đơn vị tiền tệ của các transaction
   String currencySymbol;
+  // list các tab
   List<Tab> myTabs;
-  List<DateTime> _beginDate = [];
-  List<DateTime> _endDate = [];
+  // danh sách các thời điểm bắt đầu phục vụ chức năng 'View report for this period'
+  List<DateTime> beginDate = [];
+  // danh sách các thời điểm kết thức phục vụ chức năng 'View report for this period'
+  List<DateTime> endDate = [];
 
   @override
   void initState() {
@@ -52,30 +58,32 @@ class _TransactionScreen extends State<TransactionScreen>
 
     viewByCategory = false;
     choosedTimeRange = 3;
-    _beginDate.clear();
-    _endDate.clear();
+    beginDate.clear();
+    endDate.clear();
+
+    // set up lấy các begin date
     int index = 0;
     var now = DateTime.now();
     for (; index < 20; index++) {
       var date = DateTime(now.year, now.month - (18 - index), 1);
-      _beginDate.add(date);
+      beginDate.add(date);
       if (index < 19) {
-        _endDate.add(DateTime(
-          _beginDate[index].year,
-          _beginDate[index].month + 1,
-          _beginDate[index].day - 1,
+        endDate.add(DateTime(
+          beginDate[index].year,
+          beginDate[index].month + 1,
+          beginDate[index].day - 1,
         ));
       }
     }
-    listScrollController = ScrollController();
-    listScrollController.addListener(scrollListener);
+    // listScrollController = ScrollController();
+    // listScrollController.addListener(scrollListener);
 
     myTabs = initTabBar(choosedTimeRange);
     _tabController = TabController(length: 20, vsync: this, initialIndex: 18);
     _tabController.addListener(() {
       setState(() {});
     });
-    _wallet = widget.currentWallet == null
+    wallet = widget.currentWallet == null
         ? Wallet(
             id: 'id',
             name: 'defaultName',
@@ -84,18 +92,19 @@ class _TransactionScreen extends State<TransactionScreen>
             iconID: 'assets/icons/wallet_2.svg')
         : widget.currentWallet;
     currencySymbol =
-        CurrencyService().findByCode(_wallet.currencyID).symbol ?? '';
+        CurrencyService().findByCode(wallet.currencyID).symbol ?? '';
 
-    var _auth = FirebaseAuthService();
-    var _firestore = FirebaseFireStoreService(uid: _auth.currentUser.uid);
-    _firestore.executeRecurringTransaction(_wallet);
+    // check và thực hiện các recurring transaction nếu có
+    var auth = FirebaseAuthService();
+    var firestore = FirebaseFireStoreService(uid: auth.currentUser.uid);
+    firestore.executeRecurringTransaction(wallet);
   }
 
   @override
   void didUpdateWidget(covariant TransactionScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _wallet = widget.currentWallet ??
+    wallet = widget.currentWallet ??
         Wallet(
             id: 'id',
             name: 'defaultName',
@@ -103,20 +112,21 @@ class _TransactionScreen extends State<TransactionScreen>
             currencyID: 'USD',
             iconID: 'assets/icons/wallet_2.svg');
     currencySymbol =
-        CurrencyService().findByCode(_wallet.currencyID).symbol ?? '';
+        CurrencyService().findByCode(wallet.currencyID).symbol ?? '';
   }
 
-  void scrollListener() {
-    // if (listScrollController.offset >=
-    //         listScrollController.position.maxScrollExtent &&
-    //     !listScrollController.position.outOfRange) {
-    //   setState(() {
-    //     _limit += _limitIncrement;
-    //   });
-    // }
-  }
+  // void scrollListener() {
+  //   // if (listScrollController.offset >=
+  //   //         listScrollController.position.maxScrollExtent &&
+  //   //     !listScrollController.position.outOfRange) {
+  //   //   setState(() {
+  //   //     _limit += _limitIncrement;
+  //   //   });
+  //   // }
+  // }
 
-  void _handleSelectTimeRange(int selected) {
+  // xử lý khi thay đổi time range
+  void handleSelectTimeRange(int selected) {
     showMenu(
       color: Style.foregroundColor,
       shape: RoundedRectangleBorder(
@@ -226,15 +236,15 @@ class _TransactionScreen extends State<TransactionScreen>
       switch (value) {
         case 1:
           setState(() {
-            _beginDate.clear();
-            _endDate.clear();
+            beginDate.clear();
+            endDate.clear();
             int index = 0;
             var now = DateTime.now();
             for (; index < 20; index++) {
               var date = DateTime(now.year, now.month, now.day - (18 - index));
-              _beginDate.add(date);
+              beginDate.add(date);
               if (index < 19) {
-                _endDate.add(date);
+                endDate.add(date);
               }
             }
             choosedTimeRange = 1;
@@ -249,16 +259,16 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 2:
           setState(() {
-            _beginDate.clear();
-            _endDate.clear();
+            beginDate.clear();
+            endDate.clear();
             int index = 0;
             for (; index < 20; index++) {
               var firstDateInAWeek = DateTime.now()
                   .subtract(Duration(days: DateTime.now().weekday - 1))
                   .subtract(Duration(days: 7 * (18 - index)));
-              _beginDate.add(firstDateInAWeek);
+              beginDate.add(firstDateInAWeek);
               if (index < 19) {
-                _endDate.add(DateTime(
+                endDate.add(DateTime(
                   firstDateInAWeek.year,
                   firstDateInAWeek.month,
                   firstDateInAWeek.day + 6,
@@ -276,18 +286,18 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 3:
           setState(() {
-            _beginDate.clear();
-            _endDate.clear();
+            beginDate.clear();
+            endDate.clear();
             int index = 0;
             var now = DateTime.now();
             for (; index < 20; index++) {
               var date = DateTime(now.year, now.month - (18 - index), 1);
-              _beginDate.add(date);
+              beginDate.add(date);
               if (index < 19) {
-                _endDate.add(DateTime(
-                  _beginDate[index].year,
-                  _beginDate[index].month + 1,
-                  _beginDate[index].day - 1,
+                endDate.add(DateTime(
+                  beginDate[index].year,
+                  beginDate[index].month + 1,
+                  beginDate[index].day - 1,
                 ));
               }
             }
@@ -302,22 +312,22 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 4:
           setState(() {
-            _beginDate.clear();
-            _endDate.clear();
+            beginDate.clear();
+            endDate.clear();
             int index = 0;
             var now = DateTime.now();
             var initQuater = (now.month + 2) % 3;
             for (; index < 20; index++) {
-              _beginDate.add(DateTime(
+              beginDate.add(DateTime(
                 now.year,
                 now.month - initQuater - (18 - index) * 3,
                 1,
               ));
               if (index < 19) {
-                _endDate.add(DateTime(
-                  _beginDate[index].year,
-                  _beginDate[index].month + 3,
-                  _beginDate[index].day - 1,
+                endDate.add(DateTime(
+                  beginDate[index].year,
+                  beginDate[index].month + 3,
+                  beginDate[index].day - 1,
                 ));
               }
             }
@@ -332,19 +342,19 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 5:
           setState(() {
-            _beginDate.clear();
-            _endDate.clear();
+            beginDate.clear();
+            endDate.clear();
             int index = 0;
             var now = DateTime.now();
             for (; index < 20; index++) {
-              _beginDate.add(DateTime(
+              beginDate.add(DateTime(
                 now.year - (18 - index),
                 1,
                 1,
               ));
               if (index < 19) {
-                _endDate.add(DateTime(
-                  _beginDate[index].year,
+                endDate.add(DateTime(
+                  beginDate[index].year,
                   12,
                   31,
                 ));
@@ -361,8 +371,8 @@ class _TransactionScreen extends State<TransactionScreen>
           break;
         case 6:
           setState(() {
-            _beginDate.clear();
-            _endDate.clear();
+            beginDate.clear();
+            endDate.clear();
             choosedTimeRange = 6;
             myTabs = initTabBar(choosedTimeRange);
             _tabController =
@@ -373,8 +383,8 @@ class _TransactionScreen extends State<TransactionScreen>
           });
           break;
         case 7:
-          _beginDate.clear();
-          _endDate.clear();
+          beginDate.clear();
+          endDate.clear();
           List<DateTime> timeRange = [];
           await showDialog(
               context: context,
@@ -386,8 +396,8 @@ class _TransactionScreen extends State<TransactionScreen>
           String displayTab = DateFormat('dd/MM/yyyy').format(timeRange[0]) +
               " - " +
               DateFormat('dd/MM/yyyy').format(timeRange[1]);
-          _beginDate.add(timeRange[0]);
-          _endDate.add(timeRange[1]);
+          beginDate.add(timeRange[0]);
+          endDate.add(timeRange[1]);
           setState(() {
             choosedTimeRange = 7;
             myTabs = initTabBar(choosedTimeRange, extraInfo: displayTab);
@@ -403,6 +413,7 @@ class _TransactionScreen extends State<TransactionScreen>
     });
   }
 
+  // tạo tab bar
   List<Tab> initTabBar(int choosedTimeRange, {var extraInfo}) {
     if (choosedTimeRange == 3) {
       return List.generate(20, (index) {
@@ -546,8 +557,10 @@ class _TransactionScreen extends State<TransactionScreen>
     }
   }
 
+  // lọc danh sách các transaction dựa trên time range
   List<MyTransaction> sortTransactionBasedOnTime(
       int choosedTimeRange, List<MyTransaction> _transactionList) {
+    // TRƯỜNG HỢP "MONTH"
     if (choosedTimeRange == 3) {
       // thời gian được chọn từ tab bar
       var chooseTime = myTabs[_tabController.index].text.split('/');
@@ -577,8 +590,7 @@ class _TransactionScreen extends State<TransactionScreen>
         }
       }
 
-      // trường hợp tab FUTURE thì lấy những transaction có tháng
-      // tháng hiện tại
+      // trường hợp tab FUTURE thì lấy những transaction có tháng > tháng hiện tại
       if (isFutureTab) {
         DateTime time =
             DateTime(int.parse(chooseTime[1]), int.parse(chooseTime[0]));
@@ -597,32 +609,38 @@ class _TransactionScreen extends State<TransactionScreen>
             .toList();
       }
       return _transactionList;
-    } else if (choosedTimeRange == 1) {
+    }
+    // TRƯỜNG HỢP "DAY"
+    else if (choosedTimeRange == 1) {
       // thời gian được chọn từ tab bar
+      // tách từ tab thì lấy được 3 phần tử
+      // chooseTime[0] = ngày
+      // chooseTime[1] = tháng
+      // chooseTime[2] = năm
       var chooseTime = myTabs[_tabController.index].text.split(' ');
 
       // biến để xác định tab hiện tại có là tab future hay không ?
       bool isFutureTab = false;
 
-      // trường hợp rơi vào tab THIS MONTH, LAST MONTH, FUTURE
+      // trường hợp rơi vào tab YESTERDAY, TODAY, FUTURE
       if (chooseTime.length == 1) {
         chooseTime.clear();
         int nowDay = DateTime.now().day;
         int nowMonth = DateTime.now().month;
         int nowYear = DateTime.now().year;
-        // LAST MONTH (lấy tháng trước hiện tại)
+        // YESTERDAY (lấy ngày trước hiện tại)
         if (_tabController.index == 17) {
           chooseTime.add((nowDay - 1).toString());
           chooseTime.add((nowMonth).toString());
           chooseTime.add(nowYear.toString());
         }
-        // THIS MONTH (lấy tháng hiện tại)
+        // TODAY (lấy ngày hiện tại)
         else if (_tabController.index == 18) {
           chooseTime.add((nowDay).toString());
           chooseTime.add((nowMonth).toString());
           chooseTime.add(nowYear.toString());
         }
-        // FUTURE (lấy những tháng sau hiện tại)
+        // FUTURE (lấy những ngày sau hiện tại)
         else {
           chooseTime.add((nowDay + 1).toString());
           chooseTime.add((nowMonth).toString());
@@ -671,8 +689,7 @@ class _TransactionScreen extends State<TransactionScreen>
         }
       }
 
-      // trường hợp tab FUTURE thì lấy những transaction có tháng
-      // tháng hiện tại
+      // trường hợp tab FUTURE thì lấy những transaction có ngày, tháng sau mốc hiên tại
       if (isFutureTab) {
         DateTime futureTime = DateTime(int.parse(chooseTime[2]),
             int.parse(chooseTime[1]), int.parse(chooseTime[0]));
@@ -681,7 +698,7 @@ class _TransactionScreen extends State<TransactionScreen>
             .toList();
         isFutureTab = false;
       }
-      // còn lại thì lấy bằng tháng đã lấy trong chooseTime
+      // còn lại thì lấy bằng mốc (ngày/tháng/năm) đã lấy trong chooseTime
       else {
         DateTime time = DateTime(int.parse(chooseTime[2]),
             int.parse(chooseTime[1]), int.parse(chooseTime[0]));
@@ -690,40 +707,55 @@ class _TransactionScreen extends State<TransactionScreen>
             .toList();
       }
       return _transactionList;
-    } else if (choosedTimeRange == 2) {
+    }
+    // TRƯỜNG HỢP "WEEK"
+    else if (choosedTimeRange == 2) {
+      // thời gian tách từ tab bar
+      // sẽ tách được 2 mốc thời gian
+      // chooseTime[i] = ngày/năm
       List<String> chooseTime = [];
       chooseTime = myTabs[_tabController.index].text.split(' - ');
 
+      // biến xác định có phải là tab future hay không?
       bool isFutureTab = false;
 
+      // biến chứa mốc thời gian (ngày/tháng) ở giá trị đầu của chooseTime
       var headDateList;
+      // mốc thời gian đầu
       DateTime headTime;
+      // mốc  thời gian cuối
       DateTime tailTime;
 
+      // trường hợp LAST WEEK, THIS WEEK, FUTURE
       if (chooseTime.length == 1) {
         chooseTime.clear();
 
+        // mốc thời gian đầu của THIS WEEK
         var firstDatePresent = DateTime(
                 DateTime.now().year, DateTime.now().month, DateTime.now().day)
             .subtract(Duration(days: DateTime.now().weekday - 1));
+        // mốc thời gian cuối của THIS WEEK
         var lastDatePresent = firstDatePresent.add(Duration(days: 6));
 
+        // mốc thời gian đầu của LAST WEEK
         var firstDateInPast = firstDatePresent.subtract(Duration(days: 7));
+        // mốc thời gian cuối của LAST WEEK
         var lastDateInPast = firstDateInPast.add(Duration(days: 6));
 
+        // mốc thời gian đầu của FUTURE
         var firstDateInFutre = firstDatePresent.add(Duration(days: 7));
 
-        // LAST MONTH (lấy tháng trước hiện tại)
+        // LAST WEEK (lấy tuần trước hiện tại)
         if (_tabController.index == 17) {
           headTime = firstDateInPast;
           tailTime = lastDateInPast;
         }
-        // THIS MONTH (lấy tháng hiện tại)
+        // THIS WEEK (lấy tuần hiện tại)
         else if (_tabController.index == 18) {
           headTime = firstDatePresent;
           tailTime = lastDatePresent;
         }
-        // FUTURE (lấy những tháng sau hiện tại)
+        // FUTURE (lấy những tuần sau hiện tại)
         else {
           headTime = firstDateInFutre;
           isFutureTab = true;
@@ -735,12 +767,15 @@ class _TransactionScreen extends State<TransactionScreen>
         tailTime = headTime.add(Duration(days: 6));
       }
 
+      // trường hợp future (lấy các transaction lớn hơn mốc headTime)
       if (isFutureTab) {
         _transactionList = _transactionList
             .where((element) => element.date.compareTo(headTime) >= 0)
             .toList();
         isFutureTab = false;
-      } else {
+      }
+      // trường hợp còn lại (lấy các transaction lớn hơn mốc headTime và bé hơn mốc tailTime)
+      else {
         _transactionList = _transactionList
             .where((element) =>
                 element.date.compareTo(headTime) >= 0 &&
@@ -749,16 +784,28 @@ class _TransactionScreen extends State<TransactionScreen>
       }
 
       return _transactionList;
-    } else if (choosedTimeRange == 4) {
+    }
+    // TRƯỜNG HỢP "QUARTER"
+    else if (choosedTimeRange == 4) {
+      // thời gian tách từ tab bar
+      // sẽ tách được 2 mốc thời gian
+      // chooseTime[0] = Qi
+      // chooseTime[1] = năm
       var chooseTime = myTabs[_tabController.index].text.split(' ');
 
+      // mốc thời gian đầu
       DateTime headTime;
+      // mốc thời gian cuối
       DateTime tailTime;
       DateTime now = DateTime.now();
+      // biến chứa mốc thời gian (ngày/tháng) ở giá trị đầu của chooseTime
       bool isFutureTab = false;
 
+      // trường hợp FUTURE
       if (chooseTime.length == 1) {
         isFutureTab = true;
+        // lấy mốc thời gian của tab liền trước để xác định thời gian hiện tại
+        // x là list gồm 2 giá trị x[0] = Qi, x[1] = năm
         var x = myTabs[_tabController.index - 1].text.split(' ');
 
         switch (x[0]) {
@@ -798,12 +845,15 @@ class _TransactionScreen extends State<TransactionScreen>
         }
       }
 
+      // trường hợp future (lấy các transaction lớn hơn mốc headTime)
       if (isFutureTab) {
         isFutureTab = false;
         _transactionList = _transactionList
             .where((element) => element.date.compareTo(headTime) >= 0)
             .toList();
-      } else {
+      }
+      // trường hợp còn lại (lấy các transaction lớn hơn mốc headTime và bé hơn mốc tailTime)
+      else {
         _transactionList = _transactionList
             .where((element) =>
                 element.date.compareTo(headTime) >= 0 &&
@@ -812,12 +862,16 @@ class _TransactionScreen extends State<TransactionScreen>
       }
 
       return _transactionList;
-    } else if (choosedTimeRange == 5) {
+    }
+    // TRƯỜNG HỢP "YEAR"
+    else if (choosedTimeRange == 5) {
       // thời gian được chọn từ tab bar
+      // sẽ cho ra chooseTime = năm
       var chooseTime = myTabs[_tabController.index].text;
       // biến để xác định tab hiện tại có là tab future hay không ?
       bool isFutureTab = false;
 
+      // xác định giá trị chooseTime là future hay năm
       var tempt = int.tryParse(chooseTime);
       if (tempt == null) {
         if (chooseTime == 'LAST YEAR') {
@@ -830,28 +884,39 @@ class _TransactionScreen extends State<TransactionScreen>
         }
       }
 
-      // trường hợp tab FUTURE thì lấy những transaction có tháng
-      // tháng hiện tại
+      // trường hợp tab FUTURE thì lấy những transaction có năm lớn hơn chooseTime
       if (isFutureTab) {
         _transactionList = _transactionList
             .where((element) => element.date.year >= int.parse(chooseTime))
             .toList();
         isFutureTab = false;
       }
-      // còn lại thì lấy bằng tháng đã lấy trong chooseTime
+      // còn lại thì lấy bằng năm đã lấy trong chooseTime
       else {
         _transactionList = _transactionList
             .where((element) => element.date.year == int.parse(chooseTime))
             .toList();
       }
+
       return _transactionList;
-    } else if (choosedTimeRange == 6) {
+    }
+    // TRƯỜNG HỢP "ALL"
+    else if (choosedTimeRange == 6) {
       return _transactionList;
-    } else {
+    }
+    // TRƯỜNG HỢP "CUSTOM"
+    else {
+      // tách từ tab bar được list 2 giá trị
+      // chooseTime[i] = ngày/tháng/năm
       var chooseTime = myTabs[_tabController.index].text.split(' - ');
+
+      // mốc thời gian đầu
       DateTime head;
+      // mốc thời gian cuối
       DateTime tail;
 
+      // tách từng mốc thời gian ra
+      // head/tail = mốc thời gian
       var headList = chooseTime[0].split('/');
       head = DateTime(int.parse(headList[2]), int.parse(headList[1]),
           int.parse(headList[0]));
@@ -860,21 +925,21 @@ class _TransactionScreen extends State<TransactionScreen>
       tail = DateTime(int.parse(tailList[2]), int.parse(tailList[1]),
           int.parse(tailList[0]));
 
+      // từ mốc thời gian lọc ra các transaction thỏa điều kiện
       _transactionList = _transactionList
           .where((element) =>
               element.date.compareTo(head) >= 0 &&
               element.date.compareTo(tail) <= 0)
           .toList();
+
       return _transactionList;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    print('transaction build ' + _wallet.amount.toString());
-
-    // _firestore.executeRecurringTransaction(_wallet);
+    // biến tương tác với databse
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -884,14 +949,14 @@ class _TransactionScreen extends State<TransactionScreen>
           leadingWidth: 70,
           leading: GestureDetector(
             onTap: () async {
-              buildShowDialog(context, _wallet.id);
+              buildShowDialogSelectWallet(context, wallet.id);
             },
             child: Container(
               padding: EdgeInsets.only(left: 20.0),
               child: Row(
                 children: [
                   SuperIcon(
-                    iconPath: _wallet.iconID,
+                    iconPath: wallet.iconID,
                     size: 25.0,
                   ),
                   Icon(Icons.arrow_drop_down,
@@ -901,15 +966,15 @@ class _TransactionScreen extends State<TransactionScreen>
             ),
           ),
           title: Column(children: [
-            Text(_wallet.name,
+            Text(wallet.name,
                 style: TextStyle(
                     fontFamily: Style.fontFamily,
                     fontWeight: FontWeight.w500,
                     color: Style.foregroundColor.withOpacity(0.54),
                     fontSize: 10.0)),
             MoneySymbolFormatter(
-              text: _wallet.amount,
-              currencyId: _wallet.currencyID,
+              text: wallet.amount,
+              currencyId: wallet.currencyID,
               textStyle: TextStyle(
                   fontFamily: Style.fontFamily,
                   color: Style.foregroundColor,
@@ -948,7 +1013,6 @@ class _TransactionScreen extends State<TransactionScreen>
                 icon: Icon(Icons.more_vert_rounded,
                     color: Style.foregroundColor.withOpacity(0.54)),
                 padding: EdgeInsets.all(10.0),
-                //icon: Icon(Icons.arrow_drop_down, color: Style.foregroundColor),
                 offset: Offset.fromDirection(40, 40),
                 color: Style.foregroundColor,
                 shape: RoundedRectangleBorder(
@@ -966,7 +1030,7 @@ class _TransactionScreen extends State<TransactionScreen>
                         enableDrag: false,
                         context: context,
                         builder: (context) =>
-                            SearchTransactionScreen(wallet: _wallet));
+                            SearchTransactionScreen(wallet: wallet));
                   } else if (value == 'change display') {
                     setState(() {
                       viewByCategory = !viewByCategory;
@@ -975,13 +1039,12 @@ class _TransactionScreen extends State<TransactionScreen>
                     showCupertinoModalBottomSheet(
                         context: context,
                         builder: (context) =>
-                            AdjustBalanceScreen(wallet: _wallet));
+                            AdjustBalanceScreen(wallet: wallet));
                   } else if (value == 'Select time range') {
-                    _handleSelectTimeRange(choosedTimeRange);
+                    handleSelectTimeRange(choosedTimeRange);
                   }
                 },
                 itemBuilder: (context) {
-                  print('popup build');
                   return [
                     PopupMenuItem(
                         value: 'Select time range',
@@ -1039,24 +1102,6 @@ class _TransactionScreen extends State<TransactionScreen>
                             ),
                           ],
                         )),
-                    // PopupMenuItem(
-                    //     value: 'Transfer money',
-                    //     child: Row(
-                    //       children: [
-                    //         Icon(Icons.attach_money,
-                    //             color: Style.backgroundColor),
-                    //         SizedBox(width: 10.0),
-                    //         Text(
-                    //           'Transfer money',
-                    //           style: TextStyle(
-                    //             color: Style.backgroundColor,
-                    //             fontFamily: Style.fontFamily,
-                    //             fontSize: 16.0,
-                    //             fontWeight: FontWeight.w500,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     )),
                     PopupMenuItem(
                         value: 'Search for transaction',
                         child: Row(
@@ -1074,35 +1119,18 @@ class _TransactionScreen extends State<TransactionScreen>
                             ),
                           ],
                         )),
-                    // PopupMenuItem(
-                    //     value: 'Synchronize',
-                    //     child: Row(
-                    //       children: [
-                    //         Icon(Icons.sync, color: Style.backgroundColor),
-                    //         SizedBox(width: 10.0),
-                    //         Text(
-                    //           'Synchronize',
-                    //           style: TextStyle(
-                    //             color: Style.backgroundColor,
-                    //             fontFamily: Style.fontFamily,
-                    //             fontSize: 16.0,
-                    //             fontWeight: FontWeight.w500,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     )),
                   ];
                 })
           ],
         ),
         body: StreamBuilder<List<MyTransaction>>(
-            stream: _firestore.transactionStream(_wallet, 'full'),
+            stream: firestore.transactionStream(wallet, 'full'),
             builder: (context, snapshot) {
-              print('streambuilder build');
-              List<MyTransaction> _transactionList = snapshot.data ?? [];
+              List<MyTransaction> transactionList = snapshot.data ?? [];
 
-              _transactionList = sortTransactionBasedOnTime(
-                  choosedTimeRange, _transactionList);
+              // lọc danh sách dựa trên tab được chọn
+              transactionList =
+                  sortTransactionBasedOnTime(choosedTimeRange, transactionList);
 
               // list những ngày trong các transaction đã lọc
               List<DateTime> dateInChoosenTime = [];
@@ -1118,11 +1146,11 @@ class _TransactionScreen extends State<TransactionScreen>
               List<List<MyTransaction>> transactionListSorted = [];
 
               // sort theo date giảm dần
-              _transactionList.sort((a, b) => b.date.compareTo(a.date));
+              transactionList.sort((a, b) => b.date.compareTo(a.date));
 
               // trường hợp hiển thị category
               if (viewByCategory) {
-                _transactionList.forEach((element) {
+                transactionList.forEach((element) {
                   // lấy các category trong transaction đã lọc
                   if (!categoryInChoosenTime.contains(element.category.name))
                     categoryInChoosenTime.add(element.category.name);
@@ -1134,19 +1162,19 @@ class _TransactionScreen extends State<TransactionScreen>
                   else
                     totalInCome += element.amount;
                 });
-                // totalInCome += _wallet.amount > 0 ? _wallet.amount : 0;
+
                 total = totalInCome - totalOutCome;
 
                 // lấy các transaction ra theo từng category
                 categoryInChoosenTime.forEach((cate) {
-                  final b = _transactionList.where(
+                  final b = transactionList.where(
                       (element) => element.category.name.compareTo(cate) == 0);
                   transactionListSorted.add(b.toList());
                 });
               }
               // trường hợp hiển thị theo date (tương tự)
               else {
-                _transactionList.forEach((element) {
+                transactionList.forEach((element) {
                   if (!dateInChoosenTime.contains(element.date))
                     dateInChoosenTime.add(element.date);
                   if (element.category.type == 'expense' ||
@@ -1156,11 +1184,11 @@ class _TransactionScreen extends State<TransactionScreen>
                   else
                     totalInCome += element.amount;
                 });
-                // totalInCome += _wallet.amount > 0 ? _wallet.amount : 0;
+
                 total = totalInCome - totalOutCome;
 
                 dateInChoosenTime.forEach((date) {
-                  final b = _transactionList
+                  final b = transactionList
                       .where((element) => element.date.compareTo(date) == 0);
                   transactionListSorted.add(b.toList());
                 });
@@ -1219,13 +1247,13 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       color: Style.backgroundColor,
       child: ListView.builder(
-          controller: listScrollController,
+          // controller: listScrollController,
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          //shrinkWrap: true,
           itemCount: transactionListSortByCategory.length,
           itemBuilder: (context, xIndex) {
             double totalAmountInDay = 0;
+            // tính toán lượng amount trong 1 category
             transactionListSortByCategory[xIndex].forEach((element) {
               if (element.category.type == 'expense' ||
                   element.category.name == 'Repayment' ||
@@ -1259,15 +1287,13 @@ class _TransactionScreen extends State<TransactionScreen>
     return Container(
       color: Style.backgroundColor,
       child: ListView.builder(
-          controller: listScrollController,
+          // controller: listScrollController,
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          //primary: false,
-          //shrinkWrap: true,
-          // itemCount: TRANSACTION_DATA.length + 1,
           itemCount: transactionListSortByDate.length,
           itemBuilder: (context, xIndex) {
             double totalAmountInDay = 0;
+            // tính toán lượng amount trong ngày
             transactionListSortByDate[xIndex].forEach((element) {
               if (element.category.type == 'expense' ||
                   element.category.name == 'Repayment' ||
@@ -1340,7 +1366,7 @@ class _TransactionScreen extends State<TransactionScreen>
                 child: MoneySymbolFormatter(
                   digit: totalAmountInDay >= 0 ? '+' : '',
                   text: totalAmountInDay,
-                  currencyId: _wallet.currencyID,
+                  currencyId: wallet.currencyID,
                   textAlign: TextAlign.end,
                   textStyle: TextStyle(
                     fontFamily: Style.fontFamily,
@@ -1365,7 +1391,7 @@ class _TransactionScreen extends State<TransactionScreen>
                       PageTransition(
                           childCurrent: this.widget,
                           child: TransactionDetail(
-                            transaction: transListSortByCategory[xIndex]
+                            currentTransaction: transListSortByCategory[xIndex]
                                 [yIndex],
                             wallet: widget.currentWallet,
                           ),
@@ -1415,19 +1441,18 @@ class _TransactionScreen extends State<TransactionScreen>
                             ? MoneySymbolFormatter(
                                 text: transListSortByCategory[xIndex][yIndex]
                                     .amount,
-                                currencyId: _wallet.currencyID,
+                                currencyId: wallet.currencyID,
                                 textAlign: TextAlign.end,
                                 textStyle: TextStyle(
                                     fontFamily: Style.fontFamily,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14.0,
                                     color: Style.incomeColor2),
-                                //digit: '+',
                               )
                             : MoneySymbolFormatter(
                                 text: transListSortByCategory[xIndex][yIndex]
                                     .amount,
-                                currencyId: _wallet.currencyID,
+                                currencyId: wallet.currencyID,
                                 textAlign: TextAlign.end,
                                 textStyle: TextStyle(
                                     fontFamily: Style.fontFamily,
@@ -1453,7 +1478,6 @@ class _TransactionScreen extends State<TransactionScreen>
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       padding: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-          //borderRadius:   BorderRadius.circular(8), // set chỗ này là bị mất conttent nè
           color: Style.boxBackgroundColor,
           border: Border(
               bottom: BorderSide(
@@ -1502,7 +1526,7 @@ class _TransactionScreen extends State<TransactionScreen>
                 child: MoneySymbolFormatter(
                   digit: totalAmountInDay >= 0 ? '+' : '',
                   text: totalAmountInDay,
-                  currencyId: _wallet.currencyID,
+                  currencyId: wallet.currencyID,
                   textAlign: TextAlign.end,
                   textStyle: TextStyle(
                     fontFamily: Style.fontFamily,
@@ -1530,14 +1554,11 @@ class _TransactionScreen extends State<TransactionScreen>
                   transListSortByDate[xIndex][yIndex].contact ?? 'someone';
               String _subTitle;
               if (transListSortByDate[xIndex][yIndex].category.name == 'Debt') {
-                //_subTitle = '$_eventIcon$_note from $_contact';
-                _subTitle = '$_eventIcon from '; //$_contact';
+                _subTitle = '$_eventIcon from ';
               } else if (transListSortByDate[xIndex][yIndex].category.name ==
                   'Loan') {
-                //_subTitle = '$_eventIcon$_note to $_contact';
-                _subTitle = '$_eventIcon to '; //$_contact';
+                _subTitle = '$_eventIcon to ';
               } else {
-                //_subTitle = '$_eventIcon$_note';
                 _subTitle = '$_eventIcon ';
               }
 
@@ -1550,8 +1571,6 @@ class _TransactionScreen extends State<TransactionScreen>
                               'Debt Collection'
                       ? '+'
                       : '-';
-              // double extraAmount =
-              //     transListSortByDate[xIndex][yIndex].extraAmountInfo;
 
               return GestureDetector(
                 onTap: () async {
@@ -1559,7 +1578,8 @@ class _TransactionScreen extends State<TransactionScreen>
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex][yIndex],
+                            currentTransaction: transListSortByDate[xIndex]
+                                [yIndex],
                             wallet: widget.currentWallet,
                           ),
                           type: PageTransitionType.rightToLeft));
@@ -1593,7 +1613,6 @@ class _TransactionScreen extends State<TransactionScreen>
                                     fontSize: 14.0,
                                     color: Style.foregroundColor,
                                   )),
-                              //if (_note != null && _note != '')
                               Text(
                                 _note,
                                 style: TextStyle(
@@ -1612,7 +1631,7 @@ class _TransactionScreen extends State<TransactionScreen>
                         children: [
                           MoneySymbolFormatter(
                             text: transListSortByDate[xIndex][yIndex].amount,
-                            currencyId: _wallet.currencyID,
+                            currencyId: wallet.currencyID,
                             textAlign: TextAlign.end,
                             textStyle: TextStyle(
                                 fontFamily: Style.fontFamily,
@@ -1621,7 +1640,6 @@ class _TransactionScreen extends State<TransactionScreen>
                                 color: _digit == '+'
                                     ? Style.incomeColor2
                                     : Style.expenseColor),
-                            //digit: _digit,
                           ),
                           if (_subTitle != null && _subTitle != '')
                             RichText(
@@ -1654,24 +1672,6 @@ class _TransactionScreen extends State<TransactionScreen>
                                   ),
                                 )
                             ])),
-                          // if (extraAmount != null)
-                          //   Row(
-                          //     mainAxisAlignment: MainAxisAlignment.end,
-                          //     children: [
-                          //       if (extraAmount != 0)
-                          //         MoneySymbolFormatter(
-                          //             textStyle: TextStyle(
-                          //               color: Style.foregroundColor,
-                          //               fontFamily: Style.fontFamily,
-                          //               fontWeight: FontWeight.w500,
-                          //               fontSize: 12.0,
-                          //             ),
-                          //             text: extraAmount,
-                          //             currencyId: _wallet.currencyID),
-                          //       if (extraAmount != 0) Text(' left'),
-                          //       if (extraAmount == 0) Text('Received')
-                          //     ],
-                          //   ),
                         ],
                       )),
                     ],
@@ -1712,7 +1712,7 @@ class _TransactionScreen extends State<TransactionScreen>
                       )),
                   MoneySymbolFormatter(
                     text: totalInCome,
-                    currencyId: _wallet.currencyID,
+                    currencyId: wallet.currencyID,
                     textStyle: TextStyle(
                       color: Style.foregroundColor,
                       fontSize: 14,
@@ -1738,7 +1738,7 @@ class _TransactionScreen extends State<TransactionScreen>
                         )),
                     MoneySymbolFormatter(
                       text: totalOutCome,
-                      currencyId: _wallet.currencyID,
+                      currencyId: wallet.currencyID,
                       textStyle: TextStyle(
                         color: Style.foregroundColor,
                         fontSize: 14,
@@ -1765,7 +1765,7 @@ class _TransactionScreen extends State<TransactionScreen>
                     MoneySymbolFormatter(
                       digit: total >= 0 ? '+' : '',
                       text: total,
-                      currencyId: _wallet.currencyID,
+                      currencyId: wallet.currencyID,
                       textStyle: TextStyle(
                         color: Style.foregroundColor,
                         fontSize: 14,
@@ -1777,37 +1777,38 @@ class _TransactionScreen extends State<TransactionScreen>
             ),
             TextButton(
               onPressed: () {
+                // tính toán mốc thời gian bắt đầu, kết thúc với trường hợp != "ALL"
                 if (choosedTimeRange < 6) {
                   if (transListSortByDate[0][0].date.year <
-                          _beginDate[19].year ||
+                          beginDate[19].year ||
                       (transListSortByDate[0][0].date.year ==
-                              _beginDate[19].year &&
+                              beginDate[19].year &&
                           transListSortByDate[0][0].date.month <
-                              _beginDate[19].month) ||
+                              beginDate[19].month) ||
                       (transListSortByDate[0][0].date.year ==
-                              _beginDate[19].year &&
+                              beginDate[19].year &&
                           transListSortByDate[0][0].date.month ==
-                              _beginDate[19].month &&
+                              beginDate[19].month &&
                           transListSortByDate[0][0].date.day <=
-                              _beginDate[19].day)) {
-                    _endDate.add(DateTime(_beginDate[19].year,
-                        _beginDate[19].month, _beginDate[19].day + 6));
+                              beginDate[19].day)) {
+                    endDate.add(DateTime(beginDate[19].year,
+                        beginDate[19].month, beginDate[19].day + 6));
                   } else
-                    _endDate.add(transListSortByDate[0][0].date);
+                    endDate.add(transListSortByDate[0][0].date);
                 } else if (choosedTimeRange == 6) {
-                  _endDate.clear();
-                  _endDate.add(transListSortByDate[0][0].date);
-                  _beginDate.clear();
-                  _beginDate.add(
+                  endDate.clear();
+                  endDate.add(transListSortByDate[0][0].date);
+                  beginDate.clear();
+                  beginDate.add(
                       transListSortByDate[transListSortByDate.length - 1][0]
                           .date);
                 }
                 Navigator.of(context).push(PageTransition(
                     type: PageTransitionType.rightToLeft,
                     child: ReportForThisPeriodScreen(
-                      currentWallet: _wallet,
-                      beginDate: _beginDate[_tabController.index],
-                      endDate: _endDate[_tabController.index],
+                      currentWallet: wallet,
+                      beginDate: beginDate[_tabController.index],
+                      endDate: endDate[_tabController.index],
                     )));
               },
               child: Text(
@@ -1823,8 +1824,8 @@ class _TransactionScreen extends State<TransactionScreen>
     );
   }
 
-  void buildShowDialog(BuildContext context, id) async {
-    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+  void buildShowDialogSelectWallet(BuildContext context, id) async {
+    final auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
     await showCupertinoModalBottomSheet(
         isDismissible: true,
@@ -1833,7 +1834,7 @@ class _TransactionScreen extends State<TransactionScreen>
         builder: (context) {
           return Provider(
               create: (_) {
-                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+                return FirebaseFireStoreService(uid: auth.currentUser.uid);
               },
               child: WalletSelectionScreen(
                 id: id,
@@ -1842,6 +1843,5 @@ class _TransactionScreen extends State<TransactionScreen>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => throw UnimplementedError();
 }

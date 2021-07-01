@@ -19,12 +19,12 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class TransactionDetail extends StatefulWidget {
-  final MyTransaction transaction;
+  final MyTransaction currentTransaction;
   final Wallet wallet;
 
   TransactionDetail({
     Key key,
-    @required this.transaction,
+    @required this.currentTransaction,
     @required this.wallet,
   }) : super(key: key);
 
@@ -33,60 +33,69 @@ class TransactionDetail extends StatefulWidget {
 }
 
 class _TransactionDetailState extends State<TransactionDetail> {
+  // biến xác định transaction này là debt hay loan
   bool isDebtOrLoan;
+  // biến sự kiện của transaction
   Event event;
-  MyTransaction _transaction;
-  int count = 0;
+  // biến transaction hiện tại
+  MyTransaction currentTransaction;
 
   @override
   void initState() {
     super.initState();
-    _transaction = widget.transaction;
-    isDebtOrLoan = _transaction.category.name == 'Debt' ||
-        _transaction.category.name == 'Loan';
+    currentTransaction = widget.currentTransaction;
+    isDebtOrLoan = currentTransaction.category.name == 'Debt' ||
+        currentTransaction.category.name == 'Loan';
+    // lấy event của transaction
     Future.delayed(Duration.zero, () async {
-      var res = await getEvent(_transaction.eventID, widget.wallet);
+      var res = await getEvent(currentTransaction.eventID, widget.wallet);
       setState(() {
         event = res;
       });
     });
   }
 
+  // lấy event của transaction
   Future<Event> getEvent(String id, Wallet wallet) async {
     if (id == '' || id == null) return null;
-    final _firestore =
+    final firestore =
         Provider.of<FirebaseFireStoreService>(context, listen: false);
-    var _event = await _firestore.getEventByID(id, wallet);
+    var _event = await firestore.getEventByID(id, wallet);
     return _event;
   }
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    Color _colorAmount;
+    // biến để thao tác với database
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
+    // màu của amount của transaction
+    Color colorAmount;
 
-    if (_transaction.category.type == 'expense') {
-      _colorAmount = Style.expenseColor;
-    } else if (_transaction.category.type == 'income') {
-      _colorAmount = Style.incomeColor2;
-    } else {
-      switch (_transaction.category.name) {
+    // cate của transaction là expense
+    if (currentTransaction.category.type == 'expense') {
+      colorAmount = Style.expenseColor;
+      // cate của transaction là income
+    } else if (currentTransaction.category.type == 'income') {
+      colorAmount = Style.incomeColor2;
+    }
+    // cate của transaction là debt & loan
+    else {
+      switch (currentTransaction.category.name) {
         case 'Debt':
-          _colorAmount = Style.incomeColor2;
+          colorAmount = Style.incomeColor2;
           break;
         case 'Loan':
-          _colorAmount = Style.expenseColor;
+          colorAmount = Style.expenseColor;
           break;
         case 'Repayment':
-          _colorAmount = Style.expenseColor;
+          colorAmount = Style.expenseColor;
           break;
         case 'Debt Collection':
-          _colorAmount = Style.incomeColor2;
+          colorAmount = Style.incomeColor2;
           break;
       }
     }
 
-    print('build detail');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -117,14 +126,6 @@ class _TransactionDetailState extends State<TransactionDetail> {
         ),
         centerTitle: false,
         actions: [
-          // IconButton(
-          //     icon: Icon(
-          //       Icons.share,
-          //       color: Colors.white,
-          //     ),
-          //     onPressed: () async {
-          //       //Todo: Edit transaction
-          //     }),
           IconButton(
               icon: Icon(
                 Icons.edit,
@@ -134,14 +135,14 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 final updatedTrans = await showCupertinoModalBottomSheet(
                     context: context,
                     builder: (context) => EditTransactionScreen(
-                          transaction: _transaction,
+                          transaction: currentTransaction,
                           wallet: widget.wallet,
                           event: event,
                         ));
                 if (updatedTrans != null) {
                   var e = await getEvent(updatedTrans.eventID, widget.wallet);
                   setState(() {
-                    _transaction = updatedTrans;
+                    currentTransaction = updatedTrans;
                     event = e;
                   });
                 }
@@ -152,8 +153,6 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 color: Style.foregroundColor.withOpacity(0.54),
               ),
               onPressed: () async {
-                //TODO: Thuc hien xoa transaction
-
                 String result = await showDialog(
                     context: context,
                     barrierDismissible: false,
@@ -186,8 +185,6 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               onPressed: () {
                                 Navigator.of(context, rootNavigator: true)
                                     .pop('Yes');
-
-                                // chưa có animation để back ra transaction screen
                               },
                               child: Text(
                                 'Yes',
@@ -201,18 +198,22 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       );
                     });
                 if (result == 'Yes') {
-                  if (_transaction.category.name == 'Repayment' ||
-                      _transaction.category.name == 'Debt Collection') {
-                    await _firestore.updateDebtLoanTransationAfterDelete(
-                        _transaction, widget.wallet);
+                  // nếu transaction cate là repayment / debt collection
+                  if (currentTransaction.category.name == 'Repayment' ||
+                      currentTransaction.category.name == 'Debt Collection') {
+                    // update extraTransaction mà liên hệ vs transaction
+                    await firestore.updateDebtLoanTransationAfterDelete(
+                        currentTransaction, widget.wallet);
                   }
-                  if (_transaction.category.name == 'Debt' ||
-                      _transaction.category.name == 'Loan') {
-                    await _firestore.deleteInstanceInTransactionIdList(
-                        _transaction.id, widget.wallet.id);
+                  // nếu transaction cate là debt/loan
+                  if (currentTransaction.category.name == 'Debt' ||
+                      currentTransaction.category.name == 'Loan') {
+                    // xóa các thông tin cần thiết của transaction
+                    await firestore.deleteInstanceInTransactionIdList(
+                        currentTransaction.id, widget.wallet.id);
                   }
-                  await _firestore.deleteTransaction(
-                      _transaction, widget.wallet);
+                  await firestore.deleteTransaction(
+                      currentTransaction, widget.wallet);
                   Navigator.pop(context, 'Deleted');
                 }
               })
@@ -246,7 +247,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     minLeadingWidth: 60,
                     leading: Container(
                         child: SuperIcon(
-                      iconPath: _transaction.category.iconID,
+                      iconPath: currentTransaction.category.iconID,
                       size: 50,
                     )),
                     title: Container(
@@ -254,7 +255,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _transaction.category.name,
+                            currentTransaction.category.name,
                             style: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w600,
@@ -262,12 +263,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               fontSize: 20,
                             ),
                           ),
-                          if (_transaction.note != '' &&
-                              _transaction.note != null)
+                          if (currentTransaction.note != '' &&
+                              currentTransaction.note != null)
                             Container(
                               padding: EdgeInsets.only(top: 2, bottom: 8),
                               child: Text(
-                                '${_transaction.note}',
+                                '${currentTransaction.note}',
                                 style: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w400,
@@ -278,11 +279,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               ),
                             ),
                           MoneySymbolFormatter(
-                            text: _transaction.amount,
+                            text: currentTransaction.amount,
                             currencyId: widget.wallet.currencyID,
                             textStyle: TextStyle(
                                 fontFamily: Style.fontFamily,
-                                color: _colorAmount,
+                                color: colorAmount,
                                 fontSize: 28,
                                 fontWeight: FontWeight.w500),
                           )
@@ -305,9 +306,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           iconPath: 'assets/images/time.svg', size: 35.0),
                     ),
                     title: Text(
-                      //_transaction.date.toString(),
                       DateFormat('EEEE, dd MMMM yyyy')
-                          .format(_transaction.date),
+                          .format(currentTransaction.date),
                       style: TextStyle(
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w600,
@@ -350,8 +350,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       ),
                     ),
                   ),
-                  if (_transaction.eventID != "" &&
-                      _transaction.eventID != null)
+                  if (currentTransaction.eventID != "" &&
+                      currentTransaction.eventID != null)
                     Column(
                       children: [
                         Container(
@@ -414,9 +414,9 @@ class _TransactionDetailState extends State<TransactionDetail> {
                             ),
                           ),
                           title: Text(
-                            _transaction.contact == null
+                            currentTransaction.contact == null
                                 ? 'With someone'
-                                : 'With ${_transaction.contact}',
+                                : 'With ${currentTransaction.contact}',
                             style: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w600,
@@ -426,22 +426,19 @@ class _TransactionDetailState extends State<TransactionDetail> {
                           ),
                         ),
                         Container(
-                          //padding: EdgeInsets.only(left: 92),
                           child: Divider(
                             color: Style.foregroundColor.withOpacity(0.12),
                             thickness: 0.5,
                           ),
                         ),
                         DebtLoanSection(
-                          count: count,
                           refesh: (transaction) {
                             setState(() {
                               if (transaction != null)
-                                _transaction = transaction;
-                              // _transaction = widget.transaction;
+                                currentTransaction = transaction;
                             });
                           },
-                          transaction: _transaction,
+                          transaction: currentTransaction,
                           wallet: widget.wallet,
                         ),
                       ],
@@ -452,17 +449,10 @@ class _TransactionDetailState extends State<TransactionDetail> {
             SizedBox(
               height: 10,
             ),
-            // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 20),
-            //   child: Divider(
-            //     color: Colors.white24,
-            //     thickness: 1,
-            //   ),
-            // ),
             // Này là để hiện budget đã có hoặc tùy chọn thêm budget
             StreamBuilder<List<Budget>>(
-                stream: _firestore.budgetTransactionStream(
-                    _transaction, widget.wallet.id),
+                stream: firestore.budgetTransactionStream(
+                    currentTransaction, widget.wallet.id),
                 builder: (context, snapshot) {
                   List<Budget> budgets = snapshot.data ?? [];
                   print('Nafy la in tu transaction detail');
@@ -514,7 +504,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                     context: context,
                                     builder: (context) => AddBudget(
                                           wallet: widget.wallet,
-                                          myCategory: _transaction.category,
+                                          myCategory:
+                                              currentTransaction.category,
                                         ));
                               },
                               child: Container(
@@ -547,15 +538,6 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       ),
                     );
 
-                  /*return Column(
-                    children: [
-                      for (int i = 0; i < budgets.length; i++)
-                        MyBudgetTile(
-                          budget: budgets[i],
-                          wallet: widget.wallet,
-                        ),
-                    ],
-                  );*/
                   return Container(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
@@ -608,7 +590,6 @@ class _TransactionDetailState extends State<TransactionDetail> {
 }
 
 class DebtLoanSection extends StatelessWidget {
-  final int count;
   final Wallet wallet;
   final MyTransaction transaction;
   final Function refesh;
@@ -617,7 +598,6 @@ class DebtLoanSection extends StatelessWidget {
     @required this.transaction,
     @required this.wallet,
     @required this.refesh,
-    @required this.count,
   }) : super(key: key);
 
   @override
@@ -723,7 +703,7 @@ class DebtLoanSection extends StatelessWidget {
                             child: TransactionListScreen(
                                 transactionId: transaction.id, wallet: wallet),
                             type: PageTransitionType.rightToLeft));
-
+                    // thực hiện refesh lại screen sau khi back về từ TransactionListScreen
                     refesh(trans);
                   },
                   child: Text(
@@ -762,18 +742,12 @@ class DebtLoanSection extends StatelessWidget {
                           ),
                         ),
                         onPressed: () async {
-                          // await Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (_) => CashBackScreen(
-                          //             transaction: transaction, wallet: wallet)));
                           await showCupertinoModalBottomSheet(
                               context: context,
                               builder: (context) => CashBackScreen(
                                   transaction: transaction, wallet: wallet));
-                          print('alo');
+                          // refesh sau khi back về từ trang CashBackScreen
                           refesh(null);
-                          print(transaction.extraAmountInfo);
                         },
                         child: Text(
                           'Cashback',

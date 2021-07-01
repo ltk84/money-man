@@ -154,7 +154,6 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
             : ListView.builder(
                 physics: BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
-                //shrinkWrap: true,
                 itemCount: transactionListSortByDate.length,
                 itemBuilder: (context, xIndex) {
                   double totalAmountInDay = 0;
@@ -258,7 +257,8 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex][yIndex],
+                            currentTransaction: transListSortByDate[xIndex]
+                                [yIndex],
                             wallet: widget.wallet,
                           ),
                           type: PageTransitionType.rightToLeft));

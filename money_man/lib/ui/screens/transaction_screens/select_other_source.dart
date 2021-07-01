@@ -9,10 +9,15 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class SelectOtherSourceScreen extends StatelessWidget {
+  // biến dòng chữ ở đầu
   final String title;
+  // biến dòng chữ ở cuối
   final String titleAtEnd;
+  // biến điều kiện để lọc lấy từ database
   final String criteria;
+  // biến ví hiện tại
   final Wallet wallet;
+
   const SelectOtherSourceScreen({
     Key key,
     @required this.title,
@@ -90,10 +95,11 @@ class OtherSourceListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return FutureBuilder<List<MyTransaction>>(
         future:
-            _firestore.getListOfTransactionWithCriteria(criteria, wallet.id),
+            // lấy danh sách các transaction với điều kiện
+            firestore.getListOfTransactionWithCriteria(criteria, wallet.id),
         builder: (context, AsyncSnapshot<List<MyTransaction>> snapshot) {
           List<MyTransaction> transList = snapshot.data ?? [];
           print(snapshot.hasData);
@@ -110,7 +116,6 @@ class OtherSourceListView extends StatelessWidget {
                   MyTransaction trans = transList[index];
                   return Container(
                     decoration: BoxDecoration(
-                        //color: Style.boxBackgroundColor,
                         border: Border(
                             top: BorderSide(
                               width: 0.5,
