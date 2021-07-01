@@ -5,7 +5,6 @@ import 'package:flutter/painting.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
@@ -136,7 +135,7 @@ class _FirstStepState extends State<FirstStep> {
                             ),
                             Icon(
                               Icons.arrow_drop_down,
-                              color: white,
+                              color: Colors.white,
                               size: 30,
                             ),
                           ],

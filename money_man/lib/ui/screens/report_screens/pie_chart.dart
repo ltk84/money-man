@@ -6,7 +6,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/category_model.dart';
-import 'package:money_man/ui/screens/report_screens/indicator_pie_chart.dart';
 import 'package:money_man/ui/style.dart';
 
 /// Icons by svgrepo.com (https://www.svgrepo.com/collection/job-and-professions-3/)
@@ -75,7 +74,6 @@ class PieChartScreenState extends State<PieChartScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Transform.scale(
@@ -108,24 +106,21 @@ class PieChartScreenState extends State<PieChartScreen> {
                   aspectRatio: 1,
                   child: PieChart(
                     PieChartData(
-                        pieTouchData: PieTouchData(
-                            touchCallback: (pieTouchResponse) {
-                              setState(() {
-                                final desiredTouch =
-                                    pieTouchResponse
-                                        .touchInput is! PointerExitEvent &&
-                                        pieTouchResponse
-                                            .touchInput is! PointerUpEvent;
-                                if (desiredTouch &&
-                                    pieTouchResponse.touchedSection != null) {
-                                  touchedIndex =
-                                      pieTouchResponse.touchedSection
-                                          .touchedSectionIndex;
-                                } else {
-                                  touchedIndex = -1;
-                                }
-                              });
-                            }),
+                        pieTouchData:
+                            PieTouchData(touchCallback: (pieTouchResponse) {
+                          setState(() {
+                            final desiredTouch = pieTouchResponse.touchInput
+                                    is! PointerExitEvent &&
+                                pieTouchResponse.touchInput is! PointerUpEvent;
+                            if (desiredTouch &&
+                                pieTouchResponse.touchedSection != null) {
+                              touchedIndex = pieTouchResponse
+                                  .touchedSection.touchedSectionIndex;
+                            } else {
+                              touchedIndex = -1;
+                            }
+                          });
+                        }),
                         borderData: FlBorderData(
                           show: false,
                         ),
@@ -148,56 +143,59 @@ class PieChartScreenState extends State<PieChartScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
                     _categoryList.length,
-                        (index) =>
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 2),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 14,
-                                height: 14,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle, // BoxShape.circle,
-                                  color: index < colors.length ? colors[index] : Style.pieChartExtendedCategoryColor,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                _categoryList[index].name,
-                                style: TextStyle(
-                                  fontFamily: Style.fontFamily,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.0,
-                                  color: index < colors.length ? colors[index] : Style.pieChartExtendedCategoryColor,
-                                ),
-                              )
-                            ],
+                    (index) => Container(
+                      padding: EdgeInsets.symmetric(vertical: 2),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 14,
+                            height: 14,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle, // BoxShape.circle,
+                              color: index < colors.length
+                                  ? colors[index]
+                                  : Style.pieChartExtendedCategoryColor,
+                            ),
                           ),
-                        ),
-                  )
-              ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            _categoryList[index].name,
+                            style: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: index < colors.length
+                                  ? colors[index]
+                                  : Style.pieChartExtendedCategoryColor,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
               if (_isShowPercent)
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: List.generate(
-                      _categoryList.length,
-                          (index) =>
-                              Container(
-                                padding: EdgeInsets.symmetric(vertical: 2),
-                                child: Text(
-                                  ((_info[index] / _total) * 100).toStringAsFixed(2) + '%',
-                                  style: TextStyle(
-                                    fontFamily: Style.fontFamily,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14.0,
-                                    color: index < colors.length ? colors[index] : Style.pieChartExtendedCategoryColor,
-                                  ),
+                        _categoryList.length,
+                        (index) => Container(
+                              padding: EdgeInsets.symmetric(vertical: 2),
+                              child: Text(
+                                ((_info[index] / _total) * 100)
+                                        .toStringAsFixed(2) +
+                                    '%',
+                                style: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.0,
+                                  color: index < colors.length
+                                      ? colors[index]
+                                      : Style.pieChartExtendedCategoryColor,
                                 ),
-                              )
-                    )
-                ),
+                              ),
+                            ))),
             ],
           ),
         ),
@@ -214,26 +212,31 @@ class PieChartScreenState extends State<PieChartScreen> {
             final widgetSize = isTouched ? 40.0 : 20.0;
             final double fontTitleSize = isTouched ? 17 : 8.5;
 
-            if (_total == 0)
-              _total = 1;
+            if (_total == 0) _total = 1;
             var value = ((_info[i] / _total) * 100);
 
             return PieChartSectionData(
-              color: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
+              color: i < colors.length
+                  ? colors[i]
+                  : Style.pieChartExtendedCategoryColor,
               value: value == 0 ? 1 : value,
               showTitle: _isShowPercent,
               title: value.toStringAsFixed(2) + '%',
               titlePositionPercentageOffset: isTouched ? 2.3 : 2.20,
               radius: radius,
               titleStyle: TextStyle(
-                  color: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
+                  color: i < colors.length
+                      ? colors[i]
+                      : Style.pieChartExtendedCategoryColor,
                   fontSize: fontTitleSize,
                   fontWeight: FontWeight.w500,
                   fontFamily: Style.fontFamily),
               badgeWidget: _Badge(
                 _categoryList[i].iconID, // category icon.
                 size: widgetSize,
-                borderColor: i < colors.length ? colors[i] : Style.pieChartExtendedCategoryColor,
+                borderColor: i < colors.length
+                    ? colors[i]
+                    : Style.pieChartExtendedCategoryColor,
               ),
               badgePositionPercentageOffset: .98,
             );
@@ -256,8 +259,7 @@ class PieChartScreenState extends State<PieChartScreen> {
             final radius = 8.0;
             final widgetSize = 20.0;
 
-            if (_total == 0)
-              _total = 1;
+            if (_total == 0) _total = 1;
             var value = ((_info[i] / _total) * 100);
 
             return PieChartSectionData(
@@ -285,7 +287,8 @@ class _Badge extends StatelessWidget {
   final double size;
   final Color borderColor;
 
-  const _Badge(this.svgAsset, {
+  const _Badge(
+    this.svgAsset, {
     Key key,
     @required this.size,
     @required this.borderColor,

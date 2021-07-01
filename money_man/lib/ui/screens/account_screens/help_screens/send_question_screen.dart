@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 
@@ -118,7 +117,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
                         fontFamily: Style.fontFamily,
                         fontSize: 18.0,
                         fontWeight: FontWeight.w600),
-                    cursorColor: white,
+                    cursorColor: Style.foregroundColor,
                     decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -150,7 +149,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
                         fontFamily: Style.fontFamily,
                         fontSize: 18.0,
                         fontWeight: FontWeight.w400),
-                    cursorColor: white,
+                    cursorColor: Style.foregroundColor,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Type your message",

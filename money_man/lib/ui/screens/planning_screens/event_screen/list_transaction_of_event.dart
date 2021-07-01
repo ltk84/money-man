@@ -4,7 +4,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:money_man/ui/screens/transaction_screens/transaction_detail_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
@@ -204,9 +204,9 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
               color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                    color: Style.backgroundColor,
-                    width: 1.0,
-                  ))),
+                color: Style.backgroundColor,
+                width: 1.0,
+              ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
           child: Column(children: <Widget>[
             Container(
@@ -246,14 +246,15 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                           fontFamily: Style.fontFamily,
                         )),
                     MoneySymbolFormatter(
-                        text: total,
-                        currencyId: widget.eventWallet.currencyID,
-                        textStyle: TextStyle(
-                          color: Style.foregroundColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: Style.fontFamily,
-                        ),),
+                      text: total,
+                      currencyId: widget.eventWallet.currencyID,
+                      textStyle: TextStyle(
+                        color: Style.foregroundColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: Style.fontFamily,
+                      ),
+                    ),
                   ]),
             ),
           ])),
@@ -375,19 +376,20 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                       ),
                       Expanded(
                         child: MoneySymbolFormatter(
-                            text: transListSortByDate[xIndex][yIndex].amount,
-                            currencyId: widget.eventWallet.currencyID,
-                            textAlign: TextAlign.end,
-                            textStyle: TextStyle(
-                                fontFamily: Style.fontFamily,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14.0,
-                                color: transListSortByDate[xIndex][yIndex]
-                                    .category
-                                    .type ==
-                                    'income'
-                                    ? Style.incomeColor2
-                                    : Style.expenseColor),),
+                          text: transListSortByDate[xIndex][yIndex].amount,
+                          currencyId: widget.eventWallet.currencyID,
+                          textAlign: TextAlign.end,
+                          textStyle: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: transListSortByDate[xIndex][yIndex]
+                                          .category
+                                          .type ==
+                                      'income'
+                                  ? Style.incomeColor2
+                                  : Style.expenseColor),
+                        ),
                       ),
                     ],
                   ),

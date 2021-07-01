@@ -11,7 +11,7 @@ import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/screens/transaction_screens/report_for_this_period.dart';
-import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:money_man/ui/screens/transaction_screens/transaction_detail_screen.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
