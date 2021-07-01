@@ -5,7 +5,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
-
+// màn hình hiển thị các category trên hệ thống khi nhấn vào category ở account screen
 class CategoriesScreen extends StatefulWidget {
   // list tab category
   final List<Tab> categoryTypeTab = [
@@ -18,7 +18,7 @@ class CategoriesScreen extends StatefulWidget {
     Tab(
       text: 'INCOME',
     ),
-  ];
+  ]; 
 
   @override
   _CategoriesScreenState createState() => _CategoriesScreenState();
@@ -120,8 +120,6 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  //child: Container(
-                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
@@ -148,12 +146,12 @@ class _CategoriesScreenState extends State<CategoriesScreen>
               fontWeight: FontWeight.w700,
               fontSize: 13.0,
             ),
-            unselectedLabelColor: Style.foregroundColor.withOpacity(0.54),
-            labelColor: Style.foregroundColor,
-            indicatorColor: Style.primaryColor,
-            physics: NeverScrollableScrollPhysics(),
-            isScrollable: true,
-            indicatorWeight: 3.0,
+            unselectedLabelColor: Style.foregroundColor.withOpacity(0.54), //thiết lập màu label ủa tab không đuơc chọn
+            labelColor: Style.foregroundColor, //thiết lập màu label của tab khi được chọn
+            indicatorColor: Style.primaryColor, //thiết lập màu của đường kẻ phía dưới tab được chọn
+            physics: NeverScrollableScrollPhysics(), //thiết lập không cho phép người dùng scroll
+            isScrollable: true, //thiết lập cho phép tabbar scroll theo chiều ngang
+            indicatorWeight: 3.0, //thiết lập độ dày của đường kẻ dưới tab đã chọn
             controller: _tabController,
             tabs: widget.categoryTypeTab,
           ),
@@ -164,7 +162,9 @@ class _CategoriesScreenState extends State<CategoriesScreen>
             return StreamBuilder<List<MyCategory>>(
                 stream: _firestore.categoryStream,
                 builder: (context, snapshot) {
+                  // danh sách các category được lấy xuống từ database
                   final _listCategories = snapshot.data ?? [];
+                  // lọc các category thuộc các loại category tương ứng với mỗi tab
                   final _selectCateTab = _listCategories
                       .where((element) =>
                           element.type ==

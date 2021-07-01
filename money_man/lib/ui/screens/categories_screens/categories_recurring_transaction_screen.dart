@@ -8,8 +8,9 @@ import 'package:money_man/ui/screens/transaction_screens/select_other_source.dar
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
+
 class CategoriesRecurringTransactionScreen extends StatefulWidget {
-  final String walletId;
+  final String walletId; // id của ví hiện tại
 
   const CategoriesRecurringTransactionScreen({Key key, @required this.walletId})
       : super(key: key);
@@ -167,7 +168,9 @@ class _CategoriesRecurringTransactionScreenState
             return StreamBuilder<List<MyCategory>>(
                 stream: _firestore.categoryStream,
                 builder: (context, snapshot) {
+                  // danh sách các category đươc lấy xuống từ database
                   final _listCategories = snapshot.data ?? [];
+                  // danh sách các category có cùng thể loại,tương ứng với mỗi tab
                   final _selectCateTab = _listCategories
                       .where((element) =>
                           element.type ==

@@ -12,8 +12,8 @@ class CustomAcceptAlert extends StatefulWidget {
 
 class _CustomAcceptAlertState extends State<CustomAcceptAlert>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> scaleAnimation;
+  AnimationController controller; //
+  Animation<double> scaleAnimation; //
 
   @override
   void initState() {
