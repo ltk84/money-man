@@ -24,10 +24,12 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
   @override
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
-    var todayRate = today.difference(widget.budget.beginDate).inMicroseconds /
-        widget.budget.endDate
-            .difference(widget.budget.beginDate)
-            .inMicroseconds;
+    var todayRate =
+        DateTime.now().difference(widget.budget.beginDate).inMicroseconds /
+            widget.budget.endDate
+                .add(Duration(days: 1))
+                .difference(widget.budget.beginDate)
+                .inMicroseconds;
     var todayTarget = widget.budget.spent / widget.budget.amount;
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     _firestore.updateBudget(widget.budget, widget.wallet);

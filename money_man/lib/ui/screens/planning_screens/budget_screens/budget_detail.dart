@@ -63,12 +63,22 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     DateTime today = DateTime.now();
     today = DateTime(today.year, today.month, today.day);
-    var currentTime = (today).difference(widget.budget.beginDate).inDays;
+    var currentTime =
+        (DateTime.now()).difference(widget.budget.beginDate).inDays;
     if (currentTime == 0) currentTime = 1;
     // todayRate là biến biểu thị tỉ lệ thời gian hiện tại trong khoảng thời gian của budget. nếu >1 đã kết thúc, <0 chưa bắt đầu
-    var todayRate = today.difference(widget.budget.beginDate).inSeconds /
-        widget.budget.endDate.difference(widget.budget.beginDate).inSeconds;
-    var todayTarget = widget.budget.spent / widget.budget.amount;
+    var todayRate =
+        DateTime.now().difference(widget.budget.beginDate).inMicroseconds /
+            widget.budget.endDate
+                .add(Duration(days: 1))
+                .difference(widget.budget.beginDate)
+                .inMicroseconds;
+    if (todayRate == 0) todayRate = 0.00001;
+    print('todayrate : $todayRate');
+    var todayTarget;
+    todayTarget = widget.budget.spent / widget.budget.amount;
+
+    ;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

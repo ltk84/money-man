@@ -35,11 +35,13 @@ class _LineChartsState extends State<LineCharts> {
   }
 
   double getMaxofY(Budget budget) {
+    // ket thuc roi
     if (DateTime.now()
             .compareTo(widget.budget.endDate.add(Duration(days: 1))) >=
         0) {
       return budget.spent > budget.amount ? budget.spent : budget.amount;
     }
+    // chua ket thuc
     if (DateTime.now().isBefore(budget.beginDate)) {
       return budget.amount;
     } else {
