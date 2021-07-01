@@ -7,6 +7,7 @@ class AccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[900],
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,

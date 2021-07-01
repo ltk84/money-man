@@ -113,6 +113,8 @@ class FirebaseAuthService {
     } on PlatformException catch (e) {
       print(e.code);
       return e.code;
+    } on NoSuchMethodError catch (e) {
+      return e;
     }
   }
 
@@ -121,7 +123,7 @@ class FirebaseAuthService {
     try {
       final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
-      // if (googleUser == null) return null;
+      if (googleUser == null) return null;
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
@@ -158,6 +160,8 @@ class FirebaseAuthService {
     } on PlatformException catch (e) {
       print(e.code);
       return e.code;
+    } on NoSuchMethodError catch (e) {
+      return e;
     }
   }
 
