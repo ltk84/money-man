@@ -32,6 +32,8 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
 
   BudgetTimeRange GetmTimeRangeWeek(DateTime today) {
     var firstDayOfWeek = today.subtract(Duration(days: today.weekday - 1));
+    firstDayOfWeek =
+        DateTime(firstDayOfWeek.year, firstDayOfWeek.month, firstDayOfWeek.day);
     //String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     var endDayOfWeek = firstDayOfWeek.add(Duration(days: 6));
     return new BudgetTimeRange(
@@ -42,6 +44,8 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
 
   String GetSubTitleOfTheMonth(DateTime today) {
     var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
+    firstDayOfMonth = DateTime(
+        firstDayOfMonth.year, firstDayOfMonth.month, firstDayOfMonth.day);
     var endDayOfMonth =
         DateTime(today.year, today.month + 1, 1).subtract(Duration(days: 1));
     String result = DateFormat('dd/MM').format(firstDayOfMonth) +
@@ -52,6 +56,8 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
 
   BudgetTimeRange GetmTimeRangeMonth(DateTime today) {
     var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
+    firstDayOfMonth = DateTime(
+        firstDayOfMonth.year, firstDayOfMonth.month, firstDayOfMonth.day);
     var endDayOfMonth =
         DateTime(today.year, today.month + 1, 1).subtract(Duration(days: 1));
     return new BudgetTimeRange(

@@ -296,11 +296,14 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                             left: 60 +
                                 (MediaQuery.of(context).size.width - 60 - 45) *
                                     todayRate),
-                        height: 20,
-                        width: 40,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+
+                        // height: 20,
+                        //width: 40,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(8),
                             color: Style.boxBackgroundColor),
                         child: Text(
                           "Today",

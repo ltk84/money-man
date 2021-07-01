@@ -31,6 +31,8 @@ class AddBudget extends StatefulWidget {
 class _AddBudgetState extends State<AddBudget> {
   BudgetTimeRange GetmTimeRangeMonth(DateTime today) {
     var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
+    firstDayOfMonth = DateTime(
+        firstDayOfMonth.year, firstDayOfMonth.month, firstDayOfMonth.day);
     var endDayOfMonth =
         DateTime(today.year, today.month + 1, 1).subtract(Duration(days: 1));
     return new BudgetTimeRange(
