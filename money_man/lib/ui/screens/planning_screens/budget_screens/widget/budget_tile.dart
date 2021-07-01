@@ -24,8 +24,10 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
   @override
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
-    var todayRate = today.difference(widget.budget.beginDate).inDays /
-        widget.budget.endDate.difference(widget.budget.beginDate).inDays;
+    var todayRate = today.difference(widget.budget.beginDate).inMicroseconds /
+        widget.budget.endDate
+            .difference(widget.budget.beginDate)
+            .inMicroseconds;
     var todayTarget = widget.budget.spent / widget.budget.amount;
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     _firestore.updateBudget(widget.budget, widget.wallet);
@@ -229,7 +231,6 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                       margin: EdgeInsets.only(
                           left: 45 +
                               (MediaQuery.of(context).size.width - 120) *
-                                  1 /
                                   todayRate),
                       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       // height: 20,
