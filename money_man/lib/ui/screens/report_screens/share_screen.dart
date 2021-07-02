@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -179,43 +180,45 @@ class ShareScreenState extends State<ShareScreen> {
                     ),
                   ),
                   onPressed: () async {
-                    // Lưu hình ảnh theo thứ tự đang được chọn.
-                    dynamic result = await ImageGallerySaver.saveImage(
-                        (currentIndex == 0)
-                            ? reportData1
-                            : ((currentIndex == 1)
-                                ? reportData2
-                                : reportData3),
-                        quality: 100,
-                        name: reportName);
+                    if (await Permission.storage.request().isGranted) {
+                      // Lưu hình ảnh theo thứ tự đang được chọn.
+                      dynamic result = await ImageGallerySaver.saveImage(
+                          (currentIndex == 0)
+                              ? reportData1
+                              : ((currentIndex == 1)
+                              ? reportData2
+                              : reportData3),
+                          quality: 100,
+                          name: reportName);
 
-                    if (result['isSuccess']) {
-                      // Thông báo lưu thành công.
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: false,
-                        barrierColor: Style.backgroundColor.withOpacity(0.54),
-                        builder: (BuildContext context) {
-                          return CustomAlert(
-                              iconPath: "assets/images/success.svg",
-                              title: "Successfully",
-                              content:
-                                  "Image has been saved,\ncheck your gallery.");
-                        },
-                      );
-                    } else {
-                      // Thông báo lưu thất bại.
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: false, // user must tap button!
-                        barrierColor: Style.backgroundColor.withOpacity(0.54),
-                        builder: (BuildContext context) {
-                          return CustomAlert(
-                              iconPath: "assets/images/error.svg",
-                              content:
-                                  "Something was wrong,\nplease try again.");
-                        },
-                      );
+                      if (result['isSuccess']) {
+                        // Thông báo lưu thành công.
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false,
+                          barrierColor: Style.backgroundColor.withOpacity(0.54),
+                          builder: (BuildContext context) {
+                            return CustomAlert(
+                                iconPath: "assets/images/success.svg",
+                                title: "Successfully",
+                                content:
+                                "Image has been saved,\ncheck your gallery.");
+                          },
+                        );
+                      } else {
+                        // Thông báo lưu thất bại.
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          barrierColor: Style.backgroundColor.withOpacity(0.54),
+                          builder: (BuildContext context) {
+                            return CustomAlert(
+                                iconPath: "assets/images/error.svg",
+                                content:
+                                "Something was wrong,\nplease try again.");
+                          },
+                        );
+                      }
                     }
                   },
                   child: Row(
