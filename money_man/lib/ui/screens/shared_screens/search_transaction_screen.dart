@@ -14,10 +14,10 @@ import 'package:intl/intl.dart';
 
 class SearchTransactionScreen extends StatefulWidget {
   final Wallet wallet;
-  final String muserSearch;
+  final String searchPattern;
 
   const SearchTransactionScreen(
-      {Key key, @required this.wallet, this.muserSearch})
+      {Key key, @required this.wallet, this.searchPattern})
       : super(key: key);
   @override
   _SearchTransactionScreenState createState() =>
@@ -40,9 +40,9 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.muserSearch != null) {
+    if (widget.searchPattern != null) {
       setState(() {
-        searchPattern = widget.muserSearch;
+        searchPattern = widget.searchPattern;
       });
     }
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -241,7 +241,6 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                         DateFormat("MMMM yyyy")
                             .format(transListSortByDate[xIndex][0].date)
                             .toString(),
-                    // 'hello',
                     style: TextStyle(
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,

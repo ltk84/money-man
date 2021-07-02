@@ -10,14 +10,18 @@ class EnterAmountScreen extends StatefulWidget {
 }
 
 class _EnterAmountScreenState extends State<EnterAmountScreen> {
+  // biến xác định việc kết thúc nhập
   var isEnd = false;
+  // đầu vào của user
   var userInput = '';
+  // kết quả đầu ra
   var answer = '';
+  // đầu vào được format
   var userInputFormat = '';
+  // đầu ra được format
   var answerFormat = '';
-  var tempt = '';
 
-// Array of button
+// mảng các nút
   final List<String> buttons = [
     'AC',
     '÷',
@@ -43,27 +47,11 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         leading: CloseButton(
           color: Style.calculatorForegroundColor,
         ),
-        // title: Container(
-        //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        //   decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(20),
-        //       color: Color(0xff444b59)),
-        //   child: Text(
-        //     'Calculate your amount',
-        //     style: TextStyle(
-        //       fontFamily: fontFamily,
-        //       color: foregroundColor,
-        //       fontWeight: FontWeight.w600,
-        //       fontSize: 18.0,
-        //     ),
-        //   ),
-        // ),
         title: Text(
           'Calculate your amount',
           style: TextStyle(
@@ -96,9 +84,9 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                           child: Text(
                             userInputFormat,
                             style: TextStyle(
-                                fontSize: 25,
-                                color: Style.calculatorForegroundColor,
-                                fontFamily: Style.fontFamily,
+                              fontSize: 25,
+                              color: Style.calculatorForegroundColor,
+                              fontFamily: Style.fontFamily,
                             ),
                           ),
                         ),
@@ -134,61 +122,98 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                             children: [
                               Column(
                                 children: [
-                                  KeyOfCalc(
+                                  buildKeyOfCalculator(
                                     0,
                                     Style.calculatorForegroundColor2,
                                     Style.calculatorCancelButtonColor,
                                   ),
-                                  KeyOfCalc(
-                                      4, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
-                                  KeyOfCalc(
-                                      8, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
-                                  KeyOfCalc(
-                                      12, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
-                                  KeyOfCalc(
-                                      16, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
+                                  buildKeyOfCalculator(
+                                      4,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorNumberButtonColor),
+                                  buildKeyOfCalculator(
+                                      8,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorNumberButtonColor),
+                                  buildKeyOfCalculator(
+                                      12,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorNumberButtonColor),
+                                  buildKeyOfCalculator(
+                                      16,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorNumberButtonColor),
                                 ],
                               ),
                               Column(
                                 children: [
-                                  KeyOfCalc(
-                                      1, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
-                                  KeyOfCalc(
-                                      5, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
-                                  KeyOfCalc(
-                                      9, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
-                                  KeyOfCalc(
-                                      13, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
-                                  KeyOfCalc(
-                                      17, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
+                                  buildKeyOfCalculator(
+                                      1,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorFunctionButtonColor),
+                                  buildKeyOfCalculator(
+                                      5,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorNumberButtonColor),
+                                  buildKeyOfCalculator(
+                                      9,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorNumberButtonColor),
+                                  buildKeyOfCalculator(
+                                      13,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorNumberButtonColor),
+                                  buildKeyOfCalculator(
+                                      17,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorFunctionButtonColor),
                                 ],
                               ),
                               Column(
                                 children: [
-                                  KeyOfCalc(
-                                      2, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
-                                  KeyOfCalc(
-                                      6, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
-                                  KeyOfCalc(
-                                      10, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
-                                  KeyOfCalc(
-                                      14, Style.calculatorForegroundColor2, Style.calculatorNumberButtonColor),
-                                  KeyOfCalc(
-                                      18, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
+                                  buildKeyOfCalculator(
+                                      2,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorFunctionButtonColor),
+                                  buildKeyOfCalculator(
+                                      6,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorNumberButtonColor),
+                                  buildKeyOfCalculator(
+                                      10,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorNumberButtonColor),
+                                  buildKeyOfCalculator(
+                                      14,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorNumberButtonColor),
+                                  buildKeyOfCalculator(
+                                      18,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorFunctionButtonColor),
                                 ],
                               ),
                               Column(
                                 children: [
-                                  KeyOfCalc(
-                                      3, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
-                                  KeyOfCalc(
-                                      7, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
-                                  KeyOfCalc(
-                                      11, Style.calculatorForegroundColor2, Style.calculatorFunctionButtonColor),
-                                  KeyOfCalc(
+                                  buildKeyOfCalculator(
+                                      3,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorFunctionButtonColor),
+                                  buildKeyOfCalculator(
+                                      7,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorFunctionButtonColor),
+                                  buildKeyOfCalculator(
+                                      11,
+                                      Style.calculatorForegroundColor2,
+                                      Style.calculatorFunctionButtonColor),
+                                  buildKeyOfCalculator(
                                       isEnd ? 19 : 15,
                                       Style.calculatorForegroundColor2,
-                                      isEnd ? Style.calculatorCompleteButtonColor : Style.calculatorCalculateButtonColor, //Color(0xff22a115) : Color(0xff25b197),
+                                      isEnd
+                                          ? Style.calculatorCompleteButtonColor
+                                          : Style
+                                              .calculatorCalculateButtonColor, //Color(0xff22a115) : Color(0xff25b197),
                                       2),
                                   //KeyOfCalc(19, Color(0xffdbdddd)),
                                 ],
@@ -208,6 +233,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     );
   }
 
+  // xác định button được nhấn là dấu
   bool isOperator(String x) {
     if (x == '÷' || x == 'x' || x == '-' || x == '+' || x == '=') {
       return true;
@@ -215,20 +241,15 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     return false;
   }
 
-// function to calculate the input operation
+  // tính toán phép tính
   void equalPressed() {
     String finaluserinput = userInput;
-    print(finaluserinput.length);
     if (finaluserinput.isEmpty) return;
-    // String finaluserinput = '123456+123456';
 
     Parser p = Parser();
-    print(finaluserinput);
     Expression exp = p.parse(finaluserinput);
-    print(exp);
     ContextModel cm = ContextModel();
     double eval = exp.evaluate(EvaluationType.REAL, cm);
-    print(eval);
     answer = eval.toString();
     setState(() {
       answerFormat = MoneyFormatter(amount: double.parse(answer))
@@ -241,11 +262,12 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     });
   }
 
-  KeyOnclick(int index) {
+  // hàm xử lý khi nhấn nút
+  keyOnclick(int index) {
     setState(() {
       isEnd = false;
     });
-    print(buttons[index]);
+    // Nút 'C'
     if (index == 0) {
       setState(() {
         userInput = '';
@@ -254,8 +276,8 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
         answerFormat = '0';
       });
     }
-    // Delete Button
 
+    // Nút 'Delete'
     else if (index == 3) {
       {
         if (userInput.isEmpty) return;
@@ -266,7 +288,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
       }
     }
 
-    // Equal_to Button
+    // Nút '='
     else if (index == 15) {
       setState(() {
         isEnd = true;
@@ -274,24 +296,29 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
       });
     }
 
-    // confirm button
+    // Nút 'Confirm'
     else if (index == 19) {
       Navigator.pop(context, answer);
     }
 
-    // other buttons
+    // những nút khác
     else {
       setState(() {
         var sign = ['+', '-', '*', '/'];
         var input;
 
+        // nút dấu nhân
         if (buttons[index] == '×')
           input = '*';
+        // nút dấu chia
         else if (buttons[index] == '÷')
           input = '/';
+        // các nút số + dấu +,-
         else
           input = buttons[index];
+
         if (input == '.' && userInput.contains('.')) return;
+
         if (sign.contains(input)) {
           for (var s in sign) {
             if (userInput.length == 0)
@@ -301,7 +328,6 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                 return;
               else {
                 userInput = userInput.substring(0, userInput.length - 1);
-                print(userInput);
               }
             }
           }
@@ -326,23 +352,23 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
               finalString += formatNumber;
             }
             userInputFormat = finalString;
-            print(userInput);
           }
         }
       });
     }
   }
 
-  KeyOfCalc(int index, Color txtcolor, Color BgColor, [int flex = 1]) {
+  Widget buildKeyOfCalculator(int index, Color txtcolor, Color backgroundColor,
+      [int flex = 1]) {
     return Expanded(
       flex: flex,
       child: GestureDetector(
         onTap: () {
-          KeyOnclick(index);
+          keyOnclick(index);
         },
         child: Container(
           decoration: BoxDecoration(
-            color: BgColor, //Color(0xff282c35),
+            color: backgroundColor, //Color(0xff282c35),
             borderRadius: BorderRadius.circular(15),
           ),
           alignment: Alignment.center,

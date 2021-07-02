@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/style.dart';
 
 class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _auth = FirebaseAuthService();
     return Container(
         color: Style.backgroundColor,
         alignment: Alignment.center,
