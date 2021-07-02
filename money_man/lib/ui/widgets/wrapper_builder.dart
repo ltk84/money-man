@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/core/services/firebase_storage_services.dart';
 import 'package:provider/provider.dart';
 
 class WrapperBuilder extends StatelessWidget {
@@ -25,9 +24,6 @@ class WrapperBuilder extends StatelessWidget {
                   return FirebaseFireStoreService(uid: user.uid);
                 },
               ),
-              Provider<FirebaseStorageService>(create: (BuildContext context) {
-                return FirebaseStorageService(uid: user.uid);
-              }),
             ], child: builder(context, snapshot));
           } else {
             return builder(context, snapshot);

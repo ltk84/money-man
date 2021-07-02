@@ -200,7 +200,6 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
 
   Container buildBottom(List<List<MyTransaction>> transListSortByDate,
       int xIndex, double totalAmountInDay) {
-    print('build bottom by date');
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
@@ -371,7 +370,6 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
 
   StickyHeader buildHeader(
       double totalInCome, double totalOutCome, double total) {
-    print('build header');
     return StickyHeader(
       header: SizedBox(height: 0),
       content: Container(
