@@ -11,12 +11,18 @@ class CustomSelectTimeDialog extends StatefulWidget {
 }
 
 class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with SingleTickerProviderStateMixin {
+  //Tạo controller animation cho animation
   AnimationController controller;
+  //Tạo animation
   Animation<double> scaleAnimation;
 
+  //Thời gian bắt đầu
   DateTime beginDate;
+  //Thời gian kết thúc
   DateTime endDate;
+  // string biểu diễn ngày bắt đầu
   String beginDisplay;
+  // string biểu diễn ngày kết thúc
   String endDisplay;
 
   @override
@@ -107,6 +113,8 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                           textAlign: TextAlign.center,
                         ),
                       ),
+
+                      // hiển thị dialog chọn thời gian khi nhấn vào
                       onTap: () {
                         DatePicker.showDatePicker(context,
                             currentTime: beginDate == null
@@ -203,6 +211,8 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                           textAlign: TextAlign.center,
                         ),
                       ),
+
+                      // Hiển thị dialog chọn thời gian khi nhấn vào
                       onTap: () {
                         DatePicker.showDatePicker(context,
                             currentTime: endDate == null
@@ -317,6 +327,7 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
     );
   }
 
+  // Hàm hiển thị dialog khi gặp lỗi chọn ngày
   Future<void> _showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,

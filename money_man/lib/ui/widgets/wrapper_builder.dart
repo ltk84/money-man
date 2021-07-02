@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 class WrapperBuilder extends StatelessWidget {
   final Widget Function(BuildContext, AsyncSnapshot<User>) builder;
   WrapperBuilder({this.builder});
-
   @override
   Widget build(BuildContext context) {
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);

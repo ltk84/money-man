@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/constaints.dart';
-
+// show dialog confirm 'yes' or 'no'
 class CustomAcceptAlert extends StatefulWidget {
   final content;
   const CustomAcceptAlert({Key key, this.content = "Something was wrong!"})
@@ -12,8 +12,11 @@ class CustomAcceptAlert extends StatefulWidget {
 
 class _CustomAcceptAlertState extends State<CustomAcceptAlert>
     with SingleTickerProviderStateMixin {
-  AnimationController controller; //
-  Animation<double> scaleAnimation; //
+
+  //Tạo controller animation cho animation
+  AnimationController controller;
+  //Tạo animation
+  Animation<double> scaleAnimation;
 
   @override
   void initState() {

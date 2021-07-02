@@ -18,7 +18,7 @@ class CategoriesScreen extends StatefulWidget {
     Tab(
       text: 'INCOME',
     ),
-  ]; 
+  ];
 
   @override
   _CategoriesScreenState createState() => _CategoriesScreenState();
