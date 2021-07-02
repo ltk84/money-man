@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:date_util/date_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_recurring_transaction_screen.dart';
-import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
@@ -36,22 +34,24 @@ class AddRecurringTransactionScreen extends StatefulWidget {
 
 class _AddRecurringTransactionScreenState
     extends State<AddRecurringTransactionScreen> {
+  // Khởi tạo cái biến lưu thông tin giao dịch lặp lại.
   double amount;
   MyCategory category;
   String note;
-  Wallet _wallet;
+  Wallet wallet;
   RepeatOption repeatOption;
   String repeatDescription;
-
   var dateUtility;
+
+  // Lấy ngày hiện tại.
   DateTime now =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _wallet = widget.wallet;
+    // Cập nhật giá trị mặc định cho các biến.
+    wallet = widget.wallet;
     repeatOption = RepeatOption(
         frequency: 'daily',
         rangeAmount: 1,
@@ -67,7 +67,9 @@ class _AddRecurringTransactionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
+
+    // Lấy mô tả cho tùy chọn lặp lại.
     repeatDescription = updateRepeatDescription();
 
     return Scaffold(
@@ -92,23 +94,23 @@ class _AddRecurringTransactionScreenState
               onPressed: () async {
                 // chưa pick amount
                 if (amount == null) {
-                  _showAlertDialog('Please enter amount!');
+                  showAlertDialog('Please enter amount!');
                 }
                 // chưa pick category
                 else if (category == null) {
-                  _showAlertDialog('Please pick category!');
+                  showAlertDialog('Please pick category!');
                 } else {
                   var reTrans = RecurringTransaction(
                     id: 'id',
                     category: category,
                     amount: amount,
-                    walletId: _wallet.id,
+                    walletId: wallet.id,
                     note: note,
                     transactionIdList: [],
                     repeatOption: repeatOption,
                     isFinished: false,
                   );
-                  await _firestore.addRecurringTransaction(reTrans, _wallet);
+                  await firestore.addRecurringTransaction(reTrans, wallet);
                   Navigator.pop(context);
                 }
               },
@@ -239,17 +241,17 @@ class _AddRecurringTransactionScreenState
                             backgroundColor: Style.boxBackgroundColor,
                             context: context,
                             builder: (context) =>
-                                SelectWalletAccountScreen(wallet: _wallet));
+                                SelectWalletAccountScreen(wallet: wallet));
                         if (res != null)
                           setState(() {
-                            _wallet = res;
+                            wallet = res;
                           });
                       },
                       child: buildWalletSelection(
                         display:
-                            this._wallet == null ? null : this._wallet.name,
+                            this.wallet == null ? null : this.wallet.name,
                         iconPath:
-                            this._wallet == null ? null : this._wallet.iconID,
+                            this.wallet == null ? null : this.wallet.iconID,
                       )),
                 ])),
 
@@ -299,6 +301,7 @@ class _AddRecurringTransactionScreenState
         ));
   }
 
+  // Hàm cập nhật mô tả thông tin tùy chọn lặp lại.
   String updateRepeatDescription() {
     String frequency = repeatOption.frequency == 'daily'
         ? 'day'
@@ -353,7 +356,7 @@ class _AddRecurringTransactionScreenState
                           ))
                       : MoneySymbolFormatter(
                           text: amount,
-                          currencyId: _wallet.currencyID,
+                          currencyId: wallet.currencyID,
                           textStyle: TextStyle(
                             color: Style.foregroundColor,
                             fontFamily: Style.fontFamily,
@@ -544,8 +547,8 @@ class _AddRecurringTransactionScreenState
     );
   }
 
-  // hiện thông báo
-  Future<void> _showAlertDialog(String content) async {
+  // Hàm hiển thị thông báo.
+  Future<void> showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

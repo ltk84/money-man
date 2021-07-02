@@ -12,10 +12,9 @@ import 'package:money_man/ui/screens/planning_screens/bills_screens/bill_general
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
-import 'package:currency_picker/currency_picker.dart';
 
 class BillCategoryList extends StatefulWidget {
-  Wallet currentWallet;
+  final Wallet currentWallet;
   BillCategoryList({Key key, @required this.currentWallet}) : super(key: key);
 
   @override
@@ -25,7 +24,6 @@ class BillCategoryList extends StatefulWidget {
 class _BillCategoryListState extends State<BillCategoryList> {
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
@@ -58,12 +56,10 @@ class _BillCategoryListState extends State<BillCategoryList> {
   }
 
   Widget buildListBills(context) {
-    String currencySymbol =
-        CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
 
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<List<Bill>>(
-        stream: _firestore.billStream(widget.currentWallet.id),
+        stream: firestore.billStream(widget.currentWallet.id),
         builder: (context, snapshot) {
           List<Bill> listBills = snapshot.data ?? [];
           if (listBills.length == 0) {
@@ -112,16 +108,14 @@ class _BillCategoryListState extends State<BillCategoryList> {
                         parent: AlwaysScrollableScrollPhysics()),
                     itemCount: listBills.length,
                     itemBuilder: (context, index) =>
-                        buildBillCard(_firestore, listBills[index])),
+                        buildBillCard(firestore, listBills[index])),
               ],
             );
           }
         });
   }
 
-  Widget buildBillCard(dynamic _firestore, Bill bill) {
-    // String currencySymbol =
-    //     CurrencyService().findByCode(widget.currentWallet.currencyID).symbol;
+  Widget buildBillCard(dynamic firestore, Bill bill) {
     return GestureDetector(
       onTap: () {
         showCupertinoModalBottomSheet(

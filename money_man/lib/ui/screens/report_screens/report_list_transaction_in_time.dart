@@ -57,6 +57,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     total = 0;
   }
 
+  // Hàm kiểm tra xem ngày b có lớn hơn ngày a hay không.
   bool compareDate(DateTime a, DateTime b) {
     if (a.year < b.year) return true;
     if (a.year == b.year && a.month < b.month) return true;
@@ -66,9 +67,13 @@ class _ReportListTransaction extends State<ReportListTransaction> {
 
   Widget build(BuildContext context) {
     final firestore = Provider.of<FirebaseFireStoreService>(context);
+
+    // Chuỗi mô tả khoảng thời gian.
     String dateDescription = DateFormat('dd/MM/yyyy').format(beginDate) +
         " - " +
         DateFormat('dd/MM/yyyy').format(endDate);
+
+    // Chuỗi mô tả tên danh mục.
     String categoryDescription = category != null ? category.name : '';
 
     return Scaffold(
@@ -125,7 +130,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   .toList();
               transactionList.sort((a, b) => b.date.compareTo(a.date));
 
-              //
+              // trường hợp hiển thị category
               if (viewByCategory) {
                 transactionList.forEach((element) {
                   // lấy các category trong transaction đã lọc
@@ -143,6 +148,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
                   transactionListSorted.add(b.toList());
                 });
               } else {
+                // trường hợp hiển thị theo date (tương tự)
                 transactionList.forEach((element) {
                   if (!dateInChoosenTime.contains(element.date))
                     dateInChoosenTime.add(element.date);
@@ -178,6 +184,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
           itemCount: transactionListSortByDate.length,
           itemBuilder: (context, xIndex) {
             double totalAmountInDay = 0;
+            // tính toán lượng amount trong ngày
             transactionListSortByDate[xIndex].forEach((element) {
               if (element.category.type == 'expense')
                 totalAmountInDay -= element.amount;
@@ -210,6 +217,7 @@ class _ReportListTransaction extends State<ReportListTransaction> {
           itemCount: transactionListSortByCategory.length,
           itemBuilder: (context, xIndex) {
             double totalAmountInDay = 0;
+            // tính toán lượng amount trong 1 category
             transactionListSortByCategory[xIndex].forEach((element) {
               if (element.category.type == 'expense')
                 totalAmountInDay -= element.amount;
@@ -235,6 +243,8 @@ class _ReportListTransaction extends State<ReportListTransaction> {
     totalMoney = 0;
     double totalExpense = 0;
     double totalIncome = 0;
+
+    // Tính toán tổng thu nhập và tổng chi tiêu.
     transListSorted.forEach((element) {
       element.forEach((e) {
         if (e.category.type == "income") {
@@ -245,6 +255,8 @@ class _ReportListTransaction extends State<ReportListTransaction> {
           totalExpense += e.amount;
       });
     });
+
+    // Tính toán thu nhập ròng.
     totalMoney = totalIncome - totalExpense;
 
     return StickyHeader(

@@ -33,7 +33,6 @@ class _RecurringTransactionMainScreenState
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Style.backgroundColor,
-        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
           elevation: 0.0,
@@ -62,19 +61,6 @@ class _RecurringTransactionMainScreenState
                   )),
             ),
           ),
-          // flexibleSpace: ClipRect(
-          //   child: AnimatedOpacity(
-          //     opacity: 1,
-          //     duration: Duration(milliseconds: 0),
-          //     child: BackdropFilter(
-          //       filter: ImageFilter.blur(
-          //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-          //       child: AnimatedContainer(
-          //           duration: Duration(milliseconds: 1),
-          //           color: Colors.transparent),
-          //     ),
-          //   ),
-          // ),
           actions: [
             Hero(
               tag: 'billToDetail_actionBtn',
@@ -118,10 +104,11 @@ class _RecurringTransactionMainScreenState
     );
   }
 
+  // Hàm build danh sach giao dịch lặp lại.
   Widget buildListRecurringTransactionList(context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<List<RecurringTransaction>>(
-        stream: _firestore.recurringTransactionStream(widget.wallet.id),
+        stream: firestore.recurringTransactionStream(widget.wallet.id),
         builder: (context, snapshot) {
           List<RecurringTransaction> reTransList = snapshot.data ?? [];
           if (reTransList.length == 0) return Container(
@@ -171,6 +158,7 @@ class _RecurringTransactionMainScreenState
         });
   }
 
+  // Hàm build thẻ cho giao dịch lặp lại.
   Widget buildRecurringTransactionCard(RecurringTransaction reTrans) {
     return GestureDetector(
       onTap: () {
@@ -262,6 +250,7 @@ class _RecurringTransactionMainScreenState
     );
   }
 
+  // Hàm build thông tin chung.
   Widget buildOverallInfo(
       {String overdue, String forToday, String thisPeriod}) {
     return Container(
@@ -351,9 +340,10 @@ class _RecurringTransactionMainScreenState
         ));
   }
 
+  // Hàm hiển thị chọn wallet.
   void buildShowDialog(BuildContext context, String id) async {
-    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
-    final _firestore =
+    final auth = Provider.of<FirebaseAuthService>(context, listen: false);
+    final firestore =
         Provider.of<FirebaseFireStoreService>(context, listen: false);
 
     final result = await showCupertinoModalBottomSheet(
@@ -363,13 +353,13 @@ class _RecurringTransactionMainScreenState
         builder: (context) {
           return Provider(
               create: (_) {
-                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+                return FirebaseFireStoreService(uid: auth.currentUser.uid);
               },
               child: WalletSelectionScreen(
                 id: id,
               ));
         });
-    final updatedWallet = await _firestore.getWalletByID(result);
+    final updatedWallet = await firestore.getWalletByID(result);
     setState(() {
       widget.wallet = updatedWallet;
     });

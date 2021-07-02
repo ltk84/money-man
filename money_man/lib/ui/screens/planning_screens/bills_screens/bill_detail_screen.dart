@@ -35,24 +35,25 @@ class BillDetailScreen extends StatefulWidget {
 }
 
 class _BillDetailScreenState extends State<BillDetailScreen> {
-  Bill _bill;
+  // Biến để lấy thông tin hóa đơn.
+  Bill bill;
   String currencySymbol;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _bill = widget.bill;
+
+    // Gán các giá trị mặc định.
+    bill = widget.bill;
     currencySymbol =
         CurrencyService().findByCode(widget.wallet.currencyID).symbol;
   }
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Style.backgroundColor,
-        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
           elevation: 0.0,
@@ -81,23 +82,6 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
             ),
           ),
           centerTitle: true,
-          // flexibleSpace: ClipRect(
-          //   child: AnimatedOpacity(
-          //     opacity: 1,
-          //     duration: Duration(milliseconds: 0),
-          //     child: BackdropFilter(
-          //       filter: ImageFilter.blur(
-          //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-          //       child: AnimatedContainer(
-          //           duration: Duration(milliseconds: 1),
-          //           //child: Container(
-          //           //color: Colors.transparent,
-          //           color: Colors.transparent
-          //           //),
-          //           ),
-          //     ),
-          //   ),
-          //),
           actions: [
             Hero(
               tag: 'billToDetail_actionBtn',
@@ -107,13 +91,13 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                       context: context,
                       builder: (context) {
                         return EditBillScreen(
-                          bill: _bill,
+                          bill: bill,
                           wallet: widget.wallet,
                         );
                       });
                   if (updatedBill != null) {
                     setState(() {
-                      _bill = updatedBill;
+                      bill = updatedBill;
                     });
                   }
                 },
@@ -149,8 +133,8 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                 child: Column(
                   children: [
                     buildInfoCategory(
-                      iconPath: _bill.category.iconID,
-                      display: _bill.category.name,
+                      iconPath: bill.category.iconID,
+                      display: bill.category.name,
                     ),
                     // Divider ngăn cách giữa các input field.
                     Container(
@@ -160,7 +144,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                         thickness: 1,
                       ),
                     ),
-                    buildInfoAmount(amount: _bill.amount),
+                    buildInfoAmount(amount: bill.amount),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -169,7 +153,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                         thickness: 1,
                       ),
                     ),
-                    buildNote(display: _bill.note),
+                    buildNote(display: bill.note),
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
@@ -210,8 +194,8 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                       ))),
               child: TextButton(
                 onPressed: () async {
-                  _bill.isFinished = !_bill.isFinished;
-                  await _firestore.updateBill(_bill, widget.wallet);
+                  bill.isFinished = !bill.isFinished;
+                  await firestore.updateBill(bill, widget.wallet);
                   setState(() {});
                 },
                 style: ButtonStyle(
@@ -229,7 +213,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                        _bill.isFinished
+                        bill.isFinished
                             ? "Mark as running"
                             : "Mark as finished",
                         style: TextStyle(
@@ -259,7 +243,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                       PageTransition(
                           childCurrent: this.widget,
                           child: BillTransactionList(
-                              transactionListID: _bill.transactionIdList,
+                              transactionListID: bill.transactionIdList,
                               currentWallet: widget.wallet),
                           type: PageTransitionType.rightToLeft));
                 },
@@ -312,19 +296,19 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                       ) ??
                       'none';
                   if (type == 'all') {
-                    await _firestore.deleteBill(_bill, widget.wallet);
+                    await firestore.deleteBill(bill, widget.wallet);
                   } else if (type == 'only') {
                     // Xử lý các dueDate. (Thanh toán rồi thì dueDate sẽ được cho vào list due Dates đã thanh toán,
                     // và xóa khỏi list due Dates chưa thanh toán.
-                    if (_bill.dueDates.contains(widget.dueDate))
-                      _bill.dueDates.remove(widget.dueDate);
+                    if (bill.dueDates.contains(widget.dueDate))
+                      bill.dueDates.remove(widget.dueDate);
 
-                    if (!_bill.paidDueDates.contains(widget.dueDate)) {
-                      _bill.paidDueDates.add(widget.dueDate);
+                    if (!bill.paidDueDates.contains(widget.dueDate)) {
+                      bill.paidDueDates.add(widget.dueDate);
                     }
 
                     // Cập nhật thông tin bill lên firestore.
-                    await _firestore.updateBill(_bill, widget.wallet);
+                    await firestore.updateBill(bill, widget.wallet);
                   }
                   Navigator.pop(context);
                 },

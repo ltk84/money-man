@@ -35,6 +35,7 @@ class EditBillScreen extends StatefulWidget {
 }
 
 class _EditBillScreenState extends State<EditBillScreen> {
+  // Khởi tạo cái biến lưu thông tin hóa đơn.
   String currencySymbol;
   double amount;
   MyCategory category;
@@ -44,8 +45,8 @@ class _EditBillScreenState extends State<EditBillScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    // Cập nhật giá trị mặc định cho các biến.
     amount = widget.bill.amount;
     category = widget.bill.category;
     note = widget.bill.note;
@@ -57,10 +58,13 @@ class _EditBillScreenState extends State<EditBillScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
+
+    // Lấy mô tả cho tùy chọn lặp lại.
     repeatDescription = updateRepeatDescription();
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+
     return StreamBuilder<Object>(
-        stream: _firestore.billStream(widget.wallet.id),
+        stream: firestore.billStream(widget.wallet.id),
         builder: (context, snapshot) {
           List<Bill> listBills = snapshot.data ?? [];
           return Scaffold(
@@ -86,10 +90,10 @@ class _EditBillScreenState extends State<EditBillScreen> {
                       if (listBills.any((element) =>
                               element.category.name == category.name) &&
                           category.name != widget.bill.category.name) {
-                        _showAlertDialog(
+                        showAlertDialog(
                             'This category has already been used,\nplease pick again!');
                       } else {
-                        Bill _bill = Bill(
+                        Bill bill = Bill(
                           id: widget.bill.id,
                           category: category,
                           amount: amount,
@@ -102,8 +106,8 @@ class _EditBillScreenState extends State<EditBillScreen> {
                           paidDueDates: widget.bill.paidDueDates,
                         );
 
-                        await _firestore.updateBill(_bill, widget.wallet);
-                        Navigator.pop(context, _bill);
+                        await firestore.updateBill(bill, widget.wallet);
+                        Navigator.pop(context, bill);
                       }
                     },
                     child: Text('Save',
@@ -265,9 +269,6 @@ class _EditBillScreenState extends State<EditBillScreen> {
                       margin:
                           EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                       child: Text(
-                        // 'Repeat every ${repeatOption.rangeAmount} ${repeatOption.extraAmountInfo}'
-                        //     '${repeatOption.rangeAmount == 1 ? '' : 's'} '
-                        //     'from ${DateFormat('dd/MM/yyyy').format(repeatOption.beginDateTime)}',
                         repeatDescription,
                         style: TextStyle(
                           fontFamily: Style.fontFamily,
@@ -281,6 +282,7 @@ class _EditBillScreenState extends State<EditBillScreen> {
         });
   }
 
+  // Hàm cập nhật mô tả thông tin tùy chọn lặp lại.
   String updateRepeatDescription() {
     String frequency = repeatOption.frequency == 'daily'
         ? 'day'
@@ -498,7 +500,8 @@ class _EditBillScreenState extends State<EditBillScreen> {
     );
   }
 
-  Future<void> _showAlertDialog(String content) async {
+  // Hàm hiển thị thông báo.
+  Future<void> showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

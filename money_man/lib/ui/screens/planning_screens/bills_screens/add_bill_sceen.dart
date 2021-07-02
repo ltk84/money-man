@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class AddBillScreen extends StatefulWidget {
-  Wallet currentWallet;
+  final Wallet currentWallet;
 
   AddBillScreen({Key key, @required this.currentWallet}) : super(key: key);
 
@@ -31,8 +30,10 @@ class AddBillScreen extends StatefulWidget {
 }
 
 class _AddBillScreenState extends State<AddBillScreen> {
+  // Biến lưu ví đang được chọn.
   Wallet selectedWallet;
 
+  // Khởi tạo cái biến lưu thông tin hóa đơn.
   String currencySymbol;
   double amount;
   MyCategory category;
@@ -41,12 +42,14 @@ class _AddBillScreenState extends State<AddBillScreen> {
   List<DateTime> dueDates;
   String repeatDescription;
 
+  // Lấy ngày hiện tại.
   DateTime now =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   @override
   void initState() {
     super.initState();
+    // Cập nhật giá trị mặc định cho các biến.
     selectedWallet = widget.currentWallet;
     currencySymbol =
         CurrencyService().findByCode(selectedWallet.currencyID).symbol;
@@ -62,11 +65,13 @@ class _AddBillScreenState extends State<AddBillScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
+
+    // Lấy mô tả cho tùy chọn lặp lại.
     repeatDescription = updateRepeatDescription();
 
     return StreamBuilder<Object>(
-        stream: _firestore.billStream(selectedWallet.id),
+        stream: firestore.billStream(selectedWallet.id),
         builder: (context, snapshot) {
           List<Bill> listBills = snapshot.data ?? [];
           return Scaffold(
@@ -90,12 +95,12 @@ class _AddBillScreenState extends State<AddBillScreen> {
                   TextButton(
                     onPressed: () async {
                       if (amount == null) {
-                        _showAlertDialog('Please enter amount!');
+                        showAlertDialog('Please enter amount!');
                       } else if (category == null) {
-                        _showAlertDialog('Please pick category!');
+                        showAlertDialog('Please pick category!');
                       } else if (listBills.any((element) =>
                           element.category.name == category.name)) {
-                        _showAlertDialog(
+                        showAlertDialog(
                             'This category has already been used,\nplease pick again!');
                       } else {
                         dueDates = initDueDate();
@@ -112,7 +117,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                           paidDueDates: [],
                         );
 
-                        await _firestore.addBill(bill, selectedWallet);
+                        await firestore.addBill(bill, selectedWallet);
                         Navigator.pop(context);
                       }
                     },
@@ -314,6 +319,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
         });
   }
 
+  // Hàm cập nhật mô tả thông tin tùy chọn lặp lại.
   String updateRepeatDescription() {
     String frequency = repeatOption.frequency == 'daily'
         ? 'day'
@@ -530,12 +536,19 @@ class _AddBillScreenState extends State<AddBillScreen> {
     );
   }
 
+  // Hàm khởi tạo ngày đáo hạn hóa đơn.
   List<DateTime> initDueDate() {
+    // Danh sách lưu ngày đáo hạn.
     List<DateTime> dueDates = [];
+
+    // Lấy thời gian hiện tại.
     var now =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
+    // Biến lưu tần số (Số ngày của một kỳ).
     int freq;
+
+    // Lấy giá trị tần số dựa theo thông tin repeat option.
     switch (repeatOption.frequency) {
       case 'daily':
         freq = repeatOption.rangeAmount;
@@ -554,6 +567,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
         break;
     }
 
+    // Phần này để tính chu kỳ tiếp theo của ngày đáo hạn.
     var timeRange = now.difference(repeatOption.beginDateTime).inDays;
     if (repeatOption.beginDateTime.compareTo(now) >= 0) {
       if (!dueDates.contains(repeatOption.beginDateTime))
@@ -566,10 +580,13 @@ class _AddBillScreenState extends State<AddBillScreen> {
         if (!dueDates.contains(realDue)) dueDates.add(realDue);
       }
     }
+
+    // Trả về danh sách ngày đáo hạn.
     return dueDates;
   }
 
-  Future<void> _showAlertDialog(String content) async {
+  // Hàm hiển thị thông báo.
+  Future<void> showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

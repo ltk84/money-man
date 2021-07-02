@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/bill_model.dart';
@@ -33,7 +31,6 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Style.backgroundColor,
-        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
           elevation: 0.0,
@@ -77,23 +74,6 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
             ),
           ),
           centerTitle: true,
-          // flexibleSpace: ClipRect(
-          //   child: AnimatedOpacity(
-          //     opacity: 1,
-          //     duration: Duration(milliseconds: 0),
-          //     child: BackdropFilter(
-          //       filter: ImageFilter.blur(
-          //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-          //       child: AnimatedContainer(
-          //           duration: Duration(milliseconds: 1),
-          //           //child: Container(
-          //           //color: Colors.transparent,
-          //           color: Colors.transparent
-          //           //),
-          //           ),
-          //     ),
-          //   ),
-          // ),
           actions: [
             Hero(
               tag: 'billToDetail_actionBtn',
@@ -138,23 +118,26 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
   }
 
   Widget buildListBills(context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<List<Bill>>(
-        stream: _firestore.billStream(widget.currentWallet.id),
+        stream: firestore.billStream(widget.currentWallet.id),
         builder: (context, snapshot) {
           List<Bill> listBills = snapshot.data ?? [];
 
+          // Các danh sách hóa đơn theo trạng thái thời gian.
           List<Map> overDueBills = [];
           List<Map> todayBills = [];
           List<Map> thisPeriodBills = [];
 
           listBills.forEach((element) {
+            // Cập nhật ngày đáo hạn.
             element.updateDueDate();
-            //_firestore.updateBill(element, widget.currentWallet);
 
+            // Ngày hiện tại.
             var now = DateTime(
                 DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
+            // Thêm các hóa đơn theo trạng thái thời gian vào danh sách.
             element.dueDates.forEach((e) {
               if (e.compareTo(now) == 0) {
                 todayBills.add({'bill': element, 'due': e});
@@ -206,16 +189,17 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                     thisPeriod: thisPeriodBills.fold(
                         0, (value, element) => value + element['bill'].amount)),
                 SizedBox(height: 20.0),
-                buildListDue(_firestore, overDueBills, 0),
-                buildListDue(_firestore, todayBills, 1),
-                buildListDue(_firestore, thisPeriodBills, 2),
+                buildListDue(firestore, overDueBills, 0), // Build hóa đơn quá hạn.
+                buildListDue(firestore, todayBills, 1), // Build hóa đơn vào hôm nay.
+                buildListDue(firestore, thisPeriodBills, 2), // Build hoa đơn kỳ kế tiếp.
               ],
             );
           }
         });
   }
 
-  Widget buildListDue(dynamic _firestore, List<Map> listDue, int dueState) {
+  // Hàm build các danh sách hóa đơn theo trạng thái thời gian.
+  Widget buildListDue(dynamic firestore, List<Map> listDue, int dueState) {
     String title;
 
     switch (dueState) {
@@ -249,19 +233,23 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
             shrinkWrap: true,
             itemCount: listDue.length,
             itemBuilder: (context, index) =>
-                buildBillCard(_firestore, listDue[index], dueState)),
+                buildBillCard(firestore, listDue[index], dueState)),
         SizedBox(height: 20.0),
       ],
     );
   }
 
-  Widget buildBillCard(dynamic _firestore, Map info, int dueState) {
+  // Hàm build thẻ hóa đơn.
+  Widget buildBillCard(dynamic firestore, Map info, int dueState) {
+    // Biến lưu thông tin ngày đáo hạn.
     String dueDate = DateFormat('dd/MM/yyyy').format(info['due']);
     String dueDescription;
 
+    // Ngày hiện tại.
     var now =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
+    // Cập nhật mô tả ngày đáo hạn.
     switch (dueState) {
       case 0:
         dueDescription = 'Overdue';
@@ -380,7 +368,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                             date: now,
                             currencyID: widget.currentWallet.currencyID,
                             category: info['bill'].category);
-                        await _firestore.addTransaction(
+                        await firestore.addTransaction(
                             widget.currentWallet, transFromBill);
 
                         // Thêm transaction vào bill.
@@ -398,7 +386,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                         }
 
                         // Cập nhật thông tin bill lên firestore.
-                        await _firestore.updateBill(
+                        await firestore.updateBill(
                             info['bill'], widget.currentWallet);
 
                         if (this.mounted) {
@@ -418,7 +406,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                             return !info['bill'].isFinished
                                 ? Color(0xFF4FCC5C)
                                 : Color(
-                                    0xFFcccccc); // Use the component's default.
+                                    0xFFcccccc);
                         },
                       ),
                       foregroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -431,7 +419,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                             return !info['bill'].isFinished
                                 ? Style.foregroundColor
                                 : Style.foregroundColor.withOpacity(
-                                    0.8); // Use the component's default.
+                                    0.8);
                         },
                       ),
                     ),
@@ -472,6 +460,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
     );
   }
 
+  // Hàm build thông tin chung.
   Widget buildOverallInfo(
       {double overdue, double forToday, double thisPeriod}) {
     return Container(
@@ -567,9 +556,10 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
         ));
   }
 
+  // Hàm hiển thị chọn wallet.
   void buildShowDialog(BuildContext context, id) async {
-    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
-    final _firestore =
+    final auth = Provider.of<FirebaseAuthService>(context, listen: false);
+    final firestore =
         Provider.of<FirebaseFireStoreService>(context, listen: false);
 
     final result = await showCupertinoModalBottomSheet(
@@ -579,13 +569,13 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
         builder: (context) {
           return Provider(
               create: (_) {
-                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+                return FirebaseFireStoreService(uid: auth.currentUser.uid);
               },
               child: WalletSelectionScreen(
                 id: id,
               ));
         });
-    final updatedWallet = await _firestore.getWalletByID(result);
+    final updatedWallet = await firestore.getWalletByID(result);
     setState(() {
       widget.currentWallet = updatedWallet;
     });

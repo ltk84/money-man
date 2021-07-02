@@ -29,17 +29,18 @@ class RecurringTransactionDetailScreen extends StatefulWidget {
 
 class _RecurringTransactionDetailScreenState
     extends State<RecurringTransactionDetailScreen> {
-  RecurringTransaction _recurringTransaction;
+  // Biến để lấy thông tin hóa đơn.
+  RecurringTransaction recurringTransaction;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _recurringTransaction = widget.recurringTransaction;
+    // Gán giá trị cho biến lưu giao dịch lặp lại.
+    recurringTransaction = widget.recurringTransaction;
   }
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Style.backgroundColor,
         //extendBodyBehindAppBar: true,
@@ -71,23 +72,6 @@ class _RecurringTransactionDetailScreenState
             ),
           ),
           centerTitle: true,
-          // flexibleSpace: ClipRect(
-          //   child: AnimatedOpacity(
-          //     opacity: 1,
-          //     duration: Duration(milliseconds: 0),
-          //     child: BackdropFilter(
-          //       filter: ImageFilter.blur(
-          //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-          //       child: AnimatedContainer(
-          //           duration: Duration(milliseconds: 1),
-          //           //child: Container(
-          //           //color: Colors.transparent,
-          //           color: Colors.transparent
-          //         //),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           actions: [
             Hero(
               tag: 'billToDetail_actionBtn',
@@ -97,13 +81,13 @@ class _RecurringTransactionDetailScreenState
                       context: context,
                       builder: (context) {
                         return EditRecurringTransactionScreen(
-                          recurringTransaction: _recurringTransaction,
+                          recurringTransaction: recurringTransaction,
                           wallet: widget.wallet,
                         );
                       });
                   if (updatedReTrans != null) {
                     setState(() {
-                      _recurringTransaction = updatedReTrans;
+                      recurringTransaction = updatedReTrans;
                     });
                   }
                 },
@@ -139,8 +123,8 @@ class _RecurringTransactionDetailScreenState
                 child: Column(
                   children: [
                     buildInfoCategory(
-                      iconPath: _recurringTransaction.category.iconID,
-                      display: _recurringTransaction.category.name,
+                      iconPath: recurringTransaction.category.iconID,
+                      display: recurringTransaction.category.name,
                     ),
                     // Divider ngăn cách giữa các input field.
                     Container(
@@ -150,7 +134,7 @@ class _RecurringTransactionDetailScreenState
                         thickness: 1,
                       ),
                     ),
-                    buildInfoAmount(amount: _recurringTransaction.amount),
+                    buildInfoAmount(amount: recurringTransaction.amount),
                     // Divider ngăn cách giữa các input field.
                     Container(
                       margin: EdgeInsets.only(left: 70),
@@ -159,7 +143,7 @@ class _RecurringTransactionDetailScreenState
                         thickness: 1,
                       ),
                     ),
-                    buildNote(display: _recurringTransaction.note),
+                    buildNote(display: recurringTransaction.note),
                     Container(
                       margin: EdgeInsets.only(left: 70),
                       child: Divider(
@@ -180,19 +164,19 @@ class _RecurringTransactionDetailScreenState
                     ),
                     buildInfoRepeat(
                         nextDate: DateFormat('dd/MM/yyyy').format(
-                            _recurringTransaction.repeatOption.beginDateTime),
-                        type: _recurringTransaction.repeatOption.type ==
+                            recurringTransaction.repeatOption.beginDateTime),
+                        type: recurringTransaction.repeatOption.type ==
                             'forever'
                             ? 'Forever'
-                            : _recurringTransaction.repeatOption.type == 'until'
-                            ? _recurringTransaction.repeatOption.type +
+                            : recurringTransaction.repeatOption.type == 'until'
+                            ? recurringTransaction.repeatOption.type +
                             ' ' +
                             DateFormat('dd/MM/yyyy').format(
-                                _recurringTransaction
+                                recurringTransaction
                                     .repeatOption.extraTypeInfo)
-                            : _recurringTransaction.repeatOption.type +
+                            : recurringTransaction.repeatOption.type +
                             ' ' +
-                            _recurringTransaction
+                            recurringTransaction
                                 .repeatOption.extraTypeInfo
                                 .toString() +
                             ' time'),
@@ -210,15 +194,15 @@ class _RecurringTransactionDetailScreenState
               child: TextButton(
                 onPressed: () async {
                   var result =
-                      await _firestore.executeInstantRecurringTransaction(
-                          _recurringTransaction, widget.wallet);
+                      await firestore.executeInstantRecurringTransaction(
+                          recurringTransaction, widget.wallet);
                   if (result > 0) {
-                    await _showAlertDialog(
+                    await showAlertDialog(
                         title: 'Congratulation!',
                         content: 'Execute success!',
                         iconPath: 'assets/images/success.svg');
                   } else {
-                    await _showAlertDialog(
+                    await showAlertDialog(
                         content: 'Recurring transaction expired!');
                   }
                   Navigator.pop(context);
@@ -253,8 +237,8 @@ class _RecurringTransactionDetailScreenState
                       ))),
               child: TextButton(
                 onPressed: () async {
-                  await _firestore.deleteRecurringTransaction(
-                      _recurringTransaction, widget.wallet);
+                  await firestore.deleteRecurringTransaction(
+                      recurringTransaction, widget.wallet);
                   Navigator.pop(context);
                 },
                 style: ButtonStyle(
@@ -440,7 +424,8 @@ class _RecurringTransactionDetailScreenState
     );
   }
 
-  Future<void> _showAlertDialog(
+  // Hàm hiển thị thông báo.
+  Future<void> showAlertDialog(
       {String title = 'Oops...',
         String content,
         String iconPath = 'assets/images/alert.svg'}) async {

@@ -13,7 +13,6 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_recurring_transaction_screen.dart';
-import 'package:money_man/ui/screens/categories_screens/categories_transaction_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/repeat_option_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
@@ -38,6 +37,7 @@ class EditRecurringTransactionScreen extends StatefulWidget {
 
 class _EditRecurringTransactionScreenState
     extends State<EditRecurringTransactionScreen> {
+  // Khởi tạo cái biến lưu thông tin giao dịch lặp lại.
   double amount;
   MyCategory category;
   String note;
@@ -48,8 +48,8 @@ class _EditRecurringTransactionScreenState
   var dateUtility = DateUtil();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    // Cập nhật giá trị mặc định cho các biến.
     amount = widget.recurringTransaction.amount;
     category = widget.recurringTransaction.category;
     note = widget.recurringTransaction.note;
@@ -59,7 +59,9 @@ class _EditRecurringTransactionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
+
+    // Lấy mô tả cho tùy chọn lặp lại.
     repeatDescription = updateRepeatDescription();
 
     return Scaffold(
@@ -82,7 +84,7 @@ class _EditRecurringTransactionScreenState
           actions: [
             TextButton(
               onPressed: () async {
-                RecurringTransaction _recurringTransaction =
+                RecurringTransaction recurringTransaction =
                     RecurringTransaction(
                   id: widget.recurringTransaction.id,
                   category: category,
@@ -95,9 +97,9 @@ class _EditRecurringTransactionScreenState
                   isFinished: false,
                 );
 
-                await _firestore.updateRecurringTransaction(
-                    _recurringTransaction, widget.wallet);
-                Navigator.pop(context, _recurringTransaction);
+                await firestore.updateRecurringTransaction(
+                    recurringTransaction, widget.wallet);
+                Navigator.pop(context, recurringTransaction);
               },
               child: Text('Save',
                   style: TextStyle(
@@ -249,6 +251,8 @@ class _EditRecurringTransactionScreenState
                       if (res != null)
                         setState(() {
                           repeatOption = res;
+
+                          // Tính toán ngày kế tiếp để lặp lại giao dịch.
                           if (repeatOption.frequency == 'daily') {
                             nextDate = repeatOption.beginDateTime
                                 .add(Duration(days: repeatOption.rangeAmount));
@@ -290,6 +294,7 @@ class _EditRecurringTransactionScreenState
         ));
   }
 
+  // Hàm cập nhật mô tả thông tin tùy chọn lặp lại.
   String updateRepeatDescription() {
     String frequency = repeatOption.frequency == 'daily'
         ? 'day'
