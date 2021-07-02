@@ -571,7 +571,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
 
   // Hàm hiển thị wallet selection.
   void buildShowDialog(BuildContext context, id) async {
-    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+    final auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
     await showCupertinoModalBottomSheet(
         isDismissible: true,
@@ -580,7 +580,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
         builder: (context) {
           return Provider(
               create: (_) {
-                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+                return FirebaseFireStoreService(uid: auth.currentUser.uid);
               },
               child: WalletSelectionScreen(
                 id: id,
