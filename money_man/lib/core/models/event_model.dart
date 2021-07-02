@@ -1,17 +1,25 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 
 class Event {
+  // id của event
   String id;
+  // tên của event
   String name;
+  // đường dấn icon của event (icon id)
   String iconPath;
+  // ngày kết thúc event
   DateTime endDate;
+  // id wallet của event
   String walletId;
+  // biến control event đã hết hạn hay chưa?
   bool isFinished;
+  // danh sách các transaction
   List<String> transactionIdList;
+  // số tiền đã spent của các transaction
   double spent;
+  //
   bool finishedByHand;
+  //
   bool autofinish;
 
   Event({

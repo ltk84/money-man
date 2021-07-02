@@ -3,15 +3,25 @@ import 'package:flutter/cupertino.dart';
 import './category_model.dart';
 
 class Budget {
+  // id của budget
   String id;
+  // category của budget
   MyCategory category;
+  // số tiền của budget
   double amount;
+  // sô tiền đã được chi của budget
   double spent;
+  // id wallet của budget
   String walletId;
+  // biến xác định budget đã xong hay chưa?
   bool isFinished;
+  // thời điểm bắt đầu
   DateTime beginDate;
+  // thời điểm kêt thúc
   DateTime endDate;
+  // xác định budget có lặp lại hay không?
   bool isRepeat;
+  // tên của budgets
   String label;
 
   Budget({

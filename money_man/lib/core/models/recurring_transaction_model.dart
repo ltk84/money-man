@@ -1,19 +1,23 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:money_man/core/models/repeat_option_model.dart';
-
 import './category_model.dart';
-import './transaction_model.dart';
 
 class RecurringTransaction {
+  // id của recurring transaction
   String id;
+  // category của recurring transaction
   MyCategory category;
+  // số tiền của recurring transaction
   double amount;
+  // id wallet của recurring transaction
   String walletId;
+  // note của recurring transaction
   String note;
+  // danh sách các transaction
   List<String> transactionIdList;
+  // tùy chọn lặp lại
   RepeatOption repeatOption;
+  // biến kiểm soát recurring transaction đã hoàn thành hay chưa?
   bool isFinished;
 
   RecurringTransaction({
