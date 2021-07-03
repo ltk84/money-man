@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:money_man/ui/screens/shared_screens/error_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 import 'package:money_man/ui/widgets/wrapper.dart';
@@ -32,6 +36,35 @@ class _AppState extends State<App> {
   // Set giá trị mặc định cho  `initialized` và `error` thành false
   bool initialized = false;
   bool error = false;
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  Future<void> initConnectivity() async {
+    ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+      return;
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
 
   // hàm initialize FlutterFire
   void initializeFlutterFire() async {
@@ -51,6 +84,10 @@ class _AppState extends State<App> {
 
   @override
   void initState() {
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     initializeFlutterFire();
     super.initState();
   }
@@ -59,7 +96,13 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     // hiển thị màn hinh lỗi nếu init lỗi
     if (error) {
-      return MaterialApp(home: ErrorScreen());
+      return MaterialApp(
+          debugShowCheckedModeBanner: false, home: ErrorScreen());
+    }
+
+    if (_connectionStatus == ConnectivityResult.none) {
+      return MaterialApp(
+          debugShowCheckedModeBanner: false, home: ErrorScreen());
     }
 
     // hiển thị màn hình loading trong lúc init chưa xong

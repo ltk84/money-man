@@ -1243,7 +1243,6 @@ class _TransactionScreen extends State<TransactionScreen>
       double totalInCome,
       double totalOutCome,
       double total) {
-    print('build function');
     return Container(
       color: Style.backgroundColor,
       child: ListView.builder(
@@ -1283,7 +1282,6 @@ class _TransactionScreen extends State<TransactionScreen>
       double totalInCome,
       double totalOutCome,
       double total) {
-    print('build function');
     return Container(
       color: Style.backgroundColor,
       child: ListView.builder(
@@ -1473,7 +1471,6 @@ class _TransactionScreen extends State<TransactionScreen>
 
   Container buildBottomViewByDate(List<List<MyTransaction>> transListSortByDate,
       int xIndex, double totalAmountInDay) {
-    print('build bottom by date');
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       padding: EdgeInsets.symmetric(vertical: 5),
@@ -1685,7 +1682,6 @@ class _TransactionScreen extends State<TransactionScreen>
 
   StickyHeader buildHeader(List<List<MyTransaction>> transListSortByDate,
       double totalInCome, double totalOutCome, double total) {
-    print('build header');
     return StickyHeader(
       header: SizedBox(height: 0),
       content: Container(
