@@ -78,6 +78,7 @@ class _NoteScreenState extends State<NoteScreen> {
           key: formKey,
           child: TextFormField(
               controller: myController,
+              autofocus: true,
               keyboardType: TextInputType.text,
               onSaved: (String val) {
                 myController.text = val;
