@@ -7,6 +7,7 @@ import 'package:money_man/ui/screens/introduction_screens/introduction_screen.da
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
 
 class Wrapper extends StatelessWidget {
+  // biến lấy thông tin user từ wrapper_builder
   final AsyncSnapshot<User> userSnapshot;
   const Wrapper({
     Key key,
@@ -15,20 +16,25 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // thông tin đã được lấy về
     if (userSnapshot.connectionState == ConnectionState.active) {
       if (userSnapshot.hasData) {
-        if (userSnapshot.data.isAnonymous ||
-            (userSnapshot.data.displayName != null &&
-                userSnapshot.data.displayName != ''))
+        // user đã có đầy đủ thông tin
+        if (userSnapshot.data.displayName != null &&
+            userSnapshot.data.displayName != '')
           return HomeScreen();
+        // user có email chưa được verify
         else if (!userSnapshot.data.emailVerified)
           return VerifyEmailScreen();
+        // user thiếu thông tin
         else
           return AccountInformationScreen();
-      } else
+      }
+      // chưa có thông tin
+      else
         return IntroductionScreen();
     }
+    // thông tin đang được lấy về
     return LoadingScreen();
-    // return FirstStep();
   }
 }

@@ -29,22 +29,22 @@ class _AppState extends State<App> {
     });
   }
 
-  // Set default `_initialized` and `_error` state to false
-  bool _initialized = false;
-  bool _error = false;
+  // Set giá trị mặc định cho  `initialized` và `error` thành false
+  bool initialized = false;
+  bool error = false;
 
-  // Define an async function to initialize FlutterFire
+  // hàm initialize FlutterFire
   void initializeFlutterFire() async {
     try {
-      // Wait for Firebase to initialize and set `_initialized` state to true
+      // đợi Firebase init và set `initialized` thành true
       await Firebase.initializeApp();
       setState(() {
-        _initialized = true;
+        initialized = true;
       });
     } catch (e) {
-      // Set `_error` state to true if Firebase initialization fails
+      // Set `error` thành true if Firebase init lỗi
       setState(() {
-        _error = true;
+        error = true;
       });
     }
   }
@@ -57,13 +57,13 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    // Show error message if initialization failed
-    if (_error) {
+    // hiển thị màn hinh lỗi nếu init lỗi
+    if (error) {
       return MaterialApp(home: ErrorScreen());
     }
 
-    // Show a loader until FlutterFire is initialized
-    if (!_initialized) {
+    // hiển thị màn hình loading trong lúc init chưa xong
+    if (!initialized) {
       return MaterialApp(home: LoadingScreen());
     }
 
@@ -78,7 +78,6 @@ class _AppState extends State<App> {
         child: WrapperBuilder(
           builder: (context, userSnapshot) {
             return MaterialApp(
-              // theme: firstTheme(),
               debugShowCheckedModeBanner: false,
               home: SafeArea(
                 child: Wrapper(
@@ -88,7 +87,6 @@ class _AppState extends State<App> {
             );
           },
         ),
-        // child: MaterialApp(home: FirstStep()),
       ),
     );
   }

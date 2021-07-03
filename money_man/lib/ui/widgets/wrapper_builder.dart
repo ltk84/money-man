@@ -10,15 +10,18 @@ class WrapperBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+    final auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
+    // streambuilder để theo dõi trạng thái của user
     return StreamBuilder<User>(
-        stream: _auth.userStream,
+        stream: auth.userStream,
         builder: (context, snapshot) {
           final user = snapshot.data;
 
+          // trả về MultiProvider
           if (user != null) {
             return MultiProvider(providers: [
+              // dịch vụ firestore
               Provider<FirebaseFireStoreService>(
                 create: (BuildContext context) {
                   return FirebaseFireStoreService(uid: user.uid);
