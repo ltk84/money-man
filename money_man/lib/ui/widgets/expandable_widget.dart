@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ExpandableWidget extends StatefulWidget {
+  // widget cần hiển thị
   final Widget child;
+  // xem xét widget có cần mở rộng hay không ('true' => có, 'false' => không)
   final bool expand;
+
+  //Hàm khỏi tạo class
   ExpandableWidget({this.expand = false, this.child});
 
   @override
@@ -10,7 +14,10 @@ class ExpandableWidget extends StatefulWidget {
 }
 
 class _ExpandableWidgetState extends State<ExpandableWidget> with SingleTickerProviderStateMixin {
+
+  //Tạo controller animation cho animation
   AnimationController expandController;
+  //Tạo animation
   Animation<double> animation;
 
   @override
@@ -32,6 +39,7 @@ class _ExpandableWidgetState extends State<ExpandableWidget> with SingleTickerPr
     );
   }
 
+  //Setting up the animation controller
   void _runExpandCheck() {
     if(widget.expand) {
       expandController.forward();

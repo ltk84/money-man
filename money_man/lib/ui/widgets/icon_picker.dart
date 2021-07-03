@@ -12,6 +12,7 @@ class IconPicker extends StatefulWidget {
 }
 
 class _IconPickerState extends State<IconPicker> {
+  //danh sách các icon trên hệ thống
   List<String> listIcons = [];
 
   @override
@@ -35,6 +36,7 @@ class _IconPickerState extends State<IconPicker> {
               )),
         ),
         body: FutureBuilder(
+          //Lấy dánh sách các icon
             future: getListIcon(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
@@ -49,6 +51,7 @@ class _IconPickerState extends State<IconPicker> {
                       itemCount: listIcons.length,
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
+                          //trả về icon được chọn và trờ về screen trước đó khi nhấn vào icon đó
                           onTap: () {
                             Navigator.of(context).pop(listIcons[index]);
                           },
@@ -89,6 +92,7 @@ class _IconPickerState extends State<IconPicker> {
             }));
   }
 
+  //Hàm lấy danh sách các icon trên hệ thống
   Future getListIcon() async {
     // >> To get paths you need these 2 lines
     final manifestContent =

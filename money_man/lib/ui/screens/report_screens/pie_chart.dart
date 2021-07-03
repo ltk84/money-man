@@ -224,7 +224,7 @@ class PieChartScreenState extends State<PieChartScreen> {
                                   ),
                                 ),
                               ),
-                            ))),
+                            )),
             ],
           ),
         ),

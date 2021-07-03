@@ -9,8 +9,9 @@ import 'package:money_man/ui/screens/transaction_screens/select_other_source.dar
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
+//màn hình hiển thị các category khi thao tác liên quan đến category của transaction
 class CategoriesTransactionScreen extends StatefulWidget {
-  final Wallet wallet;
+  final Wallet wallet; // ví mà user đang áp dụng
 
   const CategoriesTransactionScreen({Key key, @required this.wallet})
       : super(key: key);
@@ -170,7 +171,9 @@ class _CategoriesTransactionScreenState
             return StreamBuilder<List<MyCategory>>(
                 stream: _firestore.categoryStream,
                 builder: (context, snapshot) {
+                  // danh sách các category đươc lấy xuống từ database
                   final _listCategories = snapshot.data ?? [];
+                  // danh sách các category có cùng thể loại,tương ứng với mỗi tab
                   final _selectCateTab = _listCategories
                       .where((element) =>
                           element.type ==
