@@ -159,6 +159,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: Text(
                               " OR ",
                               style: TextStyle(
+                                color: Colors.white,
                                 fontFamily: 'Montserrat',
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,

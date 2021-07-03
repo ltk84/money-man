@@ -182,6 +182,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             child: Text(
                               " OR ",
                               style: TextStyle(
+                                color: Colors.white,
                                 fontFamily: 'Montserrat',
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,
