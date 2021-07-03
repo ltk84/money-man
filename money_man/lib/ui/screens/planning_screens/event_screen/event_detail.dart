@@ -10,7 +10,7 @@ import 'package:money_man/ui/screens/planning_screens/event_screen/list_transact
 import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/src/intl/date_format.dart';
+import 'package:intl/intl.dart';
 
 // Màn hình detail của event
 class EventDetailScreen extends StatefulWidget {

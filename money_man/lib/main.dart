@@ -36,15 +36,18 @@ class _AppState extends State<App> {
   // Set giá trị mặc định cho  `initialized` và `error` thành false
   bool initialized = false;
   bool error = false;
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
-  final Connectivity _connectivity = Connectivity();
-  StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
+  // khai báo các biến hỗ trợ việc check internet
+  ConnectivityResult connectionStatus = ConnectivityResult.none;
+  final Connectivity connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> connectivitySubscription;
+
+  // thực hiện tạo connection với internet để check
   Future<void> initConnectivity() async {
     ConnectivityResult result;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      result = await _connectivity.checkConnectivity();
+      result = await connectivity.checkConnectivity();
     } on PlatformException catch (e) {
       print(e.toString());
       return;
@@ -62,7 +65,7 @@ class _AppState extends State<App> {
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     setState(() {
-      _connectionStatus = result;
+      connectionStatus = result;
     });
   }
 
@@ -85,11 +88,17 @@ class _AppState extends State<App> {
   @override
   void initState() {
     initConnectivity();
+    connectivitySubscription =
+        connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
 
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     initializeFlutterFire();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    connectivitySubscription.cancel();
   }
 
   @override
@@ -100,7 +109,7 @@ class _AppState extends State<App> {
           debugShowCheckedModeBanner: false, home: ErrorScreen());
     }
 
-    if (_connectionStatus == ConnectivityResult.none) {
+    if (connectionStatus == ConnectivityResult.none) {
       return MaterialApp(
           debugShowCheckedModeBanner: false, home: ErrorScreen());
     }

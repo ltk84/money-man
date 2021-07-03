@@ -8,8 +8,8 @@ import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
-import 'package:intl/src/intl/date_format.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/event_detail.dart';
+import 'package:intl/intl.dart';
 
 // Đây là màn hình hiện trong tab running của event home
 class CurrentlyAppliedEvent extends StatefulWidget {

@@ -10,7 +10,7 @@ import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/src/intl/date_format.dart';
+import 'package:intl/intl.dart';
 
 // Màn hình edit evet được hiện lên khi ấn edit ở detail
 class EditEventScreen extends StatefulWidget {
