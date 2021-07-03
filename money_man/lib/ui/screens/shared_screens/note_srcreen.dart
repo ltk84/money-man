@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:money_man/ui/style.dart';
-//import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class NoteScreen extends StatefulWidget {
   String content;
@@ -13,9 +12,13 @@ class NoteScreen extends StatefulWidget {
 }
 
 class _NoteScreenState extends State<NoteScreen> {
+  // biến note
   String noteContent = '';
-  final _formKey = GlobalKey<FormState>();
+  // biến key để validate note
+  final formKey = GlobalKey<FormState>();
+  // biến để control text note
   final myController = TextEditingController();
+
   @override
   void initState() {
     noteContent = widget.content;
@@ -30,10 +33,9 @@ class _NoteScreenState extends State<NoteScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           myController.clear();
-          // noteContent = '';
         },
         child: Icon(
-            Icons.delete_forever_rounded,
+          Icons.delete_forever_rounded,
           color: Colors.white,
         ),
         elevation: 0,
@@ -51,11 +53,12 @@ class _NoteScreenState extends State<NoteScreen> {
               fontFamily: Style.fontFamily,
               fontSize: 17.0,
               fontWeight: FontWeight.w600,
-              color: Style.foregroundColor,)),
+              color: Style.foregroundColor,
+            )),
         actions: [
           TextButton(
               onPressed: () {
-                _formKey.currentState.save();
+                formKey.currentState.save();
                 Navigator.pop(context, myController.text);
               },
               child: Text(
@@ -64,8 +67,7 @@ class _NoteScreenState extends State<NoteScreen> {
                     color: Style.foregroundColor,
                     fontFamily: Style.fontFamily,
                     fontSize: 16.0,
-                    fontWeight: FontWeight.w600
-                ),
+                    fontWeight: FontWeight.w600),
               )),
         ],
       ),
@@ -73,9 +75,8 @@ class _NoteScreenState extends State<NoteScreen> {
         color: Style.backgroundColor1,
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: TextFormField(
-              // initialValue: noteContent,
               controller: myController,
               keyboardType: TextInputType.text,
               onSaved: (String val) {

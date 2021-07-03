@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/screens/account_screens/change_password_screen.dart';
-
 import '../../style.dart';
 
 class AccountDetail extends StatefulWidget {
-  User user;
+  User user; // Tài khoản đang đăng nhập
   AccountDetail({
     Key key,
     @required this.user,
@@ -22,10 +21,6 @@ class _AccountDetailState extends State<AccountDetail> {
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
-
-  //
-  // Text title = Text('My Account', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
-  // Text emptyTitle = Text('', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
   ScrollController _controller = ScrollController();
@@ -135,6 +130,7 @@ class _AccountDetailState extends State<AccountDetail> {
             Container(
               color: Style.backgroundColor,
               padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
+              // Nếu đã kéo trượt lên thì ẩn chữ My Account để hiện lên trên appbar
               child: reachTop == 0
                   ? Text('My Account',
                       style: TextStyle(
@@ -149,6 +145,7 @@ class _AccountDetailState extends State<AccountDetail> {
                           fontFamily: Style.fontFamily,
                           fontWeight: FontWeight.bold)),
             ),
+            // Thông tin mail, avt tên của tài khoản
             Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
               decoration: BoxDecoration(
@@ -215,15 +212,11 @@ class _AccountDetailState extends State<AccountDetail> {
                     thickness: 0.1,
                     color: Style.foregroundColor,
                   ),
+                  // Button điều hướng đến trang thay đổi mật khẩu
                   Container(
                     color: Style.boxBackgroundColor,
                     child: ListTile(
                       onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (BuildContext context) =>
-                        //             ChangePasswordScreen()));
                         showCupertinoModalBottomSheet(
                             backgroundColor: Style.backgroundColor1,
                             context: context,
@@ -244,6 +237,7 @@ class _AccountDetailState extends State<AccountDetail> {
                 ],
               ),
             ),
+            // Dây là 1 divider
             Container(
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
               decoration: BoxDecoration(
@@ -259,6 +253,7 @@ class _AccountDetailState extends State<AccountDetail> {
                       ))),
               child: Column(
                 children: [
+                  // Button đăng xuất người dùng
                   ListTile(
                     onTap: () {
                       final _auth = FirebaseAuthService();
@@ -285,15 +280,3 @@ class _AccountDetailState extends State<AccountDetail> {
         ));
   }
 }
-
-// class Test extends StatelessWidget {
-//   Text title = Text('More', style: TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold));
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Hero(tag: 'alo', child: title),
-//       )
-//     );
-//   }
-// }

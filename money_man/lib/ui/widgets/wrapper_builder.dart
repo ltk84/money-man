@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/core/services/firebase_storage_services.dart';
 import 'package:provider/provider.dart';
 
 class WrapperBuilder extends StatelessWidget {
@@ -11,23 +10,23 @@ class WrapperBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
+    final auth = Provider.of<FirebaseAuthService>(context, listen: false);
 
+    // streambuilder để theo dõi trạng thái của user
     return StreamBuilder<User>(
-        stream: _auth.userStream,
+        stream: auth.userStream,
         builder: (context, snapshot) {
           final user = snapshot.data;
 
+          // trả về MultiProvider
           if (user != null) {
             return MultiProvider(providers: [
+              // dịch vụ firestore
               Provider<FirebaseFireStoreService>(
                 create: (BuildContext context) {
                   return FirebaseFireStoreService(uid: user.uid);
                 },
               ),
-              Provider<FirebaseStorageService>(create: (BuildContext context) {
-                return FirebaseStorageService(uid: user.uid);
-              }),
             ], child: builder(context, snapshot));
           } else {
             return builder(context, snapshot);

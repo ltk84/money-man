@@ -2,16 +2,25 @@ import 'package:flutter/material.dart';
 import './category_model.dart';
 
 class MyTransaction {
+  // id của transaction
   String id;
+  // số tiền của transaction
   double amount;
+  // số tiền extra nếu category của transaction là debt/loan
   double extraAmountInfo;
+  // ngày thực hiện transaction
   DateTime date;
+  // note của transaction
   String note;
+  // id của đơn vị tiền tệ của transaction
   String currencyID;
+  // thể loại của transaction
   MyCategory category;
   String budgetID;
+  // id event của transaction
   String eventID;
   String billID;
+  // contact của transaction
   String contact;
 
   MyTransaction({

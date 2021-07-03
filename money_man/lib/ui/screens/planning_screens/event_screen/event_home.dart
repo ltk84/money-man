@@ -12,8 +12,9 @@ import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.d
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
+// Này là trang chủ của event nè
 class EventScreen extends StatefulWidget {
-  final Wallet currentWallet;
+  final Wallet currentWallet; // truyền vào ví hiện tại
 
   const EventScreen({Key key, this.currentWallet}) : super(key: key);
   @override
@@ -22,11 +23,14 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen>
     with TickerProviderStateMixin {
+  // Truyền vào tab controller
   TabController _tabController;
+  // ví hiện tại
   Wallet _wallet;
 
   @override
   void initState() {
+    // Khởi tạo các giá trị
     super.initState();
     _wallet = widget.currentWallet != null
         ? widget.currentWallet
@@ -41,6 +45,7 @@ class _EventScreenState extends State<EventScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Tham chiếu đến các hàm của firebase
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -54,6 +59,7 @@ class _EventScreenState extends State<EventScreen>
                     Style.backIcon,
                     color: Style.foregroundColor,
                   ),
+                  // Thoát nè
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -69,6 +75,7 @@ class _EventScreenState extends State<EventScreen>
                 ),
                 actions: [
                   GestureDetector(
+                    // Thay đổi ví nè
                     onTap: () async {
                       buildShowDialog(context, _wallet.id);
                     },
@@ -135,6 +142,7 @@ class _EventScreenState extends State<EventScreen>
                 elevation: 0,
                 centerTitle: true,
               ),
+              // Stream lấy ví hiện tại
               body: StreamBuilder<Object>(
                   stream: _firestore.currentWallet,
                   builder: (context, snapshot) {
@@ -166,6 +174,7 @@ class _EventScreenState extends State<EventScreen>
                 ),
                 backgroundColor: Style.primaryColor,
                 elevation: 0,
+                // Thêm event
                 onPressed: () async {
                   await showCupertinoModalBottomSheet(
                       isDismissible: true,
@@ -181,13 +190,14 @@ class _EventScreenState extends State<EventScreen>
             )));
   }
 
+// hàm gọi khi thay đổi ví, nó hiện cái màn hình chọn ví lên á
   void buildShowDialog(BuildContext context, id) async {
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
     final _firebase =
         Provider.of<FirebaseFireStoreService>(context, listen: false);
     final result = await showCupertinoModalBottomSheet(
         isDismissible: true,
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.backgroundColor,
         context: context,
         builder: (context) {
           return Provider(

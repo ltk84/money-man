@@ -1,41 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/models/transaction_model.dart';
-import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
-class SelectWalletAccountScreen extends StatefulWidget {
-  Wallet wallet;
+class SelectWalletScreen extends StatefulWidget {
+  Wallet currentWallet;
 
-  SelectWalletAccountScreen({Key key, this.wallet}) : super(key: key);
+  SelectWalletScreen({Key key, this.currentWallet}) : super(key: key);
   @override
-  _SelectWalletAccountScreenState createState() =>
-      _SelectWalletAccountScreenState();
+  _SelectWalletScreenState createState() => _SelectWalletScreenState();
 }
 
-class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
-  dynamic _wallet;
+class _SelectWalletScreenState extends State<SelectWalletScreen> {
+  // biến ví để đại diện cho wallet trong screen này
+  dynamic wallet;
 
   @override
   void initState() {
     super.initState();
-    _wallet = widget.wallet;
+    wallet = widget.currentWallet;
   }
 
   @override
-  void didUpdateWidget(covariant SelectWalletAccountScreen oldWidget) {
-    // TODO: implement didUpdateWidget
+  void didUpdateWidget(covariant SelectWalletScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _wallet = widget.wallet;
+    wallet = widget.currentWallet;
   }
 
   @override
   Widget build(BuildContext context) {
+    // biến để thao tác với database
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
@@ -45,7 +44,7 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
         backgroundColor: Style.appBarColor,
         leading: TextButton(
           onPressed: () {
-            Navigator.of(context).pop(_wallet);
+            Navigator.of(context).pop(wallet);
           },
           child: Text(
             'Back',
@@ -85,13 +84,10 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
                   stream: _firestore.walletStream,
                   builder: (context, snapshot) {
                     final listWallet = snapshot.data ?? [];
-                    listWallet.removeWhere((element) => element.id == 'Total');
-                    print('stream ' + listWallet.length.toString());
                     return ListView.builder(
                         itemCount: listWallet.length,
                         itemBuilder: (context, index) {
                           String iconData = listWallet[index].iconID;
-                          // IconData iconData = Icons.wallet_giftcard;
 
                           return Container(
                             width: double.infinity,
@@ -111,8 +107,9 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
                             child: ListTile(
                               contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 0),
                               onTap: () {
+                                // khi nhấn vào -> chọn wallet -> setState cho biến wallet
                                 setState(() {
-                                  _wallet = listWallet[index];
+                                  wallet = listWallet[index];
                                 });
 
                                 Navigator.pop(context, listWallet[index]);
@@ -138,8 +135,8 @@ class _SelectWalletAccountScreenState extends State<SelectWalletAccountScreen> {
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              trailing: (_wallet != null &&
-                                      _wallet.name == listWallet[index].name)
+                              trailing: (wallet != null &&
+                                      wallet.name == listWallet[index].name)
                                   ? Icon(Icons.check, color: Style.primaryColor)
                                   : null,
                             ),

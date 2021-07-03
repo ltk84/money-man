@@ -5,42 +5,46 @@ import 'package:flutter/painting.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
-import 'ending_introduction.dart';
+import 'add_first_transaction_screens.dart';
 
-class FirstStep extends StatefulWidget {
+class FirstStepForFirstWallet extends StatefulWidget {
   @override
   _FirstStepState createState() => _FirstStepState();
 }
 
-class _FirstStepState extends State<FirstStep> {
+// tạo ví mẫu để cập nhật thông tin, xuất hiện khi người dùng đăng nhập lần đầu tiên :3
+class _FirstStepState extends State<FirstStepForFirstWallet> {
   Wallet wallet = Wallet(
       id: 'id',
       name: '',
       amount: -1,
       currencyID: 'USD',
       iconID: 'assets/icons/wallet_2.svg');
-  String currencyName = 'USD';
-  //IconData iconData = Icons.account_balance_wallet;
 
+  // Đơn vị tiền tệ mặc định
+  String currencyName = 'USD';
+
+// Form key chứ gì :3
   static final _formKey = GlobalKey<FormState>();
 
+// Hàm này để slide qua trang tiếp theo (Add first transaction screen)
   Route _createRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          OnboardingScreenTwo(
+          AddFirstTransactionScreen(
         wallet: this.wallet,
       ),
+      // tạo animation
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(1.0, 0.0);
         var end = Offset.zero;
         var curve = Curves.ease;
         var tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
+// Hiệu ứng trượt qua
         return SlideTransition(
           position: animation.drive(tween),
           child: child,
@@ -50,6 +54,8 @@ class _FirstStepState extends State<FirstStep> {
   }
 
   Widget build(BuildContext context) {
+    // Lấy kích thước chuẩn của màn hình đang chạy hiện tại
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -58,6 +64,7 @@ class _FirstStepState extends State<FirstStep> {
           child: Container(
             height: double.infinity,
             decoration: BoxDecoration(
+                // Tạo màu chia đôi cho màn hình
                 gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.bottomRight,
@@ -69,7 +76,6 @@ class _FirstStepState extends State<FirstStep> {
                 Color(0xFF111111)
               ],
             )),
-            //alignment: Alignment.topCenter,
             child: Container(
               child:
                   Column(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -112,6 +118,7 @@ class _FirstStepState extends State<FirstStep> {
                 Column(
                   children: [
                     GestureDetector(
+                      // Chọn avt cho ví
                       onTap: () async {
                         var data = await showCupertinoModalBottomSheet(
                           context: context,
@@ -124,6 +131,7 @@ class _FirstStepState extends State<FirstStep> {
                         }
                       },
                       child: Container(
+                        // Row để đặt icon của ví và chọn hình khác
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -136,7 +144,7 @@ class _FirstStepState extends State<FirstStep> {
                             ),
                             Icon(
                               Icons.arrow_drop_down,
-                              color: white,
+                              color: Colors.white,
                               size: 30,
                             ),
                           ],
@@ -150,6 +158,7 @@ class _FirstStepState extends State<FirstStep> {
                       alignment: Alignment.center,
                       height: 50,
                       width: 250.0,
+                      // Textformfield để nhập tên wallet
                       child: TextFormField(
                           autocorrect: false,
                           textAlign: TextAlign.center,
@@ -178,6 +187,7 @@ class _FirstStepState extends State<FirstStep> {
                       alignment: Alignment.center,
                       height: 50,
                       width: 250.0,
+                      // Textformfield để nhập số tiền ban đầu
                       child: TextFormField(
                           keyboardType: TextInputType.number,
                           autocorrect: false,
@@ -206,6 +216,7 @@ class _FirstStepState extends State<FirstStep> {
                     ),
                     GestureDetector(
                       child: GestureDetector(
+                        // Chọn đơn vị tiền tệ cho ví
                         onTap: () {
                           showCurrencyPicker(
                             theme: CurrencyPickerThemeData(
@@ -224,7 +235,6 @@ class _FirstStepState extends State<FirstStep> {
                                   fontFamily: Style.fontFamily,
                                   fontSize: 15,
                                   color: Style.foregroundColor),
-                              //backgroundColor: Style.boxBackgroundColor,
                             ),
                             onSelect: (value) {
                               wallet.currencyID = value.code;
@@ -266,9 +276,11 @@ class _FirstStepState extends State<FirstStep> {
                             )),
                       ),
                     ),
+                    // Size box để căn chỉnh theo tùy màn hình
                     SizedBox(
                       height: size.height - 626,
                     ),
+                    // Button để chuyển đến màn hình tiếp theo
                     Container(
                       child: ButtonTheme(
                         padding: EdgeInsets.symmetric(
@@ -276,6 +288,7 @@ class _FirstStepState extends State<FirstStep> {
                         minWidth: 250.0,
                         child: RaisedButton(
                           onPressed: () {
+                            // Kiểm tra hợp lệ của các text form field để hiện lên dialog thông báo
                             if (wallet.name == null || wallet.name.length == 0)
                               _showAlertDialog(
                                   "Please type wallet's name!", null);
@@ -303,6 +316,7 @@ class _FirstStepState extends State<FirstStep> {
                         ),
                       ),
                     ),
+                    // Là mấy cái note hiển thị cho cái slider á :3
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

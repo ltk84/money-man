@@ -13,8 +13,11 @@ import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/src/intl/date_format.dart';
 
+// Màn hình edit evet được hiện lên khi ấn edit ở detail
 class EditEventScreen extends StatefulWidget {
+  // Event hiện tại
   Event currentEvent;
+  //  Ví của event
   Wallet eventWallet;
   EditEventScreen({Key key, this.currentEvent, this.eventWallet})
       : super(key: key);
@@ -26,17 +29,25 @@ class EditEventScreen extends StatefulWidget {
 
 class _EditEventScreen extends State<EditEventScreen>
     with TickerProviderStateMixin {
+  // event hiện tại
   Event _currentEvent;
+  // ví của event
   Wallet _eventWallet;
+
+  // Ngày kết thúc
   DateTime endDate;
-
+  // avt của sự kiện hiện tại
   String iconPath;
-
+  // Đơn vị tiền tệ của event hiện tại ( ví của event)
   String currencySymbol = 'Viet Nam Dong';
-
+// Tên của event
   String nameEvent;
+
+  // ngày của event sau khi được fomat lại theo định dạnh chỉ có ngày tháng năm
   DateTime formatTransDate;
-  bool CompareDate(DateTime a, DateTime b) {
+
+  // Hàm bool so sánh ngày a với b
+  bool AisBeforeB(DateTime a, DateTime b) {
     if (a.year < b.year) return true;
     if (a.year == b.year && a.month < b.month) return true;
     if (a.year == b.year && a.month == b.month && a.day < b.day) return true;
@@ -45,6 +56,7 @@ class _EditEventScreen extends State<EditEventScreen>
 
   @override
   void initState() {
+    // Khởi tạo các giá trị cơ bản bằng giá trị của event truyền vào
     _currentEvent = widget.currentEvent;
     _eventWallet = widget.eventWallet;
     endDate = _currentEvent.endDate;
@@ -58,6 +70,7 @@ class _EditEventScreen extends State<EditEventScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Tham chiếu tới các hàm của firebase
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
@@ -79,6 +92,7 @@ class _EditEventScreen extends State<EditEventScreen>
         ),
         actions: [
           TextButton(
+              // Thực hiện lưu thay đổi sau khi kiểm tra các điều kiện nhập liệu
               onPressed: () async {
                 if (_currentEvent == null) {
                   _showAlertDialog('Please pick your wallet!');
@@ -86,7 +100,7 @@ class _EditEventScreen extends State<EditEventScreen>
                   _showAlertDialog('Please enter name!');
                 } else if (iconPath == null) {
                   _showAlertDialog('Please pick category');
-                } else if (CompareDate(endDate, DateTime.now())) {
+                } else if (AisBeforeB(endDate, DateTime.now())) {
                   _showAlertDialog(
                       'Please select an end date greater than or equal to today ');
                 } else {
@@ -127,6 +141,7 @@ class _EditEventScreen extends State<EditEventScreen>
     );
   }
 
+// phần nhập chính của màn hình
   Widget buildInput() {
     return ListView(
       children: [
@@ -146,7 +161,6 @@ class _EditEventScreen extends State<EditEventScreen>
           child: Column(
             children: [
               Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
                     padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
@@ -154,6 +168,7 @@ class _EditEventScreen extends State<EditEventScreen>
                       iconPath: iconPath,
                       size: 40.0,
                     ),
+                    // Chọn icon avt cho event
                     onPressed: () async {
                       var data = await showCupertinoModalBottomSheet(
                         context: context,
@@ -174,6 +189,7 @@ class _EditEventScreen extends State<EditEventScreen>
                       Icons.arrow_drop_down,
                       size: 35.0,
                     ),
+                    // CŨng là chọn event nhưng để vô 2 chỗ mới đủ
                     onPressed: () async {
                       var data = await showCupertinoModalBottomSheet(
                         context: context,
@@ -192,6 +208,7 @@ class _EditEventScreen extends State<EditEventScreen>
                     child: Container(
                       padding: EdgeInsets.only(right: 50),
                       width: 250,
+                      // Nhập tên của event
                       child: TextFormField(
                         initialValue: _currentEvent.name,
                         autocorrect: false,
@@ -250,6 +267,7 @@ class _EditEventScreen extends State<EditEventScreen>
                   size: 30,
                 ),
                 title: TextFormField(
+                  // Chọn ngày kết thúc cho evetn
                   onTap: () async {
                     DatePicker.showDatePicker(context,
                         currentTime:
@@ -349,7 +367,7 @@ class _EditEventScreen extends State<EditEventScreen>
                       backgroundColor: Style.backgroundColor,
                       context: context,
                       builder: (context) =>
-                          SelectWalletAccountScreen(wallet: _eventWallet));
+                          SelectWalletScreen(currentWallet: _eventWallet));
                   if (res != null)
                     setState(() {
                       _eventWallet = res;

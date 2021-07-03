@@ -98,7 +98,6 @@ class PieChartScreenState extends State<PieChartScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Transform.scale(
@@ -224,9 +223,8 @@ class PieChartScreenState extends State<PieChartScreen> {
                                     // Nên nếu số thứ tự bị vượt quá, màu của danh mục đó sẽ theo màu mặc định được cài đặt trong Style.dart.
                                   ),
                                 ),
-                              )
-                    )
-                ),
+                              ),
+                            ))),
             ],
           ),
         ),

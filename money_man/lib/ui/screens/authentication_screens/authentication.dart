@@ -14,6 +14,7 @@ class Authentication extends StatefulWidget {
 }
 
 class _AuthenticationState extends State<Authentication> {
+  // hàm để toggle từ sign in <-> sign up 
   void changeShow() {
     setState(() {
       widget.showSignIn = !widget.showSignIn;

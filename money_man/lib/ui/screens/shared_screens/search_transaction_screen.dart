@@ -3,7 +3,8 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:money_man/ui/screens/transaction_screens/transaction_detail_screen.dart';
+
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
@@ -13,10 +14,10 @@ import 'package:intl/intl.dart';
 
 class SearchTransactionScreen extends StatefulWidget {
   final Wallet wallet;
-  final String muserSearch;
+  final String searchPattern;
 
   const SearchTransactionScreen(
-      {Key key, @required this.wallet, this.muserSearch})
+      {Key key, @required this.wallet, this.searchPattern})
       : super(key: key);
   @override
   _SearchTransactionScreenState createState() =>
@@ -39,9 +40,9 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.muserSearch != null) {
+    if (widget.searchPattern != null) {
       setState(() {
-        searchPattern = widget.muserSearch;
+        searchPattern = widget.searchPattern;
       });
     }
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
@@ -199,7 +200,6 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
 
   Container buildBottom(List<List<MyTransaction>> transListSortByDate,
       int xIndex, double totalAmountInDay) {
-    print('build bottom by date');
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       decoration: BoxDecoration(
@@ -240,7 +240,6 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                         DateFormat("MMMM yyyy")
                             .format(transListSortByDate[xIndex][0].date)
                             .toString(),
-                    // 'hello',
                     style: TextStyle(
                         fontFamily: Style.fontFamily,
                         fontWeight: FontWeight.w400,
@@ -275,7 +274,8 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex][yIndex],
+                            currentTransaction: transListSortByDate[xIndex]
+                                [yIndex],
                             wallet: widget.wallet,
                           ),
                           type: PageTransitionType.rightToLeft));
@@ -370,7 +370,6 @@ class _SearchTransactionScreenState extends State<SearchTransactionScreen> {
 
   StickyHeader buildHeader(
       double totalInCome, double totalOutCome, double total) {
-    print('build header');
     return StickyHeader(
       header: SizedBox(height: 0),
       content: Container(

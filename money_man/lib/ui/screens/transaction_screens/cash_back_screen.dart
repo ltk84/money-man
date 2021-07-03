@@ -11,7 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/note_srcreen.dart';
-import 'package:money_man/ui/screens/wallet_selection_screens/wallet_account_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
@@ -31,20 +30,29 @@ class CashBackScreen extends StatefulWidget {
 }
 
 class _CashBackScreenState extends State<CashBackScreen> {
+  // biến transaction repayment/debt collection
   MyTransaction extraTransaction;
+  // biến thời gian của transaction
   DateTime pickDate;
+  // biến số tiền của transaction
   double amount;
+  // biến thể loại của transaction
   MyCategory cate;
+  // biến wallet mà transaction sẽ được add vào
   Wallet selectedWallet;
+  // biến ghi chú của transaction
   String note;
+  // biến ký hiệu đơn vi tiền tệ của transaction
   String currencySymbol;
+  // biến contact của transaction
   String contact;
+  // biến hint text khi user chưa pick contact
   String hintTextConact;
+  // biến xác định extraTransaction là debt hay loan
   bool isDebt;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     extraTransaction = widget.transaction;
     amount = extraTransaction.extraAmountInfo;
@@ -61,8 +69,10 @@ class _CashBackScreenState extends State<CashBackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _firestore =
+    // biến thao tác với cơ sở dữ liệu
+    final firestore =
         Provider.of<FirebaseFireStoreService>(context, listen: false);
+
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
       appBar: AppBar(
@@ -82,17 +92,23 @@ class _CashBackScreenState extends State<CashBackScreen> {
         actions: [
           TextButton(
               onPressed: () async {
+                // trường hợp các thông tin cần thiết của transaction chưa được pick
                 if (selectedWallet == null) {
-                  _showAlertDialog('Please pick your wallet!');
+                  showAlertDialog('Please pick your wallet!');
                 } else if (amount == null) {
-                  _showAlertDialog('Please enter amount!');
+                  showAlertDialog('Please enter amount!');
                 } else {
+                  // trường hợp extraTransaction là debt
                   if (isDebt) {
-                    cate = await _firestore
-                        .getCategoryByID('gi4CfNNlUoPSQlluCvS1');
-                  } else {
-                    cate = await _firestore
-                        .getCategoryByID('ZPltfjSWha3HvmIX5fgr');
+                    // pick category là Repayment
+                    cate =
+                        await firestore.getCategoryByID('gi4CfNNlUoPSQlluCvS1');
+                  }
+                  // trường hợp extraTransaction là loan
+                  else {
+                    // pick category là Debt collection
+                    cate =
+                        await firestore.getCategoryByID('ZPltfjSWha3HvmIX5fgr');
                   }
 
                   MyTransaction trans = MyTransaction(
@@ -106,16 +122,18 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   );
 
                   if (extraTransaction != null) {
+                    // trường hợp số tiền của transaction sắp add lớn hơn extraTransaction
                     if (trans.amount > extraTransaction.extraAmountInfo) {
-                      await _showAlertDialog(
+                      await showAlertDialog(
                           'Inputted amount must be <= unpaid amount. Unpaid amount is ${extraTransaction.extraAmountInfo}');
                       return;
                     }
 
                     MyTransaction newTrans =
-                        await _firestore.addTransaction(selectedWallet, trans);
+                        await firestore.addTransaction(selectedWallet, trans);
 
-                    await _firestore.updateDebtLoanTransationAfterAdd(
+                    // update các thông tin cần thiết của extraTransaction sau khi add transactoion
+                    await firestore.updateDebtLoanTransationAfterAdd(
                         extraTransaction, newTrans, selectedWallet);
                   }
 
@@ -145,7 +163,6 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   width: 0.5,
                 ))),
         child: ListView(shrinkWrap: true, children: [
-          //Text('PAID FROM'),
           ListTile(
             contentPadding: EdgeInsets.fromLTRB(10, 0, 20, 0),
             minVerticalPadding: 10.0,
@@ -154,7 +171,6 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   MaterialPageRoute(builder: (_) => EnterAmountScreen()));
               if (resultAmount != null)
                 setState(() {
-                  print(resultAmount);
                   amount = double.parse(resultAmount);
                 });
             },
@@ -173,7 +189,6 @@ class _CashBackScreenState extends State<CashBackScreen> {
                     builder: (context) => EnterAmountScreen());
                 if (resultAmount != null)
                   setState(() {
-                    print(resultAmount);
                     amount = double.parse(resultAmount);
                   });
               },
@@ -216,21 +231,6 @@ class _CashBackScreenState extends State<CashBackScreen> {
           ),
           ListTile(
             dense: true,
-            // onTap: () async {
-            //   var res = await showCupertinoModalBottomSheet(
-            //       isDismissible: true,
-            //       backgroundColor: Style.boxBackgroundColor,
-            //       context: context,
-            //       builder: (context) =>
-            //           SelectWalletAccountScreen(wallet: selectedWallet));
-            //   if (res != null)
-            //     setState(() {
-            //       selectedWallet = res;
-            //       currencySymbol = CurrencyService()
-            //           .findByCode(selectedWallet.currencyID)
-            //           .symbol;
-            //     });
-            // },
             leading: selectedWallet == null
                 ? SuperIcon(iconPath: 'assets/icons/wallet_2.svg', size: 28.0)
                 : SuperIcon(iconPath: selectedWallet.iconID, size: 28.0),
@@ -260,22 +260,6 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   hintText: selectedWallet == null
                       ? 'Select wallet'
                       : selectedWallet.name),
-              // onTap: () async {
-              //   var res = await showCupertinoModalBottomSheet(
-              //       isDismissible: true,
-              //       backgroundColor: Style.boxBackgroundColor,
-              //       context: context,
-              //       builder: (context) =>
-              //           SelectWalletAccountScreen(wallet: selectedWallet));
-              //   if (res != null)
-              //     setState(() {
-              //       selectedWallet = res;
-              //       currencySymbol = CurrencyService()
-              //           .findByCode(selectedWallet.currencyID)
-              //           .symbol;
-              //       // event = null;
-              //     });
-              // },
             ),
             trailing: Icon(Icons.lock,
                 color: Style.foregroundColor.withOpacity(0.54)),
@@ -346,6 +330,11 @@ class _CashBackScreenState extends State<CashBackScreen> {
                     fontWeight:
                         pickDate == null ? FontWeight.w500 : FontWeight.w600,
                   ),
+                  // xử lý hint text
+                  // nếu thời gian được chọn là hôm nay thì hiện today
+                  // ngày mai là tomorrow
+                  // ngày hôm qua là yesterday
+                  // còn các ngày khác thì theo form (thứ, ngày/tháng/năm)
                   hintText: pickDate ==
                           DateTime.parse(
                               DateFormat("yyyy-MM-dd").format(DateTime.now()))
@@ -377,8 +366,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
             dense: true,
             leading: Container(
                 padding: EdgeInsets.only(left: 4),
-                child: SuperIcon(iconPath: 'assets/images/note.svg', size: 21)
-            ),
+                child: SuperIcon(iconPath: 'assets/images/note.svg', size: 21)),
             title: TextFormField(
               onTap: () async {
                 final noteContent = await showCupertinoModalBottomSheet(
@@ -388,7 +376,6 @@ class _CashBackScreenState extends State<CashBackScreen> {
                     builder: (context) => NoteScreen(
                           content: note ?? '',
                         ));
-                print(noteContent);
                 if (noteContent != null) {
                   setState(() {
                     note = noteContent;
@@ -436,9 +423,9 @@ class _CashBackScreenState extends State<CashBackScreen> {
                 final PhoneContact phoneContact =
                     await FlutterContactPicker.pickPhoneContact();
                 if (phoneContact != null) {
-                  print(phoneContact.fullName);
                   setState(() {
                     contact = phoneContact.fullName;
+                    // xử lý note khi pick contact
                     if (cate != null && note != null) {
                       if (cate.name == 'Debt Collection') {
                         note = note.replaceRange(
@@ -450,8 +437,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
                     }
                   });
                 }
-              } on UserCancelledPickingException catch (e) {
-                // TODO
+              } on UserCancelledPickingException catch (_) {
                 print('cancel');
               }
             },
@@ -469,9 +455,9 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   final PhoneContact phoneContact =
                       await FlutterContactPicker.pickPhoneContact();
                   if (phoneContact != null) {
-                    print(phoneContact.fullName);
                     setState(() {
                       contact = phoneContact.fullName;
+                      // xử lý note khi pick contact
                       if (note != null) {
                         if (isDebt == false) {
                           note = note.replaceRange(note.indexOf('from'),
@@ -483,8 +469,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
                       }
                     });
                   }
-                } on UserCancelledPickingException catch (e) {
-                  // TODO
+                } on UserCancelledPickingException catch (_) {
                   print('cancel');
                 }
               },
@@ -517,7 +502,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
     );
   }
 
-  Future<void> _showAlertDialog(String content) async {
+  Future<void> showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

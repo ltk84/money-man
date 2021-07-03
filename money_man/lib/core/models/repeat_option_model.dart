@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 
 class RepeatOption {
+  // sự lặp lại
   String frequency;
+  // khoảng thời gian lặp lại
   int rangeAmount;
+  // thông tin thêm tùy vào frequency
   dynamic extraAmountInfo;
+  // thời điểm bắt đầu
   DateTime beginDateTime;
+  // thể loại
   String type;
+  // thông tin thêm của thể loại tùy vào thể loại
   dynamic extraTypeInfo;
 
   RepeatOption({

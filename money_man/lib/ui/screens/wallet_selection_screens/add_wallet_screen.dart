@@ -5,13 +5,10 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/models/transaction_model.dart';
-import 'package:money_man/core/models/category_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
-import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
@@ -22,10 +19,13 @@ class AddWalletScreen extends StatefulWidget {
 }
 
 class _AddWalletScreenState extends State<AddWalletScreen> {
-  static var _formKey = GlobalKey<FormState>();
+  // biến key cho việc validate khi nhập name cho wallet
+  static var formKey = GlobalKey<FormState>();
+  // biến mặc định cho currency của wallet
   String currencyName = 'Viet Nam Dong';
+  // biến để low down bàn phím
   FocusNode focusNode = new FocusNode();
-
+  // biến wallet với các giá trị mặc định
   Wallet wallet = Wallet(
       id: '0',
       name: '',
@@ -35,17 +35,15 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // biến firestore để thao tác với database
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+
     return Scaffold(
         backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.appBarColor,
-          //shape: RoundedRectangleBorder(
-          //   borderRadius: BorderRadius.only(
-          //      topLeft: Radius.circular(20.0),
-          //      topRight: Radius.circular(20.0))),
           title: Text('Add Wallet',
               style: TextStyle(
                 fontFamily: Style.fontFamily,
@@ -59,11 +57,18 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
+                // trường hợp wallet không có name
                 if (wallet.name == '' || wallet.name == null) return;
-                if (_formKey.currentState.validate()) {
+
+                // trường hợp các trường đều validate
+                if (formKey.currentState.validate()) {
+                  // làm low down bàn phím
                   FocusScope.of(context).requestFocus(FocusNode());
+                  // add wallet và trả về thông tin wallet mới
                   var res = await _firestore.addWallet(this.wallet);
+                  // lấy thông tin wallet mới update lên database
                   await _firestore.updateSelectedWallet(res);
+                  // back về screen trước
                   Navigator.of(context).pop(res);
                 }
               },
@@ -82,42 +87,12 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
         body: Container(
             color: Style.backgroundColor1,
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: buildInput(),
             )));
   }
 
-  Future<void> _showAlertDialog(String content) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      barrierColor: Style.backgroundColor.withOpacity(0.54),
-      builder: (BuildContext context) {
-        return CustomAlert(content: content);
-      },
-    );
-  }
-
-  String convertMoneyType(double k) {
-    String result = k.toString();
-    var ff = result.split('.');
-    String temp1 = ff[0];
-    String temp2 = temp1.split('').reversed.join();
-    result = '';
-    int i = 0;
-    for (int j = 0; j < temp2.length; j++) {
-      result += temp2[j];
-      i++;
-      if (i % 3 == 0 && j + 1 != temp2.length) result += ',';
-    }
-    result = ff.length == 1
-        ? result.split('').reversed.join()
-        : result.split('').reversed.join() + '.';
-    for (i = 1; i < ff.length; i++) result += ff[i];
-    print(result);
-    return result;
-  }
-
+  // build phần nhập các thông tin cho wallet
   Widget buildInput() {
     return ListView(
       children: [
@@ -131,7 +106,6 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
               child: Column(
                 children: [
                   Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         color: Colors
@@ -139,11 +113,12 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                         padding: EdgeInsets.fromLTRB(24, 20, 10, 0),
                         child: GestureDetector(
                           onTap: () async {
-                            // TODO: Chọn icon cho ví
+                            // chọn icon cho wallet
                             var data = await showCupertinoModalBottomSheet(
                               context: context,
                               builder: (context) => IconPicker(),
                             );
+                            // nếu user có chọn icon thì setState cho giá trị iconID của wallet
                             if (data != null) {
                               setState(() {
                                 wallet.iconID = data;
@@ -201,8 +176,10 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                             ),
                             onChanged: (value) => wallet.name = value,
                             validator: (value) {
+                              // nếu giá trị nhập vào trường name rỗng
                               if (value == null || value.length == 0)
                                 return 'Name is empty';
+                              // nếu giá trị có ký hiệu không hợp lệ
                               return (value != null && value.contains('@'))
                                   ? 'Do not use the @ char.'
                                   : null;
@@ -222,6 +199,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 0),
                     onTap: () {
+                      // chọn currency cho wallet
                       showCurrencyPicker(
                         theme: CurrencyPickerThemeData(
                           backgroundColor: Style.boxBackgroundColor,
@@ -273,7 +251,9 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 10),
                     onTap: () async {
+                      // low down bàn phím trong trường hợp bàn phím được mở
                       focusNode.unfocus();
+                      // dẫn vào screen nhập số tiền
                       final resultAmount = await showCupertinoModalBottomSheet(
                           context: context,
                           builder: (context) => EnterAmountScreen());

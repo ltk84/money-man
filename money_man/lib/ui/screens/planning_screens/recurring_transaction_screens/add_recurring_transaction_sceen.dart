@@ -241,7 +241,7 @@ class _AddRecurringTransactionScreenState
                             backgroundColor: Style.boxBackgroundColor,
                             context: context,
                             builder: (context) =>
-                                SelectWalletAccountScreen(wallet: wallet));
+                                SelectWalletScreen(currentWallet: wallet));
                         if (res != null)
                           setState(() {
                             wallet = res;

@@ -4,7 +4,7 @@ import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
-import 'package:money_man/ui/screens/transaction_screens/transaction_detail.dart';
+import 'package:money_man/ui/screens/transaction_screens/transaction_detail_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
@@ -12,9 +12,10 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
+// HIển thị danh sách các event á
 class EventListTransactionScreen extends StatefulWidget {
-  Event currentEvent;
-  Wallet eventWallet;
+  Event currentEvent; // truyền vào event hiện tại
+  Wallet eventWallet; // ví của event đó
   EventListTransactionScreen({Key key, this.currentEvent, this.eventWallet})
       : super(key: key);
   @override
@@ -25,12 +26,16 @@ class EventListTransactionScreen extends StatefulWidget {
 
 class _EventListTransactionScreen extends State<EventListTransactionScreen>
     with TickerProviderStateMixin {
+  // event hiện tại
   Event _currentEvent;
+  // ví của event đó
   Wallet _eventWallet;
+  // Danh sách các ngày có giao dịch
   List<DateTime> dateInChoosenTime = [];
 
   @override
   void initState() {
+    // Khởi tạo giá trị các biến state
     _currentEvent = widget.currentEvent;
     _eventWallet = widget.eventWallet;
     super.initState();
@@ -45,16 +50,23 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Tham chiếu đến các hàm của firebase
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<Object>(
+        // Stream lấy tất cả các transaction
         stream: _firestore.transactionStream(_eventWallet, 'full'),
         builder: (context, snapshot) {
           double total = 0;
+          // Danh sách chứa tất cả transaction
           List<MyTransaction> listTransaction = snapshot.data ?? [];
+          // Danh sách chứa các transaction được sort theo ngày
           List<MyTransaction> listTransactionOfEventByDate = [];
+          // Danh sách các transaction hoàn taonf được sort thành các ngày khác nhau
           List<List<MyTransaction>> transactionListSorted = [];
+          // Danh sách các ngày có giao dịch
           List<DateTime> dateInChoosenTime = [];
 
+          // Tính toán total và thực hiện thêm những transaction của event vào danh sách transaction của event
           listTransaction.forEach((element) {
             if (element.eventID != null) if (element.eventID ==
                 _currentEvent.id) {
@@ -65,17 +77,20 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                 total -= element.amount;
             }
           });
+          // Sort lại theo ngày
           listTransactionOfEventByDate.sort((a, b) => b.date.compareTo(a.date));
-
+          // lưu lại các ngày có transaction
           listTransactionOfEventByDate.forEach((element) {
             if (!dateInChoosenTime.contains(element.date))
               dateInChoosenTime.add(element.date);
           });
+          // tiếp tục sort để được sortedd hoàn chỉnh, này là theo ngày luôn, cho cái list 2 chiều
           dateInChoosenTime.forEach((date) {
             final b = listTransactionOfEventByDate
                 .where((element) => element.date.compareTo(date) == 0);
             transactionListSorted.add(b.toList());
           });
+          // Nếu không có transaction nào thì hiển thị báo không có
           return (listTransactionOfEventByDate.length == 0)
               ? Scaffold(
                   backgroundColor: Style.backgroundColor,
@@ -125,6 +140,7 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                           ),
                         ],
                       )))
+              // Nếu có thì hiển thị danh sách lên
               : Scaffold(
                   backgroundColor: Style.backgroundColor,
                   appBar: AppBar(
@@ -153,15 +169,14 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
         });
   }
 
+// Hiển thị các transaction theo ngày
   Container buildDisplayTransactionByDate(
       List<List<MyTransaction>> transactionListSortByDate, double total) {
     return Container(
       color: Style.backgroundColor,
       child: ListView.builder(
           physics: BouncingScrollPhysics(),
-          //primary: false,
           shrinkWrap: true,
-          // itemCount: TRANSACTION_DATA.length + 1,
           itemCount: transactionListSortByDate.length,
           itemBuilder: (context, xIndex) {
             double totalAmountInDay = 0;
@@ -186,6 +201,7 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
     );
   }
 
+// hiển thị phần header tính toán income và expense
   Widget buildHeader(
       List<List<MyTransaction>> transListSortByDate, double total) {
     total = 0;
@@ -204,9 +220,9 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
               color: Style.boxBackgroundColor,
               border: Border(
                   bottom: BorderSide(
-                    color: Style.backgroundColor,
-                    width: 1.0,
-                  ))),
+                color: Style.backgroundColor,
+                width: 1.0,
+              ))),
           padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
           child: Column(children: <Widget>[
             Container(
@@ -246,20 +262,22 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                           fontFamily: Style.fontFamily,
                         )),
                     MoneySymbolFormatter(
-                        text: total,
-                        currencyId: widget.eventWallet.currencyID,
-                        textStyle: TextStyle(
-                          color: Style.foregroundColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: Style.fontFamily,
-                        ),),
+                      text: total,
+                      currencyId: widget.eventWallet.currencyID,
+                      textStyle: TextStyle(
+                        color: Style.foregroundColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: Style.fontFamily,
+                      ),
+                    ),
                   ]),
             ),
           ])),
     );
   }
 
+// Hiển thị các transaction tại đây
   Widget buildBottomViewByDate(List<List<MyTransaction>> transListSortByDate,
       int xIndex, double totalAmountInDay) {
     totalAmountInDay = 0;
@@ -338,12 +356,14 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
             itemCount: transListSortByDate[xIndex].length,
             itemBuilder: (context, yIndex) {
               return GestureDetector(
+                // Xem chi tiết transaction được click
                 onTap: () async {
                   await Navigator.push(
                       context,
                       PageTransition(
                           child: TransactionDetail(
-                            transaction: transListSortByDate[xIndex][yIndex],
+                            currentTransaction: transListSortByDate[xIndex]
+                                [yIndex],
                             wallet: widget.eventWallet,
                           ),
                           type: PageTransitionType.rightToLeft));
@@ -375,19 +395,20 @@ class _EventListTransactionScreen extends State<EventListTransactionScreen>
                       ),
                       Expanded(
                         child: MoneySymbolFormatter(
-                            text: transListSortByDate[xIndex][yIndex].amount,
-                            currencyId: widget.eventWallet.currencyID,
-                            textAlign: TextAlign.end,
-                            textStyle: TextStyle(
-                                fontFamily: Style.fontFamily,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14.0,
-                                color: transListSortByDate[xIndex][yIndex]
-                                    .category
-                                    .type ==
-                                    'income'
-                                    ? Style.incomeColor2
-                                    : Style.expenseColor),),
+                          text: transListSortByDate[xIndex][yIndex].amount,
+                          currencyId: widget.eventWallet.currencyID,
+                          textAlign: TextAlign.end,
+                          textStyle: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: transListSortByDate[xIndex][yIndex]
+                                          .category
+                                          .type ==
+                                      'income'
+                                  ? Style.incomeColor2
+                                  : Style.expenseColor),
+                        ),
                       ),
                     ],
                   ),

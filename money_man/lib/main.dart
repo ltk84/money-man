@@ -1,8 +1,11 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:money_man/ui/screens/shared_screens/error_screen.dart';
 import 'package:money_man/ui/screens/shared_screens/loading_screen.dart';
-import 'package:money_man/ui/theme.dart';
 import 'package:money_man/ui/widgets/wrapper.dart';
 import 'package:money_man/ui/widgets/wrapper_builder.dart';
 import 'package:provider/provider.dart';
@@ -29,41 +32,81 @@ class _AppState extends State<App> {
       key = UniqueKey();
     });
   }
-  // Set default `_initialized` and `_error` state to false
-  bool _initialized = false;
-  bool _error = false;
 
-  // Define an async function to initialize FlutterFire
+  // Set giá trị mặc định cho  `initialized` và `error` thành false
+  bool initialized = false;
+  bool error = false;
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  Future<void> initConnectivity() async {
+    ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+      return;
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
+
+  // hàm initialize FlutterFire
   void initializeFlutterFire() async {
     try {
-      // Wait for Firebase to initialize and set `_initialized` state to true
+      // đợi Firebase init và set `initialized` thành true
       await Firebase.initializeApp();
       setState(() {
-        _initialized = true;
+        initialized = true;
       });
     } catch (e) {
-      // Set `_error` state to true if Firebase initialization fails
+      // Set `error` thành true if Firebase init lỗi
       setState(() {
-        _error = true;
+        error = true;
       });
     }
   }
 
   @override
   void initState() {
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     initializeFlutterFire();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Show error message if initialization failed
-    if (_error) {
-      return MaterialApp(home: ErrorScreen());
+    // hiển thị màn hinh lỗi nếu init lỗi
+    if (error) {
+      return MaterialApp(
+          debugShowCheckedModeBanner: false, home: ErrorScreen());
     }
 
-    // Show a loader until FlutterFire is initialized
-    if (!_initialized) {
+    if (_connectionStatus == ConnectivityResult.none) {
+      return MaterialApp(
+          debugShowCheckedModeBanner: false, home: ErrorScreen());
+    }
+
+    // hiển thị màn hình loading trong lúc init chưa xong
+    if (!initialized) {
       return MaterialApp(home: LoadingScreen());
     }
 
@@ -78,7 +121,6 @@ class _AppState extends State<App> {
         child: WrapperBuilder(
           builder: (context, userSnapshot) {
             return MaterialApp(
-              theme: firstTheme(),
               debugShowCheckedModeBanner: false,
               home: SafeArea(
                 child: Wrapper(
@@ -88,7 +130,6 @@ class _AppState extends State<App> {
             );
           },
         ),
-        // child: MaterialApp(home: FirstStep()),
       ),
     );
   }

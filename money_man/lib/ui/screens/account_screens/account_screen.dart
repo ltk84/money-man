@@ -16,6 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'account_detail_screen.dart';
 import 'help_screens/help_screens.dart';
 
+// Màn hình của tab account
 class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,7 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> {
+  // Link dẫn đến repo source code của đồ án
   String exploreURL = "https://github.com/ltk84/money-man/";
 
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
@@ -81,10 +83,10 @@ class _TestState extends State<Test> {
 
   @override
   Widget build(BuildContext context) {
+    // Biến tham chiếu đến các chức năng của firebase
     final _auth = Provider.of<FirebaseAuthService>(context);
     return Scaffold(
         backgroundColor: Style.backgroundColor,
-        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: true,
@@ -103,12 +105,9 @@ class _TestState extends State<Test> {
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  //child: Container(
-                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
-                  //),
                 ),
               ),
             ),
@@ -124,6 +123,7 @@ class _TestState extends State<Test> {
                     fontWeight: FontWeight.w600,
                   ))),
         ),
+        // Stream builder để lấy thông tin người dùng hiện tại
         body: StreamBuilder<User>(
             stream: _auth.userStream,
             builder: (context, snapshot) {
@@ -141,6 +141,7 @@ class _TestState extends State<Test> {
                                 color: Colors.transparent, child: title))
                         : emptyTitle,
                   ),
+                  // Thông tin người dùng hiện tại
                   Container(
                       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                       decoration: BoxDecoration(
@@ -217,6 +218,7 @@ class _TestState extends State<Test> {
                           ),
                           ListTile(
                             minLeadingWidth: 30,
+                            // Chuyển hướng đến trang tùy chọn tài khoản (gồm thay đổi mật khẩu, đăng xuất)
                             onTap: () {
                               Navigator.push(
                                   context,
@@ -266,6 +268,7 @@ class _TestState extends State<Test> {
                       children: [
                         ListTile(
                           minLeadingWidth: 30,
+                          // Chuyển đến thông tin các ví
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -298,6 +301,7 @@ class _TestState extends State<Test> {
                         ),
                         ListTile(
                           minLeadingWidth: 30,
+                          //Chuyển đến thông tin các category
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -340,6 +344,7 @@ class _TestState extends State<Test> {
                       children: [
                         ListTile(
                           minLeadingWidth: 30,
+                          // Vào git hub của team
                           onTap: () {
                             launchURL(exploreURL);
                           },
@@ -368,6 +373,7 @@ class _TestState extends State<Test> {
                         ),
                         ListTile(
                           minLeadingWidth: 30,
+                          // Chuyển đến trang tùy chọn câu hỏi, hướng dẫn, gửi phản hồi
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -399,6 +405,7 @@ class _TestState extends State<Test> {
                         ),
                         ListTile(
                           minLeadingWidth: 30,
+                          // Chuyển đến cài đặt (gồm cài đặt theme)
                           onTap: () async {
                             int tempCurrentTheme = Style.currentTheme;
                             await Navigator.push(
@@ -434,6 +441,7 @@ class _TestState extends State<Test> {
                         ),
                         ListTile(
                           minLeadingWidth: 30,
+                          // Chuyển hướng đến thông tin về ứng dụng, thông tin các thành viên của team
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -466,6 +474,7 @@ class _TestState extends State<Test> {
             }));
   }
 
+// Này là hàm dùng cho chuyển hướng vào trang github của team
   void launchURL(String url) async =>
       await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 }
