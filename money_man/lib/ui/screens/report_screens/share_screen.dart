@@ -181,7 +181,7 @@ class ShareScreenState extends State<ShareScreen> {
                   ),
                   onPressed: () async {
                     // Gọi hàm cấp phép truy cập storage để lưu ảnh.
-                    if (await Permission.storage.request().isGranted) {
+                    if (await Permission.storage.request().isGranted && await Permission.photos.request().isGranted) {
                       // Lưu hình ảnh theo thứ tự đang được chọn.
                       dynamic result = await ImageGallerySaver.saveImage(
                           (currentIndex == 0)
