@@ -6,7 +6,6 @@ import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/planning_screens/bills_screens/bills_main_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
 import 'package:money_man/ui/screens/planning_screens/recurring_transaction_screens/recurring_transaction_main_screen.dart';
-import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_home.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/event_home.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
@@ -376,8 +375,7 @@ class _PlanningScreenState extends State<PlanningScreen> {
                     Navigator.push(
                       context,
                       PageTransition(
-                          child:
-                              RecurringTransactionMainScreen(wallet: wallet),
+                          child: RecurringTransactionMainScreen(wallet: wallet),
                           type: PageTransitionType.rightToLeft),
                     );
                   },

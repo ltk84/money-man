@@ -10,7 +10,7 @@ class BudgetTimeRange {
       {@required this.beginDay, @required this.endDay, this.description});
 
 // Này là để trả về chi tiết theo định dạnh dd/MM
-  String TimeRangeString() {
+  String getStringOfTimeRange() {
     String result = DateFormat('dd/MM').format(beginDay) +
         ' - ' +
         DateFormat('dd/MM').format(endDay);

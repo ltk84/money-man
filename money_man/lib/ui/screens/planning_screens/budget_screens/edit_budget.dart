@@ -11,7 +11,6 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/select_time
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
-import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
 // Đây là màn hình edit budget, khi ấn edit từ budget detail
@@ -478,17 +477,6 @@ class _AddBudgetState extends State<EditBudget> {
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _showAlertDialog(String content) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      barrierColor: Style.backgroundColor.withOpacity(0.54),
-      builder: (BuildContext context) {
-        return CustomAlert(content: content);
-      },
     );
   }
 }

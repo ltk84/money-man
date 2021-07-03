@@ -35,7 +35,6 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
         future: _firestore.getListOfTransactionWithCriteriaForBudget(
             widget.budget.category.name, widget.wallet.id),
         builder: (context, snapshot) {
-          double total = 0;
           List<MyTransaction> listTransaction = snapshot.data ?? [];
 
 // Loại những transaction nằm ngoài khoảng thời gian của budget
@@ -216,7 +215,7 @@ class _BudgetTransactionScreen extends State<BudgetTransactionScreen>
                     return GestureDetector(
                       // Xem chi tiết giao dịch
                       onTap: () async {
-                        var res = await Navigator.push(
+                        await Navigator.push(
                             context,
                             PageTransition(
                                 child: TransactionDetail(

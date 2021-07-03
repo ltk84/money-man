@@ -31,14 +31,14 @@ class _SelectEventScreen extends State<SelectEventScreen> {
 
   @override
   void didUpdateWidget(covariant SelectEventScreen oldWidget) {
-    // TODO: implement didUpdateWidget
+    // updateWidget
     super.didUpdateWidget(oldWidget);
     _wallet = widget.wallet;
     _timeTransaction = widget.timeTransaction;
   }
 
 // Hàm so sánh a và b (ngày)
-  bool AIsBeforeB(DateTime a, DateTime b) {
+  bool checkAisBeforeB(DateTime a, DateTime b) {
     if (a.year < b.year) return true;
     if (a.year == b.year && a.month < b.month) return true;
     if (a.year == b.year && a.month == b.month && a.day < b.day) return true;
@@ -90,7 +90,7 @@ class _SelectEventScreen extends State<SelectEventScreen> {
                             element.autofinish &&
                             element.isFinished));
                     listEvent.removeWhere((element) =>
-                        AIsBeforeB(element.endDate, _timeTransaction));
+                        checkAisBeforeB(element.endDate, _timeTransaction));
                     return ListView.builder(
                         itemCount: listEvent.length,
                         itemBuilder: (context, index) {

@@ -81,7 +81,7 @@ class BasicQuestionsScreens extends StatelessWidget {
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           itemCount: num,
           itemBuilder: (context, i) {
-            return mQandA(
+            return MyQuestion(
               index: i,
             );
           },
@@ -92,8 +92,8 @@ class BasicQuestionsScreens extends StatelessWidget {
 }
 
 // Đối tượng hiển thị các câu hỏi
-class mQandA extends StatelessWidget {
-  const mQandA({Key key, this.index}) : super(key: key);
+class MyQuestion extends StatelessWidget {
+  const MyQuestion({Key key, this.index}) : super(key: key);
   // index là biến đặc trưng cho vị trí của câu hỏi hiện tại trong danh sách
   final int index;
 

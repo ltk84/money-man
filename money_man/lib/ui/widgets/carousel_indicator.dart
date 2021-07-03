@@ -18,7 +18,7 @@ class _IntroductionSlideState extends State<IntroductionSlide> {
     "Achieve your financial goals."
   ]; //danh sách các câu mô tả ứng với mỗi hình ảnh
 
-  int _currentIndex = 0;// index trang hiện tại của slide giới thiệu
+  int _currentIndex = 0; // index trang hiện tại của slide giới thiệu
 
   // Hàm lấy danh sách các hình ảnh giới thiệu
   Future _initImages() async {
@@ -38,7 +38,6 @@ class _IntroductionSlideState extends State<IntroductionSlide> {
 
   @override
   void initState() {
-    // TODO: implement initState
     if (imgList == null) _initImages();
     super.initState();
   }
@@ -46,7 +45,7 @@ class _IntroductionSlideState extends State<IntroductionSlide> {
   @override
   Widget build(BuildContext context) {
     return imgList != null
-    //Hiển thị các slide giới thiệu khi imgList khác null
+        //Hiển thị các slide giới thiệu khi imgList khác null
         ? Column(
             children: [
               CarouselSlider(
@@ -122,28 +121,30 @@ class _IntroductionSlideState extends State<IntroductionSlide> {
               ),
             ],
           )
-    // Trả về màn hình loading khi imgList null
+        // Trả về màn hình loading khi imgList null
         : Container(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.hourglass_empty,
-              color: Colors.white.withOpacity(0.12),
-              size: 100,
-            ),
-            SizedBox(height: 10,),
-            Text(
-              'Loading',
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
-                color: Colors.white.withOpacity(0.24),
-              ),
-            ),
-          ],
-        )
-    );
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.hourglass_empty,
+                  color: Colors.white.withOpacity(0.12),
+                  size: 100,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Loading',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white.withOpacity(0.24),
+                  ),
+                ),
+              ],
+            ));
   }
 }

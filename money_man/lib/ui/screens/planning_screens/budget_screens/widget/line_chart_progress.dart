@@ -83,8 +83,8 @@ class _LineChartsState extends State<LineCharts> {
       for (double i = 0; i < 6; i++) {
         temp = temp.add(Duration(minutes: difference.toInt()));
         var spent = await _firestore.calculateBudgetSpentFromDay(budget, temp);
-        var YAxix = spent / maxOfY * 5;
-        mSpot.add(FlSpot(i, YAxix));
+        var yAxis = spent / maxOfY * 5;
+        mSpot.add(FlSpot(i, yAxis));
       }
       return mSpot;
     }
@@ -96,8 +96,8 @@ class _LineChartsState extends State<LineCharts> {
     for (double i = 0; i < 7; i++) {
       temp = temp.add(Duration(minutes: difference.toInt()));
       var spent = await _firestore.calculateBudgetSpentFromDay(budget, temp);
-      var YAxix = spent / maxOfY * 5;
-      mSpot.add(FlSpot(i * todayRate, YAxix));
+      var yAxis = spent / maxOfY * 5;
+      mSpot.add(FlSpot(i * todayRate, yAxis));
     }
     return mSpot;
   }
@@ -257,6 +257,7 @@ class _LineChartsState extends State<LineCharts> {
                               return fomatDate(widget.budget.beginDate);
                             case 6:
                               return fomatDate(widget.budget.endDate);
+                            default:
                               return '';
                           }
                         }),

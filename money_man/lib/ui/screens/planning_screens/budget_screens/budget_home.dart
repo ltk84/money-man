@@ -26,7 +26,7 @@ class _BudgetScreenState extends State<BudgetScreen>
   TabController _tabController;
   @override
   void initState() {
-    // TODO: implement initState
+    // Khởi tạo trạng thái
     super.initState();
     _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
   }
@@ -63,8 +63,8 @@ class _BudgetScreenState extends State<BudgetScreen>
               actions: [
                 GestureDetector(
                   // Chọn ví
-                  onTap: () async {
-                    await buildShowDialog(context, widget.crrWallet.id);
+                  onTap: () {
+                    buildShowDialog(context, widget.crrWallet.id);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,

@@ -24,7 +24,7 @@ class _AccountInformation extends State<AccountInformation> {
   // Key kiểm soát nhập liệu
   final _formKey = GlobalKey<FormState>();
   String username;
-  Widget InputTile(BuildContext context) {
+  Widget inputTile(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(30, 15, 30, 30),
       //padding: EdgeInsets.fromLTRB(20,10,20,20),
@@ -165,7 +165,8 @@ class _AccountInformation extends State<AccountInformation> {
                       fontWeight: FontWeight.w300,
                       color: Style.foregroundColor,
                     )),
-                InputTile(context),
+                // chèn phần in put vào nè
+                inputTile(context),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 100.0),
                   height: 45.0,

@@ -80,7 +80,7 @@ class UserGuideScreen extends StatelessWidget {
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           itemCount: num,
           itemBuilder: (context, i) {
-            return mQandA(
+            return OurGuide(
               index: i,
             );
           },
@@ -91,8 +91,8 @@ class UserGuideScreen extends StatelessWidget {
 }
 
 // Lưu trữ, hiển thị hướng dẫn với index tương ứng
-class mQandA extends StatelessWidget {
-  const mQandA({Key key, this.index}) : super(key: key);
+class OurGuide extends StatelessWidget {
+  const OurGuide({Key key, this.index}) : super(key: key);
   final int index;
 
   @override

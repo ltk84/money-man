@@ -10,7 +10,8 @@ class CustomSelectTimeDialog extends StatefulWidget {
   _CustomSelectTimeDialogState createState() => _CustomSelectTimeDialogState();
 }
 
-class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with SingleTickerProviderStateMixin {
+class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog>
+    with SingleTickerProviderStateMixin {
   //Tạo controller animation cho animation
   AnimationController controller;
   //Tạo animation
@@ -27,13 +28,12 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     controller =
         AnimationController(vsync: this, duration: Duration(milliseconds: 400));
-    scaleAnimation =
-        CurvedAnimation(parent: controller, curve: Curves.fastLinearToSlowEaseIn);
+    scaleAnimation = CurvedAnimation(
+        parent: controller, curve: Curves.fastLinearToSlowEaseIn);
 
     controller.addListener(() {
       setState(() {});
@@ -53,7 +53,7 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
         elevation: 0,
         backgroundColor: Colors.transparent,
         child: Container(
-          padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0,10.0),
+          padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 10.0),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             color: Style.boxBackgroundColor,
@@ -64,28 +64,24 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                  'Select time range',
-                style: TextStyle(
-                  fontFamily: Style.fontFamily,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Style.foregroundColor,
-                )
-              ),
+              Text('Select time range',
+                  style: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Style.foregroundColor,
+                  )),
               SizedBox(height: 20.0),
               Center(
                 child: Column(
                   children: [
-                    Text(
-                        'From',
+                    Text('From',
                         style: TextStyle(
                           fontFamily: Style.fontFamily,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Style.foregroundColor.withOpacity(0.7),
-                        )
-                    ),
+                        )),
                     SizedBox(
                       height: 15,
                     ),
@@ -95,21 +91,23 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                         padding: EdgeInsets.symmetric(vertical: 10.0),
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 1,
-                              color: Style.foregroundColor.withOpacity(0.38),
-                            )
-                          )
-                        ),
+                            border: Border(
+                                bottom: BorderSide(
+                          width: 1,
+                          color: Style.foregroundColor.withOpacity(0.38),
+                        ))),
                         child: Text(
-                            beginDisplay ?? 'Choose date',
-                            style: TextStyle(
-                              fontFamily: Style.fontFamily,
-                              fontSize: 16,
-                              fontWeight: beginDisplay == null ? FontWeight.w400 : FontWeight.w600,
-                              color: beginDisplay == null ? Style.foregroundColor.withOpacity(0.12): Style.foregroundColor,
-                            ),
+                          beginDisplay ?? 'Choose date',
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16,
+                            fontWeight: beginDisplay == null
+                                ? FontWeight.w400
+                                : FontWeight.w600,
+                            color: beginDisplay == null
+                                ? Style.foregroundColor.withOpacity(0.12)
+                                : Style.foregroundColor,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -132,16 +130,15 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                                               .format(DateTime.now()))
                                       ? 'Today'
                                       : beginDate ==
-                                              DateTime.parse(DateFormat("yyyy-MM-dd")
-                                                  .format(DateTime.now()
-                                                      .add(Duration(days: 1))))
+                                              DateTime.parse(
+                                                  DateFormat("yyyy-MM-dd").format(
+                                                      DateTime.now().add(
+                                                          Duration(days: 1))))
                                           ? 'Tomorrow'
                                           : beginDate ==
-                                                  DateTime.parse(DateFormat(
-                                                          "yyyy-MM-dd")
-                                                      .format(DateTime.now()
-                                                          .subtract(
-                                                              Duration(days: 1))))
+                                                  DateTime.parse(DateFormat("yyyy-MM-dd").format(
+                                                      DateTime.now().subtract(
+                                                          Duration(days: 1))))
                                               ? 'Yesterday'
                                               : DateFormat('EEEE, dd-MM-yyyy')
                                                   .format(beginDate);
@@ -154,20 +151,17 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                                   fontFamily: Style.fontFamily,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor
-                              ),
+                                  color: Style.foregroundColor),
                               doneStyle: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor
-                              ),
+                                  color: Style.foregroundColor),
                               itemStyle: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor
-                              ),
+                                  color: Style.foregroundColor),
                               backgroundColor: Style.boxBackgroundColor,
                             ));
                       },
@@ -175,15 +169,13 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                     SizedBox(
                       height: 15,
                     ),
-                    Text(
-                        'To',
+                    Text('To',
                         style: TextStyle(
                           fontFamily: Style.fontFamily,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Style.foregroundColor.withOpacity(0.7),
-                        )
-                    ),
+                        )),
                     SizedBox(
                       height: 15,
                     ),
@@ -195,19 +187,21 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                         decoration: BoxDecoration(
                             border: Border(
                                 bottom: BorderSide(
-                                  width: 1,
-                                  color: Style.foregroundColor.withOpacity(0.38),
-                                )
-                            )
-                        ),
+                          width: 1,
+                          color: Style.foregroundColor.withOpacity(0.38),
+                        ))),
                         child: Text(
-                            endDisplay ?? 'Choose date',
-                            style: TextStyle(
-                              fontFamily: Style.fontFamily,
-                              fontSize: 16,
-                              fontWeight: endDisplay == null ? FontWeight.w400 : FontWeight.w600,
-                              color: endDisplay == null ? Style.foregroundColor.withOpacity(0.12): Style.foregroundColor,
-                            ),
+                          endDisplay ?? 'Choose date',
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16,
+                            fontWeight: endDisplay == null
+                                ? FontWeight.w400
+                                : FontWeight.w600,
+                            color: endDisplay == null
+                                ? Style.foregroundColor.withOpacity(0.12)
+                                : Style.foregroundColor,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -230,16 +224,15 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                                               .format(DateTime.now()))
                                       ? 'Today'
                                       : endDate ==
-                                              DateTime.parse(DateFormat("yyyy-MM-dd")
-                                                  .format(DateTime.now()
-                                                      .add(Duration(days: 1))))
+                                              DateTime.parse(
+                                                  DateFormat("yyyy-MM-dd").format(
+                                                      DateTime.now().add(
+                                                          Duration(days: 1))))
                                           ? 'Tomorrow'
                                           : endDate ==
-                                                  DateTime.parse(DateFormat(
-                                                          "yyyy-MM-dd")
-                                                      .format(DateTime.now()
-                                                          .subtract(
-                                                              Duration(days: 1))))
+                                                  DateTime.parse(DateFormat("yyyy-MM-dd").format(
+                                                      DateTime.now().subtract(
+                                                          Duration(days: 1))))
                                               ? 'Yesterday'
                                               : DateFormat('EEEE, dd-MM-yyyy')
                                                   .format(endDate);
@@ -252,20 +245,17 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                                   fontFamily: Style.fontFamily,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor
-                              ),
+                                  color: Style.foregroundColor),
                               doneStyle: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor
-                              ),
+                                  color: Style.foregroundColor),
                               itemStyle: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Style.foregroundColor
-                              ),
+                                  color: Style.foregroundColor),
                               backgroundColor: Style.boxBackgroundColor,
                             ));
                       },
@@ -283,31 +273,27 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text(
-                          'CANCEL',
-                        style: TextStyle(
-                          fontFamily: Style.fontFamily,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                          color: Style.primaryColor,
-                        )
-                      )
-                  ),
+                      child: Text('CANCEL',
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.primaryColor,
+                          ))),
                   TextButton(
                       onPressed: (beginDate == null || endDate == null)
                           ? null
-                          :  () {
-                        if (beginDate != null &&
-                            endDate != null &&
-                            beginDate.compareTo(endDate) < 0) {
-                          Navigator.pop(context, [beginDate, endDate]);
-                        }
-                        else {
-                          _showAlertDialog("Ending date must be after starting date,\nplease try again.");
-                        }
-                      },
-                      child: Text(
-                          'DONE',
+                          : () {
+                              if (beginDate != null &&
+                                  endDate != null &&
+                                  beginDate.compareTo(endDate) < 0) {
+                                Navigator.pop(context, [beginDate, endDate]);
+                              } else {
+                                _showAlertDialog(
+                                    "Ending date must be after starting date,\nplease try again.");
+                              }
+                            },
+                      child: Text('DONE',
                           style: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontSize: 14.0,
@@ -315,9 +301,7 @@ class _CustomSelectTimeDialogState extends State<CustomSelectTimeDialog> with Si
                             color: (beginDate == null || endDate == null)
                                 ? Style.primaryColor.withOpacity(0.4)
                                 : Style.primaryColor,
-                          )
-                      )
-                  ),
+                          ))),
                 ],
               )
             ],

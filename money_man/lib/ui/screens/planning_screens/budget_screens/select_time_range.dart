@@ -12,14 +12,13 @@ class SelectTimeRangeScreen extends StatefulWidget {
 }
 
 class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
-  @override
   BudgetTimeRange budgetTimeRange;
   var beginDate;
   var endDate;
   var dateDescript;
 
   // Lấy mô tả cho tuần
-  String GetSubTitileOfTheWeek(DateTime today) {
+  String getSubTitleOfTheWeek(DateTime today) {
     // Tuần có ngày bắt đầu là hôm nay trừ cho weekday và ngày kết thúc + thêm 6
     var firstDayOfWeek = today.subtract(Duration(days: today.weekday - 1));
     var endDayOfWeek = firstDayOfWeek.add(Duration(days: 6));
@@ -30,7 +29,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
   }
 
 // Lấy timerange cho tuần
-  BudgetTimeRange GetmTimeRangeWeek(DateTime today) {
+  BudgetTimeRange getMyTimeRangeWeek(DateTime today) {
     // Tuần có ngày bắt đầu là hôm nay trừ cho weekday và ngày kết thúc + thêm 6
 
     var firstDayOfWeek = today.subtract(Duration(days: today.weekday - 1));
@@ -44,7 +43,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
   }
 
 // Lấy title cho tháng
-  String GetSubTitleOfTheMonth(DateTime today) {
+  String getSubTitleOfTheMonth(DateTime today) {
     //Tháng bắt đầu từ ngày hôm nay trừ cho n-1 ngày và kết thúc bằng ngày đầu tiên của tháng sau -1
     var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
     firstDayOfMonth = DateTime(
@@ -58,7 +57,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
   }
 
 // Lấy time range cho tháng
-  BudgetTimeRange GetmTimeRangeMonth(DateTime today) {
+  BudgetTimeRange getMyTimeRangeMonth(DateTime today) {
     //Tháng bắt đầu từ ngày hôm nay trừ cho n-1 ngày và kết thúc bằng ngày đầu tiên của tháng sau -1
     var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
     firstDayOfMonth = DateTime(
@@ -73,7 +72,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
   }
 
 // Lấy mô tả cho quý
-  String GetSubTitleOfTheQuarter(DateTime today) {
+  String getSubTitleOfTheQuarter(DateTime today) {
     // Quý thì sử dụng công thức trừ tháng như dưới, ngày kết thúc tương tự ở trên
     double quarterNumber = (today.month - 1) / 3 + 3;
     DateTime firstDayOfQuarter =
@@ -88,7 +87,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
   }
 
 // Lấy time range cho quý
-  BudgetTimeRange GetmTimeRangeQuarter(DateTime today) {
+  BudgetTimeRange getMyTimeRangeOfTheQuarter(DateTime today) {
     double quarterNumber = (today.month - 1) / 3 + 3;
     DateTime firstDayOfQuarter =
         new DateTime(today.year, quarterNumber.toInt(), 1);
@@ -102,7 +101,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
   }
 
 // Tương tự nhưng cho quý tiếp theo (cộng today thêm 3 tháng :v)
-  String GetSubTitleOfTheNextQuarter(DateTime today) {
+  String getSubTitleForNextQuarter(DateTime today) {
     double quarterNumber = (today.month - 1) / 3 + 5;
     DateTime firstDayOfQuarter =
         new DateTime(today.year, quarterNumber.toInt(), 1);
@@ -116,7 +115,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
   }
 
 // Lấy timerange cho quý sau, tương tự
-  BudgetTimeRange GetmTimeRangeNextQuarter(DateTime today) {
+  BudgetTimeRange getMyTimeRangeForNextQuarter(DateTime today) {
     double quarterNumber = (today.month - 1) / 3 + 5;
     DateTime firstDayOfQuarter =
         new DateTime(today.year, quarterNumber.toInt(), 1);
@@ -129,6 +128,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
         description: 'Next quarter');
   }
 
+  @override
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
     today = DateTime(today.year, today.month, today.day);
@@ -168,22 +168,22 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
               Container(
                 child: buildTimeRangeListTile(
                     title: 'This week',
-                    subTitle: GetSubTitileOfTheWeek(today),
-                    mTimeRange: GetmTimeRangeWeek(today)),
+                    subTitle: getSubTitleOfTheWeek(today),
+                    mTimeRange: getMyTimeRangeWeek(today)),
               ),
               // Biểu thị cho khoảng thời gian của tháng này
               Container(
                 child: buildTimeRangeListTile(
                     title: 'This month',
-                    subTitle: GetSubTitleOfTheMonth(today),
-                    mTimeRange: GetmTimeRangeMonth(today)),
+                    subTitle: getSubTitleOfTheMonth(today),
+                    mTimeRange: getMyTimeRangeMonth(today)),
               ),
               // Biểu thị cho khoảng thời gian của quý này
               Container(
                 child: buildTimeRangeListTile(
                     title: 'This quarter',
-                    subTitle: GetSubTitleOfTheQuarter(today),
-                    mTimeRange: GetmTimeRangeQuarter(today)),
+                    subTitle: getSubTitleOfTheQuarter(today),
+                    mTimeRange: getMyTimeRangeOfTheQuarter(today)),
               ),
               // Biểu thị cho khoảng thời gian của năm nay
               Container(
@@ -199,18 +199,18 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
               Container(
                 child: buildTimeRangeListTile(
                     title: 'Next month',
-                    subTitle: GetSubTitleOfTheMonth(
+                    subTitle: getSubTitleOfTheMonth(
                         new DateTime(today.year, today.month + 1, today.day)),
-                    mTimeRange: GetmTimeRangeMonth(
+                    mTimeRange: getMyTimeRangeMonth(
                         new DateTime(today.year, today.month + 1, today.day))),
               ),
               // Biểu thị cho quý tới
               Container(
                 child: buildTimeRangeListTile(
                     title: 'Next quarter',
-                    subTitle: GetSubTitleOfTheNextQuarter(
+                    subTitle: getSubTitleForNextQuarter(
                         new DateTime(today.year, today.month + 3, today.day)),
-                    mTimeRange: GetmTimeRangeNextQuarter(
+                    mTimeRange: getMyTimeRangeForNextQuarter(
                         new DateTime(today.year, today.month + 3, today.day))),
               ),
               // Biểu thị cho năm tới
@@ -246,7 +246,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
       String subTitle = "sub tittle", // này là hiển thị ngày một cách chính xác
       bool mCustom =
           false, // Biến để nhận diện xem đây có phải là chọn khoảng thời gian tùy chỉnh không,  mặc định là không
-      BudgetTimeRange mTimeRange = null}) {
+      BudgetTimeRange mTimeRange}) {
     return Container(
       padding: EdgeInsets.only(left: 50),
       child: Column(

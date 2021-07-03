@@ -1,4 +1,3 @@
-import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
@@ -29,7 +28,7 @@ class AddBudget extends StatefulWidget {
 
 class _AddBudgetState extends State<AddBudget> {
   // Lấy khoảng thời gian tháng này làm mặc định, logic giống trong phần budget tile
-  BudgetTimeRange GetmTimeRangeMonth(DateTime today) {
+  BudgetTimeRange getMyTimeRangeMonth(DateTime today) {
     var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
     firstDayOfMonth = DateTime(
         firstDayOfMonth.year, firstDayOfMonth.month, firstDayOfMonth.day);
@@ -61,7 +60,7 @@ class _AddBudgetState extends State<AddBudget> {
     // Nếu chưa có ví thì chọn ví, có thể khai báo ở init state
     if (selectedWallet == null) selectedWallet = widget.wallet;
     // Tương tự cho time range
-    if (mTimeRange == null) mTimeRange = GetmTimeRangeMonth(DateTime.now());
+    if (mTimeRange == null) mTimeRange = getMyTimeRangeMonth(DateTime.now());
     // Mặc định là không lặp lại cho CUSTOM
     if (mTimeRange.getBudgetLabel() == 'Custom') isRepeat = false;
 
@@ -78,7 +77,6 @@ class _AddBudgetState extends State<AddBudget> {
           actions: [
             GestureDetector(
               onTap: () async {
-                //TODO: Add new budget
                 // Kiểm tra hợp lệ và thông báo dialog lên màn hình
                 if (selectedWallet == null) {
                   _showAlertDialog('Please pick your wallet!', null);

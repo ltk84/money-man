@@ -12,7 +12,6 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  @override
   final _auth = FirebaseAuthService();
   // Biến kiểm tra việc nhập liệu của nhập mật khẩu hiện tại
   bool inValid1 = false;
@@ -30,7 +29,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool obscure1 = true;
   bool obscure2 = true;
   bool obscure3 = true;
-
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Style.backgroundColor1,

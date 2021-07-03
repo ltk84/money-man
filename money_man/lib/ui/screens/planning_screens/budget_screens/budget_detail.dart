@@ -37,7 +37,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
   }
 
   //Hàm trả về string mô tả thời gian hiện tại tương ứng với thời gian của budget như thế nào
-  String TimeLeft(Budget budget) {
+  String getTimeLeft(Budget budget) {
     var today = DateTime.now();
     if (today.isBefore(budget.beginDate)) {
       int n = budget.beginDate.difference(today).inDays;
@@ -77,8 +77,6 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
     print('todayrate : $todayRate');
     var todayTarget;
     todayTarget = widget.budget.spent / widget.budget.amount;
-
-    ;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -100,7 +98,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               color: Style.foregroundColor,
             ),
             onPressed: () async {
-              var result = await showCupertinoModalBottomSheet(
+              await showCupertinoModalBottomSheet(
                   isDismissible: true,
                   backgroundColor: Colors.grey[900],
                   context: context,
@@ -340,7 +338,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
               subtitle: Container(
                 child: Text(
-                  TimeLeft(widget.budget),
+                  getTimeLeft(widget.budget),
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 13.0,

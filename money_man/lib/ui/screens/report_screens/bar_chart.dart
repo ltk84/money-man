@@ -64,8 +64,11 @@ class BarChartScreenState extends State<BarChartScreen> {
     // Nếu khoảng thời gian ban đầu lớn hơn hoặc bằng 6 ngày thì số lượngsẽ bằng 6.
     // Nếu khoảng thời gian ban đầu nhỏ hơn 6 ngày và lớn hơn 0 thì số lượng sẽ bằng đúng khoảng thời gian ban đầu đó.
     // Nếu khoảng thời gian ban đầu bằng 0 thì số lượng sẽ bằng 1.
-    int dayRange = (value.duration >= Duration(days: 6)) ? 6
-        : (value.duration.inDays == 0) ? 1 : value.duration.inDays;
+    int dayRange = (value.duration >= Duration(days: 6))
+        ? 6
+        : (value.duration.inDays == 0)
+            ? 1
+            : value.duration.inDays;
 
     // Biến lưu giá trị tính toán cho khoảng thời gian.
     List<dynamic> calculationList = [];
@@ -80,7 +83,8 @@ class BarChartScreenState extends State<BarChartScreen> {
     for (int i = 0; i < dayRange; i++) {
       // Khoảng thời gian thì phải có ngày bắt đầu và ngày kết thúc. Ở đây biến firstDate và secondDate được dùng để tượng trưng cho điều đó, ngày bắt đầu và ngày kết thúc của khoảng thời gian được chia tách.
       firstDate = firstDate.add(Duration(days: 1));
-      var secondDate = (i != dayRange - 1) ? firstDate.add(Duration(days: x)) : endDate;
+      var secondDate =
+          (i != dayRange - 1) ? firstDate.add(Duration(days: x)) : endDate;
 
       // Lưu kết quả tính toán thu nhập và chi tiêu theo khoảng thời gian xác định.
       // Có một danh sách để lưu khoảng thời gian đã được chia nhỏ và một danh sách để lưu số tiền thu, chi trong khoảng thời gian đó, đối chiếu với nhau theo thứ tự.
@@ -153,7 +157,6 @@ class BarChartScreenState extends State<BarChartScreen> {
 
   @override
   void didUpdateWidget(covariant BarChartScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
     transactionList = widget.currentList ?? [];
@@ -193,7 +196,8 @@ class BarChartScreenState extends State<BarChartScreen> {
                       maxY: 20,
                       barTouchData: BarTouchData(
                           touchTooltipData: BarTouchTooltipData(
-                            tooltipBgColor: Style.foregroundColor.withOpacity(0.54),
+                            tooltipBgColor:
+                                Style.foregroundColor.withOpacity(0.54),
                             getTooltipItem: (_a, _b, _c, _d) => null,
                           ),
                           touchCallback: (response) {
@@ -318,7 +322,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                       Row(
                         children: [
                           Container(
-                            height: width*2,
+                            height: width * 2,
                             width: width,
                             decoration: BoxDecoration(
                               color: leftBarColor,
@@ -326,22 +330,20 @@ class BarChartScreenState extends State<BarChartScreen> {
                             ),
                           ),
                           SizedBox(width: 10),
-                          Text(
-                              'Total income',
+                          Text('Total income',
                               style: TextStyle(
                                 fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14.0,
                                 color: Style.foregroundColor.withOpacity(0.54),
-                              )
-                          ),
+                              )),
                         ],
                       ),
                       SizedBox(height: 8),
                       Row(
                         children: [
                           Container(
-                            height: width*2,
+                            height: width * 2,
                             width: width,
                             decoration: BoxDecoration(
                               color: rightBarColor,
@@ -350,7 +352,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                           ),
                           SizedBox(width: 10),
                           Text(
-                              'Total expense',
+                            'Total expense',
                             style: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
@@ -376,7 +378,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                           ),
                           SizedBox(width: 10),
                           Text(
-                              'Amount',
+                            'Amount',
                             style: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
@@ -396,7 +398,7 @@ class BarChartScreenState extends State<BarChartScreen> {
                           ),
                           SizedBox(width: 10),
                           Text(
-                              'Time range (day)',
+                            'Time range (day)',
                             style: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,

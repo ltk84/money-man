@@ -52,7 +52,7 @@ class _AddEventState extends State<AddEvent> {
   }
 
 // So sánh 2 ngày
-  bool AIsBeforeB(DateTime a, DateTime b) {
+  bool checkAisBeforeB(DateTime a, DateTime b) {
     if (a.year < b.year) return true;
     if (a.year == b.year && a.month < b.month) return true;
     if (a.year == b.year && a.month == b.month && a.day < b.day) return true;
@@ -90,7 +90,7 @@ class _AddEventState extends State<AddEvent> {
                   _showAlertDialog('Please enter name!');
                 } else if (cate == null) {
                   _showAlertDialog('Please pick category');
-                } else if (AIsBeforeB(endDate, DateTime.now())) {
+                } else if (checkAisBeforeB(endDate, DateTime.now())) {
                   _showAlertDialog(
                       'Please select an end date greater than or equal to today ');
                 } else {
