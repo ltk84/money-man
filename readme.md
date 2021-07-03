@@ -2,7 +2,7 @@
 **Money Man** là ứng dụng quản lý chi tiêu. 
 Giúp bạn theo dõi và quản lý dòng tiền cũng như
 lập kế hoạch chi tiêu một cách hiệu quả, trực quan.
-## **Tính năng chính**
+## **Tính năng**
 ### **Quản lý tài khoản**
 * Đăng ký.
 * Đăng nhập bằng tài khoản Google, Facebook.
@@ -72,6 +72,63 @@ lập kế hoạch chi tiêu một cách hiệu quả, trực quan.
         * Kết thúc lặp lại vào một ngày xác định.
         * Kết thúc sau một số lượng lần xác định.
 * Thực hiện tạo giao dịch thủ công cho giao dịch tự động.
+### **Thay đổi giao diện ứng dụng**
+*	Cho phép thay đổi màu chữ, màu nền của ứng dụng theo các gói đã được tạo sẵn:
+    *	Black Theme.
+    *	White Theme.
+    *	Grey Theme.
+### **Hướng dẫn và trợ giúp người dùng**
+*	Phần trợ giúp sẽ bao gồm phần trả lời các câu hỏi cơ bản và hướng dẫn sử dụng một số tính năng cho người dùng.
+*	Cho phép người dùng gửi mail phản hồi/ báo lỗi đến nhóm phát triển ứng dụng.
+### **Truy cập liên kết**
+*	Truy cập tới trang github của ứng dụng.
+*	Truy cập tới các trang cá nhân trên mạng xã hội cũng như email của các thành viên trong nhóm.
+## **Thư viện và Công nghệ**
+*	[Flutter](https://flutter.dev/).
+*	[Firebase](https://firebase.google.com/).
+*	[Pub.dev](https://pub.dev/).
 ## **Cài đặt**
-## **Tác giả**
-## **Kiến thức**
+### **Yêu cầu tối thiểu dành cho thiết bị:**
+*	Android 4.2 Jelly Bean.
+*   RAM: 2GB.
+*	ROM: 60MB.
+### **Cài đặt ứng dụng lên điện thoại:**
+Tải file .apk tại [đây](https://drive.google.com/file/d/1Jq3dEx3oylzjoTnloN8j4I53oQmNRKPH/view?usp=sharing) và cài đặt lên điện thoại (Android).
+### **Dành cho việc phát triển ứng dụng:** 
+Cài đặt flutter theo hướng dẫn tại [đây](https://flutter.dev/docs/get-started/install).
+
+Clone repository của Money Man từ github về máy:	
+
+    $ git clone https://github.com/ltk84/money-man.git
+
+Chạy lệnh bên dưới bên trong thư mục của project Money Man:
+
+    $ flutter pub get
+
+Sau đó mở công cụ phát triển (development tool) và chạy ứng dụng trên máy ảo.
+
+*Có thể tham khảo thêm tại [đây](https://flutter.dev/docs/get-started) (Flutter documentation).*
+
+## **Thành viên đóng góp**
+* Trương Kim Lâm - 19521743@gm.uit.edu.vn
+* Dương Hiển Thế - 19522252@gm.uit.edu.vn
+* Trần Lê Thanh Tùng - 19522496@gm.uit.edu.vn
+* Huỳnh Trọng Phục - 19522030@gm.uit.edu.vn
+
+## **Giấy phép**
+    MIT License
+
+    Copyright (c) 2021 Lemidatt
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
