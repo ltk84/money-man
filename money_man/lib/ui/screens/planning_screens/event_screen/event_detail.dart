@@ -73,14 +73,14 @@ class _EventDetailScreen extends State<EventDetailScreen>
           IconButton(
             // chỉnh sửa event
             onPressed: () async {
-              final updatedTrans = await Navigator.push(
+              final updatedEvent = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => EditEventScreen(
                         currentEvent: _currentEvent,
                         eventWallet: _eventWallet,
                       )));
-              if (updatedTrans != null)
+              if (updatedEvent != null)
                 setState(() {
                 });
             },
