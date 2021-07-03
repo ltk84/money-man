@@ -382,7 +382,7 @@ class _AddBudgetState extends State<AddBudget> {
                               hintText: mTimeRange == null
                                   ? 'Time range:'
                                   : mTimeRange.description == null
-                                      ? mTimeRange.TimeRangeString()
+                                      ? mTimeRange.getStringOfTimeRange()
                                       : mTimeRange.description,
                               hintStyle: TextStyle(
                                   color: Style.foregroundColor,
