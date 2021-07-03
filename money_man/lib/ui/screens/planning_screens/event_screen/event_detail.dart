@@ -73,13 +73,16 @@ class _EventDetailScreen extends State<EventDetailScreen>
           IconButton(
             // chỉnh sửa event
             onPressed: () async {
-              final updatedTrans = await showCupertinoModalBottomSheet(
-                  context: context,
-                  builder: (context) => EditEventScreen(
+              final updatedTrans = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => EditEventScreen(
                         currentEvent: _currentEvent,
                         eventWallet: _eventWallet,
-                      ));
-              if (updatedTrans != null) setState(() {});
+                      )));
+              if (updatedTrans != null)
+                setState(() {
+                });
             },
             icon: Icon(
               Icons.edit,
