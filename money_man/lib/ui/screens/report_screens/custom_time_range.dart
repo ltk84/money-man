@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:money_man/core/models/timeRangeInfoModel.dart';
+import 'package:money_man/core/models/time_range_info_model.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class CustomTimeRange extends StatefulWidget {
   final beginDate;
@@ -20,14 +17,11 @@ class CustomTimeRange extends StatefulWidget {
 }
 
 class CustomTimeRangeState extends State<CustomTimeRange> {
-  // String _beginDate = 'Begin date';
-  // String _endDate = 'End date';
   DateTime realBeginDate;
   DateTime realEndDate;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     realBeginDate = widget.beginDate;
     realEndDate = widget.endDate;
@@ -35,7 +29,6 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
 
   @override
   void didUpdateWidget(covariant CustomTimeRange oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     realBeginDate = widget.beginDate;
     realEndDate = widget.endDate;
@@ -43,43 +36,35 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
 
   @override
   Widget build(BuildContext context) {
-    String _beginDate = realBeginDate != null
+    // Lấy giá trị ngày bắt đầu từ tham số truyền vào.
+    String beginDate = realBeginDate != null
         ? DateFormat('dd/MM/yyyy').format(realBeginDate)
-        : 'Begin date';
-    String _endDate = realEndDate != null
+        : 'Choose begin date';
+
+    // Lấy giá trị ngày kết thúc từ tham số truyền vào.
+    String endDate = realEndDate != null
         ? DateFormat('dd/MM/yyyy').format(realEndDate)
-        : 'End date';
+        : 'Choose end date';
 
     return Scaffold(
-        backgroundColor: Colors.black45,
+        backgroundColor: Style.boxBackgroundColor,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.grey[900],
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0))),
+          backgroundColor: Style.appBarColor,
           title: Text('Custom',
               style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15.0)),
-          leadingWidth: 250.0,
-          leading: MaterialButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Row(
-              children: [
-                Icon(Icons.arrow_back_ios, color: Colors.white),
-                Text('Back', style: Theme.of(context).textTheme.headline6)
-              ],
-            ),
+                fontFamily: Style.fontFamily,
+                fontSize: 17.0,
+                fontWeight: FontWeight.w600,
+                color: Style.foregroundColor,
+              )),
+          leading: CloseButton(
+            color: Style.foregroundColor,
           ),
           actions: [
             TextButton(
+                // Đảm bảo phải có giá trị ngày bắt đầu và ngày kết thúc được chọn một cách hợp lệ thì mới có thể trả về kết quả.
                 onPressed: (realBeginDate == null || realEndDate == null)
                     ? null
                     : () {
@@ -91,25 +76,39 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                               begin: realBeginDate,
                               end: realEndDate));
                         else {
-                          _showAlertDialog();
+                          // Ngày kết thúc nhỏ hơn ngày bắt đầu và một trong hai bằng rỗng thì sẽ hiện lên thông báo lỗi.
+                          showAlertDialog();
                         }
                       },
                 child: Text(
                   'Done',
                   style: TextStyle(
-                      color: (realBeginDate == null || realEndDate == null)
-                          ? Colors.white30
-                          : Colors.white,
-                      fontFamily: 'Montserrat',
-                      fontSize: 17.0),
+                    color: (realBeginDate == null || realEndDate == null)
+                        ? Style.foregroundColor.withOpacity(0.24)
+                        : Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ))
           ],
         ),
-        body: ListView(
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 25),
-              child: ListTile(
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          color: Style.backgroundColor1,
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(5, 8, 8, 2),
+                child: Text('Begin date',
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: Style.foregroundColor.withOpacity(0.54),
+                    )),
+              ),
+              ListTile(
                 onTap: () {
                   DatePicker.showDatePicker(context,
                       currentTime: realBeginDate == null
@@ -124,31 +123,55 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                       DateFormat dateFormat = DateFormat('dd/MM/yyyy');
                       String formattedDate = dateFormat.format(date);
                       realBeginDate = dateFormat.parse(formattedDate);
-                      //_beginDate = DateFormat('dd/MM/yyyy').format(date);
                     });
                   },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
-                        cancelStyle: TextStyle(color: Colors.white),
-                        doneStyle: TextStyle(color: Colors.white),
-                        itemStyle: TextStyle(color: Colors.white),
-                        backgroundColor: Colors.grey[900],
+                        cancelStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor),
+                        doneStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor),
+                        itemStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor),
+                        backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
                 tileColor: Colors.transparent,
-                title: Text(_beginDate,
+                title: Text(beginDate,
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 16,
+                      fontFamily: Style.fontFamily,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white54,
+                      color: beginDate != 'Choose begin date'
+                          ? Style.foregroundColor
+                          : Style.foregroundColor.withOpacity(0.24),
                     )),
-                trailing: Icon(Icons.chevron_right, color: Colors.grey[500]),
+                trailing: Icon(Icons.chevron_right,
+                    color: Style.foregroundColor.withOpacity(0.54)),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: ListTile(
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(5, 8, 8, 2),
+                child: Text('End date',
+                    style: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: Style.foregroundColor.withOpacity(0.54),
+                    )),
+              ),
+              ListTile(
                 onTap: () {
                   DatePicker.showDatePicker(context,
                       currentTime: realEndDate == null
@@ -168,34 +191,50 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                   },
                       locale: LocaleType.en,
                       theme: DatePickerTheme(
-                        cancelStyle: TextStyle(color: Colors.white),
-                        doneStyle: TextStyle(color: Colors.white),
-                        itemStyle: TextStyle(color: Colors.white),
-                        backgroundColor: Colors.grey[900],
+                        cancelStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor),
+                        doneStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor),
+                        itemStyle: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                            color: Style.foregroundColor),
+                        backgroundColor: Style.boxBackgroundColor,
                       ));
                 },
                 tileColor: Colors.transparent,
-                title: Text(_endDate,
+                title: Text(endDate,
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 16,
+                      fontFamily: Style.fontFamily,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white54,
+                      color: endDate != 'Choose end date'
+                          ? Style.foregroundColor
+                          : Style.foregroundColor.withOpacity(0.24),
                     )),
-                trailing: Icon(Icons.chevron_right, color: Colors.grey[500]),
+                trailing: Icon(Icons.chevron_right,
+                    color: Style.foregroundColor.withOpacity(0.54)),
               ),
-            )
-          ],
+            ],
+          ),
         ));
   }
 
-  Future<void> _showAlertDialog() async {
+  Future<void> showAlertDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
+      barrierDismissible: false,
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
-        return CustomAlert(content: "End date can't be before begin date,\nplease try again.");
+        return CustomAlert(
+            content: "End date can't be before begin date,\nplease try again.");
       },
     );
   }

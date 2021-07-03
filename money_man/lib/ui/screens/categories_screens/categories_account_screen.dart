@@ -1,10 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:money_man/core/models/categoryModel.dart';
-import 'package:money_man/core/models/superIconModel.dart';
+import 'package:money_man/core/models/category_model.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
-
+// màn hình hiển thị các category trên hệ thống khi nhấn vào category ở account screen
 class CategoriesScreen extends StatefulWidget {
   // list tab category
   final List<Tab> categoryTypeTab = [
@@ -77,8 +78,8 @@ class _CategoriesScreenState extends State<CategoriesScreen>
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: Colors.black,
-        //extendBodyBehindAppBar: true,
+        backgroundColor: Style.backgroundColor,
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           leadingWidth: 250.0,
           leading: MaterialButton(
@@ -87,15 +88,18 @@ class _CategoriesScreenState extends State<CategoriesScreen>
             },
             child: Hero(
               tag: 'alo',
-              child: Row(
-                children: [
-                  Icon(Icons.arrow_back_ios, color: Colors.white),
-                Text('More', style: Theme.of(context).textTheme.headline6),
-                  // Hero(
-                  //     tag: 'alo',
-                  //     child: Text('More',
-                  //         style: Theme.of(context).textTheme.headline6)),
-                ],
+              child: Material(
+                color: Colors.transparent,
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, color: Style.foregroundColor),
+                    Text('More',
+                        style: TextStyle(
+                            color: Style.foregroundColor,
+                            fontFamily: Style.fontFamily,
+                            fontSize: 17.0)),
+                  ],
+                ),
               ),
             ),
           ),
@@ -116,8 +120,6 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  //child: Container(
-                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
@@ -133,16 +135,23 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                   ''
                   'Categories',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montseratt',
-                      fontSize: 17.0))),
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                  ))),
           bottom: TabBar(
-            unselectedLabelColor: Colors.grey[500],
-            labelColor: Colors.white,
-            indicatorColor: Colors.yellow[700],
-            physics: NeverScrollableScrollPhysics(),
-            isScrollable: true,
-            indicatorWeight: 3.0,
+            labelStyle: TextStyle(
+              fontFamily: Style.fontFamily,
+              fontWeight: FontWeight.w700,
+              fontSize: 13.0,
+            ),
+            unselectedLabelColor: Style.foregroundColor.withOpacity(0.54), //thiết lập màu label ủa tab không đuơc chọn
+            labelColor: Style.foregroundColor, //thiết lập màu label của tab khi được chọn
+            indicatorColor: Style.primaryColor, //thiết lập màu của đường kẻ phía dưới tab được chọn
+            physics: NeverScrollableScrollPhysics(), //thiết lập không cho phép người dùng scroll
+            isScrollable: true, //thiết lập cho phép tabbar scroll theo chiều ngang
+            indicatorWeight: 3.0, //thiết lập độ dày của đường kẻ dưới tab đã chọn
             controller: _tabController,
             tabs: widget.categoryTypeTab,
           ),
@@ -153,7 +162,9 @@ class _CategoriesScreenState extends State<CategoriesScreen>
             return StreamBuilder<List<MyCategory>>(
                 stream: _firestore.categoryStream,
                 builder: (context, snapshot) {
+                  // danh sách các category được lấy xuống từ database
                   final _listCategories = snapshot.data ?? [];
+                  // lọc các category thuộc các loại category tương ứng với mỗi tab
                   final _selectCateTab = _listCategories
                       .where((element) =>
                           element.type ==
@@ -161,14 +172,19 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                               .toLowerCase())
                       .toList();
                   return ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       controller: _controller,
                       itemCount: _selectCateTab.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          leading: SuperIcon(iconPath: _selectCateTab[index].iconID, size: 35.0),
+                          leading: SuperIcon(
+                              iconPath: _selectCateTab[index].iconID,
+                              size: 35.0),
                           title: Text(_selectCateTab[index].name,
-                              style: Theme.of(context).textTheme.subtitle1),
+                              style: TextStyle(
+                                  color: Style.foregroundColor,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: Style.fontFamily)),
                           onTap: () {
                             // _firestore.addCate();
                           },

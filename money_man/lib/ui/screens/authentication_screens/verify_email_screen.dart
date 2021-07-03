@@ -1,12 +1,8 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:money_man/core/models/superIconModel.dart';
-import 'package:money_man/core/services/constaints.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/ui/screens/account_screens/account_edit_information_screen.dart';
-import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
-import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -16,12 +12,15 @@ class VerifyEmailScreen extends StatefulWidget {
 }
 
 class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+  // biến authentication
   final auth = FirebaseAuth.instance;
-
+  // timer check verify email
   Timer timer;
+
   @override
   void initState() {
     super.initState();
+    // mỗi 5s check verify email
     timer = Timer.periodic(Duration(seconds: 5), (timer) {
       checkIfEmailVerified();
     });
@@ -35,11 +34,15 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // biến user hiện tại
     final user = auth.currentUser;
+    // controller cho nút
     final RoundedLoadingButtonController _btnController =
         new RoundedLoadingButtonController();
+    // controller cho nút
     final RoundedLoadingButtonController _btnController2 =
         new RoundedLoadingButtonController();
+
     return Scaffold(
       backgroundColor: Color(0xff1a1a1a),
       body: Container(
@@ -64,8 +67,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                               color: Colors.white,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w300,
-                              fontSize: 16
-                          ),
+                              fontSize: 16),
                         ),
                         Text(
                           'Money Man',
@@ -81,8 +83,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                               color: Colors.white,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w300,
-                              fontSize: 16
-                          ),
+                              fontSize: 16),
                         ),
                       ],
                     ),
@@ -98,14 +99,24 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                             fontSize: 30),
                       ),
                     ),
+                    SizedBox(height: 10.0),
+                    Text(
+                      'Please check your email!\nAfter verified, please wait for seconds',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w300,
+                          fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               ),
             ),
             Expanded(
               child: SuperIcon(
-                  iconPath: "assets/images/email.svg",
-                  size: 120.0,
+                iconPath: "assets/images/email.svg",
+                size: 120.0,
               ),
             ),
             Expanded(
@@ -122,26 +133,14 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         color: Color(0xff2FB49C),
                         child: Text('Tap to verify email',
                             style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16.0,
-                                color: white,
-                            )
-                        ),
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            )),
                         controller: _btnController,
                         onPressed: () async {
-                          if (user.email.contains('gmail') == false) {
-                            await user.sendEmailVerification();
-                          } else {
-                            final res = await _handleLinkWithGoogle(user.email);
-                            if (res == null) {
-                              await _showAlertDialog('There is something wrong!');
-                              await user.delete();
-                            }
-                          }
-                          final timer2 =
-                              Timer.periodic(Duration(seconds: 3), (timer) {});
-
+                          await user.sendEmailVerification();
                           _btnController.success();
                         },
                       ),
@@ -161,8 +160,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                               fontWeight: FontWeight.w700,
                               fontSize: 16.0,
                               color: Color(0xff2FB49C),
-                            )
-                        ),
+                            )),
                         controller: _btnController2,
                         onPressed: () async {
                           await auth.signOut();
@@ -184,80 +182,13 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
-      Navigator.pushReplacement(context,
+      Navigator.pushReplacement(
+          context,
           PageTransition(
             child: AccountInformationScreen(),
             type: PageTransitionType.scale,
             curve: Curves.elasticInOut,
-          )
-      );
+          ));
     }
-  }
-
-  Future _handleLinkWithGoogle(String _email) async {
-    try {
-      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser == null) return null;
-
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      final GoogleAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      if (_email.contains('gmail')) {
-        // print('link');
-        if (_email != googleUser.email) {
-          await GoogleSignIn().signOut();
-          await _showAlertDialog(
-              'The google account and the email is different! Please sign up again!');
-          await auth.currentUser.delete();
-
-          // Navigator.pop(context);
-        } else {
-          try {
-            UserCredential res =
-                await auth.currentUser.linkWithCredential(credential);
-          } on FirebaseAuthException catch (e) {
-            // TODO
-            print(e.code);
-            return null;
-          }
-        }
-      }
-    } on FirebaseAuthException catch (e) {
-      String error = '';
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          error =
-              "This account is linked with another provider! Try another provider!";
-          break;
-        case 'email-already-in-use':
-          error = "Your email address has been registered.";
-          break;
-        case 'invalid-credential':
-          error = "Your credential is malformed or has expired.";
-          break;
-        case 'user-disabled':
-          error = "This user has been disable.";
-          break;
-        default:
-          error = e.code;
-      }
-      _showAlertDialog(error);
-    }
-  }
-
-  Future<void> _showAlertDialog(String content) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      barrierColor: Colors.black54,
-      builder: (BuildContext context) {
-        return CustomAlert(content: content);
-      },
-    );
   }
 }

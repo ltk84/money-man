@@ -2,12 +2,21 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
+import 'package:money_man/main.dart';
+import 'package:money_man/ui/screens/account_screens/about_screen.dart';
+import 'package:money_man/ui/screens/account_screens/my_wallets_screen.dart';
+import 'package:money_man/ui/screens/account_screens/setting_screen.dart';
 import 'package:money_man/ui/screens/categories_screens/categories_account_screen.dart';
+import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'account_detail_screen.dart';
+import 'help_screens/help_screens.dart';
 
+// Màn hình của tab account
 class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,6 +30,9 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> {
+  // Link dẫn đến repo source code của đồ án
+  String exploreURL = "https://github.com/ltk84/money-man/";
+
   // Cái này để check xem element đầu tiên trong ListView chạm đỉnh chưa.
   int reachTop = 0;
   int reachAppBar = 0;
@@ -29,14 +41,14 @@ class _TestState extends State<Test> {
   Text title = Text('More',
       style: TextStyle(
           fontSize: 30,
-          color: Colors.white,
-          fontFamily: 'Montserrat',
+          color: Style.foregroundColor,
+          fontFamily: Style.fontFamily,
           fontWeight: FontWeight.bold));
   Text emptyTitle = Text('',
       style: TextStyle(
           fontSize: 30,
-          color: Colors.white,
-          fontFamily: 'Montserrat',
+          color: Style.foregroundColor,
+          fontFamily: Style.fontFamily,
           fontWeight: FontWeight.bold));
 
   // Phần này để check xem mình đã Scroll tới đâu trong ListView
@@ -71,11 +83,12 @@ class _TestState extends State<Test> {
 
   @override
   Widget build(BuildContext context) {
+    // Biến tham chiếu đến các chức năng của firebase
     final _auth = Provider.of<FirebaseAuthService>(context);
     return Scaffold(
-        backgroundColor: Colors.black,
-        //extendBodyBehindAppBar: true,
+        backgroundColor: Style.backgroundColor,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           centerTitle: true,
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -92,12 +105,9 @@ class _TestState extends State<Test> {
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  //child: Container(
-                  //color: Colors.transparent,
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
-                  //),
                 ),
               ),
             ),
@@ -107,10 +117,13 @@ class _TestState extends State<Test> {
               duration: Duration(milliseconds: 100),
               child: Text('More',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montseratt',
-                      fontSize: 17.0))),
+                    color: Style.foregroundColor,
+                    fontFamily: Style.fontFamily,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                  ))),
         ),
+        // Stream builder để lấy thông tin người dùng hiện tại
         body: StreamBuilder<User>(
             stream: _auth.userStream,
             builder: (context, snapshot) {
@@ -122,40 +135,43 @@ class _TestState extends State<Test> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
                     child: reachTop == 0
-                        ? Hero(tag: 'alo', child: title)
+                        ? Hero(
+                            tag: 'alo',
+                            child: Material(
+                                color: Colors.transparent, child: title))
                         : emptyTitle,
                   ),
+                  // Thông tin người dùng hiện tại
                   Container(
                       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                       decoration: BoxDecoration(
-                          color: Colors.grey[900],
+                          color: Style.boxBackgroundColor,
                           border: Border(
                               top: BorderSide(
                                 width: 0.1,
-                                color: Colors.white,
+                                color: Style.foregroundColor.withOpacity(0.12),
                               ),
                               bottom: BorderSide(
                                 width: 0.1,
-                                color: Colors.white,
+                                color: Style.foregroundColor.withOpacity(0.12),
                               ))),
                       child: Column(
                         children: [
                           CircleAvatar(
-                            backgroundColor: Colors.white,
+                            backgroundColor: Style.foregroundColor,
                             radius: 30.0,
                             child: Text(
-                                (_user == null)
-                                    ? ''
-                                    : (_user.displayName != '' &&
-                                            _user.displayName != null)
-                                        ? _user.displayName.substring(0, 1)
-                                        : 'Y',
+                              (_user == null)
+                                  ? ''
+                                  : (_user.displayName != '' &&
+                                          _user.displayName != null)
+                                      ? _user.displayName.substring(0, 1)
+                                      : 'Y',
                               style: TextStyle(
-                                  color: Color(0xff2FB49C),
+                                  color: Style.primaryColor,
                                   fontSize: 30.0,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w400
-                              ),
+                                  fontFamily: Style.fontFamily,
+                                  fontWeight: FontWeight.w400),
                             ),
                           ),
                           SizedBox(
@@ -173,9 +189,9 @@ class _TestState extends State<Test> {
                                             ? _user.phoneNumber
                                             : 'Your name'),
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Style.foregroundColor,
                                     fontWeight: FontWeight.w600,
-                                    fontFamily: 'Montserrat',
+                                    fontFamily: Style.fontFamily,
                                     fontSize: 15.0)),
                           ),
                           Text(
@@ -187,9 +203,10 @@ class _TestState extends State<Test> {
                                           ? _user.email
                                           : 'Your email'),
                               style: TextStyle(
-                                  color: Colors.grey[400],
+                                  color:
+                                      Style.foregroundColor.withOpacity(0.54),
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: Style.fontFamily,
                                   fontSize: 13.0)),
                           SizedBox(
                             height: 20.0,
@@ -197,9 +214,11 @@ class _TestState extends State<Test> {
                           Divider(
                             height: 5,
                             thickness: 0.1,
-                            color: Colors.white,
+                            color: Style.foregroundColor,
                           ),
                           ListTile(
+                            minLeadingWidth: 30,
+                            // Chuyển hướng đến trang tùy chọn tài khoản (gồm thay đổi mật khẩu, đăng xuất)
                             onTap: () {
                               Navigator.push(
                                   context,
@@ -208,67 +227,81 @@ class _TestState extends State<Test> {
                                         user: _user,
                                       ),
                                       type: PageTransitionType.rightToLeft));
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(builder: (context) => AccountDetail()));
                             },
                             dense: true,
-                            leading: Icon(Icons.person,
-                                color: Colors.white, size: 38.0),
+                            leading: SuperIcon(
+                              iconPath:
+                                  'assets/images/account_screen/user2.svg',
+                              size: 25,
+                            ),
                             title: Text('My Account',
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Style.foregroundColor,
                                     fontWeight: FontWeight.w700,
-                                    fontFamily: 'Montserrat')),
+                                    fontFamily: Style.fontFamily)),
                             subtitle: Text('Your infomation',
                                 style: TextStyle(
-                                    color: Colors.grey[400],
+                                    color:
+                                        Style.foregroundColor.withOpacity(0.54),
                                     fontWeight: FontWeight.w400,
-                                    fontFamily: 'Montserrat',
+                                    fontFamily: Style.fontFamily,
                                     fontSize: 13.0)),
                             trailing: Icon(Icons.chevron_right,
-                                color: Colors.grey[400]),
+                                color: Style.foregroundColor.withOpacity(0.54)),
                           )
                         ],
                       )),
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
                     decoration: BoxDecoration(
-                        color: Colors.grey[900],
+                        color: Style.boxBackgroundColor,
                         border: Border(
                             top: BorderSide(
                               width: 0.1,
-                              color: Colors.white,
+                              color: Style.foregroundColor.withOpacity(0.12),
                             ),
                             bottom: BorderSide(
                               width: 0.1,
-                              color: Colors.white,
+                              color: Style.foregroundColor.withOpacity(0.12),
                             ))),
                     child: Column(
                       children: [
                         ListTile(
-                          onTap: () {},
+                          minLeadingWidth: 30,
+                          // Chuyển đến thông tin các ví
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: MyWalletScreen(),
+                                    type: PageTransitionType.rightToLeft));
+                          },
                           dense: true,
-                          leading: Icon(Icons.account_balance_wallet_rounded,
-                              color: Colors.grey[400], size: 25.0),
+                          leading: SuperIcon(
+                            iconPath:
+                                'assets/images/account_screen/wallet2.svg',
+                            size: 25,
+                          ),
                           title: Text('My Wallets',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: Style.fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(60, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: Colors.white,
+                            color: Style.foregroundColor,
                           ),
                         ),
                         ListTile(
+                          minLeadingWidth: 30,
+                          //Chuyển đến thông tin các category
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -277,16 +310,19 @@ class _TestState extends State<Test> {
                                     type: PageTransitionType.rightToLeft));
                           },
                           dense: true,
-                          leading: Icon(Icons.category,
-                              color: Colors.grey[400], size: 25.0),
+                          leading: SuperIcon(
+                            iconPath:
+                                'assets/images/account_screen/category.svg',
+                            size: 25,
+                          ),
                           title: Text('Categories',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: Style.fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                       ],
                     ),
@@ -294,97 +330,138 @@ class _TestState extends State<Test> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 35, 0, 0),
                     decoration: BoxDecoration(
-                        color: Colors.grey[900],
+                        color: Style.boxBackgroundColor,
                         border: Border(
                             top: BorderSide(
                               width: 0.1,
-                              color: Colors.white,
+                              color: Style.foregroundColor.withOpacity(0.12),
                             ),
                             bottom: BorderSide(
                               width: 0.1,
-                              color: Colors.white,
+                              color: Style.foregroundColor.withOpacity(0.12),
                             ))),
                     child: Column(
                       children: [
                         ListTile(
-                          onTap: () {},
+                          minLeadingWidth: 30,
+                          // Vào git hub của team
+                          onTap: () {
+                            launchURL(exploreURL);
+                          },
                           dense: true,
-                          leading: Icon(Icons.explore,
-                              color: Colors.grey[400], size: 25.0),
+                          leading: SuperIcon(
+                            iconPath:
+                                'assets/images/account_screen/explore.svg',
+                            size: 25,
+                          ),
                           title: Text('Explore',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: Style.fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(60, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: Colors.white,
+                            color: Style.foregroundColor,
                           ),
                         ),
                         ListTile(
-                          onTap: () {},
+                          minLeadingWidth: 30,
+                          // Chuyển đến trang tùy chọn câu hỏi, hướng dẫn, gửi phản hồi
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: HelpScreens(),
+                                    type: PageTransitionType.rightToLeft));
+                          },
                           dense: true,
-                          leading: Icon(Icons.help_outline,
-                              color: Colors.grey[400], size: 25.0),
+                          leading: SuperIcon(
+                            iconPath: 'assets/images/account_screen/help.svg',
+                            size: 25,
+                          ),
                           title: Text('Help & Support',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: Style.fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(60, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: Colors.white,
+                            color: Style.foregroundColor,
                           ),
                         ),
                         ListTile(
-                          onTap: () {},
+                          minLeadingWidth: 30,
+                          // Chuyển đến cài đặt (gồm cài đặt theme)
+                          onTap: () async {
+                            int tempCurrentTheme = Style.currentTheme;
+                            await Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: SettingScreen(),
+                                    type: PageTransitionType.rightToLeft));
+                            if (tempCurrentTheme != Style.currentTheme)
+                              App.restartApp(context);
+                          },
                           dense: true,
-                          leading: Icon(Icons.settings,
-                              color: Colors.grey[400], size: 25.0),
+                          leading: SuperIcon(
+                            iconPath:
+                                'assets/images/account_screen/setting.svg',
+                            size: 25,
+                          ),
                           title: Text('Settings',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: Style.fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(60, 0, 0, 0),
                           child: Divider(
                             height: 0,
                             thickness: 0.1,
-                            color: Colors.white,
+                            color: Style.foregroundColor,
                           ),
                         ),
                         ListTile(
-                          onTap: () {},
+                          minLeadingWidth: 30,
+                          // Chuyển hướng đến thông tin về ứng dụng, thông tin các thành viên của team
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: AboutScreen(),
+                                    type: PageTransitionType.rightToLeft));
+                          },
                           dense: true,
-                          leading: Icon(Icons.info,
-                              color: Colors.grey[400], size: 25.0),
+                          leading: SuperIcon(
+                            iconPath: 'assets/images/account_screen/about.svg',
+                            size: 25,
+                          ),
                           title: Text('About',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Style.foregroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
+                                  fontFamily: Style.fontFamily,
                                   fontSize: 14.0)),
                           trailing: Icon(Icons.chevron_right,
-                              color: Colors.grey[400]),
+                              color: Style.foregroundColor.withOpacity(0.54)),
                         ),
                       ],
                     ),
@@ -396,4 +473,8 @@ class _TestState extends State<Test> {
               );
             }));
   }
+
+// Này là hàm dùng cho chuyển hướng vào trang github của team
+  void launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 }

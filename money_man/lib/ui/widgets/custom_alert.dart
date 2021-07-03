@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:money_man/ui/style.dart';
+// Dialog hiển thị cảnh báo
 class CustomAlert extends StatefulWidget {
-  final iconPath;
-  final title;
-  final content;
+  final iconPath; // path(đường dẫn) của icon cảnh báo
+  final title; // tiêu đề của icon cảnh báo
+  final content; // nội dung của icon cảnh báo
+
+  //Khởi tạo các thuộc tính mặc định của class
   const CustomAlert(
       {
         Key key,
@@ -18,7 +21,10 @@ class CustomAlert extends StatefulWidget {
 }
 
 class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStateMixin {
+
+  //Tạo controller animation cho animation
   AnimationController controller;
+  //Tạo animation
   Animation<double> scaleAnimation;
 
   @override
@@ -41,18 +47,19 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
     return ScaleTransition(
       scale: scaleAnimation,
       child: Dialog(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Style.boxBackgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Container(
             margin: EdgeInsets.only(top: 20, left: 20, right: 20.0),
-            height: 190,
             width: 315,
             decoration: BoxDecoration(
             ),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: ListView(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     children: [
@@ -65,20 +72,20 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
                       SizedBox(height: 15.0),
                       Text(widget.title,
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 5.0),
                       Text(widget.content,
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
+                          fontFamily: Style.fontFamily,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white,
+                          color: Style.foregroundColor,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -92,7 +99,7 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
                         border: Border(
                             top: BorderSide(
                               width: 1,
-                              color: Colors.white12,
+                              color: Style.foregroundColor.withOpacity(0.12),
                             )
                         )
                     ),
@@ -103,10 +110,10 @@ class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStat
                         },
                         child: Text('Close',
                           style: TextStyle(
-                            fontFamily: 'Montserrat',
+                            fontFamily: Style.fontFamily,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: Style.foregroundColor,
                           ),
                           textAlign: TextAlign.center,
                         )

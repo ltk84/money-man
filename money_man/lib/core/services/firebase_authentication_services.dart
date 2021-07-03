@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -31,7 +30,6 @@ class FirebaseAuthService {
       final res = await _auth.signInAnonymously();
       return res.user;
     } on FirebaseAuthException catch (e) {
-      print(e.toString());
       return e.code;
     }
   }
@@ -44,8 +42,10 @@ class FirebaseAuthService {
 
       // đăng xuất Google account nếu có
       await GoogleSignIn().signOut();
+
+      // đăng xuất Facebook account nếu có
+      await FacebookLogin().logOut();
     } catch (e) {
-      print(e);
       return e;
     }
   }
@@ -53,29 +53,64 @@ class FirebaseAuthService {
   // đăng nhập với email và password
   Future signInWithEmailAndPassword(email, password) async {
     try {
-      final result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return result.user;
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return 'login-success';
     } on FirebaseAuthException catch (e) {
-      print(e.code.toString());
-      return e.code.toString();
-    } catch (e) {
-      print(e);
+      String error = '';
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          error =
+              "This account is linked with another provider! Try another provider!";
+          break;
+        case 'email-already-in-use':
+          error = "Your email address has been registered.";
+          break;
+        case 'invalid-credential':
+          error = "Your credential is malformed or has expired.";
+          break;
+        case 'user-disabled':
+          error = "This user has been disable.";
+          break;
+        default:
+          error = e.code;
+      }
+      return error;
+    } on PlatformException catch (e) {
       return e.code;
+    } on NoSuchMethodError catch (e) {
+      return e;
     }
   }
 
   // đăng ký với email và password
   Future signUpWithEmailAndPassword(email, password) async {
     try {
-      final result = await _auth.createUserWithEmailAndPassword(
+      await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      return result.user;
+      return 'login-success';
     } on FirebaseAuthException catch (e) {
-      print(e.code.toString());
-      return e.code.toString();
-    } catch (e) {
-      print(e);
+      String error = '';
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          error =
+              "This account is linked with another provider! Try another provider!";
+          break;
+        case 'email-already-in-use':
+          error = "Your email address has been registered.";
+          break;
+        case 'invalid-credential':
+          error = "Your credential is malformed or has expired.";
+          break;
+        case 'user-disabled':
+          error = "This user has been disable.";
+          break;
+        default:
+          error = e.code;
+      }
+      return error;
+    } on PlatformException catch (e) {
+      return e.code;
+    } on NoSuchMethodError catch (e) {
       return e;
     }
   }
@@ -83,8 +118,7 @@ class FirebaseAuthService {
   // đăng nhập với tài khoản Google
   Future signInWithGoogleAccount() async {
     try {
-      final GoogleSignInAccount googleUser =
-          await GoogleSignIn().signIn().catchError((error) => print(error));
+      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
       if (googleUser == null) return null;
 
@@ -96,12 +130,31 @@ class FirebaseAuthService {
         idToken: googleAuth.idToken,
       );
 
-      return await _auth.signInWithCredential(credential);
-    } on FirebaseException catch (e) {
-      print(e.code);
+      await _auth.signInWithCredential(credential);
+      return 'login-success';
+    } on FirebaseAuthException catch (e) {
+      String error = '';
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          error =
+              "This account is linked with another provider! Try another provider!";
+          break;
+        case 'email-already-in-use':
+          error = "Your email address has been registered.";
+          break;
+        case 'invalid-credential':
+          error = "Your credential is malformed or has expired.";
+          break;
+        case 'user-disabled':
+          error = "This user has been disable.";
+          break;
+        default:
+          error = e.code;
+      }
+      return error;
+    } on PlatformException catch (e) {
       return e.code;
-    } catch (e) {
-      print(e);
+    } on NoSuchMethodError catch (e) {
       return e;
     }
   }
@@ -111,53 +164,38 @@ class FirebaseAuthService {
     try {
       return await _auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       return e.code;
     }
   }
 
-  Future signInWithFacebook() async {
-    try {
-      // Trigger the sign-in flow
-      final AccessToken result = await FacebookAuth.instance.login();
-
-      // Create a credential from the access token
-      final FacebookAuthCredential facebookAuthCredential =
-          FacebookAuthProvider.credential(result.token);
-
-      // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance
-          .signInWithCredential(facebookAuthCredential);
-    } on FirebaseAuthException catch (e) {
-      print(e.code);
-      return e.code;
-    }
-  }
-
-//Hàm kiểm tra password
+  //Hàm kiểm tra password
   Future<bool> validatePassword(String password) async {
-    var firebaseUser = await _auth.currentUser;
-
-    var authCredentials = EmailAuthProvider.credential(
-        email: firebaseUser.email, password: password);
     try {
+      // lấy thông tin user hiện tại
+      var firebaseUser = _auth.currentUser;
+      // lấy credential email
+      var authCredentials = EmailAuthProvider.credential(
+          email: firebaseUser.email, password: password);
+      // kiểm tra lại với password của user
       var authResult =
           await firebaseUser.reauthenticateWithCredential(authCredentials);
       return authResult.user != null;
     } catch (e) {
-      print(e);
       return false;
     }
   }
 
+  // hàm update password
   Future<void> updatePassword(String password) async {
-    var firebaseUser = await _auth.currentUser;
+    var firebaseUser = _auth.currentUser;
     firebaseUser.updatePassword(password);
   }
 
+  // đăng nhập với account Facebook
   Future signInWithFacebookVer2() async {
     try {
       final facebookLogin = FacebookLogin();
+      facebookLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
       final result = await facebookLogin.logIn(['email']);
 
       switch (result.status) {
@@ -171,7 +209,29 @@ class FirebaseAuthService {
         case FacebookLoginStatus.error:
           break;
       }
+
+      return 'login-success';
     } on FirebaseAuthException catch (e) {
+      String error = '';
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          error =
+              "This account is linked with another provider! Try another provider!";
+          break;
+        case 'email-already-in-use':
+          error = "Your email address has been registered.";
+          break;
+        case 'invalid-credential':
+          error = "Your credential is malformed or has expired.";
+          break;
+        case 'user-disabled':
+          error = "This user has been disable.";
+          break;
+        default:
+          error = e.code;
+      }
+      return error;
+    } on PlatformException catch (e) {
       return e.code;
     }
   }

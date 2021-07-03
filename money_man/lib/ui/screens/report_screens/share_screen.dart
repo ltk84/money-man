@@ -1,24 +1,21 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:intl/intl.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 
-import 'custom_time_range.dart';
-
 class ShareScreen extends StatefulWidget {
-  Uint8List bytes1;
-  Uint8List bytes2;
-  Uint8List bytes3;
+
+  // Các tham số truyền vào để lấy dữ liệu từ widget và chuyển sang hình ảnh.
+  final Uint8List bytes1;
+  final Uint8List bytes2;
+  final Uint8List bytes3;
 
   ShareScreen(
       {Key key,
@@ -31,15 +28,17 @@ class ShareScreen extends StatefulWidget {
 }
 
 class ShareScreenState extends State<ShareScreen> {
+
+  // Các tham số truyền vào để lấy dữ liệu từ widget và chuyển sang hình ảnh.
   Uint8List reportData1;
   Uint8List reportData2;
   Uint8List reportData3;
 
-  int _currentIndex = 0;
+  // Thứ tự của hình ảnh đang chọn để xuất.
+  int currentIndex = 0;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     reportData1 = widget.bytes1;
     reportData2 = widget.bytes2;
@@ -48,7 +47,6 @@ class ShareScreenState extends State<ShareScreen> {
 
   @override
   void didUpdateWidget(covariant ShareScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     reportData1 = widget.bytes1;
     reportData2 = widget.bytes2;
@@ -57,76 +55,59 @@ class ShareScreenState extends State<ShareScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Gán tên file cho báo cáo được xuất theo sự chênh lệch giây giữa thời gian hiện tại và đầu năm 2021.
+    // Việc này là để có thể xuất các file riêng biệt mà không bị trùng lặp, tránh dẫn tới việc file bị ghi đè khi xuất.
+    String reportName = 'Report_' +
+        DateTime.now().difference(DateTime(2021)).inSeconds.toString();
+
     return Scaffold(
-      backgroundColor: Colors.black45,
+      backgroundColor: Style.boxBackgroundColor,
       appBar: AppBar(
-        leadingWidth: 70.0,
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.grey[900],
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0))),
+        backgroundColor: Style.appBarColor,
         title: Text('Share',
             style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w600,
-                fontSize: 15.0)),
-        leading: TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              'Close',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            style: TextButton.styleFrom(
-              primary: Colors.white,
-              backgroundColor: Colors.transparent,
+              color: Style.foregroundColor,
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
             )),
+        leading: CloseButton(
+          color: Style.foregroundColor,
+        ),
       ),
-      // body: ListView(
-      //   scrollDirection: Axis.horizontal,
-      //   children: [
-      //     buildImage(reportData1),
-      //     buildImage(reportData2),
-      //     buildImage(reportData3),
-      //   ],
-      // )
       body: Container(
-          margin: EdgeInsets.symmetric(vertical: 20.0),
-          child: Column(
+          color: Style.backgroundColor1,
+          padding: EdgeInsets.symmetric(vertical: 20.0),
+          child: ListView(
             children: [
               Container(
                 child: CarouselSlider(
                   options: CarouselOptions(
                     scrollPhysics: BouncingScrollPhysics(),
                     autoPlay: false,
-                    aspectRatio: 2.0,
+                    aspectRatio: 1.2,
                     enlargeCenterPage: true,
                     enableInfiniteScroll: false,
                     onPageChanged: (index, reason) {
                       setState(() {
-                        _currentIndex = index;
+                        currentIndex = index;
                       });
                     },
                   ),
                   items: [
-                    ImageFromUnit8List(reportData1),
-                    ImageFromUnit8List(reportData2),
-                    ImageFromUnit8List(reportData3),
+                    if (reportData1 != null) getImageFromUnit8List(reportData1),
+                    if (reportData2 != null) getImageFromUnit8List(reportData2),
+                    if (reportData3 != null) getImageFromUnit8List(reportData3),
                   ],
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 50.0, bottom: 10.0),
-                padding: EdgeInsets.symmetric(horizontal: 100.0),
+                height: 40,
+                width: double.infinity,
+                margin: EdgeInsets.fromLTRB(40, 50, 40, 10),
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -148,32 +129,39 @@ class ShareScreenState extends State<ShareScreen> {
                   onPressed: () async {
                     final tempDir = await getTemporaryDirectory();
                     final file =
-                        await new File('${tempDir.path}/image.jpg').create();
-                    var data = (_currentIndex == 0)
+                        await new File('${tempDir.path}/$reportName.jpg')
+                            .create();
+                    var data = (currentIndex == 0)
                         ? reportData1
-                        : ((_currentIndex == 1) ? reportData2 : reportData3);
+                        : ((currentIndex == 1) ? reportData2 : reportData3);
                     file.writeAsBytesSync(data);
                     Share.shareFiles([file.path]);
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text('SHARE',
-                            style: TextStyle(fontSize: 15),
-                            textAlign: TextAlign.center),
-                        flex: 3,
+                      Icon(Icons.share),
+                      SizedBox(
+                        width: 10,
                       ),
-                      Expanded(
-                        child: Icon(Icons.share),
-                        flex: 1,
+                      Text(
+                        'SHARE',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.5,
+                            wordSpacing: 2.0),
                       ),
                     ],
                   ),
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 100.0),
+                height: 40,
+                width: double.infinity,
+                margin: EdgeInsets.fromLTRB(40, 5, 40, 10),
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -192,52 +180,62 @@ class ShareScreenState extends State<ShareScreen> {
                     ),
                   ),
                   onPressed: () async {
-                    dynamic result = await ImageGallerySaver.saveImage(
-                        (_currentIndex == 0)
-                            ? reportData1
-                            : ((_currentIndex == 1)
-                                ? reportData2
-                                : reportData3),
-                        quality: 100,
-                        name: 'Report_' + (_currentIndex + 1).toString());
-                    if (result['isSuccess']) {
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: false, // user must tap button!
-                        barrierColor: Colors.black54,
-                        builder: (BuildContext context) {
-                          return CustomAlert(
-                            iconPath: "assets/images/success.svg",
-                            title: "Successfully",
-                            content: "Image has been saved,\ncheck your gallery.");
-                        },
-                      );
-                    }
-                    else {
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: false, // user must tap button!
-                        barrierColor: Colors.black54,
-                        builder: (BuildContext context) {
-                          return CustomAlert(
-                              iconPath: "assets/images/error.svg",
-                              content: "Something was wrong,\nplease try again.");
-                        },
-                      );
+                    // Gọi hàm cấp phép truy cập storage để lưu ảnh.
+                    if (await Permission.storage.request().isGranted) {
+                      // Lưu hình ảnh theo thứ tự đang được chọn.
+                      dynamic result = await ImageGallerySaver.saveImage(
+                          (currentIndex == 0)
+                              ? reportData1
+                              : ((currentIndex == 1)
+                              ? reportData2
+                              : reportData3),
+                          quality: 100,
+                          name: reportName);
+
+                      if (result['isSuccess']) {
+                        // Thông báo lưu thành công.
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false,
+                          barrierColor: Style.backgroundColor.withOpacity(0.54),
+                          builder: (BuildContext context) {
+                            return CustomAlert(
+                                iconPath: "assets/images/success.svg",
+                                title: "Successfully",
+                                content:
+                                "Image has been saved,\ncheck your gallery.");
+                          },
+                        );
+                      } else {
+                        // Thông báo lưu thất bại.
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          barrierColor: Style.backgroundColor.withOpacity(0.54),
+                          builder: (BuildContext context) {
+                            return CustomAlert(
+                                iconPath: "assets/images/error.svg",
+                                content:
+                                "Something was wrong,\nplease try again.");
+                          },
+                        );
+                      }
                     }
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text('SAVE',
-                            style: TextStyle(fontSize: 15),
-                            textAlign: TextAlign.center),
-                        flex: 3,
-                      ),
-                      Expanded(
-                        child: Icon(Icons.save_alt),
-                        flex: 1,
+                      Icon(Icons.save_alt),
+                      SizedBox(width: 10),
+                      Text(
+                        'SAVE',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.5,
+                            wordSpacing: 2.0),
                       ),
                     ],
                   ),
@@ -248,6 +246,7 @@ class ShareScreenState extends State<ShareScreen> {
     );
   }
 
-  Widget ImageFromUnit8List(Uint8List bytes) =>
+  // Hàm chuyển từ dữ liệu của widget sang hình ảnh.
+  Widget getImageFromUnit8List(Uint8List bytes) =>
       bytes != null ? Image.memory(bytes) : Container();
 }
