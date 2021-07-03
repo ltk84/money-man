@@ -11,8 +11,9 @@ import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:intl/src/intl/date_format.dart';
 import 'package:money_man/ui/screens/planning_screens/event_screen/event_detail.dart';
 
+// Đây là màn hình hiện trong tab running của event home
 class CurrentlyAppliedEvent extends StatefulWidget {
-  Wallet wallet;
+  Wallet wallet; // truyền ví hiện tại vào
   CurrentlyAppliedEvent({Key key, this.wallet}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -22,9 +23,10 @@ class CurrentlyAppliedEvent extends StatefulWidget {
 
 class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
     with TickerProviderStateMixin {
-  Wallet _wallet;
+  Wallet _wallet; // truyền ví hiện tại vào
   @override
   void initState() {
+    // Khởi tạo giá trị cho biến _wallet khi vừa init state
     _wallet = widget.wallet ??
         Wallet(
             id: 'id',
@@ -37,6 +39,7 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
 
   @override
   void didUpdateWidget(covariant CurrentlyAppliedEvent oldWidget) {
+    // update lại dữ liệu của biến _wallet khi có sự thay đổi nào đó :3
     _wallet = widget.wallet ??
         Wallet(
             id: 'id',
@@ -49,14 +52,19 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
 
   @override
   Widget build(BuildContext context) {
+    // Tham chiếu đến các hàm của firebase
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Container(
       color: Style.backgroundColor,
+      // Stream lấy tất cả các event
       child: StreamBuilder<List<Event>>(
         stream: _firestore.eventStream(_wallet.id),
         builder: (context, snapshot) {
+          // List lưu trữ những event đang chạy sắp được lọc ra
           List<Event> currentlyEvent = [];
+          // List lưu trữ tất cả các event
           List<Event> eventList = snapshot.data ?? [];
+          // Nếu nó đã quá này, mark nó như là isFinished
           eventList.forEach((element) {
             if (element.endDate.year < DateTime.now().year ||
                 (element.endDate.year == DateTime.now().year &&
@@ -66,6 +74,7 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                     element.endDate.day < DateTime.now().day)) {
               element.isFinished = true;
             }
+            // Xét những điều kiện để nó còn đang hoạt động, thêm nó vào danh sách những event đang hoạt động
             if ((!element.isFinished && !element.finishedByHand) ||
                 (element.isFinished &&
                     !element.finishedByHand &&
@@ -74,6 +83,8 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
               currentlyEvent.add(element);
             }
           });
+
+          // Nếu không có event nào, hiển thị màn hình báo không có event nào
           if (currentlyEvent.length == 0)
             return Container(
                 color: Style.backgroundColor,
@@ -100,6 +111,8 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                     ),
                   ],
                 ));
+
+          // Nếu có thì ta hiển thị danh sách các event đang chạy thôi :3
           return Container(
             padding: EdgeInsets.only(top: 35, left: 15, right: 15),
             child: ListView.builder(
@@ -114,6 +127,7 @@ class _CurrentlyAppliedEvent extends State<CurrentlyAppliedEvent>
                       color: Style.boxBackgroundColor,
                     ),
                     child: ListTile(
+                      // Vào trang chi tiết event khi bấm vào các event trên màn hình
                       onTap: () {
                         Navigator.push(
                             context,

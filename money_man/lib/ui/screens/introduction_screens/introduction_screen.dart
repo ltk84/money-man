@@ -3,6 +3,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/ui/screens/introduction_screens/access_screen.dart';
 import '../../widgets/carousel_indicator.dart';
 
+// Hiển thị lúc mới mở app, để giới thiệu khi người dùng chưa đăng nhập mới mở lên
 class IntroductionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -59,6 +60,7 @@ class _Introduction extends State<Introduction> {
           child: ListView(
             shrinkWrap: true,
             children: [
+              // Này là slide để giới thiệu cho cái app
               IntroductionSlide(),
               Container(
                 height: 50,
@@ -82,9 +84,8 @@ class _Introduction extends State<Introduction> {
                       },
                     ),
                   ),
+                  // Chuyển đến màn hình tùy chọn đăng nhập hoặc đăng ký :3
                   onPressed: () async {
-                    // Navigator.pushReplacement(context,
-                    //     MaterialPageRoute(builder: (_) => AccessScreen()));
                     showCupertinoModalBottomSheet(
                         context: context, builder: (context) => AccessScreen());
                   },

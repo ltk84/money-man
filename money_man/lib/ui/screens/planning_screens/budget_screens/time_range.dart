@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
+// Này là class lưu trữ time range
 class BudgetTimeRange {
-  DateTime beginDay;
-  DateTime endDay;
-  String description;
+  DateTime beginDay; // ngày bắt đầu
+  DateTime endDay; // ngày kết thúc
+  String description; // mô tả: tháng này ,....
   BudgetTimeRange(
       {@required this.beginDay, @required this.endDay, this.description});
 
+// Này là để trả về chi tiết theo định dạnh dd/MM
   String TimeRangeString() {
     String result = DateFormat('dd/MM').format(beginDay) +
         ' - ' +
@@ -15,6 +17,7 @@ class BudgetTimeRange {
     return result;
   }
 
+// Lấy label theo tuần này, tháng này, năm này,... logic tương tự của budget tile
   String getBudgetLabel() {
     DateTime today = DateTime.now();
     today = DateTime(today.year, today.month, today.day);

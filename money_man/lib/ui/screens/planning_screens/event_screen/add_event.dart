@@ -13,30 +13,35 @@ import 'package:money_man/ui/widgets/icon_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/src/intl/date_format.dart';
 
+// Màn hình add event được mở ra khi ấn vào dấu + ở event home
 class AddEvent extends StatefulWidget {
-  Wallet wallet;
+  Wallet wallet; // Ví hiện tại
   AddEvent({Key key, this.wallet}) : super(key: key);
   @override
   _AddEventState createState() => _AddEventState();
 }
 
 class _AddEventState extends State<AddEvent> {
-  DateTime endDate;
-
+  DateTime endDate; // ngày kết thúc
+// Category cho event
   MyCategory cate;
-
+// Ví của event
   Wallet selectedWallet;
-
+// Đơn vị tiền tệ cho event
   String currencySymbol = '';
-
+// Tên của event
   String nameEvent;
-
+// Lưu trữ danh sách id của các transaction
   List<String> transactionIdList = [];
   @override
   void initState() {
+    // Chọn ví mặc định là ví được truyền vào
     selectedWallet = widget.wallet;
+    // Cho đơn vị tiền tệ là đơn vị tiền tệ của ví được thêm vào
     currencySymbol = selectedWallet.currencyID;
+    // Ngày kết thúc
     endDate = DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
+    // Khởi tạo giá trị mặc định cho category
     cate = MyCategory(
       id: '0',
       name: 'name',
@@ -46,7 +51,8 @@ class _AddEventState extends State<AddEvent> {
     super.initState();
   }
 
-  bool CompareDate(DateTime a, DateTime b) {
+// So sánh 2 ngày
+  bool AIsBeforeB(DateTime a, DateTime b) {
     if (a.year < b.year) return true;
     if (a.year == b.year && a.month < b.month) return true;
     if (a.year == b.year && a.month == b.month && a.day < b.day) return true;
@@ -55,6 +61,7 @@ class _AddEventState extends State<AddEvent> {
 
   @override
   Widget build(BuildContext context) {
+    // tham chiếu tới các hàm của firestore
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
@@ -75,6 +82,7 @@ class _AddEventState extends State<AddEvent> {
         ),
         actions: [
           TextButton(
+              // Lưu event, kiểm tra các điều kiện nhập đủ chưa
               onPressed: () async {
                 if (selectedWallet == null) {
                   _showAlertDialog('Please pick your wallet!');
@@ -82,10 +90,11 @@ class _AddEventState extends State<AddEvent> {
                   _showAlertDialog('Please enter name!');
                 } else if (cate == null) {
                   _showAlertDialog('Please pick category');
-                } else if (CompareDate(endDate, DateTime.now())) {
+                } else if (AIsBeforeB(endDate, DateTime.now())) {
                   _showAlertDialog(
                       'Please select an end date greater than or equal to today ');
                 } else {
+                  // Nếu rồi thì khởi tạo 1 event mẫu để thực hiện thêm lên csdl
                   Event event;
                   event = Event(
                     name: nameEvent,
@@ -130,6 +139,7 @@ class _AddEventState extends State<AddEvent> {
     );
   }
 
+// Hàm hiện dialog thông báo lên màn hình
   Future<void> _showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
@@ -141,6 +151,7 @@ class _AddEventState extends State<AddEvent> {
     );
   }
 
+// Là input đầu vào của các giá trị
   Widget buildInput() {
     return ListView(
       children: [
@@ -160,7 +171,6 @@ class _AddEventState extends State<AddEvent> {
           child: Column(
             children: [
               Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
                     padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
@@ -168,6 +178,7 @@ class _AddEventState extends State<AddEvent> {
                       iconPath: cate.iconID,
                       size: 40.0,
                     ),
+                    // Chọn icon cho sự kiện
                     onPressed: () async {
                       var data = await showCupertinoModalBottomSheet(
                         context: context,
@@ -188,6 +199,7 @@ class _AddEventState extends State<AddEvent> {
                       Icons.arrow_drop_down,
                       size: 40.0,
                     ),
+                    // Vẫn là chọn icon cho sự kiện :v
                     onPressed: () async {
                       var data = await showCupertinoModalBottomSheet(
                         context: context,
@@ -206,6 +218,7 @@ class _AddEventState extends State<AddEvent> {
                     child: Container(
                       padding: EdgeInsets.only(right: 50),
                       width: 250,
+                      // Nhập tên cho event
                       child: TextFormField(
                         autocorrect: false,
                         keyboardType: TextInputType.name,
@@ -264,6 +277,7 @@ class _AddEventState extends State<AddEvent> {
                   size: 30,
                 ),
                 title: TextFormField(
+                  // chọn ngày kết thúc của event
                   onTap: () async {
                     DatePicker.showDatePicker(context,
                         currentTime: endDate == null
@@ -372,6 +386,7 @@ class _AddEventState extends State<AddEvent> {
               ListTile(
                 contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 dense: true,
+                // Chọn ví cho event
                 onTap: () async {
                   var res = await showCupertinoModalBottomSheet(
                       isDismissible: true,

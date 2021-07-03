@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
+import 'package:money_man/ui/screens/introduction_screens/first_step_first_wallet_screen.dart';
 import 'package:money_man/ui/screens/planning_screens/planning_screen.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
@@ -54,81 +54,82 @@ class _HomeScreenState extends State<HomeScreen> {
           ];
 
           //if (snapshot.connectionState == ConnectionState.active) {
-            if (wallet == null) {
-              if (snapshot.connectionState == ConnectionState.active) {
-                return FirstStep();
-              } else {
-                return LoadingScreen();
-              }
-            } else
-              return Scaffold(
-                backgroundColor: Style.boxBackgroundColor2,
-                body: _screens.elementAt(_selectedIndex),
-                bottomNavigationBar: BottomAppBar(
-                  notchMargin: 5,
-                  shape: CircularNotchedRectangle(),
-                  color: Style.backgroundColor,
-                  child: BottomNavigationBar(
-                      type: BottomNavigationBarType.fixed,
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      items: <BottomNavigationBarItem>[
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.account_balance_wallet_rounded,
-                              size: 25.0),
-                          label: 'Transactions',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.analytics_sharp, size: 25.0),
-                          label: 'Report',
-                          //backgroundColor: Colors.grey[500],
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(
-                            Icons.add_circle,
-                            color: Colors.transparent,
-                            size: 0.0,
-                          ),
-                          label: '',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.article_sharp, size: 25.0),
-                          label: 'Planning',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.account_circle, size: 25.0),
-                          label: 'Account',
-                        ),
-                      ],
-                      selectedLabelStyle: TextStyle(
-                        fontFamily: Style.fontFamily,
-                        fontWeight: FontWeight.w600,
+          if (wallet == null) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              return FirstStepForFirstWallet();
+            } else {
+              return LoadingScreen();
+            }
+          } else
+            return Scaffold(
+              backgroundColor: Style.boxBackgroundColor2,
+              body: _screens.elementAt(_selectedIndex),
+              bottomNavigationBar: BottomAppBar(
+                notchMargin: 5,
+                shape: CircularNotchedRectangle(),
+                color: Style.backgroundColor,
+                child: BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    items: <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.account_balance_wallet_rounded,
+                            size: 25.0),
+                        label: 'Transactions',
                       ),
-                      unselectedLabelStyle: TextStyle(
-                        fontFamily: Style.fontFamily,
-                        fontWeight: FontWeight.w600,
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.analytics_sharp, size: 25.0),
+                        label: 'Report',
+                        //backgroundColor: Colors.grey[500],
                       ),
-                      selectedItemColor: Style.foregroundColor,
-                      unselectedItemColor: Style.foregroundColor.withOpacity(0.54),
-                      unselectedFontSize: 12.0,
-                      selectedFontSize: 12.0,
-                      currentIndex: _selectedIndex,
-                      onTap: (index) => _onItemTap(index, wallet)),
+                      BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.add_circle,
+                          color: Colors.transparent,
+                          size: 0.0,
+                        ),
+                        label: '',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.article_sharp, size: 25.0),
+                        label: 'Planning',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.account_circle, size: 25.0),
+                        label: 'Account',
+                      ),
+                    ],
+                    selectedLabelStyle: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      fontFamily: Style.fontFamily,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    selectedItemColor: Style.foregroundColor,
+                    unselectedItemColor:
+                        Style.foregroundColor.withOpacity(0.54),
+                    unselectedFontSize: 12.0,
+                    selectedFontSize: 12.0,
+                    currentIndex: _selectedIndex,
+                    onTap: (index) => _onItemTap(index, wallet)),
+              ),
+              floatingActionButton: FloatingActionButton(
+                child: Icon(
+                  Icons.add_rounded,
+                  size: 30,
                 ),
-                floatingActionButton: FloatingActionButton(
-                  child: Icon(
-                      Icons.add_rounded,
-                      size: 30,
-                  ),
-                  onPressed: () {
-                    _onItemTap(2, wallet);
-                  },
-                  backgroundColor: Style.primaryColor,
-                  elevation: 0,
-                ),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerDocked,
-              );
+                onPressed: () {
+                  _onItemTap(2, wallet);
+                },
+                backgroundColor: Style.primaryColor,
+                elevation: 0,
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+            );
           //} else
           //  return LoadingScreen();
         });

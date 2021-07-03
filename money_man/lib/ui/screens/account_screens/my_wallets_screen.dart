@@ -93,12 +93,12 @@ class _MyWalletScreenState extends State<MyWalletScreen>
               ),
             ),
           ),
-          //),
           centerTitle: true,
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: ClipRect(
             child: AnimatedOpacity(
+              // Nếu kéo lên thì hiện appbar và làm blur
               opacity: reachAppBar == 1 ? 1 : 0,
               duration: Duration(milliseconds: 0),
               child: BackdropFilter(
@@ -110,8 +110,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                   duration: Duration(
                       milliseconds:
                           reachAppBar == 1 ? (reachTop == 1 ? 100 : 0) : 0),
-                  //child: Container(
-                  //color: Colors.transparent,
+
                   color: Colors.grey[
                           reachAppBar == 1 ? (reachTop == 1 ? 800 : 850) : 900]
                       .withOpacity(0.2),
@@ -134,6 +133,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                   ))),
           actions: [
             TextButton(
+              // Chuyển vào màn hình thêm ví
               onPressed: () async {
                 await showCupertinoModalBottomSheet(
                   backgroundColor: Style.boxBackgroundColor,
@@ -152,6 +152,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
         ),
         body: Container(
           color: Style.backgroundColor,
+          // Stream builder lấy các ví
           child: StreamBuilder<List<Wallet>>(
               stream: _firestore.walletStream,
               builder: (context, snapshot) {
@@ -165,13 +166,11 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                     itemCount: listWallet.length,
                     itemBuilder: (context, index) {
                       String iconData = listWallet[index].iconID;
-                      // IconData iconData = Icons.wallet_giftcard;
 
                       return Column(
                         children: [
                           index == 0
                               ? Container(
-                                  //padding: const EdgeInsets.fromLTRB(24.0, 0, 0, 8.0),
                                   child: reachTop == 0
                                       ? Text('My Wallets',
                                           style: TextStyle(
@@ -218,6 +217,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                     ))),
                             child: ListTile(
                               contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+                              // chuyển hướng đến chỉnh sửa ví
                               onTap: () async {
                                 await showCupertinoModalBottomSheet(
                                   backgroundColor: Style.boxBackgroundColor,
@@ -238,11 +238,7 @@ class _MyWalletScreenState extends State<MyWalletScreen>
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              // subtitle: Text(
-                              //   listWallet[index].amount.toString(),
-                              //   style: TextStyle(
-                              //     color: foregroundColor,
-                              //     fontFamily: fontFamily,
+
                               subtitle: MoneySymbolFormatter(
                                 text: listWallet[index].amount,
                                 currencyId: listWallet[index].currencyID,

@@ -1,13 +1,13 @@
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
-import 'package:money_man/ui/screens/introduction_screens/first_step.dart';
+import 'package:money_man/ui/screens/introduction_screens/first_step_first_wallet_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+// màn hình này xuất hiện khi người dùng mới đăng ký bằng email và cần nhập thông tin tên người dùng
 class AccountInformationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,6 +21,7 @@ class AccountInformation extends StatefulWidget {
 }
 
 class _AccountInformation extends State<AccountInformation> {
+  // Key kiểm soát nhập liệu
   final _formKey = GlobalKey<FormState>();
   String username;
   Widget InputTile(BuildContext context) {
@@ -46,6 +47,7 @@ class _AccountInformation extends State<AccountInformation> {
               data: Theme.of(context).copyWith(
                 primaryColor: Style.foregroundColor,
               ),
+              // Text form field để nhập tên người dùng
               child: TextFormField(
                 validator: (value) {
                   if (value == null || value.isEmpty)
@@ -107,6 +109,7 @@ class _AccountInformation extends State<AccountInformation> {
 
   @override
   Widget build(BuildContext context) {
+    // Biến để tham chiếu đến các hàm thực hiện thay đổi trên firebase
     final _auth = Provider.of<FirebaseAuthService>(context);
     return Scaffold(
       appBar: AppBar(
@@ -136,7 +139,6 @@ class _AccountInformation extends State<AccountInformation> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                //buildInputField(),
                 Center(
                   child: Container(
                       margin: EdgeInsets.symmetric(vertical: 40),
@@ -186,6 +188,7 @@ class _AccountInformation extends State<AccountInformation> {
                         },
                       ),
                     ),
+                    // Sau khi đặt tên xong thì tới màn hình đặt ví đầu tiên thoy
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         _auth.currentUser.updateProfile(
@@ -194,7 +197,7 @@ class _AccountInformation extends State<AccountInformation> {
                         Navigator.pushReplacement(
                             context,
                             PageTransition(
-                              child: FirstStep(),
+                              child: FirstStepForFirstWallet(),
                               type: PageTransitionType.scale,
                               curve: Curves.elasticInOut,
                             ));
@@ -216,69 +219,5 @@ class _AccountInformation extends State<AccountInformation> {
         ),
       ),
     );
-  }
-
-// Đây là cái cũ, không xài, nhưng để cho có kỷ niệm.
-  Widget buildInputField() {
-    final _auth = Provider.of<FirebaseAuthService>(context);
-    return StreamBuilder<User>(
-        stream: _auth.userStream,
-        builder: (context, snapshot) {
-          User _user = snapshot.data;
-          return Column(children: [
-            SizedBox(height: 50),
-            Row(
-              children: <Widget>[
-                Text(
-                  'Username',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-            Theme(
-              data: Theme.of(context).copyWith(
-                // override textfield's icon color when selected
-                primaryColor: Colors.black,
-              ),
-              child: TextFormField(
-                initialValue:
-                    (_user.displayName != '' && _user.displayName != null)
-                        ? _user.displayName
-                        : (_user.phoneNumber != null ? _user.phoneNumber : ''),
-                validator: (value) {
-                  if (value == null || value.isEmpty)
-                    return 'Username not empty';
-                  return null;
-                },
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal),
-                textAlign: TextAlign.left,
-                onChanged: (value) => username = value,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.account_circle,
-                    size: 30,
-                  ),
-                  labelStyle: TextStyle(
-                    fontFamily: 'Montserrat',
-                  ),
-                  fillColor: Colors.white,
-                ),
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.next,
-                autocorrect: false,
-                cursorColor: Colors.black,
-              ),
-            ),
-            SizedBox(height: 10)
-          ]);
-        });
   }
 }

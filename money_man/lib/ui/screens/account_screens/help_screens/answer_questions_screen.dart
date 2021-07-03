@@ -8,6 +8,7 @@ class AnswerTheQuestions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Khởi tạo đối tượng lưu trữ câu hỏi và câu trả lời
     BasicQuestions mQuestion = new BasicQuestions();
     return Scaffold(
       backgroundColor: Style.appBarColor,
@@ -35,6 +36,7 @@ class AnswerTheQuestions extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
+            //Câu hỏi được in đậm, xuất hiện ở trên
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
@@ -46,6 +48,7 @@ class AnswerTheQuestions extends StatelessWidget {
                     fontSize: 18),
               ),
             ),
+            //Câu trả lời được đặt ở dưới, chữ bình thường
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(

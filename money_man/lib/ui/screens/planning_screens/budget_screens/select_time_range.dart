@@ -1,11 +1,9 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/time_range_info_model.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
 import 'package:money_man/ui/screens/report_screens/custom_time_range.dart';
-import 'package:money_man/ui/screens/report_screens/time_selection.dart';
 import 'package:money_man/ui/style.dart';
 
 class SelectTimeRangeScreen extends StatefulWidget {
@@ -19,9 +17,11 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
   var beginDate;
   var endDate;
   var dateDescript;
+
+  // Lấy mô tả cho tuần
   String GetSubTitileOfTheWeek(DateTime today) {
+    // Tuần có ngày bắt đầu là hôm nay trừ cho weekday và ngày kết thúc + thêm 6
     var firstDayOfWeek = today.subtract(Duration(days: today.weekday - 1));
-    //String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     var endDayOfWeek = firstDayOfWeek.add(Duration(days: 6));
     String result = DateFormat('dd/MM').format(firstDayOfWeek) +
         ' - ' +
@@ -29,11 +29,13 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
     return result;
   }
 
+// Lấy timerange cho tuần
   BudgetTimeRange GetmTimeRangeWeek(DateTime today) {
+    // Tuần có ngày bắt đầu là hôm nay trừ cho weekday và ngày kết thúc + thêm 6
+
     var firstDayOfWeek = today.subtract(Duration(days: today.weekday - 1));
     firstDayOfWeek =
         DateTime(firstDayOfWeek.year, firstDayOfWeek.month, firstDayOfWeek.day);
-    //String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     var endDayOfWeek = firstDayOfWeek.add(Duration(days: 6));
     return new BudgetTimeRange(
         beginDay: firstDayOfWeek,
@@ -41,7 +43,9 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
         description: 'This week');
   }
 
+// Lấy title cho tháng
   String GetSubTitleOfTheMonth(DateTime today) {
+    //Tháng bắt đầu từ ngày hôm nay trừ cho n-1 ngày và kết thúc bằng ngày đầu tiên của tháng sau -1
     var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
     firstDayOfMonth = DateTime(
         firstDayOfMonth.year, firstDayOfMonth.month, firstDayOfMonth.day);
@@ -53,7 +57,9 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
     return result;
   }
 
+// Lấy time range cho tháng
   BudgetTimeRange GetmTimeRangeMonth(DateTime today) {
+    //Tháng bắt đầu từ ngày hôm nay trừ cho n-1 ngày và kết thúc bằng ngày đầu tiên của tháng sau -1
     var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
     firstDayOfMonth = DateTime(
         firstDayOfMonth.year, firstDayOfMonth.month, firstDayOfMonth.day);
@@ -66,7 +72,9 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
             DateTime.now().isBefore(today) ? 'Next month' : 'This month');
   }
 
+// Lấy mô tả cho quý
   String GetSubTitleOfTheQuarter(DateTime today) {
+    // Quý thì sử dụng công thức trừ tháng như dưới, ngày kết thúc tương tự ở trên
     double quarterNumber = (today.month - 1) / 3 + 3;
     DateTime firstDayOfQuarter =
         new DateTime(today.year, quarterNumber.toInt(), 1);
@@ -79,6 +87,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
     return result;
   }
 
+// Lấy time range cho quý
   BudgetTimeRange GetmTimeRangeQuarter(DateTime today) {
     double quarterNumber = (today.month - 1) / 3 + 3;
     DateTime firstDayOfQuarter =
@@ -92,6 +101,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
         description: 'This quarter');
   }
 
+// Tương tự nhưng cho quý tiếp theo (cộng today thêm 3 tháng :v)
   String GetSubTitleOfTheNextQuarter(DateTime today) {
     double quarterNumber = (today.month - 1) / 3 + 5;
     DateTime firstDayOfQuarter =
@@ -105,6 +115,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
     return result;
   }
 
+// Lấy timerange cho quý sau, tương tự
   BudgetTimeRange GetmTimeRangeNextQuarter(DateTime today) {
     double quarterNumber = (today.month - 1) / 3 + 5;
     DateTime firstDayOfQuarter =
@@ -134,6 +145,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
                       fontFamily: Style.fontFamily,
                       color: Style.foregroundColor),
                 )),
+            // Thoát
             onTap: () {
               Navigator.pop(context);
             },
@@ -149,26 +161,31 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
         ),
         body: Container(
           color: Style.backgroundColor,
+          // Chọn vào nào thì trả về khoảng thời gian của đó
           child: ListView(
             children: [
+              // Biểu thị cho khoảng thời gian của tuần này
               Container(
                 child: buildTimeRangeListTile(
                     title: 'This week',
                     subTitle: GetSubTitileOfTheWeek(today),
                     mTimeRange: GetmTimeRangeWeek(today)),
               ),
+              // Biểu thị cho khoảng thời gian của tháng này
               Container(
                 child: buildTimeRangeListTile(
                     title: 'This month',
                     subTitle: GetSubTitleOfTheMonth(today),
                     mTimeRange: GetmTimeRangeMonth(today)),
               ),
+              // Biểu thị cho khoảng thời gian của quý này
               Container(
                 child: buildTimeRangeListTile(
                     title: 'This quarter',
                     subTitle: GetSubTitleOfTheQuarter(today),
                     mTimeRange: GetmTimeRangeQuarter(today)),
               ),
+              // Biểu thị cho khoảng thời gian của năm nay
               Container(
                 child: buildTimeRangeListTile(
                     title: 'This year',
@@ -178,6 +195,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
                         endDay: new DateTime(today.year, 12, 31),
                         description: "This year")),
               ),
+              // Biểu thị cho khoảng thời gian của tháng tới
               Container(
                 child: buildTimeRangeListTile(
                     title: 'Next month',
@@ -186,6 +204,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
                     mTimeRange: GetmTimeRangeMonth(
                         new DateTime(today.year, today.month + 1, today.day))),
               ),
+              // Biểu thị cho quý tới
               Container(
                 child: buildTimeRangeListTile(
                     title: 'Next quarter',
@@ -194,6 +213,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
                     mTimeRange: GetmTimeRangeNextQuarter(
                         new DateTime(today.year, today.month + 3, today.day))),
               ),
+              // Biểu thị cho năm tới
               Container(
                 child: buildTimeRangeListTile(
                     title: 'Next year',
@@ -204,6 +224,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
                         endDay: new DateTime(today.year + 1, 12, 31),
                         description: "Next year")),
               ),
+              // Biểu thị cho tùy chọn, nhấn vào để chuyển đến màn hình chọn khoảng thời gian
               Container(
                 child: buildTimeRangeListTile(
                     title: 'Custom time range',
@@ -217,10 +238,14 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
     );
   }
 
+  // Này là hàm thực thi việc tạo các listile
+
   Widget buildTimeRangeListTile(
-      {String title = "title",
-      String subTitle = "sub tittle",
-      bool mCustom = false,
+      {String title =
+          "title", // title là chuối văn bản chữ để mô tả tháng này tuần này,...
+      String subTitle = "sub tittle", // này là hiển thị ngày một cách chính xác
+      bool mCustom =
+          false, // Biến để nhận diện xem đây có phải là chọn khoảng thời gian tùy chỉnh không,  mặc định là không
       BudgetTimeRange mTimeRange = null}) {
     return Container(
       padding: EdgeInsets.only(left: 50),
@@ -229,10 +254,9 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
         children: [
           ListTile(
             onTap: mCustom
+                // Nếu là custom thì chuyển hướng đến trang chọn custom, rồi trả về cho trang trước
                 ? () async {
-                    print('psoidjb oker');
                     TimeRangeInfo result = await showCupertinoModalBottomSheet(
-                        //TimeRangeInfor
                         isDismissible: true,
                         backgroundColor: Style.backgroundColor,
                         context: context,
@@ -246,6 +270,7 @@ class _SelectTimeRangeScreenState extends State<SelectTimeRangeScreen> {
                       Navigator.of(context).pop(mTimeRange);
                     }
                   }
+                // Còn kkhoong phải là custome thì trả về trực tiếp
                 : () {
                     Navigator.of(context).pop(mTimeRange);
                   },

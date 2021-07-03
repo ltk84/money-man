@@ -12,13 +12,22 @@ class SendQuestionScreen extends StatefulWidget {
 }
 
 class _SendQuestionScreenState extends State<SendQuestionScreen> {
+  // Biến thể hiện trạng thái có đang gửi hay không
   bool isSending = false;
+  // Nội dung của phần góp ý
   String content;
+  // Chủ đề phần góp ý
   String subject;
+
+  // Hàm gửi email
   sendMail() async {
+    // Địa chỉ mail của nhà sản xuất
     String username = 'moneyman.feedback@gmail.com';
+    // Mật khẩu mail của nhà sản xuất
     String password = '19522252';
+    // Thiết lập thông số cho mail, để thực hiện việc đăng nhập phía sau
     final smtpServer = gmail(username, password);
+    // Biến lưu trữ mail, bao gồm tên người gửi, tên người nhận (namyeom.tiu@gmail.com), tiêu đề, nội dung
     final message = Message()
       ..from = Address(username)
       ..recipients.add('namyenom.tiu@gmail.com')
@@ -27,12 +36,15 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
       ..html = "<h1>This is my feedback content</h1>\n<p>$content</p>";
 
     try {
+      // Khởi tạo biến sendReport để theo dõi việc gửi mail qua hàm send
       final sendReport = await send(message, smtpServer);
       print('Message sent: ' + sendReport.toString());
+      // Gửi mail thành công
       await _showAlertDialog(
           'Thank you for contact to us', 'Your message was sent successfully');
       Navigator.pop(context);
     } on MailerException catch (e) {
+      // Không gửi được mail
       await _showAlertDialog(
           'Sorry, something went wrong, please try again!', null);
       Navigator.pop(context);
@@ -65,10 +77,12 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
         backgroundColor: Style.appBarColor,
         actions: [
           GestureDetector(
+            // Button ấn nút gửi
             onTap: () async {
               setState(() {
                 isSending = true;
               });
+              // Nếu chưa có nội dung cho phản hồi
               if (content == null || content == "") {
                 _showAlertDialog('Please type your message!', null);
               } else {
@@ -91,6 +105,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
           )
         ],
       ),
+      // Nếu đang gửi thì sẽ hiển thị xoay xoay
       body: isSending
           ? Container(
               color: Style.backgroundColor1,
@@ -100,14 +115,15 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
                 ),
               ),
             )
+          // Nếu không phải đang gửi thì hiển thị giao diện chính gồm 2 text form field
           : Container(
               color: Style.backgroundColor1,
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: ListView(
                 physics: BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
-                //physics: NeverScrollableScrollPhysics(),
                 children: [
+                  // Nhập tiêu đề tại đây
                   TextFormField(
                     onChanged: (val) {
                       subject = val;
@@ -139,6 +155,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
                   SizedBox(
                     height: 10,
                   ),
+                  // Nhập nội dung tại đây
                   TextFormField(
                     onChanged: (val) {
                       content = val;
@@ -165,6 +182,7 @@ class _SendQuestionScreenState extends State<SendQuestionScreen> {
     );
   }
 
+// Hiển thị dialog thông báo việc gửi mail thành công/ thất bại/ cảnh báo nhập liệu
   Future<void> _showAlertDialog(String content, String title) async {
     return showDialog<void>(
       context: context,

@@ -16,17 +16,19 @@ import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
+// Màn hình thêm budget
 class AddBudget extends StatefulWidget {
   AddBudget({this.tabController, Key key, this.wallet, this.myCategory})
       : super(key: key);
   @override
   _AddBudgetState createState() => _AddBudgetState();
   TabController tabController;
-  Wallet wallet;
-  MyCategory myCategory;
+  Wallet wallet; // truyền vào ví hiện tại
+  MyCategory myCategory; // truyền vào category để thêm nhanh cho 1 category
 }
 
 class _AddBudgetState extends State<AddBudget> {
+  // Lấy khoảng thời gian tháng này làm mặc định, logic giống trong phần budget tile
   BudgetTimeRange GetmTimeRangeMonth(DateTime today) {
     var firstDayOfMonth = today.subtract(Duration(days: today.day - 1));
     firstDayOfMonth = DateTime(
@@ -40,26 +42,27 @@ class _AddBudgetState extends State<AddBudget> {
             DateTime.now().isBefore(today) ? 'Next month' : 'This month');
   }
 
+// Lặp lại hay không?
   bool isRepeat = true;
-
+// Khoảng thời gian cho budget
   BudgetTimeRange mTimeRange;
-
+// Số tiền dự định chi tiêu
   double amount;
-
+// Category cho budget
   MyCategory cate;
-
+// VÍ được chọn
   Wallet selectedWallet;
-
-  String note;
-
-  String currencySymbol;
 
   @override
   Widget build(BuildContext context) {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    // Nếu chưa có category thì gán vào category đưuọc truyền
     if (widget.myCategory != null) cate = widget.myCategory;
+    // Nếu chưa có ví thì chọn ví, có thể khai báo ở init state
     if (selectedWallet == null) selectedWallet = widget.wallet;
+    // Tương tự cho time range
     if (mTimeRange == null) mTimeRange = GetmTimeRangeMonth(DateTime.now());
+    // Mặc định là không lặp lại cho CUSTOM
     if (mTimeRange.getBudgetLabel() == 'Custom') isRepeat = false;
 
     return Theme(
@@ -76,7 +79,7 @@ class _AddBudgetState extends State<AddBudget> {
             GestureDetector(
               onTap: () async {
                 //TODO: Add new budget
-                // await _firestore.updateEvent();
+                // Kiểm tra hợp lệ và thông báo dialog lên màn hình
                 if (selectedWallet == null) {
                   _showAlertDialog('Please pick your wallet!', null);
                 } else if (amount == null || amount <= 0) {
@@ -86,6 +89,7 @@ class _AddBudgetState extends State<AddBudget> {
                 } else if (mTimeRange == null) {
                   _showAlertDialog("Please pick time range", null);
                 } else {
+                  // hợp lệ thì tạo budget mẫu rồi add thôi
                   Budget mBudget = new Budget(
                       id: 'id',
                       category: this.cate,
@@ -142,6 +146,7 @@ class _AddBudgetState extends State<AddBudget> {
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
+                  // Chọn nhóm
                   onTap: () async {
                     final selectCate = await showCupertinoModalBottomSheet(
                         isDismissible: true,
@@ -231,6 +236,7 @@ class _AddBudgetState extends State<AddBudget> {
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
+                  // Nhập số tiền
                   onTap: () async {
                     final resultAmount = await Navigator.push(context,
                         MaterialPageRoute(builder: (_) => EnterAmountScreen()));
@@ -281,7 +287,7 @@ class _AddBudgetState extends State<AddBudget> {
                           readOnly: true,
                           decoration: InputDecoration(
                               hintText: amount == null
-                                  ? 'Enter amount' //: currencySymbol +
+                                  ? 'Enter amount'
                                   : MoneyFormatter(amount: amount)
                                       .output
                                       .withoutFractionDigits,
@@ -308,6 +314,7 @@ class _AddBudgetState extends State<AddBudget> {
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
+                  // Chọn khoảng thời gian
                   onTap: () async {
                     var resultAmount = await showCupertinoModalBottomSheet(
                         isDismissible: true,
@@ -400,6 +407,7 @@ class _AddBudgetState extends State<AddBudget> {
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
+                  // Chọn ví
                   onTap: () async {
                     var res = await showCupertinoModalBottomSheet(
                         isDismissible: true,
@@ -410,9 +418,6 @@ class _AddBudgetState extends State<AddBudget> {
                     if (res != null)
                       setState(() {
                         selectedWallet = res;
-                        currencySymbol = CurrencyService()
-                            .findByCode(selectedWallet.currencyID)
-                            .symbol;
                       });
                   },
                   trailing: Icon(
@@ -456,9 +461,6 @@ class _AddBudgetState extends State<AddBudget> {
                             if (res != null)
                               setState(() {
                                 selectedWallet = res;
-                                currencySymbol = CurrencyService()
-                                    .findByCode(selectedWallet.currencyID)
-                                    .symbol;
                               });
                           },
                           readOnly: true,
@@ -493,6 +495,7 @@ class _AddBudgetState extends State<AddBudget> {
                 margin: EdgeInsets.only(bottom: 10, top: 5),
                 padding: EdgeInsets.only(right: 15),
                 child: GestureDetector(
+                  // Thiết lập tùy chọn lặp lại hay không
                   onTap: () {
                     setState(() {
                       isRepeat = !isRepeat;
@@ -544,6 +547,7 @@ class _AddBudgetState extends State<AddBudget> {
     );
   }
 
+// Hàm show dialog thông báo lên màn hình
   Future<void> _showAlertDialog(String content, String title) async {
     return showDialog<void>(
       context: context,
