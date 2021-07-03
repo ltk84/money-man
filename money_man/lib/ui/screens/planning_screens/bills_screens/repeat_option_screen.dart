@@ -43,7 +43,6 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
 
   @override
   void initState() {
-
     repeatOption = widget.repeatOption;
 
     // Này là để lấy Frequency đang chọn để quyết định đơn vị của rangeAmount là ngày, tuần, tháng hay là năm.
@@ -416,12 +415,15 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                             child: TextFormField(
                               initialValue: repeatTime.toString(),
                               onChanged: (value) {
-                                setState(() {
-                                  if (value.isNotEmpty) {
-                                    repeatTime = int.parse(value);
-                                    repeatOption.extraTypeInfo = repeatTime;
-                                  }
-                                });
+                                var result = int.tryParse(value);
+                                if (result != null && result > 0) {
+                                  setState(() {
+                                    if (value.isNotEmpty) {
+                                      repeatTime = int.parse(value);
+                                      repeatOption.extraTypeInfo = repeatTime;
+                                    }
+                                  });
+                                }
                               },
                               style: TextStyle(
                                 fontFamily: Style.fontFamily,
@@ -431,7 +433,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                               ),
                               keyboardAppearance: Brightness.dark,
                               keyboardType: TextInputType.numberWithOptions(
-                                  signed: true, decimal: true),
+                                  signed: false, decimal: true),
                               decoration: InputDecoration(
                                 isDense: true,
                                 contentPadding:

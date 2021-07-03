@@ -297,7 +297,8 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 ))),
                             child: CupertinoDatePicker(
                                 mode: CupertinoDatePickerMode.date,
-                                minimumDate: beginDateTime,
+                                minimumDate: DateTime(DateTime.now().year,
+                                    DateTime.now().month, DateTime.now().day),
                                 initialDateTime: beginDateTime,
                                 onDateTimeChanged: (val) {
                                   setState(() {
@@ -369,7 +370,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                             ))),
                         child: CupertinoDatePicker(
                             mode: CupertinoDatePickerMode.date,
-                            minimumDate: beginDateTime,
+                            minimumDate: beginDateTime.add(Duration(days: 1)),
                             initialDateTime: endDateTime,
                             onDateTimeChanged: (val) {
                               setState(() {
@@ -418,11 +419,13 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                             child: TextFormField(
                               initialValue: repeatTime.toString(),
                               onChanged: (value) {
-                                setState(() {
-                                  repeatTime = int.parse(value);
-                                  repeatOption.extraTypeInfo = repeatTime;
-                                  print(repeatOption.extraTypeInfo);
-                                });
+                                var result = int.tryParse(value);
+                                if (result != null && result > 0) {
+                                  setState(() {
+                                    repeatTime = int.parse(value);
+                                    repeatOption.extraTypeInfo = repeatTime;
+                                  });
+                                }
                               },
                               style: TextStyle(
                                 fontFamily: Style.fontFamily,
@@ -431,8 +434,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                               keyboardAppearance: Brightness.dark,
-                              keyboardType: TextInputType.numberWithOptions(
-                                  signed: true, decimal: true),
+                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 isDense: true,
                                 contentPadding:
