@@ -11,7 +11,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class ShareScreen extends StatefulWidget {
-
   // Các tham số truyền vào để lấy dữ liệu từ widget và chuyển sang hình ảnh.
   final Uint8List bytes1;
   final Uint8List bytes2;
@@ -28,7 +27,6 @@ class ShareScreen extends StatefulWidget {
 }
 
 class ShareScreenState extends State<ShareScreen> {
-
   // Các tham số truyền vào để lấy dữ liệu từ widget và chuyển sang hình ảnh.
   Uint8List reportData1;
   Uint8List reportData2;
@@ -55,7 +53,6 @@ class ShareScreenState extends State<ShareScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     // Gán tên file cho báo cáo được xuất theo sự chênh lệch giây giữa thời gian hiện tại và đầu năm 2021.
     // Việc này là để có thể xuất các file riêng biệt mà không bị trùng lặp, tránh dẫn tới việc file bị ghi đè khi xuất.
     String reportName = 'Report_' +
@@ -180,15 +177,16 @@ class ShareScreenState extends State<ShareScreen> {
                     ),
                   ),
                   onPressed: () async {
-                    // Gọi hàm cấp phép truy cập storage để lưu ảnh.
-                    if (await Permission.storage.request().isGranted) {
+                    // Gọi hàm cấp phép truy cập storage và photo gallery để lưu ảnh.
+                    if (await Permission.storage.request().isGranted &&
+                        await Permission.photos.request().isGranted) {
                       // Lưu hình ảnh theo thứ tự đang được chọn.
                       dynamic result = await ImageGallerySaver.saveImage(
                           (currentIndex == 0)
                               ? reportData1
                               : ((currentIndex == 1)
-                              ? reportData2
-                              : reportData3),
+                                  ? reportData2
+                                  : reportData3),
                           quality: 100,
                           name: reportName);
 
@@ -203,7 +201,7 @@ class ShareScreenState extends State<ShareScreen> {
                                 iconPath: "assets/images/success.svg",
                                 title: "Successfully",
                                 content:
-                                "Image has been saved,\ncheck your gallery.");
+                                    "Image has been saved,\ncheck your gallery.");
                           },
                         );
                       } else {
@@ -216,7 +214,7 @@ class ShareScreenState extends State<ShareScreen> {
                             return CustomAlert(
                                 iconPath: "assets/images/error.svg",
                                 content:
-                                "Something was wrong,\nplease try again.");
+                                    "Something was wrong,\nplease try again.");
                           },
                         );
                       }
