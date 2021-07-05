@@ -70,7 +70,7 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                     : () {
                         if (realBeginDate != null &&
                             realEndDate != null &&
-                            realBeginDate.compareTo(realEndDate) <= 0)
+                            realBeginDate.compareTo(realEndDate) < 0)
                           Navigator.of(context).pop(TimeRangeInfo(
                               description: 'Custom',
                               begin: realBeginDate,
