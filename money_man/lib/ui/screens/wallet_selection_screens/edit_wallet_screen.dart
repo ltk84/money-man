@@ -114,11 +114,14 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
               margin: EdgeInsets.symmetric(vertical: 35.0, horizontal: 0.0),
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     children: [
                       Container(
                         color: Colors.transparent,
-                        padding: EdgeInsets.fromLTRB(24, 20, 10, 0),
+                        padding: EdgeInsets.fromLTRB(24, 0, 10, 0),
                         child: GestureDetector(
                           onTap: () async {
                             // thực hiện chọn icon
@@ -158,6 +161,8 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             initialValue: widget.wallet.name,
                             keyboardType: TextInputType.name,
                             style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontFamily: Style.fontFamily,
                               color: Style.foregroundColor,
                               fontSize: 20,
                               decoration: TextDecoration.none,
@@ -179,8 +184,13 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                           .withOpacity(0.6),
                                       width: 3),
                                 ),
+                                counterStyle: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    color: Style.foregroundColor.withOpacity(0.54),
+                                    fontSize: 12),
                                 labelText: 'Name',
                                 labelStyle: TextStyle(
+                                    fontFamily: Style.fontFamily,
                                     color:
                                         Style.foregroundColor.withOpacity(0.6),
                                     fontSize: 15)),
@@ -200,7 +210,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Divider(
                     thickness: 0.05,

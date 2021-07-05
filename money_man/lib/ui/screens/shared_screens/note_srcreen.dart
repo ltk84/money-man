@@ -97,6 +97,10 @@ class _NoteScreenState extends State<NoteScreen> {
                 enabledBorder: InputBorder.none,
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
+                counterStyle: TextStyle(
+                    fontFamily: Style.fontFamily,
+                    color: Style.foregroundColor.withOpacity(0.54),
+                    fontSize: 12),
               )),
         ),
       ),

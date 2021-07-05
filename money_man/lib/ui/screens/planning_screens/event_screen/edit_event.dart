@@ -234,6 +234,10 @@ class _EditEventScreen extends State<EditEventScreen>
                                 color: Style.foregroundColor.withOpacity(0.6),
                                 width: 3),
                           ),
+                          counterStyle: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              color: Style.foregroundColor.withOpacity(0.54),
+                              fontSize: 12),
                           labelText: 'Name event',
                           labelStyle: TextStyle(
                               fontFamily: Style.fontFamily,

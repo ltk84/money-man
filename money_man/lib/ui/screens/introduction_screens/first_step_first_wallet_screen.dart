@@ -63,7 +63,6 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        resizeToAvoidBottomInset: false,
         body: Form(
           key: _formKey,
           child: Container(
@@ -81,294 +80,296 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
                 Color(0xFF111111)
               ],
             )),
-            child: Container(
-              child:
-                  Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 15, top: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Create your',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 40,
-                              ),
-                            ),
-                            Text(
-                              'FIRST\nWALLET',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w900,
-                                fontSize: 40,
-                              ),
-                            ),
-                          ],
-                        ), // column
-                      ),
-                    ]),
-                SizedBox(
-                  height: 30,
-                ),
-                Column(
-                  children: [
-                    GestureDetector(
-                      // Chọn avt cho ví
-                      onTap: () async {
-                        var data = await showCupertinoModalBottomSheet(
-                          context: context,
-                          builder: (context) => IconPicker(),
-                        );
-                        if (data != null) {
-                          setState(() {
-                            wallet.iconID = data;
-                          });
-                        }
-                      },
-                      child: Container(
-                        // Row để đặt icon của ví và chọn hình khác
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 30,
-                            ),
-                            SuperIcon(
-                              iconPath: wallet.iconID,
-                              size: size.height * 0.13,
-                            ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      height: 50,
-                      width: 250.0,
-                      // Textformfield để nhập tên wallet
-                      child: TextFormField(
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(20),
-                        ],
-                          autocorrect: false,
-                          textAlign: TextAlign.center,
-                          onChanged: (value) => wallet.name = value,
-                          decoration: InputDecoration(
-                            hintText: 'Name',
-                            hintStyle: TextStyle(
-                              color: Colors.black.withOpacity(0.35),
-                            ),
-                            isDense: false,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 10.0),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(style: BorderStyle.none),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          style: TextStyle(color: Colors.black)),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      height: 50,
-                      width: 250.0,
-                      // Textformfield để nhập số tiền wallet
-                      child: TextFormField(
-                          readOnly: true,
-                          autocorrect: false,
-                          textAlign: TextAlign.center,
-                          onTap: () async {
-                            // nhấp số tiền
-                            final resultAmount =
-                                await showCupertinoModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => EnterAmountScreen());
-                            if (resultAmount != null)
-                              setState(() {
-                                amount = double.parse(resultAmount);
-                                wallet.amount = amount;
-                              });
-                          },
-                          decoration: InputDecoration(
-                            hintText: amount == null
-                                ? 'Amount'
-                                : MoneyFormatter(
-                                        amount:
-                                            double.tryParse(amount.toString()))
-                                    .output
-                                    .withoutFractionDigits,
-                            hintStyle: TextStyle(
-                              color: amount == null
-                                  ? Colors.black.withOpacity(0.35)
-                                  : Colors.black,
-                            ),
-                            isDense: false,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 10.0),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(style: BorderStyle.none),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          style: TextStyle(color: Colors.black)),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    GestureDetector(
-                      child: GestureDetector(
-                        // Chọn đơn vị tiền tệ cho ví
-                        onTap: () {
-                          showCurrencyPicker(
-                            theme: CurrencyPickerThemeData(
-                              backgroundColor: Style.boxBackgroundColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(23.0)),
-                              ),
-                              flagSize: 26,
-                              titleTextStyle: TextStyle(
-                                  fontFamily: Style.fontFamily,
-                                  fontSize: 17,
-                                  color: Style.foregroundColor,
-                                  fontWeight: FontWeight.w700),
-                              subtitleTextStyle: TextStyle(
-                                  fontFamily: Style.fontFamily,
-                                  fontSize: 15,
-                                  color: Style.foregroundColor),
-                            ),
-                            onSelect: (value) {
-                              wallet.currencyID = value.code;
-                              setState(() {
-                                currencyName = value.code;
-                              });
-                            },
-                            context: context,
-                            showFlag: true,
-                            showCurrencyName: true,
-                            showCurrencyCode: true,
-                          );
-                        },
-                        child: Container(
-                            alignment: Alignment.center,
-                            width: 250,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(23),
-                                border:
-                                    Border.all(color: Colors.white, width: 2)),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                    child: Center(
-                                        child: Text(
-                                  'Currency: $currencyName',
-                                  style: TextStyle(
-                                      fontFamily: Style.fontFamily,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600),
-                                ))),
-                                Icon(Icons.arrow_drop_down,
-                                    color: Colors.white),
-                                SizedBox(
-                                  width: 8,
-                                )
-                              ],
-                            )),
-                      ),
-                    ),
-                    // Size box để căn chỉnh theo tùy màn hình
-                    SizedBox(
-                      height: size.height - 626,
-                    ),
-                    // Button để chuyển đến màn hình tiếp theo
-                    Container(
-                      child: ButtonTheme(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 14.0),
-                        minWidth: 250.0,
-                        child: RaisedButton(
-                          onPressed: () {
-                            // Kiểm tra hợp lệ của các text form field để hiện lên dialog thông báo
-                            if (wallet.name == null || wallet.name.length == 0)
-                              _showAlertDialog(
-                                  "Please type wallet's name!", null);
-                            else if (wallet.amount < 0)
-                              _showAlertDialog(
-                                  "Wallet's amount is not negative number",
-                                  null);
-                            else
-                              Navigator.of(context).push(_createRoute());
-                          },
-                          color: Color(0xff2FB49C),
-                          elevation: 0.0,
-                          child: Text(
-                            'Continue',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Là mấy cái note hiển thị cho cái slider á :3
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            child: SingleChildScrollView(
+              child: Container(
+                child:
+                    Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 2.0),
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withOpacity(0.9)),
+                          padding: EdgeInsets.only(left: 15, top: 45),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Create your',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 40,
+                                ),
+                              ),
+                              Text(
+                                'FIRST\nWALLET',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 40,
+                                ),
+                              ),
+                            ],
+                          ), // column
                         ),
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 2.0),
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withOpacity(0.4)),
+                      ]),
+                  SizedBox(
+                    height: 45,
+                  ),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        // Chọn avt cho ví
+                        onTap: () async {
+                          var data = await showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (context) => IconPicker(),
+                          );
+                          if (data != null) {
+                            setState(() {
+                              wallet.iconID = data;
+                            });
+                          }
+                        },
+                        child: Container(
+                          // Row để đặt icon của ví và chọn hình khác
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 30,
+                              ),
+                              SuperIcon(
+                                iconPath: wallet.iconID,
+                                size: size.height * 0.13,
+                              ),
+                              Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ],
-                )
-              ]),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: 250.0,
+                        // Textformfield để nhập tên wallet
+                        child: TextFormField(
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(20),
+                          ],
+                            autocorrect: false,
+                            textAlign: TextAlign.center,
+                            onChanged: (value) => wallet.name = value,
+                            decoration: InputDecoration(
+                              hintText: 'Name',
+                              hintStyle: TextStyle(
+                                color: Colors.black.withOpacity(0.35),
+                              ),
+                              isDense: false,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 10.0),
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(style: BorderStyle.none),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            style: TextStyle(color: Colors.black)),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: 250.0,
+                        // Textformfield để nhập số tiền wallet
+                        child: TextFormField(
+                            readOnly: true,
+                            autocorrect: false,
+                            textAlign: TextAlign.center,
+                            onTap: () async {
+                              // nhấp số tiền
+                              final resultAmount =
+                                  await showCupertinoModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => EnterAmountScreen());
+                              if (resultAmount != null)
+                                setState(() {
+                                  amount = double.parse(resultAmount);
+                                  wallet.amount = amount;
+                                });
+                            },
+                            decoration: InputDecoration(
+                              hintText: amount == null
+                                  ? 'Amount'
+                                  : MoneyFormatter(
+                                          amount:
+                                              double.tryParse(amount.toString()))
+                                      .output
+                                      .withoutFractionDigits,
+                              hintStyle: TextStyle(
+                                color: amount == null
+                                    ? Colors.black.withOpacity(0.35)
+                                    : Colors.black,
+                              ),
+                              isDense: false,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 10.0),
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(style: BorderStyle.none),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            style: TextStyle(color: Colors.black)),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      GestureDetector(
+                        child: GestureDetector(
+                          // Chọn đơn vị tiền tệ cho ví
+                          onTap: () {
+                            showCurrencyPicker(
+                              theme: CurrencyPickerThemeData(
+                                backgroundColor: Style.boxBackgroundColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(23.0)),
+                                ),
+                                flagSize: 26,
+                                titleTextStyle: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontSize: 17,
+                                    color: Style.foregroundColor,
+                                    fontWeight: FontWeight.w700),
+                                subtitleTextStyle: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    fontSize: 15,
+                                    color: Style.foregroundColor),
+                              ),
+                              onSelect: (value) {
+                                wallet.currencyID = value.code;
+                                setState(() {
+                                  currencyName = value.code;
+                                });
+                              },
+                              context: context,
+                              showFlag: true,
+                              showCurrencyName: true,
+                              showCurrencyCode: true,
+                            );
+                          },
+                          child: Container(
+                              alignment: Alignment.center,
+                              width: 250,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(23),
+                                  border:
+                                      Border.all(color: Colors.white, width: 2)),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: Center(
+                                          child: Text(
+                                    'Currency: $currencyName',
+                                    style: TextStyle(
+                                        fontFamily: Style.fontFamily,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ))),
+                                  Icon(Icons.arrow_drop_down,
+                                      color: Colors.white),
+                                  SizedBox(
+                                    width: 8,
+                                  )
+                                ],
+                              )),
+                        ),
+                      ),
+                      // Size box để căn chỉnh theo tùy màn hình
+                      SizedBox(
+                        height: size.height - 626,
+                      ),
+                      // Button để chuyển đến màn hình tiếp theo
+                      Container(
+                        child: ButtonTheme(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 14.0),
+                          minWidth: 250.0,
+                          child: RaisedButton(
+                            onPressed: () {
+                              // Kiểm tra hợp lệ của các text form field để hiện lên dialog thông báo
+                              if (wallet.name == null || wallet.name.length == 0)
+                                _showAlertDialog(
+                                    "Please type wallet's name!", null);
+                              else if (wallet.amount < 0)
+                                _showAlertDialog(
+                                    "Wallet's amount is not negative number",
+                                    null);
+                              else
+                                Navigator.of(context).push(_createRoute());
+                            },
+                            color: Color(0xff2FB49C),
+                            elevation: 0.0,
+                            child: Text(
+                              'Continue',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Là mấy cái note hiển thị cho cái slider á :3
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 2.0),
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white.withOpacity(0.9)),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 2.0),
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white.withOpacity(0.4)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ]),
+              ),
             ),
           ),
         ));
