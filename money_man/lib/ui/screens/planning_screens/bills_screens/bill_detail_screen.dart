@@ -409,12 +409,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
               padding: EdgeInsets.symmetric(horizontal: 23.0),
               child: Icon(Icons.notes,
                   color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
-          Text(
-              display == null || display == ''
-                  ? 'Note'
-                  : display.length >= 20
-                      ? display.substring(0, 19) + '...'
-                      : display,
+          Text(display == null || display == '' ? 'Note' : display,
               style: TextStyle(
                 fontFamily: Style.fontFamily,
                 fontSize: 16.0,
