@@ -144,6 +144,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           padding: EdgeInsets.only(right: 50),
                           width: 250,
                           child: TextFormField(
+                            maxLength: 20,
                             focusNode: focusNode,
                             autocorrect: false,
                             keyboardType: TextInputType.name,

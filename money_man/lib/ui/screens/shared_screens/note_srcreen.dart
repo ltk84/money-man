@@ -77,6 +77,7 @@ class _NoteScreenState extends State<NoteScreen> {
         child: Form(
           key: formKey,
           child: TextFormField(
+              maxLength: 50,
               controller: myController,
               autofocus: true,
               keyboardType: TextInputType.text,

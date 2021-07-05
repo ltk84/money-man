@@ -220,6 +220,7 @@ class _AddEventState extends State<AddEvent> {
                       width: 250,
                       // Nhập tên cho event
                       child: TextFormField(
+                        maxLength: 20,
                         autocorrect: false,
                         keyboardType: TextInputType.name,
                         style: TextStyle(

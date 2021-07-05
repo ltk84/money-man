@@ -209,6 +209,7 @@ class _EditEventScreen extends State<EditEventScreen>
                       width: 250,
                       // Nhập tên của event
                       child: TextFormField(
+                        maxLength: 20,
                         initialValue: _currentEvent.name,
                         autocorrect: false,
                         keyboardType: TextInputType.name,

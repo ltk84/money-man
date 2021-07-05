@@ -156,7 +156,9 @@ class OtherSourceListView extends StatelessWidget {
                             Column(
                               children: [
                                 Text(
-                                  trans.note,
+                                  trans.note.length >= 20
+                                      ? trans.note.substring(0, 20) + '...'
+                                      : trans.note,
                                   style: TextStyle(
                                     color:
                                         Style.foregroundColor.withOpacity(0.54),

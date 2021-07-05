@@ -189,6 +189,7 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
                       width: 250.0,
                       // Textformfield để nhập số tiền ban đầu
                       child: TextFormField(
+                          maxLength: 20,
                           keyboardType: TextInputType.number,
                           autocorrect: false,
                           textAlign: TextAlign.center,

@@ -49,6 +49,7 @@ class _AccountInformation extends State<AccountInformation> {
               ),
               // Text form field để nhập tên người dùng
               child: TextFormField(
+                maxLength: 20,
                 validator: (value) {
                   if (value == null || value.isEmpty)
                     return 'Please enter your name';
