@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/ui/style.dart';
 
@@ -175,6 +176,7 @@ class BarChartScreenState extends State<BarChartScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return AspectRatio(
       aspectRatio: 1,
       child: Card(
@@ -274,9 +276,9 @@ class BarChartScreenState extends State<BarChartScreen> {
                             if (value == 0) {
                               return '0';
                             } else if (value == 10) {
-                              return (maximumAmount / 2).round().toString();
+                              return getLargeAmount(maximumAmount/2);
                             } else if (value == 20) {
-                              return maximumAmount.round().toString();
+                              return getLargeAmount(maximumAmount);
                             } else {
                               return '';
                             }
@@ -436,5 +438,23 @@ class BarChartScreenState extends State<BarChartScreen> {
         width: width,
       ),
     ]);
+  }
+
+  String getLargeAmount(double amount) {
+    const units = <int, String>{
+      1000000000000000000: 'qui',
+      1000000000000000: 'qua',
+      1000000000000: 'tri',
+      1000000000: 'bil',
+      1000000: 'mil',
+    };
+
+    return units.entries
+        .map((e) {
+      return MoneyFormatter(amount: amount / e.key).output.withoutFractionDigits + ' ' + e.value.toString();
+    })
+        .firstWhere((e) => !e.startsWith('0'), orElse: () {
+      return MoneyFormatter(amount: amount).output.withoutFractionDigits;
+    });
   }
 }
