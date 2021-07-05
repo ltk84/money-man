@@ -158,7 +158,11 @@ class _BillCategoryListState extends State<BillCategoryList> {
                           color: Style.foregroundColor,
                         )),
                     if (bill.note != null && bill.note != '')
-                      Text(bill.note,
+                      Text(
+                          bill.note.toString().length >= 20
+                              ? bill.note.toString().substring(0, 19) +
+                              '...'
+                              : bill.note,
                           style: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w400,
