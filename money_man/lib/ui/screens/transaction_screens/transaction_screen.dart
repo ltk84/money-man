@@ -1612,7 +1612,7 @@ class _TransactionScreen extends State<TransactionScreen>
                                   )),
                               Text(
                                 _note.length >= 20
-                                    ? _note.substring(0, 20) + '...'
+                                    ? _note.substring(0, 19) + '...'
                                     : _note,
                                 style: TextStyle(
                                   fontFamily: Style.fontFamily,

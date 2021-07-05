@@ -410,7 +410,12 @@ class _EditBillScreenState extends State<EditBillScreen> {
                   child: Icon(Icons.notes,
                       color: Style.foregroundColor.withOpacity(0.7),
                       size: 24.0)),
-              Text(display == null || display == '' ? 'Note' : display,
+              Text(
+                  display == null || display == ''
+                      ? 'Note'
+                      : display.length >= 20
+                          ? display.substring(0, 19) + '...'
+                          : display,
                   style: TextStyle(
                     fontFamily: Style.fontFamily,
                     fontSize: 16.0,

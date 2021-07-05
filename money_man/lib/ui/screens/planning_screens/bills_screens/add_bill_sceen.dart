@@ -447,7 +447,12 @@ class _AddBillScreenState extends State<AddBillScreen> {
                   child: Icon(Icons.notes,
                       color: Style.foregroundColor.withOpacity(0.70),
                       size: 24.0)),
-              Text(display ?? 'Note',
+              Text(
+                  display != null
+                      ? display.length >= 20
+                          ? display.substring(0, 19) + '...'
+                          : display
+                      : 'Note',
                   style: TextStyle(
                     fontFamily: Style.fontFamily,
                     fontSize: 16.0,
