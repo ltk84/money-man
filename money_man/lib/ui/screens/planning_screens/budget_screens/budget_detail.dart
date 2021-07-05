@@ -88,7 +88,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               Style.backIcon,
               color: Style.foregroundColor,
             )),
-        title: Text('Budget'),
+        title: Text('Budget', style: TextStyle(color: Style.foregroundColor)),
         centerTitle: true,
         actions: [
           // Button chỉnh sửa budget
