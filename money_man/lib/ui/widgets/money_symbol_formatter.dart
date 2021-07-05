@@ -44,23 +44,48 @@ class MoneySymbolFormatter extends StatelessWidget {
     //xem xét đơn vị tiền tệ được hiển thị bên trái hay phải amount
     bool onLeft = currency.symbolOnLeft;
     //dấu của amount ( '-' khi amount < 0 , '+' khi amount > 0)
-    String _digit = this.digit;
+    String newDigit = this.digit;
     //giá trị của tiền cần hiển thị
-    double _text = this.text;
+    double newText = this.text;
+
+    // Xử lý tiền quá nhiều.
+    String approx = '';
+    const units = <int, String>{
+      1000000000000000000: 'quintillion',
+      1000000000000000: 'quadrillion',
+      1000000000000: 'trillion',
+      1000000000: 'billion',
+    };
 
     //lấy dấu của amount và lấy giá trị tuyệt đối của amount khi amount < 0;
     if (digit == '' && text < 0) {
-      _digit = text.toString().substring(0, 1);
-      _text = double.parse(text.toString().substring(1));
+      newDigit = text.toString().substring(0, 1);
+      newText = double.parse(text.toString().substring(1));
     }
 
+
     //Tạo text cần hiển thị
+
+    String formattedString = units.entries
+        .map((e) {
+          approx = '~ ';
+          return MoneyFormatter(amount: newText / e.key).output.withoutFractionDigits + ' ' + e.value.toString();
+        })
+        .firstWhere((e) => !e.startsWith('0'), orElse: () {
+          approx = '';
+          return MoneyFormatter(amount: newText).output.withoutFractionDigits;
+        });
     String finalText = onLeft
-        ? '$_digit$symbol ' +
-        MoneyFormatter(amount: _text).output.withoutFractionDigits
-        : _digit +
-        MoneyFormatter(amount: _text).output.withoutFractionDigits +
-        ' $symbol';
+      ? approx + '$newDigit$symbol ' + formattedString
+      : approx + newDigit + formattedString + ' $symbol';
+
+    // String finalText = onLeft
+    //     ? '$newDigit$symbol ' +
+    //     MoneyFormatter(amount: newText).output.withoutFractionDigits
+    //     : newDigit +
+    //     MoneyFormatter(amount: newText).output.withoutFractionDigits +
+    //     ' $symbol';
     return finalText;
+
   }
 }
