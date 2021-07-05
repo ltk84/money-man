@@ -482,7 +482,7 @@ class _CashBackScreenState extends State<CashBackScreen> {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   hintStyle: TextStyle(
-                      color: Style.foregroundColor.withOpacity(0.24),
+                      color: contact == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                       fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight:

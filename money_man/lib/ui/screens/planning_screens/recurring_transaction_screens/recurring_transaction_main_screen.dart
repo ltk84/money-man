@@ -236,6 +236,7 @@ class _RecurringTransactionMainScreenState
               ],
             ),
             MoneySymbolFormatter(
+              checkOverflow: true,
               text: reTrans.amount,
               currencyId: widget.wallet.currencyID,
               textStyle: TextStyle(

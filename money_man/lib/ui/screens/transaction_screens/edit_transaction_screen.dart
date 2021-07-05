@@ -599,7 +599,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                 disabledBorder: InputBorder.none,
                                 hintStyle: TextStyle(
                                     color:
-                                        Style.foregroundColor.withOpacity(0.24),
+                                    contact == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                                     fontFamily: Style.fontFamily,
                                     fontSize: 16.0,
                                     fontWeight: contact == null

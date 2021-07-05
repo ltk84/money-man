@@ -277,6 +277,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                         color: Style.foregroundColor.withOpacity(0.24)),
                     title: adjustAmount != null
                         ? MoneySymbolFormatter(
+                            checkOverflow: false,
                             text: adjustAmount,
                             currencyId: widget.wallet.currencyID,
                             textStyle: TextStyle(
@@ -286,6 +287,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                 fontSize: 16.0),
                           )
                         : MoneySymbolFormatter(
+                            checkOverflow: false,
                             text: widget.wallet.amount,
                             currencyId: widget.wallet.currencyID,
                             textStyle: TextStyle(

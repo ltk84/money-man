@@ -14,6 +14,8 @@ class MoneySymbolFormatter extends StatelessWidget {
   final String digit;
   // vị trí của text được trả về.
   final TextAlign textAlign;
+  // biến check xem có xử lý chống tràn hay không (để hiển thị đầy đủ số tiền).
+  final bool checkOverflow;
 
   MoneySymbolFormatter({
     Key key,
@@ -22,6 +24,7 @@ class MoneySymbolFormatter extends StatelessWidget {
     this.textStyle,
     this.digit = '',
     this.textAlign,
+    this.checkOverflow = false,
   }) : super(key: key);
 
   @override
@@ -48,15 +51,6 @@ class MoneySymbolFormatter extends StatelessWidget {
     //giá trị của tiền cần hiển thị
     double newText = this.text;
 
-    // Xử lý tiền quá nhiều.
-    String approx = '';
-    const units = <int, String>{
-      1000000000000000000: 'quintillion',
-      1000000000000000: 'quadrillion',
-      1000000000000: 'trillion',
-      1000000000: 'billion',
-    };
-
     //lấy dấu của amount và lấy giá trị tuyệt đối của amount khi amount < 0;
     if (digit == '' && text < 0) {
       newDigit = text.toString().substring(0, 1);
@@ -65,26 +59,22 @@ class MoneySymbolFormatter extends StatelessWidget {
 
 
     //Tạo text cần hiển thị
-
-    String formattedString = units.entries
-        .map((e) {
-          approx = '~ ';
-          return MoneyFormatter(amount: newText / e.key).output.withoutFractionDigits + ' ' + e.value.toString();
-        })
-        .firstWhere((e) => !e.startsWith('0'), orElse: () {
-          approx = '';
-          return MoneyFormatter(amount: newText).output.withoutFractionDigits;
-        });
-    String finalText = onLeft
-      ? approx + '$newDigit$symbol ' + formattedString
-      : approx + newDigit + formattedString + ' $symbol';
-
-    // String finalText = onLeft
-    //     ? '$newDigit$symbol ' +
-    //     MoneyFormatter(amount: newText).output.withoutFractionDigits
-    //     : newDigit +
-    //     MoneyFormatter(amount: newText).output.withoutFractionDigits +
-    //     ' $symbol';
+    String finalText;
+    if (newText >= 1000000000 && checkOverflow) {
+      finalText = onLeft
+          ? '~ ' + '$newDigit$symbol ' +
+          MoneyFormatter(amount: newText).output.compactNonSymbol
+          : '~ ' + newDigit +
+          MoneyFormatter(amount: newText).output.compactNonSymbol +
+          ' $symbol';
+    } else {
+      finalText = onLeft
+          ? '$newDigit$symbol ' +
+          MoneyFormatter(amount: newText).output.withoutFractionDigits
+          : newDigit +
+          MoneyFormatter(amount: newText).output.withoutFractionDigits +
+          ' $symbol';
+    }
     return finalText;
 
   }

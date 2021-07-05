@@ -442,6 +442,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                                 ),
                               ),
                               MoneySymbolFormatter(
+                                checkOverflow: true,
                                 text: info['bill'].amount,
                                 currencyId: widget.currentWallet.currencyID,
                                 textStyle: TextStyle(

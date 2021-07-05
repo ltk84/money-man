@@ -200,6 +200,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 ),
                               ),
                               subtitle: MoneySymbolFormatter(
+                                checkOverflow: false,
                                 text: listWallet[index].amount,
                                 currencyId: listWallet[index].currencyID,
                                 textStyle: TextStyle(
@@ -254,6 +255,7 @@ class _WalletSelectionScreenState extends State<WalletSelectionScreen> {
                                 ),
                               ),
                               subtitle: MoneySymbolFormatter(
+                                checkOverflow: false,
                                 text: listWallet[index].amount,
                                 currencyId: listWallet[index].currencyID,
                                 textStyle: TextStyle(

@@ -269,6 +269,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     title: wallet.amount == null
                         ? Text('Enter wallet amount')
                         : MoneySymbolFormatter(
+                            checkOverflow: false,
                             text: wallet.amount,
                             currencyId: wallet.currencyID,
                             textStyle: TextStyle(

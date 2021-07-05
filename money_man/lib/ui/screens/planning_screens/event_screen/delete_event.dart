@@ -5,6 +5,7 @@ import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
 
 // màn hình xóa event
@@ -128,58 +129,59 @@ class _DeleteEventScreen extends State<DeleteEventScreen>
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
                             title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Padding(
-                                    padding:
+                                Row(
+                                  children: [
+                                    Padding(
+                                        padding:
                                         const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                    child: SuperIcon(
-                                      iconPath:
+                                        child: SuperIcon(
+                                          iconPath:
                                           listTransactionOfEventByDate[index]
                                               .category
                                               .iconID,
-                                      size: 35,
-                                    )),
-                                Padding(
-                                  padding:
+                                          size: 35,
+                                        )),
+                                    Padding(
+                                      padding:
                                       const EdgeInsets.fromLTRB(14, 0, 18, 0),
-                                  child: Text(
-                                      listTransactionOfEventByDate[index]
-                                          .category
-                                          .name,
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontFamily: Style.fontFamily,
-                                          fontWeight: FontWeight.w600,
-                                          color: Style.foregroundColor)),
+                                      child: Text(
+                                          listTransactionOfEventByDate[index]
+                                              .category
+                                              .name,
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontFamily: Style.fontFamily,
+                                              fontWeight: FontWeight.w600,
+                                              color: Style.foregroundColor)),
+                                    ),
+                                  ],
                                 ),
-                                Expanded(
-                                  child: Text(
-                                      listTransactionOfEventByDate[index]
-                                                  .category
-                                                  .type ==
-                                              'income'
-                                          ? '+' +
-                                              listTransactionOfEventByDate[
-                                                      index]
-                                                  .amount
-                                                  .toString()
-                                          : '-' +
-                                              listTransactionOfEventByDate[
-                                                      index]
-                                                  .amount
-                                                  .toString(),
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontFamily: Style.fontFamily,
-                                          fontWeight: FontWeight.w700,
-                                          color: listTransactionOfEventByDate[
-                                                          index]
-                                                      .category
-                                                      .type ==
-                                                  'income'
-                                              ? Style.incomeColor2
-                                              : Style.expenseColor)),
+                                MoneySymbolFormatter(
+                                    checkOverflow: true,
+                                    text: listTransactionOfEventByDate[index]
+                                        .category
+                                        .type ==
+                                        'income'
+                                        ? listTransactionOfEventByDate[
+                                        index]
+                                            .amount
+                                        : listTransactionOfEventByDate[
+                                        index]
+                                            .amount,
+                                    currencyId: _eventWallet.currencyID,
+                                    textStyle: TextStyle(
+                                        fontSize: 16.0,
+                                        fontFamily: Style.fontFamily,
+                                        fontWeight: FontWeight.w700,
+                                        color: listTransactionOfEventByDate[
+                                        index]
+                                            .category
+                                            .type ==
+                                            'income'
+                                            ? Style.incomeColor2
+                                            : Style.expenseColor)
                                 ),
                               ],
                             ),

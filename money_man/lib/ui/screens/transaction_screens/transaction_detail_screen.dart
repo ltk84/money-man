@@ -279,6 +279,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               ),
                             ),
                           MoneySymbolFormatter(
+                            checkOverflow: false,
                             text: currentTransaction.amount,
                             currencyId: widget.wallet.currencyID,
                             textStyle: TextStyle(
