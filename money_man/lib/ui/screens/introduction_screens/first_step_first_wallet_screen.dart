@@ -5,9 +5,11 @@ import 'package:flutter/painting.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
+import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:money_man/ui/widgets/icon_picker.dart';
+import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'add_first_transaction_screens.dart';
 
 class FirstStepForFirstWallet extends StatefulWidget {
@@ -17,6 +19,7 @@ class FirstStepForFirstWallet extends StatefulWidget {
 
 // tạo ví mẫu để cập nhật thông tin, xuất hiện khi người dùng đăng nhập lần đầu tiên :3
 class _FirstStepState extends State<FirstStepForFirstWallet> {
+  double amount ;
   Wallet wallet = Wallet(
       id: 'id',
       name: '',
@@ -187,18 +190,26 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
                       alignment: Alignment.center,
                       height: 50,
                       width: 250.0,
-                      // Textformfield để nhập số tiền ban đầu
+                      // Textformfield để nhập tên wallet
                       child: TextFormField(
-                          maxLength: 20,
-                          keyboardType: TextInputType.number,
+                        readOnly: true,
                           autocorrect: false,
                           textAlign: TextAlign.center,
-                          onChanged: (value) =>
-                              wallet.amount = double.tryParse(value),
+                          onTap: () async {
+                            // nhấp số tiền
+                            final resultAmount = await showCupertinoModalBottomSheet(
+                                context: context,
+                                builder: (context) => EnterAmountScreen());
+                            if (resultAmount != null)
+                              setState(() {
+                                amount = double.parse(resultAmount);
+                              });
+                          },
                           decoration: InputDecoration(
-                            hintText: 'Amount',
+                            hintText: amount == null ?'Amount': amount.toString(),
                             hintStyle: TextStyle(
-                              color: Colors.black.withOpacity(0.35),
+                              color:  amount == null ?Colors.black.withOpacity(0.35):
+                              Colors.black,
                             ),
                             isDense: false,
                             contentPadding: EdgeInsets.symmetric(
@@ -207,7 +218,7 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
                             fillColor: Colors.white,
                             border: OutlineInputBorder(
                               borderSide: BorderSide(style: BorderStyle.none),
-                              borderRadius: BorderRadius.circular(23),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
                           style: TextStyle(color: Colors.black)),
@@ -262,8 +273,8 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
                                 Expanded(
                                     child: Center(
                                         child: Text(
-                                  'Currency: $currencyName',
-                                  style: TextStyle(
+                                      'Currency: $currencyName',
+                                     style: TextStyle(
                                       fontFamily: Style.fontFamily,
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600),
