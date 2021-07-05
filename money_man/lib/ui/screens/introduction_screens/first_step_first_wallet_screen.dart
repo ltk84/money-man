@@ -2,6 +2,7 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
@@ -20,7 +21,7 @@ class FirstStepForFirstWallet extends StatefulWidget {
 
 // tạo ví mẫu để cập nhật thông tin, xuất hiện khi người dùng đăng nhập lần đầu tiên :3
 class _FirstStepState extends State<FirstStepForFirstWallet> {
-  double amount ;
+  double amount;
   Wallet wallet = Wallet(
       id: 'id',
       name: '',
@@ -164,6 +165,9 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
                       width: 250.0,
                       // Textformfield để nhập tên wallet
                       child: TextFormField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(20),
+                        ],
                           autocorrect: false,
                           textAlign: TextAlign.center,
                           onChanged: (value) => wallet.name = value,
@@ -191,16 +195,17 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
                       alignment: Alignment.center,
                       height: 50,
                       width: 250.0,
-                      // Textformfield để nhập tên wallet
+                      // Textformfield để nhập số tiền wallet
                       child: TextFormField(
-                        readOnly: true,
+                          readOnly: true,
                           autocorrect: false,
                           textAlign: TextAlign.center,
                           onTap: () async {
                             // nhấp số tiền
-                            final resultAmount = await showCupertinoModalBottomSheet(
-                                context: context,
-                                builder: (context) => EnterAmountScreen());
+                            final resultAmount =
+                                await showCupertinoModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => EnterAmountScreen());
                             if (resultAmount != null)
                               setState(() {
                                 amount = double.parse(resultAmount);
@@ -210,12 +215,15 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
                           decoration: InputDecoration(
                             hintText: amount == null
                                 ? 'Amount'
-                                : MoneyFormatter(amount: double.tryParse(amount.toString()))
-                                .output
-                                .withoutFractionDigits,
+                                : MoneyFormatter(
+                                        amount:
+                                            double.tryParse(amount.toString()))
+                                    .output
+                                    .withoutFractionDigits,
                             hintStyle: TextStyle(
-                              color:  amount == null ?Colors.black.withOpacity(0.35):
-                              Colors.black,
+                              color: amount == null
+                                  ? Colors.black.withOpacity(0.35)
+                                  : Colors.black,
                             ),
                             isDense: false,
                             contentPadding: EdgeInsets.symmetric(
@@ -279,8 +287,8 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
                                 Expanded(
                                     child: Center(
                                         child: Text(
-                                      'Currency: $currencyName',
-                                     style: TextStyle(
+                                  'Currency: $currencyName',
+                                  style: TextStyle(
                                       fontFamily: Style.fontFamily,
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600),
