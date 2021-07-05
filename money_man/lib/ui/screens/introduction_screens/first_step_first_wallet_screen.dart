@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
@@ -203,10 +204,15 @@ class _FirstStepState extends State<FirstStepForFirstWallet> {
                             if (resultAmount != null)
                               setState(() {
                                 amount = double.parse(resultAmount);
+                                wallet.amount = amount;
                               });
                           },
                           decoration: InputDecoration(
-                            hintText: amount == null ?'Amount': amount.toString(),
+                            hintText: amount == null
+                                ? 'Amount'
+                                : MoneyFormatter(amount: double.tryParse(amount.toString()))
+                                .output
+                                .withoutFractionDigits,
                             hintStyle: TextStyle(
                               color:  amount == null ?Colors.black.withOpacity(0.35):
                               Colors.black,
