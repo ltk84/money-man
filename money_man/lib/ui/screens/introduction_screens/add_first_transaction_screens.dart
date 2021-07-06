@@ -95,10 +95,11 @@ class AddFirstTransactionScreen extends StatelessWidget {
                     child: RaisedButton(
                       // Chuyển hướng đến màn hình Home khi tạo ví thành công
                       onPressed: () async {
-                        final _firestore =
-                            Provider.of<FirebaseFireStoreService>(context,
-                                listen: false);
-                        await _firestore.addFirstWallet(wallet);
+                        final firestore = Provider.of<FirebaseFireStoreService>(
+                            context,
+                            listen: false);
+                        await firestore.addFirstWallet(wallet);
+                        await firestore.setTheme(0);
 
                         Navigator.pushReplacement(
                           context,

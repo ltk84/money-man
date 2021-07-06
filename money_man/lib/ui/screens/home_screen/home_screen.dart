@@ -18,10 +18,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  int selectedIndex = 0;
+  int theme;
 
   void _onItemTap(int index, Wallet wallet) {
-    if (_selectedIndex != index) {
+    if (selectedIndex != index) {
       if (index == 2) {
         showCupertinoModalBottomSheet(
             isDismissible: true,
@@ -30,18 +31,35 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context) => AddTransactionScreen(currentWallet: wallet));
       } else
         setState(() {
-          _selectedIndex = index;
+          selectedIndex = index;
         });
     }
   }
 
   @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      int result = await getTheme();
+      setState(() {
+        theme = result;
+        Style.changeTheme(theme);
+      });
+    });
+    super.initState();
+  }
+
+  getTheme() async {
+    final firestore =
+        Provider.of<FirebaseFireStoreService>(context, listen: false);
+    return firestore.getTheme();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
-    print('home build');
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return StreamBuilder<Wallet>(
-        stream: _firestore.currentWallet,
+        stream: firestore.currentWallet,
         builder: (context, snapshot) {
           final wallet = snapshot.data;
 
@@ -63,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
           } else
             return Scaffold(
               backgroundColor: Style.boxBackgroundColor2,
-              body: _screens.elementAt(_selectedIndex),
+              body: _screens.elementAt(selectedIndex),
               bottomNavigationBar: BottomAppBar(
                 notchMargin: 5,
                 shape: CircularNotchedRectangle(),
@@ -113,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Style.foregroundColor.withOpacity(0.54),
                     unselectedFontSize: 12.0,
                     selectedFontSize: 12.0,
-                    currentIndex: _selectedIndex,
+                    currentIndex: selectedIndex,
                     onTap: (index) => _onItemTap(index, wallet)),
               ),
               floatingActionButton: FloatingActionButton(

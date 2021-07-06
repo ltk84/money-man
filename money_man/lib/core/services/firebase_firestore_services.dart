@@ -855,6 +855,21 @@ class FirebaseFireStoreService {
     return users.doc(uid).snapshots().map(_userNameFromSnapshot);
   }
 
+  // set theme của user
+  Future setTheme(int theme) async {
+    await users
+        .doc(uid)
+        .update({'theme': theme})
+        .then((value) => print('update theme to $theme'))
+        .catchError((error) => print(error));
+  }
+
+  Future getTheme() async {
+    int theme = 0;
+    await users.doc(uid).get().then((value) => {theme = value.get('theme')});
+    return theme;
+  }
+
   String _userNameFromSnapshot(DocumentSnapshot snapshot) {
     return snapshot.get(FieldPath(['userName'])).toString();
   }
