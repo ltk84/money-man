@@ -167,6 +167,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               MoneySymbolFormatter(
+                                checkOverflow: true,
                                 text: this.widget.budget.amount,
                                 currencyId: widget.wallet.currencyID,
                                 textStyle: TextStyle(
@@ -196,6 +197,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                     ),
                                   ),
                                   MoneySymbolFormatter(
+                                    checkOverflow: true,
                                     text: (this.widget.budget.spent -
                                             this.widget.budget.amount)
                                         .abs(),

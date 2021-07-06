@@ -304,6 +304,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                               ),
                                             ),
                                             MoneySymbolFormatter(
+                                              checkOverflow: true,
                                               text: openingBalance,
                                               currencyId: wallet.currencyID,
                                               textStyle: TextStyle(
@@ -331,6 +332,7 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                               ),
                                             ),
                                             MoneySymbolFormatter(
+                                              checkOverflow: true,
                                               text: closingBalance,
                                               currencyId: wallet.currencyID,
                                               textStyle: TextStyle(
@@ -451,13 +453,14 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                             textAlign: TextAlign.start,
                                           ),
                                           MoneySymbolFormatter(
+                                            checkOverflow: true,
                                             text: income,
                                             currencyId: wallet.currencyID,
                                             textStyle: TextStyle(
                                               color: Style.incomeColor2,
                                               fontFamily: Style.fontFamily,
                                               fontWeight: FontWeight.w400,
-                                              fontSize: 24,
+                                              fontSize: 20,
                                               height: 1.5,
                                             ),
                                             textAlign: TextAlign.start,
@@ -516,13 +519,14 @@ class _ReportScreen extends State<ReportScreen> with TickerProviderStateMixin {
                                           textAlign: TextAlign.start,
                                         ),
                                         MoneySymbolFormatter(
+                                          checkOverflow: true,
                                           text: expense,
                                           currencyId: wallet.currencyID,
                                           textStyle: TextStyle(
                                             color: Style.expenseColor,
                                             fontFamily: Style.fontFamily,
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 24,
+                                            fontSize: 20,
                                             height: 1.5,
                                           ),
                                           textAlign: TextAlign.start,

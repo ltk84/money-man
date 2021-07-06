@@ -25,7 +25,8 @@ class BillGeneralDetailScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _BillGeneralDetailScreenState createState() => _BillGeneralDetailScreenState();
+  _BillGeneralDetailScreenState createState() =>
+      _BillGeneralDetailScreenState();
 }
 
 class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
@@ -105,7 +106,7 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
         ),
         body: ListView(
           physics:
-          BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             Container(
                 margin: EdgeInsets.only(top: 30.0),
@@ -183,25 +184,26 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
               child: TextButton(
                 onPressed: () async {
                   bill.isFinished = !bill.isFinished;
-                  await firestore.updateBill(
-                      bill, widget.wallet);
-                  setState(() { });
+                  await firestore.updateBill(bill, widget.wallet);
+                  setState(() {});
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xFF4FCC5C).withOpacity(0.4);
                       else
-                        return Color(
-                            0xFF4FCC5C);
+                        return Color(0xFF4FCC5C);
                     },
                   ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(bill.isFinished ? "Mark as running" : "Mark as finished",
+                    Text(
+                        bill.isFinished
+                            ? "Mark as running"
+                            : "Mark as finished",
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: Style.fontFamily,
@@ -219,26 +221,27 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                   color: Style.boxBackgroundColor2,
                   border: Border(
                       bottom: BorderSide(
-                        color: Style.foregroundColor.withOpacity(0.12),
-                        width: 0.5,
-                      ))),
+                    color: Style.foregroundColor.withOpacity(0.12),
+                    width: 0.5,
+                  ))),
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
                       context,
                       PageTransition(
                           childCurrent: this.widget,
-                          child: BillTransactionList(transactionListID: bill.transactionIdList, currentWallet: widget.wallet),
+                          child: BillTransactionList(
+                              transactionListID: bill.transactionIdList,
+                              currentWallet: widget.wallet),
                           type: PageTransitionType.rightToLeft));
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Color(0xFF4FCC5C).withOpacity(0.4);
                       else
-                        return Color(
-                            0xFF4FCC5C);
+                        return Color(0xFF4FCC5C);
                     },
                   ),
                 ),
@@ -264,18 +267,17 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                   color: Style.boxBackgroundColor2,
                   border: Border(
                       bottom: BorderSide(
-                        color: Style.foregroundColor.withOpacity(0.12),
-                        width: 0.5,
-                      ))),
+                    color: Style.foregroundColor.withOpacity(0.12),
+                    width: 0.5,
+                  ))),
               child: TextButton(
                 onPressed: () async {
-                  await firestore.deleteBill(
-                      bill, widget.wallet);
+                  await firestore.deleteBill(bill, widget.wallet);
                   Navigator.pop(context);
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
+                    (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
                         return Colors.redAccent.withOpacity(0.4);
                       else
@@ -296,22 +298,29 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
         ));
   }
 
-  Widget buildNote ({String display}) {
+  Widget buildNote({String display}) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 23.0),
-              child: Icon(Icons.notes, color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
-          Text(display == null || display == '' ? 'Note' : display,
-              style: TextStyle(
-                fontFamily: Style.fontFamily,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
-                color: display == null || display == '' ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
-              )),
+              child: Icon(Icons.notes,
+                  color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
+          Flexible(
+            child: Text(
+                display == null || display == '' ? 'Note' : display,
+                style: TextStyle(
+                  fontFamily: Style.fontFamily,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                  color: display == null || display == ''
+                      ? Style.foregroundColor.withOpacity(0.24)
+                      : Style.foregroundColor,
+                )),
+          ),
         ],
       ),
     );
@@ -325,8 +334,8 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
         children: [
           Container(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child:
-              Icon(Icons.attach_money, color: Style.foregroundColor.withOpacity(0.7), size: 40.0)),
+              child: Icon(Icons.attach_money,
+                  color: Style.foregroundColor.withOpacity(0.7), size: 40.0)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -372,7 +381,9 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                 fontFamily: Style.fontFamily,
                 fontSize: 20.0,
                 fontWeight: FontWeight.w500,
-                color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                color: display == null
+                    ? Style.foregroundColor.withOpacity(0.24)
+                    : Style.foregroundColor,
               )),
         ],
       ),
@@ -396,7 +407,9 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
                 fontFamily: Style.fontFamily,
                 fontSize: 16.0,
                 fontWeight: FontWeight.w500,
-                color: display == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
+                color: display == null
+                    ? Style.foregroundColor.withOpacity(0.24)
+                    : Style.foregroundColor,
               )),
         ],
       ),
@@ -421,52 +434,60 @@ class _BillGeneralDetailScreenState extends State<BillGeneralDetailScreen> {
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 23.0),
                   child: Icon(Icons.calendar_today,
-                      color: Style.foregroundColor.withOpacity(0.7), size: 24.0)),
+                      color: Style.foregroundColor.withOpacity(0.7),
+                      size: 24.0)),
               Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Due dates',
-                        style: TextStyle(
-                          fontFamily: Style.fontFamily,
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w500,
-                          color: Style.foregroundColor.withOpacity(0.6),
-                        )),
-                    Row(
-                      children: [
-                        Text(
-                            listDueDates.length == 0 ? 'None' : DateFormat('dd/MM/yyyy').format(listDueDates[0]),
-                            style: TextStyle(
-                              fontFamily: Style.fontFamily,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                              color: listDueDates.length == 0 ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
-                            )
-                        ),
-                        listDueDates.length < 2 ? Container() : Icon(Icons.arrow_drop_down, color: Style.foregroundColorDark)
-                      ],
-                    ),
-                    ExpandableWidget(
-                      expand: expandDueDates,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            for (int i = 1; i < listDueDates.length; i++)
-                              Text(
-                                  DateFormat('dd/MM/yyyy').format(listDueDates[i]),
-                                  style: TextStyle(
-                                    fontFamily: Style.fontFamily,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w600,
-                                    color: Style.foregroundColor,
-                                  )
-                              ),
-                          ],
-                        ),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Due dates',
+                      style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w500,
+                        color: Style.foregroundColor.withOpacity(0.6),
+                      )),
+                  Row(
+                    children: [
+                      Text(
+                          listDueDates.length == 0
+                              ? 'None'
+                              : DateFormat('dd/MM/yyyy')
+                                  .format(listDueDates[0]),
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w600,
+                            color: listDueDates.length == 0
+                                ? Style.foregroundColor.withOpacity(0.24)
+                                : Style.foregroundColor,
+                          )),
+                      listDueDates.length < 2
+                          ? Container()
+                          : Icon(Icons.arrow_drop_down,
+                              color: Style.foregroundColorDark)
+                    ],
+                  ),
+                  ExpandableWidget(
+                    expand: expandDueDates,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          for (int i = 1; i < listDueDates.length; i++)
+                            Text(
+                                DateFormat('dd/MM/yyyy')
+                                    .format(listDueDates[i]),
+                                style: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Style.foregroundColor,
+                                )),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

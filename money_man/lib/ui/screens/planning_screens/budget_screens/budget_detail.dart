@@ -88,7 +88,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               Style.backIcon,
               color: Style.foregroundColor,
             )),
-        title: Text('Budget'),
+        title: Text('Budget', style: TextStyle(color: Style.foregroundColor)),
         centerTitle: true,
         actions: [
           // Button chỉnh sửa budget
@@ -173,6 +173,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                     ),
                     Container(
                         child: MoneySymbolFormatter(
+                          checkOverflow: false,
                       text: widget.budget.amount,
                       currencyId: widget.wallet.currencyID,
                       textStyle: TextStyle(
@@ -206,6 +207,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                     ),
                                     SizedBox(height: 2),
                                     MoneySymbolFormatter(
+                                      checkOverflow: true,
                                       text: widget.budget.spent,
                                       currencyId: widget.wallet.currencyID,
                                       textStyle: TextStyle(
@@ -233,6 +235,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                     ),
                                     SizedBox(height: 2),
                                     MoneySymbolFormatter(
+                                      checkOverflow: true,
                                       text: todayTarget > 1
                                           ? this.widget.budget.spent -
                                               this.widget.budget.amount

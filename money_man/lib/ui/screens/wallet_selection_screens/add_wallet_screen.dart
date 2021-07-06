@@ -105,12 +105,15 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
               margin: EdgeInsets.symmetric(vertical: 35.0, horizontal: 0.0),
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     children: [
                       Container(
                         color: Colors
                             .transparent, // Không thừa đâu, như vậy mới ấn vùng ngoài được.
-                        padding: EdgeInsets.fromLTRB(24, 20, 10, 0),
+                        padding: EdgeInsets.fromLTRB(24, 10, 10, 0),
                         child: GestureDetector(
                           onTap: () async {
                             // chọn icon cho wallet
@@ -144,11 +147,14 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                           padding: EdgeInsets.only(right: 50),
                           width: 250,
                           child: TextFormField(
+                            maxLength: 20,
                             focusNode: focusNode,
                             autocorrect: false,
                             keyboardType: TextInputType.name,
                             style: TextStyle(
+                              fontWeight: FontWeight.w600,
                               fontSize: 20,
+                              fontFamily: Style.fontFamily,
                               color: Style.foregroundColor,
                               decoration: TextDecoration.none,
                             ),
@@ -169,8 +175,13 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                                         Style.foregroundColor.withOpacity(0.6),
                                     width: 3),
                               ),
+                              counterStyle: TextStyle(
+                                  fontFamily: Style.fontFamily,
+                                  color: Style.foregroundColor.withOpacity(0.54),
+                                  fontSize: 12),
                               labelText: 'Name',
                               labelStyle: TextStyle(
+                                fontFamily: Style.fontFamily,
                                   color: Style.foregroundColor.withOpacity(0.6),
                                   fontSize: 15),
                             ),
@@ -190,7 +201,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Divider(
                     thickness: 0.05,
@@ -269,6 +280,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     title: wallet.amount == null
                         ? Text('Enter wallet amount')
                         : MoneySymbolFormatter(
+                            checkOverflow: false,
                             text: wallet.amount,
                             currencyId: wallet.currencyID,
                             textStyle: TextStyle(

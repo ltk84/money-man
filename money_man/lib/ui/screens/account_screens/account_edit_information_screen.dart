@@ -49,6 +49,7 @@ class _AccountInformation extends State<AccountInformation> {
               ),
               // Text form field để nhập tên người dùng
               child: TextFormField(
+                maxLength: 20,
                 validator: (value) {
                   if (value == null || value.isEmpty)
                     return 'Please enter your name';
@@ -91,6 +92,10 @@ class _AccountInformation extends State<AccountInformation> {
                       fontFamily: Style.fontFamily,
                       fontWeight: FontWeight.w400,
                     ),
+                    counterStyle: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        color: Style.foregroundColor.withOpacity(0.54),
+                        fontSize: 12),
                     labelText: 'Enter your name',
                     labelStyle: TextStyle(
                         color: Style.foregroundColor.withOpacity(0.24),

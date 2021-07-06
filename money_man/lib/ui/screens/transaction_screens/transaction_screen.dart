@@ -1611,7 +1611,9 @@ class _TransactionScreen extends State<TransactionScreen>
                                     color: Style.foregroundColor,
                                   )),
                               Text(
-                                _note,
+                                _note.length >= 20
+                                    ? _note.substring(0, 19) + '...'
+                                    : _note,
                                 style: TextStyle(
                                   fontFamily: Style.fontFamily,
                                   fontWeight: FontWeight.w500,

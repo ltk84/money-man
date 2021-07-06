@@ -126,6 +126,7 @@ class _SelectWalletScreenState extends State<SelectWalletScreen> {
                                 ),
                               ),
                               subtitle: MoneySymbolFormatter(
+                                checkOverflow: false,
                                 text: listWallet[index].amount,
                                 currencyId: listWallet[index].currencyID,
                                 textStyle: TextStyle(

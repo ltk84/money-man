@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/transaction_model.dart';
 import 'package:money_man/ui/style.dart';
 
@@ -175,6 +176,7 @@ class BarChartScreenState extends State<BarChartScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return AspectRatio(
       aspectRatio: 1,
       child: Card(
@@ -274,9 +276,9 @@ class BarChartScreenState extends State<BarChartScreen> {
                             if (value == 0) {
                               return '0';
                             } else if (value == 10) {
-                              return (maximumAmount / 2).round().toString();
+                              return MoneyFormatter(amount: maximumAmount/2).output.compactNonSymbol;
                             } else if (value == 20) {
-                              return maximumAmount.round().toString();
+                              return MoneyFormatter(amount: maximumAmount).output.compactNonSymbol;
                             } else {
                               return '';
                             }

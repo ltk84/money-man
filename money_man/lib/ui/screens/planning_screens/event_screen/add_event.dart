@@ -220,6 +220,7 @@ class _AddEventState extends State<AddEvent> {
                       width: 250,
                       // Nhập tên cho event
                       child: TextFormField(
+                        maxLength: 20,
                         autocorrect: false,
                         keyboardType: TextInputType.name,
                         style: TextStyle(
@@ -243,6 +244,10 @@ class _AddEventState extends State<AddEvent> {
                                 color: Style.foregroundColor.withOpacity(0.6),
                                 width: 3),
                           ),
+                          counterStyle: TextStyle(
+                              fontFamily: Style.fontFamily,
+                              color: Style.foregroundColor.withOpacity(0.54),
+                              fontSize: 12),
                           labelText: 'Name event',
                           labelStyle: TextStyle(
                               fontFamily: Style.fontFamily,

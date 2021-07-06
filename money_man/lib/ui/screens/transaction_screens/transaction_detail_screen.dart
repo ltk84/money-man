@@ -279,6 +279,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               ),
                             ),
                           MoneySymbolFormatter(
+                            checkOverflow: false,
                             text: currentTransaction.amount,
                             currencyId: widget.wallet.currencyID,
                             textStyle: TextStyle(
@@ -449,26 +450,96 @@ class _TransactionDetailState extends State<TransactionDetail> {
             SizedBox(
               height: 10,
             ),
-            // Này là để hiện budget đã có hoặc tùy chọn thêm budget
-            StreamBuilder<List<Budget>>(
-                stream: firestore.budgetTransactionStream(
-                    currentTransaction, widget.wallet.id),
-                builder: (context, snapshot) {
-                  List<Budget> budgets = snapshot.data ?? [];
-                  print('Nafy la in tu transaction detail');
-                  budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
-                  for (int i = 0; i < budgets.length; i++) {
-                    if (budgets[i]
-                        .endDate
-                        .add(Duration(days: 1))
-                        .isBefore(DateTime.now())) {
-                      budgets.removeAt(i);
-                      i--;
+            if (widget.currentTransaction.category.type != 'debt & loan')
+              // Này là để hiện budget đã có hoặc tùy chọn thêm budget
+              StreamBuilder<List<Budget>>(
+                  stream: firestore.budgetTransactionStream(
+                      currentTransaction, widget.wallet.id),
+                  builder: (context, snapshot) {
+                    List<Budget> budgets = snapshot.data ?? [];
+                    print('Nafy la in tu transaction detail');
+                    budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
+                    for (int i = 0; i < budgets.length; i++) {
+                      if (budgets[i]
+                          .endDate
+                          .add(Duration(days: 1))
+                          .isBefore(DateTime.now())) {
+                        budgets.removeAt(i);
+                        i--;
+                      }
                     }
-                  }
 
-                  // Nếu không có budgets nào có categories trùng với transaction hiển thị tùy chọn thêm transaction
-                  if (budgets.length == 0)
+                    // Nếu không có budgets nào có categories trùng với transaction hiển thị tùy chọn thêm transaction
+                    if (budgets.length == 0)
+                      return Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.only(top: 15, bottom: 10),
+                              child: Text('Budget',
+                                  style: TextStyle(
+                                      color: Style.foregroundColor,
+                                      fontSize: 25,
+                                      fontFamily: Style.fontFamily,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                            Text(
+                              'This transaction is not within a budget, but it should be within a budget so you can better manage your finances.',
+                              style: TextStyle(
+                                color: Style.foregroundColor.withOpacity(0.7),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: Style.fontFamily,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Center(
+                              child: GestureDetector(
+                                onTap: () async {
+                                  await showCupertinoModalBottomSheet(
+                                      isDismissible: true,
+                                      backgroundColor: Style.boxBackgroundColor,
+                                      context: context,
+                                      builder: (context) => AddBudget(
+                                            wallet: widget.wallet,
+                                            myCategory:
+                                                currentTransaction.category,
+                                          ));
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  margin: EdgeInsets.symmetric(horizontal: 15),
+                                  //width: 300,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Style.primaryColor,
+                                        width: 1.5,
+                                      ),
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: Text(
+                                    "Add budget for this transaction",
+                                    style: TextStyle(
+                                        color: Style.primaryColor,
+                                        fontSize: 16,
+                                        fontFamily: Style.fontFamily,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 45,
+                            ),
+                          ],
+                        ),
+                      );
+
                     return Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
@@ -484,7 +555,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                     fontWeight: FontWeight.w500)),
                           ),
                           Text(
-                            'This transaction is not within a budget, but it should be within a budget so you can better manage your finances.',
+                            'This transaction belongs to the following budget(s)',
                             style: TextStyle(
                               color: Style.foregroundColor.withOpacity(0.7),
                               fontSize: 15,
@@ -493,95 +564,26 @@ class _TransactionDetailState extends State<TransactionDetail> {
                             ),
                           ),
                           SizedBox(
-                            height: 25,
+                            height: 15,
                           ),
-                          Center(
-                            child: GestureDetector(
-                              onTap: () async {
-                                await showCupertinoModalBottomSheet(
-                                    isDismissible: true,
-                                    backgroundColor: Style.boxBackgroundColor,
-                                    context: context,
-                                    builder: (context) => AddBudget(
-                                          wallet: widget.wallet,
-                                          myCategory:
-                                              currentTransaction.category,
-                                        ));
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                                margin: EdgeInsets.symmetric(horizontal: 15),
-                                //width: 300,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Style.primaryColor,
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12)),
-                                child: Text(
-                                  "Add budget for this transaction",
-                                  style: TextStyle(
-                                      color: Style.primaryColor,
-                                      fontSize: 16,
-                                      fontFamily: Style.fontFamily,
-                                      fontWeight: FontWeight.w600),
-                                ),
+                          Container(
+                            height: MediaQuery.of(context).size.height - 450,
+                            child: ListView.builder(
+                              itemCount: budgets == null ? 0 : budgets.length,
+                              itemBuilder: (context, index) => Column(
+                                children: [
+                                  MyBudgetTile(
+                                    budget: budgets[index],
+                                    wallet: widget.wallet,
+                                  )
+                                ],
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 45,
                           ),
                         ],
                       ),
                     );
-
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(top: 15, bottom: 10),
-                          child: Text('Budget',
-                              style: TextStyle(
-                                  color: Style.foregroundColor,
-                                  fontSize: 25,
-                                  fontFamily: Style.fontFamily,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                        Text(
-                          'This transaction belongs to the following budget(s)',
-                          style: TextStyle(
-                            color: Style.foregroundColor.withOpacity(0.7),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: Style.fontFamily,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          height: MediaQuery.of(context).size.height - 450,
-                          child: ListView.builder(
-                            itemCount: budgets == null ? 0 : budgets.length,
-                            itemBuilder: (context, index) => Column(
-                              children: [
-                                MyBudgetTile(
-                                  budget: budgets[index],
-                                  wallet: widget.wallet,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                })
+                  })
           ],
         ),
       ),

@@ -316,6 +316,7 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                               ),
                                             ),
                                             MoneySymbolFormatter(
+                                              checkOverflow: true,
                                               text: openingBalance,
                                               currencyId: wallet.currencyID,
                                               textStyle: TextStyle(
@@ -343,6 +344,7 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                               ),
                                             ),
                                             MoneySymbolFormatter(
+                                              checkOverflow: true,
                                               text: closingBalance,
                                               currencyId: wallet.currencyID,
                                               textStyle: TextStyle(
@@ -462,6 +464,7 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                             textAlign: TextAlign.start,
                                           ),
                                           MoneySymbolFormatter(
+                                            checkOverflow: true,
                                             text: income,
                                             currencyId: wallet.currencyID,
                                             textStyle: TextStyle(
@@ -526,6 +529,7 @@ class _ReportForThisPeriodScreen extends State<ReportForThisPeriodScreen>
                                           textAlign: TextAlign.start,
                                         ),
                                         MoneySymbolFormatter(
+                                          checkOverflow: true,
                                           text: expense,
                                           currencyId: wallet.currencyID,
                                           textStyle: TextStyle(

@@ -82,6 +82,20 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 30),
                           alignment: Alignment.centerRight,
                           child: Text(
+                            userInput.length.toString() + '/12',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Style.calculatorForegroundColor.withOpacity(0.24),
+                              fontFamily: Style.fontFamily,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 2,),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          alignment: Alignment.centerRight,
+                          child: Text(
                             userInputFormat,
                             style: TextStyle(
                               fontSize: 25,
@@ -97,7 +111,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                             answerFormat,
                             style: TextStyle(
                                 fontFamily: Style.fontFamily,
-                                fontSize: 40,
+                                fontSize: 35,
                                 color: Style.calculatorForegroundColor,
                                 fontWeight: FontWeight.w700),
                           ),
@@ -243,14 +257,21 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
 
   // tính toán phép tính
   void equalPressed() {
-    String finaluserinput = userInput;
-    if (finaluserinput.isEmpty) return;
+    // Kiểm tra xem ký tự cuối cùng có phải là dấu hay không.
+    var sign = ['+', '-', '*', '/',];
+    sign.forEach((element) {
+      if (userInput.endsWith(element))
+        userInput = userInput.substring(0, userInput.length - 1);
+    });
+    
+    String finalUserInput = userInput;
+    if (finalUserInput.isEmpty) return;
 
     Parser p = Parser();
-    Expression exp = p.parse(finaluserinput);
+    Expression exp = p.parse(finalUserInput);
     ContextModel cm = ContextModel();
     double eval = exp.evaluate(EvaluationType.REAL, cm);
-    answer = eval.toString();
+    answer = eval.toStringAsFixed(0);
     setState(() {
       answerFormat = MoneyFormatter(amount: double.parse(answer))
           .output
@@ -260,6 +281,29 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
           .output
           .withoutFractionDigits;
     });
+  }
+
+  // Convert to formatter for displaying.
+  convertInput() {
+    final intRegex = RegExp(r'[+|\-|*|/]');
+    var listString =
+    intRegex.allMatches(userInput).map((m) => m.group(0)).toList();
+    var listNumber = userInput.split(intRegex);
+    String finalString = '';
+    for (var i = 0; i < listNumber.length; i++) {
+      if (listNumber[i] != '') {
+        var formatNumber =
+            MoneyFormatter(amount: double.tryParse(listNumber[i]))
+                .output
+                .withoutFractionDigits;
+        if (i != listNumber.length - 1) {
+          finalString += formatNumber + listString[i];
+        } else {
+          finalString += formatNumber;
+        }
+        userInputFormat = finalString;
+      }
+    }
   }
 
   // hàm xử lý khi nhấn nút
@@ -284,7 +328,9 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
         setState(() {
           userInput = userInput.substring(0, userInput.length - 1);
           userInputFormat = userInput;
+          //convertInput();
         });
+        convertInput();
       }
     }
 
@@ -298,7 +344,8 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
 
     // Nút 'Confirm'
     else if (index == 19) {
-      Navigator.pop(context, answer);
+      if (answer != null && answer != '')
+        Navigator.pop(context, answer);
     }
 
     // những nút khác
@@ -317,7 +364,10 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
         else
           input = buttons[index];
 
-        if (input == '.' && userInput.contains('.')) return;
+        // if (input == '.' && userInput.contains('.')) return;
+
+        if (input == '.')
+          return;
 
         if (sign.contains(input)) {
           for (var s in sign) {
@@ -333,7 +383,11 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
           }
         }
 
-        userInput += input;
+        if (userInput.length < 12)
+          userInput += input;
+
+        if (userInput.length > 12)
+          userInput = userInput.substring(0, 12);
 
         final intRegex = RegExp(r'[+|\-|*|/]');
         var listString =

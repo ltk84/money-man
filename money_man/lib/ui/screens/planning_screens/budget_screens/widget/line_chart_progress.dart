@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
@@ -268,7 +269,8 @@ class _LineChartsState extends State<LineCharts> {
                       // này là giá trị của các cột nè, val chạy từ 0 tới maxY
                       getTitles: (value) {
                         if (value == 0) return '0.0';
-                        return '${fomatMonney(value * maxOfY / 5)}';
+                        //return '${fomatMonney(value * maxOfY / 5)}';
+                        return MoneyFormatter(amount: (value * maxOfY / 5)).output.compactNonSymbol;
                       },
                     ),
                   ),

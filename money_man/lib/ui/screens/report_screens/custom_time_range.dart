@@ -70,7 +70,7 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
                     : () {
                         if (realBeginDate != null &&
                             realEndDate != null &&
-                            realBeginDate.compareTo(realEndDate) <= 0)
+                            realBeginDate.compareTo(realEndDate) < 0)
                           Navigator.of(context).pop(TimeRangeInfo(
                               description: 'Custom',
                               begin: realBeginDate,
@@ -234,7 +234,7 @@ class CustomTimeRangeState extends State<CustomTimeRange> {
       barrierColor: Style.backgroundColor.withOpacity(0.54),
       builder: (BuildContext context) {
         return CustomAlert(
-            content: "End date can't be before begin date,\nplease try again.");
+            content: "End date must be after begin date,\nplease try again.");
       },
     );
   }

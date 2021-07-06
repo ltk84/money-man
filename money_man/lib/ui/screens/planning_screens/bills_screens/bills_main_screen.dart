@@ -189,9 +189,12 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                     thisPeriod: thisPeriodBills.fold(
                         0, (value, element) => value + element['bill'].amount)),
                 SizedBox(height: 20.0),
-                buildListDue(firestore, overDueBills, 0), // Build hóa đơn quá hạn.
-                buildListDue(firestore, todayBills, 1), // Build hóa đơn vào hôm nay.
-                buildListDue(firestore, thisPeriodBills, 2), // Build hoa đơn kỳ kế tiếp.
+                buildListDue(
+                    firestore, overDueBills, 0), // Build hóa đơn quá hạn.
+                buildListDue(
+                    firestore, todayBills, 1), // Build hóa đơn vào hôm nay.
+                buildListDue(
+                    firestore, thisPeriodBills, 2), // Build hoa đơn kỳ kế tiếp.
               ],
             );
           }
@@ -313,7 +316,11 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                           color: Style.foregroundColor,
                         )),
                     if (info['bill'].note != null && info['bill'].note != '')
-                      Text(info['bill'].note,
+                      Text(
+                          info['bill'].note.toString().length >= 20
+                              ? info['bill'].note.toString().substring(0, 19) +
+                                  '...'
+                              : info['bill'].note,
                           style: TextStyle(
                             fontFamily: Style.fontFamily,
                             fontWeight: FontWeight.w400,
@@ -405,8 +412,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                           else
                             return !info['bill'].isFinished
                                 ? Color(0xFF4FCC5C)
-                                : Color(
-                                    0xFFcccccc);
+                                : Color(0xFFcccccc);
                         },
                       ),
                       foregroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -418,8 +424,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                           else
                             return !info['bill'].isFinished
                                 ? Style.foregroundColor
-                                : Style.foregroundColor.withOpacity(
-                                    0.8);
+                                : Style.foregroundColor.withOpacity(0.8);
                         },
                       ),
                     ),
@@ -442,6 +447,7 @@ class _BillsMainScreenState extends State<BillsMainScreen> {
                                 ),
                               ),
                               MoneySymbolFormatter(
+                                checkOverflow: true,
                                 text: info['bill'].amount,
                                 currencyId: widget.currentWallet.currencyID,
                                 textStyle: TextStyle(

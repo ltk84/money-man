@@ -1256,12 +1256,12 @@ class FirebaseFireStoreService {
       MyTransaction transaction = MyTransaction(
           id: 'id',
           amount: recurringTrans.amount,
+          note: recurringTrans.note,
           date: recurringTrans.repeatOption.beginDateTime,
           currencyID: wallet.currencyID,
           category: recurringTrans.category);
       transaction = await addTransaction(wallet, transaction);
       transactionIdList.add(transaction.id);
-      print(transactionIdList.length);
     }
     return transactionIdList;
   }

@@ -6,7 +6,6 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
-
 class CategoriesRecurringTransactionScreen extends StatefulWidget {
   final String walletId; // id của ví hiện tại
 
@@ -23,9 +22,6 @@ class _CategoriesRecurringTransactionScreenState
     with TickerProviderStateMixin {
   // list tab category
   final List<Tab> categoryTypeTab = [
-    Tab(
-      text: 'DEBT & LOAN',
-    ),
     Tab(
       text: 'EXPENSE',
     ),
@@ -72,7 +68,7 @@ class _CategoriesRecurringTransactionScreenState
   void initState() {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
-    _tabController = TabController(length: 3, vsync: this, initialIndex: 1);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -84,7 +80,7 @@ class _CategoriesRecurringTransactionScreenState
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         backgroundColor: Style.backgroundColor,
         //extendBodyBehindAppBar: true,
