@@ -311,9 +311,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       await showAlertDialog(result);
     }
     // tắt màn hình loading
-    setState(() {
-      loading = false;
-    });
+    if (this.mounted)
+      setState(() {
+        loading = false;
+      });
   }
 
   Future signInWithGoogleAccount() async {
@@ -328,9 +329,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       await showAlertDialog(res);
     }
     // tắt màn hình loading
-    setState(() {
-      loading = false;
-    });
+    if (this.mounted)
+      setState(() {
+        loading = false;
+      });
   }
 
   Future _signUpWithEmailAndPassword(
@@ -347,9 +349,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         showAlertDialog(res);
       }
       // tắt màn hình loading
-      setState(() {
-        loading = false;
-      });
+      if (this.mounted)
+        setState(() {
+          loading = false;
+        });
     }
   }
 

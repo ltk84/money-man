@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:provider/provider.dart';
 
 // Màn hình cài đặt
 class SettingScreen extends StatefulWidget {
@@ -13,6 +15,8 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
+    final firestore =
+        Provider.of<FirebaseFireStoreService>(context, listen: false);
     return Scaffold(
       backgroundColor: Style.backgroundColor,
       appBar: AppBar(
@@ -87,6 +91,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       // Gọi hàm thay đổi ở Style
                       Style.changeTheme(result);
                     });
+                    await firestore.setTheme(result);
                   }
                 }
               },
@@ -157,7 +162,7 @@ class ThemeSettingDialog extends StatelessWidget {
             ),
             // Theme đen thui thùi lùi
             ListTile(
-              onTap: () {
+              onTap: () async {
                 Navigator.of(context).pop(0);
               },
               dense: true,
@@ -178,7 +183,7 @@ class ThemeSettingDialog extends StatelessWidget {
             ),
             // Theme trắng bốc
             ListTile(
-              onTap: () {
+              onTap: () async {
                 Navigator.of(context).pop(1);
               },
               dense: true,
@@ -199,7 +204,7 @@ class ThemeSettingDialog extends StatelessWidget {
             ),
             // Theme siêu hài hòa đẹp đẽ của thế :v
             ListTile(
-              onTap: () {
+              onTap: () async {
                 Navigator.of(context).pop(2);
               },
               dense: true,
