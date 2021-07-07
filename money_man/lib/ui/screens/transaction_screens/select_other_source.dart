@@ -9,10 +9,15 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class SelectOtherSourceScreen extends StatelessWidget {
+  // biến dòng chữ ở đầu
   final String title;
+  // biến dòng chữ ở cuối
   final String titleAtEnd;
+  // biến điều kiện để lọc lấy từ database
   final String criteria;
+  // biến ví hiện tại
   final Wallet wallet;
+
   const SelectOtherSourceScreen({
     Key key,
     @required this.title,
@@ -41,35 +46,37 @@ class SelectOtherSourceScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: ListView(
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          children: [
-        SizedBox(
-          height: 30,
+      body: ListView(children: [
+        Container(
+          margin: EdgeInsets.only(top: 30),
+          child: OtherSourceListView(
+            criteria: criteria,
+            wallet: wallet,
+          ),
         ),
-        OtherSourceListView(
-          criteria: criteria,
-          wallet: wallet,
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        ListTile(
-          onTap: () {
-            Navigator.pop(context, 0);
-          },
-          leading: Icon(
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: ListTile(
+            onTap: () {
+              Navigator.pop(context, 0);
+            },
+            leading: Icon(
               Icons.money,
               color: Style.foregroundColor.withOpacity(0.54),
             ),
-          title: Text(
-            titleAtEnd,
-            style: TextStyle(
-                color: Colors.black
+            title: Text(
+              titleAtEnd,
+              style: TextStyle(
+                fontFamily: Style.fontFamily,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w600,
+                color: Style.foregroundColor,
+              ),
             ),
-          ),
-          trailing: Icon(
-              Icons.chevron_right
+            trailing: Icon(
+              Icons.chevron_right,
+              color: Style.foregroundColor,
+            ),
           ),
         )
       ]),
@@ -88,14 +95,18 @@ class OtherSourceListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return FutureBuilder<List<MyTransaction>>(
-        future: _firestore.getListOfTransactionWithCriteria(criteria, wallet.id),
+        future:
+            // lấy danh sách các transaction với điều kiện
+            firestore.getListOfTransactionWithCriteria(criteria, wallet.id),
         builder: (context, AsyncSnapshot<List<MyTransaction>> snapshot) {
           List<MyTransaction> transList = snapshot.data ?? [];
           print(snapshot.hasData);
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return CircularProgressIndicator(
+                // color: Style.primaryColor,
+                );
           } else {
             return ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
@@ -105,7 +116,6 @@ class OtherSourceListView extends StatelessWidget {
                   MyTransaction trans = transList[index];
                   return Container(
                     decoration: BoxDecoration(
-                        //color: Style.boxBackgroundColor,
                         border: Border(
                             top: BorderSide(
                               width: 0.5,
@@ -114,9 +124,7 @@ class OtherSourceListView extends StatelessWidget {
                             bottom: BorderSide(
                               width: 0.5,
                               color: Style.foregroundColor.withOpacity(0.12),
-                            )
-                        )
-                    ),
+                            ))),
                     child: ListTile(
                       tileColor: Style.boxBackgroundColor,
                       minVerticalPadding: 20,
@@ -124,15 +132,13 @@ class OtherSourceListView extends StatelessWidget {
                       onTap: () {
                         Navigator.pop(context, trans);
                       },
-                      leading:
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SuperIcon(
-                                  iconPath: trans.category.iconID, size: 45.0
-                              ),
-                            ],
-                          ),
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SuperIcon(
+                              iconPath: trans.category.iconID, size: 45.0),
+                        ],
+                      ),
                       title: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,25 +146,30 @@ class OtherSourceListView extends StatelessWidget {
                           Text(
                             trans.category.name,
                             style: TextStyle(
-                                color: Style.foregroundColor,
-                                fontSize: 18.0,
-                                fontFamily: Style.fontFamily,
-                                fontWeight: FontWeight.w700,
+                              color: Style.foregroundColor,
+                              fontSize: 18.0,
+                              fontFamily: Style.fontFamily,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           if (trans.note != null && trans.note != '')
                             Column(
                               children: [
                                 Text(
-                                  trans.note,
+                                  trans.note.length >= 20
+                                      ? trans.note.substring(0, 19) + '...'
+                                      : trans.note,
                                   style: TextStyle(
-                                      color: Style.foregroundColor.withOpacity(0.54),
-                                      fontFamily: Style.fontFamily,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12.0,
+                                    color:
+                                        Style.foregroundColor.withOpacity(0.54),
+                                    fontFamily: Style.fontFamily,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12.0,
                                   ),
                                 ),
-                                SizedBox(height: 4,),
+                                SizedBox(
+                                  height: 4,
+                                ),
                               ],
                             ),
                         ],
@@ -168,55 +179,48 @@ class OtherSourceListView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           RichText(
-                              text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: criteria == 'Debt'
-                                          ? 'from '
-                                          : 'to ',
-                                      style: TextStyle(
-                                        fontFamily: Style.fontFamily,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0,
-                                        color: Style.foregroundColor.withOpacity(0.54),
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: trans.contact ?? 'someone',
-                                      style: TextStyle(
-                                        fontFamily: Style.fontFamily,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14.0,
-                                        color: Style.foregroundColor,
-                                      ),
-                                    )
-                                  ]
-                              )
-                          ),
+                              text: TextSpan(children: [
+                            TextSpan(
+                              text: criteria == 'Debt' ? 'from ' : 'to ',
+                              style: TextStyle(
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12.0,
+                                color: Style.foregroundColor.withOpacity(0.54),
+                              ),
+                            ),
+                            TextSpan(
+                              text: trans.contact ?? 'someone',
+                              style: TextStyle(
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.0,
+                                color: Style.foregroundColor,
+                              ),
+                            )
+                          ])),
                           RichText(
-                              text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'on ',
-                                      style: TextStyle(
-                                        fontFamily: Style.fontFamily,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0,
-                                        color: Style.foregroundColor.withOpacity(0.54),
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: DateFormat('EEEE, dd MMMM yyyy').format(trans.date),
-                                      style: TextStyle(
-                                        fontFamily: Style.fontFamily,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14.0,
-                                        color: Style.foregroundColor,
-                                      ),
-                                    )
-                                  ]
-                              )
-                          ),
+                              text: TextSpan(children: [
+                            TextSpan(
+                              text: 'on ',
+                              style: TextStyle(
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12.0,
+                                color: Style.foregroundColor.withOpacity(0.54),
+                              ),
+                            ),
+                            TextSpan(
+                              text: DateFormat('EEEE, dd MMMM yyyy')
+                                  .format(trans.date),
+                              style: TextStyle(
+                                fontFamily: Style.fontFamily,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.0,
+                                color: Style.foregroundColor,
+                              ),
+                            )
+                          ])),
                         ],
                       ),
                       trailing: Column(
@@ -230,18 +234,17 @@ class OtherSourceListView extends StatelessWidget {
                                 fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14.0,
-                                color: criteria == 'Debt' ? Style.incomeColor2 : Style.expenseColor,
-                              )
-                          ),
-                          Text(
-                              ' left',
+                                color: criteria == 'Debt'
+                                    ? Style.incomeColor2
+                                    : Style.expenseColor,
+                              )),
+                          Text(' left',
                               style: TextStyle(
                                 fontFamily: Style.fontFamily,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14.0,
                                 color: Style.foregroundColor.withOpacity(0.54),
-                              )
-                          ),
+                              )),
                           MoneySymbolFormatter(
                               text: trans.extraAmountInfo,
                               currencyId: wallet.currencyID,
@@ -250,8 +253,7 @@ class OtherSourceListView extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14.0,
                                 color: Style.foregroundColor,
-                              )
-                          ),
+                              )),
                         ],
                       ),
                     ),

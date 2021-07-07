@@ -6,6 +6,7 @@ import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
+// màn hình hiển thị các category có thể áp dụng cho bill
 class CategoriesBillScreen extends StatefulWidget {
   @override
   _CategoriesBillScreenState createState() => _CategoriesBillScreenState();
@@ -118,7 +119,9 @@ class _CategoriesBillScreenState extends State<CategoriesBillScreen>
         body: StreamBuilder<List<MyCategory>>(
             stream: _firestore.categoryStream,
             builder: (context, snapshot) {
+              //danh sách các category được lấy từ database
               final _listCategories = snapshot.data ?? [];
+              // chọn các category thuộc loại expense có thể áp dụng cho bill.
               final _selectCateTab = _listCategories
                   .where((element) => element.type == 'expense')
                   .toList();

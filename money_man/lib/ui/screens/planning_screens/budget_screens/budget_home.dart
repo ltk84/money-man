@@ -7,15 +7,14 @@ import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/wallet_selection_screens/wallet_selection.dart';
 import 'package:money_man/ui/style.dart';
-//ui/screens/planning_screens/budget_screen/budget_home.dart
 import 'package:provider/provider.dart';
-
 import 'add_budget.dart';
 import 'applied_budget.dart';
 import 'current_applied_budget.dart';
 
+//Giao diện chính của budget
 class BudgetScreen extends StatefulWidget {
-  Wallet crrWallet;
+  Wallet crrWallet; // Truyền vào ví hiện tại, đỡ sử dụng stream builder
   BudgetScreen({Key key, this.crrWallet}) : super(key: key);
 
   @override
@@ -27,13 +26,14 @@ class _BudgetScreenState extends State<BudgetScreen>
   TabController _tabController;
   @override
   void initState() {
-    // TODO: implement initState
+    // Khởi tạo trạng thái
     super.initState();
     _tabController = new TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
   @override
   Widget build(BuildContext context) {
+    // tham chiếu đến các hàm của firestore
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -44,6 +44,7 @@ class _BudgetScreenState extends State<BudgetScreen>
             appBar: AppBar(
               backgroundColor: Style.appBarColor,
               leading: MaterialButton(
+                  // Trở về
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -61,8 +62,9 @@ class _BudgetScreenState extends State<BudgetScreen>
               centerTitle: true,
               actions: [
                 GestureDetector(
-                  onTap: () async {
-                    await buildShowDialog(context, widget.crrWallet.id);
+                  // Chọn ví
+                  onTap: () {
+                    buildShowDialog(context, widget.crrWallet.id);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -129,6 +131,7 @@ class _BudgetScreenState extends State<BudgetScreen>
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
             floatingActionButton: FloatingActionButton(
+              // Thực hiện thêm budget
               onPressed: () async {
                 await showCupertinoModalBottomSheet(
                     isDismissible: true,
@@ -148,6 +151,7 @@ class _BudgetScreenState extends State<BudgetScreen>
             body: Container(
               color: Style.backgroundColor,
               padding: EdgeInsets.only(top: 15),
+              // Stream để lấy ví hiện tại???
               child: StreamBuilder<Object>(
                   stream: _firestore.currentWallet,
                   builder: (context, snapshot) {
@@ -173,6 +177,7 @@ class _BudgetScreenState extends State<BudgetScreen>
         ));
   }
 
+// Này là dialoge để chọn ví
   void buildShowDialog(BuildContext context, String id) async {
     final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
     final _firestore =

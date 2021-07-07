@@ -11,41 +11,37 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/select_time
 import 'package:money_man/ui/screens/planning_screens/budget_screens/time_range.dart';
 import 'package:money_man/ui/screens/shared_screens/enter_amount_screen.dart';
 import 'package:money_man/ui/style.dart';
-import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:provider/provider.dart';
 
+// Đây là màn hình edit budget, khi ấn edit từ budget detail
 class EditBudget extends StatefulWidget {
-  EditBudget({this.tabController, Key key, this.budget, this.wallet})
-      : super(key: key);
+  EditBudget({Key key, this.budget, this.wallet}) : super(key: key);
   @override
   _AddBudgetState createState() => _AddBudgetState();
-  TabController tabController;
-  Budget budget;
-  Wallet wallet;
+  Budget budget; // truyền vào budget hiện tại cần chỉnh sửa
+  Wallet wallet; // truyền vào ví của budget đó
 }
 
 class _AddBudgetState extends State<EditBudget> {
-  Budget _budget;
+  Budget _budget; // lưu trữ sao lưu budget
 
-  BudgetTimeRange mTimeRange;
+  BudgetTimeRange mTimeRange; // lưu trữ khoảng thời gian
 
-  double amount;
+  double amount; // Lưu trữ dự tính chi tiêu
 
-  MyCategory cate;
+  MyCategory cate; // Lưu trữ nhóm chi tiêu
 
-  Wallet selectedWallet;
-
-  String note;
-
-  String currencySymbol;
+  Wallet selectedWallet; // Lưu trữ ví
 
   @override
   Widget build(BuildContext context) {
     _budget = this.widget.budget;
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+
     if (mTimeRange == null)
       mTimeRange = new BudgetTimeRange(
           beginDay: _budget.beginDate, endDay: _budget.endDate);
+    // Mặc định không lặp lại cho budget loại CUSTOM
     if (mTimeRange.getBudgetLabel() == 'Custom') _budget.isRepeat = false;
 
     return Theme(
@@ -70,6 +66,7 @@ class _AddBudgetState extends State<EditBudget> {
           ),
           actions: [
             GestureDetector(
+              // Lưu thay đổi
               onTap: () async {
                 await _firestore.updateBudget(_budget, widget.wallet);
                 Navigator.pop(context);
@@ -83,7 +80,7 @@ class _AddBudgetState extends State<EditBudget> {
                       fontFamily: Style.fontFamily,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600,
-                      color: Style.successColor,
+                      color: Style.foregroundColor,
                     ),
                   )),
             ),
@@ -103,6 +100,7 @@ class _AddBudgetState extends State<EditBudget> {
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
+                  // Chọn nhóm
                   onTap: () async {
                     final selectCate = await showCupertinoModalBottomSheet(
                         isDismissible: true,
@@ -193,6 +191,7 @@ class _AddBudgetState extends State<EditBudget> {
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
+                  // nhập sóo tiền
                   onTap: () async {
                     final resultAmount = await Navigator.push(context,
                         MaterialPageRoute(builder: (_) => EnterAmountScreen()));
@@ -272,6 +271,7 @@ class _AddBudgetState extends State<EditBudget> {
                     borderRadius: BorderRadius.circular(17)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListTile(
+                  //Chọn khoảng thời gian
                   onTap: () async {
                     var resultAmount = await showCupertinoModalBottomSheet(
                         isDismissible: true,
@@ -429,6 +429,7 @@ class _AddBudgetState extends State<EditBudget> {
                 padding: EdgeInsets.only(right: 15),
                 child: GestureDetector(
                   onTap: () {
+                    // tùy chỉnh lặp lại
                     setState(() {
                       _budget.isRepeat = !_budget.isRepeat;
                     });
@@ -476,17 +477,6 @@ class _AddBudgetState extends State<EditBudget> {
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _showAlertDialog(String content) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      barrierColor: Style.backgroundColor.withOpacity(0.54),
-      builder: (BuildContext context) {
-        return CustomAlert(content: content);
-      },
     );
   }
 }

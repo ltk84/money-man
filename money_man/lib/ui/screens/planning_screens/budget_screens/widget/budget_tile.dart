@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
@@ -11,9 +9,12 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../budget_detail.dart';
 
+// Này là mấy cái thẻ để hiển thị thông tin các budget trong màn hình budget home
 class MyBudgetTile extends StatefulWidget {
   const MyBudgetTile({Key key, this.budget, this.wallet}) : super(key: key);
+  // Budget cho thẻ hiện tại
   final Budget budget;
+  // Ví cho budget của thẻ hiện tại
   final Wallet wallet;
 
   @override
@@ -23,14 +24,27 @@ class MyBudgetTile extends StatefulWidget {
 class _MyBudgetTileState extends State<MyBudgetTile> {
   @override
   Widget build(BuildContext context) {
+    // THời gian ngày hôm nay
     DateTime today = DateTime.now();
-    var todayRate = today.difference(widget.budget.beginDate).inDays /
-        widget.budget.endDate.difference(widget.budget.beginDate).inDays;
+    // Biến todayRate để hiển thị tỉ lệ ngày hôm nay so với tổng thể của budget
+    var todayRate = DateTime.now()
+            .difference(widget.budget.beginDate)
+            .inMicroseconds /
+        widget.budget.endDate
+            // Cộng thêm 1 ngày vì nếu  là ngày hôm nay rồi thì vẫn là cộng thôi :v
+            .add(Duration(days: 1))
+            .difference(widget.budget.beginDate)
+            .inMicroseconds;
+    // todayTarget là tỉ lệ số tiền đã chi so với mức đề ra
     var todayTarget = widget.budget.spent / widget.budget.amount;
+    // biến này để sử dụng các hàm firestore
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    //update để tính toán spent nè :3
     _firestore.updateBudget(widget.budget, widget.wallet);
+    // Nếu nó là ở chế độ lặp lại và nó đã kết thúc thì tắt lặp lại, tạo cái mới :3 cái mới có ngày bắt đầu = ngày cuối + 1, ngày cuối = ngày cuối + tổng ngày ban đầu
     if (widget.budget.isRepeat &&
         widget.budget.endDate.add(Duration(days: 1)).isBefore(today)) {
+      // Tạo một budget mới nè :3
       Budget newBudget = new Budget(
           id: 'id',
           category: widget.budget.category,
@@ -44,14 +58,18 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
           isRepeat: widget.budget.isRepeat);
       Budget temp = widget.budget;
       temp.isRepeat = false;
+      // update budget ban đầu
       _firestore.updateBudget(temp, widget.wallet);
+      // thêm budget mới nè :v
       _firestore.addBudget(newBudget, widget.wallet);
     }
 
+// này để lấy mô tả khoảng thời gian cho budget
     widget.budget.label = getBudgetLabel(widget.budget);
 
     return Center(
       child: GestureDetector(
+        // Nếu ấn vào thì xem chi tiết thôi :3
         onTap: () async {
           Wallet wallet =
               await _firestore.getWalletByID(widget.budget.walletId);
@@ -70,7 +88,6 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
             color: Style.boxBackgroundColor,
           ),
           width: MediaQuery.of(context).size.width,
-          //height: 140,
           margin: EdgeInsets.only(bottom: 15),
           padding: EdgeInsets.only(bottom: 10),
           child: Column(
@@ -150,6 +167,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               MoneySymbolFormatter(
+                                checkOverflow: true,
                                 text: this.widget.budget.amount,
                                 currencyId: widget.wallet.currencyID,
                                 textStyle: TextStyle(
@@ -166,6 +184,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
+                                    // todaytarget > 1 là spent lớn hơn amount rồi đó :3
                                     todayTarget > 1
                                         ? 'Over spent: '
                                         : 'Remain: ',
@@ -178,6 +197,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                                     ),
                                   ),
                                   MoneySymbolFormatter(
+                                    checkOverflow: true,
                                     text: (this.widget.budget.spent -
                                             this.widget.budget.amount)
                                         .abs(),
@@ -198,6 +218,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                   ),
                 ],
               ),
+              // này là cái để đưa ra cái chỉ khoảng tiền chi tiêu nè :3 cái progress bar đó
               Container(
                 padding: EdgeInsets.fromLTRB(60, 8, 15, 0),
                 child: ClipRRect(
@@ -221,6 +242,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
               SizedBox(
                 height: 5,
               ),
+              // Nếu chưa kết thúc thì hiển thị cái chỉ ngày, nếu rồi hoặc chưa bắt đầu thì không hiển thị cái đó
               widget.budget.beginDate.isAfter(today) ||
                       today
                           .isAfter(widget.budget.endDate.add(Duration(days: 1)))
@@ -231,9 +253,6 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                               (MediaQuery.of(context).size.width - 120) *
                                   todayRate),
                       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                      // height: 20,
-                      // width: 40,
-                      //alignment: Alignment.center,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           color: Style.boxBackgroundColor2),
@@ -254,14 +273,20 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
     );
   }
 
+// Hàm này lấy budget nè
   String getBudgetLabel(Budget budget) {
+    // lấy ngày hôm nay nè
     DateTime today = DateTime.now();
+    // ngày bắt đầu nè
     DateTime begin = budget.beginDate;
+    // ngày kết thúc nè
     DateTime end = budget.endDate;
+    // Nếu ngày bắt đầu là thứ 2 kết thúc là thứ 7 và ngày hiện tại nằm giữa 2 thời gian đó thì nó là tuần này
     if (end.weekday == 7 &&
         begin.weekday == 1 &&
         begin.isBefore(today.add(Duration(days: 1))) &&
         end.isAfter(today.subtract(Duration(days: 1)))) return 'This week';
+    // Nếu ngày bắt đầu là ngày đầu tiên của tháng, kết thúc là ngày cuối của tháng (lấy bằng cách trừ đi 1 ngày kể từ ngày đầu tiên của tháng sau) và cũng nằm giữa thì là tháng này
     if (begin.day == 1 &&
         end.day ==
             DateTime(begin.year, begin.month + 1, 1)
@@ -269,9 +294,10 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
                 .day &&
         end.month == today.month &&
         begin.month == end.month &&
-        begin.isBefore(today) &&
-        end.isAfter(today)) return 'This month';
+        begin.compareTo(today) <= 0 &&
+        end.add(Duration(days: 1)).compareTo(today) >= 0) return 'This month';
     var temp = DateTime(today.year, today.month + 1, today.day);
+    // tương tự nhưng nếu + 1 tháng cho nó thì là tháng sau rồi :3
     if (begin.day == 1 &&
         end.day ==
             DateTime(begin.year, begin.month + 1, 1)
@@ -280,14 +306,14 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
         end.month == temp.month &&
         begin.isBefore(temp) &&
         end.isAfter(temp)) return 'Next month';
-
+// Về quý thì theo công thức đó, cũng làm tương tự
     double quarterNumber = (today.month - 1) / 3 + 3;
     DateTime firstDayOfQuarter =
         new DateTime(today.year, quarterNumber.toInt(), 1);
     final endDayOfQuarter =
         new DateTime(today.year, quarterNumber.toInt() + 3, 1)
             .subtract(Duration(days: 1));
-
+// Tương tự ở trên
     if (begin.compareTo(firstDayOfQuarter) == 0 &&
         end.compareTo(endDayOfQuarter) == 0) return 'This quarter';
 
@@ -306,6 +332,7 @@ class _MyBudgetTileState extends State<MyBudgetTile> {
     if (begin.compareTo(DateTime(today.year + 1, 1, 1)) == 0 &&
         end.compareTo(DateTime(today.year + 1, 12, 31)) == 0)
       return 'Next year';
+    // nếu không phải trường hợp nào thì nó là CUSTOM
     return 'Custom';
   }
 }

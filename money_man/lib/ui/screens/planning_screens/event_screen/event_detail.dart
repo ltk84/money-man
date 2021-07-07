@@ -10,8 +10,9 @@ import 'package:money_man/ui/screens/planning_screens/event_screen/list_transact
 import 'package:money_man/ui/style.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/src/intl/date_format.dart';
+import 'package:intl/intl.dart';
 
+// Màn hình detail của event
 class EventDetailScreen extends StatefulWidget {
   Event currentEvent;
   Wallet eventWallet;
@@ -25,10 +26,13 @@ class EventDetailScreen extends StatefulWidget {
 
 class _EventDetailScreen extends State<EventDetailScreen>
     with TickerProviderStateMixin {
+  // truyền vào event hiện tại
   Event _currentEvent;
+  // Truyền vào ví của event
   Wallet _eventWallet;
   @override
   void initState() {
+    // truyền giá trị cho các biến khi vừa được khởi tạo
     _currentEvent = widget.currentEvent;
     _eventWallet = widget.eventWallet;
     super.initState();
@@ -36,6 +40,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
 
   @override
   void didUpdateWidget(covariant EventDetailScreen oldWidget) {
+    // update giá trị của các biến khi có sự thay đổi
     _currentEvent = widget.currentEvent;
     _eventWallet = widget.eventWallet;
     super.didUpdateWidget(oldWidget);
@@ -43,6 +48,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Tham chiếu đến các hàm firestore
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
       backgroundColor: Style.backgroundColor,
@@ -51,7 +57,9 @@ class _EventDetailScreen extends State<EventDetailScreen>
         centerTitle: true,
         title: Text('Event',
             style: TextStyle(
-              fontFamily: 'Montserrat',
+              fontFamily: Style.fontFamily,
+              fontSize: 17.0,
+              fontWeight: FontWeight.w600,
               color: Style.foregroundColor,
             )),
         backgroundColor: Style.appBarColor,
@@ -63,17 +71,18 @@ class _EventDetailScreen extends State<EventDetailScreen>
         ),
         actions: <Widget>[
           IconButton(
+            // chỉnh sửa event
             onPressed: () async {
-              final updatedTrans = await showCupertinoModalBottomSheet(
-                  isDismissible: false,
-                  enableDrag: false,
-                  context: context,
-                  builder: (context) =>EditEventScreen(
-                    currentEvent: _currentEvent,
-                    eventWallet: _eventWallet,
-                  )
-              );
-              if (updatedTrans != null) setState(() {});
+              final updatedEvent = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => EditEventScreen(
+                        currentEvent: _currentEvent,
+                        eventWallet: _eventWallet,
+                      )));
+              if (updatedEvent != null)
+                setState(() {
+                });
             },
             icon: Icon(
               Icons.edit,
@@ -87,6 +96,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                 color: Style.foregroundColor,
               ),
               iconSize: 25,
+              // Xóa event
               onPressed: () async {
                 if (_currentEvent.transactionIdList.length == 0) {
                   await showDialog(
@@ -98,7 +108,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                             'Do you want to delete this event?',
                             style: TextStyle(
                               color: Colors.red,
-                              fontFamily: 'Montserrat',
+                              fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -129,12 +139,13 @@ class _EventDetailScreen extends State<EventDetailScreen>
                   });
                   final delete = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (_) => DeleteEventScreen(
-                                currentEvent: _currentEvent,
-                                eventWallet: _eventWallet,
-                                count: _currentEvent.transactionIdList.length,
-                              )));
+                      PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: DeleteEventScreen(
+                            currentEvent: _currentEvent,
+                            eventWallet: _eventWallet,
+                            count: _currentEvent.transactionIdList.length,
+                          )));
                   if (delete != null) setState(() {});
                 }
               })
@@ -160,74 +171,71 @@ class _EventDetailScreen extends State<EventDetailScreen>
               child: Column(
                 children: [
                   ListTile(
+                    minLeadingWidth: 50,
                     dense: true,
                     leading: SuperIcon(
                       iconPath: _currentEvent.iconPath,
-                      size: 60.0,
+                      size: 45.0,
                     ),
                     title: Text(
                       _currentEvent.name,
                       style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 28,
-                        fontWeight: FontWeight.w500,
+                        fontFamily: Style.fontFamily,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
                         color: Style.foregroundColor.withOpacity(0.9),
                       ),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 70, top: 10),
+                    margin: EdgeInsets.only(left: 80, top: 0),
                     child: Divider(
                       color: Style.foregroundColor.withOpacity(0.12),
                       thickness: 0.5,
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 15),
-                    child: ListTile(
-                      dense: true,
-                      leading: SuperIcon(
+                  ListTile(
+                    minLeadingWidth: 50,
+                    dense: true,
+                    leading: Container(
+                      padding: EdgeInsets.only(left: 8),
+                      child: SuperIcon(
                         iconPath: 'assets/images/time.svg',
                         size: 30,
                       ),
-                      title: Container(
-                        padding: EdgeInsets.only(left: 5),
-                        child: Text(
-                            DateFormat('EEEE, dd-MM-yyyy')
-                                .format(_currentEvent.endDate),
-                            style: TextStyle(
-                              color: Style.foregroundColor.withOpacity(0.7),
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Montserrat',
-                            )),
-                      ),
                     ),
+                    title: Text(
+                        DateFormat('EEEE, dd-MM-yyyy')
+                            .format(_currentEvent.endDate),
+                        style: TextStyle(
+                            color: Style.foregroundColor.withOpacity(0.8),
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18.0)),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 70, top: 10),
+                    margin: EdgeInsets.only(left: 80, top: 0),
                     child: Divider(
                       color: Style.foregroundColor.withOpacity(0.12),
                       thickness: 0.5,
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 15),
-                    child: ListTile(
-                      dense: true,
-                      leading: SuperIcon(
+                  ListTile(
+                    minLeadingWidth: 50,
+                    dense: true,
+                    leading: Container(
+                      padding: EdgeInsets.only(left: 8),
+                      child: SuperIcon(
                         iconPath: _eventWallet.iconID,
                         size: 30.0,
                       ),
-                      title: Container(
-                        padding: EdgeInsets.only(left: 5),
-                        child: Text(_eventWallet.name,
-                            style: TextStyle(
-                                color: Style.foregroundColor.withOpacity(0.8),
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20.0)),
-                      ),
                     ),
+                    title: Text(_eventWallet.name,
+                        style: TextStyle(
+                            color: Style.foregroundColor.withOpacity(0.8),
+                            fontFamily: Style.fontFamily,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18.0)),
                   ),
                 ],
               ),
@@ -240,6 +248,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                 height: 40,
                 width: double.infinity,
                 child: TextButton(
+                  // Mark as finish hoặc mark as chưa finished
                   onPressed: () {
                     setState(() {
                       if (_currentEvent.autofinish &&
@@ -261,8 +270,9 @@ class _EventDetailScreen extends State<EventDetailScreen>
                         ? 'Mark not complete'
                         : 'Mark complete',
                     style: TextStyle(
+                      fontWeight: FontWeight.w600,
                       fontSize: 17,
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                     ),
                   ),
                   style: ButtonStyle(
@@ -270,20 +280,21 @@ class _EventDetailScreen extends State<EventDetailScreen>
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.white;
-                        return Colors.green; // Use the component's default.
+                        return Style
+                            .primaryColor; // Use the component's default.
                       },
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Colors.green;
+                          return Style.primaryColor;
                         return Colors.white; // Use the component's default.
                       },
                     ),
                   ),
                 )),
             SizedBox(
-              height: 8,
+              height: 10,
             ),
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -294,7 +305,7 @@ class _EventDetailScreen extends State<EventDetailScreen>
                     await Navigator.push(
                         context,
                         PageTransition(
-                            type: PageTransitionType.leftToRight,
+                            type: PageTransitionType.rightToLeft,
                             child: EventListTransactionScreen(
                               currentEvent: _currentEvent,
                               eventWallet: _eventWallet,
@@ -304,23 +315,25 @@ class _EventDetailScreen extends State<EventDetailScreen>
                   child: Text(
                     'Transaction of Event',
                     style: TextStyle(
+                      fontWeight: FontWeight.w600,
                       fontSize: 17,
-                      fontFamily: 'Montserrat',
+                      fontFamily: Style.fontFamily,
                     ),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Colors.white;
-                        return Colors.green; // Use the component's default.
+                          return Style.primaryColor;
+                        return Colors.white; // Use the component's default.
                       },
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Colors.green;
-                        return Colors.white; // Use the component's default.
+                          return Colors.white;
+                        return Style
+                            .primaryColor; // Use the component's default.
                       },
                     ),
                   ),

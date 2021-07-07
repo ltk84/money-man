@@ -1,19 +1,27 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:money_man/core/models/repeat_option_model.dart';
-
 import './category_model.dart';
 
 class Bill {
+  // id của bill
   String id;
+  // category của bill
   MyCategory category;
+  // số tiền của bill
   double amount;
+  // note của bill
   String note;
+  // id wallet của bill
   String walletId;
+  // danh sách các transaction của bill
   List<String> transactionIdList;
+  // tùy chọn lặp lại của bill
   RepeatOption repeatOption;
+  // biến xác định bill hoàn thành hay chưa?
   bool isFinished;
+  // danh sách các thời điểm hết hạn
   List<DateTime> dueDates;
+  // danh sách các thời điểm trả bill hết hạn
   List<DateTime> paidDueDates;
 
   Bill({
@@ -51,34 +59,35 @@ class Bill {
       amount: data['amount'],
       note: data['note'],
       walletId: data['walletId'],
-      transactionIdList: List<String>.from(
-          data['transactionIdList']?.map((x) => x)),
+      transactionIdList:
+          List<String>.from(data['transactionIdList']?.map((x) => x)),
       repeatOption: RepeatOption.fromMap(data['repeatOption']),
       isFinished: data['isFinished'],
-      dueDates: List<DateTime>.from(data['dueDates']?.map((x) =>
-          DateTime.tryParse(x.toDate().toString()))),
-      paidDueDates: List<DateTime>.from(data['paidDueDates']?.map((x) =>
-          DateTime.tryParse(x.toDate().toString()))),
+      dueDates: List<DateTime>.from(data['dueDates']
+          ?.map((x) => DateTime.tryParse(x.toDate().toString()))),
+      paidDueDates: List<DateTime>.from(data['paidDueDates']
+          ?.map((x) => DateTime.tryParse(x.toDate().toString()))),
     );
   }
 
-  void updateDueDate () {
+  // update các thời điểm hết hạn
+  void updateDueDate() {
     if (!isFinished) {
-      var now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      var now = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
       if (now.compareTo(repeatOption.beginDateTime) >= 0) {
-        if (repeatOption.type == 'until' && now.isAfter(repeatOption.extraTypeInfo)) {
-          //isFinished = true;
+        if (repeatOption.type == 'until' &&
+            now.isAfter(repeatOption.extraTypeInfo)) {
           return;
-        } else if (repeatOption.type == 'for' && repeatOption.extraTypeInfo - 1 == 0) {
-          //isFinished = true;
+        } else if (repeatOption.type == 'for' &&
+            repeatOption.extraTypeInfo - 1 == 0) {
           return;
         }
         var timeRange = now.difference(repeatOption.beginDateTime).inDays;
         int freq;
 
-        switch (repeatOption.frequency)
-        {
+        switch (repeatOption.frequency) {
           case 'daily':
             freq = repeatOption.rangeAmount;
             break;
@@ -92,7 +101,7 @@ class Bill {
           case 'yearly':
             bool isLeap = DateTime(now.year, 3, 0).day == 29;
             int dayOfYear = isLeap ? 366 : 365;
-            freq = dayOfYear  * repeatOption.rangeAmount;
+            freq = dayOfYear * repeatOption.rangeAmount;
             break;
         }
 
@@ -102,14 +111,11 @@ class Bill {
           if (!paidDueDates.contains(nextDue)) {
             if (!dueDates.contains(nextDue)) {
               dueDates.add(nextDue);
-              if (repeatOption.type == 'for')
-                repeatOption.extraTypeInfo--;
+              if (repeatOption.type == 'for') repeatOption.extraTypeInfo--;
             }
           }
         }
       }
     }
   }
-
-
 }

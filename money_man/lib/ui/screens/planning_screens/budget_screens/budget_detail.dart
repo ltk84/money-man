@@ -2,26 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/wallet_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/edit_budget.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/widget/line_chart_progress.dart';
-import 'package:money_man/ui/screens/shared_screens/search_transaction_screen.dart';
 import 'package:money_man/ui/style.dart';
-import 'package:money_man/ui/widgets/accept_dialog.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:money_man/ui/screens/planning_screens/budget_screens/budget_transaction.dart';
 
+// được hiển thị khi ấn vào budget tile ở màn hình budget home
 class BudgetDetailScreen extends StatefulWidget {
   const BudgetDetailScreen({Key key, this.budget, this.wallet})
       : super(key: key);
-  final Budget budget;
-  final Wallet wallet;
+  final Budget budget; // Budget được chọn
+  final Wallet wallet; // ví của budget được chọn
 
   @override
   _BudgetDetailScreenState createState() => _BudgetDetailScreenState();
@@ -39,7 +37,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
   }
 
   //Hàm trả về string mô tả thời gian hiện tại tương ứng với thời gian của budget như thế nào
-  String TimeLeft(Budget budget) {
+  String getTimeLeft(Budget budget) {
     var today = DateTime.now();
     if (today.isBefore(budget.beginDate)) {
       int n = budget.beginDate.difference(today).inDays;
@@ -63,10 +61,22 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     DateTime today = DateTime.now();
     today = DateTime(today.year, today.month, today.day);
+    // Số ngày kể từ ngày bắt đầu, nhỏ nhất là 1
+    var currentTime =
+        (DateTime.now()).difference(widget.budget.beginDate).inDays;
+    if (currentTime == 0) currentTime = 1;
     // todayRate là biến biểu thị tỉ lệ thời gian hiện tại trong khoảng thời gian của budget. nếu >1 đã kết thúc, <0 chưa bắt đầu
-    var todayRate = today.difference(widget.budget.beginDate).inHours /
-        widget.budget.endDate.difference(widget.budget.beginDate).inHours;
-    var todayTarget = widget.budget.spent / widget.budget.amount;
+    var todayRate =
+        DateTime.now().difference(widget.budget.beginDate).inMicroseconds /
+            widget.budget.endDate
+                .add(Duration(days: 1))
+                .difference(widget.budget.beginDate)
+                .inMicroseconds;
+    // tại thời điểm chính là thời điểm bắt đầu, không để giá trị của nó là 0.
+    if (todayRate == 0) todayRate = 0.00001;
+    print('todayrate : $todayRate');
+    var todayTarget;
+    todayTarget = widget.budget.spent / widget.budget.amount;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -78,7 +88,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               Style.backIcon,
               color: Style.foregroundColor,
             )),
-        title: Text('Budget'),
+        title: Text('Budget', style: TextStyle(color: Style.foregroundColor)),
         centerTitle: true,
         actions: [
           // Button chỉnh sửa budget
@@ -88,7 +98,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               color: Style.foregroundColor,
             ),
             onPressed: () async {
-              var result = await showCupertinoModalBottomSheet(
+              await showCupertinoModalBottomSheet(
                   isDismissible: true,
                   backgroundColor: Colors.grey[900],
                   context: context,
@@ -99,9 +109,11 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               setState(() {});
             },
           ),
+          // button xóa budget
           IconButton(
               icon: Icon(Icons.delete, color: Style.foregroundColor),
               onPressed: () async {
+                // Hiện dialog hỏi có muốn xóa không
                 String res = await showDialog<String>(
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
@@ -126,21 +138,6 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                   Navigator.pop(context);
                 }
               })
-
-          /*IconButton(
-              icon: Icon(Icons.delete, color: Colors.white),
-              onPressed: () async {
-                //TODO: Thuc hien xoa budget
-                String result = await _showAcceptionDialog();
-                print(result);
-                if (result == 'no') {
-                  return;
-                } else {
-                  await _firestore.deleteBudget(
-                      widget.budget.walletId, widget.budget.id);
-                  Navigator.pop(context);
-                }
-              })*/
         ],
         backgroundColor: Style.appBarColor,
       ),
@@ -151,6 +148,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
+            // Hiển thị tên nhóm + số tiền + hình ảnh của nhóm giao dịch
             ListTile(
               minVerticalPadding: 10,
               minLeadingWidth: 50,
@@ -175,6 +173,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                     ),
                     Container(
                         child: MoneySymbolFormatter(
+                          checkOverflow: false,
                       text: widget.budget.amount,
                       currencyId: widget.wallet.currencyID,
                       textStyle: TextStyle(
@@ -208,6 +207,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                     ),
                                     SizedBox(height: 2),
                                     MoneySymbolFormatter(
+                                      checkOverflow: true,
                                       text: widget.budget.spent,
                                       currencyId: widget.wallet.currencyID,
                                       textStyle: TextStyle(
@@ -219,6 +219,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                   ],
                                 ),
                               ),
+                              // Hiển thị số tiền đã chi, còn lại/vượt quá bao nhiêu
                               Container(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -234,6 +235,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                                     ),
                                     SizedBox(height: 2),
                                     MoneySymbolFormatter(
+                                      checkOverflow: true,
                                       text: todayTarget > 1
                                           ? this.widget.budget.spent -
                                               this.widget.budget.amount
@@ -251,6 +253,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                               )
                             ],
                           ),
+                          // Hiển thị progress bar
                           Container(
                             margin: EdgeInsets.only(top: 6),
                             child: ClipRRect(
@@ -275,6 +278,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 ),
               ),
             ),
+            // Này là để hiển thị hôm nay nằm ở đâu của ngân sách
             Row(
               children: [
                 // Nếu chưa bắt đầu hoặc hết hạn thì không để today
@@ -287,11 +291,14 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                             left: 60 +
                                 (MediaQuery.of(context).size.width - 60 - 45) *
                                     todayRate),
-                        height: 20,
-                        width: 40,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+
+                        // height: 20,
+                        //width: 40,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(8),
                             color: Style.boxBackgroundColor),
                         child: Text(
                           "Today",
@@ -310,6 +317,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 thickness: 1,
               ),
             ),
+            // này để hiển thị ngày của budget
             ListTile(
               dense: true,
               minLeadingWidth: 50,
@@ -333,7 +341,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
               subtitle: Container(
                 child: Text(
-                  TimeLeft(widget.budget),
+                  getTimeLeft(widget.budget),
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 13.0,
@@ -350,6 +358,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 thickness: 1,
               ),
             ),
+            // Này để hiển thị ví
             ListTile(
                 minLeadingWidth: 50,
                 leading: Container(
@@ -386,6 +395,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               color: Style.foregroundColor.withOpacity(0.12),
               thickness: 1,
             ),
+            // Này để hiển thị cái sơ đồ
             GestureDetector(
               onTap: () {},
               child: Container(
@@ -401,6 +411,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                 ),
               ),
             ),
+            // Tính toán các số ước tính
             Container(
               padding: EdgeInsets.symmetric(horizontal: 50, vertical: 25),
               child: Row(
@@ -409,6 +420,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                     Column(
                       children: [
                         Text(
+                          // này là số tiền nên chi tiêu trong 1 ngày
                           'Should spend/day ',
                           style: TextStyle(
                               fontFamily: Style.fontFamily,
@@ -436,6 +448,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                     Column(
                       children: [
                         Text(
+                          // Thực tế chi tiêu trong 1 ngày
                           'Actual spend/day',
                           style: TextStyle(
                               fontFamily: Style.fontFamily,
@@ -447,10 +460,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                           height: 2,
                         ),
                         MoneySymbolFormatter(
-                          text: widget.budget.spent /
-                              (today)
-                                  .difference(widget.budget.beginDate)
-                                  .inDays,
+                          text: widget.budget.spent / currentTime,
                           currencyId: widget.wallet.currencyID,
                           textStyle: TextStyle(
                               fontFamily: Style.fontFamily,
@@ -470,6 +480,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                   Column(
                     children: [
                       Text(
+                        // Dự đoán khoảng tiền chi tiêu trong suốt khoảng thời gian của budget
                         'Expected spending',
                         style: TextStyle(
                             fontFamily: Style.fontFamily,
@@ -479,7 +490,7 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
                       ),
                       MoneySymbolFormatter(
                         text: widget.budget.spent /
-                            (today).difference(widget.budget.beginDate).inDays *
+                            currentTime *
                             (widget.budget.endDate)
                                 .difference(widget.budget.beginDate)
                                 .inDays,
@@ -496,9 +507,8 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             Divider(
-              color: Style.foregroundColor.withOpacity(0.24),
-              thickness: 0.5
-            ),
+                color: Style.foregroundColor.withOpacity(0.24), thickness: 0.5),
+            // Bật tắt thông báo cho budget
             Container(
               padding: EdgeInsets.symmetric(horizontal: 25),
               child: Row(
@@ -523,13 +533,13 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
               ),
             ),
             Divider(
-                color: Style.foregroundColor.withOpacity(0.24),
-                thickness: 0.5
-            ),
+                color: Style.foregroundColor.withOpacity(0.24), thickness: 0.5),
+            //Xem danh sách các giao dịch thuộc budget
             Container(
               margin: EdgeInsets.only(top: 10, bottom: 20),
               alignment: Alignment.center,
               child: TextButton(
+                  // Chuyển hướng đến màn hình hiển thị danh sách
                   onPressed: () async {
                     await Navigator.push(
                         context,

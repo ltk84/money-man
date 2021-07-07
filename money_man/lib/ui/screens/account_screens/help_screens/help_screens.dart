@@ -16,6 +16,7 @@ class HelpScreens extends StatelessWidget {
     return Scaffold(
       backgroundColor: Style.backgroundColor,
       floatingActionButton: FloatingActionButton(
+        // Chuyển hướng đến trang gửi tin nhắn góp ý đến nhà sản xuất :v
         onPressed: () {
           showCupertinoModalBottomSheet(
             isDismissible: false,
@@ -86,6 +87,7 @@ class HelpScreens extends StatelessWidget {
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             GestureDetector(
+              //Chuyển hướng đến màn hình xem danh sách các câu hỏi
               onTap: () {
                 print("tapppp");
                 Navigator.push(
@@ -123,6 +125,7 @@ class HelpScreens extends StatelessWidget {
               ),
             ),
             GestureDetector(
+              // Chuyển hướng đến màn hình hướng dẫn cơ bản
               onTap: () {
                 print("tapppp");
                 Navigator.push(

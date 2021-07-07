@@ -26,18 +26,25 @@ class EditWalletScreen extends StatefulWidget {
 }
 
 class _EditWalletScreenState extends State<EditWalletScreen> {
-  static var _formKey = GlobalKey<FormState>();
+  // biến key cho việc validate khi nhập name cho wallet
+  static var formKey = GlobalKey<FormState>();
+  // biến mặc định cho currency của wallet
   String currencyName = 'Currency';
+  // biến mặc định cho icon của wallet
   String iconData = 'assets/icons/wallet_2.svg';
+  // biến dành cho việc amount của wallet bị thay đổi
   double adjustAmount;
+  // biến để low down bàn phím
   FocusNode focusNode = new FocusNode();
 
   @override
   Widget build(BuildContext context) {
+    // biến firestore để thao tác với database
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    // lấy value cho currency của wallet
     currencyName = CurrencyService().findByCode(widget.wallet.currencyID).name;
+    // lấy value cho data của wallet
     iconData = widget.wallet.iconID;
-    // iconData = Wallet.getIconDataByIconID(widget.wallet.iconID);
 
     return Scaffold(
         backgroundColor: Style.boxBackgroundColor,
@@ -45,10 +52,6 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
           centerTitle: true,
           elevation: 0,
           backgroundColor: Style.appBarColor,
-          // shape: RoundedRectangleBorder(
-          //    borderRadius: BorderRadius.only(
-          //      topLeft: Radius.circular(20.0),
-          //      topRight: Radius.circular(20.0))),
           title: Text('Edit Wallet',
               style: TextStyle(
                 fontFamily: Style.fontFamily,
@@ -62,13 +65,21 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                if (_formKey.currentState.validate()) {
+                // trường hợp các trường đều validate
+                if (formKey.currentState.validate()) {
+                  // low down bàn phím
                   FocusScope.of(context).requestFocus(FocusNode());
+                  // nếu không thay đổi amount của wallet
                   if (adjustAmount == null) {
+                    // update wallet
                     await _firestore.updateWallet(widget.wallet);
+                    // update ví được chọn
                     await _firestore.updateSelectedWallet(widget.wallet.id);
-                  } else
+                  }
+                  // trường hợp thay đổi amount của wallet
+                  else
                     await _firestore.adjustBalance(widget.wallet, adjustAmount);
+                  // back về screen trước
                   Navigator.pop(context, widget.wallet.id);
                 }
               },
@@ -85,11 +96,12 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
         body: Container(
             color: Style.backgroundColor1,
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: buildInput(),
             )));
   }
 
+  // build phần nhập các thông tin cho wallet
   Widget buildInput() {
     return ListView(
       children: [
@@ -102,15 +114,17 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
               margin: EdgeInsets.symmetric(vertical: 35.0, horizontal: 0.0),
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     children: [
                       Container(
-                        color: Colors
-                            .transparent, // Không thừa đâu, như vậy mới ấn vùng ngoài được.
-                        padding: EdgeInsets.fromLTRB(24, 20, 10, 0),
+                        color: Colors.transparent,
+                        padding: EdgeInsets.fromLTRB(24, 0, 10, 0),
                         child: GestureDetector(
                           onTap: () async {
-                            // TODO: Chọn icon cho ví
+                            // thực hiện chọn icon
                             var data = await showCupertinoModalBottomSheet(
                               context: context,
                               builder: (context) => IconPicker(),
@@ -141,11 +155,14 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                           padding: EdgeInsets.only(right: 50),
                           width: 250,
                           child: TextFormField(
+                            maxLength: 20,
                             focusNode: focusNode,
                             autocorrect: false,
                             initialValue: widget.wallet.name,
                             keyboardType: TextInputType.name,
                             style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontFamily: Style.fontFamily,
                               color: Style.foregroundColor,
                               fontSize: 20,
                               decoration: TextDecoration.none,
@@ -167,19 +184,22 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                           .withOpacity(0.6),
                                       width: 3),
                                 ),
-                                // border: UnderlineInputBorder(
-                                //   borderSide:
-                                //       BorderSide(color: Style.foregroundColor.withOpacity(0.6), width: 3),
-                                // ),
+                                counterStyle: TextStyle(
+                                    fontFamily: Style.fontFamily,
+                                    color: Style.foregroundColor.withOpacity(0.54),
+                                    fontSize: 12),
                                 labelText: 'Name',
                                 labelStyle: TextStyle(
+                                    fontFamily: Style.fontFamily,
                                     color:
                                         Style.foregroundColor.withOpacity(0.6),
                                     fontSize: 15)),
                             onChanged: (value) => widget.wallet.name = value,
                             validator: (value) {
+                              // nếu giá trị nhập vào trường name rỗng
                               if (value == null || value.length == 0)
                                 return 'Name is empty';
+                              // nếu giá trị có ký hiệu không hợp lệ
                               return (value != null && value.contains('@'))
                                   ? 'Do not use the @ char.'
                                   : null;
@@ -190,7 +210,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Divider(
                     thickness: 0.05,
@@ -199,6 +219,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 0),
                     onTap: () {
+                      // chọn currency cho wallet
                       showCurrencyPicker(
                         theme: CurrencyPickerThemeData(
                           backgroundColor: Style.boxBackgroundColor,
@@ -250,15 +271,15 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(30, 0, 20, 10),
                     onTap: () async {
+                      // low down bàn phím trong trường hợp bàn phím được mở
                       focusNode.unfocus();
+                      // dẫn vào screen nhập amount cho wallet
                       final resultAmount = await showCupertinoModalBottomSheet(
                           context: context,
                           builder: (context) => EnterAmountScreen());
                       if (resultAmount != null)
                         setState(() {
-                          print(resultAmount);
                           adjustAmount = double.parse(resultAmount);
-                          // widget.wallet.amount = double.parse(resultAmount);
                         });
                     },
                     dense: true,
@@ -267,6 +288,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                         color: Style.foregroundColor.withOpacity(0.24)),
                     title: adjustAmount != null
                         ? MoneySymbolFormatter(
+                            checkOverflow: false,
                             text: adjustAmount,
                             currencyId: widget.wallet.currencyID,
                             textStyle: TextStyle(
@@ -276,6 +298,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                 fontSize: 16.0),
                           )
                         : MoneySymbolFormatter(
+                            checkOverflow: false,
                             text: widget.wallet.amount,
                             currencyId: widget.wallet.currencyID,
                             textStyle: TextStyle(
@@ -296,6 +319,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () async {
+                    // xóa wallet
                     String result = await showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -319,6 +343,7 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                               ),
                             ),
                             actions: [
+                              // chọn 'NO'
                               FlatButton(
                                   onPressed: () {
                                     Navigator.of(context, rootNavigator: true)
@@ -335,10 +360,9 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                                   )),
                               FlatButton(
                                   onPressed: () {
+                                    // Chọn 'YES'
                                     Navigator.of(context, rootNavigator: true)
                                         .pop('Yes');
-
-                                    // chưa có animation để back ra transaction screen
                                   },
                                   child: Text(
                                     'Yes',
@@ -352,15 +376,17 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
                             ],
                           );
                         });
+                    // xử lý khi kết quả là YES
                     if (result == 'Yes') {
-                      // Xử lý sự kiện click ở đây.
                       final _firestore = Provider.of<FirebaseFireStoreService>(
                           context,
                           listen: false);
                       final res =
                           await _firestore.deleteWallet(widget.wallet.id);
+
+                      // trường hợp chỉ còn 1 ví
                       if (res is String && res == 'only 1 wallet') {
-                        _showAlertDialog(
+                        showAlertDialog(
                             content: 'You can\'t delete the only wallet');
                         return;
                       }
@@ -398,27 +424,8 @@ class _EditWalletScreenState extends State<EditWalletScreen> {
     );
   }
 
-  String convertMoneyType(amount) {
-    String result = amount.toString();
-    var ff = result.split('.');
-    String temp1 = ff[0];
-    String temp2 = temp1.split('').reversed.join();
-    result = '';
-    int i = 0;
-    for (int j = 0; j < temp2.length; j++) {
-      result += temp2[j];
-      i++;
-      if (i % 3 == 0 && j + 1 != temp2.length) result += ',';
-    }
-    result = ff.length == 1
-        ? result.split('').reversed.join()
-        : result.split('').reversed.join() + '.';
-    for (i = 1; i < ff.length; i++) result += ff[i];
-    print(result);
-    return result;
-  }
-
-  Future<void> _showAlertDialog(
+  //
+  Future<void> showAlertDialog(
       {String title = 'Oops...',
       String content,
       String iconPath = 'assets/images/alert.svg'}) async {

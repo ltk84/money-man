@@ -1,8 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:money_man/main.dart';
+import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:provider/provider.dart';
 
+// Màn hình cài đặt
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key key}) : super(key: key);
 
@@ -13,6 +15,8 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
+    final firestore =
+        Provider.of<FirebaseFireStoreService>(context, listen: false);
     return Scaffold(
       backgroundColor: Style.backgroundColor,
       appBar: AppBar(
@@ -73,6 +77,7 @@ class _SettingScreenState extends State<SettingScreen> {
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
             GestureDetector(
+              // Hiển thị dialog để chọn theme
               onTap: () async {
                 final result = await showDialog(
                   barrierColor: Style.backgroundColor.withOpacity(0.54),
@@ -82,11 +87,11 @@ class _SettingScreenState extends State<SettingScreen> {
                 );
                 if (result != null) {
                   if (result != Style.currentTheme && result != -1) {
-                    //Style.currentTheme = result;
                     setState(() {
+                      // Gọi hàm thay đổi ở Style
                       Style.changeTheme(result);
                     });
-                    //App.restartApp(context);
+                    await firestore.setTheme(result);
                   }
                 }
               },
@@ -123,6 +128,7 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 }
 
+// Dialog cài đặt theme
 class ThemeSettingDialog extends StatelessWidget {
   final int currentTheme;
 
@@ -154,8 +160,9 @@ class ThemeSettingDialog extends StatelessWidget {
                     fontSize: 18),
               ),
             ),
+            // Theme đen thui thùi lùi
             ListTile(
-              onTap: () {
+              onTap: () async {
                 Navigator.of(context).pop(0);
               },
               dense: true,
@@ -174,8 +181,9 @@ class ThemeSettingDialog extends StatelessWidget {
                     )
                   : null,
             ),
+            // Theme trắng bốc
             ListTile(
-              onTap: () {
+              onTap: () async {
                 Navigator.of(context).pop(1);
               },
               dense: true,
@@ -194,13 +202,14 @@ class ThemeSettingDialog extends StatelessWidget {
                     )
                   : null,
             ),
+            // Theme siêu hài hòa đẹp đẽ của thế :v
             ListTile(
-              onTap: () {
+              onTap: () async {
                 Navigator.of(context).pop(2);
               },
               dense: true,
               title: Text(
-                'TheThemes',
+                'Grey',
                 style: TextStyle(
                     fontFamily: Style.fontFamily,
                     color: Style.foregroundColor,
@@ -224,6 +233,7 @@ class ThemeSettingDialog extends StatelessWidget {
                 color: Style.foregroundColor.withOpacity(0.12),
               ))),
               width: double.infinity,
+              // Button hủy việc thay đổi
               child: TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(-1);

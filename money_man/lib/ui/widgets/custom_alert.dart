@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:money_man/ui/style.dart';
-
+// Dialog hiển thị cảnh báo
 class CustomAlert extends StatefulWidget {
-  final iconPath;
-  final title;
-  final content;
+  final iconPath; // path(đường dẫn) của icon cảnh báo
+  final title; // tiêu đề của icon cảnh báo
+  final content; // nội dung của icon cảnh báo
+
+  //Khởi tạo các thuộc tính mặc định của class
   const CustomAlert(
       {
         Key key,
@@ -19,7 +21,10 @@ class CustomAlert extends StatefulWidget {
 }
 
 class _CustomAlertState extends State<CustomAlert> with SingleTickerProviderStateMixin {
+
+  //Tạo controller animation cho animation
   AnimationController controller;
+  //Tạo animation
   Animation<double> scaleAnimation;
 
   @override

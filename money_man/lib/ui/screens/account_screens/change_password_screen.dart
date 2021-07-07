@@ -5,24 +5,31 @@ import 'package:money_man/ui/screens/authentication_screens/forgot_password_scre
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
 
+// Màn hình thay đổi mật khẩu
 class ChangePasswordScreen extends StatefulWidget {
   @override
   _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  @override
   final _auth = FirebaseAuthService();
+  // Biến kiểm tra việc nhập liệu của nhập mật khẩu hiện tại
   bool inValid1 = false;
+  // Biến kiểm tra việc nhập liệu của nhập mật khẩu muốn đổi
   bool invalid2 = false;
+  // Biến kiểm tra việc nhập liệu của nhập xác nhận mật khẩu muốn đổi
   bool invalid3 = false;
+  // Biến kiểm tra việc xác nhận mật khẩu muốn đổi giống nhau hay không
   bool isEqual = true;
+  // Xác nhận mật khẩu hiện tại chính xác
   bool truePassword = true;
+  // LƯu trữ thông tin các text nhập vào từ mật khẩu hiện tại, muốn đổi, xác nhận
   String field1, field2, field3;
+  // Biến hiển thị việc che hay không che cho thứ tự mật khẩu hiện tại, muốn đổi, xác nhận
   bool obscure1 = true;
   bool obscure2 = true;
   bool obscure3 = true;
-
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
@@ -81,6 +88,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       data: Theme.of(context).copyWith(
                         primaryColor: Style.foregroundColor,
                       ),
+                      // Nhập mật khẩu hiện tại
                       child: TextFormField(
                         obscureText: obscure1,
                         cursorColor: Style.foregroundColor,
@@ -110,18 +118,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   : Style.foregroundColor,
                               width: 2.0,
                             )),
-                            // errorBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(
-                            //       color: Colors.red[700],
-                            //       width: 1.5,
-                            //     )
-                            // ),
-                            // focusedErrorBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(
-                            //       color: Colors.red[700],
-                            //       width: 2.0,
-                            //     )
-                            // ),
                             errorStyle: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
@@ -137,6 +133,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       ),
                     ),
                     trailing: GestureDetector(
+                      //Hiện mật khẩu
                       onTap: () {
                         setState(() {
                           obscure1 = !obscure1;
@@ -150,6 +147,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       ),
                     ),
                   ),
+                  //Hiển thị việc nhập đúng mật khẩu hay chưa, nếu chưa thì hiện luôn cái lỗi
                   Container(
                       padding: EdgeInsets.only(left: 85.0, bottom: 20.0),
                       alignment: Alignment.topLeft,
@@ -202,6 +200,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       data: Theme.of(context).copyWith(
                         primaryColor: Style.foregroundColor,
                       ),
+                      // Nhập mật khẩu mới
                       child: TextFormField(
                         obscureText: obscure2,
                         cursorColor: Style.foregroundColor,
@@ -231,18 +230,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   : Style.foregroundColor,
                               width: 2.0,
                             )),
-                            // errorBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(
-                            //       color: Colors.red[700],
-                            //       width: 1.5,
-                            //     )
-                            // ),
-                            // focusedErrorBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(
-                            //       color: Colors.red[700],
-                            //       width: 2.0,
-                            //     )
-                            // ),
                             errorStyle: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
@@ -258,6 +245,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       ),
                     ),
                     trailing: GestureDetector(
+                      // Hiện thị mật khậu
                       onTap: () {
                         setState(() {
                           obscure2 = !obscure2;
@@ -296,6 +284,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       data: Theme.of(context).copyWith(
                         primaryColor: Style.foregroundColor,
                       ),
+                      // Nhập xác nhận mật khẩu
                       child: TextFormField(
                         obscureText: obscure3,
                         cursorColor: Style.foregroundColor,
@@ -325,18 +314,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   : Style.foregroundColor,
                               width: 2.0,
                             )),
-                            // errorBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(
-                            //       color: Colors.red[700],
-                            //       width: 1.5,
-                            //     )
-                            // ),
-                            // focusedErrorBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(
-                            //       color: Colors.red[700],
-                            //       width: 2.0,
-                            //     )
-                            // ),
                             errorStyle: TextStyle(
                               fontFamily: Style.fontFamily,
                               fontWeight: FontWeight.w400,
@@ -352,6 +329,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       ),
                     ),
                     trailing: GestureDetector(
+                      // hiện mật khẩu
                       onTap: () {
                         setState(() {
                           obscure3 = !obscure3;
@@ -365,6 +343,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       ),
                     ),
                   ),
+                  // Nếu nhập sai, không đủ ký tự, thì hiện lên cái này
                   Container(
                       padding: EdgeInsets.only(left: 85.0, bottom: 20.0),
                       alignment: Alignment.topLeft,
@@ -411,7 +390,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 onPressed: () async {
                   setState(() async {
                     // Kiểm tra mật khẩu đúng hay k
-                    // Validate field 1
                     if (field1 == null || field1.length < 6) {
                       inValid1 = true;
                       print('validate1');

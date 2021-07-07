@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_man/core/models/repeat_option_model.dart';
-import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/expandable_widget.dart';
 
@@ -18,33 +17,39 @@ class RepeatOptionScreen extends StatefulWidget {
 }
 
 class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
+  // Danh sách tần số và biến lưu thứ tự được chọn.
   List<String> frequencyList;
   int selectedFrequencyIndex;
 
+  // Kiểu tần số.
   String freqType;
 
+  // Thông tin khoảng thời gian.
   int rangeAmount;
   DateTime beginDateTime;
   DateTime endDateTime;
   int repeatTime;
 
+// Thông tin người dùng chọn (chọn mở rộng phần nào, phần nào đang được chọn).
   bool expandOption;
   int selectedOption;
 
+  // Kiểu của phần được chọn, được mở rộng.
   bool expandTypeOption;
   int selectedTypeOption;
 
-  RepeatOption _repeatOption;
+  // Biến lưuu thông tin tùy chọn lặp lại.
+  RepeatOption repeatOption;
 
   @override
   void initState() {
-    // TODO: implement initState
+    // Khoi tao
 
-    _repeatOption = widget.repeatOption;
+    repeatOption = widget.repeatOption;
 
     // Này là để lấy Frequency đang chọn để quyết định đơn vị của rangeAmount là ngày, tuần, tháng hay là năm.
     frequencyList = ['daily', 'weekly', 'monthly', 'yearly'];
-    selectedFrequencyIndex = frequencyList.indexOf(_repeatOption.frequency);
+    selectedFrequencyIndex = frequencyList.indexOf(repeatOption.frequency);
 
     // Biến để lưu chuỗi đơn vị cho rangeAmount.
     if (selectedFrequencyIndex == 0) {
@@ -58,12 +63,12 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
     }
 
     // Biến để lưu các giá trị tùy chọn.
-    rangeAmount = _repeatOption.rangeAmount;
-    beginDateTime = _repeatOption.beginDateTime;
-    endDateTime = _repeatOption.extraTypeInfo is DateTime == false
+    rangeAmount = repeatOption.rangeAmount;
+    beginDateTime = repeatOption.beginDateTime;
+    endDateTime = repeatOption.extraTypeInfo is DateTime == false
         ? beginDateTime.add(Duration(days: 1))
-        : _repeatOption.extraTypeInfo;
-    repeatTime = _repeatOption.type == 'for' ? _repeatOption.extraTypeInfo : 1;
+        : repeatOption.extraTypeInfo;
+    repeatTime = repeatOption.type == 'for' ? repeatOption.extraTypeInfo : 1;
 
     // Biến triggẻ để xử lý các tùy chọn.
     expandOption = false;
@@ -71,9 +76,9 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
 
     // Biến trigger để xử lý chọn loại lặp lại.
     expandTypeOption = false;
-    if (_repeatOption.type == 'forever') {
+    if (repeatOption.type == 'forever') {
       selectedTypeOption = 1;
-    } else if (_repeatOption.type == 'until') {
+    } else if (repeatOption.type == 'until') {
       selectedTypeOption = 2;
     } else {
       selectedTypeOption = 3;
@@ -93,8 +98,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
           leading: CloseButton(
             color: Style.foregroundColor,
             onPressed: () {
-              // print(_repeatOption.toMap());
-              Navigator.of(context).pop(_repeatOption);
+              Navigator.of(context).pop(repeatOption);
             },
           ),
           title: Text('Repeat Options',
@@ -149,7 +153,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 brightness: Brightness.dark,
                                 textTheme: CupertinoTextThemeData(
                                     pickerTextStyle: TextStyle(
-                                      color: Style.foregroundColor,
+                                  color: Style.foregroundColor,
                                   fontFamily: Style.fontFamily,
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w500,
@@ -164,7 +168,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                     selectedFrequencyIndex = index;
                                     freqType = getFreqTypeString(
                                         selectedFrequencyIndex);
-                                    _repeatOption.frequency =
+                                    repeatOption.frequency =
                                         frequencyList[selectedFrequencyIndex];
                                   });
                                 },
@@ -218,7 +222,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 brightness: Brightness.dark,
                                 textTheme: CupertinoTextThemeData(
                                     pickerTextStyle: TextStyle(
-                                      color: Style.foregroundColor,
+                                  color: Style.foregroundColor,
                                   fontFamily: Style.fontFamily,
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w500,
@@ -230,7 +234,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 onSelectedItemChanged: (index) {
                                   setState(() {
                                     rangeAmount = index + 1;
-                                    _repeatOption.rangeAmount = rangeAmount;
+                                    repeatOption.rangeAmount = rangeAmount;
                                   });
                                 },
                                 itemBuilder: (context, index) {
@@ -286,21 +290,22 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 brightness: Brightness.dark,
                                 textTheme: CupertinoTextThemeData(
                                     dateTimePickerTextStyle: TextStyle(
-                                      color: Style.foregroundColor,
+                                  color: Style.foregroundColor,
                                   fontFamily: Style.fontFamily,
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w500,
                                 ))),
                             child: CupertinoDatePicker(
                                 mode: CupertinoDatePickerMode.date,
-                                minimumDate: beginDateTime,
+                                minimumDate: DateTime(DateTime.now().year,
+                                    DateTime.now().month, DateTime.now().day),
                                 initialDateTime: beginDateTime,
                                 onDateTimeChanged: (val) {
                                   setState(() {
                                     beginDateTime = val;
                                     endDateTime =
                                         beginDateTime.add(Duration(days: 1));
-                                    _repeatOption.beginDateTime = beginDateTime;
+                                    repeatOption.beginDateTime = beginDateTime;
                                   });
                                 }),
                           ),
@@ -320,7 +325,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                       onTap: () {
                         setState(() {
                           selectedTypeOption = 1;
-                          _repeatOption.type = 'forever';
+                          repeatOption.type = 'forever';
                         });
                       },
                       child: buildForeverOption(
@@ -333,8 +338,8 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                           if (selectedTypeOption != 2) {
                             selectedTypeOption = 2;
                             expandTypeOption = true;
-                            _repeatOption.type = 'until';
-                            _repeatOption.extraTypeInfo = endDateTime;
+                            repeatOption.type = 'until';
+                            repeatOption.extraTypeInfo = endDateTime;
                           } else
                             expandTypeOption = !expandTypeOption;
                         });
@@ -358,19 +363,19 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                             brightness: Brightness.dark,
                             textTheme: CupertinoTextThemeData(
                                 dateTimePickerTextStyle: TextStyle(
-                                  color: Style.foregroundColor,
+                              color: Style.foregroundColor,
                               fontFamily: Style.fontFamily,
                               fontSize: 18.0,
                               fontWeight: FontWeight.w500,
                             ))),
                         child: CupertinoDatePicker(
                             mode: CupertinoDatePickerMode.date,
-                            minimumDate: beginDateTime,
+                            minimumDate: beginDateTime.add(Duration(days: 1)),
                             initialDateTime: endDateTime,
                             onDateTimeChanged: (val) {
                               setState(() {
                                 endDateTime = val;
-                                _repeatOption.extraTypeInfo = endDateTime;
+                                repeatOption.extraTypeInfo = endDateTime;
                               });
                             }),
                       ),
@@ -384,8 +389,8 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                           if (selectedTypeOption != 3) {
                             selectedTypeOption = 3;
                             expandTypeOption = true;
-                            _repeatOption.type = 'for';
-                            _repeatOption.extraTypeInfo = repeatTime;
+                            repeatOption.type = 'for';
+                            repeatOption.extraTypeInfo = repeatTime;
                           } else
                             expandTypeOption = !expandTypeOption;
                         });
@@ -414,11 +419,13 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                             child: TextFormField(
                               initialValue: repeatTime.toString(),
                               onChanged: (value) {
-                                setState(() {
-                                  repeatTime = int.parse(value);
-                                  _repeatOption.extraTypeInfo = repeatTime;
-                                  print(_repeatOption.extraTypeInfo);
-                                });
+                                var result = int.tryParse(value);
+                                if (result != null && result > 0) {
+                                  setState(() {
+                                    repeatTime = int.parse(value);
+                                    repeatOption.extraTypeInfo = repeatTime;
+                                  });
+                                }
                               },
                               style: TextStyle(
                                 fontFamily: Style.fontFamily,
@@ -427,8 +434,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                               keyboardAppearance: Brightness.dark,
-                              keyboardType: TextInputType.numberWithOptions(
-                                  signed: true, decimal: true),
+                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 isDense: true,
                                 contentPadding:
@@ -436,13 +442,15 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(5),
                                     borderSide: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.24),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.24),
                                       width: 0.5,
                                     )),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(5),
                                     borderSide: BorderSide(
-                                      color: Style.foregroundColor.withOpacity(0.24),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.24),
                                       width: 0.5,
                                     )),
                               ),
@@ -664,6 +672,7 @@ class _RepeatOptionScreenState extends State<RepeatOptionScreen> {
     );
   }
 
+  // Hàm lấy đơn vị cho tần số.
   String getFreqTypeString(int indexFreq) {
     switch (indexFreq) {
       case 0:

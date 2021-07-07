@@ -1,9 +1,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
-import 'package:money_man/core/services/constaints.dart';
 import 'package:money_man/core/services/firebase_authentication_services.dart';
 import 'package:money_man/ui/style.dart';
+import 'package:money_man/ui/widgets/custom_alert.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 
@@ -13,12 +13,11 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  String _email;
-
-  final _formKey = GlobalKey<FormState>();
-
-  ButtonState stateOnlyText = ButtonState.idle;
-
+  // email của user
+  String email;
+  // biến đẻ validate email của user
+  final formKey = GlobalKey<FormState>();
+  // trạng thái của nút
   ButtonState stateTextWithIcon = ButtonState.idle;
 
   @override
@@ -76,7 +75,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   height: 80.0,
                   width: 300,
                   child: Form(
-                    key: _formKey,
+                    key: formKey,
                     child: TextFormField(
                       style: TextStyle(
                         fontFamily: Style.fontFamily,
@@ -92,7 +91,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         return null;
                       },
                       textAlign: TextAlign.start,
-                      onChanged: (value) => _email = value,
+                      onChanged: (value) => email = value,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
                         labelText: 'Email',
@@ -115,7 +114,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide(color: Style.errorColor, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Style.errorColor, width: 2.0),
                         ),
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
@@ -126,7 +126,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide(color: Style.foregroundColor, width: 2.0),
+                          borderSide: BorderSide(
+                              color: Style.foregroundColor, width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
@@ -184,23 +185,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   void onPressedIconWithText() async {
     bool ok = true;
-    print('click');
     switch (stateTextWithIcon) {
       case ButtonState.idle:
         {
           stateTextWithIcon = ButtonState.loading;
-          print('0');
 
-          if (_formKey.currentState.validate()) {
+          if (formKey.currentState.validate()) {
             final _auth = FirebaseAuthService();
-            final res = await _auth.resetPassword(_email);
-            print('sent');
+            final res = await _auth.resetPassword(email);
             if (res is String) {
               String error = "";
               switch (res) {
                 case 'invalid-email':
                   error = 'Email is invalid';
-                  print('1');
                   setState(
                     () {
                       ok = false;
@@ -209,7 +206,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   break;
                 case 'user-not-found':
                   error = 'Email not registered yet';
-                  print('2');
                   setState(
                     () {
                       ok = false;
@@ -217,25 +213,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   );
                   break;
                 default:
-                  print('4');
                   setState(
                     () {
                       ok = false;
                     },
                   );
               }
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(error)));
-            } else
-              print('bug o day');
-            //Hàm res is String luôn là false m ơi
+              await showAlertDialog(error);
+            }
           } else {
-            print('3');
             stateTextWithIcon = ButtonState.idle;
-
             return;
           }
-          print(ok);
           setState(
             () {
               stateTextWithIcon = ok ? ButtonState.success : ButtonState.fail;
@@ -255,6 +244,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     setState(
       () {
         stateTextWithIcon = stateTextWithIcon;
+      },
+    );
+  }
+
+  Future<void> showAlertDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      barrierColor: Style.backgroundColor.withOpacity(0.54),
+      builder: (BuildContext context) {
+        return CustomAlert(content: content);
       },
     );
   }

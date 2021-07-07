@@ -5,7 +5,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/event_model.dart';
 import 'package:money_man/core/models/super_icon_model.dart';
 import 'package:money_man/core/models/transaction_model.dart';
@@ -35,14 +34,21 @@ class EditTransactionScreen extends StatefulWidget {
 }
 
 class _EditTransactionScreenState extends State<EditTransactionScreen> {
+  // biến thời gian của transaction
   DateTime pickDate;
-  DateTime formatTransDate;
+  // biến ký hiệu tiền tệ của transaction
   String currencySymbol;
+  // biến số tiền của transaction
   double amount;
+  // biến ký hiệu của transaction
   String note;
+  // biến contact của transaction
   String contact;
-  Event _event;
-  bool pickEvent = false;
+  // biến event của transaction
+  Event event;
+  // biến xác định user có pick event hay không
+  bool pickEvent;
+  // biến xác định transaction có phải là debt/loan
   bool isDebtLoan;
 
   @override
@@ -54,13 +60,15 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
     amount = widget.transaction.amount;
     note = widget.transaction.note;
     contact = widget.transaction.contact;
-    _event = widget.event;
+    event = widget.event;
     isDebtLoan = widget.transaction.category.type == 'debt & loan';
+    pickEvent = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    // biến thao tác với database
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return Scaffold(
       backgroundColor: Style.backgroundColor1,
@@ -81,15 +89,18 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
         actions: [
           TextButton(
             onPressed: () async {
+              // nếu transaction không thay đổi thì return
               if (amount == widget.transaction.amount &&
                   widget.transaction.date.compareTo(pickDate) == 0 &&
                   note == widget.transaction.note &&
                   contact == widget.transaction.contact &&
-                  ((_event == null && widget.transaction.eventID == '') ||
-                      (_event != null &&
-                          widget.transaction.eventID == _event.id))) return;
+                  ((event == null && widget.transaction.eventID == '') ||
+                      (event != null &&
+                          widget.transaction.eventID == event.id))) return;
+              // low down bàn phím
               FocusScope.of(context).requestFocus(FocusNode());
-              MyTransaction _transaction = MyTransaction(
+
+              MyTransaction transaction = MyTransaction(
                 id: widget.transaction.id,
                 amount: amount,
                 date: pickDate,
@@ -97,7 +108,8 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 category: widget.transaction.category,
                 note: note,
                 contact: contact,
-                eventID: _event == null ? '' : _event.id,
+                eventID: event == null ? '' : event.id,
+                // xác định extraAmount
                 extraAmountInfo: widget.transaction.extraAmountInfo == null
                     ? null
                     : amount -
@@ -105,31 +117,33 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                             widget.transaction.extraAmountInfo),
               );
 
-              if (_transaction.category.name == 'Repayment' ||
-                  _transaction.category.name == 'Debt Collection') {
-                var res = await _firestore.updateDebtLoanTransationAfterEdit(
-                    widget.transaction, _transaction, widget.wallet);
+              // nếu transaction có cate là repayment hay debt collection
+              if (transaction.category.name == 'Repayment' ||
+                  transaction.category.name == 'Debt Collection') {
+                // update các thông tin cần thiết của transaction sau khi edit
+                var res = await firestore.updateDebtLoanTransationAfterEdit(
+                    widget.transaction, transaction, widget.wallet);
                 if (res == null) {
-                  await _showAlertDialog(
+                  await showAlertDialog(
                       'The amount must be less than or equal to unpaid amount');
                   return;
                 }
               }
 
-              if (_transaction.category.name == 'Debt' ||
-                  _transaction.category.name == 'Loan') {
-                // print(_transaction);
-                if (_transaction.amount <
+              // nếu transaction có cate là Debt hay Loan
+              if (transaction.category.name == 'Debt' ||
+                  transaction.category.name == 'Loan') {
+                if (transaction.amount <
                     (widget.transaction.amount -
                         widget.transaction.extraAmountInfo)) {
-                  await _showAlertDialog(
+                  await showAlertDialog(
                       'Transaction amount must be less than or equal to paid amount');
                   return;
                 }
               }
 
-              await _firestore.updateTransaction(_transaction, widget.wallet);
-              Navigator.pop(context, _transaction);
+              await firestore.updateTransaction(transaction, widget.wallet);
+              Navigator.pop(context, transaction);
             },
             child: Text(
               'Save',
@@ -138,9 +152,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         widget.transaction.date.compareTo(pickDate) == 0 &&
                         note == widget.transaction.note &&
                         contact == widget.transaction.contact &&
-                        ((_event == null && widget.transaction.eventID == '') ||
-                            (_event != null &&
-                                widget.transaction.eventID == _event.id)))
+                        ((event == null && widget.transaction.eventID == '') ||
+                            (event != null &&
+                                widget.transaction.eventID == event.id)))
                     ? Style.foregroundColor.withOpacity(0.24)
                     : Style.foregroundColor,
                 fontFamily: Style.fontFamily,
@@ -177,12 +191,13 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     builder: (context) => EnterAmountScreen());
                 if (resultAmount != null)
                   setState(() {
-                    print(resultAmount);
                     amount = double.parse(resultAmount);
                   });
               },
-              leading:
-                  SuperIcon(iconPath: 'assets/images/coin.svg', size: 45.0),
+              leading: SuperIcon(
+                iconPath: 'assets/images/coin.svg',
+                size: 35,
+              ),
               title: TextFormField(
                 readOnly: true,
                 onTap: () async {
@@ -195,7 +210,6 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       amount = double.parse(resultAmount);
                     });
                 },
-                // onChanged: (value) => amount = double.tryParse(value),
                 style: TextStyle(
                     color: Style.foregroundColor,
                     fontSize: 30.0,
@@ -282,7 +296,6 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 iconPath: widget.wallet.iconID,
                 size: 28.0,
               ),
-              // leading: Icon(Icons.wallet_giftcard),
               title: TextFormField(
                 readOnly: true,
                 style: TextStyle(
@@ -330,14 +343,14 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                   if (date != null) {
                     setState(() {
                       pickDate = date;
-                      if (_event != null) {
-                        if (pickDate.year > _event.endDate.year ||
-                            (pickDate.year == _event.endDate.year &&
-                                pickDate.month > _event.endDate.month) ||
-                            (pickDate.year == _event.endDate.year &&
-                                pickDate.month == _event.endDate.month &&
-                                pickDate.day > _event.endDate.day))
-                          _event = null;
+                      // load lại event nếu thời gian được chọn quá mức cho phép của event
+                      if (event != null) {
+                        if (pickDate.year > event.endDate.year ||
+                            (pickDate.year == event.endDate.year &&
+                                pickDate.month > event.endDate.month) ||
+                            (pickDate.year == event.endDate.year &&
+                                pickDate.month == event.endDate.month &&
+                                pickDate.day > event.endDate.day)) event = null;
                       }
                     });
                   }
@@ -373,14 +386,15 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     if (date != null) {
                       setState(() {
                         pickDate = date;
-                        if (_event != null) {
-                          if (pickDate.year > _event.endDate.year ||
-                              (pickDate.year == _event.endDate.year &&
-                                  pickDate.month > _event.endDate.month) ||
-                              (pickDate.year == _event.endDate.year &&
-                                  pickDate.month == _event.endDate.month &&
-                                  pickDate.day > _event.endDate.day))
-                            _event = null;
+                        // load lại event nếu thời gian được chọn quá mức cho phép của event
+                        if (event != null) {
+                          if (pickDate.year > event.endDate.year ||
+                              (pickDate.year == event.endDate.year &&
+                                  pickDate.month > event.endDate.month) ||
+                              (pickDate.year == event.endDate.year &&
+                                  pickDate.month == event.endDate.month &&
+                                  pickDate.day > event.endDate.day))
+                            event = null;
                         }
                       });
                     }
@@ -426,6 +440,11 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       fontWeight:
                           pickDate == null ? FontWeight.w500 : FontWeight.w600,
                     ),
+                    // xử lý hint text
+                    // nếu thời gian được chọn là hôm nay thì hiện today
+                    // ngày mai là tomorrow
+                    // ngày hôm qua là yesterday
+                    // còn các ngày khác thì theo form (thứ, ngày/tháng/năm)
                     hintText: pickDate == null
                         ? 'Select date'
                         : pickDate ==
@@ -458,7 +477,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.note, color: Colors.orange, size: 28.0),
+              leading: Container(
+                  padding: EdgeInsets.only(left: 4),
+                  child:
+                      SuperIcon(iconPath: 'assets/images/note.svg', size: 21)),
               title: TextFormField(
                 readOnly: true,
                 decoration: InputDecoration(
@@ -490,11 +512,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       builder: (context) => NoteScreen(
                             content: note,
                           ));
-                  print(noteContent);
                   if (noteContent != null) {
                     setState(() {
                       note = noteContent;
-                      print(note);
                     });
                   }
                 },
@@ -502,88 +522,6 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               trailing: Icon(Icons.chevron_right,
                   color: Style.foregroundColor.withOpacity(0.54)),
             ),
-            // (_event != null)
-            //     ? Column(
-            //   children: [
-            //     Container(
-            //       margin: EdgeInsets.fromLTRB(70, 0, 0, 0),
-            //       child: Divider(
-            //         color: Style.foregroundColor.withOpacity(0.24),
-            //         height: 1,
-            //         thickness: 0.2,
-            //       ),
-            //     ),
-            //     ListTile(
-            //       dense: true,
-            //       onTap: () async {
-            //         var res = await showCupertinoModalBottomSheet(
-            //             isDismissible: true,
-            //             backgroundColor: Style.boxBackgroundColor,
-            //             context: context,
-            //             builder: (context) =>
-            //                 SelectEventScreen(
-            //                   wallet: widget.wallet,
-            //                   timeTransaction: pickDate,
-            //                 ));
-            //         if (res != null)
-            //           setState(() {
-            //             _event = res;
-            //           });
-            //       },
-            //       leading: _event == null
-            //           ? Icon(
-            //         Icons.event,
-            //         size: 28.0,
-            //         color: Style.foregroundColor.withOpacity(0.54),
-            //       )
-            //           : SuperIcon(iconPath: _event.iconPath, size: 28.0),
-            //       title: TextFormField(
-            //         readOnly: true,
-            //         style: TextStyle(
-            //             color: Style.foregroundColor,
-            //             fontFamily: Style.fontFamily,
-            //             fontSize: 16.0,
-            //             fontWeight: FontWeight.w600),
-            //         decoration: InputDecoration(
-            //             border: InputBorder.none,
-            //             focusedBorder: InputBorder.none,
-            //             enabledBorder: InputBorder.none,
-            //             errorBorder: InputBorder.none,
-            //             disabledBorder: InputBorder.none,
-            //             hintStyle: TextStyle(
-            //               color: _event == null
-            //                   ? Style.foregroundColor.withOpacity(0.24)
-            //                   : Style.foregroundColor,
-            //               fontFamily: Style.fontFamily,
-            //               fontSize: 16.0,
-            //               fontWeight: _event == null
-            //                   ? FontWeight.w500
-            //                   : FontWeight.w600,
-            //             ),
-            //             hintText:
-            //             _event == null ? 'Select event' : _event.name),
-            //         onTap: () async {
-            //           var res = await showCupertinoModalBottomSheet(
-            //               isDismissible: true,
-            //               backgroundColor: Style.boxBackgroundColor,
-            //               context: context,
-            //               builder: (context) =>
-            //                   SelectEventScreen(
-            //                     wallet: widget.wallet,
-            //                     timeTransaction: pickDate,
-            //                   ));
-            //           if (res != null)
-            //             setState(() {
-            //               _event = res;
-            //             });
-            //         },
-            //       ),
-            //       trailing: Icon(Icons.chevron_right,
-            //           color: Style.foregroundColor.withOpacity(0.54)),
-            //     ),
-            //   ],
-            // )
-            //:
             Column(
               children: <Widget>[
                 Visibility(
@@ -636,10 +574,12 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       Visibility(
                         visible: pickEvent,
                         child: ListTile(
+                          minLeadingWidth: 42,
                           dense: true,
-                          leading: Icon(Icons.person,
-                              color: Style.foregroundColor.withOpacity(0.54),
-                              size: 28.0),
+                          leading: SuperIcon(
+                            iconPath: 'assets/images/account_screen/user2.svg',
+                            size: 28,
+                          ),
                           title: TextFormField(
                             onTap: () async {
                               final PhoneContact phoneContact =
@@ -659,7 +599,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                 disabledBorder: InputBorder.none,
                                 hintStyle: TextStyle(
                                     color:
-                                        Style.foregroundColor.withOpacity(0.24),
+                                    contact == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                                     fontFamily: Style.fontFamily,
                                     fontSize: 16.0,
                                     fontWeight: contact == null
@@ -699,6 +639,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 Visibility(
                     visible: pickEvent,
                     child: ListTile(
+                      minLeadingWidth: 42,
                       dense: true,
                       onTap: () async {
                         var res = await showCupertinoModalBottomSheet(
@@ -711,17 +652,13 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                 ));
                         if (res != null)
                           setState(() {
-                            _event = res;
-                            // widget.transaction.eventID = _event.id;
+                            event = res;
                           });
                       },
-                      leading: _event == null
-                          ? Icon(
-                              Icons.event,
-                              size: 28.0,
-                              color: Style.foregroundColor.withOpacity(0.54),
-                            )
-                          : SuperIcon(iconPath: _event.iconPath, size: 28.0),
+                      leading: event == null
+                          ? SuperIcon(
+                              iconPath: 'assets/images/event.svg', size: 28)
+                          : SuperIcon(iconPath: event.iconPath, size: 28.0),
                       title: TextFormField(
                         readOnly: true,
                         style: TextStyle(
@@ -736,17 +673,17 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                             errorBorder: InputBorder.none,
                             disabledBorder: InputBorder.none,
                             hintStyle: TextStyle(
-                              color: _event == null
+                              color: event == null
                                   ? Style.foregroundColor.withOpacity(0.24)
                                   : Style.foregroundColor,
                               fontFamily: Style.fontFamily,
                               fontSize: 16.0,
-                              fontWeight: _event == null
+                              fontWeight: event == null
                                   ? FontWeight.w500
                                   : FontWeight.w600,
                             ),
                             hintText:
-                                _event == null ? 'Select event' : _event.name),
+                                event == null ? 'Select event' : event.name),
                         onTap: () async {
                           var res = await showCupertinoModalBottomSheet(
                               isDismissible: true,
@@ -758,8 +695,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                                   ));
                           if (res != null)
                             setState(() {
-                              _event = res;
-                              // widget.transaction.eventID = _event.id;
+                              event = res;
                             });
                         },
                       ),
@@ -774,7 +710,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
     );
   }
 
-  Future<void> _showAlertDialog(String content) async {
+  Future<void> showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

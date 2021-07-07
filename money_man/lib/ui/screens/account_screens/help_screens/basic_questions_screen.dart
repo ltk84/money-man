@@ -11,7 +11,9 @@ class BasicQuestionsScreens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Khởi tạo biến lưu trữ danh sách các câu hỏi và câu trả lời
     BasicQuestions mQuestion = new BasicQuestions();
+    // Biến num lưu trữ số lượng các câu hỏi
     int num = mQuestion.answers.length;
     return Scaffold(
       backgroundColor: Style.backgroundColor,
@@ -79,7 +81,7 @@ class BasicQuestionsScreens extends StatelessWidget {
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           itemCount: num,
           itemBuilder: (context, i) {
-            return mQandA(
+            return MyQuestion(
               index: i,
             );
           },
@@ -89,14 +91,17 @@ class BasicQuestionsScreens extends StatelessWidget {
   }
 }
 
-class mQandA extends StatelessWidget {
-  const mQandA({Key key, this.index}) : super(key: key);
+// Đối tượng hiển thị các câu hỏi
+class MyQuestion extends StatelessWidget {
+  const MyQuestion({Key key, this.index}) : super(key: key);
+  // index là biến đặc trưng cho vị trí của câu hỏi hiện tại trong danh sách
   final int index;
 
   @override
   Widget build(BuildContext context) {
     BasicQuestions mQuestion = new BasicQuestions();
     return GestureDetector(
+      // Ấn vào chuyển hướng đến màn hình trả lời câu hỏi
       onTap: () {
         print("tappsdfgnpp");
         showCupertinoModalBottomSheet(
@@ -111,6 +116,7 @@ class mQandA extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Hiển thị câu hỏi
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
@@ -122,6 +128,7 @@ class mQandA extends StatelessWidget {
                     fontSize: 17),
               ),
             ),
+            // dòng phân cách giữa các câu
             Container(
               margin: EdgeInsets.only(left: 20),
               child: Divider(

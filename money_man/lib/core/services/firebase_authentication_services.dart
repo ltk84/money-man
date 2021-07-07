@@ -30,7 +30,6 @@ class FirebaseAuthService {
       final res = await _auth.signInAnonymously();
       return res.user;
     } on FirebaseAuthException catch (e) {
-      print(e.toString());
       return e.code;
     }
   }
@@ -43,8 +42,10 @@ class FirebaseAuthService {
 
       // đăng xuất Google account nếu có
       await GoogleSignIn().signOut();
+
+      // đăng xuất Facebook account nếu có
+      await FacebookLogin().logOut();
     } catch (e) {
-      print(e);
       return e;
     }
   }
@@ -56,12 +57,10 @@ class FirebaseAuthService {
       return 'login-success';
     } on FirebaseAuthException catch (e) {
       String error = '';
-      print('a');
       switch (e.code) {
         case 'account-exists-with-different-credential':
           error =
               "This account is linked with another provider! Try another provider!";
-
           break;
         case 'email-already-in-use':
           error = "Your email address has been registered.";
@@ -77,8 +76,9 @@ class FirebaseAuthService {
       }
       return error;
     } on PlatformException catch (e) {
-      print(e.code);
       return e.code;
+    } on NoSuchMethodError catch (e) {
+      return e;
     }
   }
 
@@ -90,12 +90,10 @@ class FirebaseAuthService {
       return 'login-success';
     } on FirebaseAuthException catch (e) {
       String error = '';
-      print('a');
       switch (e.code) {
         case 'account-exists-with-different-credential':
           error =
               "This account is linked with another provider! Try another provider!";
-
           break;
         case 'email-already-in-use':
           error = "Your email address has been registered.";
@@ -111,8 +109,9 @@ class FirebaseAuthService {
       }
       return error;
     } on PlatformException catch (e) {
-      print(e.code);
       return e.code;
+    } on NoSuchMethodError catch (e) {
+      return e;
     }
   }
 
@@ -121,7 +120,7 @@ class FirebaseAuthService {
     try {
       final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
-      // if (googleUser == null) return null;
+      if (googleUser == null) return null;
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
@@ -135,12 +134,10 @@ class FirebaseAuthService {
       return 'login-success';
     } on FirebaseAuthException catch (e) {
       String error = '';
-      print('a');
       switch (e.code) {
         case 'account-exists-with-different-credential':
           error =
               "This account is linked with another provider! Try another provider!";
-
           break;
         case 'email-already-in-use':
           error = "Your email address has been registered.";
@@ -156,8 +153,9 @@ class FirebaseAuthService {
       }
       return error;
     } on PlatformException catch (e) {
-      print(e.code);
       return e.code;
+    } on NoSuchMethodError catch (e) {
+      return e;
     }
   }
 
@@ -166,51 +164,34 @@ class FirebaseAuthService {
     try {
       return await _auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       return e.code;
     }
   }
 
-  // Future signInWithFacebook() async {
-  //   try {
-  //     // facebook
-  //     // Trigger the sign-in flow
-  //     final LoginResult result = await FacebookAuth.instance.login();
-
-  //     // Create a credential from the access token
-  //     final FacebookAuthCredential facebookAuthCredential =
-  //         FacebookAuthProvider.credential(result.accessToken.token);
-
-  //     // Once signed in, return the UserCredential
-  //     return await FirebaseAuth.instance
-  //         .signInWithCredential(facebookAuthCredential);
-  //   } on FirebaseAuthException catch (e) {
-  //     print(e.code);
-  //     return e.code;
-  //   }
-  // }
-
-//Hàm kiểm tra password
+  //Hàm kiểm tra password
   Future<bool> validatePassword(String password) async {
-    var firebaseUser = _auth.currentUser;
-
-    var authCredentials = EmailAuthProvider.credential(
-        email: firebaseUser.email, password: password);
     try {
+      // lấy thông tin user hiện tại
+      var firebaseUser = _auth.currentUser;
+      // lấy credential email
+      var authCredentials = EmailAuthProvider.credential(
+          email: firebaseUser.email, password: password);
+      // kiểm tra lại với password của user
       var authResult =
           await firebaseUser.reauthenticateWithCredential(authCredentials);
       return authResult.user != null;
     } catch (e) {
-      print(e);
       return false;
     }
   }
 
+  // hàm update password
   Future<void> updatePassword(String password) async {
     var firebaseUser = _auth.currentUser;
     firebaseUser.updatePassword(password);
   }
 
+  // đăng nhập với account Facebook
   Future signInWithFacebookVer2() async {
     try {
       final facebookLogin = FacebookLogin();
@@ -231,7 +212,6 @@ class FirebaseAuthService {
 
       return 'login-success';
     } on FirebaseAuthException catch (e) {
-      print('a');
       String error = '';
       switch (e.code) {
         case 'account-exists-with-different-credential':
@@ -252,7 +232,6 @@ class FirebaseAuthService {
       }
       return error;
     } on PlatformException catch (e) {
-      print(e.code);
       return e.code;
     }
   }

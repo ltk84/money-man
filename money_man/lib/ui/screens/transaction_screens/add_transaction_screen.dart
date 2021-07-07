@@ -33,21 +33,31 @@ class AddTransactionScreen extends StatefulWidget {
 }
 
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
+  // biến ngày tháng của transaction
   DateTime pickDate;
+  // biến số tiền của transaction
   double amount;
+  // biến thể loại của transaction
   MyCategory cate;
+  // biến đại diện cho wallet mà transaction này được add vào
   Wallet selectedWallet;
+  // biến note của transaction
   String note;
+  // biến biểu tượng của tiền tệ của transaction
   String currencySymbol;
+  // biến contact của transaction
   String contact;
+  // biến hiển thị ở phần contact khi chưa có contact được chọn
   String hintTextConact;
+  // biến transaction được dùng khi category là repayment/ debt collection
   MyTransaction extraTransaction;
+  // biến đại diện khi user bấm vào phần 'More' để chọn event
   bool pickEvent = false;
+  // biến event của transaction
   Event event;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pickDate = DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
     selectedWallet = widget.currentWallet;
@@ -58,8 +68,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('add build');
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    // biến tương tác với database
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return Scaffold(
         backgroundColor: Style.backgroundColor1,
         appBar: AppBar(
@@ -79,16 +89,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           actions: [
             TextButton(
               onPressed: () async {
+                // trường hợp chưa nhập đủ các trường
                 if (selectedWallet == null) {
                   return;
-                  //_showAlertDialog('Please pick your wallet!');
                 } else if (amount == null) {
                   return;
-                  //_showAlertDialog('Please enter amount!');
                 } else if (cate == null) {
                   return;
-                  //_showAlertDialog('Please pick category');
-                } else {
+                }
+                // trường hợp đủ các trường
+                else {
                   MyTransaction trans = MyTransaction(
                       id: 'id',
                       amount: amount,
@@ -99,26 +109,33 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       contact: contact,
                       eventID: event == null ? '' : event.id);
 
+                  // trường hợp transaction (A) là repayment/debt collection cho transaction debt/loan (B) nào đó
                   if (extraTransaction != null) {
+                    // số tiền transaction (A) lớn hơn số tiền của (B)
                     if (trans.amount > extraTransaction.extraAmountInfo) {
-                      await _showAlertDialog(
+                      await showAlertDialog(
                           'The amount must be less than or equal to unpaid amount.\nUnpaid amount is ' +
                               getMoneyFormat(extraTransaction.extraAmountInfo,
                                   selectedWallet.currencyID));
                       return;
                     }
-                    MyTransaction newTransaction =
-                        await _firestore.addTransaction(selectedWallet, trans);
 
-                    _firestore.updateDebtLoanTransationAfterAdd(
-                        extraTransaction, newTransaction, selectedWallet);
-                  } else {
+                    // thực hiện add transaction A lên database
                     MyTransaction newTransaction =
-                        await _firestore.addTransaction(selectedWallet, trans);
+                        await firestore.addTransaction(selectedWallet, trans);
+
+                    // update các thông tin cần thiết cho transaction B
+                    firestore.updateDebtLoanTransationAfterAdd(
+                        extraTransaction, newTransaction, selectedWallet);
+                  }
+                  // trường hợp transaction có category != repayment/debt collection
+                  else {
+                    await firestore.addTransaction(selectedWallet, trans);
                   }
 
+                  // trường hợp transaction có pick event
                   if (event != null) {
-                    await _firestore.updateEventAmountAndTransList(
+                    await firestore.updateEventAmountAndTransList(
                         event, selectedWallet, trans);
                   }
 
@@ -158,36 +175,36 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ListTile(
               contentPadding: EdgeInsets.fromLTRB(10, 0, 20, 0),
               minVerticalPadding: 10.0,
+              minLeadingWidth: 43,
               onTap: () async {
+                // nhập số tiền
                 final resultAmount = await showCupertinoModalBottomSheet(
                     context: context,
                     builder: (context) => EnterAmountScreen());
                 if (resultAmount != null)
                   setState(() {
-                    print(resultAmount);
                     amount = double.parse(resultAmount);
                   });
               },
               leading: Container(
-                padding: EdgeInsets.only(top: 5),
+                padding: EdgeInsets.only(top: 8, left: 4),
                 child: SuperIcon(
                   iconPath: 'assets/images/coin.svg',
-                  size: 40,
+                  size: 35,
                 ),
               ),
               title: TextFormField(
                 readOnly: true,
                 onTap: () async {
+                  // nhấp số tiền
                   final resultAmount = await showCupertinoModalBottomSheet(
                       context: context,
                       builder: (context) => EnterAmountScreen());
                   if (resultAmount != null)
                     setState(() {
-                      print(resultAmount);
                       amount = double.parse(resultAmount);
                     });
                 },
-                // onChanged: (value) => amount = double.tryParse(value),
                 style: TextStyle(
                     color: Style.foregroundColor,
                     fontSize: 30.0,
@@ -227,8 +244,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
             ListTile(
               dense: true,
-              //minVerticalPadding: 8,
               onTap: () async {
+                // chọn category
                 final selectCate = await showCupertinoModalBottomSheet(
                     isDismissible: true,
                     backgroundColor: Colors.transparent,
@@ -237,9 +254,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           wallet: selectedWallet,
                         ));
                 if (selectCate != null) {
+                  // trường hợp cate của transaction là repayment/debt collection
+                  // giá trị trả về là có category và transaction debt/loan liên quan
                   if (selectCate is List && selectCate.length == 2) {
                     MyCategory category = selectCate[0];
                     extraTransaction = selectCate[1];
+                    // biến để xử lý việc gán note cho transaction
                     bool isDebt = extraTransaction.category.name == 'Debt';
 
                     setState(() {
@@ -253,13 +273,20 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       }
                       this.contact = extraTransaction.contact;
 
+                      // xử lý gán note cho transaction
                       note =
                           isDebt ? 'Debt paid to ' : 'Payment received from ';
 
+                      // xử lý + contact với note
                       contact == null ? note += 'someone' : note += contact;
                     });
-                  } else {
+                  }
+                  // trường hợp cate != repayment/ debt collection
+                  else {
+                    // trường hợp chọn lại category cũ
                     if (cate != null && selectCate.id == cate.id) return;
+
+                    // trường hợp chọn cate mới
                     setState(() {
                       if (cate != null && cate.id != selectCate.id) {
                         note = null;
@@ -289,6 +316,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               title: TextField(
                 autocorrect: false,
                 onTap: () async {
+                  // chọn category xử lý như trên
                   final selectCate = await showCupertinoModalBottomSheet(
                       isDismissible: true,
                       backgroundColor: Style.boxBackgroundColor,
@@ -375,12 +403,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ListTile(
               dense: true,
               onTap: () async {
+                // thay đổi ví
                 var res = await showCupertinoModalBottomSheet(
                     isDismissible: true,
                     backgroundColor: Style.boxBackgroundColor,
                     context: context,
                     builder: (context) =>
-                        SelectWalletAccountScreen(wallet: selectedWallet));
+                        SelectWalletScreen(currentWallet: selectedWallet));
                 if (res != null && res.id != selectedWallet.id)
                   setState(() {
                     selectedWallet = res;
@@ -423,12 +452,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         ? 'Select wallet'
                         : selectedWallet.name),
                 onTap: () async {
+                  // thay đổi ví
                   var res = await showCupertinoModalBottomSheet(
                       isDismissible: true,
                       backgroundColor: Style.boxBackgroundColor,
                       context: context,
                       builder: (context) =>
-                          SelectWalletAccountScreen(wallet: selectedWallet));
+                          SelectWalletScreen(currentWallet: selectedWallet));
                   if (res != null && res.id != selectedWallet.id)
                     setState(() {
                       selectedWallet = res;
@@ -458,6 +488,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               leading: SuperIcon(iconPath: 'assets/images/time.svg', size: 28),
               title: TextFormField(
                 onTap: () async {
+                  // chọn ngày tháng
                   DatePicker.showDatePicker(context,
                       currentTime: pickDate == null
                           ? DateTime(DateTime.now().year, DateTime.now().month,
@@ -467,6 +498,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     if (date != null) {
                       setState(() {
                         pickDate = date;
+                        // load lại event nếu thời gian được chọn quá mức cho phép của event
                         if (event != null) {
                           if (pickDate.year > event.endDate.year ||
                               (pickDate.year == event.endDate.year &&
@@ -520,6 +552,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       fontWeight:
                           pickDate == null ? FontWeight.w500 : FontWeight.w600,
                     ),
+                    // xử lý hint text
+                    // nếu thời gian được chọn là hôm nay thì hiện today
+                    // ngày mai là tomorrow
+                    // ngày hôm qua là yesterday
+                    // còn các ngày khác thì theo form (thứ, ngày/tháng/năm)
                     hintText: pickDate ==
                             DateTime.parse(
                                 DateFormat("yyyy-MM-dd").format(DateTime.now()))
@@ -549,9 +586,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.note, color: Colors.orange, size: 28.0),
+              leading: Container(
+                  padding: EdgeInsets.only(left: 4),
+                  child:
+                      SuperIcon(iconPath: 'assets/images/note.svg', size: 21)),
               title: TextFormField(
                 onTap: () async {
+                  // dấn tới screen nhập note
                   final noteContent = await showCupertinoModalBottomSheet(
                       isDismissible: true,
                       backgroundColor: Style.boxBackgroundColor,
@@ -559,7 +600,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       builder: (context) => NoteScreen(
                             content: note ?? '',
                           ));
-                  print(noteContent);
                   if (noteContent != null) {
                     setState(() {
                       note = noteContent;
@@ -623,6 +663,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             Visibility(
               visible: pickEvent,
               child: ListTile(
+                minLeadingWidth: 42,
                 onTap: () async {
                   try {
                     final PhoneContact phoneContact =
@@ -642,8 +683,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         }
                       });
                     }
-                  } on UserCancelledPickingException catch (e) {
-                    // TODO
+                  } on UserCancelledPickingException catch (_) {
                     print('cancel');
                   }
                 },
@@ -672,8 +712,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           }
                         });
                       }
-                    } on UserCancelledPickingException catch (e) {
-                      // TODO
+                    } on UserCancelledPickingException catch (_) {
                       print('cancel');
                     }
                   },
@@ -686,7 +725,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       errorBorder: InputBorder.none,
                       disabledBorder: InputBorder.none,
                       hintStyle: TextStyle(
-                          color: Style.foregroundColor.withOpacity(0.24),
+                          color: contact == null ? Style.foregroundColor.withOpacity(0.24) : Style.foregroundColor,
                           fontFamily: Style.fontFamily,
                           fontSize: 16.0,
                           fontWeight: contact == null
@@ -717,6 +756,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             Visibility(
                 visible: pickEvent,
                 child: ListTile(
+                  minLeadingWidth: 42,
                   dense: true,
                   onTap: () async {
                     var res = await showCupertinoModalBottomSheet(
@@ -780,7 +820,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         ));
   }
 
-  Future<void> _showAlertDialog(String content) async {
+  Future<void> showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

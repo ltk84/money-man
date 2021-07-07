@@ -6,20 +6,22 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/widget/budg
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
+// Này xuất hiện trong tab finished của budget home
 class Applied extends StatelessWidget {
   const Applied({Key key, this.wallet}) : super(key: key);
-  final Wallet wallet;
+  final Wallet wallet; // truyền vào ví hiện tại
 
   @override
   Widget build(BuildContext context) {
+    // Tham chiếu đến các hàm firebase
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Container(
       padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
       color: Style.backgroundColor,
+      // Stream lấy các budget đã kết thúc
       child: StreamBuilder<List<Budget>>(
           stream: _firestore.budgetStream(wallet.id),
           builder: (context, snapshot) {
-            print('day la ham print goi tu current budget');
             List<Budget> budgets = snapshot.data ?? [];
             budgets.sort((b, a) => b.beginDate.compareTo(a.beginDate));
             for (int i = 0; i < budgets.length; i++) {
@@ -29,6 +31,7 @@ class Applied extends StatelessWidget {
                 i--;
               }
             }
+            // Nếu không có budget nào
             if (budgets.length == 0)
               return Container(
                   color: Style.backgroundColor,
@@ -55,8 +58,10 @@ class Applied extends StatelessWidget {
                       ),
                     ],
                   ));
+            // Nếu có thì hiển thị cái list của budget tile
             return ListView.builder(
-              physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
               itemCount: budgets == null ? 0 : budgets.length,
               itemBuilder: (context, index) => Column(
                 children: [
@@ -64,7 +69,9 @@ class Applied extends StatelessWidget {
                     budget: budgets[index],
                     wallet: wallet,
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                 ],
               ),
             );

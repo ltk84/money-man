@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
 class Wallet {
+  // id của wallet
   String id;
+  // tên của wallet
   String name;
+  // số tiền của wallet
   double amount;
+  // id tiền tệ của wallet
   String currencyID;
+  // id icon của wallet
   String iconID;
+
   Wallet({
     @required this.id,
     @required this.name,

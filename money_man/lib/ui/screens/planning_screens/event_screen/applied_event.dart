@@ -8,10 +8,11 @@ import 'package:page_transition/page_transition.dart';
 import 'package:intl/src/intl/date_format.dart';
 import 'package:money_man/ui/widgets/money_symbol_formatter.dart';
 import 'package:provider/provider.dart';
-
 import 'event_detail.dart';
 
+//này là màn hình hiển thị trong tab finished của màn hình event home
 class AppliedEvent extends StatefulWidget {
+  // truyền vào ví hiện tại
   Wallet wallet;
   AppliedEvent({Key key, this.wallet}) : super(key: key);
   @override
@@ -21,9 +22,11 @@ class AppliedEvent extends StatefulWidget {
 }
 
 class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
+  // Ví hiện tại
   Wallet _wallet;
   @override
   void initState() {
+    // Khởi tạo ví hiện tại, nếu null thì tạo 1 ví ảo ???
     _wallet = widget.wallet ??
         Wallet(
             id: 'id',
@@ -36,6 +39,7 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
 
   @override
   void didUpdateWidget(covariant AppliedEvent oldWidget) {
+    // gán giá trị cho ví hiện tại, nếu vẫn còn null thì tạo ví ảo
     _wallet = widget.wallet ??
         Wallet(
             id: 'id',
@@ -48,15 +52,19 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // Tham chiếu tới các hàm firebase
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
     return Container(
-      color: Colors.grey[900],
+      color: Style.backgroundColor,
+      // stream builder tới danh sách các event
       child: StreamBuilder<List<Event>>(
         stream: _firestore.eventStream(_wallet.id),
         builder: (context, snapshot) {
+          // Danh sách lọc ra đã kết thúc
           List<Event> appliedEvent = [];
+          // Danh sách tất cả các event
           List<Event> eventList = snapshot.data ?? [];
-
+          // với mỗi event, nếu nó đã kết thúc rồi thì đặt isFinished là true
           eventList.forEach((element) {
             if (element.endDate.year < DateTime.now().year ||
                 (element.endDate.year == DateTime.now().year &&
@@ -66,6 +74,7 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                     element.endDate.day < DateTime.now().day)) {
               element.isFinished = true;
             }
+            // Lọc lại nếu đã kết thúc ( bằng tay, hoặc thời gian, hoặc tự động)
             if ((!element.isFinished && element.finishedByHand) ||
                 (element.isFinished &&
                     element.finishedByHand &&
@@ -76,6 +85,7 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
               appliedEvent.add(element);
             }
           });
+          // Nếu không có events nào trong danh sách thì hiển thị màn hình báo rỗng
           if (appliedEvent.length == 0)
             return Container(
                 color: Style.backgroundColor,
@@ -102,6 +112,7 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                     ),
                   ],
                 ));
+          // Nếu có thì hiển thị màn hình chứa các event đã cho
           return Container(
             color: Style.backgroundColor,
             padding: EdgeInsets.only(top: 35, left: 15, right: 15),
@@ -117,11 +128,12 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                       color: Style.boxBackgroundColor,
                     ),
                     child: ListTile(
+                      // Chuyển hướng đến màn hình chi tiết event
                       onTap: () {
                         Navigator.push(
                             context,
                             PageTransition(
-                                type: PageTransitionType.leftToRight,
+                                type: PageTransitionType.rightToLeft,
                                 child: EventDetailScreen(
                                   currentEvent: appliedEvent[index],
                                   eventWallet: _wallet,
@@ -138,49 +150,62 @@ class _AppliedEvent extends State<AppliedEvent> with TickerProviderStateMixin {
                             Text(
                               appliedEvent[index].name,
                               style: TextStyle(
-                                  fontSize: 24.0,
+                                  fontSize: 18.0,
                                   color: Style.foregroundColor,
                                   fontWeight: FontWeight.w500,
-                                  fontFamily: 'Montserrat'),
-                              textAlign: TextAlign.start,
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              'End date: ' +
-                                  DateFormat('EEEE, dd-MM-yyyy')
-                                      .format(appliedEvent[index].endDate),
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color:
-                                      Style.foregroundColor.withOpacity(0.54),
-                                  fontFamily: 'Montserrat'),
+                                  fontFamily: Style.fontFamily),
                               textAlign: TextAlign.start,
                             ),
                             SizedBox(
                               height: 3,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Text(
+                                  'Ending date: ',
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.54),
+                                      fontFamily: Style.fontFamily),
+                                  textAlign: TextAlign.start,
+                                ),
+                                Text(
+                                  DateFormat('EEEE, dd-MM-yyyy')
+                                      .format(appliedEvent[index].endDate),
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Style.foregroundColor,
+                                      fontFamily: Style.fontFamily),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
                               mainAxisSize: MainAxisSize.max,
                               children: <Widget>[
                                 Text(
                                   'Spent: ',
                                   style: TextStyle(
                                       fontSize: 16.0,
-                                      color: Style.foregroundColor,
-                                      fontFamily: 'Montserrat'),
+                                      color: Style.foregroundColor
+                                          .withOpacity(0.54),
+                                      fontFamily: Style.fontFamily),
                                   textAlign: TextAlign.start,
                                 ),
                                 MoneySymbolFormatter(
                                     text: appliedEvent[index].spent,
                                     currencyId: _wallet.currencyID,
                                     textStyle: TextStyle(
+                                      fontWeight: FontWeight.w600,
                                       color: Style.foregroundColor,
                                       fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Montserrat',
+                                      fontFamily: Style.fontFamily,
                                     )),
                               ],
                             )

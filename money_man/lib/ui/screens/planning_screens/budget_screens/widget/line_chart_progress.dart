@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:money_man/core/models/budget_model.dart';
 import 'package:money_man/core/services/firebase_firestore_services.dart';
 import 'package:money_man/ui/style.dart';
@@ -11,18 +12,20 @@ class LineCharts extends StatefulWidget {
       : super(key: key);
   final todayRate; // tỉ lệ ngày
   final todayTaget; // tỉ lệ spent/amoount
-  final Budget budget;
+  final Budget budget; // budget hiện tại
 
   @override
   _LineChartsState createState() => _LineChartsState();
 }
 
 class _LineChartsState extends State<LineCharts> {
+  // Điều chỉnh hiển thị ngày theo thứ tự ngày tháng năm
   String fomatDate(DateTime variable) {
     String result = DateFormat('dd/MM/yyyy').format(variable);
     return result;
   }
 
+// Điều chỉnh hiển thị số tiền để dễ nhìn hơn, không phải đếm số 0
   String fomatMonney(double money) {
     if (money > 1000000000)
       return (money / 1000000000).toStringAsFixed(1) + 'B';
@@ -34,27 +37,34 @@ class _LineChartsState extends State<LineCharts> {
       return money.toStringAsFixed(1);
   }
 
+// Lấy giá trị lớn nhất của lược đồ
   double getMaxofY(Budget budget) {
+    // ket thuc roi
     if (DateTime.now()
             .compareTo(widget.budget.endDate.add(Duration(days: 1))) >=
         0) {
+      // lấy cái lớn hơn giữa spent và amount
       return budget.spent > budget.amount ? budget.spent : budget.amount;
     }
+    // chưa bắt đầu
     if (DateTime.now().isBefore(budget.beginDate)) {
+      // lấy amount thoi :v
       return budget.amount;
     } else {
+      // tính toán nếu lúc kết thúc mà nó lớn hơn thì lấy cái lướn hơn, k thì lấy amount
       return budget.spent / widget.todayRate > budget.amount
           ? budget.spent / widget.todayRate
           : budget.amount;
     }
   }
 
+// Này là lấy các điểm để tính toán trên lược đồ nè
   Future<List<FlSpot>> getSpot(
       Budget budget,
       FirebaseFireStoreService _firestore,
       double maxOfY,
       double todayRate) async {
-    // truowngf hop chua bat dau
+    // truowngf hop chua bat dau thì làm gì có điểm nào :v nên cho đứng im tại chỗ
     if (DateTime.now().isBefore(budget.beginDate))
       return [
         FlSpot(0, 0),
@@ -69,15 +79,17 @@ class _LineChartsState extends State<LineCharts> {
       List<FlSpot> mSpot = [];
       var temp = budget.beginDate;
       var end = budget.endDate;
+      // chia khoảng thời gian từ đầu tới cuối ra làm 6 khoảng, từ đó tính toán
       var difference = end.difference(budget.beginDate).inMinutes / 6;
       for (double i = 0; i < 6; i++) {
         temp = temp.add(Duration(minutes: difference.toInt()));
         var spent = await _firestore.calculateBudgetSpentFromDay(budget, temp);
-        var YAxix = spent / maxOfY * 5;
-        mSpot.add(FlSpot(i, YAxix));
+        var yAxis = spent / maxOfY * 5;
+        mSpot.add(FlSpot(i, yAxis));
       }
       return mSpot;
     }
+    // cũng tương tự trên kia nhưng nó khác 1 xí :3 này phải nhân với todayRate để rút ngắn lại cái độ dài trục hoành
     List<FlSpot> mSpot = [];
     var temp = budget.beginDate;
     var end = DateTime.now();
@@ -85,27 +97,29 @@ class _LineChartsState extends State<LineCharts> {
     for (double i = 0; i < 7; i++) {
       temp = temp.add(Duration(minutes: difference.toInt()));
       var spent = await _firestore.calculateBudgetSpentFromDay(budget, temp);
-      var YAxix = spent / maxOfY * 5;
-      mSpot.add(FlSpot(i * todayRate, YAxix));
+      var yAxis = spent / maxOfY * 5;
+      mSpot.add(FlSpot(i * todayRate, yAxis));
     }
     return mSpot;
   }
 
   @override
   Widget build(BuildContext context) {
+    // Lấy để thực hiện hàm firebase
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
-
+// Lấy giá trị max cho y nè
     var maxOfY = getMaxofY(widget.budget);
     const cutOffYValue = 0.0;
+    // Style cho kí tự trong lược đồ
     var yearTextStyle = TextStyle(
         fontSize: 12,
         color: Style.foregroundColor,
         fontFamily: Style.fontFamily);
-
     TextStyle getTextStyle(double b) {
       return yearTextStyle;
     }
 
+// Future để lấy mấy điểm đó nè
     return FutureBuilder<Object>(
         future: getSpot(widget.budget, _firestore, maxOfY, widget.todayRate),
         builder: (context, snapshot) {
@@ -244,6 +258,7 @@ class _LineChartsState extends State<LineCharts> {
                               return fomatDate(widget.budget.beginDate);
                             case 6:
                               return fomatDate(widget.budget.endDate);
+                            default:
                               return '';
                           }
                         }),
@@ -254,7 +269,8 @@ class _LineChartsState extends State<LineCharts> {
                       // này là giá trị của các cột nè, val chạy từ 0 tới maxY
                       getTitles: (value) {
                         if (value == 0) return '0.0';
-                        return '${fomatMonney(value * maxOfY / 5)}';
+                        //return '${fomatMonney(value * maxOfY / 5)}';
+                        return MoneyFormatter(amount: (value * maxOfY / 5)).output.compactNonSymbol;
                       },
                     ),
                   ),

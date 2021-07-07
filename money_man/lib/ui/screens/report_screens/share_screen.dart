@@ -2,24 +2,19 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:money_man/ui/style.dart';
 import 'package:money_man/ui/widgets/custom_alert.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:intl/intl.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 
-import 'custom_time_range.dart';
-
 class ShareScreen extends StatefulWidget {
-  Uint8List bytes1;
-  Uint8List bytes2;
-  Uint8List bytes3;
+  // Các tham số truyền vào để lấy dữ liệu từ widget và chuyển sang hình ảnh.
+  final Uint8List bytes1;
+  final Uint8List bytes2;
+  final Uint8List bytes3;
 
   ShareScreen(
       {Key key,
@@ -32,15 +27,16 @@ class ShareScreen extends StatefulWidget {
 }
 
 class ShareScreenState extends State<ShareScreen> {
+  // Các tham số truyền vào để lấy dữ liệu từ widget và chuyển sang hình ảnh.
   Uint8List reportData1;
   Uint8List reportData2;
   Uint8List reportData3;
 
-  int _currentIndex = 0;
+  // Thứ tự của hình ảnh đang chọn để xuất.
+  int currentIndex = 0;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     reportData1 = widget.bytes1;
     reportData2 = widget.bytes2;
@@ -49,7 +45,6 @@ class ShareScreenState extends State<ShareScreen> {
 
   @override
   void didUpdateWidget(covariant ShareScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     reportData1 = widget.bytes1;
     reportData2 = widget.bytes2;
@@ -58,6 +53,8 @@ class ShareScreenState extends State<ShareScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Gán tên file cho báo cáo được xuất theo sự chênh lệch giây giữa thời gian hiện tại và đầu năm 2021.
+    // Việc này là để có thể xuất các file riêng biệt mà không bị trùng lặp, tránh dẫn tới việc file bị ghi đè khi xuất.
     String reportName = 'Report_' +
         DateTime.now().difference(DateTime(2021)).inSeconds.toString();
 
@@ -67,10 +64,6 @@ class ShareScreenState extends State<ShareScreen> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Style.appBarColor,
-        //shape: RoundedRectangleBorder(
-        //    borderRadius: BorderRadius.only(
-        //        topLeft: Radius.circular(20.0),
-        //        topRight: Radius.circular(20.0))),
         title: Text('Share',
             style: TextStyle(
               color: Style.foregroundColor,
@@ -86,8 +79,6 @@ class ShareScreenState extends State<ShareScreen> {
           color: Style.backgroundColor1,
           padding: EdgeInsets.symmetric(vertical: 20.0),
           child: ListView(
-            physics:
-                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               Container(
                 child: CarouselSlider(
@@ -99,14 +90,14 @@ class ShareScreenState extends State<ShareScreen> {
                     enableInfiniteScroll: false,
                     onPageChanged: (index, reason) {
                       setState(() {
-                        _currentIndex = index;
+                        currentIndex = index;
                       });
                     },
                   ),
                   items: [
-                    if (reportData1 != null) ImageFromUnit8List(reportData1),
-                    if (reportData2 != null) ImageFromUnit8List(reportData2),
-                    if (reportData3 != null) ImageFromUnit8List(reportData3),
+                    if (reportData1 != null) getImageFromUnit8List(reportData1),
+                    if (reportData2 != null) getImageFromUnit8List(reportData2),
+                    if (reportData3 != null) getImageFromUnit8List(reportData3),
                   ],
                 ),
               ),
@@ -137,9 +128,9 @@ class ShareScreenState extends State<ShareScreen> {
                     final file =
                         await new File('${tempDir.path}/$reportName.jpg')
                             .create();
-                    var data = (_currentIndex == 0)
+                    var data = (currentIndex == 0)
                         ? reportData1
-                        : ((_currentIndex == 1) ? reportData2 : reportData3);
+                        : ((currentIndex == 1) ? reportData2 : reportData3);
                     file.writeAsBytesSync(data);
                     Share.shareFiles([file.path]);
                   },
@@ -186,39 +177,47 @@ class ShareScreenState extends State<ShareScreen> {
                     ),
                   ),
                   onPressed: () async {
-                    dynamic result = await ImageGallerySaver.saveImage(
-                        (_currentIndex == 0)
-                            ? reportData1
-                            : ((_currentIndex == 1)
-                                ? reportData2
-                                : reportData3),
-                        quality: 100,
-                        name: reportName);
-                    if (result['isSuccess']) {
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: false, // user must tap button!
-                        barrierColor: Style.backgroundColor.withOpacity(0.54),
-                        builder: (BuildContext context) {
-                          return CustomAlert(
-                              iconPath: "assets/images/success.svg",
-                              title: "Successfully",
-                              content:
-                                  "Image has been saved,\ncheck your gallery.");
-                        },
-                      );
-                    } else {
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: false, // user must tap button!
-                        barrierColor: Style.backgroundColor.withOpacity(0.54),
-                        builder: (BuildContext context) {
-                          return CustomAlert(
-                              iconPath: "assets/images/error.svg",
-                              content:
-                                  "Something was wrong,\nplease try again.");
-                        },
-                      );
+                    // Gọi hàm cấp phép truy cập storage và photo gallery để lưu ảnh.
+                    if (await Permission.storage.request().isGranted &&
+                        await Permission.photos.request().isGranted) {
+                      // Lưu hình ảnh theo thứ tự đang được chọn.
+                      dynamic result = await ImageGallerySaver.saveImage(
+                          (currentIndex == 0)
+                              ? reportData1
+                              : ((currentIndex == 1)
+                                  ? reportData2
+                                  : reportData3),
+                          quality: 100,
+                          name: reportName);
+
+                      if (result['isSuccess']) {
+                        // Thông báo lưu thành công.
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false,
+                          barrierColor: Style.backgroundColor.withOpacity(0.54),
+                          builder: (BuildContext context) {
+                            return CustomAlert(
+                                iconPath: "assets/images/success.svg",
+                                title: "Successfully",
+                                content:
+                                    "Image has been saved,\ncheck your gallery.");
+                          },
+                        );
+                      } else {
+                        // Thông báo lưu thất bại.
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          barrierColor: Style.backgroundColor.withOpacity(0.54),
+                          builder: (BuildContext context) {
+                            return CustomAlert(
+                                iconPath: "assets/images/error.svg",
+                                content:
+                                    "Something was wrong,\nplease try again.");
+                          },
+                        );
+                      }
                     }
                   },
                   child: Row(
@@ -245,6 +244,7 @@ class ShareScreenState extends State<ShareScreen> {
     );
   }
 
-  Widget ImageFromUnit8List(Uint8List bytes) =>
+  // Hàm chuyển từ dữ liệu của widget sang hình ảnh.
+  Widget getImageFromUnit8List(Uint8List bytes) =>
       bytes != null ? Image.memory(bytes) : Container();
 }

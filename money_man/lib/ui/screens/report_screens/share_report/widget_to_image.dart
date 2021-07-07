@@ -17,6 +17,7 @@ class _WidgetToImageState extends State<WidgetToImage> {
 
   @override
   Widget build(BuildContext context) {
+    // Lấy key của widget và cô lập nó như một render object.
     return RepaintBoundary(
       key: globalKey,
       child: widget.builder(globalKey),

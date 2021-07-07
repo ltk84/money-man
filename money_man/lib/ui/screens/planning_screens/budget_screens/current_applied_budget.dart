@@ -6,6 +6,7 @@ import 'package:money_man/ui/screens/planning_screens/budget_screens/widget/budg
 import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
+// Này là phần hiển thị trong tab running trong màn hình budget home, mọi thông tin đề tương ứng với finished, chỉ khác ở phần chọn budget
 class CurrentlyApplied extends StatelessWidget {
   Wallet wallet;
 
@@ -61,7 +62,8 @@ class CurrentlyApplied extends StatelessWidget {
                     ],
                   ));
             return ListView.builder(
-              physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
               itemCount: budgets == null ? 0 : budgets.length,
               itemBuilder: (context, index) => Column(
                 children: [
@@ -69,7 +71,9 @@ class CurrentlyApplied extends StatelessWidget {
                     budget: budgets[index],
                     wallet: wallet,
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                 ],
               ),
             );

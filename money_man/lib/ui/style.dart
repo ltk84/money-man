@@ -1,23 +1,30 @@
 import 'package:flutter/material.dart';
 
 class Style {
+  // Default theme = 0 - Black Theme.
   static int currentTheme = 0;
 
+  // Default font family - Montserrat.
   static String fontFamily = 'Montserrat';
 
-  // Start Theme 1
+  // Default back icon.
   static IconData backIcon = Icons.arrow_back_ios_rounded;
+
+  // Màu chính.
+  static Color primaryColor = Color(0xff2FB49C);
+  static Color highlightPrimaryColor = Color(0xff36D1B5);
+
+  // Màu background, foreground, box.
   static Color backgroundColor = Colors.black;
-  //static Color backgroundColor = Color(0xFF111111);
   static Color appBarColor = Colors.grey[900];
   static Color backgroundColor1 = Color(0xFF111111);
   static Color foregroundColor = Colors.white;
   static Color foregroundColorDark = Color(0x70999999);
   static Color boxBackgroundColor = Colors.grey[900];
   static Color boxBackgroundColor2 = Color(0xFF1c1c1c);
-  static Color primaryColor = Color(0xff2FB49C);
-  static Color highlightPrimaryColor = Color(0xff36D1B5);
 
+
+  // Màu status và button.
   static Color igButtonColor = Color(0xFFc65072);
   static Color fbButtonColor = Color(0xFF2c84d4);
   static Color errorColor = Colors.red[700];
@@ -26,9 +33,9 @@ class Style {
   static Color incomeColor = Color(0xFF76F676);
   static Color incomeColor2 = Colors.blueAccent;
   static Color runningColor = Color(0xFF51f08d);
-  static Color successColor = Color(0xFF4FCC5C); // Nut Save
-  // End Theme 1
+  static Color successColor = Color(0xFF4FCC5C);
 
+  // Màu calculator.
   static String calculatorFontFamily = 'Montserrat';
   static Color calculatorPrimaryColor = Color(0xff22252e);
   static Color calculatorForegroundColor = Colors.white;
@@ -40,6 +47,7 @@ class Style {
   static Color calculatorCalculateButtonColor = Color(0xff25b197);
   static Color calculatorBoxBackgroundColor = Color(0xff292d36);
 
+  // Màu pie chart.
   static List<Color> pieChartCategoryColors = [
     Color(0xFF678f8f).withOpacity(0.5),
     Color(0xFF23cc9c),
@@ -52,37 +60,18 @@ class Style {
   ];
   static Color pieChartExtendedCategoryColor = Colors.grey;
 
+  // Màu bar chart.
   static Color incomeBarColor = Color(0xff53fdd7);
   static Color expenseBarColor = Color(0xffff5182);
 
-  // Start Theme 2
-  // static Color backgroundColor = Color(0xFFf0f0f0);
-  // static Color backgroundColor1 = Color(0xFFEEEEEE);
-  // static Color foregroundColor = Color(0xFF2e2e2e);
-  // static Color foregroundColorDark = Color(0xFF111111);
-  // static Color boxBackgroundColor = Color(0xFFe6e6e6);
-  // static Color boxBackgroundColor2 = Color(0xFFc9c9c9);
-  // static Color primaryColor = Color(0xff2FB49C);
-  // static Color highlightPrimaryColor = Color(0xff36D1B5);
-  //
-  // static Color igButtonColor = Color(0xFFc65072);
-  // static Color fbButtonColor = Color(0xFF2c84d4);
-  // static Color errorColor = Colors.red[700];
-  // static Color warningColor = Colors.yellow[600];
-  // static Color expenseColor = Colors.red[600];
-  // static Color incomeColor = Color(0xFF76F676);
-  // static Color incomeColor2 = Colors.blueAccent;
-  // static Color runningColor = Color(0xFF51f08d);
-  // static Color successColor = Color(0xFF4FCC5C);
-  // End Theme 2
-
+  // Hàm đổi giao diện theo các chủ đề.
   static void changeTheme(int themeCode) {
     switch (themeCode) {
+      // Black Theme.
       case 0:
         currentTheme = 0;
         backgroundColor = Colors.black;
         appBarColor = Colors.grey[900];
-        //static Color backgroundColor = Color(0xFF111111);
         backgroundColor1 = Color(0xFF111111);
         foregroundColor = Colors.white;
         foregroundColorDark = Color(0x70999999);
@@ -99,9 +88,34 @@ class Style {
         incomeColor = Color(0xFF76F676);
         incomeColor2 = Colors.blueAccent;
         runningColor = Color(0xFF51f08d);
-        successColor = Color(0xFF4FCC5C); // Nut Save
+        successColor = Color(0xFF4FCC5C);
         break;
-      // nay la style The tao
+
+      // White Theme.
+      case 1:
+        currentTheme = 1;
+        backgroundColor = Color(0xFFffffff);
+        backgroundColor1 = Color(0xFFffffff);
+        foregroundColor = Color(0xFF000000);
+        foregroundColorDark = Color(0xFF111111);
+        boxBackgroundColor = Color(0xFFe5e6eb);
+        appBarColor = Color(0xff2cb84b);
+        boxBackgroundColor2 = Color(0xFFcbccd1);
+        primaryColor = Color(0xff36f800);
+        highlightPrimaryColor = Color(0xff36D1B5);
+
+        igButtonColor = Color(0xFFc65072);
+        fbButtonColor = Color(0xFF2c84d4);
+        errorColor = Colors.red[700];
+        warningColor = Colors.yellow[600];
+        expenseColor = Colors.red[600];
+        incomeColor = Color(0xFF76F676);
+        incomeColor2 = Colors.blueAccent;
+        runningColor = Color(0xFF51f08d);
+        successColor = Color(0xFF51f08d);
+        break;
+
+      // Grey Theme.
       case 2:
         currentTheme = 2;
         appBarColor = Color(0xff444444);
@@ -122,29 +136,7 @@ class Style {
         incomeColor = Color(0xFF76F676);
         incomeColor2 = Colors.blueAccent;
         runningColor = Color(0xFF51f08d);
-        successColor = Color(0xFF4FCC5C); // Nut Save
-        break;
-      case 1:
-        currentTheme = 1;
-        backgroundColor = Color(0xFFffffff);
-        backgroundColor1 = Color(0xFFe7f3ff);
-        foregroundColor = Color(0xFF000000);
-        foregroundColorDark = Color(0xFF111111);
-        boxBackgroundColor = Color(0xFFe5e6eb);
-        appBarColor = Color(0xff2cb84b);
-        boxBackgroundColor2 = Color(0xFFcbccd1);
-        primaryColor = Color(0xff36f800);
-        highlightPrimaryColor = Color(0xff36D1B5);
-
-        igButtonColor = Color(0xFFc65072);
-        fbButtonColor = Color(0xFF2c84d4);
-        errorColor = Colors.red[700];
-        warningColor = Colors.yellow[600];
-        expenseColor = Colors.red[600];
-        incomeColor = Color(0xFF76F676);
-        incomeColor2 = Colors.blueAccent;
-        runningColor = Color(0xFF51f08d);
-        successColor = Color(0xFF51f08d);
+        successColor = Color(0xFF4FCC5C);
         break;
     }
   }

@@ -7,7 +7,7 @@ import 'package:money_man/ui/style.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesRecurringTransactionScreen extends StatefulWidget {
-  final String walletId;
+  final String walletId; // id của ví hiện tại
 
   const CategoriesRecurringTransactionScreen({Key key, @required this.walletId})
       : super(key: key);
@@ -22,9 +22,6 @@ class _CategoriesRecurringTransactionScreenState
     with TickerProviderStateMixin {
   // list tab category
   final List<Tab> categoryTypeTab = [
-    Tab(
-      text: 'DEBT & LOAN',
-    ),
     Tab(
       text: 'EXPENSE',
     ),
@@ -71,7 +68,7 @@ class _CategoriesRecurringTransactionScreenState
   void initState() {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
-    _tabController = TabController(length: 3, vsync: this, initialIndex: 1);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -83,7 +80,7 @@ class _CategoriesRecurringTransactionScreenState
     final _firestore = Provider.of<FirebaseFireStoreService>(context);
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         backgroundColor: Style.backgroundColor,
         //extendBodyBehindAppBar: true,
@@ -165,7 +162,9 @@ class _CategoriesRecurringTransactionScreenState
             return StreamBuilder<List<MyCategory>>(
                 stream: _firestore.categoryStream,
                 builder: (context, snapshot) {
+                  // danh sách các category đươc lấy xuống từ database
                   final _listCategories = snapshot.data ?? [];
+                  // danh sách các category có cùng thể loại,tương ứng với mỗi tab
                   final _selectCateTab = _listCategories
                       .where((element) =>
                           element.type ==

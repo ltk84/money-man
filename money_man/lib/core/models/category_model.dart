@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
 class MyCategory {
+  // id của category
   String id;
+  // tên của category
   String name;
+  // thể loại của category
   String type;
+  // id icon của category
   String iconID;
+
   MyCategory({
     @required this.id,
     @required this.name,

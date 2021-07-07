@@ -32,123 +32,115 @@ class _RecurringTransactionMainScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Style.backgroundColor,
-        //extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
-          elevation: 0.0,
-          leading: Hero(
-            tag: 'billToDetail_backBtn',
-            child: MaterialButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Icon(
-                  Icons.arrow_back_ios_rounded,
+      backgroundColor: Style.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: Style.boxBackgroundColor.withOpacity(0.2),
+        elevation: 0.0,
+        leading: Hero(
+          tag: 'billToDetail_backBtn',
+          child: MaterialButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.arrow_back_ios_rounded,
+                color: Style.foregroundColor,
+              )),
+        ),
+        centerTitle: true,
+        title: Hero(
+          tag: 'billToDetail_title',
+          child: Material(
+            color: Colors.transparent,
+            child: Text('Recurring transactions',
+                style: TextStyle(
+                  fontFamily: Style.fontFamily,
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w600,
                   color: Style.foregroundColor,
                 )),
           ),
-          centerTitle: true,
-          title: Hero(
-            tag: 'billToDetail_title',
-            child: Material(
-              color: Colors.transparent,
-              child: Text('Recurring transactions',
+        ),
+        actions: [
+          Hero(
+            tag: 'billToDetail_actionBtn',
+            child: TextButton(
+              onPressed: () async {
+                showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return AddRecurringTransactionScreen(
+                          wallet: widget.wallet);
+                    });
+              },
+              child: Text('Add',
                   style: TextStyle(
                     fontFamily: Style.fontFamily,
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
                     color: Style.foregroundColor,
                   )),
             ),
           ),
-          // flexibleSpace: ClipRect(
-          //   child: AnimatedOpacity(
-          //     opacity: 1,
-          //     duration: Duration(milliseconds: 0),
-          //     child: BackdropFilter(
-          //       filter: ImageFilter.blur(
-          //           sigmaX: 500, sigmaY: 500, tileMode: TileMode.values[0]),
-          //       child: AnimatedContainer(
-          //           duration: Duration(milliseconds: 1),
-          //           color: Colors.transparent),
-          //     ),
-          //   ),
-          // ),
-          actions: [
-            Hero(
-              tag: 'billToDetail_actionBtn',
-              child: TextButton(
-                onPressed: () async {
-                  showCupertinoModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return AddRecurringTransactionScreen(
-                            wallet: widget.wallet);
-                      });
-                },
-                child: Text('Add',
-                    style: TextStyle(
-                      fontFamily: Style.fontFamily,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      color: Style.foregroundColor,
-                    )),
+          GestureDetector(
+            onTap: () async {
+              buildShowDialog(context, widget.wallet.id);
+            },
+            child: Container(
+              child: Row(
+                children: [
+                  SuperIcon(
+                    iconPath: widget.wallet.iconID,
+                    size: 25.0,
+                  ),
+                  Icon(Icons.arrow_drop_down,
+                      color: Style.foregroundColor.withOpacity(0.54))
+                ],
               ),
             ),
-            GestureDetector(
-              onTap: () async {
-                buildShowDialog(context, widget.wallet.id);
-              },
-              child: Container(
-                child: Row(
-                  children: [
-                    SuperIcon(
-                      iconPath: widget.wallet.iconID,
-                      size: 25.0,
-                    ),
-                    Icon(Icons.arrow_drop_down, color: Style.foregroundColor.withOpacity(0.54))
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: buildListRecurringTransactionList(context),
+          ),
+        ],
+      ),
+      body: buildListRecurringTransactionList(context),
     );
   }
 
+  // Hàm build danh sach giao dịch lặp lại.
   Widget buildListRecurringTransactionList(context) {
-    final _firestore = Provider.of<FirebaseFireStoreService>(context);
+    final firestore = Provider.of<FirebaseFireStoreService>(context);
     return StreamBuilder<List<RecurringTransaction>>(
-        stream: _firestore.recurringTransactionStream(widget.wallet.id),
+        stream: firestore.recurringTransactionStream(widget.wallet.id),
         builder: (context, snapshot) {
           List<RecurringTransaction> reTransList = snapshot.data ?? [];
-          if (reTransList.length == 0) return Container(
-              color: Style.backgroundColor,
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.hourglass_empty,
-                    color: Style.foregroundColor.withOpacity(0.12),
-                    size: 100,
-                  ),
-                  SizedBox(height: 10,),
-                  Text(
-                    'There are no recurring transactions',
-                    style: TextStyle(
-                      fontFamily: Style.fontFamily,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      color: Style.foregroundColor.withOpacity(0.24),
+          if (reTransList.length == 0)
+            return Container(
+                color: Style.backgroundColor,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.hourglass_empty,
+                      color: Style.foregroundColor.withOpacity(0.12),
+                      size: 100,
                     ),
-                  ),
-                ],
-              )
-          );
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'There are no recurring transactions',
+                      style: TextStyle(
+                        fontFamily: Style.fontFamily,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        color: Style.foregroundColor.withOpacity(0.24),
+                      ),
+                    ),
+                  ],
+                ));
           return ListView(
-            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics:
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
@@ -171,6 +163,7 @@ class _RecurringTransactionMainScreenState
         });
   }
 
+  // Hàm build thẻ cho giao dịch lặp lại.
   Widget buildRecurringTransactionCard(RecurringTransaction reTrans) {
     return GestureDetector(
       onTap: () {
@@ -219,14 +212,19 @@ class _RecurringTransactionMainScreenState
                           color: Style.foregroundColor,
                         )),
                     if (reTrans.note != null && reTrans.note != '')
-                    Text(reTrans.note,
-                        style: TextStyle(
-                          fontFamily: Style.fontFamily,
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w400,
-                          color: Style.foregroundColor.withOpacity(0.54),
-                        )),
-                    SizedBox(height: 2,),
+                      Text(
+                          reTrans.note.length >= 20
+                              ? reTrans.note.substring(0, 19) + '...'
+                              : reTrans.note,
+                          style: TextStyle(
+                            fontFamily: Style.fontFamily,
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w400,
+                            color: Style.foregroundColor.withOpacity(0.54),
+                          )),
+                    SizedBox(
+                      height: 2,
+                    ),
                     Text('Next occurrence:',
                         style: TextStyle(
                           fontFamily: Style.fontFamily,
@@ -234,20 +232,21 @@ class _RecurringTransactionMainScreenState
                           fontWeight: FontWeight.w600,
                           color: Style.foregroundColor,
                         )),
-                    Text(DateFormat('EEEE, dd-MM-yyyy')
-                        .format(reTrans.repeatOption.beginDateTime),
+                    Text(
+                        DateFormat('EEEE, dd-MM-yyyy')
+                            .format(reTrans.repeatOption.beginDateTime),
                         style: TextStyle(
                           fontFamily: Style.fontFamily,
                           fontSize: 13.0,
                           fontWeight: FontWeight.w400,
                           color: Style.foregroundColor.withOpacity(0.7),
-                        )
-                    )
+                        ))
                   ],
                 ),
               ],
             ),
             MoneySymbolFormatter(
+              checkOverflow: true,
               text: reTrans.amount,
               currencyId: widget.wallet.currencyID,
               textStyle: TextStyle(
@@ -262,6 +261,7 @@ class _RecurringTransactionMainScreenState
     );
   }
 
+  // Hàm build thông tin chung.
   Widget buildOverallInfo(
       {String overdue, String forToday, String thisPeriod}) {
     return Container(
@@ -351,9 +351,10 @@ class _RecurringTransactionMainScreenState
         ));
   }
 
+  // Hàm hiển thị chọn wallet.
   void buildShowDialog(BuildContext context, String id) async {
-    final _auth = Provider.of<FirebaseAuthService>(context, listen: false);
-    final _firestore =
+    final auth = Provider.of<FirebaseAuthService>(context, listen: false);
+    final firestore =
         Provider.of<FirebaseFireStoreService>(context, listen: false);
 
     final result = await showCupertinoModalBottomSheet(
@@ -363,13 +364,13 @@ class _RecurringTransactionMainScreenState
         builder: (context) {
           return Provider(
               create: (_) {
-                return FirebaseFireStoreService(uid: _auth.currentUser.uid);
+                return FirebaseFireStoreService(uid: auth.currentUser.uid);
               },
               child: WalletSelectionScreen(
                 id: id,
               ));
         });
-    final updatedWallet = await _firestore.getWalletByID(result);
+    final updatedWallet = await firestore.getWalletByID(result);
     setState(() {
       widget.wallet = updatedWallet;
     });

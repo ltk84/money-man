@@ -17,19 +17,27 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final _auth = FirebaseAuthService();
-  final _formKey = GlobalKey<FormState>();
-  String _email;
-  String _password;
-  bool isObcure = true;
-  bool isObcureSub = true;
+  // biến tương tác với authentication
+  final auth = FirebaseAuthService();
+  // biến validate thông tin user
+  final formKey = GlobalKey<FormState>();
+
+  // email của user
+  String email;
+  // password của user
+  String password;
+  // biến điều khiển việc show password
   bool show = true;
+  // biến điều khiển việc show password ở field sub
   bool showSub = true;
+
+  // icon mắt ở trailing của password field
   Icon trailingIconPass = Icon(Icons.remove_red_eye, color: Color(0x70999999));
+  // icon mắt ở trailing của password field sub
   Icon trailingIconPassSub =
       Icon(Icons.remove_red_eye, color: Color(0x70999999));
+  // biến loading
   bool loading = false;
-  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             body: ListView(
               children: [
                 Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     children: [
                       Text(
@@ -88,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           onPressed: () async {
-                            await _signUpWithEmailAndPassword(_auth, context);
+                            await _signUpWithEmailAndPassword(auth, context);
                           },
                           child: Text("SIGN UP",
                               style: TextStyle(
@@ -151,6 +159,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: Text(
                               " OR ",
                               style: TextStyle(
+                                color: Colors.white,
                                 fontFamily: 'Montserrat',
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,
@@ -189,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           onPressed: () {
-                            _signInWithFacebookAccount();
+                            signInWithFacebookAccount();
                           },
                           child: Row(
                             children: [
@@ -248,7 +257,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           onPressed: () {
-                            _signInWithGoogleAccount();
+                            signInWithGoogleAccount();
                           },
                           child: Row(
                             children: [
@@ -282,65 +291,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      // Container(
-                      //   margin: EdgeInsets.symmetric(horizontal: 60.0),
-                      //   width: double.infinity,
-                      //   child: TextButton(
-                      //     style: ButtonStyle(
-                      //       backgroundColor:
-                      //           MaterialStateProperty.resolveWith<Color>(
-                      //         (Set<MaterialState> states) {
-                      //           if (states.contains(MaterialState.pressed))
-                      //             return Color(0xFF0c0c0c);
-                      //           return Colors
-                      //               .white; // Use the component's default.
-                      //         },
-                      //       ),
-                      //       foregroundColor:
-                      //           MaterialStateProperty.resolveWith<Color>(
-                      //         (Set<MaterialState> states) {
-                      //           if (states.contains(MaterialState.pressed))
-                      //             return Colors.white;
-                      //           return Color(
-                      //               0xFF0c0c0c); // Use the component's default.
-                      //         },
-                      //       ),
-                      //     ),
-                      //     onPressed: () {
-                      //       //_auth.signInWithGoogleAccount();
-                      //     },
-                      //     child: Row(
-                      //       children: [
-                      //         Expanded(
-                      //           flex: 1,
-                      //           child: SuperIcon(
-                      //             iconPath: 'assets/images/apple.svg',
-                      //             size: 18,
-                      //           ),
-                      //         ),
-                      //         Expanded(
-                      //           flex: 1,
-                      //           child: SizedBox(
-                      //             width: 10,
-                      //           ),
-                      //         ),
-                      //         Expanded(
-                      //           flex: 8,
-                      //           child: Text(
-                      //             "Connect with Apple",
-                      //             style: TextStyle(
-                      //                 fontSize: 13,
-                      //                 fontFamily: 'Montserrat',
-                      //                 fontWeight: FontWeight.w700,
-                      //                 letterSpacing: 0.5,
-                      //                 wordSpacing: 2.0),
-                      //             textAlign: TextAlign.left,
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -349,61 +299,64 @@ class _SignUpScreenState extends State<SignUpScreen> {
           );
   }
 
-  // Future _signInAnonymously(
-  //     FirebaseAuthService _auth, BuildContext context) async {
-  //   final res = await _auth.signInAnonymously();
-
-  //   if (res is String) {
-  //     final error = res;
-  //     ScaffoldMessenger.of(context)
-  //         .showSnackBar(SnackBar(content: Text(error)));
-  //   }
-  // }
-
-  Future _signInWithFacebookAccount() async {
+  Future signInWithFacebookAccount() async {
+    // hiển thị màn hình loading
     setState(() {
       loading = true;
     });
-    var result = await _auth.signInWithFacebookVer2();
+    var result = await auth.signInWithFacebookVer2();
+    // giá trị trả về code của lỗi khi xuất hiện lỗi khi đăng nhập
+    // trả về login-success khi đăng nhập thành công
     if (result != null && result != 'login-success') {
-      await _showAlertDialog(result);
+      await showAlertDialog(result);
     }
-    setState(() {
-      loading = false;
-    });
+    // tắt màn hình loading
+    if (this.mounted)
+      setState(() {
+        loading = false;
+      });
   }
 
-  Future _signInWithGoogleAccount() async {
+  Future signInWithGoogleAccount() async {
+    // hiển thị màn hình loading
     setState(() {
       loading = true;
     });
-    var res = await _auth.signInWithGoogleAccount();
-    // print(res.additionalUserInfo.providerId);
+    var res = await auth.signInWithGoogleAccount();
+    // giá trị trả về code của lỗi khi xuất hiện lỗi khi đăng nhập
+    // trả về login-success khi đăng nhập thành công
     if (res != null && res != 'login-success') {
-      await _showAlertDialog(res);
+      await showAlertDialog(res);
     }
-    setState(() {
-      loading = false;
-    });
+    // tắt màn hình loading
+    if (this.mounted)
+      setState(() {
+        loading = false;
+      });
   }
 
   Future _signUpWithEmailAndPassword(
       FirebaseAuthService _auth, BuildContext context) async {
-    if (_formKey.currentState.validate()) {
+    if (formKey.currentState.validate()) {
+      // hiển thị màn hình loading
       setState(() {
         loading = true;
       });
-      final res = await _auth.signUpWithEmailAndPassword(_email, _password);
+      final res = await _auth.signUpWithEmailAndPassword(email, password);
+      // giá trị trả về code của lỗi khi xuất hiện lỗi khi đăng nhập
+      // trả về login-success khi đăng nhập thành công
       if (res != null && res != 'login-success') {
-        _showAlertDialog(res);
+        showAlertDialog(res);
       }
-      setState(() {
-        loading = false;
-      });
+      // tắt màn hình loading
+      if (this.mounted)
+        setState(() {
+          loading = false;
+        });
     }
   }
 
-  Future<void> _showAlertDialog(String content) async {
+  Future<void> showAlertDialog(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -415,7 +368,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget buildInputField() {
-    // TextEditingController PasswordControler = TextEditingController();
     return Column(
       children: [
         Theme(
@@ -438,7 +390,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.left,
-            onChanged: (value) => _email = value,
+            onChanged: (value) => email = value,
             decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
@@ -471,7 +423,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             primaryColor: Colors.white,
           ),
           child: TextFormField(
-            // controller: PasswordControler,
             validator: (value) {
               if (value == null || value.isEmpty)
                 return 'Password is empty';
@@ -486,7 +437,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.left,
-            onChanged: (value) => _password = value,
+            onChanged: (value) => password = value,
             decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
@@ -507,7 +458,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               suffixIcon: IconButton(
                 icon: trailingIconPass,
                 onPressed: () => this.setState(() {
-                  isObcure = !isObcure;
                   show = !show;
                   trailingIconPass = Icon(
                     show == true
@@ -522,7 +472,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
             autocorrect: false,
-            obscureText: isObcure,
+            obscureText: show,
             cursorColor: Color(0xFF2FB49C),
           ),
         ),
@@ -568,7 +518,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               suffixIcon: IconButton(
                 icon: trailingIconPassSub,
                 onPressed: () => this.setState(() {
-                  isObcureSub = !isObcureSub;
                   showSub = !showSub;
                   trailingIconPassSub = Icon(
                     showSub == true
@@ -583,7 +532,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             autocorrect: false,
-            obscureText: isObcureSub,
+            obscureText: showSub,
             cursorColor: Color(0xFF2FB49C),
           ),
         ),
