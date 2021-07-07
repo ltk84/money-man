@@ -426,7 +426,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     // Nếu tất cả đều hợp lệ
                     if (!(inValid1 || invalid2 || invalid3)) {
                       try {
-                        print("dm");
                         await _auth.updatePassword(field2);
                         await showDialog(
                           context: context,
