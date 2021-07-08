@@ -90,11 +90,16 @@ class BarChartScreenState extends State<BarChartScreen> {
       // Lưu kết quả tính toán thu nhập và chi tiêu theo khoảng thời gian xác định.
       // Có một danh sách để lưu khoảng thời gian đã được chia nhỏ và một danh sách để lưu số tiền thu, chi trong khoảng thời gian đó, đối chiếu với nhau theo thứ tự.
       // Ví dụ: Khoảng thời gian có thứ tự là 1 trong danh sách khoảng thời gian sẽ có thông tin thu chi có thứ tự là 1 tranh danh sách lưu số tiền thu chi.
-      var calculation =
+      List<double> calculation =
           calculateByTimeRange(firstDate, secondDate, transactionList);
-      calculationList.add(calculation);
-      timeRangeList
-          .add(firstDate.day.toString() + "-" + secondDate.day.toString());
+      if (firstDate.compareTo(endDate) < 0) {
+        calculationList.add(calculation);
+        timeRangeList
+            .add(firstDate.day.toString() + "-" + secondDate.day.toString());
+      } else if (firstDate.compareTo(endDate) == 0) {
+        calculationList.add(calculation);
+        timeRangeList.add(firstDate.day.toString());
+      }
 
       // Phần dưới này sẽ là tính toán giá trị lớn nhất trong tất cả các giao dịch.
       // Bước này là để lấy giá trị lớn nhất, hỗ trợ cho việc hiển thị cột trong chart.
@@ -276,9 +281,13 @@ class BarChartScreenState extends State<BarChartScreen> {
                             if (value == 0) {
                               return '0';
                             } else if (value == 10) {
-                              return MoneyFormatter(amount: maximumAmount/2).output.compactNonSymbol;
+                              return MoneyFormatter(amount: maximumAmount / 2)
+                                  .output
+                                  .compactNonSymbol;
                             } else if (value == 20) {
-                              return MoneyFormatter(amount: maximumAmount).output.compactNonSymbol;
+                              return MoneyFormatter(amount: maximumAmount)
+                                  .output
+                                  .compactNonSymbol;
                             } else {
                               return '';
                             }

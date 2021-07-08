@@ -4,12 +4,12 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService {
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   // lấy thông tin từ stream để listen tới sự thay đổi của authentication
   Stream<User> get userStream {
     // listen để in ra terminal
-    _auth.authStateChanges().listen((User user) {
+    auth.authStateChanges().listen((User user) {
       if (user == null) {
         print('User is currently signed out!');
       } else {
@@ -18,16 +18,16 @@ class FirebaseAuthService {
     });
 
     // trả về stream
-    return _auth.authStateChanges();
+    return auth.authStateChanges();
   }
 
   // lấy user hiện tại
-  User get currentUser => _auth.currentUser;
+  User get currentUser => auth.currentUser;
 
   // đăng nhập ẩn danh
   Future signInAnonymously() async {
     try {
-      final res = await _auth.signInAnonymously();
+      final res = await auth.signInAnonymously();
       return res.user;
     } on FirebaseAuthException catch (e) {
       return e.code;
@@ -38,7 +38,7 @@ class FirebaseAuthService {
   Future signOut() async {
     try {
       // đăng xuất firebase
-      await _auth.signOut();
+      await auth.signOut();
 
       // đăng xuất Google account nếu có
       await GoogleSignIn().signOut();
@@ -53,7 +53,7 @@ class FirebaseAuthService {
   // đăng nhập với email và password
   Future signInWithEmailAndPassword(email, password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await auth.signInWithEmailAndPassword(email: email, password: password);
       return 'login-success';
     } on FirebaseAuthException catch (e) {
       String error = '';
@@ -85,7 +85,7 @@ class FirebaseAuthService {
   // đăng ký với email và password
   Future signUpWithEmailAndPassword(email, password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       return 'login-success';
     } on FirebaseAuthException catch (e) {
@@ -130,7 +130,7 @@ class FirebaseAuthService {
         idToken: googleAuth.idToken,
       );
 
-      await _auth.signInWithCredential(credential);
+      await auth.signInWithCredential(credential);
       return 'login-success';
     } on FirebaseAuthException catch (e) {
       String error = '';
@@ -162,7 +162,7 @@ class FirebaseAuthService {
   // lấy lại mật khẩu qua email
   Future resetPassword(email) async {
     try {
-      return await _auth.sendPasswordResetEmail(email: email);
+      return await auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
       return e.code;
     }
@@ -172,7 +172,7 @@ class FirebaseAuthService {
   Future<bool> validatePassword(String password) async {
     try {
       // lấy thông tin user hiện tại
-      var firebaseUser = _auth.currentUser;
+      var firebaseUser = auth.currentUser;
       // lấy credential email
       var authCredentials = EmailAuthProvider.credential(
           email: firebaseUser.email, password: password);
@@ -187,7 +187,7 @@ class FirebaseAuthService {
 
   // hàm update password
   Future<void> updatePassword(String password) async {
-    var firebaseUser = _auth.currentUser;
+    var firebaseUser = auth.currentUser;
     firebaseUser.updatePassword(password);
   }
 
@@ -202,7 +202,7 @@ class FirebaseAuthService {
         case FacebookLoginStatus.loggedIn:
           final credential =
               FacebookAuthProvider.credential(result.accessToken.token);
-          await _auth.signInWithCredential(credential);
+          await auth.signInWithCredential(credential);
           break;
         case FacebookLoginStatus.cancelledByUser:
           break;
