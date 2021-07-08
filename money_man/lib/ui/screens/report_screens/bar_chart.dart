@@ -181,6 +181,7 @@ class BarChartScreenState extends State<BarChartScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return AspectRatio(
       aspectRatio: 1,
       child: Card(
