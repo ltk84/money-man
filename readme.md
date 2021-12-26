@@ -38,7 +38,7 @@ lập kế hoạch chi tiêu một cách hiệu quả, trực quan.
 	- [Quản lý tài khoản](#quản-lý-tài-khoản)
 	- [Quản lý ví](#quản-lý-ví)
  	- [Quản lý các giao dịch](#quản-lý-các-giao-dịch)
- 	- [Quản lý các giao dịch vay/cho vay](#quản-lý-các-giao-dịch-vay/cho-vay)
+ 	- [Quản lý các giao dịch vay và cho vay](#quản-lý-các-giao-dịch-vay-và-cho-vay)
 	- [Thống kê chi tiêu](#thống-kê-chi-tiêu)
 	- [Quản lý ngân sách](#quản-lý-ngân-sách)
 	- [Quản lý chi tiêu sự kiện](#quản-lý-chi-tiêu-sự-kiện)
@@ -47,7 +47,7 @@ lập kế hoạch chi tiêu một cách hiệu quả, trực quan.
 	- [Thay đổi giao diện ứng dụng](#thay-đổi-giao-diện-ứng-dụng)
 	- [Hướng dẫn và trợ giúp người dùng](#hướng-dẫn-và-trợ-giúp-người-dùng)
 	- [Truy cập liên kết](#truy-cập-liên-kết)
-- [Thư viện & Công nghệ](#thư-viện-&-công-nghệ)
+- [Thư viện và Công nghệ](#thư-viện-và-công-nghệ)
 - [Thành viên đóng góp](#thành-viên-đóng-góp)
 - [Giấy phép](#giấy-phép)
 
@@ -149,8 +149,6 @@ Sau đó mở công cụ phát triển (development tool) và chạy ứng dụn
 
 </details>
 
-<br/>
-
 ## **Tính năng**
 ### **Quản lý tài khoản**
 * Đăng ký.
@@ -167,7 +165,7 @@ Sau đó mở công cụ phát triển (development tool) và chạy ứng dụn
 * Tìm kiếm giao dịch.
 * Tùy chọn hiển thị giao dịch theo các khoảng thời gian.
 * Tùy chọn hiển thị giao dịch theo thể loại/thời gian.
-### **Quản lý các giao dịch vay/cho vay**
+### **Quản lý các giao dịch vay và cho vay**
 * Thêm liên hệ đã vay/cho vay.
 * Tính toán lượng tiền cần phải trả nợ/thu nợ.
 * Tạo nhanh giao dịch trả nợ/thu nợ cho giao dịch vay/cho vay.
