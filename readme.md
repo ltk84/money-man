@@ -2,10 +2,9 @@
 
 [![tag](https://img.shields.io/badge/-money-4db39d)](https://github.com/ltk84/money-man)
 [![tag](https://img.shields.io/badge/-management-4db39d)](https://github.com/ltk84/money-man)
-[![os](https://img.shields.io/badge/-windows-4677d4)](https://github.com/ltk84/money-man)
-[![framework](https://img.shields.io/badge/-WPF-7C81E4)](https://github.com/ltk84/money-man)
-[![framework](https://img.shields.io/badge/-.NET%20Framework-7C81E4)](https://github.com/ltk84/money-man)
-[![framework](https://img.shields.io/badge/-C%23-7C81E4)](https://github.com/ltk84/money-man)
+[![os](https://img.shields.io/badge/-mobile-%230175C2)](https://github.com/ltk84/money-man)
+[![framework](https://img.shields.io/badge/-dart-%230175C2)](https://github.com/ltk84/money-man)
+[![framework](https://img.shields.io/badge/-flutter-%2302569B)](https://github.com/ltk84/money-man)
 
 [![school](https://img.shields.io/badge/school-UIT-3f6cb6)](https://www.uit.edu.vn/)
 [![subject](https://img.shields.io/badge/subject-MOBILE-3f6cb6)](https://www.uit.edu.vn/)
