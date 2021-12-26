@@ -75,13 +75,6 @@ Sau đó mở công cụ phát triển (development tool) và chạy ứng dụn
 *Có thể tham khảo thêm tại [đây](https://flutter.dev/docs/get-started) (Flutter documentation).*
 
 ## **Giao diện**
-
-<details>
-    <summary>Xem các giao diện màn hình</summary>
-    
-<br/>
-
-<p align="center">
  <img width="200" src=".\resources\ui\1.PNG"></a>
  <img width="200" src=".\resources\ui\2.PNG"></a>
  <img width="200" src=".\resources\ui\3.PNG"></a>
@@ -146,9 +139,6 @@ Sau đó mở công cụ phát triển (development tool) và chạy ứng dụn
  <img width="200" src=".\resources\ui\62.PNG"></a>
  <img width="200" src=".\resources\ui\63.PNG"></a>
  <img width="200" src=".\resources\ui\64.PNG"></a>
-</p>
-
-</details>
 
 ## **Tính năng**
 ### **Quản lý tài khoản**
