@@ -34,6 +34,7 @@ lập kế hoạch chi tiêu một cách hiệu quả, trực quan.
 	- [Yêu cầu tối thiểu dành cho thiết bị](#yêu-cầu-tối-thiểu-dành-cho-thiết-bị)
 	- [Cài đặt ứng dụng lên điện thoại](#cài-đặt-ứng-dụng-lên-điện-thoại)
 	- [Dành cho việc phát triển ứng dụng](#dành-cho-việc-phát-triển-ứng-dụng)
+- [Giao diện](#giao-diện)
 - [Tính năng](#tính-năng)
 	- [Quản lý tài khoản](#quản-lý-tài-khoản)
 	- [Quản lý ví](#quản-lý-ví)
