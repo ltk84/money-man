@@ -1,7 +1,156 @@
-# **Money Man**
+# Money Man
+
+[![tag](https://img.shields.io/badge/-money-4db39d)](https://github.com/ltk84/money-man)
+[![tag](https://img.shields.io/badge/-management-4db39d)](https://github.com/ltk84/money-man)
+[![os](https://img.shields.io/badge/-windows-4677d4)](https://github.com/ltk84/money-man)
+[![framework](https://img.shields.io/badge/-WPF-7C81E4)](https://github.com/ltk84/money-man)
+[![framework](https://img.shields.io/badge/-.NET%20Framework-7C81E4)](https://github.com/ltk84/money-man)
+[![framework](https://img.shields.io/badge/-C%23-7C81E4)](https://github.com/ltk84/money-man)
+
+[![school](https://img.shields.io/badge/school-UIT-3f6cb6)](https://www.uit.edu.vn/)
+[![subject](https://img.shields.io/badge/subject-MOBILE-3f6cb6)](https://www.uit.edu.vn/)
+[![contributors](https://img.shields.io/badge/contributors-4-1d9583)](#team)
+
+<br>
+
+<p align="center">
+ <img src="./resources/money_man.svg" height = "200"></a>
+</p>
+
+<p align="center">
+<i>Đây là một đồ án môn học.</i>
+</p>
+
+
 **Money Man** là ứng dụng quản lý chi tiêu. 
 Giúp bạn theo dõi và quản lý dòng tiền cũng như
 lập kế hoạch chi tiêu một cách hiệu quả, trực quan.
+
+---
+
+## **📝 Mục lục**
+
+- [Cài đặt](#cài-đặt)
+	- [Yêu cầu tối thiểu dành cho thiết bị](#yêu-cầu-tối-thiểu-dành-cho-thiết-bị)
+	- [Cài đặt ứng dụng lên điện thoại](#cài-đặt-ứng-dụng-lên-điện-thoại)
+	- [Dành cho việc phát triển ứng dụng](#dành-cho-việc-phát-triển-ứng-dụng)
+- [Tính năng](#tính-năng)
+	- [Quản lý tài khoản](#quản-lý-tài-khoản)
+	- [Quản lý ví](#quản-lý-ví)
+ 	- [Quản lý các giao dịch](#quản-lý-các-giao-dịch)
+ 	- [Quản lý các giao dịch vay/cho vay](#quản-lý-các-giao-dịch-vay/cho-vay)
+	- [Thống kê chi tiêu](#thống-kê-chi-tiêu)
+	- [Quản lý ngân sách](#quản-lý-ngân-sách)
+	- [Quản lý chi tiêu sự kiện](#quản-lý-chi-tiêu-sự-kiện)
+	- [Quản lý hóa đơn](#quản-lý-hóa-đơn)
+	- [Quản lý các giao dịch tự động](#quản-lý-các-giao-dịch-tự-động)
+	- [Thay đổi giao diện ứng dụng](#thay-đổi-giao-diện-ứng-dụng)
+	- [Hướng dẫn và trợ giúp người dùng](#hướng-dẫn-và-trợ-giúp-người-dùng)
+	- [Truy cập liên kết](#truy-cập-liên-kết)
+- [Thư viện & Công nghệ](#thư-viện-&-công-nghệ)
+- [Thành viên đóng góp](#thành-viên-đóng-góp)
+- [Giấy phép](#giấy-phép)
+
+## **Cài đặt**
+### **Yêu cầu tối thiểu dành cho thiết bị:**
+*	Android 4.2 Jelly Bean.
+*   RAM: 2GB.
+*	ROM: 60MB.
+### **Cài đặt ứng dụng lên điện thoại:**
+Tải file .apk tại [đây](https://drive.google.com/file/d/1Jq3dEx3oylzjoTnloN8j4I53oQmNRKPH/view?usp=sharing) và cài đặt lên điện thoại (Android).
+### **Dành cho việc phát triển ứng dụng:** 
+Cài đặt flutter theo hướng dẫn tại [đây](https://flutter.dev/docs/get-started/install).
+
+Clone repository của Money Man từ github về máy:	
+
+    $ git clone https://github.com/ltk84/money-man.git
+
+Chạy lệnh bên dưới bên trong thư mục của project Money Man:
+
+    $ flutter pub get
+
+Sau đó mở công cụ phát triển (development tool) và chạy ứng dụng trên máy ảo.
+
+*Có thể tham khảo thêm tại [đây](https://flutter.dev/docs/get-started) (Flutter documentation).*
+
+## **Giao diện**
+
+<details>
+    <summary>Xem các giao diện màn hình</summary>
+    
+<br/>
+
+<p align="center">
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1mXEWfZsRAVQejdvcuPxf2HGV18M3mTau"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1MZhEE66Lo9WFYsEeFcIshnOT_liPC661"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1Ln3XugMNHmfE0k_uuVB_6f2G9XXrGlHe"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=137Q83HPoqBxOBVaJL3OjEh4BKJaWttPW"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1MNxtsnB9hTFeGBl6lB0hydgVtV0tvhkw"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1Ui6JpPpciHH-cxiopJGz2ZuxgA_P2B84"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1h66ipAFjT9Lt6UqE4b_-WIpTXCXEBKIT"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1t1CsWsyKS9H95gzUjLryEI5idrAqXgUa"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1rP0BN8azR7oSYoSxY1lBkRLSFKzXVaxQ"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1j3cHHxsjWJ0G9uMjSbGk30bQKQXdC1WE"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1tpEJhZ6vMf3NQf8t51fvIZLipwJ3qDva"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1bAmNzIDJXKq6PLCi81oKGVkm_w1lnoaJ"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1W_QorFlepihs_b2tQLhyCvEAFJA4x5g3"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1RwLctex1N_eJQSHy3VNjLFeAh6OYa3PY"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=12ADo6H4_sK8b9qE_N_z2PauV3ndYFGHS"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1Wfw8FhKnnUCbF81t0kyRZHzOThPIh6WI"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1l6jrC4itPDJf8dqs86GPYzSc2lgFqPy1"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1sLWZk9nn5pl_kzGVKuuuAk71zue6hVlX"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1N6376jfgIxSak5C-ShqDUMze1OIg9SR6"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1fFN0unlCaCw1PRpo44v623S3FCziSURH"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1xbnCG7m2abHuNU0IVqJtlFkqvHY-pXFe"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1SCiEE8r1Lu0DVpxFsvpFVvVhIhHRP6eD"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1TZ5xFevOcll4kOQTwOkPft7Xqwom4h71"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1JBilHaz1GvHQsgrd0MQRnzxwZmnfbfrQ"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=17QcjO3dXpdg8HVmb3FVRr1K4XSjJ6ur7"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1XBLD0GxEK8sfQzolA3I3-2XA9Fwkq4AZ"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=12l52lxRpDLB4QFdf9EYqEreCAMMN1Zjm"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1hWy-AMQDrEHOBdTD1b5fFNPGax8bjryX"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1qKk9fHgPqtru-PT-38UVTl6BtI-oPrce"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=13WM97ZHY8DP5CTveYF7pkk9j6lSFFHXi"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1bN5Glon1schfQMQOxGCCHijJhxJ4Kpy9"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1kpQjNdAR8BwAZKaVT_QCwq-XHvL-Hlu2"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1twCR2E_v2QWS5A1MT0pVwDdy34iNcCQr"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1nDq-WhO_b9Rm14hqv5d8ckUV_1xHXMZI"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1G0Y2reb_HGWYXbcQLYexuJw4BJnbdgZe"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1qt7uBSSrJI4VgKXdLtUTuY3NpQXIAiic"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1rfPjvksmr8AZbv9Mw8WCj6sAZxo6Lxif"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1un8VC3gQNP_zyGCUWvZSJsocMdQh4lYw"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1Ce9cb7GBBnS5B_nC6j8RSXecltPQiE-f"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1JbPxUQJoH2RjhMJZpKEL9Gy-GvBfTwJ4"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1c8RNK5U6__tkPUc1XSszLdguhpUh3uxx"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1mOOGOt5MkSs7-E8kUI6qsKuEAaWbg_31"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1lvfuSpqmckEMbLmGHuaUQWnecCAD7wGk"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1NtBpdUGZoKkdX-5zPsCLJldQb4arNmDl"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1XgK31RQV66FYyfu01VDqLpD6uWkojrZ0"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=15au-dg74jIfqmi5Sq7NO-bUB1319ZYbm"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1FJYvGg4rrVAf2-htfoD-L09ZPAv6-YHp"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1Yfl3I6ZIrLbyY6JViFs3GjT9db7OC11G"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1XRMEquCAl7EWVwpiIgYDgCQiP_fMZGLp"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1A6U2BlXN6KBTBBF3hNP-gwp49PZ-a98X"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1ye5yJGy2P-TEVC2NmFWRHLLKASHLaZbf"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1uwxUg2jM6BEY2NfSQunCGAxgNGT5S9PJ"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1AWzuSiwE-MnMdvDaOYhdeu8vQlUot3pV"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1_h7vx7gybY693lmZa6myONnHsavjQa_w"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1muIB4VeJUghqAp6Vme_sf7X5w1s2cmHz"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1A3EeP8u_Stq6RB_QffhscWM50nlazAwm"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1TpR6QIv0MO7irmmBTRe4TjG_nTec2apZ"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1R_tMie6jGfkBgMcOs6-jAVq-nIdlf_Mg"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1KD5Cd0OXTKznugdpPScYeEmXRAMGw3Oq"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1IpBVDDF6tRY_PETmFnWplBd4-Q7gHPtG"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1HGwhtfBlzBRumzWuSYx71btnA-tUJ83y"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1LktcRRhmuKk_xkDuZxI7hfDwz-EnZM9C"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1-0SZiT3t-9CY38FU1GGFHoCLmHudzqpt"></a>
+ <img width="200" src="https://drive.google.com/uc?export=view&id=1jWar0Tii8mjiKUsbhd0MGEWT-FxnAHci"></a>
+</p>
+
+</details>
+
+<br/>
+
 ## **Tính năng**
 ### **Quản lý tài khoản**
 * Đăng ký.
@@ -87,33 +236,22 @@ lập kế hoạch chi tiêu một cách hiệu quả, trực quan.
 *	[Flutter](https://flutter.dev/).
 *	[Firebase](https://firebase.google.com/).
 *	[Pub.dev](https://pub.dev/).
-## **Cài đặt**
-### **Yêu cầu tối thiểu dành cho thiết bị:**
-*	Android 4.2 Jelly Bean.
-*   RAM: 2GB.
-*	ROM: 60MB.
-### **Cài đặt ứng dụng lên điện thoại:**
-Tải file .apk tại [đây](https://drive.google.com/file/d/1Jq3dEx3oylzjoTnloN8j4I53oQmNRKPH/view?usp=sharing) và cài đặt lên điện thoại (Android).
-### **Dành cho việc phát triển ứng dụng:** 
-Cài đặt flutter theo hướng dẫn tại [đây](https://flutter.dev/docs/get-started/install).
-
-Clone repository của Money Man từ github về máy:	
-
-    $ git clone https://github.com/ltk84/money-man.git
-
-Chạy lệnh bên dưới bên trong thư mục của project Money Man:
-
-    $ flutter pub get
-
-Sau đó mở công cụ phát triển (development tool) và chạy ứng dụng trên máy ảo.
-
-*Có thể tham khảo thêm tại [đây](https://flutter.dev/docs/get-started) (Flutter documentation).*
 
 ## **Thành viên đóng góp**
-* Trương Kim Lâm - 19521743@gm.uit.edu.vn
-* Dương Hiển Thế - 19522252@gm.uit.edu.vn
-* Trần Lê Thanh Tùng - 19522496@gm.uit.edu.vn
-* Huỳnh Trọng Phục - 19522030@gm.uit.edu.vn
+
+- Trần Lê Thanh Tùng *(TungTLT)*: 19522496@gm.uit.edu.vn
+- Dương Hiển Thế *(hacThe)*: 19522252@gm.uit.edu.vn
+- Huỳnh Trọng Phục *(Phuc-HuynhTrong)*: 19522030@gm.uit.edu.vn
+- Trương Kim Lâm *(ltk84)*: 19521743@gm.uit.edu.vn
+
+<br/>
+
+<h4 align="center">
+<a href="https://github.com/ltk84/QuanLyKhuCachLy/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=ltk84/QuanLyKhuCachLy" />
+</a>
+
+<br/>
 
 ## **Giấy phép**
     MIT License
